@@ -25,15 +25,14 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
-    function shouldSkipSematicCheck(project: Project) {
-        if (project.getCompilerOptions().skipLibCheck !== undefined) {
-            return false;
+    function shouldSkipSemanticCheck(project: Project) {
+        if (project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) {
+            return project.isJsOnlyProject();
         }
-
-        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) && project.isJsOnlyProject()) {
-            return true;
+        else {
+            // For configured projects, require that skipLibCheck be set also
+            return project.getCompilerOptions().skipLibCheck && project.isJsOnlyProject();
         }
-        return false;
     }
 
     interface FileStart {
@@ -227,7 +226,7 @@ namespace ts.server {
 
     /**
      * Represents operation that can schedule its next step to be executed later.
-     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed. 
+     * Scheduling is done via instance of NextStep. If on current step subsequent step was not scheduled - operation is assumed to be completed.
      */
     class MultistepOperation {
         private requestId: number;
@@ -240,7 +239,7 @@ namespace ts.server {
             this.next = {
                 immediate: action => this.immediate(action),
                 delay: (ms, action) => this.delay(ms, action)
-            }
+            };
         }
 
         public startNew(action: (next: NextStep) => void) {
@@ -263,7 +262,7 @@ namespace ts.server {
 
         private immediate(action: () => void) {
             const requestId = this.requestId;
-            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id")
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "immediate: incorrect request id");
             this.setImmediateId(this.operationHost.getServerHost().setImmediate(() => {
                 this.immediateId = undefined;
                 this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
@@ -272,7 +271,7 @@ namespace ts.server {
 
         private delay(ms: number, action: () => void) {
             const requestId = this.requestId;
-            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id")
+            Debug.assert(requestId === this.operationHost.getCurrentRequestId(), "delay: incorrect request id");
             this.setTimerHandle(this.operationHost.getServerHost().setTimeout(() => {
                 this.timerHandle = undefined;
                 this.operationHost.executeWithRequestId(requestId, () => this.executeAction(action));
@@ -352,7 +351,7 @@ namespace ts.server {
                 logError: (err, cmd) => this.logError(err, cmd),
                 sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
                 isCancellationRequested: () => cancellationToken.isCancellationRequested()
-            }
+            };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
             this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
@@ -455,7 +454,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
                 let diags: Diagnostic[] = [];
-                if (!shouldSkipSematicCheck(project)) {
+                if (!shouldSkipSemanticCheck(project)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
 
@@ -563,7 +562,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
-            if (isSemantic && shouldSkipSematicCheck(project)) {
+            if (isSemantic && shouldSkipSemanticCheck(project)) {
                 return [];
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -652,16 +651,21 @@ namespace ts.server {
             }
 
             return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan } = occurrence;
+                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
                 const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
-                return {
+                const result: protocol.OccurrencesResponseItem = {
                     start,
                     end,
                     file: fileName,
                     isWriteAccess,
                 };
+                // no need to serialize the property if it is not true
+                if (isInString) {
+                    result.isInString = isInString;
+                }
+                return result;
             });
         }
 
@@ -1425,8 +1429,9 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const startPosition = getStartPosition();
             const endPosition = getEndPosition();
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
             if (!codeActions) {
                 return undefined;
             }
