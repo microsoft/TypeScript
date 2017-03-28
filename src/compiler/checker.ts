@@ -3625,7 +3625,7 @@ namespace ts {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
-                        // Public properties/methods are visible if its parents are visible, so
+                        // Public properties/methods are visible if its parents are visible, so:
                         // falls through
 
                     case SyntaxKind.Constructor:
