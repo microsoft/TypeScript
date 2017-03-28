@@ -549,8 +549,8 @@ namespace ts {
                     [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
                     /*type*/ undefined,
                     createToken(SyntaxKind.EqualsGreaterThanToken),
-                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments.concat([resolve]))
-                )]);
+                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral(node.arguments), resolve]))
+                ]);
         }
  
     function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
