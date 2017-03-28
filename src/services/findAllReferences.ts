@@ -305,11 +305,11 @@ namespace ts.FindAllReferences.Core {
                 const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), (<Identifier>node).text);
                 // if we have a label definition, look within its statement for references, if not, then
                 // the label is undefined and we have no results..
-                return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition, cancellationToken);
+                return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
             }
             else {
                 // it is a label definition and not a target, search within the parent labeledStatement
-                return getLabelReferencesInNode(node.parent, <Identifier>node, cancellationToken);
+                return getLabelReferencesInNode(node.parent, <Identifier>node);
             }
         }
 
@@ -318,7 +318,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         if (node.kind === SyntaxKind.SuperKeyword) {
-            return getReferencesForSuperKeyword(node, cancellationToken);
+            return getReferencesForSuperKeyword(node);
         }
 
         return undefined;
@@ -460,7 +460,7 @@ namespace ts.FindAllReferences.Core {
         };
 
         function getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
-            if (!importTracker) importTracker = createImportTracker(sourceFiles, checker);
+            if (!importTracker) importTracker = createImportTracker(sourceFiles, checker, cancellationToken);
             return importTracker(exportSymbol, exportInfo, options.isForRename);
         }
 
@@ -515,7 +515,6 @@ namespace ts.FindAllReferences.Core {
 
         // For each import, find all references to that import in its source file.
         for (const [importLocation, importSymbol] of importSearches) {
-            state.cancellationToken.throwIfCancellationRequested();
             getReferencesInSourceFile(importLocation.getSourceFile(), state.createSearch(importLocation, importSymbol, ImportExport.Export), state);
         }
 
@@ -534,7 +533,6 @@ namespace ts.FindAllReferences.Core {
             }
             if (indirectSearch) {
                 for (const indirectUser of indirectUsers) {
-                    state.cancellationToken.throwIfCancellationRequested();
                     searchForName(indirectUser, indirectSearch, state);
                 }
             }
@@ -648,7 +646,7 @@ namespace ts.FindAllReferences.Core {
         return parent ? scope.getSourceFile() : scope;
     }
 
-    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, start: number, end: number, cancellationToken: CancellationToken): number[] {
+    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, start: number, end: number): number[] {
         const positions: number[] = [];
 
         /// TODO: Cache symbol existence for files to save text search
@@ -665,8 +663,6 @@ namespace ts.FindAllReferences.Core {
 
         let position = text.indexOf(symbolName, start);
         while (position >= 0) {
-            cancellationToken.throwIfCancellationRequested();
-
             // If we are past the end, stop looking
             if (position > end) break;
 
@@ -685,14 +681,12 @@ namespace ts.FindAllReferences.Core {
         return positions;
     }
 
-    function getLabelReferencesInNode(container: Node, targetLabel: Identifier, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
         const references: Entry[] = [];
         const sourceFile = container.getSourceFile();
         const labelName = targetLabel.text;
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd(), cancellationToken);
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
         for (const position of possiblePositions) {
-            cancellationToken.throwIfCancellationRequested();
-
             const node = getTouchingWord(sourceFile, position);
             if (!node || node.getWidth() !== labelName.length) {
                 continue;
@@ -731,15 +725,14 @@ namespace ts.FindAllReferences.Core {
         const references: NodeEntry[] = [];
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
-            addReferencesForKeywordInFile(sourceFile, keywordKind, tokenToString(keywordKind), cancellationToken, references);
+            addReferencesForKeywordInFile(sourceFile, keywordKind, tokenToString(keywordKind), references);
         }
         return references.length ? [{ definition: { type: "keyword", node: references[0].node }, references }] : undefined;
     }
 
-    function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, cancellationToken: CancellationToken, references: Push<NodeEntry>): void {
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
+    function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, references: Push<NodeEntry>): void {
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile.getStart(), sourceFile.getEnd());
         for (const position of possiblePositions) {
-            cancellationToken.throwIfCancellationRequested();
             const referenceLocation = getTouchingPropertyName(sourceFile, position);
             if (referenceLocation.kind === kind) {
                 references.push(nodeEntry(referenceLocation));
@@ -748,6 +741,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getReferencesInSourceFile(sourceFile: ts.SourceFile, search: Search, state: State): void {
+        state.cancellationToken.throwIfCancellationRequested();
         return getReferencesInContainer(sourceFile, sourceFile, search, state);
     }
 
@@ -762,9 +756,8 @@ namespace ts.FindAllReferences.Core {
         }
 
         const start = state.findInComments ? container.getFullStart() : container.getStart();
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, search.text, start, container.getEnd(), state.cancellationToken);
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, search.text, start, container.getEnd());
         for (const position of possiblePositions) {
-            state.cancellationToken.throwIfCancellationRequested();
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
@@ -1182,7 +1175,7 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getReferencesForSuperKeyword(superKeyword: Node, cancellationToken: CancellationToken): SymbolAndEntries[] {
+    function getReferencesForSuperKeyword(superKeyword: Node): SymbolAndEntries[] {
         let searchSpaceNode = getSuperContainer(superKeyword, /*stopOnFunctions*/ false);
         if (!searchSpaceNode) {
             return undefined;
@@ -1208,10 +1201,8 @@ namespace ts.FindAllReferences.Core {
         const references: Entry[] = [];
 
         const sourceFile = searchSpaceNode.getSourceFile();
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd(), cancellationToken);
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
         for (const position of possiblePositions) {
-            cancellationToken.throwIfCancellationRequested();
-
             const node = getTouchingWord(sourceFile, position);
 
             if (!node || node.kind !== SyntaxKind.SuperKeyword) {
@@ -1271,13 +1262,14 @@ namespace ts.FindAllReferences.Core {
         let possiblePositions: number[];
         if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
             forEach(sourceFiles, sourceFile => {
-                possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
+                cancellationToken.throwIfCancellationRequested();
+                possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
                 getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, references);
             });
         }
         else {
             const sourceFile = searchSpaceNode.getSourceFile();
-            possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd(), cancellationToken);
+            possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
             getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
         }
 
@@ -1288,8 +1280,6 @@ namespace ts.FindAllReferences.Core {
 
         function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: Entry[]): void {
             forEach(possiblePositions, position => {
-                cancellationToken.throwIfCancellationRequested();
-
                 const node = getTouchingWord(sourceFile, position);
                 if (!node || !isThis(node)) {
                     return;
@@ -1333,7 +1323,7 @@ namespace ts.FindAllReferences.Core {
 
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
-            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, node.text, sourceFile.getStart(), sourceFile.getEnd(), cancellationToken);
+            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, node.text, sourceFile.getStart(), sourceFile.getEnd());
             getReferencesForStringLiteralInFile(sourceFile, node.text, possiblePositions, references);
         }
 

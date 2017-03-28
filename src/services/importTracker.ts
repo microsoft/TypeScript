@@ -12,10 +12,10 @@ namespace ts.FindAllReferences {
     export type ImportTracker = (exportSymbol: Symbol, exportInfo: ExportInfo, isForRename: boolean) => ImportsResult;
 
     /** Creates the imports map and returns an ImportTracker that uses it. Call this lazily to avoid calling `getDirectImportsMap` unnecessarily.  */
-    export function createImportTracker(sourceFiles: SourceFile[], checker: TypeChecker): ImportTracker {
-        const allDirectImports = getDirectImportsMap(sourceFiles, checker);
+    export function createImportTracker(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): ImportTracker {
+        const allDirectImports = getDirectImportsMap(sourceFiles, checker, cancellationToken);
         return (exportSymbol, exportInfo, isForRename) => {
-            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, allDirectImports, exportInfo, checker);
+            const { directImports, indirectUsers } = getImportersForExport(sourceFiles, allDirectImports, exportInfo, checker, cancellationToken);
             return { indirectUsers, ...getSearchesFromDirectImports(directImports, exportSymbol, exportInfo.exportKind, checker, isForRename) };
         };
     }
@@ -37,7 +37,13 @@ namespace ts.FindAllReferences {
     type ImporterOrCallExpression = Importer | CallExpression;
 
     /** Returns import statements that directly reference the exporting module, and a list of files that may access the module through a namespace. */
-    function getImportersForExport(sourceFiles: SourceFile[], allDirectImports: Map<ImporterOrCallExpression[]>, { exportingModuleSymbol, exportKind }: ExportInfo, checker: TypeChecker): { directImports: Importer[], indirectUsers: SourceFile[] } {
+    function getImportersForExport(
+            sourceFiles: SourceFile[],
+            allDirectImports: Map<ImporterOrCallExpression[]>,
+            { exportingModuleSymbol, exportKind }: ExportInfo,
+            checker: TypeChecker,
+            cancellationToken: CancellationToken
+            ): { directImports: Importer[], indirectUsers: SourceFile[] } {
         const markSeenDirectImport = nodeSeenTracker<ImporterOrCallExpression>();
         const markSeenIndirectUser = nodeSeenTracker<SourceFileLike>();
         const directImports: Importer[] = [];
@@ -71,6 +77,8 @@ namespace ts.FindAllReferences {
                 if (!markSeenDirectImport(direct)) {
                     continue;
                 }
+
+                cancellationToken.throwIfCancellationRequested();
 
                 switch (direct.kind) {
                     case SyntaxKind.CallExpression:
@@ -289,10 +297,11 @@ namespace ts.FindAllReferences {
     }
 
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
-    function getDirectImportsMap(sourceFiles: SourceFile[], checker: TypeChecker): Map<ImporterOrCallExpression[]> {
+    function getDirectImportsMap(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): Map<ImporterOrCallExpression[]> {
         const map = createMap<ImporterOrCallExpression[]>();
 
         for (const sourceFile of sourceFiles) {
+            cancellationToken.throwIfCancellationRequested();
             forEachImport(sourceFile, (importDecl, moduleSpecifier) => {
                 const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
                 if (moduleSymbol) {
