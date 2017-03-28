@@ -104,8 +104,6 @@ namespace ts.server {
         getExternalFiles?(proj: Project): string[];
     }
 
-    export type ModuleResolver = (moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache) => ResolvedModuleWithFailedLookupLocations;
-
     export interface PluginModuleFactory {
         (mod: { typescript: typeof ts }): PluginModule;
     }
