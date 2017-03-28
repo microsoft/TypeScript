@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 interface I<T> { }
 class C<T> { }
 var i: I;

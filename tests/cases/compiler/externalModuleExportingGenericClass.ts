@@ -1,4 +1,5 @@
 // @module: commonjs
+// @noImplicitAny: true
 
 // @Filename: externalModuleExportingGenericClass_file0.ts
 class C<T> {

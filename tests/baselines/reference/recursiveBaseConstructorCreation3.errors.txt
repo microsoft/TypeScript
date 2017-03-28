@@ -1,4 +1,4 @@
-tests/cases/compiler/recursiveBaseConstructorCreation3.ts(6,27): error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
+tests/cases/compiler/recursiveBaseConstructorCreation3.ts(6,27): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
@@ -10,7 +10,7 @@ tests/cases/compiler/recursiveBaseConstructorCreation3.ts(9,11): error TS2351: C
     }
     declare class xyz extends abc {
                               ~~~
-!!! error TS2314: Generic type 'abc<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     }
     
     var bar = new xyz(); // Error: Invalid 'new' expression.

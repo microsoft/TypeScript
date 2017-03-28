@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 declare class base<T> {
 }
 declare class abc<T> extends base<T> {

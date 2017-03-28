@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 class C<T> {
     foo(): T { return null }
 }

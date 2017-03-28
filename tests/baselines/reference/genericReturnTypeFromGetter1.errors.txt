@@ -1,4 +1,4 @@
-tests/cases/compiler/genericReturnTypeFromGetter1.ts(5,18): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+tests/cases/compiler/genericReturnTypeFromGetter1.ts(5,18): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 tests/cases/compiler/genericReturnTypeFromGetter1.ts(6,7): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
@@ -9,7 +9,7 @@ tests/cases/compiler/genericReturnTypeFromGetter1.ts(6,7): error TS1056: Accesso
     export class DbSet<T> {
         _entityType: A;
                      ~
-!!! error TS2314: Generic type 'A<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
       get entityType() { return this._entityType; }  // used to ICE without return type annotation
           ~~~~~~~~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.

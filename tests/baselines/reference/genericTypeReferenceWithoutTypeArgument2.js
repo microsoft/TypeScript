@@ -1,6 +1,6 @@
 //// [genericTypeReferenceWithoutTypeArgument2.ts]
 // it is an error to use a generic type without type arguments
-// all of these are errors 
+// all of these are errors
 
 interface I<T> {
     foo: T;
@@ -39,7 +39,7 @@ var k = <M.E>null;
 
 //// [genericTypeReferenceWithoutTypeArgument2.js]
 // it is an error to use a generic type without type arguments
-// all of these are errors 
+// all of these are errors
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||

@@ -7,5 +7,5 @@
 
 verify.quickInfos({
     1: "var i: I<any>",
-    2: "var c: C<any>"
+    2: "var c: C<I<any>>"
 });

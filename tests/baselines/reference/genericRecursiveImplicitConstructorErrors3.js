@@ -5,7 +5,7 @@ module TypeScript {
         }
     }
 }
- 
+
 module TypeScript {
     export class PullSymbol <A,B,C>{
         public type: PullTypeSymbol = null;
@@ -27,7 +27,7 @@ module TypeScript {
         }
     }
 }
- 
+
 
 
 //// [genericRecursiveImplicitConstructorErrors3.js]

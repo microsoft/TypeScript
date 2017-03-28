@@ -1,7 +1,7 @@
 tests/cases/compiler/tooManyTypeParameters1.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/tooManyTypeParameters1.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/compiler/tooManyTypeParameters1.ts(8,9): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type 'I<T>' requires 1 or fewer type argument(s).
 
 
 ==== tests/cases/compiler/tooManyTypeParameters1.ts (4 errors) ====
@@ -23,4 +23,4 @@ tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type
     interface I<T> {}
     var i: I<number,number>;
            ~~~~~~~~~~~~~~~~
-!!! error TS2314: Generic type 'I<T>' requires 1 type argument(s).
+!!! error TS2314: Generic type 'I<T>' requires 1 or fewer type argument(s).

@@ -10,7 +10,7 @@ export declare module TypeScript {
   class PullTypeParameterSymbol <A,B,C> extends PullTypeSymbol {
   }
 }
- 
+
 
 
 //// [genericRecursiveImplicitConstructorErrors1.js]

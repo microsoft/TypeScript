@@ -1,9 +1,9 @@
-tests/cases/compiler/genericTypeUsedWithoutTypeArguments1.ts(2,25): error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+tests/cases/compiler/genericTypeUsedWithoutTypeArguments1.ts(2,25): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
 ==== tests/cases/compiler/genericTypeUsedWithoutTypeArguments1.ts (1 errors) ====
     interface Foo<T> { }
     class Bar<T> implements Foo { }
                             ~~~
-!!! error TS2314: Generic type 'Foo<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     

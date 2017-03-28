@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 module A {
     export class B<T> {
         foo() { }

@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 class One<T>{
     value: T;
 }

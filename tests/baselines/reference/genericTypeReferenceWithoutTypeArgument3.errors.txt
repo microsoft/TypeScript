@@ -1,22 +1,24 @@
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(8,16): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(10,21): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(8,16): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(10,21): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,22): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(11,26): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,19): error TS1023: An index signature parameter type must be 'string' or 'number'.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,22): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,26): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,23): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,27): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(16,25): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,22): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(12,26): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,23): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(14,27): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(16,25): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(22,28): error TS2339: Property 'C' does not exist on type 'typeof M'.
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(23,28): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(25,30): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
-tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(26,30): error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(23,28): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(25,18): error TS7010: 'h', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(25,30): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(26,18): error TS7010: 'i', which lacks return-type annotation, implicitly has an 'any' return type.
+tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts(26,30): error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts (14 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument3.ts (16 errors) ====
     // it is an error to use a generic type without type arguments
-    // all of these are errors 
+    // all of these are errors
     
     declare class C<T> {
         foo: T;
@@ -24,33 +26,33 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
     
     declare var c: C;
                    ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     
     declare var a: { x: C };
                         ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     declare var b: { (x: C): C };
                          ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
                              ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     declare var d: { [x: C]: C };
                       ~
 !!! error TS1023: An index signature parameter type must be 'string' or 'number'.
                          ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
                              ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     
     declare function f(x: C): C;
                           ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
                               ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     
     declare class D extends C {}
                             ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     
     declare module M {
         export class E<T> { foo: T }
@@ -61,11 +63,15 @@ tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenc
 !!! error TS2339: Property 'C' does not exist on type 'typeof M'.
     declare class D3<T extends M.E> { }
                                ~~~
-!!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     
     declare function h<T extends C>(x: T);
+                     ~
+!!! error TS7010: 'h', which lacks return-type annotation, implicitly has an 'any' return type.
                                  ~
-!!! error TS2314: Generic type 'C<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.
     declare function i<T extends M.E>(x: T);
+                     ~
+!!! error TS7010: 'i', which lacks return-type annotation, implicitly has an 'any' return type.
                                  ~~~
-!!! error TS2314: Generic type 'E<T>' requires 1 type argument(s).
+!!! error TS2707: Type parameter 'T' implicitly has type 'any' because it was not supplied.

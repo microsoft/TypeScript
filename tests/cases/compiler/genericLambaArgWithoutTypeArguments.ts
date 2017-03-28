@@ -1,3 +1,4 @@
+// @noImplicitAny: true
 interface Foo<T> {
    x: T;
 }

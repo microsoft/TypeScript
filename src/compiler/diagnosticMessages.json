@@ -923,7 +923,7 @@
         "category": "Error",
         "code": 2313
     },
-    "Generic type '{0}' requires {1} type argument(s).": {
+    "Generic type '{0}' requires {1} or fewer type argument(s).": {
         "category": "Error",
         "code": 2314
     },
@@ -2091,7 +2091,7 @@
         "category": "Error",
         "code": 2706
     },
-    "Generic type '{0}' requires between {1} and {2} type arguments.": {
+    "Type parameter '{0}' implicitly has type 'any' because it was not supplied.": {
         "category": "Error",
         "code": 2707
     },
