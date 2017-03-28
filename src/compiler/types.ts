@@ -1952,6 +1952,10 @@ namespace ts {
         fileName: string;
     }
 
+    export interface CheckJsDirective extends TextRange {
+        enabled: boolean;
+    }
+
     export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
 
     export interface CommentRange extends TextRange {
@@ -2294,6 +2298,7 @@ namespace ts {
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
+        /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
     export interface Bundle extends Node {
@@ -3355,6 +3360,7 @@ namespace ts {
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
