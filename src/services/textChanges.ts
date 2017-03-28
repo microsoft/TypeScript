@@ -274,9 +274,9 @@ namespace ts.textChanges {
         }
 
         /**
-         * This function should be used to insert nodes in lists when nodes  don't carry separators as the part of the node range,
-         * i.e. arguments in arguments lists, parameters in parameter lists etc. Statements or class elements are different in sense that
-         * for them separators are treated as the part of the node.
+         * This function should be used to insert nodes in lists when nodes don't carry separators as the part of the node range,
+         * i.e. arguments in arguments lists, parameters in parameter lists etc.
+         * Note that separators are part of the node in statements and class elements.
          */
         public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node) {
             const containingList = formatting.SmartIndenter.getContainingList(after, sourceFile);
@@ -484,7 +484,7 @@ namespace ts.textChanges {
         private static normalize(changes: Change[]) {
             // order changes by start position
             const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
-            // verify that end position of the change is less than start position of the next change
+            // verify that change intervals do not overlap, except possibly at end points.
             for (let i = 0; i < normalized.length - 2; i++) {
                 Debug.assert(normalized[i].range.end <= normalized[i + 1].range.pos);
             }
@@ -549,7 +549,7 @@ namespace ts.textChanges {
     };
 
     function assignPositionsToNode(node: Node): Node {
-        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray);
+        const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);
         // create proxy node for non synthesized nodes
         const newNode = nodeIsSynthesized(visited)
             ? visited

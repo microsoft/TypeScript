@@ -13,6 +13,7 @@ namespace ts.codefix {
         // this.missing = 1;
         //      ^^^^^^^
         const token = getTokenAtPosition(sourceFile, start);
+
         if (token.kind != SyntaxKind.Identifier) {
             return undefined;
         }
@@ -35,46 +36,6 @@ namespace ts.codefix {
 
         return isInJavaScriptFile(sourceFile) ? getActionsForAddMissingMemberInJavaScriptFile() : getActionsForAddMissingMemberInTypeScriptFile();
 
-        function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
-            let typeString = "any";
-
-            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
-                const binaryExpression = token.parent.parent as BinaryExpression;
-
-                const checker = context.program.getTypeChecker();
-                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-                typeString = checker.typeToString(widenedType);
-            }
-
-            const startPos = classDeclaration.members.pos;
-
-            const actions = [{
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
-                changes: [{
-                    fileName: sourceFile.fileName,
-                    textChanges: [{
-                        span: { start: startPos, length: 0 },
-                        newText: `${isStatic ? "static " : ""}${token.getText(sourceFile)}: ${typeString};`
-                    }]
-                }]
-            }];
-
-            if (!isStatic) {
-                actions.push({
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: [{
-                            span: { start: startPos, length: 0 },
-                            newText: `[x: string]: ${typeString};`
-                        }]
-                    }]
-                });
-            }
-
-            return actions;
-        }
-
         function getActionsForAddMissingMemberInJavaScriptFile(): CodeAction[] | undefined {
             const memberName = token.getText();
 
@@ -95,6 +56,7 @@ namespace ts.codefix {
                         }]
                     }]
                 }];
+
             }
             else {
                 const classConstructor = getFirstConstructorWithBody(classDeclaration);
@@ -113,6 +75,64 @@ namespace ts.codefix {
                     }]
                 }];
             }
+        }
+
+        function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
+            let typeNode: TypeNode;
+
+            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
+                const binaryExpression = token.parent.parent as BinaryExpression;
+
+                const checker = context.program.getTypeChecker();
+                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
+                typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+            }
+
+            typeNode = typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+
+            const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
+
+            const property = createProperty(
+                /*decorators*/undefined,
+                /*modifiers*/ isStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+                token.getText(sourceFile),
+                /*questionToken*/ undefined,
+                typeNode,
+                /*initializer*/ undefined);
+            const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
+
+            const actions = [{
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
+                changes: propertyChangeTracker.getChanges()
+            }];
+
+            if (!isStatic) {
+                const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
+                const indexingParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                    "x",
+                /*questionToken*/ undefined,
+                    stringTypeNode,
+                /*initializer*/ undefined);
+                const indexSignature = createIndexSignatureDeclaration(
+                /*decorators*/undefined,
+                /*modifiers*/ undefined,
+                    [indexingParameter],
+                    typeNode);
+
+                const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
+
+                actions.push({
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
+                    changes: indexSignatureChangeTracker.getChanges()
+                });
+            }
+
+            return actions;
         }
     }
 }
