@@ -7,12 +7,15 @@ export class C {}
 // @filename: 1.ts
 import * as defaultModule from "./defaultPath";
 declare function getSpecifier(): string;
+declare function ValidSomeCondition(): boolean;
 declare var whatToLoad: boolean;
 declare const directory: string;
 declare const moduleFile: number;
 
 import(`${directory}\${moduleFile}`);
 import(getSpecifier());
+
+var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
 var p1: Promise<any> = import(getSpecifier());
 var p11: Promise<typeof defaultModule> = import(getSpecifier());
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof defaultModule>;

@@ -284,7 +284,6 @@ namespace ts {
         let deferredGlobalAsyncIterableIteratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredJsxElementClassType: Type;
-        let deferredGlobalPromiseAnyType: Type;
 
         let deferredNodes: Node[];
         let deferredUnusedIdentifierNodes: Node[];
@@ -3456,11 +3455,6 @@ namespace ts {
             // Use the type of the initializer expression if one is present
             if (declaration.initializer) {
                 const type = checkDeclarationInitializer(declaration);
-
-                if (isImportCall(declaration.initializer)) {
-                    if (noImplicitAny && type === getGlobalPromiseAnyType()) {
-                        error(declaration, Diagnostics.Cannot_resolve_dynamic_import_implicitly_has_a_Promise_any_type);                    }
-                }
                 return addOptionality(type, /*optional*/ declaration.questionToken && includeOptionality);
             }
 
@@ -6087,10 +6081,6 @@ namespace ts {
 
         function getGlobalPromiseType(reportErrors: boolean) {
             return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise", /*arity*/ 1, reportErrors)) || emptyGenericType;
-        }
-
-        function getGlobalPromiseAnyType() {
-            return deferredGlobalPromiseAnyType || (deferredGlobalPromiseAnyType = createPromiseType(anyType));
         }
 
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {

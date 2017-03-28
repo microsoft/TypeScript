@@ -1,4 +1,4 @@
-{
+﻿{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -3174,14 +3174,11 @@
         "category": "Error",
         "code": 7034
     },
-    "Cannot resolve dynamic import, implicitly has a 'Promise<any>' type.": {
-      "category": "Error",
-      "code": 7035
-    },
     "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
-      "category": "Error",
-      "code": 7036
+        "category": "Error",
+        "code": 7035
     },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
