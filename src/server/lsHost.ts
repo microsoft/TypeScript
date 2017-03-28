@@ -11,7 +11,7 @@ namespace ts.server {
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
 
-        private resolveModuleName: typeof resolveModuleName;
+        private readonly resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
@@ -44,11 +44,6 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
-        }
-
-        public overrideResolveModuleName(plugin: PluginResolveModules) {
-            const prevResolveModuleName = this.resolveModuleName;
-            this.resolveModuleName = plugin(prevResolveModuleName);
         }
 
         public startRecordingFilesWithChangedResolutions() {
