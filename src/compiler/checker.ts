@@ -8525,16 +8525,9 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // if we have indexed access types with identical index types, see if relationship holds for
-                    // the two object types.
-                    if (source.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
-                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
-                            return result;
-                        }
-                    }
                     // A type S is related to a type T[K] if S is related to A[K], where K is string-like and
                     // A is the apparent type of S.
-                    const constraint = getBaseConstraintOfType(target);
+                    const constraint = getConstraintOfType(<IndexedAccessType>target);
                     if (constraint) {
                         if (result = isRelatedTo(source, constraint, reportErrors)) {
                             errorInfo = saveErrorInfo;
@@ -8578,6 +8571,13 @@ namespace ts {
                     if (constraint) {
                         if (result = isRelatedTo(constraint, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                    else if (target.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>source).indexType === (<IndexedAccessType>target).indexType) {
+                        // if we have indexed access types with identical index types, see if relationship holds for
+                        // the two object types.
+                        if (result = isRelatedTo((<IndexedAccessType>source).objectType, (<IndexedAccessType>target).objectType, reportErrors)) {
                             return result;
                         }
                     }
