@@ -694,7 +694,7 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
-        getRefactorDiagnostics(_fileName: string): Diagnostic[] {
+        getCodeFixDiagnostics(_fileName: string): Diagnostic[] {
             return notImplemented();
         }
 
@@ -720,25 +720,23 @@ namespace ts.server {
             const request = this.processRequest<protocol.Refactor.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
             const response = this.processResponse<protocol.Refactor.GetApplicableRefactorsResponse>(request);
 
-            return response.body;
+            return response.body.refactors;
         }
 
         getRefactorCodeActions(
             fileName: string,
             _formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorKinds?: RefactorKind[],
-            diagnosticCodes?: number[]) {
+            refactorName: string) {
 
             const args: protocol.Refactor.GetRefactorCodeActionsRequestArgs = {
                 file: fileName,
                 locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName),
-                refactorKinds,
-                diagnosticCodes
+                refactorName
             };
 
             const request = this.processRequest<protocol.Refactor.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
-            const codeActions = this.processResponse<protocol.Refactor.GetRefactorCodeActionsResponse>(request).body;
+            const codeActions = this.processResponse<protocol.Refactor.GetRefactorCodeActionsResponse>(request).body.actions;
 
             return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
         }

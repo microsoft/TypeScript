@@ -489,8 +489,8 @@ namespace FourSlash {
             return diagnostics;
         }
 
-        private getRefactorDiagnostics(fileName: string): ts.Diagnostic[] {
-            return this.languageService.getRefactorDiagnostics(fileName);
+        private getCodeFixDiagnostics(fileName: string): ts.Diagnostic[] {
+            return this.languageService.getCodeFixDiagnostics(fileName);
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {
@@ -2231,17 +2231,6 @@ namespace FourSlash {
             return actions;
         }
 
-        private applyAllCodeActions(fileName: string, codeActions: ts.CodeAction[]): void {
-            if (!codeActions) {
-                return;
-            }
-
-            for (const codeAction of codeActions) {
-                const fileChanges = ts.find(codeAction.changes, change => change.fileName === fileName);
-                this.applyEdits(fileChanges.fileName, fileChanges.textChanges, /*isFormattingEdit*/ false);
-            }
-        }
-
         private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
@@ -2599,12 +2588,12 @@ namespace FourSlash {
             }
         }
 
-        public verifyRefactorDiagnosticsAvailableAtMarker(negative: boolean, markerName: string, diagnosticCode?: number) {
+        public verifyCodeFixDiagnosticsAvailableAtMarker(negative: boolean, markerName: string, diagnosticCode?: number) {
             const marker = this.getMarkerByName(markerName);
             const markerPos = marker.position;
             let foundDiagnostic = false;
 
-            const refactorDiagnostics = this.getRefactorDiagnostics(this.activeFile.fileName);
+            const refactorDiagnostics = this.getCodeFixDiagnostics(this.activeFile.fileName);
             for (const diag of refactorDiagnostics) {
                 if (diag.start <= markerPos && diag.start + diag.length >= markerPos) {
                     foundDiagnostic = diagnosticCode === undefined || diagnosticCode === diag.code;
@@ -2650,28 +2639,22 @@ namespace FourSlash {
         public verifyFileAfterApplyingRefactorAtMarker(
             markerName: string,
             expectedContent: string,
-            refactorKindToApply?: ts.RefactorKind,
+            refactorNameToApply: string,
             formattingOptions?: ts.FormatCodeSettings) {
 
             formattingOptions = formattingOptions || this.formatCodeSettings;
             const markerPos = this.getMarkerByName(markerName).position;
-            const diagnostics = this.getRefactorDiagnostics(this.activeFile.fileName);
-
-            const diagnosticCodesAtMarker: number[] = [];
-            for (const diagnostic of diagnostics) {
-                if (diagnostic.start <= markerPos && diagnostic.start + diagnostic.length >= markerPos) {
-                    diagnosticCodesAtMarker.push(diagnostic.code);
-                }
-            }
 
             const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos);
-            const applicableRefactorKinds =
-                ts.map(ts.filter(applicableRefactors, ar => refactorKindToApply === undefined || refactorKindToApply === ar.refactorKind),
-                    refactorInfo => refactorInfo.refactorKind);
-            const codeActions = this.languageService.getRefactorCodeActions(
-                this.activeFile.fileName, formattingOptions, markerPos, applicableRefactorKinds, diagnosticCodesAtMarker);
+            const applicableRefactorToApply = ts.find(applicableRefactors, refactor => refactor.refactorName === refactorNameToApply);
 
-            this.applyAllCodeActions(this.activeFile.fileName, codeActions);
+            if (!applicableRefactorToApply) {
+                this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
+            }
+
+            const codeActions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply);
+
+            this.applyCodeAction(this.activeFile.fileName, codeActions);
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
@@ -3472,7 +3455,7 @@ namespace FourSlashInterface {
         }
 
         public refactorDiagnosticsAvailableAtMarker(markerName: string, refactorCode?: number) {
-            this.state.verifyRefactorDiagnosticsAvailableAtMarker(this.negative, markerName, refactorCode);
+            this.state.verifyCodeFixDiagnosticsAvailableAtMarker(this.negative, markerName, refactorCode);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {
@@ -3688,8 +3671,8 @@ namespace FourSlashInterface {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
         }
 
-        public fileAfterApplyingRefactorsAtMarker(markerName: string, expectedContent: string, refactorKindToApply?: ts.RefactorKind, formattingOptions?: ts.FormatCodeSettings): void {
-            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorKindToApply, formattingOptions);
+        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: ts.FormatCodeSettings): void {
+            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, formattingOptions);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {

@@ -1422,7 +1422,7 @@ namespace ts.server {
         }
 
         private refactorDiagnosticsCheck(file: NormalizedPath, project: Project): void {
-            const refactorDiags = project.getLanguageService().getRefactorDiagnostics(file);
+            const refactorDiags = project.getLanguageService().getCodeFixDiagnostics(file);
             const diagnostics = refactorDiags.map(d => formatDiag(file, project, d));
 
             this.event<protocol.DiagnosticEventBody>({ file, diagnostics }, "refactorDiag");
@@ -1467,8 +1467,7 @@ namespace ts.server {
                 file,
                 this.projectService.getFormatCodeOptions(),
                 position || textRange,
-                args.refactorKinds,
-                args.diagnosticCodes
+                args.refactorName
             );
             return map(result, action => this.mapCodeAction(action, scriptInfo));
         }

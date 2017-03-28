@@ -489,7 +489,7 @@ namespace Harness.LanguageService {
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
-        getRefactorDiagnostics(): ts.Diagnostic[] {
+        getCodeFixDiagnostics(): ts.Diagnostic[] {
             throw new Error("Not supported on the shim.");
         }
         getRefactorCodeActions(): ts.CodeAction[] {

@@ -1910,18 +1910,18 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
-        function getRefactorDiagnostics(fileName: string): Diagnostic[] {
+        function getCodeFixDiagnostics(fileName: string): Diagnostic[] {
             const newLineCharacter = host.getNewLine();
             const boundSourceFile = getValidSourceFile(fileName);
             const program = getProgram();
-            const context: RefactorContext = { boundSourceFile, newLineCharacter, program, rulesProvider: ruleProvider };
+            const context: CodeFixDiagnoseContext = { boundSourceFile, newLineCharacter, program, rulesProvider: ruleProvider };
             const result: Diagnostic[] = [];
 
             forEachChild(boundSourceFile, visitor);
             return result;
 
             function visitor(node: Node): void {
-                const diags = refactor.getRefactorDiagnosticsForNode(context, node);
+                const diags = codefix.getCodeFixDiagnosticsForNode(context, node);
                 if (diags) {
                     addRange(result, diags);
                 }
@@ -1942,8 +1942,7 @@ namespace ts {
             fileName: string,
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorKinds?: RefactorKind[],
-            diagnosticCodes?: number[]): CodeAction[] {
+            refactorName: string): CodeAction[] {
 
             const context: RefactorContext = {
                 boundSourceFile: getValidSourceFile(fileName),
@@ -1952,7 +1951,7 @@ namespace ts {
                 rulesProvider: getRuleProvider(formatOptions)
             };
 
-            return refactor.getRefactorCodeActions(context, positionOrRange, refactorKinds, diagnosticCodes);
+            return refactor.getRefactorCodeActions(context, positionOrRange, refactorName);
         }
 
         return {
@@ -1960,7 +1959,7 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getRefactorDiagnostics,
+            getCodeFixDiagnostics,
             getApplicableRefactors,
             getRefactorCodeActions,
             getCompilerOptionsDiagnostics,

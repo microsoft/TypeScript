@@ -417,12 +417,12 @@ namespace ts.server.protocol {
         }
 
         export interface ApplicableRefactorInfo {
-            refactorKind: number;
+            refactorName: string;
             description: string;
         }
 
         export interface GetApplicableRefactorsResponse extends Response {
-            body?: ApplicableRefactorInfo[];
+            body?: { refactors: ApplicableRefactorInfo[] };
         }
 
         export interface GetRefactorCodeActionsRequest extends Request {
@@ -432,13 +432,11 @@ namespace ts.server.protocol {
 
         export interface GetRefactorCodeActionsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
             /* The kind of the applicable refactor */
-            refactorKinds?: number[];
-            /* The diagnostic code of a refactor diagnostic */
-            diagnosticCodes?: number[];
+            refactorName: string;
         }
 
         export interface GetRefactorCodeActionsResponse extends Response {
-            body?: CodeAction[];
+            body?: { actions: CodeAction[] };
         }
 
         export interface RefactorDiagnosticEventBody {
