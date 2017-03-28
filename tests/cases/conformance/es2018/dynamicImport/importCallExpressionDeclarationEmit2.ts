@@ -6,5 +6,4 @@
 export function foo() { return "foo"; }
 
 // @filename: 1.ts
-import("./0");
 var p1 = import("./0");
