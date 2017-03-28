@@ -1287,6 +1287,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitForInitializer(node: ForInitializer): ForInitializer {
+            if (!node) {
+                return node;
+            }
+
             if (shouldHoistForInitializer(node)) {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {
