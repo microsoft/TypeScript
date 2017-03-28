@@ -469,29 +469,6 @@ namespace ts {
         }
     }
 
-    /** A cancellation that throttles calls to the host */
-    class ThrottledCancellationToken implements HostCancellationToken {
-        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
-        // to marshall over to the host layer).  So we only bother actually checking once enough
-        // time has passed.
-        private lastCancellationCheckTime = 0;
-
-        constructor(private hostCancellationToken: HostCancellationToken) {
-        }
-
-        public isCancellationRequested(): boolean {
-            const time = timestamp();
-            const duration = Math.abs(time - this.lastCancellationCheckTime);
-            if (duration > 10) {
-                // Check no more than once every 10 ms.
-                this.lastCancellationCheckTime = time;
-                return this.hostCancellationToken.isCancellationRequested();
-            }
-
-            return false;
-        }
-    }
-
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost {
 
         public directoryExists: (directoryName: string) => boolean;

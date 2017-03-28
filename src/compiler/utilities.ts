@@ -1450,11 +1450,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
+    export function getSpecialPropertyAssignmentKind(expression: ts.BinaryExpression): SpecialPropertyAssignmentKind {
         if (!isInJavaScriptFile(expression)) {
-            return SpecialPropertyAssignmentKind.None;
-        }
-        if (expression.kind !== SyntaxKind.BinaryExpression) {
             return SpecialPropertyAssignmentKind.None;
         }
         const expr = <BinaryExpression>expression;

@@ -1,0 +1,55 @@
+=== tests/cases/compiler/indexedAccessRelation.ts ===
+// Repro from #14723
+
+class Component<S> {
+>Component : Component<S>
+>S : S
+
+    setState<K extends keyof S>(state: Pick<S, K>) {}
+>setState : <K extends keyof S>(state: Pick<S, K>) => void
+>K : K
+>S : S
+>state : Pick<S, K>
+>Pick : Pick<T, K>
+>S : S
+>K : K
+}
+
+export interface State<T> {
+>State : State<T>
+>T : T
+
+    a?: T;
+>a : T
+>T : T
+}
+
+class Foo {}
+>Foo : Foo
+
+class Comp<T extends Foo, S> extends Component<S & State<T>>
+>Comp : Comp<T, S>
+>T : T
+>Foo : Foo
+>S : S
+>Component : Component<S & State<T>>
+>S : S
+>State : State<T>
+>T : T
+{
+    foo(a: T) {
+>foo : (a: T) => void
+>a : T
+>T : T
+
+        this.setState({ a: a });
+>this.setState({ a: a }) : void
+>this.setState : <K extends keyof (S & State<T>)>(state: Pick<S & State<T>, K>) => void
+>this : this
+>setState : <K extends keyof (S & State<T>)>(state: Pick<S & State<T>, K>) => void
+>{ a: a } : { a: T; }
+>a : T
+>a : T
+    }
+}
+
