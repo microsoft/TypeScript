@@ -1430,25 +1430,23 @@ namespace ts.server {
             this.event<protocol.DiagnosticEventBody>({ file, diagnostics }, "refactorDiag");
         }
 
-        private isLocation(locationOrSpan: protocol.LocationOrSpanWithPosition): locationOrSpan is protocol.LocationWithPosition {
-            return (<any>locationOrSpan).start === undefined;
+        private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
+            return (<protocol.FileLocationRequestArgs>locationOrSpan).line !== undefined;
         }
 
-        private extractPositionAndRange(args: protocol.FileLocationOrSpanWithPositionRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
+        private extractPositionAndRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
             let position: number;
             let textRange: TextRange;
-            if (this.isLocation(args.locationOrSpan)) {
-                position = getPosition(args.locationOrSpan);
+            if (this.isLocation(args)) {
+                position = getPosition(args);
             }
             else {
-                textRange = {
-                    pos: getPosition(args.locationOrSpan.start),
-                    end: getPosition(args.locationOrSpan.end)
-                };
+                const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
+                textRange = { pos: startPosition, end: endPosition };
             }
             return { position, textRange };
 
-            function getPosition(loc: protocol.LocationWithPosition) {
+            function getPosition(loc: protocol.FileLocationRequestArgs) {
                 return loc.position !== undefined ? loc.position : scriptInfo.lineOffsetToPosition(loc.line, loc.offset);
             }
         }
@@ -1481,8 +1479,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
 
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-            const startPosition = getStartPosition();
-            const endPosition = getEndPosition();
+            const { startPosition, endPosition } = this.getStartAndEndPosition(args, scriptInfo);
             const formatOptions = this.projectService.getFormatCodeOptions(file);
 
             const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
@@ -1495,18 +1492,16 @@ namespace ts.server {
             else {
                 return codeActions;
             }
+        }
 
-            function getStartPosition() {
-                return args.startPosition !== undefined
-                    ? args.startPosition
-                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
-            }
-
-            function getEndPosition() {
-                return args.endPosition !== undefined
-                    ? args.endPosition
-                    : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
-            }
+        private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
+            const startPosition = args.startPosition !== undefined
+                ? args.startPosition
+                : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+            const endPosition = args.endPosition !== undefined
+                ? args.endPosition
+                : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            return { startPosition, endPosition };
         }
 
         private mapCodeAction(codeAction: CodeAction, scriptInfo: ScriptInfo): protocol.CodeAction {

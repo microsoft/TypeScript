@@ -397,23 +397,14 @@ namespace ts.server.protocol {
         position?: number;
     }
 
-    export type LocationOrSpanWithPosition = LocationWithPosition | { start: LocationWithPosition, end: LocationWithPosition };
-
-    export interface FileLocationOrSpanWithPositionRequestArgs extends FileRequestArgs {
-        locationOrSpan: LocationOrSpanWithPosition;
-    }
-
-    export interface LocationWithPosition extends Location {
-        position?: number;
-    }
+    export type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
 
     export interface GetApplicableRefactorsRequest extends Request {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
 
-    export interface GetApplicableRefactorsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
-    }
+    export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
 
     export interface ApplicableRefactorInfo {
         refactorName: string;
@@ -429,16 +420,16 @@ namespace ts.server.protocol {
         arguments: GetRefactorCodeActionsRequestArgs;
     }
 
-    export interface GetRefactorCodeActionsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
+    export type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
         /* The kind of the applicable refactor */
         refactorName: string;
-    }
+    };
 
     export interface GetRefactorCodeActionsResponse extends Response {
         body?: { actions: CodeAction[] };
     }
 
-    export interface RefactorDiagnosticEventBody {
+    export interface CodeFixDiagnosticEventBody {
         file: string;
         diagnostics: Diagnostic[];
     }

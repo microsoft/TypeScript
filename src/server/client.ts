@@ -698,24 +698,24 @@ namespace ts.server {
             return notImplemented();
         }
 
-        private positionOrRangeToLocationOrSpan(positionOrRange: number | TextRange, fileName: string) {
-            let locationOrSpan: protocol.LocationOrSpanWithPosition;
+        private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
             if (typeof positionOrRange === "number") {
-                locationOrSpan = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+                const { line, offset } = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+                return <protocol.FileLocationRequestArgs>{ file: fileName, line, offset };
             }
-            else {
-                locationOrSpan = positionOrRange
-                    ? { start: this.positionToOneBasedLineOffset(fileName, positionOrRange.pos), end: this.positionToOneBasedLineOffset(fileName, positionOrRange.end) }
-                    : undefined;
-            }
-            return locationOrSpan;
+            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.pos);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.end);
+            return <protocol.FileRangeRequestArgs>{
+                file: fileName,
+                startLine,
+                startOffset,
+                endLine,
+                endOffset
+            };
         }
 
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
-            const args: protocol.GetApplicableRefactorsRequestArgs = {
-                file: fileName,
-                locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName)
-            };
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
 
             const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
             const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
@@ -729,11 +729,8 @@ namespace ts.server {
             positionOrRange: number | TextRange,
             refactorName: string) {
 
-            const args: protocol.GetRefactorCodeActionsRequestArgs = {
-                file: fileName,
-                locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName),
-                refactorName
-            };
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetRefactorCodeActionsRequestArgs;
+            args.refactorName = refactorName;
 
             const request = this.processRequest<protocol.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
             const codeActions = this.processResponse<protocol.GetRefactorCodeActionsResponse>(request).body.actions;
