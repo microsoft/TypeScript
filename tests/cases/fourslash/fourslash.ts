@@ -296,6 +296,7 @@ declare namespace FourSlashInterface {
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
         printCompletionListMembers(): void;
+        printAvailableCodeFixes(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;
         printNameOrDottedNameSpans(pos: number): void;

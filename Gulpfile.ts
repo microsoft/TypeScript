@@ -1024,7 +1024,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = cmdLineOptions["files"];
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts' --exclude 'src/harness/unittests/services/**/*.ts'";
+        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
     console.log("Linting: " + cmd);
     child_process.execSync(cmd, { stdio: [0, 1, 2] });

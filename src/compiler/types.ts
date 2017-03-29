@@ -815,18 +815,21 @@ namespace ts {
 
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
         kind: SyntaxKind.Constructor;
+        parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
     }
 
-    // For when we encounter a semicolon in a class declaration.  ES6 allows these as class elements.
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
+        parent?: ClassDeclaration | ClassExpression;
     }
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
     export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.GetAccessor;
+        parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
         body: FunctionBody;
     }
@@ -835,6 +838,7 @@ namespace ts {
     // ClassElement and an ObjectLiteralElement.
     export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
         kind: SyntaxKind.SetAccessor;
+        parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
         body: FunctionBody;
     }
@@ -843,6 +847,7 @@ namespace ts {
 
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
         kind: SyntaxKind.IndexSignature;
+        parent?: ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeLiteralNode;
     }
 
     export interface TypeNode extends Node {
@@ -856,22 +861,24 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
-            | SyntaxKind.VoidKeyword;
+            | SyntaxKind.ThisKeyword
+            | SyntaxKind.VoidKeyword
+            | SyntaxKind.UndefinedKeyword
+            | SyntaxKind.NullKeyword
+            | SyntaxKind.NeverKeyword;
     }
 
     export interface ThisTypeNode extends TypeNode {
         kind: SyntaxKind.ThisType;
     }
 
-    export interface FunctionOrConstructorTypeNode extends TypeNode, SignatureDeclaration {
-        kind: SyntaxKind.FunctionType | SyntaxKind.ConstructorType;
-    }
+    export type FunctionOrConstructorTypeNode = FunctionTypeNode | ConstructorTypeNode;
 
-    export interface FunctionTypeNode extends FunctionOrConstructorTypeNode {
+    export interface FunctionTypeNode extends TypeNode, SignatureDeclaration {
         kind: SyntaxKind.FunctionType;
     }
 
-    export interface ConstructorTypeNode extends FunctionOrConstructorTypeNode {
+    export interface ConstructorTypeNode extends TypeNode, SignatureDeclaration {
         kind: SyntaxKind.ConstructorType;
     }
 
@@ -908,17 +915,16 @@ namespace ts {
         elementTypes: NodeArray<TypeNode>;
     }
 
-    export interface UnionOrIntersectionTypeNode extends TypeNode {
-        kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType;
+    export type UnionOrIntersectionTypeNode = UnionTypeNode | IntersectionTypeNode;
+
+    export interface UnionTypeNode extends TypeNode {
+        kind: SyntaxKind.UnionType;
         types: NodeArray<TypeNode>;
     }
 
-    export interface UnionTypeNode extends UnionOrIntersectionTypeNode {
-        kind: SyntaxKind.UnionType;
-    }
-
-    export interface IntersectionTypeNode extends UnionOrIntersectionTypeNode {
+    export interface IntersectionTypeNode extends TypeNode {
         kind: SyntaxKind.IntersectionType;
+        types: NodeArray<TypeNode>;
     }
 
     export interface ParenthesizedTypeNode extends TypeNode {
@@ -940,6 +946,7 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
+        parent?: TypeAliasDeclaration;
         readonlyToken?: ReadonlyToken;
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken;
@@ -1027,15 +1034,15 @@ namespace ts {
         _primaryExpressionBrand: any;
     }
 
-    export interface NullLiteral extends PrimaryExpression {
+    export interface NullLiteral extends PrimaryExpression, TypeNode {
         kind: SyntaxKind.NullKeyword;
     }
 
-    export interface BooleanLiteral extends PrimaryExpression {
+    export interface BooleanLiteral extends PrimaryExpression, TypeNode {
         kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
     }
 
-    export interface ThisExpression extends PrimaryExpression {
+    export interface ThisExpression extends PrimaryExpression, KeywordTypeNode {
         kind: SyntaxKind.ThisKeyword;
     }
 
@@ -1453,7 +1460,7 @@ namespace ts {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
-        arguments: NodeArray<Expression>;
+        arguments?: NodeArray<Expression>;
     }
 
     export interface TaggedTemplateExpression extends MemberExpression {
@@ -1507,6 +1514,7 @@ namespace ts {
     export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        parent?: JsxOpeningLikeElement;
     }
 
     /// The opening element of a <Tag>...</Tag> JsxElement
@@ -1526,7 +1534,7 @@ namespace ts {
 
     export interface JsxAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxAttribute;
-        parent?: JsxOpeningLikeElement;
+        parent?: JsxAttributes;
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
         initializer?: StringLiteral | JsxExpression;
@@ -1534,7 +1542,7 @@ namespace ts {
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
         kind: SyntaxKind.JsxSpreadAttribute;
-        parent?: JsxOpeningLikeElement;
+        parent?: JsxAttributes;
         expression: Expression;
     }
 
@@ -1779,8 +1787,8 @@ namespace ts {
     export interface HeritageClause extends Node {
         kind: SyntaxKind.HeritageClause;
         parent?: InterfaceDeclaration | ClassDeclaration | ClassExpression;
-        token: SyntaxKind;
-        types?: NodeArray<ExpressionWithTypeArguments>;
+        token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
+        types: NodeArray<ExpressionWithTypeArguments>;
     }
 
     export interface TypeAliasDeclaration extends DeclarationStatement {
@@ -1942,6 +1950,10 @@ namespace ts {
 
     export interface FileReference extends TextRange {
         fileName: string;
+    }
+
+    export interface CheckJsDirective extends TextRange {
+        enabled: boolean;
     }
 
     export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
@@ -2286,6 +2298,7 @@ namespace ts {
         /* @internal */ moduleAugmentations: LiteralExpression[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
+        /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
     export interface Bundle extends Node {
@@ -2468,6 +2481,14 @@ namespace ts {
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
 
+        /** Note that the resulting nodes cannot be checked. */
+
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
+        /** Note that the resulting nodes cannot be checked. */
+        signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
+        /** Note that the resulting nodes cannot be checked. */
+        indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
+
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
@@ -2517,6 +2538,16 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+    }
+
+    export enum NodeBuilderFlags {
+        None                                    = 0,
+        allowThisInObjectLiteral                = 1 << 0,
+        allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
+        allowTypeParameterInQualifiedName       = 1 << 2,
+        allowAnonymousIdentifier                = 1 << 3,
+        allowEmptyUnionOrIntersection           = 1 << 4,
+        allowEmptyTuple                         = 1 << 5
     }
 
     export interface SymbolDisplayBuilder {
@@ -3010,7 +3041,6 @@ namespace ts {
         ObjectLiteral    = 1 << 7,  // Originates in an object literal
         EvolvingArray    = 1 << 8,  // Evolving array type
         ObjectLiteralPatternWithComputedProperties = 1 << 9,  // Object literal pattern with computed properties
-        NonPrimitive        = 1 << 10,  // NonPrimitive object type
         ClassOrInterface = Class | Interface
     }
 
@@ -3321,6 +3351,7 @@ namespace ts {
     export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[];
 
     export interface CompilerOptions {
+        /*@internal*/ all?: boolean;
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
@@ -3329,6 +3360,7 @@ namespace ts {
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
@@ -3513,8 +3545,10 @@ namespace ts {
         shortName?: string;                                     // A short mnemonic for convenience - for instance, 'h' can be used in place of 'help'
         description?: DiagnosticMessage;                        // The message describing what the command line switch does
         paramType?: DiagnosticMessage;                          // The name to be used for a non-boolean option's parameter
-        experimental?: boolean;
         isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
+        isCommandLineOnly?: boolean;
+        showInSimplifiedHelpView?: boolean;
+        category?: DiagnosticMessage;
     }
 
     /* @internal */
@@ -4067,7 +4101,7 @@ namespace ts {
     export type Transformer<T extends Node> = (node: T) => T;
 
     /**
-     * A function that accepts and possible transforms a node.
+     * A function that accepts and possibly transforms a node.
      */
     export type Visitor = (node: Node) => VisitResult<Node>;
 
