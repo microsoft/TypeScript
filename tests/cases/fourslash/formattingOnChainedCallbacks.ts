@@ -20,6 +20,14 @@
 ////    /*n2*/
 ////    .then();
 
+////Promise
+////    .then(
+////        /*cbNoComma*/cb
+////    /*endNoComma*/)
+////    .then(
+////        /*cbComma*/cb,
+////    /*endComma*/)
+////    .then();
 
 goTo.marker('1');
 edit.insertLine('');
@@ -50,3 +58,14 @@ goTo.marker('n1');
 verify.indentationIs(8);
 goTo.marker('n2');
 verify.indentationIs(4);
+
+format.document();
+
+goTo.marker('cbNoComma');
+verify.currentLineContentIs('        cb');
+goTo.marker('cbComma');
+verify.currentLineContentIs('        cb,');
+goTo.marker('endNoComma');
+verify.currentLineContentIs('    )');
+goTo.marker('endComma');
+// verify.currentLineContentIs('    )');
