@@ -4,6 +4,7 @@
 
 namespace ts {
     const emptyArray: any[] = [];
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
@@ -911,15 +912,40 @@ namespace ts {
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                // For JavaScript files, we don't want to report semantic errors.
-                // Instead, we'll report errors for using TypeScript-only constructs from within a
-                // JavaScript file when we get syntactic diagnostics for the file.
-                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ? [] : typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report semantic errors unless explicitly requested.
+                const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) || isCheckJsEnabledForFile(sourceFile, options);
+                const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                return isSourceFileJavaScript(sourceFile)
+                    ? filter(diagnostics, shouldReportDiagnostic)
+                    : diagnostics;
             });
+        }
+
+        /**
+         * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
+         */
+        function shouldReportDiagnostic(diagnostic: Diagnostic) {
+            const { file, start } = diagnostic;
+            const lineStarts = getLineStarts(file);
+            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+            while (line > 0) {
+                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
+                if (!result) {
+                    // non-empty line
+                    return true;
+                }
+                if (result[3]) {
+                    // @ts-ignore
+                    return false;
+                }
+                line--;
+            }
+            return true;
         }
 
         function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
@@ -1720,6 +1746,10 @@ namespace ts {
 
             if (!options.noEmit && options.allowJs && options.declaration) {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
+            }
+
+            if (options.checkJs && !options.allowJs) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
             if (options.emitDecoratorMetadata &&

@@ -154,6 +154,12 @@ namespace ts {
             description: Diagnostics.Allow_javascript_files_to_be_compiled
         },
         {
+            name: "checkJs",
+            type: "boolean",
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Report_errors_in_js_files
+        },
+        {
             name: "jsx",
             type: createMapFromTemplate({
                 "preserve": JsxEmit.Preserve,

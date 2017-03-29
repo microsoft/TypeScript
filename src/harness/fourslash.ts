@@ -2662,6 +2662,11 @@ namespace FourSlash {
             }
         }
 
+        public printAvailableCodeFixes() {
+            const codeFixes = this.getCodeFixActions(this.activeFile.fileName);
+            Harness.IO.log(stringify(codeFixes));
+        }
+
         // Get the text of the entire line the caret is currently at
         private getCurrentLineContent() {
             const text = this.getFileContent(this.activeFile.fileName);
@@ -3864,6 +3869,10 @@ namespace FourSlashInterface {
 
         public printCompletionListMembers() {
             this.state.printCompletionListMembers();
+        }
+
+        public printAvailableCodeFixes() {
+            this.state.printAvailableCodeFixes();
         }
 
         public printBreakpointLocation(pos: number) {

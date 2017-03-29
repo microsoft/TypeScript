@@ -204,21 +204,17 @@ namespace ts {
      * @param visitor The callback used to visit each child.
      * @param context A lexical environment context for the visitor.
      */
-    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes): T | undefined;
+    export function visitEachChild<T extends Node>(node: T | undefined, visitor: Visitor, context: TransformationContext, nodesVisitor?: typeof visitNodes, tokenVisitor?: Visitor): T | undefined;
 
-    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes): Node {
+    export function visitEachChild(node: Node, visitor: Visitor, context: TransformationContext, nodesVisitor = visitNodes, tokenVisitor?: Visitor): Node {
         if (node === undefined) {
             return undefined;
         }
 
         const kind = node.kind;
-        // No need to visit nodes with no children.
-        if ((kind > SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken)) {
-            return node;
-        }
 
-        // We do not yet support types.
-        if ((kind >= SyntaxKind.TypePredicate && kind <= SyntaxKind.LiteralType)) {
+        // No need to visit nodes with no children.
+        if ((kind > SyntaxKind.FirstToken && kind <= SyntaxKind.LastToken) || kind === SyntaxKind.ThisType) {
             return node;
         }
 
@@ -227,6 +223,8 @@ namespace ts {
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.OmittedExpression:
             case SyntaxKind.DebuggerStatement:
+            case SyntaxKind.EndOfDeclarationMarker:
+            case SyntaxKind.MissingDeclaration:
                 // No need to visit nodes with no children.
                 return node;
 
@@ -240,13 +238,53 @@ namespace ts {
                 return updateComputedPropertyName(<ComputedPropertyName>node,
                     visitNode((<ComputedPropertyName>node).expression, visitor, isExpression));
 
-            // Signature elements
+            // Signatures and Signature Elements
+            case SyntaxKind.FunctionType:
+                return updateFunctionTypeNode(<FunctionTypeNode>node,
+                    nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<FunctionTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<FunctionTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.ConstructorType:
+                return updateConstructorTypeNode(<ConstructorTypeNode>node,
+                    nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<ConstructorTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.CallSignature:
+                return updateCallSignatureDeclaration(<CallSignatureDeclaration>node,
+                    nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<CallSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.ConstructSignature:
+                return updateConstructSignatureDeclaration(<ConstructSignatureDeclaration>node,
+                    nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<ConstructSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.MethodSignature:
+                return updateMethodSignature(<MethodSignature>node,
+                    nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameter),
+                    visitParameterList((<MethodSignature>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<MethodSignature>node).type, visitor, isTypeNode),
+                    visitNode((<MethodSignature>node).name, visitor, isPropertyName),
+                    visitNode((<MethodSignature>node).questionToken, tokenVisitor, isToken));
+
+            case SyntaxKind.IndexSignature:
+                return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
+                    nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier),
+                    visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
+
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,
                     nodesVisitor((<ParameterDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ParameterDeclaration>node).modifiers, visitor, isModifier),
-                    (<ParameterDeclaration>node).dotDotDotToken,
+                    visitNode((<ParameterDeclaration>node).dotDotDotToken, tokenVisitor, isToken),
                     visitNode((<ParameterDeclaration>node).name, visitor, isBindingName),
+                    visitNode((<ParameterDeclaration>node).questionToken, tokenVisitor, isToken),
                     visitNode((<ParameterDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<ParameterDeclaration>node).initializer, visitor, isExpression));
 
@@ -254,7 +292,74 @@ namespace ts {
                 return updateDecorator(<Decorator>node,
                     visitNode((<Decorator>node).expression, visitor, isExpression));
 
-            // Type member
+            // Types
+
+            case SyntaxKind.TypeReference:
+                return updateTypeReferenceNode(<TypeReferenceNode>node,
+                    visitNode((<TypeReferenceNode>node).typeName, visitor, isEntityName),
+                    nodesVisitor((<TypeReferenceNode>node).typeArguments, visitor, isTypeNode));
+
+            case SyntaxKind.TypePredicate:
+                return updateTypePredicateNode(<TypePredicateNode>node,
+                    visitNode((<TypePredicateNode>node).parameterName, visitor),
+                    visitNode((<TypePredicateNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.TypeQuery:
+                return updateTypeQueryNode((<TypeQueryNode>node), visitNode((<TypeQueryNode>node).exprName, visitor, isEntityName));
+
+            case SyntaxKind.TypeLiteral:
+                return updateTypeLiteralNode((<TypeLiteralNode>node), nodesVisitor((<TypeLiteralNode>node).members, visitor));
+
+            case SyntaxKind.ArrayType:
+                return updateArrayTypeNode(<ArrayTypeNode>node, visitNode((<ArrayTypeNode>node).elementType, visitor, isTypeNode));
+
+            case SyntaxKind.TupleType:
+                return updateTypleTypeNode((<TupleTypeNode>node), nodesVisitor((<TupleTypeNode>node).elementTypes, visitor, isTypeNode));
+
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+                return updateUnionOrIntersectionTypeNode(<UnionOrIntersectionTypeNode>node,
+                    nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
+
+            case SyntaxKind.ParenthesizedType:
+                Debug.fail("not implemented.");
+
+            case SyntaxKind.TypeOperator:
+                return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.IndexedAccessType:
+                return updateIndexedAccessTypeNode((<IndexedAccessTypeNode>node),
+                    visitNode((<IndexedAccessTypeNode>node).objectType, visitor, isTypeNode),
+                    visitNode((<IndexedAccessTypeNode>node).indexType, visitor, isTypeNode));
+
+            case SyntaxKind.MappedType:
+                return updateMappedTypeNode((<MappedTypeNode>node),
+                    visitNode((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
+                    visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter),
+                    visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
+                    visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+
+            case SyntaxKind.LiteralType:
+                return updateLiteralTypeNode(<LiteralTypeNode>node,
+                    visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
+
+            // Type Declarations
+
+            case SyntaxKind.TypeParameter:
+                return updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
+                    visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
+                    visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode),
+                    visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
+
+            // Type members
+
+            case SyntaxKind.PropertySignature:
+                return updatePropertySignature((<PropertySignature>node),
+                    visitNode((<PropertySignature>node).name, visitor, isPropertyName),
+                    visitNode((<PropertySignature>node).questionToken, tokenVisitor, isToken),
+                    visitNode((<PropertySignature>node).type, visitor, isTypeNode),
+                    visitNode((<PropertySignature>node).initializer, visitor, isExpression));
+
             case SyntaxKind.PropertyDeclaration:
                 return updateProperty(<PropertyDeclaration>node,
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
@@ -267,8 +372,9 @@ namespace ts {
                 return updateMethod(<MethodDeclaration>node,
                     nodesVisitor((<MethodDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<MethodDeclaration>node).modifiers, visitor, isModifier),
-                    (<MethodDeclaration>node).asteriskToken,
+                    visitNode((<MethodDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
+                    visitNode((<MethodDeclaration>node).questionToken, tokenVisitor, isToken),
                     nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode),
@@ -309,7 +415,7 @@ namespace ts {
 
             case SyntaxKind.BindingElement:
                 return updateBindingElement(<BindingElement>node,
-                    (<BindingElement>node).dotDotDotToken,
+                    visitNode((<BindingElement>node).dotDotDotToken, tokenVisitor, isToken),
                     visitNode((<BindingElement>node).propertyName, visitor, isPropertyName),
                     visitNode((<BindingElement>node).name, visitor, isBindingName),
                     visitNode((<BindingElement>node).initializer, visitor, isExpression));
@@ -362,7 +468,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
                 return updateFunctionExpression(<FunctionExpression>node,
                     nodesVisitor((<FunctionExpression>node).modifiers, visitor, isModifier),
-                    (<FunctionExpression>node).asteriskToken,
+                    visitNode((<FunctionExpression>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
                     nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context, nodesVisitor),
@@ -419,7 +525,7 @@ namespace ts {
 
             case SyntaxKind.YieldExpression:
                 return updateYield(<YieldExpression>node,
-                    (<YieldExpression>node).asteriskToken,
+                    visitNode((<YieldExpression>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<YieldExpression>node).expression, visitor, isExpression));
 
             case SyntaxKind.SpreadElement:
@@ -555,7 +661,7 @@ namespace ts {
                 return updateFunctionDeclaration(<FunctionDeclaration>node,
                     nodesVisitor((<FunctionDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<FunctionDeclaration>node).modifiers, visitor, isModifier),
-                    (<FunctionDeclaration>node).asteriskToken,
+                    visitNode((<FunctionDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
                     nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context, nodesVisitor),

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/a.js ===
+
+// @ts-nocheck
+var x = "string";
+>x : Symbol(x, Decl(a.js, 2, 3))
+
+x = 0;
+>x : Symbol(x, Decl(a.js, 2, 3))
+
