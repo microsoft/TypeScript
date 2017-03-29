@@ -1,5 +1,4 @@
 //// [optionalProperties02.ts]
-
 interface Foo {
     a?: string;
     b: string;

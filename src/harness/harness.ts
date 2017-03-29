@@ -1798,7 +1798,7 @@ namespace Harness {
                     if (currentFileContent === undefined) {
                         currentFileContent = "";
                     }
-                    else {
+                    else if (currentFileContent !== "") {
                         // End-of-line
                         currentFileContent = currentFileContent + "\n";
                     }

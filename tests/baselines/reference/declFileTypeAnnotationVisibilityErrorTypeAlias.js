@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationVisibilityErrorTypeAlias.ts]
-
 interface Window {
     someMethod();
 }

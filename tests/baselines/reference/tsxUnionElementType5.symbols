@@ -1,10 +1,9 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 function EmptySFC1() {
->EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 1, 32))
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
 
     return <div>hello</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
@@ -12,7 +11,7 @@ function EmptySFC1() {
 }
 
 function EmptySFC2() {
->EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 5, 1))
+>EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
 
     return <div>Hello</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
@@ -20,9 +19,9 @@ function EmptySFC2() {
 }
 
 function SFC2(prop: { x: boolean }) {
->SFC2 : Symbol(SFC2, Decl(file.tsx, 9, 1))
->prop : Symbol(prop, Decl(file.tsx, 11, 14))
->x : Symbol(x, Decl(file.tsx, 11, 21))
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 8, 1))
+>prop : Symbol(prop, Decl(file.tsx, 10, 14))
+>x : Symbol(x, Decl(file.tsx, 10, 21))
 
     return <h1>World</h1>;
 >h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2407, 47))
@@ -30,26 +29,26 @@ function SFC2(prop: { x: boolean }) {
 }
 
 var EmptySFCComp = EmptySFC1 || EmptySFC2;
->EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 15, 3))
->EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 1, 32))
->EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 5, 1))
+>EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
+>EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
 
 var SFC2AndEmptyComp = SFC2 || EmptySFC1;
->SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 16, 3))
->SFC2 : Symbol(SFC2, Decl(file.tsx, 9, 1))
->EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 1, 32))
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 8, 1))
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
 
 let a = <EmptySFCComp />
->a : Symbol(a, Decl(file.tsx, 18, 3))
->EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 15, 3))
+>a : Symbol(a, Decl(file.tsx, 17, 3))
+>EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
 
 let a1 = <EmptySFCComp data-prop />
->a1 : Symbol(a1, Decl(file.tsx, 19, 3))
->EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 15, 3))
->data-prop : Symbol(data-prop, Decl(file.tsx, 19, 22))
+>a1 : Symbol(a1, Decl(file.tsx, 18, 3))
+>EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 18, 22))
 
 let b = <SFC2AndEmptyComp x />
->b : Symbol(b, Decl(file.tsx, 20, 3))
->SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 16, 3))
->x : Symbol(x, Decl(file.tsx, 20, 25))
+>b : Symbol(b, Decl(file.tsx, 19, 3))
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+>x : Symbol(x, Decl(file.tsx, 19, 25))
 

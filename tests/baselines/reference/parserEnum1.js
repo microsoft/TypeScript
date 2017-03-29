@@ -1,6 +1,4 @@
 //// [parserEnum1.ts]
-
-
     export enum SignatureFlags {
         None = 0,
         IsIndexer = 1,

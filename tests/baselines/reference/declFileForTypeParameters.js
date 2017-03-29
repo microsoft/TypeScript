@@ -1,5 +1,4 @@
 //// [declFileForTypeParameters.ts]
-
 class C<T> {
     x: T;
     foo(a: T): T {

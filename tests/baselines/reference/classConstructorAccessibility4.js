@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility4.ts]
-
 class A {
     private constructor() { }
 

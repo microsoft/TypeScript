@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments12.ts]
-
 class C {
     f(arguments) {
         var a = () => arguments;

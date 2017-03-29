@@ -1,5 +1,4 @@
 //// [functionTypesLackingReturnTypes.ts]
-
 // Error (no '=>')
 function f(x: ()) {
 }

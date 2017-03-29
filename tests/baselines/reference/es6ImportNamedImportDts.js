@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportDts.ts] ////
 
 //// [server.ts]
-
 export class a { }
 export class a11 { }
 export class a12 { }

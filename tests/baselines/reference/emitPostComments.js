@@ -1,5 +1,4 @@
 //// [emitPostComments.ts]
-
 var y = 10;
 /**
 * @name Foo

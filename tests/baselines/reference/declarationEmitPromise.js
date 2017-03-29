@@ -1,5 +1,4 @@
 //// [declarationEmitPromise.ts]
-
 export class bluebird<T> {
     static all: Array<bluebird<any>>;
 }

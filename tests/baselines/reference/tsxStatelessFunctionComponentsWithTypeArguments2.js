@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;

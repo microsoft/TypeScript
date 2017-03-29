@@ -276,6 +276,8 @@ namespace ts {
         function writeBundle(bundle: Bundle, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
+            emitShebangIfNeeded(bundle);
+            emitPrologueDirectivesIfNeeded(bundle);
             emitHelpersIndirect(bundle);
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
@@ -287,6 +289,8 @@ namespace ts {
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
+            emitShebangIfNeeded(sourceFile);
+            emitPrologueDirectivesIfNeeded(sourceFile);
             print(EmitHint.SourceFile, sourceFile, sourceFile);
             reset();
             writer = previousWriter;
@@ -736,15 +740,6 @@ namespace ts {
 
         function trySubstituteNode(hint: EmitHint, node: Node) {
             return node && substituteNode && substituteNode(hint, node) || node;
-        }
-
-        function emitBodyIndirect(node: Node, elements: NodeArray<Node>, emitCallback: (node: Node) => void): void {
-            if (emitBodyWithDetachedComments) {
-                emitBodyWithDetachedComments(node, elements, emitCallback);
-            }
-            else {
-                emitCallback(node);
-            }
         }
 
         function emitHelpersIndirect(node: Node) {
@@ -1664,7 +1659,12 @@ namespace ts {
                 ? emitBlockFunctionBodyOnSingleLine
                 : emitBlockFunctionBodyWorker;
 
-            emitBodyIndirect(body, body.statements, emitBlockFunctionBody);
+            if (emitBodyWithDetachedComments) {
+                emitBodyWithDetachedComments(body, body.statements, emitBlockFunctionBody);
+            }
+            else {
+                emitBlockFunctionBody(body);
+            }
 
             decreaseIndent();
             writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
@@ -2073,16 +2073,27 @@ namespace ts {
 
         function emitSourceFile(node: SourceFile) {
             writeLine();
-            emitShebang();
-            emitBodyIndirect(node, node.statements, emitSourceFileWorker);
+            const statements = node.statements;
+            if (emitBodyWithDetachedComments) {
+                // Emit detached comment if there are no prologue directives or if the first node is synthesized.
+                // The synthesized node will have no leading comment so some comments may be missed.
+                const shouldEmitDetachedComment = statements.length === 0 ||
+                    !isPrologueDirective(statements[0]) ||
+                    nodeIsSynthesized(statements[0]);
+                if (shouldEmitDetachedComment) {
+                    emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
+                    return;
+                }
+            }
+            emitSourceFileWorker(node);
         }
 
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
-            const statementOffset = emitPrologueDirectives(statements);
             pushNameGenerationScope();
             emitHelpersIndirect(node);
-            emitList(node, statements, ListFormat.MultiLine, statementOffset);
+            const index = findIndex(statements, statement => !isPrologueDirective(statement));
+            emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
             popNameGenerationScope();
         }
 
@@ -2096,13 +2107,20 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean): number {
+        function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean, seenPrologueDirectives?: Map<String>): number {
             for (let i = 0; i < statements.length; i++) {
-                if (isPrologueDirective(statements[i])) {
-                    if (startWithNewLine || i > 0) {
-                        writeLine();
+                const statement = statements[i];
+                if (isPrologueDirective(statement)) {
+                    const shouldEmitPrologueDirective = seenPrologueDirectives ? !seenPrologueDirectives.has(statement.expression.text) : true;
+                    if (shouldEmitPrologueDirective) {
+                        if (startWithNewLine || i > 0) {
+                            writeLine();
+                        }
+                        emit(statement);
+                        if (seenPrologueDirectives) {
+                            seenPrologueDirectives.set(statement.expression.text, statement.expression.text);
+                        }
                     }
-                    emit(statements[i]);
                 }
                 else {
                     // return index of the first non prologue directive
@@ -2113,17 +2131,42 @@ namespace ts {
             return statements.length;
         }
 
+        function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
+                setSourceFile(sourceFileOrBundle as SourceFile);
+                emitPrologueDirectives((sourceFileOrBundle as SourceFile).statements);
+            }
+            else {
+                const seenPrologueDirectives = createMap<String>();
+                for (const sourceFile of (sourceFileOrBundle as Bundle).sourceFiles) {
+                    setSourceFile(sourceFile);
+                    emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
+                }
+            }
+        }
+
+        function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
+                const shebang = getShebang(sourceFileOrBundle.text);
+                if (shebang) {
+                    write(shebang);
+                    writeLine();
+                    return true;
+                }
+            }
+            else {
+                for (const sourceFile of sourceFileOrBundle.sourceFiles) {
+                    // Emit only the first encountered shebang
+                    if (emitShebangIfNeeded(sourceFile)) {
+                        break;
+                    }
+                }
+            }
+        }
+
         //
         // Helpers
         //
-
-        function emitShebang() {
-            const shebang = getShebang(currentSourceFile.text);
-            if (shebang) {
-                write(shebang);
-                writeLine();
-            }
-        }
 
         function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
             if (modifiers && modifiers.length) {

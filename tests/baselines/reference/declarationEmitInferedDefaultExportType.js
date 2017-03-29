@@ -1,5 +1,4 @@
 //// [declarationEmitInferedDefaultExportType.ts]
-
 // test.ts
 export default {
   foo: [],

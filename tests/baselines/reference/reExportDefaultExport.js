@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/reExportDefaultExport.ts] ////
 
 //// [m1.ts]
-
 export default function f() {
 }
 export {f};

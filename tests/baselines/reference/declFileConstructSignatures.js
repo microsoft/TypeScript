@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructSignatures.ts] ////
 
 //// [declFileConstructSignatures_0.ts]
-
 export interface IConstructSignature {
     /** This comment should appear for foo*/
     new (): string;

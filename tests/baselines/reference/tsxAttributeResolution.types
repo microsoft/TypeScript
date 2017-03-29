@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxAttributeResolution.tsx ===
-
 declare namespace JSX {
 >JSX : any
 

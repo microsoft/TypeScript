@@ -7,7 +7,6 @@ tests/cases/compiler/f3.ts(13,16): error TS4000: Import declaration 'C' is using
 
 
 ==== tests/cases/compiler/f1.ts (0 errors) ====
-    
     export class A {}
     
 ==== tests/cases/compiler/f2.ts (0 errors) ====

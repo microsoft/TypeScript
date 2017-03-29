@@ -1,5 +1,4 @@
 //// [stringLiteralTypesInUnionTypes03.ts]
-
 type T = number | "foo" | "bar";
 
 var x: "foo" | "bar" | number;

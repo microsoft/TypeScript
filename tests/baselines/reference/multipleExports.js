@@ -1,5 +1,4 @@
 //// [multipleExports.ts]
-
 export module M {
     export var v = 0;
     export let x;

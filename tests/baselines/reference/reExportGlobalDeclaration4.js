@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportGlobalDeclaration4.ts] ////
 
 //// [file1.d.ts]
-
 declare class Cls1 {
     x: number
 }

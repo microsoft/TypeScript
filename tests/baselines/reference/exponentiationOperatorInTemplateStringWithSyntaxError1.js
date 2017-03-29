@@ -1,5 +1,4 @@
 //// [exponentiationOperatorInTemplateStringWithSyntaxError1.ts]
-
 var t1 = 10;
 var t2 = 10;
 var s;

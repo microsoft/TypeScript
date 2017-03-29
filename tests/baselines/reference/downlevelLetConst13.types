@@ -1,5 +1,4 @@
 === tests/cases/compiler/downlevelLetConst13.ts ===
-
 'use strict'
 >'use strict' : "use strict"
 

@@ -1,5 +1,4 @@
 //// [functionWithNoBestCommonType2.ts]
-
 var v = function () {
    return true;
    return bar();

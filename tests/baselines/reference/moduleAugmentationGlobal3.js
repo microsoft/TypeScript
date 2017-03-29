@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal3.ts] ////
 
 //// [f1.ts]
-
 export class A {};
 //// [f2.ts]
-
 // change the shape of Array<T>
 import {A} from "./f1";
 

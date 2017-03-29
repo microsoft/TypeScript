@@ -1,5 +1,4 @@
 //// [decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts]
-
 declare var decorator: any;
 
 class MyClass {

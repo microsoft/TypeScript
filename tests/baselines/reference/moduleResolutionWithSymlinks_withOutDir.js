@@ -20,8 +20,8 @@ y = x;
 
 
 //// [/src/bin/library-a/index.js]
-// Same as moduleResolutionWithSymlinks.ts, but with outDir
 "use strict";
+// Same as moduleResolutionWithSymlinks.ts, but with outDir
 exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {

@@ -1,5 +1,4 @@
 //// [for-inStatementsArrayErrors.ts]
-
 let a: Date[];
 
 for (let x in a) {

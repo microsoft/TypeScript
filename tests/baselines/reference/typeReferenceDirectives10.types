@@ -12,7 +12,6 @@ export interface A {
 }
 
 === /ref.d.ts ===
-
 export interface $ { x }
 >$ : $
 >x : any

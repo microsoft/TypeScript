@@ -2,7 +2,6 @@ tests/cases/compiler/file2.ts(1,50): error TS6133: 't2' is declared but never us
 
 
 ==== tests/cases/compiler/file1.ts (0 errors) ====
-    
     export class Calculator {
         handleChar() {}
     }

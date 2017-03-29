@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/salsa/jsObjectsMarkedAsOpenEnded.ts] ////
 
 //// [a.js]
-
 var variable = {};
 variable.a = 0;
 

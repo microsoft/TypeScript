@@ -4,7 +4,6 @@ tests/cases/conformance/jsx/file.tsx(11,14): error TS2322: Type '{ bar: "world";
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

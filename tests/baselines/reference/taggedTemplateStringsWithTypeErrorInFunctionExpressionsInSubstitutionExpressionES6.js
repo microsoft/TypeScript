@@ -1,5 +1,4 @@
 //// [taggedTemplateStringsWithTypeErrorInFunctionExpressionsInSubstitutionExpressionES6.ts]
-
 function foo(...rest: any[]) {
 }
 

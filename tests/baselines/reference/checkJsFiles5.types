@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.js ===
-
 // @ts-nocheck
 var x = "string";
 >x : string

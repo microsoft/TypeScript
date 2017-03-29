@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitFirstTypeArgumentGenericFunctionType.ts ===
-
 class X<A> {
 >X : X<A>
 >A : A

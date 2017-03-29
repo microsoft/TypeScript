@@ -1,11 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(14,24): error TS2322: Type '{ editable: true; }' is not assignable to type '(IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: false; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; })'.
+tests/cases/conformance/jsx/file.tsx(13,24): error TS2322: Type '{ editable: true; }' is not assignable to type '(IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: false; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; })'.
   Type '{ editable: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; }'.
     Type '{ editable: true; }' is not assignable to type '{ editable: true; onEdit: (newText: string) => void; }'.
       Property 'onEdit' is missing in type '{ editable: true; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
-    
     import React = require('react');
     
     type TextProps = { editable: false }

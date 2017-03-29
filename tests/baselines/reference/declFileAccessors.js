@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileAccessors.ts] ////
 
 //// [declFileAccessors_0.ts]
-
 /** This is comment for c1*/
 export class c1 {
     /** getter property*/

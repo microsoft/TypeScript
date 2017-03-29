@@ -1,5 +1,4 @@
 //// [mixinClassesAnnotated.ts]
-
 type Constructor<T> = new(...args: any[]) => T;
 
 class Base {

@@ -11,7 +11,6 @@ tests/cases/compiler/f4.ts(5,11): error TS2339: Property 'foo' does not exist on
 
 
 ==== tests/cases/compiler/f1.ts (0 errors) ====
-    
     export class A {}
     
 ==== tests/cases/compiler/f2.ts (0 errors) ====

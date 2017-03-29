@@ -1,5 +1,4 @@
 //// [a.js]
-
 class c {
     method(a) {
         let x = a => this.method(a);

@@ -1,5 +1,4 @@
 //// [protectedClassPropertyAccessibleWithinNestedSubclass.ts]
-
 class B {
     protected x: string;
     protected static x: string;

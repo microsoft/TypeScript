@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/importsImplicitlyReadonly.ts] ////
 
 //// [a.ts]
-
 export var x = 1;
 var y = 1;
 export { y };

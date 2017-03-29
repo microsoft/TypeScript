@@ -1,5 +1,4 @@
 //// [callWithSpreadES6.ts]
-
 interface X {
     foo(x: number, y: number, ...z: string[]);
 }

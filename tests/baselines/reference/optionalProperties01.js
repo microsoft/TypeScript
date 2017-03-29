@@ -1,5 +1,4 @@
 //// [optionalProperties01.ts]
-
 interface Foo {
   required1: string;
   required2: string;

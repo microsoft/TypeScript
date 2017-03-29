@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives13.ts] ////
 
 //// [ref.d.ts]
-
 export interface $ { x }
 
 //// [index.d.ts]

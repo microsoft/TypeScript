@@ -1,5 +1,4 @@
 //// [unusedParameterProperty1.ts]
-
 class A {
     constructor(private used: string) {
         let foge = used;

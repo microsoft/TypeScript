@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsNamespace04.ts]
-
 let module = 10;
 module in {}
 

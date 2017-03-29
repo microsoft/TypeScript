@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports12.ts] ////
 
 //// [b.ts]
-
 export class Member {}
 export default Member;
 

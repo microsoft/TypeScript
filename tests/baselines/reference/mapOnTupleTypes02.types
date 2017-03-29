@@ -1,5 +1,4 @@
 === tests/cases/compiler/mapOnTupleTypes02.ts ===
-
 export type Point = [number, number];
 >Point : [number, number]
 

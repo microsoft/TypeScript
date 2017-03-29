@@ -1,5 +1,4 @@
 //// [unusedGetterInClass.ts]
-
 class Employee {
     private _fullName: string;
 

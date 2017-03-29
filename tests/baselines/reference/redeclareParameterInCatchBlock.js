@@ -1,5 +1,4 @@
 //// [redeclareParameterInCatchBlock.ts]
-
 try {
 
 } catch(e) {
