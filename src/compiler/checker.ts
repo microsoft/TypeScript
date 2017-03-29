@@ -4649,7 +4649,7 @@ namespace ts {
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             const baseConstructorType = getApparentType(getBaseConstructorTypeOfClass(type));
-            if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+            if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Any))) {
                 return;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -4661,6 +4661,9 @@ namespace ts {
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
                 baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
+            }
+            else if (baseConstructorType.flags & TypeFlags.Any) {
+                baseType = anyType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
@@ -4715,10 +4718,11 @@ namespace ts {
             return true;
         }
 
-        // A valid base type is any non-generic object type or intersection of non-generic
+        // A valid base type is `any`, any non-generic object type or intersection of non-generic
         // object types.
         function isValidBaseType(type: Type): boolean {
-            return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive) && !isGenericMappedType(type) ||
+            return !!(type.flags & TypeFlags.Any) ||
+                type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive) && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
         }
 
@@ -5077,9 +5081,7 @@ namespace ts {
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call"));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new"));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = (getBaseConstructorTypeOfClass(type) === anyType) ?
-                    createIndexInfo(anyType, /*isReadonly*/ false) :
-                    getIndexInfoOfSymbol(symbol, IndexKind.String);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
             }
             return <InterfaceTypeWithDeclaredMembers>type;
         }
@@ -5132,7 +5134,9 @@ namespace ts {
                     addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                    stringIndexInfo = stringIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
+                    stringIndexInfo = stringIndexInfo || (instantiatedBaseType === anyType ?
+                                                          createIndexInfo(anyType, /*isReadonly*/ false) :
+                                                          getIndexInfoOfType(instantiatedBaseType, IndexKind.String));
                     numberIndexInfo = numberIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.Number);
                 }
             }
