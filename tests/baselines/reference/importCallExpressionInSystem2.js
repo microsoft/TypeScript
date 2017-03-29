@@ -33,7 +33,6 @@ System.register([], function (exports_1, context_1) {
 });
 //// [2.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     // We use Promise<any> for now as there is no way to specify shape of module object
     function foo(x) {

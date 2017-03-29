@@ -29,7 +29,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
-"use strict";
 async function compute(promise) {
     let j = await promise;
     if (!j) {

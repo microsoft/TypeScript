@@ -12,7 +12,6 @@ const p3 = import(,);
 const p4 = import("pathToModule", "secondModule");
 
 //// [importCallExpressionGrammarError.js]
-"use strict";
 var a = ["./0"];
 Promise.resolve().then(() => require(...["PathModule"]));
 var p1 = Promise.resolve().then(() => require(...a));

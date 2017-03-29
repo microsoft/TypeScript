@@ -28,7 +28,6 @@ System.register([], function (exports_1, context_1) {
 });
 //// [1.js]
 System.register([], function (exports_1, context_1) {
-    "use strict";
     var __moduleName = context_1 && context_1.id;
     function foo() {
         const p2 = context_1.import("./0");

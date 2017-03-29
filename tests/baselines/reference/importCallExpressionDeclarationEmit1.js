@@ -16,7 +16,6 @@ function returnDynamicLoad(path: string) {
 }
 
 //// [importCallExpressionDeclarationEmit1.js]
-"use strict";
 Promise.resolve().then(() => require(getSpecifier()));
 var p0 = Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
 var p1 = Promise.resolve().then(() => require(getSpecifier()));

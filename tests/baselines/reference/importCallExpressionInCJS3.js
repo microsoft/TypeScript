@@ -24,7 +24,6 @@ class B {
 }
 exports.B = B;
 //// [2.js]
-"use strict";
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x) {
     x.then(value => {

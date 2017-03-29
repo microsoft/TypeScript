@@ -20,7 +20,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
-"use strict";
 Promise.resolve().then(() => require("./0"));
 var p1 = Promise.resolve().then(() => require("./0"));
 p1.then(zero => {

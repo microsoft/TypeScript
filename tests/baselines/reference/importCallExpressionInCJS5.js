@@ -40,7 +40,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
-"use strict";
 class C {
     constructor() {
         this.myModule = Promise.resolve().then(() => require("./0"));
