@@ -2074,7 +2074,7 @@ namespace ts {
             writeLine();
             const statements = node.statements;
             if (emitBodyWithDetachedComments) {
-                // Emit detached comment if there iare no prologue directives or this is a synthesized prologue directives.
+                // Emit detached comment if there are no prologue directives or if the first node is synthesized.
                 // The synthesized node will have no leading comment so some comments may be missed.
                 const shouldEmitDetachedComment = statements.length === 0 ||
                     !isPrologueDirective(statements[0]) ||
@@ -2136,10 +2136,10 @@ namespace ts {
                 emitPrologueDirectives((sourceFileOrBundle as SourceFile).statements);
             }
             else {
-                const seenProgolueDirectives = createMap<String>();
+                const seenPrologueDirectives = createMap<String>();
                 for (const sourceFile of (sourceFileOrBundle as Bundle).sourceFiles) {
                     setSourceFile(sourceFile);
-                    emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenProgolueDirectives);
+                    emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
                 }
             }
         }
