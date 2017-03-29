@@ -1,23 +1,4 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithPropertyAccessInHeritageClause1.ts ===
-interface I {}
->I : I
-
-interface CTor {
->CTor : CTor
-
-    new (hour: number, minute: number): I
->hour : number
->minute : number
->I : I
-}
-var x: {
->x : { B: CTor; }
-
-    B : CTor
->B : CTor
->CTor : CTor
-
-};
 class B {}
 >B : B
 

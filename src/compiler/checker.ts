@@ -1540,9 +1540,9 @@ namespace ts {
                 }
             }
             else if (name.kind === SyntaxKind.ParenthesizedExpression) {
-                // If the expression in parenthsizedExpression is not an entity-name (e.g. it is a call expression), it won't be able to successfully resolve the name.
-                // This is the case when we are trying to do any language service operation in heritage clauses. By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression
-                // will attempt to checkPropertyAccessExpression to resolve symbol.
+                // If the expression in parenthesizedExpression is not an entity-name (e.g. it is a call expression), it won't be able to successfully resolve the name.
+                // This is the case when we are trying to do any language service operation in heritage clauses.
+                // By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression will attempt to checkPropertyAccessExpression to resolve symbol.
                 // i.e class C extends foo()./*do language service operation here*/B {}
                 return isEntityNameExpression(name.expression) ?
                     resolveEntityName(name.expression as EntityNameOrEntityNameExpression, meaning, ignoreErrors, dontResolveAlias, location) :
