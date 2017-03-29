@@ -1,0 +1,8 @@
+=== /a.ts ===
+import Foo from "foo";
+>Foo : any
+
+class A extends Foo { }
+>A : A
+>Foo : any
+
