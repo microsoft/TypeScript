@@ -25,15 +25,15 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
-    function shouldSkipSematicCheck(project: Project) {
-        if (project.getCompilerOptions().skipLibCheck !== undefined) {
-            return false;
+    function shouldSkipSemanticCheck(project: Project) {
+        if (project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) {
+            return project.isJsOnlyProject();
         }
-
-        if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) && project.isJsOnlyProject()) {
-            return true;
+        else {
+            // For configured projects, require that skipLibCheck be set also
+            const options = project.getCompilerOptions();
+            return options.skipLibCheck && !options.checkJs && project.isJsOnlyProject();
         }
-        return false;
     }
 
     interface FileStart {
@@ -338,7 +338,8 @@ namespace ts.server {
             private hrtime: (start?: number[]) => number[],
             protected logger: Logger,
             protected readonly canUseEvents: boolean,
-            eventHandler?: ProjectServiceEventHandler) {
+            eventHandler?: ProjectServiceEventHandler,
+            private readonly throttleWaitMilliseconds?: number) {
 
             this.eventHander = canUseEvents
                 ? eventHandler || (event => this.defaultEventHandler(event))
@@ -353,7 +354,7 @@ namespace ts.server {
                 isCancellationRequested: () => cancellationToken.isCancellationRequested()
             };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
-            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander);
+            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander, this.throttleWaitMilliseconds);
             this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
         }
 
@@ -454,7 +455,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
                 let diags: Diagnostic[] = [];
-                if (!shouldSkipSematicCheck(project)) {
+                if (!shouldSkipSemanticCheck(project)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
 
@@ -562,7 +563,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
-            if (isSemantic && shouldSkipSematicCheck(project)) {
+            if (isSemantic && shouldSkipSemanticCheck(project)) {
                 return [];
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -651,16 +652,21 @@ namespace ts.server {
             }
 
             return occurrences.map(occurrence => {
-                const { fileName, isWriteAccess, textSpan } = occurrence;
+                const { fileName, isWriteAccess, textSpan, isInString } = occurrence;
                 const scriptInfo = project.getScriptInfo(fileName);
                 const start = scriptInfo.positionToLineOffset(textSpan.start);
                 const end = scriptInfo.positionToLineOffset(ts.textSpanEnd(textSpan));
-                return {
+                const result: protocol.OccurrencesResponseItem = {
                     start,
                     end,
                     file: fileName,
                     isWriteAccess,
                 };
+                // no need to serialize the property if it is not true
+                if (isInString) {
+                    result.isInString = isInString;
+                }
+                return result;
             });
         }
 
@@ -1420,8 +1426,9 @@ namespace ts.server {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const startPosition = getStartPosition();
             const endPosition = getEndPosition();
+            const formatOptions = this.projectService.getFormatCodeOptions(file);
 
-            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes);
+            const codeActions = project.getLanguageService().getCodeFixesAtPosition(file, startPosition, endPosition, args.errorCodes, formatOptions);
             if (!codeActions) {
                 return undefined;
             }

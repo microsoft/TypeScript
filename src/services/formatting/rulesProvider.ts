@@ -24,6 +24,10 @@ namespace ts.formatting {
             return this.rulesMap;
         }
 
+        public getFormatOptions(): Readonly<ts.FormatCodeSettings> {
+            return this.options;
+        }
+
         public ensureUpToDate(options: ts.FormatCodeSettings) {
             if (!this.options || !ts.compareDataObjects(this.options, options)) {
                 const activeRules = this.createActiveRules(options);

@@ -29,7 +29,7 @@ interface TextStreamBase {
 
     /**
      * Closes a text stream.
-     * It is not necessary to close standard streams; they close automatically when the process ends. If 
+     * It is not necessary to close standard streams; they close automatically when the process ends. If
      * you close a standard stream, be aware that any other pointers to that standard stream become invalid.
      */
     Close(): void;

@@ -89,7 +89,8 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());

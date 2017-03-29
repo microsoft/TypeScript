@@ -63,6 +63,7 @@
         "shims.ts",
         "signatureHelp.ts",
         "symbolDisplay.ts",
+        "textChanges.ts",
         "formatting/formatting.ts",
         "formatting/formattingContext.ts",
         "formatting/formattingRequestKind.ts",
@@ -90,6 +91,7 @@
         "codefixes/fixes.ts",
         "codefixes/helpers.ts",
         "codefixes/importFixes.ts",
-        "codefixes/unusedIdentifierFixes.ts"
+        "codefixes/unusedIdentifierFixes.ts",
+        "codefixes/disableJsDiagnostics.ts"
     ]
 }

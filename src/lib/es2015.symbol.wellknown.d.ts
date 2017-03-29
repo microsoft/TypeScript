@@ -1,55 +1,55 @@
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
-    /** 
-      * A method that determines if a constructor object recognizes an object as one of the 
-      * constructor’s instances. Called by the semantics of the instanceof operator. 
+    /**
+      * A method that determines if a constructor object recognizes an object as one of the
+      * constructor’s instances. Called by the semantics of the instanceof operator.
       */
     readonly hasInstance: symbol;
 
-    /** 
+    /**
       * A Boolean value that if true indicates that an object should flatten to its array elements
       * by Array.prototype.concat.
       */
     readonly isConcatSpreadable: symbol;
 
     /**
-      * A regular expression method that matches the regular expression against a string. Called 
-      * by the String.prototype.match method. 
+      * A regular expression method that matches the regular expression against a string. Called
+      * by the String.prototype.match method.
       */
     readonly match: symbol;
 
-    /** 
-      * A regular expression method that replaces matched substrings of a string. Called by the 
+    /**
+      * A regular expression method that replaces matched substrings of a string. Called by the
       * String.prototype.replace method.
       */
     readonly replace: symbol;
 
     /**
-      * A regular expression method that returns the index within a string that matches the 
+      * A regular expression method that returns the index within a string that matches the
       * regular expression. Called by the String.prototype.search method.
       */
     readonly search: symbol;
 
-    /** 
-      * A function valued property that is the constructor function that is used to create 
+    /**
+      * A function valued property that is the constructor function that is used to create
       * derived objects.
       */
     readonly species: symbol;
 
     /**
-      * A regular expression method that splits a string at the indices that match the regular 
+      * A regular expression method that splits a string at the indices that match the regular
       * expression. Called by the String.prototype.split method.
       */
     readonly split: symbol;
 
-    /** 
+    /**
       * A method that converts an object to a corresponding primitive value.
       * Called by the ToPrimitive abstract operation.
       */
     readonly toPrimitive: symbol;
 
-    /** 
+    /**
       * A String value that is used in the creation of the default string description of an object.
       * Called by the built-in method Object.prototype.toString.
       */
@@ -137,7 +137,7 @@ interface Function {
     [Symbol.hasInstance](value: any): boolean;
 }
 
-interface GeneratorFunction extends Function {
+interface GeneratorFunction {
     readonly [Symbol.toStringTag]: "GeneratorFunction";
 }
 
@@ -165,7 +165,7 @@ interface RegExp {
       * Replaces text in a string, using this regular expression.
       * @param string A String object or string literal whose contents matching against
       *               this regular expression will be replaced
-      * @param replaceValue A String object or string literal containing the text to replace for every 
+      * @param replaceValue A String object or string literal containing the text to replace for every
       *                     successful match of this regular expression.
       */
     [Symbol.replace](string: string, replaceValue: string): string;
@@ -241,10 +241,10 @@ interface String {
 }
 
 /**
-  * Represents a raw buffer of binary data, which is used to store data for the 
-  * different typed arrays. ArrayBuffers cannot be read from or written to directly, 
-  * but can be passed to a typed array or DataView Object to interpret the raw 
-  * buffer as needed. 
+  * Represents a raw buffer of binary data, which is used to store data for the
+  * different typed arrays. ArrayBuffers cannot be read from or written to directly,
+  * but can be passed to a typed array or DataView Object to interpret the raw
+  * buffer as needed.
   */
 interface ArrayBuffer {
     readonly [Symbol.toStringTag]: "ArrayBuffer";
@@ -255,7 +255,7 @@ interface DataView {
 }
 
 /**
-  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
+  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
   * number of bytes could not be allocated an exception is raised.
   */
 interface Int8Array {
@@ -263,7 +263,7 @@ interface Int8Array {
 }
 
 /**
-  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8Array {
@@ -271,7 +271,7 @@ interface Uint8Array {
 }
 
 /**
-  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
+  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
   * If the requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint8ClampedArray {
@@ -279,7 +279,7 @@ interface Uint8ClampedArray {
 }
 
 /**
-  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
+  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int16Array {
@@ -287,7 +287,7 @@ interface Int16Array {
 }
 
 /**
-  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint16Array {
@@ -295,7 +295,7 @@ interface Uint16Array {
 }
 
 /**
-  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the 
+  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Int32Array {
@@ -303,7 +303,7 @@ interface Int32Array {
 }
 
 /**
-  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the 
+  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
   */
 interface Uint32Array {
@@ -319,7 +319,7 @@ interface Float32Array {
 }
 
 /**
-  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested 
+  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
   * number of bytes could not be allocated an exception is raised.
   */
 interface Float64Array {

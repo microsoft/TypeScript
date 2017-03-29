@@ -24,6 +24,7 @@
 /// <reference path='transpile.ts' />
 /// <reference path='formatting\formatting.ts' />
 /// <reference path='formatting\smartIndenter.ts' />
+/// <reference path='textChanges.ts' />
 /// <reference path='codeFixProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
 
@@ -63,7 +64,7 @@ namespace ts {
             return getSourceFileOfNode(this);
         }
 
-        public getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
             return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
@@ -129,7 +130,7 @@ namespace ts {
             return list;
         }
 
-        private createChildren(sourceFile?: SourceFile) {
+        private createChildren(sourceFile?: SourceFileLike) {
             let children: Node[];
             if (this.kind >= SyntaxKind.FirstNode) {
                 scanner.setText((sourceFile || this.getSourceFile()).text);
@@ -182,7 +183,7 @@ namespace ts {
             return this._children[index];
         }
 
-        public getChildren(sourceFile?: SourceFile): Node[] {
+        public getChildren(sourceFile?: SourceFileLike): Node[] {
             if (!this._children) this.createChildren(sourceFile);
             return this._children;
         }
@@ -209,6 +210,10 @@ namespace ts {
 
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
+
+        public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T {
+            return forEachChild(this, cbNode, cbNodeArray);
+        }
     }
 
     class TokenOrIdentifierObject implements Node {
@@ -231,7 +236,7 @@ namespace ts {
             return getSourceFileOfNode(this);
         }
 
-        public getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number {
+        public getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number {
             return getTokenPosOfNode(this, sourceFile, includeJsDocComment);
         }
 
@@ -280,6 +285,10 @@ namespace ts {
         }
 
         public getLastToken(): Node {
+            return undefined;
+        }
+
+        public forEachChild<T>(): T {
             return undefined;
         }
     }
@@ -473,6 +482,7 @@ namespace ts {
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
+        public checkJsDirective: CheckJsDirective | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -972,6 +982,36 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    /** A cancellation that throttles calls to the host */
+    export class ThrottledCancellationToken implements CancellationToken {
+        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
+        // to marshall over to the host layer).  So we only bother actually checking once enough
+        // time has passed.
+        private lastCancellationCheckTime = 0;
+
+        constructor(private hostCancellationToken: HostCancellationToken, private readonly throttleWaitMilliseconds = 20) {
+        }
+
+        public isCancellationRequested(): boolean {
+            const time = timestamp();
+            const duration = Math.abs(time - this.lastCancellationCheckTime);
+            if (duration >= this.throttleWaitMilliseconds) {
+                // Check no more than once every throttle wait milliseconds
+                this.lastCancellationCheckTime = time;
+                return this.hostCancellationToken.isCancellationRequested();
+            }
+
+            return false;
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
+    }
+
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
@@ -1395,7 +1435,8 @@ namespace ts {
                             fileName: entry.fileName,
                             textSpan: highlightSpan.textSpan,
                             isWriteAccess: highlightSpan.kind === HighlightSpanKind.writtenReference,
-                            isDefinition: false
+                            isDefinition: false,
+                            isInString: highlightSpan.isInString,
                         });
                     }
                 }
@@ -1542,11 +1583,11 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function getNavigationTree(fileName: string): NavigationTree {
-            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1585,7 +1626,7 @@ namespace ts {
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return OutliningElementsCollector.collectElements(sourceFile);
+            return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
@@ -1682,7 +1723,7 @@ namespace ts {
             return [];
         }
 
-        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[] {
+        function getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[] {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const span = { start, length: end - start };
@@ -1700,7 +1741,8 @@ namespace ts {
                     program: program,
                     newLineCharacter: newLineChar,
                     host: host,
-                    cancellationToken: cancellationToken
+                    cancellationToken: cancellationToken,
+                    rulesProvider: getRuleProvider(formatOptions)
                 };
 
                 const fixes = codefix.getFixes(context);

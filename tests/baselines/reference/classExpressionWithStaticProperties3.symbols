@@ -31,9 +31,9 @@ for (let i = 0; i < 3; i++) {
     });
 }
 arr.forEach(C => console.log(C.y()));
->arr.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>arr.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticProperties3.ts, 2, 5))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >C : Symbol(C, Decl(classExpressionWithStaticProperties3.ts, 9, 12))
 >console : Symbol(console, Decl(classExpressionWithStaticProperties3.ts, 1, 11))
 >C.y : Symbol(y, Decl(classExpressionWithStaticProperties3.ts, 2, 12))

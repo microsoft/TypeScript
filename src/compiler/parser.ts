@@ -1315,7 +1315,7 @@ namespace ts {
                 case ParsingContext.ObjectBindingElements:
                     return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
                 case ParsingContext.HeritageClauseElement:
-                    // If we see { } then only consume it as an expression if it is followed by , or {
+                    // If we see `{ ... }` then only consume it as an expression if it is followed by `,` or `{`
                     // That way we won't consume the body of a class in its heritage clause.
                     if (token() === SyntaxKind.OpenBraceToken) {
                         return lookAhead(isValidHeritageClauseObjectLiteral);
@@ -2119,7 +2119,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseTypeParameters(): NodeArray<TypeParameterDeclaration> {
+        function parseTypeParameters(): NodeArray<TypeParameterDeclaration> | undefined {
             if (token() === SyntaxKind.LessThanToken) {
                 return parseBracketedList(ParsingContext.TypeParameters, parseTypeParameter, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2189,7 +2189,7 @@ namespace ts {
         }
 
         function fillSignature(
-            returnToken: SyntaxKind,
+            returnToken: SyntaxKind.ColonToken | SyntaxKind.EqualsGreaterThanToken,
             yieldContext: boolean,
             awaitContext: boolean,
             requireCompleteParameterList: boolean,
@@ -2379,14 +2379,14 @@ namespace ts {
         }
 
         function isTypeMemberStart(): boolean {
-            let idToken: SyntaxKind;
             // Return true if we have the start of a signature member
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                 return true;
             }
+            let idToken: boolean;
             // Eat up all modifiers, but hold on to the last one in case it is actually an identifier
             while (isModifierKind(token())) {
-                idToken = token();
+                idToken = true;
                 nextToken();
             }
             // Index signatures and computed property names are type members
@@ -2395,7 +2395,7 @@ namespace ts {
             }
             // Try to get the first property-like token following all modifiers
             if (isLiteralPropertyName()) {
-                idToken = token();
+                idToken = true;
                 nextToken();
             }
             // If we were able to get any potential identifier, check that it is
@@ -2503,7 +2503,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseKeywordAndNoDot(): TypeNode {
+        function parseKeywordAndNoDot(): TypeNode | undefined {
             const node = parseTokenNode<TypeNode>();
             return token() === SyntaxKind.DotToken ? undefined : node;
         }
@@ -2641,7 +2641,7 @@ namespace ts {
             return parseArrayTypeOrHigher();
         }
 
-        function parseUnionOrIntersectionType(kind: SyntaxKind, parseConstituentType: () => TypeNode, operator: SyntaxKind): TypeNode {
+        function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
             parseOptional(operator);
             let type = parseConstituentType();
             if (token() === operator) {
@@ -3877,6 +3877,9 @@ namespace ts {
                     // If we hit EOF, issue the error at the tag that lacks the closing element
                     // rather than at the end of the file (which is useless)
                     parseErrorAtPosition(openingTagName.pos, openingTagName.end - openingTagName.pos, Diagnostics.JSX_element_0_has_no_corresponding_closing_tag, getTextOfNodeFromSourceText(sourceText, openingTagName));
+                    break;
+                }
+                else if (token() === SyntaxKind.ConflictMarkerTrivia) {
                     break;
                 }
                 result.push(parseJsxChild());
@@ -5297,8 +5300,8 @@ namespace ts {
          *
          * In such situations, 'permitInvalidConstAsModifier' should be set to true.
          */
-        function parseModifiers(permitInvalidConstAsModifier?: boolean): NodeArray<Modifier> {
-            let modifiers: NodeArray<Modifier>;
+        function parseModifiers(permitInvalidConstAsModifier?: boolean): NodeArray<Modifier> | undefined {
+            let modifiers: NodeArray<Modifier> | undefined;
             while (true) {
                 const modifierStart = scanner.getStartPos();
                 const modifierKind = token();
@@ -5438,7 +5441,7 @@ namespace ts {
             return token() === SyntaxKind.ImplementsKeyword && lookAhead(nextTokenIsIdentifierOrKeyword);
         }
 
-        function parseHeritageClauses(): NodeArray<HeritageClause> {
+        function parseHeritageClauses(): NodeArray<HeritageClause> | undefined {
             // ClassTail[Yield,Await] : (Modified) See 14.5
             //      ClassHeritage[?Yield,?Await]opt { ClassBody[?Yield,?Await]opt }
 
@@ -5449,10 +5452,11 @@ namespace ts {
             return undefined;
         }
 
-        function parseHeritageClause() {
-            if (token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword) {
+        function parseHeritageClause(): HeritageClause | undefined {
+            const tok = token();
+            if (tok === SyntaxKind.ExtendsKeyword || tok === SyntaxKind.ImplementsKeyword) {
                 const node = <HeritageClause>createNode(SyntaxKind.HeritageClause);
-                node.token = token();
+                node.token = tok;
                 nextToken();
                 node.types = parseDelimitedList(ParsingContext.HeritageClauseElement, parseExpressionWithTypeArguments);
                 return finishNode(node);
@@ -5475,7 +5479,7 @@ namespace ts {
             return token() === SyntaxKind.ExtendsKeyword || token() === SyntaxKind.ImplementsKeyword;
         }
 
-        function parseClassMembers() {
+        function parseClassMembers(): NodeArray<ClassElement> {
             return parseList(ParsingContext.ClassMembers, parseClassElement);
         }
 
@@ -5639,17 +5643,7 @@ namespace ts {
             if (isIdentifier()) {
                 identifier = parseIdentifier();
                 if (token() !== SyntaxKind.CommaToken && token() !== SyntaxKind.FromKeyword) {
-                    // ImportEquals declaration of type:
-                    // import x = require("mod"); or
-                    // import x = M.x;
-                    const importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
-                    importEqualsDeclaration.decorators = decorators;
-                    importEqualsDeclaration.modifiers = modifiers;
-                    importEqualsDeclaration.name = identifier;
-                    parseExpected(SyntaxKind.EqualsToken);
-                    importEqualsDeclaration.moduleReference = parseModuleReference();
-                    parseSemicolon();
-                    return addJSDocComment(finishNode(importEqualsDeclaration));
+                    return parseImportEqualsDeclaration(fullStart, decorators, modifiers, identifier);
                 }
             }
 
@@ -5671,6 +5665,17 @@ namespace ts {
             importDeclaration.moduleSpecifier = parseModuleSpecifier();
             parseSemicolon();
             return finishNode(importDeclaration);
+        }
+
+        function parseImportEqualsDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>, identifier: ts.Identifier): ImportEqualsDeclaration {
+            const importEqualsDeclaration = <ImportEqualsDeclaration>createNode(SyntaxKind.ImportEqualsDeclaration, fullStart);
+            importEqualsDeclaration.decorators = decorators;
+            importEqualsDeclaration.modifiers = modifiers;
+            importEqualsDeclaration.name = identifier;
+            parseExpected(SyntaxKind.EqualsToken);
+            importEqualsDeclaration.moduleReference = parseModuleReference();
+            parseSemicolon();
+            return addJSDocComment(finishNode(importEqualsDeclaration));
         }
 
         function parseImportClause(identifier: Identifier, fullStart: number) {
@@ -5838,6 +5843,7 @@ namespace ts {
             const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
+            let checkJsDirective: CheckJsDirective = undefined;
 
             // Keep scanning all the leading trivia in the file until we get to something that
             // isn't trivia.  Any single line comment will be analyzed to see if it is a
@@ -5899,6 +5905,16 @@ namespace ts {
                             amdDependencies.push(amdDependency);
                         }
                     }
+
+                    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/gim;
+                    const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
+                    if (checkJsDirectiveMatchResult) {
+                        checkJsDirective = {
+                            enabled: compareStrings(checkJsDirectiveMatchResult[1], "@ts-check", /*ignoreCase*/ true) === Comparison.EqualTo,
+                            end: range.end,
+                            pos: range.pos
+                        };
+                    }
                 }
             }
 
@@ -5906,6 +5922,7 @@ namespace ts {
             sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
+            sourceFile.checkJsDirective = checkJsDirective;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {

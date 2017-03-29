@@ -16,7 +16,7 @@ namespace ts.codefix {
                 return undefined;
             }
 
-            // figure out if the this access is actuall inside the supercall
+            // figure out if the `this` access is actually inside the supercall
             // i.e. super(this.a), since in that case we won't suggest a fix
             if (superCall.expression && superCall.expression.kind == SyntaxKind.CallExpression) {
                 const arguments = (<CallExpression>superCall.expression).arguments;
@@ -26,22 +26,13 @@ namespace ts.codefix {
                     }
                 }
             }
-
-            const newPosition = getOpenBraceEnd(<ConstructorDeclaration>constructor, sourceFile);
-            const changes = [{
-                fileName: sourceFile.fileName, textChanges: [{
-                    newText: superCall.getText(sourceFile),
-                    span: { start: newPosition, length: 0 }
-                },
-                {
-                    newText: "",
-                    span: { start: superCall.getStart(sourceFile), length: superCall.getWidth(sourceFile) }
-                }]
-            }];
+            const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            changeTracker.insertNodeAfter(sourceFile, getOpenBrace(<ConstructorDeclaration>constructor, sourceFile), superCall, { suffix: context.newLineCharacter });
+            changeTracker.deleteNode(sourceFile, superCall);
 
             return [{
                 description: getLocaleSpecificMessage(Diagnostics.Make_super_call_the_first_statement_in_the_constructor),
-                changes
+                changes: changeTracker.getChanges()
             }];
 
             function findSuperCall(n: Node): ExpressionStatement {

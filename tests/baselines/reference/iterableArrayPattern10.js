@@ -1,6 +1,4 @@
 //// [iterableArrayPattern10.ts]
-function fun([a, b]) { }
-fun(new FooIterator);
 class Bar { x }
 class Foo extends Bar { y }
 class FooIterator {
@@ -16,9 +14,10 @@ class FooIterator {
     }
 }
 
-//// [iterableArrayPattern10.js]
 function fun([a, b]) { }
 fun(new FooIterator);
+
+//// [iterableArrayPattern10.js]
 class Bar {
 }
 class Foo extends Bar {
@@ -34,3 +33,5 @@ class FooIterator {
         return this;
     }
 }
+function fun([a, b]) { }
+fun(new FooIterator);

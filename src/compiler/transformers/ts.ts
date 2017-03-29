@@ -2049,6 +2049,7 @@ namespace ts {
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,

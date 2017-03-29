@@ -9,20 +9,19 @@
 ////     h();
 //// }
 ////
-//// class C1 implements I1 {[|
-//// |]}
+//// class C1 implements I1 {[| |]}
 
 verify.rangeAfterCodeFix(`
 x: number;
 y: number;
 z: number;
 f() {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
 }
 g() {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
 }
 h() {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
 }
 `);

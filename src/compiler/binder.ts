@@ -259,7 +259,7 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    switch (getSpecialPropertyAssignmentKind(node)) {
+                    switch (getSpecialPropertyAssignmentKind(node as BinaryExpression)) {
                         case SpecialPropertyAssignmentKind.ModuleExports:
                             // module.exports = ...
                             return "export=";
@@ -2017,30 +2017,28 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    if (isInJavaScriptFile(node)) {
-                        const specialKind = getSpecialPropertyAssignmentKind(node);
-                        switch (specialKind) {
-                            case SpecialPropertyAssignmentKind.ExportsProperty:
-                                bindExportsPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ModuleExports:
-                                bindModuleExportsAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.PrototypeProperty:
-                                bindPrototypePropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ThisProperty:
-                                bindThisPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.Property:
-                                bindStaticPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.None:
-                                // Nothing to do
-                                break;
-                            default:
-                                Debug.fail("Unknown special property assignment kind");
-                        }
+                    const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                    switch (specialKind) {
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                            bindModuleExportsAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                            bindPrototypePropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            bindThisPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.Property:
+                            bindStaticPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.None:
+                            // Nothing to do
+                            break;
+                        default:
+                            Debug.fail("Unknown special property assignment kind");
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -2332,6 +2330,7 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
+            const container = getThisContainer(node, /*includeArrowFunctions*/false);
             switch (container.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -2342,6 +2341,7 @@ namespace ts {
                     break;
 
                 case SyntaxKind.Constructor:
+                case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:

@@ -12,11 +12,11 @@ interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, argArray: any, newTarget?: any): object
+    construct? (target: T, argArray: any, newTarget?: any): object;
 }
 
 interface ProxyConstructor {
     revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
-    new <T>(target: T, handler: ProxyHandler<T>): T
+    new <T>(target: T, handler: ProxyHandler<T>): T;
 }
 declare var Proxy: ProxyConstructor;

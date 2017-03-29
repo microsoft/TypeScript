@@ -199,6 +199,8 @@ namespace ts {
             onEmitHelpers,
             onSetSourceFile,
             substituteNode,
+            onBeforeEmitNodeArray,
+            onAfterEmitNodeArray
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -630,6 +632,11 @@ namespace ts {
             // substitution.
             if (isExpression(node)) {
                 return pipelineEmitExpression(trySubstituteNode(EmitHint.Expression, node));
+            }
+
+            if (isToken(node)) {
+                writeTokenText(kind);
+                return;
             }
         }
 
@@ -1554,6 +1561,10 @@ namespace ts {
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
+        function emitBlockCallback(_hint: EmitHint, body: Node): void {
+            emitBlockFunctionBody(<Block>body);
+        }
+
         function emitSignatureAndBody(node: FunctionLikeDeclaration, emitSignatureHead: (node: SignatureDeclaration) => void) {
             const body = node.body;
             if (body) {
@@ -1565,12 +1576,22 @@ namespace ts {
 
                     if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(body);
+                        if (onEmitNode) {
+                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
+                        }
+                        else {
+                            emitBlockFunctionBody(body);
+                        }
                     }
                     else {
                         pushNameGenerationScope();
                         emitSignatureHead(node);
-                        emitBlockFunctionBody(body);
+                        if (onEmitNode) {
+                            onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
+                        }
+                        else {
+                            emitBlockFunctionBody(body);
+                        }
                         popNameGenerationScope();
                     }
 
@@ -2201,6 +2222,10 @@ namespace ts {
                 write(getOpeningBracket(format));
             }
 
+            if (onBeforeEmitNodeArray) {
+                onBeforeEmitNodeArray(children);
+            }
+
             if (isEmpty) {
                 // Write a line terminator if the parent node was multi-line
                 if (format & ListFormat.MultiLine) {
@@ -2314,6 +2339,10 @@ namespace ts {
                 else if (format & ListFormat.SpaceBetweenBraces) {
                     write(" ");
                 }
+            }
+
+            if (onAfterEmitNodeArray) {
+                onAfterEmitNodeArray(children);
             }
 
             if (format & ListFormat.BracketsMask) {

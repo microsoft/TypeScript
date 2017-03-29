@@ -394,8 +394,8 @@ namespace ts {
         list: Node;
     }
 
-    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
-        const lineStarts = sourceFile.getLineStarts();
+    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFileLike): number {
+        const lineStarts = getLineStarts(sourceFile);
         const line = sourceFile.getLineAndCharacterOfPosition(position).line;
         return lineStarts[line];
     }
@@ -604,7 +604,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -1003,10 +1003,6 @@ namespace ts {
         return undefined;
     }
 
-    export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
-    }
-
     export function isWord(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.Identifier || isKeyword(kind);
     }
@@ -1384,8 +1380,19 @@ namespace ts {
         };
     }
 
-    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+    export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
+        while (isWhiteSpace(text.charCodeAt(position))) {
+            position += 1;
+        }
+        return position;
+    }
+
+    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
         // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile).getEnd();
+        return constructor.body.getFirstToken(sourceFile);
+    }
+
+    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
+        return getTokenAtPosition(sourceFile, declaration.members.pos - 1);
     }
 }

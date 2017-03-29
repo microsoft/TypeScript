@@ -184,7 +184,7 @@ namespace ts {
         return false;
     }
 
-    export function getStartPositionOfLine(line: number, sourceFile: SourceFile): number {
+    export function getStartPositionOfLine(line: number, sourceFile: SourceFileLike): number {
         Debug.assert(line >= 0);
         return getLineStarts(sourceFile)[line];
     }
@@ -204,7 +204,7 @@ namespace ts {
         return value !== undefined;
     }
 
-    export function getEndLinePosition(line: number, sourceFile: SourceFile): number {
+    export function getEndLinePosition(line: number, sourceFile: SourceFileLike): number {
         Debug.assert(line >= 0);
         const lineStarts = getLineStarts(sourceFile);
 
@@ -255,7 +255,11 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFile, includeJsDoc?: boolean): number {
+    export function isToken(n: Node): boolean {
+        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
+    }
+
+    export function getTokenPosOfNode(node: Node, sourceFile?: SourceFileLike, includeJsDoc?: boolean): number {
         // With nodes that have no width (i.e. 'Missing' nodes), we actually *don't*
         // want to skip trivia because this will launch us forward to the next token.
         if (nodeIsMissing(node)) {
@@ -289,7 +293,7 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
-    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFile): number {
+    export function getNonDecoratorTokenPosOfNode(node: Node, sourceFile?: SourceFileLike): number {
         if (nodeIsMissing(node) || !node.decorators) {
             return getTokenPosOfNode(node, sourceFile);
         }
@@ -521,6 +525,10 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
+    export function getNameFromIndexInfo(info: IndexInfo) {
+        return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
+    }
+
     export function getTextOfPropertyName(name: PropertyName): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
@@ -740,8 +748,8 @@ namespace ts {
                 //
                 //     let a: A.B.C;
                 //
-                // Calling isPartOfTypeNode would consider the qualified name A.B a type node. Only C or
-                // A.B.C is a type node.
+                // Calling isPartOfTypeNode would consider the qualified name A.B a type node.
+                // Only C and A.B.C are type nodes.
                 if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
                     return true;
                 }
@@ -1446,11 +1454,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
+    export function getSpecialPropertyAssignmentKind(expression: ts.BinaryExpression): SpecialPropertyAssignmentKind {
         if (!isInJavaScriptFile(expression)) {
-            return SpecialPropertyAssignmentKind.None;
-        }
-        if (expression.kind !== SyntaxKind.BinaryExpression) {
             return SpecialPropertyAssignmentKind.None;
         }
         const expr = <BinaryExpression>expression;
@@ -2495,7 +2500,7 @@ namespace ts {
         return indentStrings[1].length;
     }
 
-    export function createTextWriter(newLine: String): EmitTextWriter {
+    export function createTextWriter(newLine: string): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
@@ -2675,7 +2680,7 @@ namespace ts {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : undefined;
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : "";
                 action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
@@ -3713,10 +3718,14 @@ namespace ts {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
             || kind === SyntaxKind.NumberKeyword
+            || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
             || kind === SyntaxKind.SymbolKeyword
+            || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.VoidKeyword
+            || kind === SyntaxKind.UndefinedKeyword
+            || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.NeverKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments;
     }

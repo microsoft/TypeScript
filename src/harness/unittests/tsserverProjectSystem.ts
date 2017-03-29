@@ -176,11 +176,11 @@ namespace ts.projectSystem {
         }
     };
 
-    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken) {
+    export function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller, projectServiceEventHandler?: server.ProjectServiceEventHandler, cancellationToken?: server.ServerCancellationToken, throttleWaitMilliseconds?: number) {
         if (typingsInstaller === undefined) {
             typingsInstaller = new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
         }
-        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler);
+        return new TestSession(host, cancellationToken || server.nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ projectServiceEventHandler !== undefined, projectServiceEventHandler, throttleWaitMilliseconds);
     }
 
     export interface CreateProjectServiceParameters {
@@ -545,6 +545,49 @@ namespace ts.projectSystem {
         readonly getCurrentDirectory = () => this.currentDirectory;
         readonly exit = notImplemented;
         readonly getEnvironmentVariable = notImplemented;
+    }
+
+    /**
+      * Test server cancellation token used to mock host token cancellation requests.
+      * The cancelAfterRequest constructor param specifies how many isCancellationRequested() calls
+      * should be made before canceling the token. The id of the request to cancel should be set with
+      * setRequestToCancel();
+      */
+    export class TestServerCancellationToken implements server.ServerCancellationToken {
+        private currentId = -1;
+        private requestToCancel = -1;
+        private isCancellationRequestedCount = 0;
+
+        constructor(private cancelAfterRequest = 0) {
+        }
+
+        setRequest(requestId: number) {
+            this.currentId = requestId;
+        }
+
+        setRequestToCancel(requestId: number) {
+            this.resetToken();
+            this.requestToCancel = requestId;
+        }
+
+        resetRequest(requestId: number) {
+            assert.equal(requestId, this.currentId, "unexpected request id in cancellation");
+            this.currentId = undefined;
+        }
+
+        isCancellationRequested() {
+            this.isCancellationRequestedCount++;
+            // If the request id is the request to cancel and isCancellationRequestedCount
+            // has been met then cancel the request. Ex: cancel the request if it is a
+            // nav bar request & isCancellationRequested() has already been called three times.
+            return this.requestToCancel === this.currentId && this.isCancellationRequestedCount >= this.cancelAfterRequest;
+        }
+
+        resetToken() {
+            this.currentId = -1;
+            this.isCancellationRequestedCount = 0;
+            this.requestToCancel = -1;
+        }
     }
 
     export function makeSessionRequest<T>(command: string, args: T) {
@@ -1005,6 +1048,41 @@ namespace ts.projectSystem {
             projectService.openClientFile(commonFile1.path);
             checkNumberOfConfiguredProjects(projectService, 1);
             checkProjectRootFiles(projectService.configuredProjects[0], [commonFile1.path, commonFile2.path]);
+        });
+
+        it("should disable features when the files are too large", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;",
+                fileSize: 10 * 1024 * 1024
+            };
+            const file2 = {
+                path: "/a/b/f2.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+            const file3 = {
+                path: "/a/b/f3.js",
+                content: "let y =1;",
+                fileSize: 6 * 1024 * 1024
+            };
+
+            const proj1name = "proj1", proj2name = "proj2", proj3name = "proj3";
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path]), options: {}, projectFileName: proj1name });
+            const proj1 = projectService.findProject(proj1name);
+            assert.isTrue(proj1.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file2.path]), options: {}, projectFileName: proj2name });
+            const proj2 = projectService.findProject(proj2name);
+            assert.isTrue(proj2.languageServiceEnabled);
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file3.path]), options: {}, projectFileName: proj3name });
+            const proj3 = projectService.findProject(proj3name);
+            assert.isFalse(proj3.languageServiceEnabled);
         });
 
         it("should use only one inferred project if 'useOneInferredProject' is set", () => {
@@ -3006,6 +3084,42 @@ namespace ts.projectSystem {
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
         });
+
+        it("should be turned on for js-only external projects with skipLibCheck=false", () => {
+            const jsFile = {
+                path: "/a/b/file1.js",
+                content: "let x =1;"
+            };
+            const dTsFile = {
+                path: "/a/b/file2.d.ts",
+                content: `
+                interface T {
+                    name: string;
+                };
+                interface T {
+                    name: number;
+                };`
+            };
+            const host = createServerHost([jsFile, dTsFile]);
+            const session = createSession(host);
+
+            const openExternalProjectRequest = makeSessionRequest<protocol.OpenExternalProjectArgs>(
+                CommandNames.OpenExternalProject,
+                {
+                    projectFileName: "project1",
+                    rootFiles: toExternalFiles([jsFile.path, dTsFile.path]),
+                    options: { skipLibCheck: false }
+                }
+            );
+            session.executeCommand(openExternalProjectRequest);
+
+            const dTsFileGetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
+            assert.isTrue(errorResult.length === 0);
+        });
     });
 
     describe("non-existing directories listed in config file input array", () => {
@@ -3313,6 +3427,7 @@ namespace ts.projectSystem {
                 },
                 resetRequest: noop
             };
+
             const session = createSession(host, /*typingsInstaller*/ undefined, /*projectServiceEventHandler*/ undefined, cancellationToken);
 
             expectedRequestId = session.getNextSeq();
@@ -3351,22 +3466,7 @@ namespace ts.projectSystem {
                 })
             };
 
-            let requestToCancel = -1;
-            const cancellationToken: server.ServerCancellationToken = (function(){
-                let currentId: number;
-                return <server.ServerCancellationToken>{
-                    setRequest(requestId) {
-                        currentId = requestId;
-                    },
-                    resetRequest(requestId) {
-                        assert.equal(requestId, currentId, "unexpected request id in cancellation");
-                        currentId = undefined;
-                    },
-                    isCancellationRequested() {
-                        return requestToCancel === currentId;
-                    }
-                };
-            })();
+            const cancellationToken = new TestServerCancellationToken();
             const host = createServerHost([f1, config]);
             const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);
             {
@@ -3401,13 +3501,13 @@ namespace ts.projectSystem {
                 host.clearOutput();
 
                 // cancel previously issued Geterr
-                requestToCancel = getErrId;
+                cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedTimeoutCallbacks();
 
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 verifyRequestCompleted(getErrId, 0);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErrId = session.getNextSeq();
@@ -3424,12 +3524,12 @@ namespace ts.projectSystem {
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
 
-                requestToCancel = getErrId;
+                cancellationToken.setRequestToCancel(getErrId);
                 host.runQueuedImmediateCallbacks();
                 assert.equal(host.getOutput().length, 1, "expect 1 message");
                 verifyRequestCompleted(getErrId, 0);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErrId = session.getNextSeq();
@@ -3452,7 +3552,7 @@ namespace ts.projectSystem {
                 assert.equal(e2.event, "semanticDiag");
                 verifyRequestCompleted(getErrId, 1);
 
-                requestToCancel = -1;
+                cancellationToken.resetToken();
             }
             {
                 const getErr1 = session.getNextSeq();
@@ -3485,6 +3585,114 @@ namespace ts.projectSystem {
 
             function getMessage(n: number) {
                 return JSON.parse(server.extractMessage(host.getOutput()[n]));
+            }
+        });
+        it("Lower priority tasks are cancellable", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: `{ let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";`
+            };
+            const config = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {}
+                })
+            };
+            const cancellationToken = new TestServerCancellationToken(/*cancelAfterRequest*/ 3);
+            const host = createServerHost([f1, config]);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken, /*throttleWaitMilliseconds*/ 0);
+            {
+                session.executeCommandSeq(<protocol.OpenRequest>{
+                    command: "open",
+                    arguments: { file: f1.path }
+                });
+
+                // send navbar request (normal priority)
+                session.executeCommandSeq(<protocol.NavBarRequest>{
+                    command: "navbar",
+                    arguments: { file: f1.path }
+                });
+
+                // ensure the nav bar request can be canceled
+                verifyExecuteCommandSeqIsCancellable(<protocol.NavBarRequest>{
+                    command: "navbar",
+                    arguments: { file: f1.path }
+                });
+
+                // send outlining spans request (normal priority)
+                session.executeCommandSeq(<protocol.OutliningSpansRequest>{
+                    command: "outliningSpans",
+                    arguments: { file: f1.path }
+                });
+
+                // ensure the outlining spans request can be canceled
+                verifyExecuteCommandSeqIsCancellable(<protocol.OutliningSpansRequest>{
+                    command: "outliningSpans",
+                    arguments: { file: f1.path }
+                });
+            }
+
+            function verifyExecuteCommandSeqIsCancellable<T extends server.protocol.Request>(request: Partial<T>) {
+                // Set the next request to be cancellable
+                // The cancellation token will cancel the request the third time
+                // isCancellationRequested() is called.
+                cancellationToken.setRequestToCancel(session.getNextSeq());
+                let operationCanceledExceptionThrown = false;
+
+                try {
+                    session.executeCommandSeq(request);
+                }
+                catch (e) {
+                    assert(e instanceof OperationCanceledException);
+                    operationCanceledExceptionThrown = true;
+                }
+                assert(operationCanceledExceptionThrown, "Operation Canceled Exception not thrown for request: " + JSON.stringify(request));
+            }
+        });
+    });
+
+    describe("occurence highlight on string", () => {
+        it("should be marked if only on string values", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: `let t1 = "div";\nlet t2 = "div";\nlet t3 = { "div": 123 };\nlet t4 = t3["div"];`
+            };
+
+            const host = createServerHost([file1]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            projectService.openClientFile(file1.path);
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 1, offset: 11 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                const firstOccurence = highlightResponse[0];
+                assert.isTrue(firstOccurence.isInString, "Highlights should be marked with isInString");
+            }
+
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 3, offset: 13 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                assert.isTrue(highlightResponse.length === 2);
+                const firstOccurence = highlightResponse[0];
+                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on property name");
+            }
+
+            {
+                const highlightRequest = makeSessionRequest<protocol.FileLocationRequestArgs>(
+                    CommandNames.Occurrences,
+                    { file: file1.path, line: 4, offset: 14 }
+                );
+                const highlightResponse = session.executeCommand(highlightRequest).response as protocol.OccurrencesResponseItem[];
+                assert.isTrue(highlightResponse.length === 2);
+                const firstOccurence = highlightResponse[0];
+                assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
             }
         });
     });
