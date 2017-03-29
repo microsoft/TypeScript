@@ -20,8 +20,8 @@ class Comp<T extends Foo, S> extends Component<S & State<T>>
 
 
 //// [indexedAccessRelation.js]
-// Repro from #14723
 "use strict";
+// Repro from #14723
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
