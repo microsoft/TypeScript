@@ -359,15 +359,20 @@ namespace ts {
 
                 // Find the name of the module alias, if there is one
                 const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
-                if (includeNonAmdDependencies && importAliasName) {
-                    // Set emitFlags on the name of the classDeclaration
-                    // This is so that when printer will not substitute the identifier
-                    setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
-                    aliasedModuleNames.push(externalModuleName);
-                    importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
-                }
-                else {
-                    unaliasedModuleNames.push(externalModuleName);
+                // It is possible that externalModuleName is undefined if it is not string literal.
+                // This can happen in the invalid import syntax.
+                // E.g : "import * from alias from 'someLib';"
+                if (externalModuleName) {
+                    if (includeNonAmdDependencies && importAliasName) {
+                        // Set emitFlags on the name of the classDeclaration
+                        // This is so that when printer will not substitute the identifier
+                        setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
+                        aliasedModuleNames.push(externalModuleName);
+                        importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                    }
+                    else {
+                        unaliasedModuleNames.push(externalModuleName);
+                    }
                 }
             }
 
