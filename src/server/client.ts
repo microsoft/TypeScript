@@ -712,13 +712,13 @@ namespace ts.server {
         }
 
         getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
-            const args: protocol.Refactor.GetApplicableRefactorsRequestArgs = {
+            const args: protocol.GetApplicableRefactorsRequestArgs = {
                 file: fileName,
                 locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName)
             };
 
-            const request = this.processRequest<protocol.Refactor.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
-            const response = this.processResponse<protocol.Refactor.GetApplicableRefactorsResponse>(request);
+            const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
+            const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
 
             return response.body.refactors;
         }
@@ -729,14 +729,14 @@ namespace ts.server {
             positionOrRange: number | TextRange,
             refactorName: string) {
 
-            const args: protocol.Refactor.GetRefactorCodeActionsRequestArgs = {
+            const args: protocol.GetRefactorCodeActionsRequestArgs = {
                 file: fileName,
                 locationOrSpan: this.positionOrRangeToLocationOrSpan(positionOrRange, fileName),
                 refactorName
             };
 
-            const request = this.processRequest<protocol.Refactor.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
-            const codeActions = this.processResponse<protocol.Refactor.GetRefactorCodeActionsResponse>(request).body.actions;
+            const request = this.processRequest<protocol.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
+            const codeActions = this.processResponse<protocol.GetRefactorCodeActionsResponse>(request).body.actions;
 
             return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
         }

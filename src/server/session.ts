@@ -1451,14 +1451,14 @@ namespace ts.server {
             }
         }
 
-        private getApplicableRefactors(args: protocol.Refactor.GetApplicableRefactorsRequestArgs): protocol.Refactor.ApplicableRefactorInfo[] {
+        private getApplicableRefactors(args: protocol.GetApplicableRefactorsRequestArgs): protocol.ApplicableRefactorInfo[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
             return project.getLanguageService().getApplicableRefactors(file, position || textRange);
         }
 
-        private getRefactorCodeActions(args: protocol.Refactor.GetRefactorCodeActionsRequestArgs): protocol.CodeAction[] {
+        private getRefactorCodeActions(args: protocol.GetRefactorCodeActionsRequestArgs): protocol.CodeAction[] {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
@@ -1838,10 +1838,10 @@ namespace ts.server {
             [CommandNames.GetSupportedCodeFixes]: () => {
                 return this.requiredResponse(this.getSupportedCodeFixes());
             },
-            [CommandNames.GetApplicableRefactors]: (request: protocol.Refactor.GetApplicableRefactorsRequest) => {
+            [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
                 return this.requiredResponse(this.getApplicableRefactors(request.arguments));
             },
-            [CommandNames.GetRefactorCodeActions]: (request: protocol.Refactor.GetRefactorCodeActionsRequest) => {
+            [CommandNames.GetRefactorCodeActions]: (request: protocol.GetRefactorCodeActionsRequest) => {
                 return this.requiredResponse(this.getRefactorCodeActions(request.arguments));
             }
         });

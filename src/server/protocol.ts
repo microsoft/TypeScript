@@ -407,42 +407,40 @@ namespace ts.server.protocol {
         position?: number;
     }
 
-    export namespace Refactor {
-        export interface GetApplicableRefactorsRequest extends Request {
-            command: CommandTypes.GetApplicableRefactors;
-            arguments: GetApplicableRefactorsRequestArgs;
-        }
+    export interface GetApplicableRefactorsRequest extends Request {
+        command: CommandTypes.GetApplicableRefactors;
+        arguments: GetApplicableRefactorsRequestArgs;
+    }
 
-        export interface GetApplicableRefactorsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
-        }
+    export interface GetApplicableRefactorsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
+    }
 
-        export interface ApplicableRefactorInfo {
-            refactorName: string;
-            description: string;
-        }
+    export interface ApplicableRefactorInfo {
+        refactorName: string;
+        description: string;
+    }
 
-        export interface GetApplicableRefactorsResponse extends Response {
-            body?: { refactors: ApplicableRefactorInfo[] };
-        }
+    export interface GetApplicableRefactorsResponse extends Response {
+        body?: { refactors: ApplicableRefactorInfo[] };
+    }
 
-        export interface GetRefactorCodeActionsRequest extends Request {
-            command: CommandTypes.GetRefactorCodeActions;
-            arguments: GetRefactorCodeActionsRequestArgs;
-        }
+    export interface GetRefactorCodeActionsRequest extends Request {
+        command: CommandTypes.GetRefactorCodeActions;
+        arguments: GetRefactorCodeActionsRequestArgs;
+    }
 
-        export interface GetRefactorCodeActionsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
-            /* The kind of the applicable refactor */
-            refactorName: string;
-        }
+    export interface GetRefactorCodeActionsRequestArgs extends FileLocationOrSpanWithPositionRequestArgs {
+        /* The kind of the applicable refactor */
+        refactorName: string;
+    }
 
-        export interface GetRefactorCodeActionsResponse extends Response {
-            body?: { actions: CodeAction[] };
-        }
+    export interface GetRefactorCodeActionsResponse extends Response {
+        body?: { actions: CodeAction[] };
+    }
 
-        export interface RefactorDiagnosticEventBody {
-            file: string;
-            diagnostics: Diagnostic[];
-        }
+    export interface RefactorDiagnosticEventBody {
+        file: string;
+        diagnostics: Diagnostic[];
     }
 
     /**
