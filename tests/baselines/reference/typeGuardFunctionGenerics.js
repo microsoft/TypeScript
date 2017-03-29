@@ -1,5 +1,4 @@
 //// [typeGuardFunctionGenerics.ts]
-
 class A {
     propA: number;
 }

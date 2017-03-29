@@ -1,5 +1,4 @@
 //// [es5ModuleInternalNamedImports.ts]
-
 export module M {
     // variable
     export var M_V = 0;

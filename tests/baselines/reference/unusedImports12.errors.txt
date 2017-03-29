@@ -22,7 +22,6 @@ tests/cases/compiler/a.ts(4,8): error TS6133: 'r' is declared but never used.
 !!! error TS6133: 'r' is declared but never used.
     
 ==== tests/cases/compiler/b.ts (0 errors) ====
-    
     export class Member {}
     export default Member;
     

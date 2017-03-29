@@ -1,5 +1,4 @@
 //// [arrowFunctionsMissingTokens.ts]
-
 module missingArrowsWithCurly {
     var a = () { };
 

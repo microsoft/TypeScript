@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/cacheResolutions.ts] ////
 
 //// [app.ts]
-
 export let x = 1;
 
 //// [lib1.ts]

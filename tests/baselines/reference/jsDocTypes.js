@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/salsa/jsDocTypes.ts] ////
 
 //// [a.js]
-
 /** @type {String} */
 var S;
 

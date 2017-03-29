@@ -1,5 +1,4 @@
 === tests/cases/compiler/Element.ts ===
-
 declare namespace JSX {
 >JSX : any
 

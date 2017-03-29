@@ -1,30 +1,29 @@
 === tests/cases/compiler/es6ImportNamedImportAmd_0.ts ===
-
 export var a = 10;
->a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 
 export var x = a;
->x : Symbol(x, Decl(es6ImportNamedImportAmd_0.ts, 2, 10))
->a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>x : Symbol(x, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 
 export var m = a;
->m : Symbol(m, Decl(es6ImportNamedImportAmd_0.ts, 3, 10))
->a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 1, 10))
+>m : Symbol(m, Decl(es6ImportNamedImportAmd_0.ts, 2, 10))
+>a : Symbol(a, Decl(es6ImportNamedImportAmd_0.ts, 0, 10))
 
 export var a1 = 10;
->a1 : Symbol(a1, Decl(es6ImportNamedImportAmd_0.ts, 4, 10))
+>a1 : Symbol(a1, Decl(es6ImportNamedImportAmd_0.ts, 3, 10))
 
 export var x1 = 10;
->x1 : Symbol(x1, Decl(es6ImportNamedImportAmd_0.ts, 5, 10))
+>x1 : Symbol(x1, Decl(es6ImportNamedImportAmd_0.ts, 4, 10))
 
 export var z1 = 10;
->z1 : Symbol(z1, Decl(es6ImportNamedImportAmd_0.ts, 6, 10))
+>z1 : Symbol(z1, Decl(es6ImportNamedImportAmd_0.ts, 5, 10))
 
 export var z2 = 10;
->z2 : Symbol(z2, Decl(es6ImportNamedImportAmd_0.ts, 7, 10))
+>z2 : Symbol(z2, Decl(es6ImportNamedImportAmd_0.ts, 6, 10))
 
 export var aaaa = 10;
->aaaa : Symbol(aaaa, Decl(es6ImportNamedImportAmd_0.ts, 8, 10))
+>aaaa : Symbol(aaaa, Decl(es6ImportNamedImportAmd_0.ts, 7, 10))
 
 === tests/cases/compiler/es6ImportNamedImportAmd_1.ts ===
 import { } from "es6ImportNamedImportAmd_0";

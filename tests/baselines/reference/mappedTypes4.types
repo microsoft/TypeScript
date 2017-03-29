@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/mapped/mappedTypes4.ts ===
-
 type Box<T> = {
 >Box : Box<T>
 >T : T

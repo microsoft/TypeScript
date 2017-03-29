@@ -1,5 +1,4 @@
 //// [modularizeLibrary_ErrorFromUsingES6ArrayWithOnlyES6ArrayLib.ts]
-
 // Error missing basic JavaScript objects
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

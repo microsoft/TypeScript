@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxImportInAttribute.tsx] ////
 
 //// [component.d.ts]
-
 declare module "Test" {
 	export default class Text { }
 }

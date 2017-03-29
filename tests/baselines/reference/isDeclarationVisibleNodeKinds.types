@@ -1,5 +1,4 @@
 === tests/cases/compiler/isDeclarationVisibleNodeKinds.ts ===
-
 // Function types
 module schema {
 >schema : typeof schema

@@ -1,5 +1,4 @@
 //// [restUnion2.ts]
-
 declare const undefinedUnion: { n: number } | undefined;
 var rest2: { n: number };
 var {...rest2 } = undefinedUnion;

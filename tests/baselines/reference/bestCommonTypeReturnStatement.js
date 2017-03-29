@@ -1,5 +1,4 @@
 //// [bestCommonTypeReturnStatement.ts]
-
 interface IPromise<T> {
     then(successCallback: (promiseValue: T) => any, errorCallback?: (reason: any) => any): IPromise<any>;
 }

@@ -7,7 +7,6 @@ error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. Th
 !!! error TS5055:   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
 !!! error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts', '.js', '.jsx'.
 ==== tests/cases/compiler/a.ts (0 errors) ====
-    
     class c {
     }
     

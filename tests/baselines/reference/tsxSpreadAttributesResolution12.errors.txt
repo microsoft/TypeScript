@@ -1,15 +1,14 @@
-tests/cases/conformance/jsx/file.tsx(28,24): error TS2322: Type '{ x: 2; y: true; overwrite: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(27,24): error TS2322: Type '{ x: 2; y: true; overwrite: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'.
   Type '{ x: 2; y: true; overwrite: "hi"; }' is not assignable to type 'Prop'.
     Types of property 'y' are incompatible.
       Type 'true' is not assignable to type 'false'.
-tests/cases/conformance/jsx/file.tsx(29,25): error TS2322: Type '{ y: true; x: 3; overwrite: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(28,25): error TS2322: Type '{ y: true; x: 3; overwrite: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<OverWriteAttr> & Prop & { children?: ReactNode; }'.
   Type '{ y: true; x: 3; overwrite: "hi"; }' is not assignable to type 'Prop'.
     Types of property 'x' are incompatible.
       Type '3' is not assignable to type '2'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
-    
     import React = require('react');
     
     const obj = {};

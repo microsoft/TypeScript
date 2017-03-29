@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralMatchedInSwitch01.ts ===
-
 type S = "a" | "b";
 >S : S
 

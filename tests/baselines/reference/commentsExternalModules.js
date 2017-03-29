@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commentsExternalModules.ts] ////
 
 //// [commentsExternalModules_0.ts]
-
 /** Module comment*/
 export module m1 {
     /** b's comment*/

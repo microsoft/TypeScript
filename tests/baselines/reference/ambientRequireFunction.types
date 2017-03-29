@@ -16,8 +16,6 @@ const text = fs.readFileSync("/a/b/c");
 >"/a/b/c" : "/a/b/c"
 
 === tests/cases/compiler/node.d.ts ===
-
-
 declare function require(moduleName: string): any;
 >require : (moduleName: string) => any
 >moduleName : string

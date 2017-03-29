@@ -1,5 +1,4 @@
 //// [mapOnTupleTypes02.ts]
-
 export type Point = [number, number];
 
 export function increment(point: Point) {

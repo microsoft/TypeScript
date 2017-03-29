@@ -1,5 +1,4 @@
 //// [indexedAccessTypeConstraints.ts]
-
 // Repro from #14557
 
 interface IData<T> {
@@ -37,8 +36,8 @@ function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 
 
 //// [indexedAccessTypeConstraints.js]
-// Repro from #14557
 "use strict";
+// Repro from #14557
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||

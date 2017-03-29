@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileExportAssignmentOfGenericInterface.ts] ////
 
 //// [declFileExportAssignmentOfGenericInterface_0.ts]
-
 interface Foo<T> {
     a: string;
 }

@@ -1,5 +1,4 @@
 //// [declarationEmitInterfaceWithNonEntityNameExpressionHeritage.ts]
-
 class A { }
 interface Class extends (typeof A) { }
 

@@ -4,7 +4,6 @@
 export class Host { }
 
 //// [consumer.ts]
-
 import host = require("host");
 var hostVar = host;
 var v = new hostVar.Host();

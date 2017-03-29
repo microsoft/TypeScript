@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(13,10): error TS2322: Type '{ x: "hi"; }' is not assignable to type '(IntrinsicAttributes & { x: number; }) | (IntrinsicAttributes & { x: boolean; })'.
+tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' is not assignable to type '(IntrinsicAttributes & { x: number; }) | (IntrinsicAttributes & { x: boolean; })'.
   Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
     Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
       Types of property 'x' are incompatible.
@@ -6,7 +6,6 @@ tests/cases/conformance/jsx/file.tsx(13,10): error TS2322: Type '{ x: "hi"; }' i
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
-    
     import React = require('react');
     
     function SFC1(prop: { x: number }) {

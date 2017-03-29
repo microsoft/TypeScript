@@ -1,14 +1,13 @@
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(2,10): error TS4060: Return type of exported function has or is using private name 'D'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(6,7): error TS4093: 'extends' clause of exported class 'C' refers to a type whose name cannot be referenced.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(6,17): error TS2315: Type 'D' is not generic.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(10,7): error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(10,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(15,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(15,18): error TS4020: 'extends' clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(1,10): error TS4060: Return type of exported function has or is using private name 'D'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(5,7): error TS4093: 'extends' clause of exported class 'C' refers to a type whose name cannot be referenced.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(5,17): error TS2315: Type 'D' is not generic.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(9,7): error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(9,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS4020: 'extends' clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
 
 
 ==== tests/cases/compiler/declarationEmitExpressionInExtends4.ts (7 errors) ====
-    
     function getSomething() {
              ~~~~~~~~~~~~
 !!! error TS4060: Return type of exported function has or is using private name 'D'.

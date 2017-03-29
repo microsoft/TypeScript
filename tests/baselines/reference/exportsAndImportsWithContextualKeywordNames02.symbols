@@ -1,12 +1,11 @@
 === tests/cases/conformance/es6/modules/t1.ts ===
-
 let as = 100;
->as : Symbol(as, Decl(t1.ts, 1, 3))
+>as : Symbol(as, Decl(t1.ts, 0, 3))
 
 export { as as return, as };
->as : Symbol(return, Decl(t1.ts, 3, 8))
->return : Symbol(return, Decl(t1.ts, 3, 8))
->as : Symbol(as, Decl(t1.ts, 3, 22))
+>as : Symbol(return, Decl(t1.ts, 2, 8))
+>return : Symbol(return, Decl(t1.ts, 2, 8))
+>as : Symbol(as, Decl(t1.ts, 2, 22))
 
 === tests/cases/conformance/es6/modules/t2.ts ===
 import * as as from "./t1";
@@ -14,15 +13,15 @@ import * as as from "./t1";
 
 var x = as.as;
 >x : Symbol(x, Decl(t2.ts, 1, 3))
->as.as : Symbol(as.as, Decl(t1.ts, 3, 22))
+>as.as : Symbol(as.as, Decl(t1.ts, 2, 22))
 >as : Symbol(as, Decl(t2.ts, 0, 6))
->as : Symbol(as.as, Decl(t1.ts, 3, 22))
+>as : Symbol(as.as, Decl(t1.ts, 2, 22))
 
 var y = as.return;
 >y : Symbol(y, Decl(t2.ts, 2, 3))
->as.return : Symbol(as.return, Decl(t1.ts, 3, 8))
+>as.return : Symbol(as.return, Decl(t1.ts, 2, 8))
 >as : Symbol(as, Decl(t2.ts, 0, 6))
->return : Symbol(as.return, Decl(t1.ts, 3, 8))
+>return : Symbol(as.return, Decl(t1.ts, 2, 8))
 
 === tests/cases/conformance/es6/modules/t3.ts ===
 import { as as as } from "./t1";

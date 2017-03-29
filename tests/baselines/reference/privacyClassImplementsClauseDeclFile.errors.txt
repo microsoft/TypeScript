@@ -1,13 +1,12 @@
 tests/cases/compiler/privacyClassImplementsClauseDeclFile_GlobalFile.ts(14,77): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(15,77): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(20,79): error TS4019: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(23,78): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(63,65): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterface' has or is using private name 'privateInterface'.
-tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(68,75): error TS4019: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(14,77): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterfaceInModule' has or is using private name 'privateInterfaceInPublicModule'.
+tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(19,79): error TS4019: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
+tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(22,78): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateAndPublicInterface' has or is using private name 'privateInterfaceInPublicModule'.
+tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(62,65): error TS4019: Implements clause of exported class 'publicClassImplementingPrivateInterface' has or is using private name 'privateInterface'.
+tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts(67,75): error TS4019: Implements clause of exported class 'publicClassImplementingFromPrivateModuleInterface' has or is using private name 'privateModule'.
 
 
 ==== tests/cases/compiler/privacyClassImplementsClauseDeclFile_externalModule.ts (5 errors) ====
-    
     export module publicModule {
         export interface publicInterfaceInPublicModule {
         }

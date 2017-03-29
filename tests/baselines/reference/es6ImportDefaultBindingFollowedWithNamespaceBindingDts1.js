@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingDts1.ts] ////
 
 //// [server.ts]
-
 class a { }
 export default a;
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/keywordInJsxIdentifier.tsx ===
-
 declare var React: any;
 >React : any
 

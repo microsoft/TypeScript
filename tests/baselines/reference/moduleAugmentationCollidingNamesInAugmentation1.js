@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationCollidingNamesInAugmentation1.ts] ////
 
 //// [map1.ts]
-
 import { Observable } from "./observable"
 
 (<any>Observable.prototype).map = function() { }

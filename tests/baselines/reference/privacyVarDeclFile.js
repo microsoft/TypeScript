@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyVarDeclFile.ts] ////
 
 //// [privacyVarDeclFile_externalModule.ts]
-
 class privateClass {
 }
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/missingSemicolonInModuleSpecifier.ts] ////
 
 //// [a.ts]
-
 export const x = 1;
 
 //// [b.ts]

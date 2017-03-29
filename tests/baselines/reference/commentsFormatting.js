@@ -1,5 +1,4 @@
 //// [commentsFormatting.ts]
-
 module m {
     /** this is first line - aligned to class declaration
 * this is 4 spaces left aligned

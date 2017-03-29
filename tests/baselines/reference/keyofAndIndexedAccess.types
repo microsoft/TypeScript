@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts ===
-
 class Shape {
 >Shape : Shape
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importWithTrailingSlash.ts] ////
 
 //// [a.ts]
-
 export default { a: 0 };
 
 //// [index.ts]

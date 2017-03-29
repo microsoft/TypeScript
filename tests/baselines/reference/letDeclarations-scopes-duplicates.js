@@ -1,5 +1,4 @@
 //// [letDeclarations-scopes-duplicates.ts]
-
 // Errors: redeclaration
 let var1 = 0;
 let var1 = 0; // error

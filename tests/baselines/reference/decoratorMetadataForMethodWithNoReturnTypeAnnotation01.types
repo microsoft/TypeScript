@@ -1,5 +1,4 @@
 === tests/cases/compiler/decoratorMetadataForMethodWithNoReturnTypeAnnotation01.ts ===
-
 declare var decorator: any;
 >decorator : any
 

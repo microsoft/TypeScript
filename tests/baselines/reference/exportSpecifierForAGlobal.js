@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportSpecifierForAGlobal.ts] ////
 
 //// [a.d.ts]
-
 declare class X { }
 
 //// [b.ts]

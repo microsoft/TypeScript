@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitDestructuringOptionalBindingParametersInOverloads.ts ===
-
 function foo([x, y, z] ?: [string, number, boolean]);
 >foo : ([x, y, z]?: [string, number, boolean]) => any
 >x : string

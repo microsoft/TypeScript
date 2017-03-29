@@ -1,5 +1,4 @@
 //// [unusedLocalsAndObjectSpread.ts]
-
 declare var console: { log(a: any): void };
 
 function one() {

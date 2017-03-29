@@ -29,14 +29,13 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^->
 1 >
-  >
-1 >Emitted(18, 13) Source(2, 1) + SourceIndex(0)
+1 >Emitted(18, 13) Source(1, 1) + SourceIndex(0)
 ---
 >>>                function A() {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^->
 1->
-1->Emitted(19, 17) Source(2, 1) + SourceIndex(0)
+1->Emitted(19, 17) Source(1, 1) + SourceIndex(0)
 ---
 >>>                }
 1->^^^^^^^^^^^^^^^^
@@ -44,16 +43,16 @@ sourceFile:tests/cases/compiler/ref/a.ts
 3 >                 ^^^^^^^^^->
 1->export class A { 
 2 >                }
-1->Emitted(20, 17) Source(2, 18) + SourceIndex(0)
-2 >Emitted(20, 18) Source(2, 19) + SourceIndex(0)
+1->Emitted(20, 17) Source(1, 18) + SourceIndex(0)
+2 >Emitted(20, 18) Source(1, 19) + SourceIndex(0)
 ---
 >>>                return A;
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^
 1->
 2 >                }
-1->Emitted(21, 17) Source(2, 18) + SourceIndex(0)
-2 >Emitted(21, 25) Source(2, 19) + SourceIndex(0)
+1->Emitted(21, 17) Source(1, 18) + SourceIndex(0)
+2 >Emitted(21, 25) Source(1, 19) + SourceIndex(0)
 ---
 >>>            }());
 1 >^^^^^^^^^^^^
@@ -65,10 +64,10 @@ sourceFile:tests/cases/compiler/ref/a.ts
 2 >            }
 3 >             
 4 >             export class A { }
-1 >Emitted(22, 13) Source(2, 18) + SourceIndex(0)
-2 >Emitted(22, 14) Source(2, 19) + SourceIndex(0)
-3 >Emitted(22, 14) Source(2, 1) + SourceIndex(0)
-4 >Emitted(22, 18) Source(2, 19) + SourceIndex(0)
+1 >Emitted(22, 13) Source(1, 18) + SourceIndex(0)
+2 >Emitted(22, 14) Source(1, 19) + SourceIndex(0)
+3 >Emitted(22, 14) Source(1, 1) + SourceIndex(0)
+4 >Emitted(22, 18) Source(1, 19) + SourceIndex(0)
 ---
 >>>            exports_1("A", A);
 >>>        }
@@ -77,8 +76,8 @@ sourceFile:tests/cases/compiler/ref/a.ts
 1->
   >
 2 >        
-1->Emitted(24, 9) Source(3, 1) + SourceIndex(0)
-2 >Emitted(24, 10) Source(3, 2) + SourceIndex(0)
+1->Emitted(24, 9) Source(2, 1) + SourceIndex(0)
+2 >Emitted(24, 10) Source(2, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:all.js

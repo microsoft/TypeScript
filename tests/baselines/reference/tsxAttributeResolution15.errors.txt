@@ -1,9 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(12,21): error TS2322: Type '{ prop1: "hello"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & {} & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(11,21): error TS2322: Type '{ prop1: "hello"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & {} & { children?: ReactNode; }'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & {} & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
-    
     import React = require('react');
     
     class BigGreeter extends React.Component<{ }, {}> {

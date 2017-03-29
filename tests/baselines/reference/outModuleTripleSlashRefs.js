@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleTripleSlashRefs.ts] ////
 
 //// [a.ts]
-
 /// <reference path="./b.ts" />
 export class A {
 	member: typeof GlobalFoo;

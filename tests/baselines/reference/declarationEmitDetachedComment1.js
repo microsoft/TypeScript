@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationEmitDetachedComment1.ts] ////
 
 //// [test1.ts]
-
 /*! Copyright 2015 MyCompany Inc. */
 
 /**

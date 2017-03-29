@@ -1,5 +1,4 @@
 //// [generatorTypeCheck63.ts]
-
 export interface StrategicState {
     lastStrategyApplied?: string;
 }

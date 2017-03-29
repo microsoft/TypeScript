@@ -1,5 +1,4 @@
 //// [test.tsx]
-
 declare module JSX {
     interface IntrinsicElements {
         [s: string]: any;

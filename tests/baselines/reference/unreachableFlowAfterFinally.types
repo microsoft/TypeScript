@@ -1,5 +1,4 @@
 === tests/cases/compiler/unreachableFlowAfterFinally.ts ===
-
 function f() {
 >f : () => number
 

@@ -1,5 +1,4 @@
 //// [logicalAndOperatorStrictMode.ts]
-
 const a = [0];
 const s = "";
 const x = 0;

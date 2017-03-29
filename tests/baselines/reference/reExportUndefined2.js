@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportUndefined2.ts] ////
 
 //// [a.ts]
-
 var undefined;
 export { undefined };
 

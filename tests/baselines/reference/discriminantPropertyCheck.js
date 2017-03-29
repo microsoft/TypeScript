@@ -1,5 +1,4 @@
 //// [discriminantPropertyCheck.ts]
-
 type Item = Item1 | Item2;
 
 interface Base {

@@ -1,5 +1,4 @@
 //// [derivedClassWithPrivateInstanceShadowingProtectedInstance.ts]
-
 class Base {
     protected x: string;
     protected fn(): string {

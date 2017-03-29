@@ -1,5 +1,4 @@
 //// [es5-souremap-amd.ts]
-
 class A
 {
     constructor ()

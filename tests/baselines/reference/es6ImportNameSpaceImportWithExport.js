@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportWithExport.ts] ////
 
 //// [server.ts]
-
 export var a = 10;
 
 //// [client.ts]

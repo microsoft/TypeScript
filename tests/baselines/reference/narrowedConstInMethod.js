@@ -1,5 +1,4 @@
 //// [narrowedConstInMethod.ts]
-
 function f() {
     const x: string | null = <any>{};
     if (x !== null) {

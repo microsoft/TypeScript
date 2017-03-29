@@ -1,5 +1,4 @@
 === tests/cases/compiler/namespacesDeclaration1.ts ===
-
 module M {
 >M : any
 

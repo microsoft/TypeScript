@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores4.ts] ////
 
 //// [m1.ts]
-
 declare var console: any;
 export function _() {
     console.log("_");

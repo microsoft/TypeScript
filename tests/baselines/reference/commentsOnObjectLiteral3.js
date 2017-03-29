@@ -1,5 +1,4 @@
 //// [commentsOnObjectLiteral3.ts]
-
 var v = {
  //property
  prop: 1 /* multiple trailing comments */ /*trailing comments*/,

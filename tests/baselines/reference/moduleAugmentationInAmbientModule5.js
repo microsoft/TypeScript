@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationInAmbientModule5.ts] ////
 
 //// [array.d.ts]
-
 declare module "A" {
     class A { x: number; }
 }

@@ -1,5 +1,4 @@
 //// [pi.ts]
-
 export default 3.14159;
 
 //// [app.js]

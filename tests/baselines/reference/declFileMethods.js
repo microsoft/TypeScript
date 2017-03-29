@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileMethods.ts] ////
 
 //// [declFileMethods_0.ts]
-
 export class c1 {
     /** This comment should appear for foo*/
     public foo() {

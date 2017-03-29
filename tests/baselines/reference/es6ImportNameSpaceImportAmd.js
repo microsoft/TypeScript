@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportAmd.ts] ////
 
 //// [es6ImportNameSpaceImportAmd_0.ts]
-
 export var a = 10;
 
 //// [es6ImportNameSpaceImportAmd_1.ts]

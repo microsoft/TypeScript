@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule.ts] ////
 
 //// [declFileAmbientExternalModuleWithSingleExportedModule_0.ts]
-
 declare module "SubModule" {
     export module m {
         export module m3 {
