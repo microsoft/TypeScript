@@ -1507,9 +1507,23 @@ namespace ts {
                 }
             }
             else if (name.kind === SyntaxKind.QualifiedName || name.kind === SyntaxKind.PropertyAccessExpression) {
-                const left = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).left : (<PropertyAccessEntityNameExpression>name).expression;
-                const right = name.kind === SyntaxKind.QualifiedName ? (<QualifiedName>name).right : (<PropertyAccessExpression>name).name;
+                let left: EntityNameOrEntityNameExpression;
 
+                if (name.kind === SyntaxKind.QualifiedName) {
+                    left = (<QualifiedName>name).left;
+                }
+                else if (name.kind === SyntaxKind.PropertyAccessExpression &&
+                    (name.expression.kind === SyntaxKind.ParenthesizedExpression || isEntityNameExpression(name.expression))) {
+                    left = name.expression;
+                }
+                else {
+                    // If the expression in property-access expression is not entity-name or parenthsizedExpression (e.g. it is a call expression), it won't be able to successfully resolve the name.
+                    // This is the case when we are trying to do any language service operation in heritage clauses. By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression
+                    // will attempt to checkPropertyAccessExpression to resolve symbol.
+                    // i.e class C extends foo()./*do language service operation here*/B {}
+                    return undefined;
+                }
+                const right = name.kind === SyntaxKind.QualifiedName ? name.right : name.name;
                 const namespace = resolveEntityName(left, SymbolFlags.Namespace, ignoreErrors, /*dontResolveAlias*/ false, location);
                 if (!namespace || nodeIsMissing(right)) {
                     return undefined;
@@ -1524,6 +1538,15 @@ namespace ts {
                     }
                     return undefined;
                 }
+            }
+            else if (name.kind === SyntaxKind.ParenthesizedExpression) {
+                // If the expression in parenthsizedExpression is not an entity-name (e.g. it is a call expression), it won't be able to successfully resolve the name.
+                // This is the case when we are trying to do any language service operation in heritage clauses. By return undefined, the getSymbolOfEntityNameOrPropertyAccessExpression
+                // will attempt to checkPropertyAccessExpression to resolve symbol.
+                // i.e class C extends foo()./*do language service operation here*/B {}
+                return isEntityNameExpression(name.expression) ?
+                    resolveEntityName(name.expression as EntityNameOrEntityNameExpression, meaning, ignoreErrors, dontResolveAlias, location) :
+                    undefined;
             }
             else {
                 Debug.fail("Unknown entity name kind.");
@@ -21689,7 +21712,6 @@ namespace ts {
 
             if (isHeritageClauseElementIdentifier(<EntityName>entityName)) {
                 let meaning = SymbolFlags.None;
-
                 // In an interface or class, we're definitely interested in a type.
                 if (entityName.parent.kind === SyntaxKind.ExpressionWithTypeArguments) {
                     meaning = SymbolFlags.Type;
@@ -21704,9 +21726,13 @@ namespace ts {
                 }
 
                 meaning |= SymbolFlags.Alias;
-                return resolveEntityName(<EntityName>entityName, meaning);
+                const entityNameSymbol = resolveEntityName(<EntityName>entityName, meaning);
+                if (entityNameSymbol) {
+                    return entityNameSymbol;
+                }
             }
-            else if (isPartOfExpression(entityName)) {
+
+            if (isPartOfExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.
                     return undefined;
