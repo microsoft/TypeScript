@@ -151,18 +151,20 @@ namespace ts {
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
-                const text = externalModuleName.text;
-                const groupIndex = groupIndices.get(text);
-                if (groupIndex !== undefined) {
-                    // deduplicate/group entries in dependency list by the dependency name
-                    dependencyGroups[groupIndex].externalImports.push(externalImport);
-                }
-                else {
-                    groupIndices.set(text, dependencyGroups.length);
-                    dependencyGroups.push({
-                        name: externalModuleName,
-                        externalImports: [externalImport]
-                    });
+                if (externalModuleName) {
+                    const text = externalModuleName.text;
+                    const groupIndex = groupIndices.get(text);
+                    if (groupIndex !== undefined) {
+                        // deduplicate/group entries in dependency list by the dependency name
+                        dependencyGroups[groupIndex].externalImports.push(externalImport);
+                    }
+                    else {
+                        groupIndices.set(text, dependencyGroups.length);
+                        dependencyGroups.push({
+                            name: externalModuleName,
+                            externalImports: [externalImport]
+                        });
+                    }
                 }
             }
 
