@@ -96,7 +96,7 @@
         "rwcRunner.ts",
         "test262Runner.ts",
         "runner.ts",
-        "../server/protocol.d.ts",
+        "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
