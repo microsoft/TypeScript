@@ -975,6 +975,34 @@ namespace ts.projectSystem {
             }
         });
 
+        it("should find the first package.json in one of the parent folders if no project root provided", () => {
+            const f = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const packageJson = {
+                path: "/a/package.json",
+                content: `{
+                    "dependencies": {
+                        "knockout": "3.4.1"
+                    }
+                }`
+            };
+            // this json file should not be used for typing discovery
+            const upperLevelPackageJson = {
+                path: "/package.json",
+                content: `{
+                    "dependencies": {
+                        "jquery": "1.0.0"
+                    }
+                }`
+            };
+            const host = createServerHost([f, packageJson, upperLevelPackageJson]);
+            const cache = createMap<string>();
+            const result = JsTyping.discoverTypings(host, [f.path], /*projectRootPath*/ undefined, /*safeListPath*/ undefined, cache, { enable: true }, ["somename"]);
+            assert.deepEqual(result.newTypingNames.sort(), ["knockout", "somename"]);
+        });
+
         it("should use cached locaitons", () => {
             const f = {
                 path: "/a/b/app.js",

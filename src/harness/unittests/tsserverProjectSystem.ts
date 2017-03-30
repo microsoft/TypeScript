@@ -807,7 +807,7 @@ namespace ts.projectSystem {
                 path: "/c/app.ts",
                 content: "let x = 1"
             };
-            const makeProject = (f:  FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const makeProject = (f: FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
             const p1 = makeProject(f1);
             const p2 = makeProject(f2);
             const p3 = makeProject(f3);
@@ -1982,6 +1982,38 @@ namespace ts.projectSystem {
 
             projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
+        });
+
+        it("type acquisition for inferred projects", () => {
+            const file1 = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const file2 = {
+                path: "/a/b/app2.js",
+                content: ""
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+
+            projectService.setTypeAcquisitionForInferredProjects({
+                enable: true,
+                include: ["cordova"]
+            });
+
+            projectService.openClientFile(file2.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+
+            for (const project of projectService.inferredProjects) {
+                const typeAcquisition = project.getTypeAcquisition();
+                assert.equal(typeAcquisition.enable, true);
+                assert.deepEqual(typeAcquisition.include, ["cordova"]);
+            }
         });
 
         it("syntax tree cache handles changes in project settings", () => {

@@ -42,6 +42,8 @@ namespace ts.JsTyping {
 
     const nodeCoreModules = arrayToMap(<string[]>nodeCoreModuleList, x => x);
 
+    const interestingJsonFiles = ["package.json", "bower.json"];
+
     /**
      * @param host is the object providing I/O related operations.
      * @param fileNames are the file names that belong to the same project
@@ -81,27 +83,40 @@ namespace ts.JsTyping {
 
         const filesToWatch: string[] = [];
         // Directories to search for package.json, bower.json and other typing information
-        let searchDirs: string[] = [];
+        const searchDirs = createMap<true>();
         let exclude: string[] = [];
 
         mergeTypings(typeAcquisition.include);
         exclude = typeAcquisition.exclude || [];
 
-        const possibleSearchDirs = map(fileNames, getDirectoryPath);
-        if (projectRootPath) {
-            possibleSearchDirs.push(projectRootPath);
+        for (const fileName of fileNames) {
+            const dir = getDirectoryPath(fileName);
+            searchDirs.set(dir, true);
         }
-        searchDirs = deduplicate(possibleSearchDirs);
-        for (const searchDir of searchDirs) {
-            const packageJsonPath = combinePaths(searchDir, "package.json");
-            getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
-            const bowerJsonPath = combinePaths(searchDir, "bower.json");
-            getTypingNamesFromJson(bowerJsonPath, filesToWatch);
+        if (projectRootPath) {
+            searchDirs.set(projectRootPath, true);
+        }
+        else {
+            // no project root provided. Look up until find a potential project root.
+            for (const fileName of fileNames) {
+                const possibleRoot = findPossibleProjectRoot(fileName);
+                if (possibleRoot) {
+                    searchDirs.set(possibleRoot, true);
+                }
+            }
+        }
+
+        searchDirs.forEach((_, searchDir) => {
+            for (const jsonFile of interestingJsonFiles) {
+                const packageJsonPath = combinePaths(searchDir, jsonFile);
+                getTypingNamesFromJson(packageJsonPath, filesToWatch);
+            }
 
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
             getTypingNamesFromNodeModuleFolder(nodeModulesPath);
-        }
+        });
+
         getTypingNamesFromSourceFileNames(fileNames);
 
         // add typings for unresolved imports
@@ -136,6 +151,21 @@ namespace ts.JsTyping {
             }
         });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
+
+        function findPossibleProjectRoot(fileName: string) {
+            let currentDir = getDirectoryPath(fileName);
+            let parentDir = getDirectoryPath(currentDir);
+            while (parentDir !== currentDir) {
+                for (const jsonFile of interestingJsonFiles) {
+                    if (host.fileExists(combinePaths(currentDir, jsonFile))) {
+                        return currentDir;
+                    }
+                }
+                currentDir = parentDir;
+                parentDir = getDirectoryPath(parentDir);
+            }
+            return undefined;
+        }
 
         /**
          * Merge a given list of typingNames to the inferredTypings map
