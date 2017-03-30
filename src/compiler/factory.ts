@@ -2,6 +2,26 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
+    export const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
+
     function createSynthesizedNode(kind: SyntaxKind): Node {
         const node = createNode(kind, -1, -1);
         node.flags |= NodeFlags.Synthesized;
@@ -62,6 +82,11 @@ namespace ts {
         }
 
         return clone;
+    }
+
+    export function getDeepSynthesizedClone<T extends Node>(node: T | undefined): T {
+        const clone = visitEachChild(node, getDeepSynthesizedClone, nullTransformationContext, /*nodeVisitor*/ undefined, getSynthesizedClone);
+        return nodeIsSynthesized(clone) ? clone : getSynthesizedClone(clone);
     }
 
     // Literals

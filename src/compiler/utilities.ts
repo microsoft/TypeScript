@@ -3272,13 +3272,15 @@ namespace ts {
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
-        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
-            return carriageReturnLineFeed;
+        switch (options.newLine) {
+            case NewLineKind.None:
+                return "";
+            case NewLineKind.CarriageReturnLineFeed:
+                return carriageReturnLineFeed;
+            case NewLineKind.LineFeed:
+                return lineFeed;
         }
-        else if (options.newLine === NewLineKind.LineFeed) {
-            return lineFeed;
-        }
-        else if (sys) {
+        if (sys) {
             return sys.newLine;
         }
         return carriageReturnLineFeed;

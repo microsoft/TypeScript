@@ -2541,8 +2541,10 @@ namespace ts {
         allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
         allowTypeParameterInQualifiedName       = 1 << 2,
         allowAnonymousIdentifier                = 1 << 3,
-        allowEmptyUnionOrIntersection           = 1 << 4,
-        allowEmptyTuple                         = 1 << 5
+        allowEmptyUnionOrIntersection = 1 << 4,
+        allowEmptyTuple = 1 << 5,
+        suppressAnyReturnType = 1 << 6,
+        ignoreErrors = allowThisInObjectLiteral | allowQualifedNameInPlaceOfIdentifier | allowTypeParameterInQualifiedName | allowAnonymousIdentifier | allowEmptyUnionOrIntersection | allowEmptyTuple
     }
 
     export interface SymbolDisplayBuilder {
@@ -3470,6 +3472,7 @@ namespace ts {
     export const enum NewLineKind {
         CarriageReturnLineFeed = 0,
         LineFeed = 1,
+        None = 2
     }
 
     export interface LineAndCharacter {
@@ -4115,7 +4118,7 @@ namespace ts {
          * the identifiers of the source file are used when generating unique names to avoid
          * collisions.
          */
-        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined): string;
         /**
          * Prints a source file as-is, without any emit transformations.
          */
@@ -4124,7 +4127,7 @@ namespace ts {
          * Prints a bundle of source files as-is, without any emit transformations.
          */
         printBundle(bundle: Bundle): string;
-        /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
+        /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
         /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
     }
