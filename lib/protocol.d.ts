@@ -469,6 +469,10 @@ declare namespace ts.server.protocol {
           * True if the occurrence is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+        /**
+         * True if the occurrence is in a string, undefined otherwise;
+         */
+        isInString?: true;
     }
     interface OccurrencesResponse extends Response {
         body?: OccurrencesResponseItem[];
@@ -640,7 +644,7 @@ declare namespace ts.server.protocol {
      * Represents a file in external project.
      * External project is project whose set of files, compilation options and open\close state
      * is maintained by the client (i.e. if all this data come from .csproj file in Visual Studio).
-     * External project will exist even if all files in it are closed and should be closed explicity.
+     * External project will exist even if all files in it are closed and should be closed explicitly.
      * If external project includes one or more tsconfig.json/jsconfig.json files then tsserver will
      * create configured project for every config file but will maintain a link that these projects were created
      * as a result of opening external project so they should be removed once external project is closed.
@@ -1665,6 +1669,14 @@ declare namespace ts.server.protocol {
     interface TelemetryEventBody {
         telemetryEventName: string;
         payload: any;
+    }
+    type TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+    interface TypesInstallerInitializationFailedEvent extends Event {
+        event: TypesInstallerInitializationFailedEventName;
+        body: TypesInstallerInitializationFailedEventBody;
+    }
+    interface TypesInstallerInitializationFailedEventBody {
+        message: string;
     }
     type TypingsInstalledTelemetryEventName = "typingsInstalled";
     interface TypingsInstalledTelemetryEventBody extends TelemetryEventBody {
