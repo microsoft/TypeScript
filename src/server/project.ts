@@ -517,6 +517,15 @@ namespace ts.server {
             // - newProgram is different from the old program and structure of the old program was not reused.
             if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
                 hasChanges = true;
+
+                const options = this.getCompilerOptions();
+                if ((this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) && !options.noEmit && allFilesAreJsOrDts(this)) {
+                    options.noEmit = true;
+                    this.lsHost.setCompilationSettings(options);
+                    // need to get a new program as the compiler option changed.
+                    this.program = this.languageService.getProgram();
+                }
+
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
