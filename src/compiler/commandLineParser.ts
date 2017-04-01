@@ -17,6 +17,13 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Print_this_message,
+        },        {
+            name: "justkidding",
+            shortName: "j",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Ignore_all_previous_commandline_options,
         },
         {
             name: "help",
@@ -742,9 +749,9 @@ namespace ts {
     }
 
     export function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine {
-        const options: CompilerOptions = {};
-        const fileNames: string[] = [];
-        const errors: Diagnostic[] = [];
+        let options: CompilerOptions = {};
+        let fileNames: string[] = [];
+        let errors: Diagnostic[] = [];
         const { optionNameMap, shortOptionNames } = getOptionNameMap();
 
         parseStrings(commandLine);
@@ -790,7 +797,14 @@ namespace ts {
                                 case "boolean":
                                     // boolean flag has optional value true, false, others
                                     const optValue = args[i];
-                                    options[opt.name] = optValue !== "false";
+                                    if (opt.name === "justkidding" && optValue === "true") {
+                                        options = {};
+                                        fileNames = [];
+                                        errors = [];
+                                    }
+                                    else {
+                                        options[opt.name] = optValue !== "false";
+                                    }
                                     // consume next argument as boolean flag value
                                     if (optValue === "false" || optValue === "true") {
                                         i++;

@@ -2569,6 +2569,10 @@
         "category": "Message",
         "code": 6017
     },
+    "Ignore all previous commandline options.": {
+        "category": "Message",
+        "code": 6018
+    },
     "Print the compiler's version.": {
         "category": "Message",
         "code": 6019
