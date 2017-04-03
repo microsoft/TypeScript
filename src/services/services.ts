@@ -302,6 +302,10 @@ namespace ts {
         // symbol has no doc comment, then the empty string will be returned.
         documentationComment: SymbolDisplayPart[];
 
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no JSDoc tags, then the empty array will be returned.
+        tags: JSDocTagInfo[];
+
         constructor(flags: SymbolFlags, name: string) {
             this.flags = flags;
             this.name = name;
@@ -325,6 +329,14 @@ namespace ts {
             }
 
             return this.documentationComment;
+        }
+
+        getJsDocTags(): JSDocTagInfo[] {
+            if (this.tags === undefined) {
+                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+            }
+
+            return this.tags;
         }
     }
 
@@ -415,6 +427,10 @@ namespace ts {
         // symbol has no doc comment, then the empty string will be returned.
         documentationComment: SymbolDisplayPart[];
 
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty array will be returned.
+        jsDocTags: JSDocTagInfo[];
+
         constructor(checker: TypeChecker) {
             this.checker = checker;
         }
@@ -437,6 +453,14 @@ namespace ts {
             }
 
             return this.documentationComment;
+        }
+
+        getJsDocTags(): JSDocTagInfo[] {
+            if (this.jsDocTags === undefined) {
+                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+            }
+
+            return this.jsDocTags;
         }
     }
 
@@ -1360,7 +1384,8 @@ namespace ts {
                                 kindModifiers: ScriptElementKindModifier.none,
                                 textSpan: createTextSpan(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
-                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
+                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined,
+                                tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                             };
                         }
                 }
@@ -1374,7 +1399,8 @@ namespace ts {
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                 textSpan: createTextSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
-                documentation: displayPartsDocumentationsAndKind.documentation
+                documentation: displayPartsDocumentationsAndKind.documentation,
+                tags: displayPartsDocumentationsAndKind.tags
             };
         }
 
