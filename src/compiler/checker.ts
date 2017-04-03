@@ -255,7 +255,7 @@ namespace ts {
          * List of every ambient module with a "*" wildcard.
          * Unlike other ambient modules, these can't be stored in `globals` because symbol tables only deal with exact matches.
          * This is only used if there is no exact match.
-        */
+         */
         let patternAmbientModules: PatternAmbientModule[];
 
         let globalObjectType: ObjectType;
@@ -5569,7 +5569,8 @@ namespace ts {
         }
 
         /** If the given type is an object type and that type has a property by the given name,
-         * return the symbol for that property. Otherwise return undefined. */
+         * return the symbol for that property. Otherwise return undefined.
+         */
         function getPropertyOfObjectType(type: Type, name: string): Symbol {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -13265,11 +13266,11 @@ namespace ts {
         }
 
         /**
-          * Looks up an intrinsic tag name and returns a symbol that either points to an intrinsic
-          * property (in which case nodeLinks.jsxFlags will be IntrinsicNamedElement) or an intrinsic
-          * string index signature (in which case nodeLinks.jsxFlags will be IntrinsicIndexedElement).
-          * May also return unknownSymbol if both of these lookups fail.
-          */
+         * Looks up an intrinsic tag name and returns a symbol that either points to an intrinsic
+         * property (in which case nodeLinks.jsxFlags will be IntrinsicNamedElement) or an intrinsic
+         * string index signature (in which case nodeLinks.jsxFlags will be IntrinsicIndexedElement).
+         * May also return unknownSymbol if both of these lookups fail.
+         */
         function getIntrinsicTagSymbol(node: JsxOpeningLikeElement | JsxClosingElement): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
@@ -13473,7 +13474,7 @@ namespace ts {
          * @return attributes type if able to resolve the type of node
          *         anyType if there is no type ElementAttributesProperty or there is an error
          *         emptyObjectType if there is no "prop" in the element instance type
-         **/
+         */
         function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement,
             shouldIncludeAllStatelessAttributesType: boolean,
             elementType?: Type,
@@ -13730,11 +13731,11 @@ namespace ts {
         }
 
          /**
-         * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
-         *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
-         *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
-         * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
-         */
+          * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
+          *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
+          *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
+          * @param openingLikeElement an opening-like JSX element to check its JSXAttributes
+          */
         function checkJsxAttributesAssignableToTagNameAttributes(openingLikeElement: JsxOpeningLikeElement) {
             // The function involves following steps:
             //      1. Figure out expected attributes type by resolving tagName of the JSX opening-like element, targetAttributesType.
@@ -14601,18 +14602,18 @@ namespace ts {
 
 
         /**
-          * Returns the effective argument count for a node that works like a function invocation.
-          * If 'node' is a Decorator, the number of arguments is derived from the decoration
-          *    target and the signature:
-          *    If 'node.target' is a class declaration or class expression, the effective argument
-          *       count is 1.
-          *    If 'node.target' is a parameter declaration, the effective argument count is 3.
-          *    If 'node.target' is a property declaration, the effective argument count is 2.
-          *    If 'node.target' is a method or accessor declaration, the effective argument count
-          *       is 3, although it can be 2 if the signature only accepts two arguments, allowing
-          *       us to match a property decorator.
-          * Otherwise, the argument count is the length of the 'args' array.
-          */
+         * Returns the effective argument count for a node that works like a function invocation.
+         * If 'node' is a Decorator, the number of arguments is derived from the decoration
+         *    target and the signature:
+         *    If 'node.target' is a class declaration or class expression, the effective argument
+         *       count is 1.
+         *    If 'node.target' is a parameter declaration, the effective argument count is 3.
+         *    If 'node.target' is a property declaration, the effective argument count is 2.
+         *    If 'node.target' is a method or accessor declaration, the effective argument count
+         *       is 3, although it can be 2 if the signature only accepts two arguments, allowing
+         *       us to match a property decorator.
+         * Otherwise, the argument count is the length of the 'args' array.
+         */
         function getEffectiveArgumentCount(node: CallLikeExpression, args: Expression[], signature: Signature) {
             if (node.kind === SyntaxKind.Decorator) {
                 switch (node.parent.kind) {
@@ -14654,17 +14655,17 @@ namespace ts {
         }
 
         /**
-          * Returns the effective type of the first argument to a decorator.
-          * If 'node' is a class declaration or class expression, the effective argument type
-          *    is the type of the static side of the class.
-          * If 'node' is a parameter declaration, the effective argument type is either the type
-          *    of the static or instance side of the class for the parameter's parent method,
-          *    depending on whether the method is declared static.
-          *    For a constructor, the type is always the type of the static side of the class.
-          * If 'node' is a property, method, or accessor declaration, the effective argument
-          *    type is the type of the static or instance side of the parent class for class
-          *    element, depending on whether the element is declared static.
-          */
+         * Returns the effective type of the first argument to a decorator.
+         * If 'node' is a class declaration or class expression, the effective argument type
+         *    is the type of the static side of the class.
+         * If 'node' is a parameter declaration, the effective argument type is either the type
+         *    of the static or instance side of the class for the parameter's parent method,
+         *    depending on whether the method is declared static.
+         *    For a constructor, the type is always the type of the static side of the class.
+         * If 'node' is a property, method, or accessor declaration, the effective argument
+         *    type is the type of the static or instance side of the parent class for class
+         *    element, depending on whether the element is declared static.
+         */
         function getEffectiveDecoratorFirstArgumentType(node: Node): Type {
             // The first argument to a decorator is its `target`.
             if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -14700,20 +14701,20 @@ namespace ts {
         }
 
         /**
-          * Returns the effective type for the second argument to a decorator.
-          * If 'node' is a parameter, its effective argument type is one of the following:
-          *    If 'node.parent' is a constructor, the effective argument type is 'any', as we
-          *       will emit `undefined`.
-          *    If 'node.parent' is a member with an identifier, numeric, or string literal name,
-          *       the effective argument type will be a string literal type for the member name.
-          *    If 'node.parent' is a computed property name, the effective argument type will
-          *       either be a symbol type or the string type.
-          * If 'node' is a member with an identifier, numeric, or string literal name, the
-          *    effective argument type will be a string literal type for the member name.
-          * If 'node' is a computed property name, the effective argument type will either
-          *    be a symbol type or the string type.
-          * A class decorator does not have a second argument type.
-          */
+         * Returns the effective type for the second argument to a decorator.
+         * If 'node' is a parameter, its effective argument type is one of the following:
+         *    If 'node.parent' is a constructor, the effective argument type is 'any', as we
+         *       will emit `undefined`.
+         *    If 'node.parent' is a member with an identifier, numeric, or string literal name,
+         *       the effective argument type will be a string literal type for the member name.
+         *    If 'node.parent' is a computed property name, the effective argument type will
+         *       either be a symbol type or the string type.
+         * If 'node' is a member with an identifier, numeric, or string literal name, the
+         *    effective argument type will be a string literal type for the member name.
+         * If 'node' is a computed property name, the effective argument type will either
+         *    be a symbol type or the string type.
+         * A class decorator does not have a second argument type.
+         */
         function getEffectiveDecoratorSecondArgumentType(node: Node) {
             // The second argument to a decorator is its `propertyKey`
             if (node.kind === SyntaxKind.ClassDeclaration) {
@@ -14767,12 +14768,12 @@ namespace ts {
         }
 
         /**
-          * Returns the effective argument type for the third argument to a decorator.
-          * If 'node' is a parameter, the effective argument type is the number type.
-          * If 'node' is a method or accessor, the effective argument type is a
-          *    `TypedPropertyDescriptor<T>` instantiated with the type of the member.
-          * Class and property decorators do not have a third effective argument.
-          */
+         * Returns the effective argument type for the third argument to a decorator.
+         * If 'node' is a parameter, the effective argument type is the number type.
+         * If 'node' is a method or accessor, the effective argument type is a
+         *    `TypedPropertyDescriptor<T>` instantiated with the type of the member.
+         * Class and property decorators do not have a third effective argument.
+         */
         function getEffectiveDecoratorThirdArgumentType(node: Node) {
             // The third argument to a decorator is either its `descriptor` for a method decorator
             // or its `parameterIndex` for a parameter decorator
@@ -14805,8 +14806,8 @@ namespace ts {
         }
 
         /**
-          * Returns the effective argument type for the provided argument to a decorator.
-          */
+         * Returns the effective argument type for the provided argument to a decorator.
+         */
         function getEffectiveDecoratorArgumentType(node: Decorator, argIndex: number): Type {
             if (argIndex === 0) {
                 return getEffectiveDecoratorFirstArgumentType(node.parent);
@@ -14823,8 +14824,8 @@ namespace ts {
         }
 
         /**
-          * Gets the effective argument type for an argument in a call expression.
-          */
+         * Gets the effective argument type for an argument in a call expression.
+         */
         function getEffectiveArgumentType(node: CallLikeExpression, argIndex: number): Type {
             // Decorators provide special arguments, a tagged template expression provides
             // a special first argument, and string literals get string literal types
@@ -14842,8 +14843,8 @@ namespace ts {
         }
 
         /**
-          * Gets the effective argument expression for an argument in a call expression.
-          */
+         * Gets the effective argument expression for an argument in a call expression.
+         */
         function getEffectiveArgument(node: CallLikeExpression, args: Expression[], argIndex: number) {
             // For a decorator or the first argument of a tagged template expression we return undefined.
             if (node.kind === SyntaxKind.Decorator ||
@@ -14855,8 +14856,8 @@ namespace ts {
         }
 
         /**
-          * Gets the error node to use when reporting errors for an effective argument.
-          */
+         * Gets the error node to use when reporting errors for an effective argument.
+         */
         function getEffectiveArgumentErrorNode(node: CallLikeExpression, argIndex: number, arg: Expression) {
             if (node.kind === SyntaxKind.Decorator) {
                 // For a decorator, we use the expression of the decorator for error reporting.
@@ -15358,8 +15359,8 @@ namespace ts {
         }
 
         /**
-          * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
-          */
+         * Gets the localized diagnostic head message to use for errors when resolving a decorator as a call expression.
+         */
         function getDiagnosticHeadMessageForDecoratorResolution(node: Decorator) {
             switch (node.parent.kind) {
                 case SyntaxKind.ClassDeclaration:
@@ -15380,8 +15381,8 @@ namespace ts {
         }
 
         /**
-          * Resolves a decorator as if it were a call expression.
-          */
+         * Resolves a decorator as if it were a call expression.
+         */
         function resolveDecorator(node: Decorator, candidatesOutArray: Signature[]): Signature {
             const funcType = checkExpression(node.expression);
             const apparentType = getApparentType(funcType);
@@ -18189,10 +18190,10 @@ namespace ts {
         }
 
         /**
-          * Gets the "promised type" of a promise.
-          * @param type The type of the promise.
-          * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
-          */
+         * Gets the "promised type" of a promise.
+         * @param type The type of the promise.
+         * @remarks The "promised type" of a type is the type of the "value" parameter of the "onfulfilled" callback.
+         */
         function getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type {
             //
             //  { // promise
@@ -18247,12 +18248,12 @@ namespace ts {
         }
 
         /**
-          * Gets the "awaited type" of a type.
-          * @param type The type to await.
-          * @remarks The "awaited type" of an expression is its "promised type" if the expression is a
-          * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
-          * The runtime behavior of the `await` keyword.
-          */
+         * Gets the "awaited type" of a type.
+         * @param type The type to await.
+         * @remarks The "awaited type" of an expression is its "promised type" if the expression is a
+         * Promise-like type; otherwise, it is the type of the expression. This is used to reflect
+         * The runtime behavior of the `await` keyword.
+         */
         function checkAwaitedType(type: Type, errorNode: Node): Type {
             return getAwaitedType(type, errorNode) || unknownType;
         }
@@ -22055,9 +22056,9 @@ namespace ts {
         }
 
         /**
-          * Gets either the static or instance type of a class element, based on
-          * whether the element is declared as "static".
-          */
+         * Gets either the static or instance type of a class element, based on
+         * whether the element is declared as "static".
+         */
         function getParentTypeOfClassElement(node: ClassElement) {
             const classSymbol = getSymbolOfNode(node.parent);
             return getModifierFlags(node) & ModifierFlags.Static
@@ -23579,9 +23580,9 @@ namespace ts {
         }
 
         /** Does the accessor have the right number of parameters?
-
-            A get accessor has no parameters or a single `this` parameter.
-            A set accessor has one parameter or a `this` parameter and one more parameter */
+         * A get accessor has no parameters or a single `this` parameter.
+         * A set accessor has one parameter or a `this` parameter and one more parameter.
+         */
         function doesAccessorHaveCorrectParameterCount(accessor: AccessorDeclaration) {
             return getAccessorThisParameter(accessor) || accessor.parameters.length === (accessor.kind === SyntaxKind.GetAccessor ? 0 : 1);
         }

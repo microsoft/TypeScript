@@ -1095,13 +1095,13 @@ namespace ts {
     }
 
     /**
-      * Given an super call/property node, returns the closest node where
-      * - a super call/property access is legal in the node and not legal in the parent node the node.
-      *   i.e. super call is legal in constructor but not legal in the class body.
-      * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
-      * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
-      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
-      */
+     * Given an super call/property node, returns the closest node where
+     * - a super call/property access is legal in the node and not legal in the parent node the node.
+     *   i.e. super call is legal in constructor but not legal in the class body.
+     * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
+     * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
+     *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+     */
     export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -4554,9 +4554,9 @@ namespace ts {
     }
 
     /**
-      * Checks to see if the locale is in the appropriate format,
-      * and if it is, attempts to set the appropriate language.
-      */
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     export function validateLocaleAndSetLanguage(
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },

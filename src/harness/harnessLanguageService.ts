@@ -169,9 +169,9 @@ namespace Harness.LanguageService {
         }
 
         /**
-          * @param line 0 based index
-          * @param col 0 based index
-          */
+         * @param line 0 based index
+         * @param col 0 based index
+         */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);

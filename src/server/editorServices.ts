@@ -179,12 +179,12 @@ namespace ts.server {
     class DirectoryWatchers {
         /**
          * a path to directory watcher map that detects added tsconfig files
-         **/
+         */
         private readonly directoryWatchersForTsconfig: Map<FileWatcher> = createMap<FileWatcher>();
         /**
          * count of how many projects are using the directory watcher.
          * If the number becomes 0 for a watcher, then we should close it.
-         **/
+         */
         private readonly directoryWatchersRefCount: Map<number> = createMap<number>();
 
         constructor(private readonly projectService: ProjectService) {
@@ -241,11 +241,11 @@ namespace ts.server {
         readonly externalProjects: ExternalProject[] = [];
         /**
          * projects built from openFileRoots
-         **/
+         */
         readonly inferredProjects: InferredProject[] = [];
         /**
          * projects specified by a tsconfig.json file
-         **/
+         */
         readonly configuredProjects: ConfiguredProject[] = [];
         /**
          * list of open files
@@ -637,9 +637,9 @@ namespace ts.server {
         }
 
         /**
-          * Remove this file from the set of open, non-configured files.
-          * @param info The file that has been closed or newly configured
-          */
+         * Remove this file from the set of open, non-configured files.
+         * @param info The file that has been closed or newly configured
+         */
         private closeOpenFile(info: ScriptInfo): void {
             // Closing file should trigger re-reading the file content from disk. This is
             // because the user may chose to discard the buffer content before saving
