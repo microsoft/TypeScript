@@ -8818,7 +8818,7 @@ namespace ts {
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & 1) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= 1;
                 if (!(expandingFlags & 2) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= 2;
-                let result = expandingFlags !== 3 ? structuredTypeRelatedTo(source, target, reportErrors) : Ternary.Maybe;
+                const result = expandingFlags !== 3 ? structuredTypeRelatedTo(source, target, reportErrors) : Ternary.Maybe;
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
