@@ -2031,22 +2031,18 @@ namespace ts {
                 node.isUnterminated = true;
             }
 
-            const tokenPos = scanner.getTokenPos();
-            nextToken();
-            finishNode(node);
-
             // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal.But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
-                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
-                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
-
-                node.isOctalLiteral = true;
+            if (node.kind === SyntaxKind.NumericLiteral) {
+                (<NumericLiteral>node).numericLiteralFlags = scanner.getNumericLiteralFlags();
             }
+
+            nextToken();
+            finishNode(node);
 
             return node;
         }
