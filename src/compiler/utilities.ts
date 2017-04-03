@@ -1404,7 +1404,7 @@ namespace ts {
 
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
-     * exactly one argument. (of the form 'require("name")')
+     * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
      */
     export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
