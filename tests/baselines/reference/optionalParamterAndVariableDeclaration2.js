@@ -1,5 +1,4 @@
 //// [optionalParamterAndVariableDeclaration2.ts]
-
 class C {
     constructor(options?: number) {
         var options = (options || 0);

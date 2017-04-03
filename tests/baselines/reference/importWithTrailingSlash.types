@@ -1,5 +1,4 @@
 === /a.ts ===
-
 export default { a: 0 };
 >{ a: 0 } : { a: number; }
 >a : number

@@ -1,5 +1,4 @@
 === tests/cases/compiler/utils.ts ===
-
 export function foo() { }
 >foo : () => void
 

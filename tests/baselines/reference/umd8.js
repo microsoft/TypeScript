@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd8.ts] ////
 
 //// [foo.d.ts]
-
 declare class Thing {
 	foo(): number;
 }

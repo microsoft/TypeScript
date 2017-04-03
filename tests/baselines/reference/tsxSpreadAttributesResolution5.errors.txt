@@ -1,13 +1,12 @@
-tests/cases/conformance/jsx/file.tsx(21,19): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
   Type '{ x: string; y: number; }' is not assignable to type 'PoisonedProp'.
     Types of property 'y' are incompatible.
       Type 'number' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(34,20): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & {} & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(33,20): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & {} & { children?: ReactNode; }'.
   Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<EmptyProp> & {} & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
-    
     import React = require('react');
     
     interface PoisonedProp {

@@ -1,5 +1,4 @@
 //// [noEmitHelpers.ts]
-
 class A { }
 class B extends A { }
 

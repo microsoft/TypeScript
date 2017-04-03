@@ -692,7 +692,54 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
         });
 
-        it("configured projects discover from bower.josn", () => {
+        it("configured projects discover from bower_components", () => {
+            const app = {
+                path: "/app.js",
+                content: ""
+            };
+            const jsconfig = {
+                path: "/jsconfig.json",
+                content: JSON.stringify({})
+            };
+            const jquery = {
+                path: "/bower_components/jquery/index.js",
+                content: ""
+            };
+            const jqueryPackage = {
+                path: "/bower_components/jquery/package.json",
+                content: JSON.stringify({ name: "jquery" })
+            };
+            const jqueryDTS = {
+                path: "/tmp/node_modules/@types/jquery/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/jquery"];
+                    const typingFiles = [jqueryDTS];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [app.path]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+        });
+
+        it("configured projects discover from bower.json", () => {
             const app = {
                 path: "/app.js",
                 content: ""
@@ -975,7 +1022,7 @@ namespace ts.projectSystem {
             }
         });
 
-        it("should use cached locaitons", () => {
+        it("should use cached locations", () => {
             const f = {
                 path: "/a/b/app.js",
                 content: ""

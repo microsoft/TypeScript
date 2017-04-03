@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesSystem.ts]
-
 var;
 let;
 const;

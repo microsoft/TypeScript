@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 interface Context {
     color: any;
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingDts.ts] ////
 
 //// [server.ts]
-
 class c { }
 export default c;
 

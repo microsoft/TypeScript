@@ -1,9 +1,8 @@
-tests/cases/compiler/noImplicitThisFunctions.ts(14,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-tests/cases/compiler/noImplicitThisFunctions.ts(18,38): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/compiler/noImplicitThisFunctions.ts(13,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+tests/cases/compiler/noImplicitThisFunctions.ts(17,38): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
 ==== tests/cases/compiler/noImplicitThisFunctions.ts (2 errors) ====
-    
     function f1(x) {
         // implicit any is still allowed
         return x + 1;

@@ -1,11 +1,10 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
-
 declare module 'mod' {
   var y: any;
->y : Symbol(y, Decl(modules.d.ts, 2, 5))
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
 
   export default y;
->y : Symbol(y, Decl(modules.d.ts, 2, 5))
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
 }
 
 === tests/cases/conformance/jsx/app.tsx ===

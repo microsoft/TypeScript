@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitInferedDefaultExportType.ts ===
-
 // test.ts
 export default {
 >{  foo: [],  bar: undefined,  baz: null} : { foo: undefined[]; bar: undefined; baz: null; }

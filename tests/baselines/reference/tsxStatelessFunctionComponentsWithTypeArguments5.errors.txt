@@ -1,12 +1,11 @@
+tests/cases/conformance/jsx/file.tsx(6,25): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/jsx/file.tsx(7,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(8,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(16,33): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(17,34): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(18,33): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(15,33): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(16,34): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(17,33): error TS2698: Spread types may only be created from object types.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
-    
     import React = require('react')
     
     // Error, can only spread object type

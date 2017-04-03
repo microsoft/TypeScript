@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 class BigGreeter extends React.Component<{ }, {}> {

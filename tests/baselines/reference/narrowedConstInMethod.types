@@ -1,5 +1,4 @@
 === tests/cases/compiler/narrowedConstInMethod.ts ===
-
 function f() {
 >f : () => { bar(): number; } | undefined
 

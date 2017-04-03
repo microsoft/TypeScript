@@ -1,25 +1,24 @@
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(11,12): error TS4025: Exported variable 'x' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(12,12): error TS4025: Exported variable 'x' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(13,13): error TS4025: Exported variable 'x' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(14,19): error TS4025: Exported variable 'x' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(15,22): error TS4025: Exported variable 'x' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(16,22): error TS4025: Exported variable 'x' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(18,16): error TS4024: Exported variable 'x2' has or is using name 'm2.public1' from private module 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(18,16): error TS4025: Exported variable 'x2' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(25,16): error TS4024: Exported variable 'x3' has or is using name 'm2.public1' from private module 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(25,16): error TS4025: Exported variable 'x3' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,23): error TS4025: Exported variable 'y' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,36): error TS4025: Exported variable 'y' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(29,16): error TS4024: Exported variable 'y2' has or is using name 'm2.public1' from private module 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(29,16): error TS4025: Exported variable 'y2' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,27): error TS4025: Exported variable 'z' has or is using private name 'private1'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,40): error TS4025: Exported variable 'z' has or is using private name 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16): error TS4024: Exported variable 'z2' has or is using name 'm2.public1' from private module 'm2'.
-tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(33,16): error TS4025: Exported variable 'z2' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(10,12): error TS4025: Exported variable 'x' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(11,12): error TS4025: Exported variable 'x' has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(12,13): error TS4025: Exported variable 'x' has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(13,19): error TS4025: Exported variable 'x' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(14,22): error TS4025: Exported variable 'x' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(15,22): error TS4025: Exported variable 'x' has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(17,16): error TS4024: Exported variable 'x2' has or is using name 'm2.public1' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(17,16): error TS4025: Exported variable 'x2' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(24,16): error TS4024: Exported variable 'x3' has or is using name 'm2.public1' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(24,16): error TS4025: Exported variable 'x3' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(27,23): error TS4025: Exported variable 'y' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(27,36): error TS4025: Exported variable 'y' has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,16): error TS4024: Exported variable 'y2' has or is using name 'm2.public1' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(28,16): error TS4025: Exported variable 'y2' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(31,27): error TS4025: Exported variable 'z' has or is using private name 'private1'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(31,40): error TS4025: Exported variable 'z' has or is using private name 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,16): error TS4024: Exported variable 'z2' has or is using name 'm2.public1' from private module 'm2'.
+tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts(32,16): error TS4025: Exported variable 'z2' has or is using private name 'private1'.
 
 
 ==== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorTypeLiteral.ts (18 errors) ====
-    
     module m {
         class private1 {
         }

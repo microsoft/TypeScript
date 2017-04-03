@@ -1,6 +1,4 @@
 //// [parserEnum4.ts]
-
-
     export enum SignatureFlags {
         ,
     }

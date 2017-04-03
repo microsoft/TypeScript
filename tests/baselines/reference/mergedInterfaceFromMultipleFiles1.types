@@ -48,7 +48,6 @@ var e: Date = c.b();
 >b : () => Date
 
 === tests/cases/compiler/mergedInterfaceFromMultipleFiles1_0.ts ===
-
 interface I { foo(): string; }
 >I : I
 >foo : () => string

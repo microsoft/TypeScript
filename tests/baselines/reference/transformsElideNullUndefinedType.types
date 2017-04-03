@@ -1,5 +1,4 @@
 === tests/cases/compiler/transformsElideNullUndefinedType.ts ===
-
 var v0: null;
 >v0 : null
 >null : null

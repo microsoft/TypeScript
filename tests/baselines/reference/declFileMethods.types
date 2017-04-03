@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileMethods_0.ts ===
-
 export class c1 {
 >c1 : c1
 

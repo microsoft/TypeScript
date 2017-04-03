@@ -1,5 +1,4 @@
 //// [mixinAccessModifiers.ts]
-
 type Constructable = new (...args: any[]) => object;
 
 class Private {

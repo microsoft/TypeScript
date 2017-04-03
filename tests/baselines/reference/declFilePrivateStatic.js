@@ -1,5 +1,4 @@
 //// [declFilePrivateStatic.ts]
-
 class C {
     private static x = 1;
     static y = 1;

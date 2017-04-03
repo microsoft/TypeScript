@@ -9,8 +9,8 @@ export const Form3 = brokenFunction(parameterFn)({store: "hello"})
 
 
 //// [intersectionTypeInference1.js]
-// Repro from #8801
 "use strict";
+// Repro from #8801
 exports.__esModule = true;
 function alert(s) { }
 var parameterFn = function (props) { return alert(props.store); };

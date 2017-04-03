@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxReactEmit5.tsx] ////
 
 //// [file.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {

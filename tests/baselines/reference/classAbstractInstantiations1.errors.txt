@@ -1,10 +1,9 @@
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts(11,1): error TS2511: Cannot create an instance of the abstract class 'A'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts(12,1): error TS2511: Cannot create an instance of the abstract class 'A'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts(13,1): error TS2511: Cannot create an instance of the abstract class 'A'.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts(15,1): error TS2511: Cannot create an instance of the abstract class 'C'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts(14,1): error TS2511: Cannot create an instance of the abstract class 'C'.
 
 
 ==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations1.ts (3 errors) ====
-    
     //
     // Calling new with (non)abstract classes.
     //

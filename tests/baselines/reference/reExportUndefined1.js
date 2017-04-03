@@ -1,5 +1,4 @@
 //// [a.ts]
-
 export { undefined };
 
 //// [a.js]

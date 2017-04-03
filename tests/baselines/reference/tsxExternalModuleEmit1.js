@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxExternalModuleEmit1.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	class Component<T, U> { }
 }

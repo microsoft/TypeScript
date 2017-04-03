@@ -1,7 +1,6 @@
 === /a/b/foo.d.ts ===
-
 export declare let x: number
->x : Symbol(x, Decl(foo.d.ts, 1, 18))
+>x : Symbol(x, Decl(foo.d.ts, 0, 18))
 
 === /a/b/c/lib.ts ===
 import {x} from "foo";

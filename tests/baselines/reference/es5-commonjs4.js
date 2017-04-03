@@ -1,5 +1,4 @@
 //// [es5-commonjs4.ts]
-
 export default class A
 {
     constructor ()

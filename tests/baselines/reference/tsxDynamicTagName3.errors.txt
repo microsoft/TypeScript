@@ -1,8 +1,7 @@
-tests/cases/conformance/jsx/tsxDynamicTagName3.tsx(10,1): error TS2339: Property 'h1' does not exist on type 'JSX.IntrinsicElements'.
+tests/cases/conformance/jsx/tsxDynamicTagName3.tsx(9,1): error TS2339: Property 'h1' does not exist on type 'JSX.IntrinsicElements'.
 
 
 ==== tests/cases/conformance/jsx/tsxDynamicTagName3.tsx (1 errors) ====
-    
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {

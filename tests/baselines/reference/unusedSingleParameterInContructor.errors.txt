@@ -1,9 +1,8 @@
-tests/cases/compiler/unusedSingleParameterInContructor.ts(3,17): error TS6133: 'person' is declared but never used.
-tests/cases/compiler/unusedSingleParameterInContructor.ts(4,13): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedSingleParameterInContructor.ts(2,17): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedSingleParameterInContructor.ts(3,13): error TS6133: 'unused' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedSingleParameterInContructor.ts (2 errors) ====
-    
     class Dummy {
         constructor(person: string) {
                     ~~~~~~

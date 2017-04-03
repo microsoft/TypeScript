@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 type Invalid1 = React.ComponentClass<any> | number;

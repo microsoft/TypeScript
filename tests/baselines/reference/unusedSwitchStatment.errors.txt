@@ -1,13 +1,12 @@
-tests/cases/compiler/unusedSwitchStatment.ts(3,10): error TS2678: Type '0' is not comparable to type '1'.
-tests/cases/compiler/unusedSwitchStatment.ts(4,13): error TS6133: 'x' is declared but never used.
-tests/cases/compiler/unusedSwitchStatment.ts(7,15): error TS6133: 'c' is declared but never used.
-tests/cases/compiler/unusedSwitchStatment.ts(10,13): error TS6133: 'z' is declared but never used.
-tests/cases/compiler/unusedSwitchStatment.ts(15,10): error TS2678: Type '0' is not comparable to type '2'.
-tests/cases/compiler/unusedSwitchStatment.ts(17,10): error TS2678: Type '1' is not comparable to type '2'.
+tests/cases/compiler/unusedSwitchStatment.ts(2,10): error TS2678: Type '0' is not comparable to type '1'.
+tests/cases/compiler/unusedSwitchStatment.ts(3,13): error TS6133: 'x' is declared but never used.
+tests/cases/compiler/unusedSwitchStatment.ts(6,15): error TS6133: 'c' is declared but never used.
+tests/cases/compiler/unusedSwitchStatment.ts(9,13): error TS6133: 'z' is declared but never used.
+tests/cases/compiler/unusedSwitchStatment.ts(14,10): error TS2678: Type '0' is not comparable to type '2'.
+tests/cases/compiler/unusedSwitchStatment.ts(16,10): error TS2678: Type '1' is not comparable to type '2'.
 
 
 ==== tests/cases/compiler/unusedSwitchStatment.ts (6 errors) ====
-    
     switch (1) {
         case 0:
              ~

@@ -93,6 +93,7 @@ namespace ts.SymbolDisplay {
 
         const displayParts: SymbolDisplayPart[] = [];
         let documentation: SymbolDisplayPart[];
+        let tags: JSDocTagInfo[];
         const symbolFlags = symbol.flags;
         let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
         let hasAddedSymbolInfo: boolean;
@@ -418,6 +419,7 @@ namespace ts.SymbolDisplay {
 
         if (!documentation) {
             documentation = symbol.getDocumentationComment();
+            tags = symbol.getJsDocTags();
             if (documentation.length === 0 && symbol.flags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
@@ -434,6 +436,7 @@ namespace ts.SymbolDisplay {
                         }
 
                         documentation = rhsSymbol.getDocumentationComment();
+                        tags = rhsSymbol.getJsDocTags();
                         if (documentation.length > 0) {
                             break;
                         }
@@ -442,7 +445,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        return { displayParts, documentation, symbolKind };
+        return { displayParts, documentation, symbolKind, tags };
 
         function addNewLineIfDisplayPartsExist() {
             if (displayParts.length) {
@@ -500,6 +503,7 @@ namespace ts.SymbolDisplay {
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
             documentation = signature.getDocumentationComment();
+            tags = signature.getJsDocTags();
         }
 
         function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {

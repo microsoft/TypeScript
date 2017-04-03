@@ -1,5 +1,4 @@
 //// [es6ExportEquals.ts]
-
 export function f() { }
 
 export = f;

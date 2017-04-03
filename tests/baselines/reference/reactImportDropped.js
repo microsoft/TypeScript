@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reactImportDropped.ts] ////
 
 //// [react.d.ts]
-
 export = React;
 export as namespace React;
 

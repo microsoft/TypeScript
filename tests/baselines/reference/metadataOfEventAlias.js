@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/metadataOfEventAlias.ts] ////
 
 //// [event.ts]
-
 export interface Event { title: string };
 
 //// [test.ts]

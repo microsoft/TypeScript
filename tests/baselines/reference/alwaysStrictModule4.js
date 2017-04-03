@@ -1,5 +1,4 @@
 //// [alwaysStrictModule4.ts]
-
 // Module commonjs
 export const a = 1
 

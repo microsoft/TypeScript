@@ -1,5 +1,4 @@
 //// [localClassesInLoop_ES6.ts]
-
 declare function use(a: any);
 
 "use strict"

@@ -1,5 +1,4 @@
 //// [switchCaseWithUnionTypes01.ts]
-
 var strOrNum: string | number;
 var numOrBool: number | boolean;
 var str: string;

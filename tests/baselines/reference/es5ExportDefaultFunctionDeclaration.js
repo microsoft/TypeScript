@@ -1,5 +1,4 @@
 //// [es5ExportDefaultFunctionDeclaration.ts]
-
 export default function f() { }
 
 

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/typings/typingsLookupAmd.ts] ////
 
 //// [index.d.ts]
-
 export declare class A {}
 
 //// [index.d.ts]

@@ -3,5 +3,4 @@ error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedMo
 
 !!! error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
 ==== tests/cases/compiler/file1.ts (0 errors) ====
-    
     export var x;

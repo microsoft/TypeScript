@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMap-InterfacePrecedingVariableDeclaration1.ts ===
-
 interface I {}
 >I : I
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export class publicClassInPublicModule {
         private f1() {

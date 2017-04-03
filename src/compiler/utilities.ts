@@ -1404,17 +1404,24 @@ namespace ts {
 
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
-     * exactly one argument.
+     * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
-        // of the form 'require("name")'
-        const isRequire = expression.kind === SyntaxKind.CallExpression &&
-            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-            (<CallExpression>expression).arguments.length === 1;
+     */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
+        if (callExpression.kind !== SyntaxKind.CallExpression) {
+            return false;
+        }
+        const { expression, arguments } = callExpression as CallExpression;
 
-        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
+        if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).text !== "require") {
+            return false;
+        }
+
+        if (arguments.length !== 1) {
+            return false;
+        }
+        const arg = arguments[0];
+        return !checkArgumentIsStringLiteral || arg.kind === SyntaxKind.StringLiteral || arg.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -1588,7 +1595,7 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);

@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/privacyFunctionCannotNameReturnTypeDeclFile.ts] ////
 
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts]
-
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;

@@ -1,5 +1,4 @@
 === tests/cases/conformance/externalModules/asiPreventsParsingAsAmbientExternalModule01.ts ===
-
 var declare: number;
 >declare : number
 

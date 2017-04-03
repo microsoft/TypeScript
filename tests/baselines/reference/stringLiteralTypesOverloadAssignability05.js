@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloadAssignability05.ts]
-
 function f(x: "foo"): number;
 function f(x: string): number;
 function f(x: string): number {

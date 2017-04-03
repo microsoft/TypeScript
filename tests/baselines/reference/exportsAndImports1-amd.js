@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports1-amd.ts] ////
 
 //// [t1.ts]
-
 var v = 1;
 function f() { }
 class C {

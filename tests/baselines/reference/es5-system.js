@@ -1,5 +1,4 @@
 //// [es5-system.ts]
-
 export default class A
 {
     constructor ()

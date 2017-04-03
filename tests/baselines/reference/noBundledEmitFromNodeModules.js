@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/noBundledEmitFromNodeModules.ts] ////
 
 //// [index.ts]
-
 export class C {}
 
 //// [a.ts]
