@@ -37,8 +37,8 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 
 
 //// [recursiveTypeRelations.js]
-// Repro from #14896
 "use strict";
+// Repro from #14896
 exports.__esModule = true;
 var Query = (function () {
     function Query() {
