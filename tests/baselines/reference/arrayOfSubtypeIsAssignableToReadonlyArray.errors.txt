@@ -8,7 +8,6 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
   Types of property 'concat' are incompatible.
     Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
       Type 'A[]' is not assignable to type 'B[]'.
-        Type 'A' is not assignable to type 'B'.
 
 
 ==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
@@ -42,5 +41,4 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
 !!! error TS2322:   Types of property 'concat' are incompatible.
 !!! error TS2322:     Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
 !!! error TS2322:       Type 'A[]' is not assignable to type 'B[]'.
-!!! error TS2322:         Type 'A' is not assignable to type 'B'.
     
