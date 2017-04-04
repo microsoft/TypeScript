@@ -10382,6 +10382,8 @@ namespace ts {
                         getExportSymbolOfValueSymbolIfExported(getResolvedSymbol(<Identifier>source)) === getSymbolOfNode(target);
                 case SyntaxKind.ThisKeyword:
                     return target.kind === SyntaxKind.ThisKeyword;
+                case SyntaxKind.SuperKeyword:
+                    return target.kind === SyntaxKind.SuperKeyword;
                 case SyntaxKind.PropertyAccessExpression:
                     return target.kind === SyntaxKind.PropertyAccessExpression &&
                         (<PropertyAccessExpression>source).name.text === (<PropertyAccessExpression>target).name.text &&
@@ -11518,6 +11520,7 @@ namespace ts {
                 switch (expr.kind) {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.SuperKeyword:
                     case SyntaxKind.PropertyAccessExpression:
                         return narrowTypeByTruthiness(type, expr, assumeTrue);
                     case SyntaxKind.CallExpression:
