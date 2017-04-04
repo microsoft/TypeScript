@@ -69,6 +69,7 @@ TypeScript is authored by:
 * Emilio García-Pumarino
 * Eric Tsang
 * Erik Edrosa
+* Erik McClenney 
 * Ethan Resnick 
 * Ethan Rubio
 * Evan Martin
