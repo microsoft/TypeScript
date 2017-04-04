@@ -794,6 +794,9 @@ namespace ts {
         // Start position of text of current token
         let tokenPos: number;
 
+        // how many /* :: embedded comments */ are we in?
+        let embeddedCommentStack: number;
+
         let token: SyntaxKind;
         let tokenValue: string;
         let precedingLineBreak: boolean;
@@ -1221,7 +1224,7 @@ namespace ts {
             hasExtendedUnicodeEscape = false;
             precedingLineBreak = false;
             tokenIsUnterminated = false;
-            while (true) {
+            scan: while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
                     return token = SyntaxKind.EndOfFileToken;
@@ -1308,6 +1311,13 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.CloseParenToken;
                     case CharacterCodes.asterisk:
+                        if (embeddedCommentStack > 0) {
+                            if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
+                               embeddedCommentStack--;
+                               pos += 2;
+                               continue;
+                            }
+                        }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                         }
@@ -1375,8 +1385,31 @@ namespace ts {
                             pos += 2;
 
                             let commentClosed = false;
+                            let initialColon: boolean | undefined = undefined;
+                            let doubleColon = false;
                             while (pos < end) {
                                 const ch = text.charCodeAt(pos);
+
+                                if (initialColon === undefined) {
+                                    if (isWhiteSpace(ch)) {
+                                        initialColon = undefined;
+                                    }
+                                    else if (ch === CharacterCodes.colon) {
+                                        initialColon = true;
+                                        embeddedCommentStack++;
+                                        // we don't increment pos for the single colon case, so
+                                        // the colon in /* : string */ will be parsed again and correctly
+                                        // interpreted as the start of a type annotation.
+                                        if (text.charCodeAt(pos + 1) === CharacterCodes.colon) {
+                                            doubleColon = true;
+                                            pos += 2;
+                                        }
+                                        continue scan;
+                                    }
+                                    else {
+                                        initialColon = false;
+                                    }
+                                }
 
                                 if (ch === CharacterCodes.asterisk && text.charCodeAt(pos + 1) === CharacterCodes.slash) {
                                     pos += 2;
@@ -1858,6 +1891,7 @@ namespace ts {
             const saveTokenValue = tokenValue;
             const saveHasExtendedUnicodeEscape = hasExtendedUnicodeEscape;
             const saveTokenIsUnterminated = tokenIsUnterminated;
+            const saveEmbeddedCommentStack = embeddedCommentStack;
 
             setText(text, start, length);
             const result = callback();
@@ -1871,6 +1905,7 @@ namespace ts {
             tokenValue = saveTokenValue;
             hasExtendedUnicodeEscape = saveHasExtendedUnicodeEscape;
             tokenIsUnterminated = saveTokenIsUnterminated;
+            embeddedCommentStack = saveEmbeddedCommentStack;
 
             return result;
         }
@@ -1913,6 +1948,7 @@ namespace ts {
             token = SyntaxKind.Unknown;
             precedingLineBreak = false;
 
+            embeddedCommentStack = 0;
             tokenValue = undefined;
             hasExtendedUnicodeEscape = false;
             tokenIsUnterminated = false;
