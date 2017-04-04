@@ -91,7 +91,9 @@ namespace ts.server.protocol {
         /* @internal */
         export type BreakpointStatement = "breakpointStatement";
         export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type LoadTypesMap = "loadTypesMap";
         export type GetCodeFixes = "getCodeFixes";
+        /* @internal */
         /* @internal */
         export type GetCodeFixesFull = "getCodeFixes-full";
         export type GetSupportedCodeFixes = "getSupportedCodeFixes";
