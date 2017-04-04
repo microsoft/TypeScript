@@ -805,7 +805,7 @@ namespace ts {
                         }
                         else {
                             const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
-                            if(!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
+                            if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
                                 return true;
                             }
                         }
