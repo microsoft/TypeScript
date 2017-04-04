@@ -3272,6 +3272,7 @@ declare namespace ts {
         getName(): string;
         getDeclarations(): Declaration[];
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
     interface Type {
         getFlags(): TypeFlags;
@@ -3292,6 +3293,7 @@ declare namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
     interface SourceFile {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -3628,12 +3630,17 @@ declare namespace ts {
         text: string;
         kind: string;
     }
+    interface JSDocTagInfo {
+        name: string;
+        text?: string;
+    }
     interface QuickInfo {
         kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface RenameInfo {
         canRename: boolean;
@@ -3664,6 +3671,7 @@ declare namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     /**
      * Represents a set of signature help items, and the preferred item that should be selected.
@@ -3702,6 +3710,7 @@ declare namespace ts {
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
