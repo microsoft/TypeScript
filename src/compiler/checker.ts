@@ -751,6 +751,7 @@ namespace ts {
             // declaration is after usage, but it can still be legal if usage is deferred:
             // 1. inside a function
             // 2. inside an instance property initializer, a reference to a non-instance property
+            // 3. inside a static property initializer, a reference to a static method in the same class
             const container = getEnclosingBlockScopeContainer(declaration);
             return isUsedInFunctionOrInstanceProperty(usage, declaration, container);
 
@@ -792,14 +793,22 @@ namespace ts {
                         return true;
                     }
 
-                    const initializerOfInstanceProperty = current.parent &&
+                    const initializerOfProperty = current.parent &&
                         current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                        (getModifierFlags(current.parent) & ModifierFlags.Static) === 0 &&
                         (<PropertyDeclaration>current.parent).initializer === current;
 
-                    if (initializerOfInstanceProperty) {
-                        const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
-                        return !isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration);
+                    if (initializerOfProperty) {
+                        if (getModifierFlags(current.parent) & ModifierFlags.Static) {
+                            if (declaration.kind === SyntaxKind.MethodDeclaration) {
+                                return true;
+                            }
+                        }
+                        else {
+                            const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
+                            if (!isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration)) {
+                                return true;
+                            }
+                        }
                     }
 
                     current = current.parent;
