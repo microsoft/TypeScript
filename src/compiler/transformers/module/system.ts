@@ -1488,7 +1488,7 @@ namespace ts {
             //         }
             //     };
             // });
-            return createCall( 
+            return createCall(
                 createPropertyAccess(
                     contextObject,
                     createIdentifier("import")

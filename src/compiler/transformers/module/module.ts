@@ -558,7 +558,7 @@ namespace ts {
                     createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral(node.arguments), resolve]))
                 ]);
         }
- 
+
     function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
             // import("./blah")
             // emit as

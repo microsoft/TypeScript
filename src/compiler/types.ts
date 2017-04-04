@@ -1052,7 +1052,7 @@ namespace ts {
     }
 
     export interface ImportExpression extends PrimaryExpression {
-        kind: SyntaxKind.ImportKeyword
+        kind: SyntaxKind.ImportKeyword;
     }
 
     export interface DeleteExpression extends UnaryExpression {

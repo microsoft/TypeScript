@@ -3906,7 +3906,7 @@ namespace ts {
             || kind === SyntaxKind.TrueKeyword
             || kind === SyntaxKind.SuperKeyword
             || kind === SyntaxKind.NonNullExpression
-            || kind === SyntaxKind.MetaProperty
+            || kind === SyntaxKind.MetaProperty;
     }
 
     export function isLeftHandSideExpression(node: Node): node is LeftHandSideExpression {
