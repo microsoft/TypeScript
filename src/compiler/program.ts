@@ -1223,7 +1223,9 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                collectImportOrRequireCalls(node);
+                if (file.possiblyContainDynamicImport || isJavaScriptFile) {
+                    collectDynamicImportOrRequireCalls(node);
+                }
             }
 
             file.imports = imports || emptyArray;
@@ -1285,8 +1287,8 @@ namespace ts {
                 }
             }
 
-            function collectImportOrRequireCalls(node: Node): void {
-                if (isJavaScriptFile && isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+            function collectDynamicImportOrRequireCalls(node: Node): void {
+                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
                 // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
@@ -1294,7 +1296,7 @@ namespace ts {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
                 else {
-                    forEachChild(node, collectImportOrRequireCalls);
+                    forEachChild(node, collectDynamicImportOrRequireCalls);
                 }
             }
         }
