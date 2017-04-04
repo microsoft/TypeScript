@@ -1,5 +1,4 @@
 //// [importCallExpressionSpecifierNotStringTypeError.ts]
-
 declare function getSpecifier(): boolean;
 declare var whatToLoad: boolean;
 

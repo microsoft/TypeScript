@@ -7,7 +7,6 @@ tests/cases/conformance/es2018/dynamicImport/1.ts(5,10): error TS2352: Type 'Pro
 
 
 ==== tests/cases/conformance/es2018/dynamicImport/anotherModule.ts (0 errors) ====
-    
     export class D{}
     
 ==== tests/cases/conformance/es2018/dynamicImport/defaultPath.ts (0 errors) ====

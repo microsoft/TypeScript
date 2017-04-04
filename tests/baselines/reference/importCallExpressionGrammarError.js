@@ -1,5 +1,4 @@
 //// [importCallExpressionGrammarError.ts]
-
 declare function getSpecifier(): string;
 declare var whatToLoad: boolean;
 

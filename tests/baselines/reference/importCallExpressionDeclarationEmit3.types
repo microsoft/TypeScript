@@ -1,5 +1,4 @@
 === tests/cases/conformance/es2018/dynamicImport/0.ts ===
-
 export function foo() { return "foo"; }
 >foo : () => string
 >"foo" : "foo"

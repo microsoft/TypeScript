@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionCheckReturntype1.ts] ////
 
 //// [anotherModule.ts]
-
 export class D{}
 
 //// [defaultPath.ts]

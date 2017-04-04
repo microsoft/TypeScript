@@ -1,5 +1,4 @@
 //// [importCallExpressionDeclarationEmit1.ts]
-
 declare function getSpecifier(): string;
 declare var whatToLoad: boolean;
 declare const directory: string;

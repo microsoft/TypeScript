@@ -3,7 +3,6 @@ tests/cases/conformance/es2018/dynamicImport/1.ts(3,10): error TS1323: Dynamic i
 
 
 ==== tests/cases/conformance/es2018/dynamicImport/0.ts (0 errors) ====
-    
     export function foo() { return "foo"; }
     
 ==== tests/cases/conformance/es2018/dynamicImport/1.ts (2 errors) ====
