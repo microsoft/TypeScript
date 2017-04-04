@@ -721,7 +721,7 @@ namespace ts {
                 }
                 // declaration is after usage
                 // can be legal if usage is deferred (i.e. inside function or in initializer of instance property)
-                if (isUsedInFunctionOrInstanceProperty(usage)) {
+                if (isUsedInFunctionOrInstanceProperty(usage, declaration)) {
                     return true;
                 }
                 const sourceFiles = host.getSourceFiles();
@@ -752,8 +752,7 @@ namespace ts {
             // 1. inside a function
             // 2. inside an instance property initializer, a reference to a non-instance property
             const container = getEnclosingBlockScopeContainer(declaration);
-            const isInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
-            return isUsedInFunctionOrInstanceProperty(usage, isInstanceProperty, container);
+            return isUsedInFunctionOrInstanceProperty(usage, declaration, container);
 
             function isImmediatelyUsedInInitializerOfBlockScopedVariable(declaration: VariableDeclaration, usage: Node): boolean {
                 const container = getEnclosingBlockScopeContainer(declaration);
@@ -782,7 +781,7 @@ namespace ts {
                 return false;
             }
 
-            function isUsedInFunctionOrInstanceProperty(usage: Node, isDeclarationInstanceProperty?: boolean, container?: Node): boolean {
+            function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node, container?: Node): boolean {
                 let current = usage;
                 while (current) {
                     if (current === container) {
@@ -799,7 +798,8 @@ namespace ts {
                         (<PropertyDeclaration>current.parent).initializer === current;
 
                     if (initializerOfInstanceProperty) {
-                        return !isDeclarationInstanceProperty;
+                        const isDeclarationInstanceProperty = declaration.kind === SyntaxKind.PropertyDeclaration && !(getModifierFlags(declaration) & ModifierFlags.Static);
+                        return !isDeclarationInstanceProperty || getContainingClass(usage) !== getContainingClass(declaration);
                     }
 
                     current = current.parent;
