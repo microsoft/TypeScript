@@ -125,7 +125,7 @@ namespace ts.codefix {
 
                         case SyntaxKind.NamespaceImport:
                             const namespaceImport = <NamespaceImport>token.parent;
-                            if (namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name) {
+                            if (namespaceImport.name === token && !(<ImportClause>namespaceImport.parent).name) {
                                 const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
                                 return deleteNode(importDecl);
                             }

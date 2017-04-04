@@ -49,7 +49,7 @@ namespace ts.server {
         if (a.file < b.file) {
             return -1;
         }
-        else if (a.file == b.file) {
+        else if (a.file === b.file) {
             const n = compareNumber(a.start.line, b.start.line);
             if (n === 0) {
                 return compareNumber(a.start.offset, b.start.offset);
@@ -1084,7 +1084,7 @@ namespace ts.server {
             // getFormattingEditsAfterKeystroke either empty or pertaining
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
-            if ((args.key == "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
+            if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
                 const lineInfo = scriptInfo.getLineInfo(args.line);
                 if (lineInfo && (lineInfo.leaf) && (lineInfo.leaf.text)) {
                     const lineText = lineInfo.leaf.text;
@@ -1093,10 +1093,10 @@ namespace ts.server {
                         let hasIndent = 0;
                         let i: number, len: number;
                         for (i = 0, len = lineText.length; i < len; i++) {
-                            if (lineText.charAt(i) == " ") {
+                            if (lineText.charAt(i) === " ") {
                                 hasIndent++;
                             }
-                            else if (lineText.charAt(i) == "\t") {
+                            else if (lineText.charAt(i) === "\t") {
                                 hasIndent += formatOptions.tabSize;
                             }
                             else {
@@ -1499,7 +1499,7 @@ namespace ts.server {
             const normalizedFileName = toNormalizedPath(fileName);
             const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*refreshInferredProjects*/ true);
             for (const fileNameInProject of fileNamesInProject) {
-                if (this.getCanonicalFileName(fileNameInProject) == this.getCanonicalFileName(fileName))
+                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName))
                     highPriorityFiles.push(fileNameInProject);
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
@@ -1520,7 +1520,7 @@ namespace ts.server {
                 const checkList = fileNamesInProject.map(fileName => ({ fileName, project }));
                 // Project level error analysis runs on background files too, therefore
                 // doesn't require the file to be opened
-                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n == this.changeSeq, delay, 200, /*requireOpen*/ false);
+                this.updateErrorCheck(next, checkList, this.changeSeq, (n) => n === this.changeSeq, delay, 200, /*requireOpen*/ false);
             }
         }
 

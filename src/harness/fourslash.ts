@@ -2275,13 +2275,13 @@ namespace FourSlash {
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
             const ranges = this.getRanges();
-            if (ranges.length == 0) {
+            if (ranges.length === 0) {
                 this.raiseError("At least one range should be specified in the testfile.");
             }
 
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName, errorCode);
 
-            if (!codeFixes || codeFixes.length == 0) {
+            if (!codeFixes || codeFixes.length === 0) {
                 this.raiseError("No codefixes returned.");
             }
 
@@ -2646,7 +2646,7 @@ namespace FourSlash {
         private assertItemInCompletionList(items: ts.CompletionEntry[], name: string, text?: string, documentation?: string, kind?: string, spanIndex?: number) {
             for (const item of items) {
                 if (item.name === name) {
-                    if (documentation != undefined || text !== undefined) {
+                    if (documentation !== undefined || text !== undefined) {
                         const details = this.getCompletionEntryDetails(item.name);
 
                         if (documentation !== undefined) {
@@ -2899,7 +2899,7 @@ ${code}
                 }
                 // TODO: should be '==='?
             }
-            else if (line == "" || lineLength === 0) {
+            else if (line === "" || lineLength === 0) {
                 // Previously blank lines between fourslash content caused it to be considered as 2 files,
                 // Remove this behavior since it just causes errors now
             }

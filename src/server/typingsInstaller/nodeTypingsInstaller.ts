@@ -31,7 +31,7 @@ namespace ts.server.typingsInstaller {
     }
 
     function getNPMLocation(processName: string) {
-        if (path.basename(processName).indexOf("node") == 0) {
+        if (path.basename(processName).indexOf("node") === 0) {
             return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
         }
         else {

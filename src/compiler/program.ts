@@ -557,7 +557,7 @@ namespace ts {
             // combine results of resolutions and predicted results
             let j = 0;
             for (let i = 0; i < result.length; i++) {
-                if (result[i] == predictedToResolveToAmbientModuleMarker) {
+                if (result[i] === predictedToResolveToAmbientModuleMarker) {
                     result[i] = undefined;
                 }
                 else {
@@ -1364,7 +1364,7 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth == 0) {
+                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth === 0) {
                     sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);

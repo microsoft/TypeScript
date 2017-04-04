@@ -50,11 +50,11 @@ namespace Harness.SourceMapRecorder {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ",") {
+            if (sourceMapMappings.charAt(decodingIndex) === ",") {
                 return true;
             }
 
-            if (sourceMapMappings.charAt(decodingIndex) == ";") {
+            if (sourceMapMappings.charAt(decodingIndex) === ";") {
                 return true;
             }
 
@@ -117,7 +117,7 @@ namespace Harness.SourceMapRecorder {
             }
 
             while (decodingIndex < sourceMapMappings.length) {
-                if (sourceMapMappings.charAt(decodingIndex) == ";") {
+                if (sourceMapMappings.charAt(decodingIndex) === ";") {
                     // New line
                     decodeOfEncodedMapping.emittedLine++;
                     decodeOfEncodedMapping.emittedColumn = 1;
@@ -125,7 +125,7 @@ namespace Harness.SourceMapRecorder {
                     continue;
                 }
 
-                if (sourceMapMappings.charAt(decodingIndex) == ",") {
+                if (sourceMapMappings.charAt(decodingIndex) === ",") {
                     // Next entry is on same line - no action needed
                     decodingIndex++;
                     continue;

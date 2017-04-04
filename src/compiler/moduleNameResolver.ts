@@ -378,7 +378,7 @@ namespace ts {
                     directoryPathMap.set(parent, result);
                     current = parent;
 
-                    if (current == commonPrefix) {
+                    if (current === commonPrefix) {
                         break;
                     }
                 }

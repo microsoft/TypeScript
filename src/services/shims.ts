@@ -293,7 +293,7 @@ namespace ts {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
             // TODO: should this be '==='?
-            if (encoded == null) {
+            if (encoded === null) {
                 return null;
             }
 
@@ -382,7 +382,7 @@ namespace ts {
         public getCompilationSettings(): CompilerOptions {
             const settingsJson = this.shimHost.getCompilationSettings();
             // TODO: should this be '==='?
-            if (settingsJson == null || settingsJson == "") {
+            if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
             const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
@@ -416,7 +416,7 @@ namespace ts {
 
         public getLocalizedDiagnosticMessages(): any {
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
-            if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
+            if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
             }
 

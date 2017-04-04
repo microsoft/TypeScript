@@ -4658,7 +4658,7 @@ namespace ts {
      */
     export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
     export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node == undefined || isParseTreeNode(node)) {
+        if (node === undefined || isParseTreeNode(node)) {
             return node;
         }
 

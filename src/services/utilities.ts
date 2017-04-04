@@ -911,10 +911,10 @@ namespace ts {
             // Internally, we represent the end of the comment at the newline and closing '/', respectively.
             return predicate ?
                 forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
                     predicate(c)) :
                 forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
         }
 
         return false;

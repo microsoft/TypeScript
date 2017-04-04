@@ -204,7 +204,7 @@ namespace ts.server {
         startWatchingContainingDirectoriesForFile(fileName: string, project: InferredProject, callback: (fileName: string) => void) {
             let currentPath = getDirectoryPath(fileName);
             let parentPath = getDirectoryPath(currentPath);
-            while (currentPath != parentPath) {
+            while (currentPath !== parentPath) {
                 if (!this.directoryWatchersForTsconfig.has(currentPath)) {
                     this.projectService.logger.info(`Add watcher for: ${currentPath}`);
                     this.directoryWatchersForTsconfig.set(currentPath, this.projectService.host.watchDirectory(currentPath, callback));
@@ -540,7 +540,7 @@ namespace ts.server {
          */
         private onConfigFileAddedForInferredProject(fileName: string) {
             // TODO: check directory separators
-            if (getBaseFileName(fileName) != "tsconfig.json") {
+            if (getBaseFileName(fileName) !== "tsconfig.json") {
                 this.logger.info(`${fileName} is not tsconfig.json`);
                 return;
             }
@@ -950,7 +950,7 @@ namespace ts.server {
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
                 else {
