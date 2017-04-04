@@ -807,7 +807,7 @@ namespace ts.projectSystem {
                 path: "/c/app.ts",
                 content: "let x = 1"
             };
-            const makeProject = (f:  FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const makeProject = (f: FileOrFolder) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
             const p1 = makeProject(f1);
             const p2 = makeProject(f2);
             const p3 = makeProject(f3);
