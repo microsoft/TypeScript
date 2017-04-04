@@ -1,12 +1,5 @@
 /// <reference path='fourslash.ts' />
 
-//// interface I {}
-//// interface CTor {
-////     new (hour: number, minute: number): I
-//// }
-//// var x: {
-////     B : CTor
-//// };
 //// class B {}
 //// function foo() {
 ////     return {/*refB*/B: B};

@@ -1273,6 +1273,7 @@ namespace ts {
         function nextTokenIsClassOrFunctionOrAsync(): boolean {
             nextToken();
             return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
+                (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
                 (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
         }
 
@@ -4677,6 +4678,11 @@ namespace ts {
             return tokenIsIdentifierOrKeyword(token()) && !scanner.hasPrecedingLineBreak();
         }
 
+        function nextTokenIsClassKeywordOnSameLine() {
+            nextToken();
+            return token() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak();
+        }
+
         function nextTokenIsFunctionKeywordOnSameLine() {
             nextToken();
             return token() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
@@ -6549,7 +6555,7 @@ namespace ts {
 
                 function parseTagComments(indent: number) {
                     const comments: string[] = [];
-                    let state = JSDocState.SawAsterisk;
+                    let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
                     function pushComment(text: string) {
                         if (!margin) {

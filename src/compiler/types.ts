@@ -2880,6 +2880,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
+        isRestParameter?: boolean;
     }
 
     export type SymbolTable = Map<Symbol>;
@@ -2909,7 +2910,7 @@ namespace ts {
         ContextChecked                      = 0x00000400,  // Contextual types have been assigned
         AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
         AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
-        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
+        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body
         EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
@@ -2933,6 +2934,7 @@ namespace ts {
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
+        containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element

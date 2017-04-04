@@ -1,5 +1,4 @@
 === tests/cases/compiler/SystemModuleForStatementNoInitializer.ts ===
-
 export { };
 
 let i = 0;

@@ -1,5 +1,4 @@
 //// [SystemModuleForStatementNoInitializer.ts]
-
 export { };
 
 let i = 0;

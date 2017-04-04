@@ -219,7 +219,7 @@ namespace ts.server {
         getCurrentRequestId(): number;
         sendRequestCompletedEvent(requestId: number): void;
         getServerHost(): ServerHost;
-        isCancellationRequested():  boolean;
+        isCancellationRequested(): boolean;
         executeWithRequestId(requestId: number, action: () => void): void;
         logError(error: Error, message: string): void;
     }
@@ -1020,6 +1020,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 const displayString = ts.displayPartsToString(quickInfo.displayParts);
                 const docString = ts.displayPartsToString(quickInfo.documentation);
+
                 return {
                     kind: quickInfo.kind,
                     kindModifiers: quickInfo.kindModifiers,
@@ -1027,6 +1028,7 @@ namespace ts.server {
                     end: scriptInfo.positionToLineOffset(ts.textSpanEnd(quickInfo.textSpan)),
                     displayString: displayString,
                     documentation: docString,
+                    tags: quickInfo.tags || []
                 };
             }
             else {

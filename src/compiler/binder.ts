@@ -703,6 +703,7 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier ||
                 expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.SuperKeyword ||
                 expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
@@ -1910,7 +1911,9 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) {
+                bindJSDocTypedefTagIfAny(node);
+            }
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
