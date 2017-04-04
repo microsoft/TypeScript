@@ -88,6 +88,7 @@ namespace ts {
     export function createNumericLiteral(value: string): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
+        node.numericLiteralFlags = 0;
         return node;
     }
 
