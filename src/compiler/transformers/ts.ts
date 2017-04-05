@@ -2326,17 +2326,12 @@ namespace ts {
                 //
                 // To preserve comments, we return a "PartiallyEmittedExpression" here which will
                 // preserve the position information of the original expression.
-                const partialExpression = createPartiallyEmittedExpression(expression, node);
-
+                //
                 // Due to the auto-parenthesization rules used by the visitor and factory functions
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
-                // However, auto-parenthesization will not preserve parenthesis for the following case: ({ "1": "one", "2": "two" } as { [key: string]: string })[x].
-                // so we have to manually preserve it here.
-                const shouldPreserveParen = (isPropertyAccessExpression(node.parent) || isElementAccessExpression(node.parent)) &&
-                    isObjectLiteralExpression((expression as PartiallyEmittedExpression).expression);
-                return shouldPreserveParen ? createParen(partialExpression) : partialExpression;
+                return createPartiallyEmittedExpression(expression, node);
             }
 
             return visitEachChild(node, visitor, context);
