@@ -3,7 +3,6 @@ import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        // Cheat to get type checker
         return this.applyWithFunction(sourceFile, ctx => walk(ctx));
     }
 }
