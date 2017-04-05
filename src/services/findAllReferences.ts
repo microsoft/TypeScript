@@ -187,7 +187,7 @@ namespace ts.FindAllReferences {
                 return { symbol };
             }
 
-            if (ts.isUntypedOrShorthandAmbientModuleSymbol(aliasedSymbol)) {
+            if (ts.isShorthandAmbientModuleSymbol(aliasedSymbol)) {
                 return { symbol, shorthandModuleSymbol: aliasedSymbol };
             }
 
