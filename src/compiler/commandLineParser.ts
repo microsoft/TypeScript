@@ -1083,6 +1083,26 @@ namespace ts {
     }
 
     /**
+     * Merge compiler options of a config file (tsconfig.json) with "extend" config.
+     * For primitive types overrides values from extend with value from main config file.
+     * For arrays (e.g. "lib"") concats and dedup them.
+     *
+     * @param baseOptions
+     * @param options
+     */
+    export function mergeCompilerOptions(baseOptions: CompilerOptions, options: CompilerOptions): CompilerOptions {
+        return Object.keys(options).reduce((newOptions, key) => {
+            const param = options[key];
+            if (!newOptions.hasOwnProperty(key) || !Array.isArray(newOptions[key])) {
+                newOptions[key] = param;
+                return newOptions;
+            }
+            newOptions[key] = deduplicate<any>((newOptions[key] as any).concat(param));
+            return newOptions;
+        }, assign({}, baseOptions));
+    }
+
+    /**
       * Parse the contents of a config file (tsconfig.json).
       * @param json The contents of the config file to parse
       * @param host Instance of ParseConfigHost used to enumerate files in folder.
@@ -1128,7 +1148,8 @@ namespace ts {
             if (files && !json["files"]) {
                 json["files"] = files;
             }
-            options = assign({}, baseOptions, options);
+
+            options = mergeCompilerOptions(baseOptions, options);
         }
 
         options = extend(existingOptions, options);
