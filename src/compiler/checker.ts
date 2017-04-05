@@ -1597,7 +1597,6 @@ namespace ts {
                 }
                 // Unlike a failed import, an untyped module produces a dummy symbol.
                 // This is checked for by `isUntypedOrShorthandAmbientModuleSymbol`.
-                // This must be different than `unknownSymbol` because `getBaseConstructorTypeOfClass` won't fail for `unknownSymbol`.
                 return untypedModuleSymbol;
             }
 
