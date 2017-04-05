@@ -1866,9 +1866,9 @@ let c1 = new Component1({
 
 c1.get("hello");
 >c1.get("hello") : string
->c1.get : <K extends "hello">(key: K) => ({ hello: string; } & {})[K]
+>c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
 >c1 : Component1<{ hello: string; }, {}>
->get : <K extends "hello">(key: K) => ({ hello: string; } & {})[K]
+>get : <K extends "hello">(key: K) => { hello: string; }[K]
 >"hello" : "hello"
 
 // Repro from #12625
