@@ -3489,8 +3489,7 @@ namespace ts {
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        const emittedBody = skipPartiallyEmittedExpressions(body);
-        if (emittedBody.kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 
