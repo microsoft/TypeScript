@@ -4664,7 +4664,7 @@ namespace ts {
                 baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
-                baseType = anyType;
+                baseType = baseConstructorType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
