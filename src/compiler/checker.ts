@@ -47,6 +47,7 @@ namespace ts {
 
         let typeCount = 0;
         let symbolCount = 0;
+        let symbolInstantiationDepth = 0;
 
         const emptyArray: any[] = [];
         const emptySymbols = createMap<Symbol>();
@@ -4449,14 +4450,22 @@ namespace ts {
         function getTypeOfInstantiatedSymbol(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
-                    return unknownType;
+                if (symbolInstantiationDepth === 100) {
+                    error(symbol.valueDeclaration, Diagnostics.Generic_type_instantiation_is_excessively_deep_and_possibly_infinite);
+                    links.type = unknownType;
                 }
-                let type = instantiateType(getTypeOfSymbol(links.target), links.mapper);
-                if (!popTypeResolution()) {
-                    type = reportCircularityError(symbol);
+                else {
+                    if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                        return unknownType;
+                    }
+                    symbolInstantiationDepth++;
+                    let type = instantiateType(getTypeOfSymbol(links.target), links.mapper);
+                    symbolInstantiationDepth--;
+                    if (!popTypeResolution()) {
+                        type = reportCircularityError(symbol);
+                    }
+                    links.type = type;
                 }
-                links.type = type;
             }
             return links.type;
         }
@@ -7266,8 +7275,9 @@ namespace ts {
                 else {
                     error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                 }
+                return unknownType;
             }
-            return unknownType;
+            return anyType;
         }
 
         function getIndexedAccessForMappedType(type: MappedType, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode) {
