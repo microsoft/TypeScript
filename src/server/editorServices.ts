@@ -61,6 +61,24 @@ namespace ts.server {
         "smart": IndentStyle.Smart
     });
 
+    const defaultTypeSafeList: SafeList = {
+        "jquery": {
+            // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
+            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/gi,
+            "types": ["jquery"]
+        },
+        "WinJS": {
+            "match": /^(.*\/winjs)\/base\.js$/gi,        // If the winjs/base.js file is found..
+            "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
+            "types": ["winjs"]                           // And fetch the @types package for WinJS
+        },
+        "Office Nuget": {
+            "match": /^(.*\/1\/office)\/excel\.debug\.js$/gi, // Office NuGet package is installed under a "1/office" folder
+            "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
+            "types": ["office"]                               // @types package to fetch instead
+        }
+    };
+
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
         if (typeof protocolOptions.indentStyle === "string") {
             protocolOptions.indentStyle = indentStyle.get(protocolOptions.indentStyle.toLowerCase());
@@ -263,7 +281,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
-        private static safelist: SafeList = {};
+        private static safelist: SafeList = defaultTypeSafeList;
 
         private changedFiles: ScriptInfo[];
 
@@ -1406,6 +1424,10 @@ namespace ts.server {
         private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
         private static escapeFilenameForRegex(filename: string) {
             return filename.replace(this.filenameEscapeRegexp, "\\$&");
+        }
+
+        resetSafeList(): void {
+            ProjectService.safelist = defaultTypeSafeList;
         }
 
         loadSafeList(fileName: string): void {

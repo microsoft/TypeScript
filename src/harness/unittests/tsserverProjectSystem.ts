@@ -17,27 +17,13 @@ namespace ts.projectSystem {
         })
     };
 
-    const typeMapList = {
+    const customSafeList = {
         path: <Path>"/typeMapList.json",
         content: JSON.stringify({
-            "jquery": {
-                // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-                "match": "/jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
-                "types": ["jquery"]
+            "quack": {
+                "match": "/duckquack-(\\d+)\\.min\\.js",
+                "types": ["duck-types"]
             },
-            "WinJS": {
-                "match": "^(.*/winjs)/base\\.js$",           // If the winjs/base.js file is found..
-                "exclude": [["^", 1, "/.*"]],                       // ..then exclude all files under the winjs folder
-                "types": ["winjs"]                           // And fetch the @types package for WinJS
-            },
-            "Office Nuget": {
-                "match": "^(.*/1/office)/excel\\.debug\\.js$", // Office NuGet package is installed under a "1/office" folder
-                "exclude": [["^", 1, "/.*"]],                         // Exclude that whole folder if the file indicated above is found in it
-                "types": ["office"]                            // @types package to fetch instead
-            },
-            "Minified files": {
-                "match": "^.*\\.min\\.js$"                     // Catch-all for minified files. Default exclude is the matched file.
-            }
         })
     };
 
@@ -1475,17 +1461,20 @@ namespace ts.projectSystem {
                 content: "export let x = 5"
             };
             const office = {
-                path: "lib/1/office/excel.debug.js",
+                path: "/lib/duckquack-3.min.js",
                 content: "whoa do @@ not parse me ok thanks!!!"
             };
-            const host = createServerHost([typeMapList, file1, office]);
+            const host = createServerHost([customSafeList, file1, office]);
             const projectService = createProjectService(host);
-            projectService.loadSafeList(typeMapList.path);
-
-            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
-            const proj = projectService.externalProjects[0];
-            assert.deepEqual(proj.getFileNames(true), [file1.path]);
-            assert.deepEqual(proj.getTypeAcquisition().include, ["office"]);
+            projectService.loadSafeList(customSafeList.path);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
+            } finally {
+                projectService.resetSafeList();
+            }
         });
 
         it("open file become a part of configured project if it is referenced from root file", () => {
