@@ -111,7 +111,6 @@ class ProjectRunner extends RunnerBase {
                 else if (url.indexOf(diskProjectPath) === 0) {
                     // Replace the disk specific path into the project root path
                     url = url.substr(diskProjectPath.length);
-                    // TODO: should be '!=='?
                     if (url.charCodeAt(0) !== ts.CharacterCodes.slash) {
                         url = "/" + url;
                     }

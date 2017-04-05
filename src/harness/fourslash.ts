@@ -2897,7 +2897,6 @@ ${code}
                         }
                     }
                 }
-                // TODO: should be '==='?
             }
             else if (line === "" || lineLength === 0) {
                 // Previously blank lines between fourslash content caused it to be considered as 2 files,
