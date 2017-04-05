@@ -24017,7 +24017,7 @@ namespace ts {
 
         function checkGrammarNumericLiteral(node: NumericLiteral): boolean {
             // Grammar checking
-            if (node.isOctalLiteral) {
+            if (node.numericLiteralFlags & NumericLiteralFlags.Octal) {
                 let diagnosticMessage: DiagnosticMessage | undefined;
                 if (languageVersion >= ScriptTarget.ES5) {
                     diagnosticMessage = Diagnostics.Octal_literals_are_not_available_when_targeting_ECMAScript_5_and_higher_Use_the_syntax_0;

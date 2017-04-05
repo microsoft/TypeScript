@@ -88,6 +88,7 @@ namespace ts {
     export function createNumericLiteral(value: string): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
+        node.numericLiteralFlags = 0;
         return node;
     }
 
@@ -3365,17 +3366,14 @@ namespace ts {
      */
     export function parenthesizeForAccess(expression: Expression): LeftHandSideExpression {
         // isLeftHandSideExpression is almost the correct criterion for when it is not necessary
-        // to parenthesize the expression before a dot. The known exceptions are:
+        // to parenthesize the expression before a dot. The known exception is:
         //
         //    NewExpression:
         //       new C.x        -> not the same as (new C).x
-        //    NumericLiteral
-        //       1.x            -> not the same as (1).x
         //
         const emittedExpression = skipPartiallyEmittedExpressions(expression);
         if (isLeftHandSideExpression(emittedExpression)
-            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)
-            && emittedExpression.kind !== SyntaxKind.NumericLiteral) {
+            && (emittedExpression.kind !== SyntaxKind.NewExpression || (<NewExpression>emittedExpression).arguments)) {
             return <LeftHandSideExpression>expression;
         }
 

@@ -52,6 +52,9 @@ namespace ts {
 
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
+
+            // github #14948
+            printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
         });
 
         describe("printBundle", () => {

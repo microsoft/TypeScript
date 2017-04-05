@@ -204,7 +204,6 @@ namespace ts {
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
-        const languageVersion = getEmitScriptTarget(printerOptions);
         const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
         const {
             emitNodeWithComments,
@@ -1084,7 +1083,7 @@ namespace ts {
                 }
 
                 const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-                const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
+                const allowTrailingComma = currentSourceFile.languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
                 emitList(node, properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
                 if (indentedFlag) {
@@ -1118,11 +1117,11 @@ namespace ts {
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
         function needsDotDotForPropertyAccess(expression: Expression) {
-            if (expression.kind === SyntaxKind.NumericLiteral) {
+            expression = skipPartiallyEmittedExpressions(expression);
+            if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(<LiteralExpression>expression);
-                return getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.All) === NumericLiteralFlags.None
-                    && !(<LiteralExpression>expression).isOctalLiteral
+                return !expression.numericLiteralFlags
                     && text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
@@ -2638,7 +2637,7 @@ namespace ts {
                 }
             }
 
-            return getLiteralText(node, currentSourceFile, languageVersion);
+            return getLiteralText(node, currentSourceFile);
         }
 
         /**

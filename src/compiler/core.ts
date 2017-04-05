@@ -1455,7 +1455,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 

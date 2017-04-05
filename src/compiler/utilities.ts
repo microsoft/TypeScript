@@ -322,21 +322,11 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
-        // Any template literal or string literal with an extended escape
-        // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-        if (languageVersion < ScriptTarget.ES2015 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-            return getQuotedEscapedLiteralText('"', node.text, '"');
-        }
-
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
-            const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
-            if (languageVersion < ScriptTarget.ES2015 && isBinaryOrOctalIntegerLiteral(node, text)) {
-                return node.text;
-            }
-            return text;
+            return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
         // If we can't reach the original source text, use the canonical form if it's a number,
@@ -357,55 +347,6 @@ namespace ts {
         }
 
         Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-    }
-
-    export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
-        return node.kind === SyntaxKind.NumericLiteral
-            && (getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.BinaryOrOctal) & NumericLiteralFlags.BinaryOrOctal) !== 0;
-    }
-
-    export const enum NumericLiteralFlags {
-        None = 0,
-        Hexadecimal = 1 << 0,
-        Binary = 1 << 1,
-        Octal = 1 << 2,
-        Scientific = 1 << 3,
-
-        BinaryOrOctal = Binary | Octal,
-        BinaryOrOctalOrHexadecimal = BinaryOrOctal | Hexadecimal,
-        All = Hexadecimal | Binary | Octal | Scientific,
-    }
-
-    /**
-     * Scans a numeric literal string to determine the form of the number.
-     * @param text Numeric literal text
-     * @param hint If `Scientific` or `All` is specified, performs a more expensive check to scan for scientific notation.
-     */
-    export function getNumericLiteralFlags(text: string, hint?: NumericLiteralFlags) {
-        if (text.length > 1) {
-            switch (text.charCodeAt(1)) {
-                case CharacterCodes.b:
-                case CharacterCodes.B:
-                    return NumericLiteralFlags.Binary;
-                case CharacterCodes.o:
-                case CharacterCodes.O:
-                    return NumericLiteralFlags.Octal;
-                case CharacterCodes.x:
-                case CharacterCodes.X:
-                    return NumericLiteralFlags.Hexadecimal;
-            }
-
-            if (hint & NumericLiteralFlags.Scientific) {
-                for (let i = text.length - 1; i >= 0; i--) {
-                    switch (text.charCodeAt(i)) {
-                        case CharacterCodes.e:
-                        case CharacterCodes.E:
-                            return NumericLiteralFlags.Scientific;
-                    }
-                }
-            }
-        }
-        return NumericLiteralFlags.None;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
@@ -2025,6 +1966,10 @@ namespace ts {
                     && hasModifier(node, ModifierFlags.Async);
         }
         return false;
+    }
+
+    export function isNumericLiteral(node: Node): node is NumericLiteral {
+        return node.kind === SyntaxKind.NumericLiteral;
     }
 
     export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {

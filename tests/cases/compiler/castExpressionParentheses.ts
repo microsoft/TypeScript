@@ -23,15 +23,15 @@ declare var a;
 (<any>a[0]);
 (<any>a.b["0"]);
 (<any>a()).x;
-
-declare var A;
-
-// should keep the parentheses in emit
 (<any>1).foo;
 (<any>1.).foo;
 (<any>1.0).foo;
 (<any>12e+34).foo;
 (<any>0xff).foo;
+
+declare var A;
+
+// should keep the parentheses in emit
 (<any>(1.0)); 
 (<any>new A).foo; 
 (<any>typeof A).x; 
