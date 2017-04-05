@@ -702,12 +702,11 @@ namespace ts.server {
     }
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
-        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
         try {
-            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+            return { module: require(resolveJavaScriptModule(moduleName, initialDir, sys)), error: undefined };
         }
-        catch (e) {
-            return { module: undefined, error: e };
+        catch (error) {
+            return { module: undefined, error };
         }
     };
 
