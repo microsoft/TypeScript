@@ -49,7 +49,7 @@ namespace ts {
         error(s: string): void;
     }
 
-    /** Public interface of the host of a language service shim instance.*/
+    /** Public interface of the host of a language service shim instance. */
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 

@@ -2205,7 +2205,7 @@ namespace FourSlash {
         /**
          * Applies fixes for the errors in fileName and compares the results to
          * expectedContents after all fixes have been applied.
-
+         *
          * Note: applying one codefix may generate another (eg: remove duplicate implements
          * may generate an extends -> interface conversion fix).
          * @param expectedContents The contents of the file after the fixes are applied.

@@ -146,7 +146,7 @@ namespace ts.codefix {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
-        */
+         */
         let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
         let someSigHasRestParameter = false;

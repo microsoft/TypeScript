@@ -819,7 +819,7 @@ namespace ts {
         body?: FunctionBody;
     }
 
-    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
         parent?: ClassDeclaration | ClassExpression;
@@ -1397,11 +1397,11 @@ namespace ts {
     }
 
     /**
-      * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
-      * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
-      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
-      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
-     **/
+     * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+     * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+     * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+     * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     */
     export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
@@ -2330,9 +2330,9 @@ namespace ts {
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
 
         /**
-          * Gets a value indicating whether the specified path exists and is a file.
-          * @param path The path to test.
-          */
+         * Gets a value indicating whether the specified path exists and is a file.
+         * @param path The path to test.
+         */
         fileExists(path: string): boolean;
 
         readFile(path: string): string;
@@ -2680,8 +2680,7 @@ namespace ts {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
-      * metadata */
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
         Unknown,                            // The TypeReferenceNode could not be resolved. The type name

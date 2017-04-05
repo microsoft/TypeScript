@@ -705,13 +705,13 @@ namespace ts {
     }
 
     /**
-      * The token on the left of the position is the token that strictly includes the position
-      * or sits to the left of the cursor if it is on a boundary. For example
-      *
-      *   fo|o               -> will return foo
-      *   foo <comment> |bar -> will return foo
-      *
-      */
+     * The token on the left of the position is the token that strictly includes the position
+     * or sits to the left of the cursor if it is on a boundary. For example
+     *
+     *   fo|o               -> will return foo
+     *   foo <comment> |bar -> will return foo
+     *
+     */
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.

@@ -411,7 +411,7 @@ namespace ts {
          * Determine if the given comment is a triple-slash
          *
          * @return true if the comment is a triple-slash comment else false
-         **/
+         */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
             // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
             // so that we don't end up computing comment string and doing match for all // comments

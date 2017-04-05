@@ -315,7 +315,7 @@ namespace ts {
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
          * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
          * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
-         **/
+         */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
@@ -328,7 +328,7 @@ namespace ts {
          * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
          * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
          * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
-         **/
+         */
         function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
         }
