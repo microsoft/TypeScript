@@ -1,5 +1,4 @@
 //// [exportCodeGen.ts]
-
 // should replace all refs to 'x' in the body,
 // with fully qualified
 module A {

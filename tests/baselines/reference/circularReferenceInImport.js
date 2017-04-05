@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/circularReferenceInImport.ts] ////
 
 //// [db.d.ts]
-
 declare namespace Db {
     export import Types = Db;
 }

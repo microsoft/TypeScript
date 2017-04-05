@@ -1,5 +1,4 @@
 //// [accessorsNotAllowedInES3.ts]
-
 class C {
     get x(): number { return 1; }
 }

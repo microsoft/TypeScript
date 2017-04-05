@@ -1,5 +1,4 @@
 === /node_modules/@types/node/index.d.ts ===
-
 interface Error2 {
 >Error2 : Error2
 
@@ -8,7 +7,6 @@ interface Error2 {
 }
 
 === /app.ts ===
-
 function foo(): Error2 {
 >foo : () => Error2
 >Error2 : Error2

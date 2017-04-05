@@ -1455,7 +1455,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
@@ -2359,5 +2359,9 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

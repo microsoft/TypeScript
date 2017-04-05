@@ -1,5 +1,4 @@
 //// [commentsInheritance.ts]
-
 /** i1 is interface with properties*/
 interface i1 {
     /** i1_p1*/

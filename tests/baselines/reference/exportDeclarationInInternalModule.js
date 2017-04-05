@@ -1,5 +1,4 @@
 //// [exportDeclarationInInternalModule.ts]
-
 class Bbb {
 }
 

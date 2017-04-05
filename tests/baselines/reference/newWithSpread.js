@@ -1,5 +1,4 @@
 //// [newWithSpread.ts]
-
 function f(x: number, y: number, ...z: string[]) {
 }
 

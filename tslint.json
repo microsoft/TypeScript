@@ -1,4 +1,5 @@
 {
+    "rulesDirectory": "built/local/tslint",
     "rules": {
         "no-bom": true,
         "class-name": true,
@@ -27,13 +28,23 @@
             "check-separator",
             "check-type"
         ],
-        "typedef-whitespace": [true, {
-            "call-signature": "nospace",
-            "index-signature": "nospace",
-            "parameter": "nospace",
-            "property-declaration": "nospace",
-            "variable-declaration": "nospace"
-        }],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
         "next-line": [true,
             "check-catch",
             "check-else"
@@ -49,5 +60,5 @@
         "object-literal-surrounding-space": true,
         "no-type-assertion-whitespace": true,
         "no-in-operator": true
-  }
+    }
 }

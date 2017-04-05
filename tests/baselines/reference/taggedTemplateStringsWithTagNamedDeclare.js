@@ -1,6 +1,4 @@
 //// [taggedTemplateStringsWithTagNamedDeclare.ts]
-
-
 function declare(x: any, ...ys: any[]) {
 }
 

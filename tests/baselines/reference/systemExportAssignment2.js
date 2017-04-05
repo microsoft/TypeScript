@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemExportAssignment2.ts] ////
 
 //// [a.ts]
-
 var a = 10;
 export = a;  // Error: export = not allowed in ES6
 

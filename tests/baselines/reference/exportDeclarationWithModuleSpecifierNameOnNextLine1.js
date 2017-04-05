@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportDeclarationWithModuleSpecifierNameOnNextLine1.ts] ////
 
 //// [t1.ts]
-
 export var x = "x";
 
 //// [t2.ts]

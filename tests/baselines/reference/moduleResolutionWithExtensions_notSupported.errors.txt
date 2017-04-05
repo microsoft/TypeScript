@@ -16,7 +16,6 @@
     
 ==== /tsx.tsx (0 errors) ====
     
-    
 ==== /jsx.jsx (0 errors) ====
     
 ==== /js.js (0 errors) ====

@@ -1,5 +1,4 @@
 //// [m1.ts]
-
 function foo() {}
 module foo {
     const enum E { X }

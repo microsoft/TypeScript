@@ -1,5 +1,4 @@
 //// [declFileForClassWithPrivateOverloadedFunction.ts]
-
 class C {
     private foo(x: number);
     private foo(x: string);

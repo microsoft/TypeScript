@@ -1,5 +1,4 @@
 //// [typesWithProtectedConstructor.ts]
-
 class C {
     protected constructor() { }
 }

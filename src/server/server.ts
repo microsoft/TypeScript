@@ -135,7 +135,7 @@ namespace ts.server {
                 try {
                     this.fd = fs.openSync(this.logFilename, "w");
                 }
-                catch(_) {
+                catch (_) {
                     // swallow the error and keep logging disabled if file cannot be opened
                 }
             }
@@ -219,6 +219,7 @@ namespace ts.server {
             host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
+            readonly typingSafeListLocation: string,
             private newLine: string) {
             this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
@@ -259,6 +260,9 @@ namespace ts.server {
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
+            }
+            if (this.typingSafeListLocation) {
+                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
             }
             const execArgv: string[] = [];
             {
@@ -315,7 +319,7 @@ namespace ts.server {
                 }
                 const body: protocol.TypesInstallerInitializationFailedEventBody = {
                     message: response.message
-                }
+                };
                 const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
                 this.eventSender.event(body, eventName);
                 return;
@@ -378,11 +382,12 @@ namespace ts.server {
             useSingleInferredProject: boolean,
             disableAutomaticTypingAcquisition: boolean,
             globalTypingsCacheLocation: string,
+            typingSafeListLocation: string,
             telemetryEnabled: boolean,
             logger: server.Logger) {
                 const typingsInstaller = disableAutomaticTypingAcquisition
                     ? undefined
-                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine);
+                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, host.newLine);
 
                 super(
                     host,
@@ -473,14 +478,14 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
 
-        const logFileName = cmdLineLogFileName 
-            ? stripQuotes(cmdLineLogFileName) 
+        const logFileName = cmdLineLogFileName
+            ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity)
+        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -729,6 +734,8 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    const typingSafeListLocation = findArgument("--typingSafeListLocation");
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
@@ -741,6 +748,7 @@ namespace ts.server {
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
         getGlobalTypingsCacheLocation(),
+        typingSafeListLocation,
         telemetryEnabled,
         logger);
     process.on("uncaughtException", function (err: Error) {

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationExtendFileModule1.ts] ////
 
 //// [map.ts]
-
 import { Observable } from "./observable"
 
 (<any>Observable.prototype).map = function() { }

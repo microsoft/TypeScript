@@ -1,5 +1,4 @@
 === tests/cases/compiler/recursiveIdenticalOverloadResolution.ts ===
-
 module M {
 >M : typeof M
 

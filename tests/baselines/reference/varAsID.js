@@ -1,5 +1,4 @@
 //// [varAsID.ts]
-
 class Foo {
     var; // ok
     x=1;

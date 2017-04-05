@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 declare function OverloadComponent<U>(): JSX.Element;

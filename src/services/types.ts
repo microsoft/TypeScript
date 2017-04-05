@@ -18,6 +18,8 @@ namespace ts {
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node;
         getLastToken(sourceFile?: SourceFile): Node;
+        // See ts.forEachChild for documentation.
+        forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     }
 
     export interface Symbol {
@@ -25,6 +27,7 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[];
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -47,6 +50,7 @@ namespace ts {
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface SourceFile {
@@ -354,22 +358,23 @@ namespace ts {
         caretOffset: number;
     }
 
-    export interface RenameLocation {
+    export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
     }
 
-    export interface ReferenceEntry {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface RenameLocation extends DocumentSpan {
+    }
+
+    export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
         isDefinition: boolean;
         isInString?: true;
     }
 
-    export interface ImplementationLocation {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface ImplementationLocation extends DocumentSpan {
+        kind: string;
+        displayParts: SymbolDisplayPart[];
     }
 
     export interface DocumentHighlights {
@@ -478,9 +483,12 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface ReferencedSymbol {
+    export interface ReferencedSymbolOf<T extends DocumentSpan> {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: T[];
+    }
+
+    export interface ReferencedSymbol extends ReferencedSymbolOf<ReferenceEntry> {
     }
 
     export enum SymbolDisplayPartKind {
@@ -513,12 +521,18 @@ namespace ts {
         kind: string; // A ScriptElementKind
     }
 
+    export interface JSDocTagInfo {
+        name: string;
+        text?: string;
+    }
+
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     export interface RenameInfo {
@@ -552,6 +566,7 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     /**
@@ -597,6 +612,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
         codeActions?: CodeAction[];
     }
 

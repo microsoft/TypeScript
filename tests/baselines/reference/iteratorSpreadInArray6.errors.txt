@@ -1,16 +1,9 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(2,14): error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | number[]'.
+tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(15,14): error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | number[]'.
   Type 'symbol[]' is not assignable to type 'number[]'.
     Type 'symbol' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts (1 errors) ====
-    var array: number[] = [0, 1];
-    array.concat([...new SymbolIterator]);
-                 ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | number[]'.
-!!! error TS2345:   Type 'symbol[]' is not assignable to type 'number[]'.
-!!! error TS2345:     Type 'symbol' is not assignable to type 'number'.
-    
     class SymbolIterator {
         next() {
             return {
@@ -23,3 +16,10 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray6.ts(2,14): error TS2345
             return this;
         }
     }
+    
+    var array: number[] = [0, 1];
+    array.concat([...new SymbolIterator]);
+                 ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'symbol[]' is not assignable to parameter of type 'number | number[]'.
+!!! error TS2345:   Type 'symbol[]' is not assignable to type 'number[]'.
+!!! error TS2345:     Type 'symbol' is not assignable to type 'number'.

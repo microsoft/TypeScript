@@ -1,5 +1,4 @@
 //// [recursiveIdenticalOverloadResolution.ts]
-
 module M {
 
    interface I { (i: I): I; }

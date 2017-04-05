@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports3.ts] ////
 
 //// [t1.ts]
-
 export var v = 1;
 export function f() { }
 export class C {

@@ -1,5 +1,4 @@
 === tests/cases/compiler/selfInLambdas.ts ===
-
 interface MouseEvent {
 >MouseEvent : MouseEvent
 

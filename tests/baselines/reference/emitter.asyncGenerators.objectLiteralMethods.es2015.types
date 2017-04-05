@@ -83,11 +83,11 @@ const o6 = {
 }
 === tests/cases/conformance/emitter/es2015/asyncGenerators/O7.ts ===
 const o7 = {
->o7 : { f(): AsyncIterableIterator<any>; }
->{    async * f() {        return 1;    }} : { f(): AsyncIterableIterator<any>; }
+>o7 : { f(): AsyncIterableIterator<1>; }
+>{    async * f() {        return 1;    }} : { f(): AsyncIterableIterator<1>; }
 
     async * f() {
->f : () => AsyncIterableIterator<any>
+>f : () => AsyncIterableIterator<1>
 
         return 1;
 >1 : 1

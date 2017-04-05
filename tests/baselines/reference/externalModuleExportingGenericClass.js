@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/externalModuleExportingGenericClass.ts] ////
 
 //// [externalModuleExportingGenericClass_file0.ts]
-
 class C<T> {
     foo: T;
 }

@@ -1,5 +1,4 @@
 //// [iteratorsAndStrictNullChecks.ts]
-
 // for..of
 for (const x of ["a", "b"]) {
     x.substring;

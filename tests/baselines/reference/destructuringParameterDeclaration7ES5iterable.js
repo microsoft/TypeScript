@@ -1,5 +1,4 @@
 //// [destructuringParameterDeclaration7ES5iterable.ts]
-
 interface ISomething {
     foo: string,
     bar: string

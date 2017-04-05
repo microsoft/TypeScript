@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 declare var vdom: any;
 >vdom : any
 

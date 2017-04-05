@@ -11,6 +11,7 @@ namespace ts.server {
         export const GlobalCacheLocation = "--globalTypingsCacheLocation";
         export const LogFile = "--logFile";
         export const EnableTelemetry = "--enableTelemetry";
+        export const TypingSafeListLocation = "--typingSafeListLocation";
     }
 
     export function hasArgument(argumentName: string) {

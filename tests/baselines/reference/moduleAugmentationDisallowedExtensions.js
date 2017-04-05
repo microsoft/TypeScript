@@ -1,11 +1,9 @@
 //// [tests/cases/compiler/moduleAugmentationDisallowedExtensions.ts] ////
 
 //// [x0.ts]
-
 export let a = 1;
 
 //// [x.ts]
-
 namespace N1 {
     export let x = 1;
 }

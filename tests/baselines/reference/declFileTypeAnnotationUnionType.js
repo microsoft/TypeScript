@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationUnionType.ts]
-
 class c {
     private p: string;
 }

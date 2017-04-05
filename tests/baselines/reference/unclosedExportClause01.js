@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unclosedExportClause01.ts] ////
 
 //// [t1.ts]
-
 export var x = "x";
 
 //// [t2.ts]

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxFactoryNotIdentifierOrQualifiedName.ts] ////
 
 //// [Element.ts]
-
 declare namespace JSX {
     interface Element {
         name: string;

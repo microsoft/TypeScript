@@ -328,13 +328,14 @@ namespace ts.Completions {
                     }
                 }
 
-                const { displayParts, documentation, symbolKind } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
+                const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
                 return {
                     name: entryName,
                     kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                     kind: symbolKind,
                     displayParts,
                     documentation,
+                    tags,
                     codeActions
                 };
             }
@@ -349,6 +350,7 @@ namespace ts.Completions {
                 kindModifiers: ScriptElementKindModifier.none,
                 displayParts: [displayPart(entryName, SymbolDisplayPartKind.keyword)],
                 documentation: undefined,
+                tags: undefined,
                 codeActions: undefined
             };
         }

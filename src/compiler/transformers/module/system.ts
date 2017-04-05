@@ -151,18 +151,20 @@ namespace ts {
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
-                const text = externalModuleName.text;
-                const groupIndex = groupIndices.get(text);
-                if (groupIndex !== undefined) {
-                    // deduplicate/group entries in dependency list by the dependency name
-                    dependencyGroups[groupIndex].externalImports.push(externalImport);
-                }
-                else {
-                    groupIndices.set(text, dependencyGroups.length);
-                    dependencyGroups.push({
-                        name: externalModuleName,
-                        externalImports: [externalImport]
-                    });
+                if (externalModuleName) {
+                    const text = externalModuleName.text;
+                    const groupIndex = groupIndices.get(text);
+                    if (groupIndex !== undefined) {
+                        // deduplicate/group entries in dependency list by the dependency name
+                        dependencyGroups[groupIndex].externalImports.push(externalImport);
+                    }
+                    else {
+                        groupIndices.set(text, dependencyGroups.length);
+                        dependencyGroups.push({
+                            name: externalModuleName,
+                            externalImports: [externalImport]
+                        });
+                    }
                 }
             }
 
@@ -225,7 +227,8 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
@@ -1286,6 +1289,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitForInitializer(node: ForInitializer): ForInitializer {
+            if (!node) {
+                return node;
+            }
+
             if (shouldHoistForInitializer(node)) {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxDynamicTagName5.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	class Component<T, U> { }
 }

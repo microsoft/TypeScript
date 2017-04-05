@@ -1,5 +1,4 @@
 //// [a.ts]
-
 export { };
 
 declare global {

@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileGenericType2.ts ===
-
 declare module templa.mvc {
 >templa : typeof templa
 >mvc : typeof mvc

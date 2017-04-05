@@ -1,5 +1,4 @@
 //// [es6ExportDefaultClassDeclaration.ts]
-
 export default class C {
     method() { }
 }

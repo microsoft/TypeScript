@@ -6,8 +6,8 @@
 ////    abstract z: number;
 //// }
 ////
-//// class C extends A {[|   |]
-////    constructor(public x: number) { super(); }
+//// class C extends A {[|   
+////    |]constructor(public x: number) { super(); }
 ////    y: number;
 //// }
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/objectCreate.ts ===
-
 declare var union: null | { a: number, b: string };
 >union : { a: number; b: string; } | null
 >null : null

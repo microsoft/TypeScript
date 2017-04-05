@@ -1,5 +1,4 @@
 === tests/cases/compiler/moduleOuterQualification.ts ===
-
 declare module outer {
 >outer : any
 

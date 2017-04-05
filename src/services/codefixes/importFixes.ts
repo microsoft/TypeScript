@@ -551,8 +551,8 @@ namespace ts.codefix {
             const checker = importFixContext.checker;
             const token = importFixContext.symbolToken;
             const symbolIdActionMap = new ImportCodeActionMap();
-
             const currentTokenMeaning = getMeaningFromLocation(token);
+
             if (context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
                 const symbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(token));
                 return getCodeActionForImport(symbol, importFixContext, /*isDefault*/ false, /*isNamespaceImport*/ true);

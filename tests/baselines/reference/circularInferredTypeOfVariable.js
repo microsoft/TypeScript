@@ -1,5 +1,4 @@
 //// [circularInferredTypeOfVariable.ts]
-
 // Repro from #14428
 
 (async () => {

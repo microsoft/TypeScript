@@ -466,6 +466,12 @@ namespace ts {
                 case SyntaxKind.TemplateTail:
                     return visitTemplateLiteral(<LiteralExpression>node);
 
+                case SyntaxKind.StringLiteral:
+                    return visitStringLiteral(<StringLiteral>node);
+
+                case SyntaxKind.NumericLiteral:
+                    return visitNumericLiteral(<NumericLiteral>node);
+
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
 
@@ -3412,6 +3418,30 @@ namespace ts {
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
             return setTextRange(createLiteral(node.text), node);
+        }
+
+        /**
+         * Visits a string literal with an extended unicode escape.
+         *
+         * @param node A string literal.
+         */
+        function visitStringLiteral(node: StringLiteral) {
+            if (node.hasExtendedUnicodeEscape) {
+                return setTextRange(createLiteral(node.text), node);
+            }
+            return node;
+        }
+
+        /**
+         * Visits a binary or octal (ES6) numeric literal.
+         *
+         * @param node A string literal.
+         */
+        function visitNumericLiteral(node: NumericLiteral) {
+            if (node.numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                return setTextRange(createNumericLiteral(node.text), node);
+            }
+            return node;
         }
 
         /**

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/errorsOnImportedSymbol.ts] ////
 
 //// [errorsOnImportedSymbol_0.ts]
-
 interface Sammy {
     new (): any;
     (): number;

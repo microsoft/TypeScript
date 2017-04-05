@@ -1319,6 +1319,11 @@ namespace ts.server.protocol {
           * Documentation associated with symbol.
           */
         documentation: string;
+
+        /**
+         * JSDoc tags associated with symbol.
+         */
+        tags: JSDocTagInfo[];
     }
 
     /**
@@ -1556,6 +1561,11 @@ namespace ts.server.protocol {
         documentation: SymbolDisplayPart[];
 
         /**
+          * JSDoc tags for the symbol.
+          */
+        tags: JSDocTagInfo[];
+
+        /**
          * The associated code actions for this entry
          */
         codeActions?: CodeAction[];
@@ -1629,6 +1639,11 @@ namespace ts.server.protocol {
          * The signature's documentation
          */
         documentation: SymbolDisplayPart[];
+
+        /**
+         * The signature's JSDoc tags
+         */
+        tags: JSDocTagInfo[];
     }
 
     /**

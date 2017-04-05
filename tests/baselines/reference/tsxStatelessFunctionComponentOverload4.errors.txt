@@ -1,39 +1,38 @@
-tests/cases/conformance/jsx/file.tsx(13,22): error TS2322: Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(12,22): error TS2322: Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(14,22): error TS2322: Type '{ yy: 10; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(13,22): error TS2322: Type '{ yy: 10; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Type '{ yy: 10; }' is not assignable to type '{ yy: number; yy1: string; }'.
     Property 'yy1' is missing in type '{ yy: 10; }'.
-tests/cases/conformance/jsx/file.tsx(15,22): error TS2322: Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(14,22): error TS2322: Type '{ yy1: true; yy: number; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Type '{ yy1: true; yy: number; }' is not assignable to type '{ yy: number; yy1: string; }'.
     Types of property 'yy1' are incompatible.
       Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(16,22): error TS2322: Type '{ extra: string; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(15,22): error TS2322: Type '{ extra: string; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Property 'extra' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(17,22): error TS2322: Type '{ y1: 10000; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,22): error TS2322: Type '{ y1: 10000; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(18,22): error TS2322: Type '{ yy: boolean; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(17,22): error TS2322: Type '{ yy: boolean; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
     Types of property 'yy' are incompatible.
       Type 'boolean' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(26,29): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { yy: string; direction?: number; }'.
+tests/cases/conformance/jsx/file.tsx(25,29): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { yy: string; direction?: number; }'.
   Type '{}' is not assignable to type '{ yy: string; direction?: number; }'.
     Property 'yy' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(27,29): error TS2322: Type '{ yy: "hello"; direction: "left"; }' is not assignable to type 'IntrinsicAttributes & { yy: string; direction?: number; }'.
+tests/cases/conformance/jsx/file.tsx(26,29): error TS2322: Type '{ yy: "hello"; direction: "left"; }' is not assignable to type 'IntrinsicAttributes & { yy: string; direction?: number; }'.
   Type '{ yy: "hello"; direction: "left"; }' is not assignable to type '{ yy: string; direction?: number; }'.
     Types of property 'direction' are incompatible.
       Type '"left"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: true; y3: "hello"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(32,29): error TS2322: Type '{ y1: true; y3: "hello"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
   Type '{ y1: true; y3: "hello"; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
     Types of property 'y3' are incompatible.
       Type '"hello"' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
   Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
     Types of property 'y1' are incompatible.
       Type '"hello"' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (10 errors) ====
-    
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;

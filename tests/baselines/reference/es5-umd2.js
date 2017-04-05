@@ -1,5 +1,4 @@
 //// [es5-umd2.ts]
-
 export class A
 {
     constructor ()

@@ -7,7 +7,6 @@ tests/cases/compiler/client.ts(11,8): error TS1192: Module '"tests/cases/compile
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
-    
     export class a { }
     export class x { }
     export class m { }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructors.ts] ////
 
 //// [declFileConstructors_0.ts]
-
 export class SimpleConstructor {
     /** This comment should appear for foo*/
     constructor() {

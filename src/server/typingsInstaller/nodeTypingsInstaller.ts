@@ -24,7 +24,7 @@ namespace ts.server.typingsInstaller {
             try {
                 fs.appendFileSync(this.logFile, text + sys.newLine);
             }
-            catch(e) {
+            catch (e) {
                 this.logEnabled = false;
             }
         }
@@ -76,11 +76,11 @@ namespace ts.server.typingsInstaller {
 
         private delayedInitializationError: InitializationFailedResponse;
 
-        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
+        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
-                toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
             if (this.log.isEnabled()) {
@@ -164,6 +164,7 @@ namespace ts.server.typingsInstaller {
 
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -177,6 +178,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, /*throttleLimit*/5, log);
     installer.listen();
 }

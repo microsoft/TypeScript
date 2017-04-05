@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts ===
-
 declare module A.B.Base {
 >A : typeof A
 >B : typeof B

@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility4.ts ===
-
 class A {
 >A : A
 

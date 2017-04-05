@@ -1,5 +1,4 @@
 //// [unusedSingleParameterInContructor.ts]
-
 class Dummy {
     constructor(person: string) {
         var unused = 20;

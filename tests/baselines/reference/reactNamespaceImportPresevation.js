@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reactNamespaceImportPresevation.tsx] ////
 
 //// [modules.d.ts]
-
 declare module "my-React-Lib" {
     var a: any;
     export = a;

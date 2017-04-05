@@ -1,5 +1,4 @@
 //// [unusedTypeParameters9.ts]
-
 // clas + interface
 class C1<T> { }
 interface C1<T> { a: T; }

@@ -29,7 +29,8 @@ var thirdParty = "ThirdPartyNoticeText.txt";
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
     process.env.path = nodeModulesPathPrefix + process.env.path;
-} else if (process.env.PATH !== undefined) {
+}
+else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
@@ -312,13 +313,15 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         if (useDebugMode) {
             if (opts.inlineSourceMap) {
                 options += " --inlineSourceMap --inlineSources";
-            } else {
+            }
+            else {
                 options += " -sourcemap";
                 if (!opts.noMapRoot) {
                     options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
                 }
             }
-        } else {
+        }
+        else {
             options += " --newLine LF";
         }
 
@@ -748,7 +751,8 @@ function exec(cmd, completeHandler, errorHandler) {
     ex.addListener("error", function (e, status) {
         if (errorHandler) {
             errorHandler(e, status);
-        } else {
+        }
+        else {
             fail("Process exited with code " + status);
         }
     });
@@ -942,7 +946,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = "tests/webTestServer.js";
 var nodeServerInFile = "tests/webTestServer.ts";
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true, lib: "es6" });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
@@ -1006,21 +1010,32 @@ task("baseline-accept", function () {
 
 function acceptBaseline(sourceFolder, targetFolder) {
     console.log('Accept baselines from ' + sourceFolder + ' to ' + targetFolder);
-    var files = fs.readdirSync(sourceFolder);
     var deleteEnding = '.delete';
-    for (var i in files) {
-        var filename = files[i];
-        var fullLocalPath = path.join(sourceFolder, filename);
-        if (fs.statSync(fullLocalPath).isFile()) {
-            if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
-                filename = filename.substr(0, filename.length - deleteEnding.length);
-                fs.unlinkSync(path.join(targetFolder, filename));
-            } else {
-                var target = path.join(targetFolder, filename);
-                if (fs.existsSync(target)) {
-                    fs.unlinkSync(target);
+
+    acceptBaselineFolder(sourceFolder, targetFolder);
+
+    function acceptBaselineFolder(sourceFolder, targetFolder) {
+        var files = fs.readdirSync(sourceFolder);
+
+        for (var i in files) {
+            var filename = files[i];
+            var fullLocalPath = path.join(sourceFolder, filename);
+            var stat = fs.statSync(fullLocalPath);
+            if (stat.isFile()) {
+                if (filename.substr(filename.length - deleteEnding.length) === deleteEnding) {
+                    filename = filename.substr(0, filename.length - deleteEnding.length);
+                    fs.unlinkSync(path.join(targetFolder, filename));
                 }
-                fs.renameSync(path.join(sourceFolder, filename), target);
+                else {
+                    var target = path.join(targetFolder, filename);
+                    if (fs.existsSync(target)) {
+                        fs.unlinkSync(target);
+                    }
+                    fs.renameSync(path.join(sourceFolder, filename), target);
+                }
+            }
+            else if (stat.isDirectory()) {
+                acceptBaselineFolder(fullLocalPath, path.join(targetFolder, filename));
             }
         }
     }
@@ -1177,43 +1192,16 @@ function spawnLintWorker(files, callback) {
 }
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
-task("lint", ["build-rules"], function () {
+task("lint", ["build-rules"], () => {
     if (fold.isTravis()) console.log(fold.start("lint"));
-    var startTime = mark();
-    var failed = 0;
-    var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
-    var done = {};
-    for (var i in lintTargets) {
-        var target = lintTargets[i];
-        if (!done[target] && fileMatcher.test(target)) {
-            done[target] = fs.statSync(target).size;
-        }
-    }
-
-    var workerCount = (process.env.workerCount && +process.env.workerCount) || os.cpus().length;
-
-    var names = Object.keys(done).sort(function (namea, nameb) {
-        return done[namea] - done[nameb];
+    const fileMatcher = process.env.f || process.env.file || process.env.files;
+    const files = fileMatcher
+        ? `src/**/${fileMatcher}`
+        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+    const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
+    console.log("Linting: " + cmd);
+    jake.exec([cmd], { interactive: true }, () => {
+        if (fold.isTravis()) console.log(fold.end("lint"));
+        complete();
     });
-
-    for (var i = 0; i < workerCount; i++) {
-        spawnLintWorker(names, finished);
-    }
-
-    var completed = 0;
-    var failures = 0;
-    function finished(fails) {
-        completed++;
-        failures += fails;
-        if (completed === workerCount) {
-            measure(startTime);
-            if (fold.isTravis()) console.log(fold.end("lint"));
-            if (failures > 0) {
-                fail('Linter errors.', failed);
-            }
-            else {
-                complete();
-            }
-        }
-    }
-}, { async: true });
+});

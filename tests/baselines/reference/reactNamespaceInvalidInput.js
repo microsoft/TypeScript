@@ -1,5 +1,4 @@
 //// [reactNamespaceInvalidInput.tsx]
-
 <foo data/>;
 
 

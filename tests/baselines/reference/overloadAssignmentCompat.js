@@ -1,5 +1,4 @@
 //// [overloadAssignmentCompat.ts]
-
 // ok - overload signatures are assignment compatible with their implementation
 class Accessor {}
 

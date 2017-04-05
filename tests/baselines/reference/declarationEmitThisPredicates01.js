@@ -1,5 +1,4 @@
 //// [declarationEmitThisPredicates01.ts]
-
 export class C {
     m(): this is D {
         return this instanceof D;

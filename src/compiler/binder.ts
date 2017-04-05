@@ -259,7 +259,7 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    switch (getSpecialPropertyAssignmentKind(node)) {
+                    switch (getSpecialPropertyAssignmentKind(node as BinaryExpression)) {
                         case SpecialPropertyAssignmentKind.ModuleExports:
                             // module.exports = ...
                             return "export=";
@@ -703,6 +703,7 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier ||
                 expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.SuperKeyword ||
                 expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
@@ -1854,7 +1855,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.isOctalLiteral) {
+            if (inStrictMode && node.numericLiteralFlags & NumericLiteralFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -1910,7 +1911,9 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) {
+                bindJSDocTypedefTagIfAny(node);
+            }
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -2017,30 +2020,28 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    if (isInJavaScriptFile(node)) {
-                        const specialKind = getSpecialPropertyAssignmentKind(node);
-                        switch (specialKind) {
-                            case SpecialPropertyAssignmentKind.ExportsProperty:
-                                bindExportsPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ModuleExports:
-                                bindModuleExportsAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.PrototypeProperty:
-                                bindPrototypePropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ThisProperty:
-                                bindThisPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.Property:
-                                bindStaticPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.None:
-                                // Nothing to do
-                                break;
-                            default:
-                                Debug.fail("Unknown special property assignment kind");
-                        }
+                    const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                    switch (specialKind) {
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                            bindModuleExportsAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                            bindPrototypePropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            bindThisPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.Property:
+                            bindStaticPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.None:
+                            // Nothing to do
+                            break;
+                        default:
+                            Debug.fail("Unknown special property assignment kind");
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -3327,6 +3328,18 @@ namespace ts {
             case SyntaxKind.MetaProperty:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
+                break;
+
+            case SyntaxKind.StringLiteral:
+                if ((<StringLiteral>node).hasExtendedUnicodeEscape) {
+                    transformFlags |= TransformFlags.AssertES2015;
+                }
+                break;
+
+            case SyntaxKind.NumericLiteral:
+                if ((<NumericLiteral>node).numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                    transformFlags |= TransformFlags.AssertES2015;
+                }
                 break;
 
             case SyntaxKind.ForOfStatement:

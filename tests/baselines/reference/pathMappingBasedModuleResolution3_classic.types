@@ -1,5 +1,4 @@
 === c:/root/folder1/file1.ts ===
-
 // baseUrl set via command line
 
 import {x} from "folder2/file2"
