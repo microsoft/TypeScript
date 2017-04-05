@@ -7433,7 +7433,7 @@ namespace ts {
                     skippedPrivateMembers.set(rightProp.name, true);
                 }
                 else if (!isClassMethod(rightProp) && !isSetterWithoutGetter) {
-                    members.set(rightProp.name, rightProp);
+                    members.set(rightProp.name, getNonReadonlySymbol(rightProp));
                 }
             }
             for (const leftProp of getPropertiesOfType(left)) {
@@ -7449,7 +7449,7 @@ namespace ts {
                         const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.name);
-                        result.checkFlags = isReadonlySymbol(leftProp) || isReadonlySymbol(rightProp) ? CheckFlags.Readonly : 0;
+                        result.checkFlags = 0;
                         result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
@@ -7458,10 +7458,23 @@ namespace ts {
                     }
                 }
                 else {
-                    members.set(leftProp.name, leftProp);
+                    members.set(leftProp.name, getNonReadonlySymbol(leftProp));
                 }
             }
             return createAnonymousType(undefined, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+        }
+
+        function getNonReadonlySymbol(prop: Symbol) {
+            if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.Readonly)) {
+                return prop;
+            }
+            const declarations: Declaration[] = prop.declarations;
+            const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
+            const result = createSymbol(flags, prop.name);
+            result.checkFlags = 0;
+            result.type = getTypeOfSymbol(prop);
+            result.declarations = declarations;
+            return result;
         }
 
         function isClassMethod(prop: Symbol) {
