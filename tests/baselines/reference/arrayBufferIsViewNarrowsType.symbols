@@ -10,8 +10,10 @@ if (ArrayBuffer.isView(obj)) {
 >obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
 
     // isView should be a guard that narrows type to ArrayBufferView.
-    var ab: ArrayBufferView = obj;
+    var ab: ArrayBuffer = obj.buffer;
 >ab : Symbol(ab, Decl(arrayBufferIsViewNarrowsType.ts, 3, 7))
->ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>obj.buffer : Symbol(buffer, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >obj : Symbol(obj, Decl(arrayBufferIsViewNarrowsType.ts, 0, 3))
+>buffer : Symbol(buffer, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }
