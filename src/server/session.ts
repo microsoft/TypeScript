@@ -1139,7 +1139,7 @@ namespace ts.server {
             if (simplifiedResult) {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction, sourceFileName } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan: protocol.TextSpan =
                             replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
 
@@ -1147,7 +1147,6 @@ namespace ts.server {
                         // avoid serialization when hasAction = false
                         if (hasAction) {
                             newEntry.hasAction = true;
-                            newEntry.sourceFileName = sourceFileName;
                         }
                         result.push(newEntry);
                     }

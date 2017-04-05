@@ -13,7 +13,6 @@ namespace ts.server.protocol {
         /* @internal */
         export type CompletionsFull = "completions-full";
         export type CompletionDetails = "completionEntryDetails";
-        export type CommitCompletionWithCodeAction = "commitCompletionWithCodeAction";
         export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
         export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
         export type Configure = "configure";
@@ -1225,20 +1224,6 @@ namespace ts.server.protocol {
         command: CommandTypes.Close;
     }
 
-    export interface CommitCompletionWithCodeActionRequest extends Request {
-        command: CommandTypes.CommitCompletionWithCodeAction;
-        arguments: CommitCompletionWithCodeActionRequestArgs;
-    }
-
-    export interface CommitCompletionWithCodeActionRequestArgs extends FileRequestArgs {
-        itemName: string;
-        sourceFileName: string;
-    }
-
-    export interface CommitCompletionWithCodeActionResponse extends Response {
-        body?: CodeAction[];
-    }
-
     /**
      * Request to obtain the list of files that should be regenerated if target file is recompiled.
      * NOTE: this us query-only operation and does not generate any output on disk.
@@ -1542,11 +1527,6 @@ namespace ts.server.protocol {
          * made to avoid errors. The code action is normally adding an additional import statement.
          */
         hasAction?: true;
-        /**
-         * ONLY has value when hasAction = true
-         * Used to find the corresponding completion item symbol for additional code actions
-         */
-        sourceFileName?: string;
     }
 
     /**

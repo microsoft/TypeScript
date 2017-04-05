@@ -128,13 +128,6 @@ namespace ts.codefix {
         }
     }
 
-    // export function test(symbol: Symbol, sourceFile: SourceFile): CodeAction[] {
-    //     const moduleSymbols = symbol.parent;
-    //     if (!moduleSymbols) {
-    //         return undefined;
-    //     }
-    // }
-
     function createCodeAction(
         description: DiagnosticMessage,
         diagnosticArgs: string[],
