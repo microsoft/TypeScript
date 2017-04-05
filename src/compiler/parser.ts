@@ -2050,9 +2050,8 @@ namespace ts {
         // TYPES
 
         function parseTypeReference(): TypeReferenceNode {
-            const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
-            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
-            node.typeName = typeName;
+            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
+            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
