@@ -536,7 +536,7 @@ namespace ts.formatting {
                         }
                         case SyntaxKind.OpenBracketToken:
                         case SyntaxKind.CloseBracketToken: {
-                            if (container.kind !== SyntaxKind.MappedType) {
+                            if (container.kind !== SyntaxKind.MappedType && container.kind !== SyntaxKind.ElementAccessExpression) {
                                 return indentation;
                             }
                             break;
@@ -704,9 +704,16 @@ namespace ts.formatting {
              * over the indentation in line 1 (".then").
              */
             function shouldListInheritIndentationFromLastIndentedLine(listStartLine: number, parent: Node, nodes: NodeArray<Node>) {
-                return lastIndentedLine === listStartLine &&
-                    parent.kind === SyntaxKind.CallExpression &&
-                    (<CallExpression>parent).arguments === nodes;
+                if (lastIndentedLine !== listStartLine) {
+                    return false;
+                }
+
+                switch (parent.kind) {
+                    case SyntaxKind.CallExpression:
+                        return (<CallExpression>parent).arguments === nodes;
+                    default:
+                        return false;
+                }
             }
 
             function processChildNodes(nodes: NodeArray<Node>,

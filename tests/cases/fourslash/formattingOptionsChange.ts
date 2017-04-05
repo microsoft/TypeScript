@@ -5,7 +5,7 @@
 /////*insertSpaceBeforeAndAfterBinaryOperators*/1+2-    3
 /////*insertSpaceAfterKeywordsInControlFlowStatements*/if     (true) { }
 /////*insertSpaceAfterFunctionKeywordForAnonymousFunctions*/(function               () { })
-/////*insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  )
+/////*insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis*/(1  );
 /////*insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets*/[1  ]; [ ]; []; [,];
 /////*insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces*/`${1}`;`${   1  }`
 /////*insertSpaceAfterTypeAssertion*/const bar = <Bar>    Thing.getFoo();
@@ -22,7 +22,7 @@ runTest("insertSpaceAfterSemicolonInForStatements", "for (i = 0; i; i++);", "for
 runTest("insertSpaceBeforeAndAfterBinaryOperators", "1 + 2 - 3", "1+2-3");
 runTest("insertSpaceAfterKeywordsInControlFlowStatements", "if (true) { }", "if(true) { }");
 runTest("insertSpaceAfterFunctionKeywordForAnonymousFunctions", "(function () { })", "(function() { })");
-runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 )", "    (1)");
+runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis", "    ( 1 );", "    (1);");
 runTest("insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets", "[ 1 ];[];[];[ , ];", "[1];[];[];[,];");
 runTest("insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces", "`${ 1 }`; `${ 1 }`", "`${1}`; `${1}`");
 runTest("insertSpaceAfterTypeAssertion", "const bar = <Bar> Thing.getFoo();", "const bar = <Bar>Thing.getFoo();");
