@@ -5,7 +5,7 @@ class C extends Base {
 }
 
 let c = new C();
-c.known.length; // error, 'real' has no 'length' property
-C.sknown.length; // error, 'sreal' has no 'length' property
-c.unknown.length; // ok, fake: any
-C.sunknown.length; // ok: sfake: any
+c.known.length; // error, 'known' has no 'length' property
+C.sknown.length; // error, 'sknown' has no 'length' property
+c.unknown.length; // ok, unknown: any
+C.sunknown.length; // ok: sunknown: any
