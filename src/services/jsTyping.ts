@@ -204,7 +204,6 @@ namespace ts.JsTyping {
         /**
          * Infer typing names from packages folder (ex: node_module, bower_components)
          * @param packagesFolderPath is the path to the packages folder
-
          */
         function getTypingNamesFromPackagesFolder(packagesFolderPath: string) {
             filesToWatch.push(packagesFolderPath);

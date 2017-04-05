@@ -315,7 +315,7 @@ namespace ts {
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
          * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
          * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
-         **/
+         */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
@@ -328,7 +328,7 @@ namespace ts {
          * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
          * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
          * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
-         **/
+         */
         function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
         }
@@ -465,6 +465,12 @@ namespace ts {
                 case SyntaxKind.TemplateMiddle:
                 case SyntaxKind.TemplateTail:
                     return visitTemplateLiteral(<LiteralExpression>node);
+
+                case SyntaxKind.StringLiteral:
+                    return visitStringLiteral(<StringLiteral>node);
+
+                case SyntaxKind.NumericLiteral:
+                    return visitNumericLiteral(<NumericLiteral>node);
 
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
@@ -3412,6 +3418,30 @@ namespace ts {
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
             return setTextRange(createLiteral(node.text), node);
+        }
+
+        /**
+         * Visits a string literal with an extended unicode escape.
+         *
+         * @param node A string literal.
+         */
+        function visitStringLiteral(node: StringLiteral) {
+            if (node.hasExtendedUnicodeEscape) {
+                return setTextRange(createLiteral(node.text), node);
+            }
+            return node;
+        }
+
+        /**
+         * Visits a binary or octal (ES6) numeric literal.
+         *
+         * @param node A string literal.
+         */
+        function visitNumericLiteral(node: NumericLiteral) {
+            if (node.numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                return setTextRange(createNumericLiteral(node.text), node);
+            }
+            return node;
         }
 
         /**

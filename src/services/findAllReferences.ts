@@ -496,9 +496,9 @@ namespace ts.FindAllReferences {
     }
 
     /** Search within node "container" for references for a search value, where the search value is defined as a
-         * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
-        * searchLocation: a node where the search value
-        */
+     * tuple of(searchSymbol, searchText, searchLocation, and searchMeaning).
+     * searchLocation: a node where the search value
+     */
     function getReferencesInNode<T extends DocumentSpan>(container: Node,
         searchSymbol: Symbol,
         searchText: string,

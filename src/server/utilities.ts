@@ -166,11 +166,11 @@ namespace ts.server {
     export interface ProjectOptions {
         /**
          * true if config file explicitly listed files
-         **/
+         */
         configHasFilesProperty?: boolean;
         /**
          * these fields can be present in the project file
-         **/
+         */
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;

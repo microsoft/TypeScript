@@ -1358,7 +1358,7 @@ namespace ts {
 
     /**
      * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
-    */
+     */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1455,7 +1455,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
