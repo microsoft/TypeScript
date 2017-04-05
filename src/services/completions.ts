@@ -284,7 +284,17 @@ namespace ts.Completions {
         }
     }
 
-    export function getCompletionEntryDetails(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string, allSourceFiles: SourceFile[]): CompletionEntryDetails {
+    export function getCompletionEntryDetails(
+        typeChecker: TypeChecker,
+        log: (message: string) => void,
+        compilerOptions: CompilerOptions,
+        sourceFile: SourceFile,
+        position: number,
+        entryName: string,
+        allSourceFiles: SourceFile[],
+        host?: LanguageServiceHost,
+        rulesProvider?: formatting.RulesProvider): CompletionEntryDetails {
+
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position, allSourceFiles);
         if (completionData) {
@@ -299,8 +309,19 @@ namespace ts.Completions {
             if (symbol) {
 
                 let codeActions: CodeAction[];
-                if (symbolActionMap.has(getUniqueSymbolIdAsString(symbol, typeChecker))) {
-                    codeActions = [];
+                if (host && rulesProvider && symbol.parent && symbolActionMap.has(getUniqueSymbolIdAsString(symbol, typeChecker))) {
+                    const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
+                    const context: codefix.ImportCodeFixContext = {
+                        host,
+                        checker: typeChecker,
+                        newLineCharacter: host.getNewLine(),
+                        compilerOptions,
+                        sourceFile,
+                        rulesProvider,
+                        symbolName: symbol.name,
+                        getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames)
+                    };
+                    codeActions = codefix.getCodeActionForImport(symbol.parent, context);
                 }
 
                 const { displayParts, documentation, symbolKind } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
