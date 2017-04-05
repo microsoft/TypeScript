@@ -4595,7 +4595,8 @@ namespace ts {
          * The base constructor of a class can resolve to
          * * undefinedType if the class has no extends clause,
          * * unknownType if an error occurred during resolution of the extends expression,
-         * * nullType if the extends expression is the null value, or
+         * * nullType if the extends expression is the null value,
+         * * anyType if the extends expression has type any, or
          * * an object type with at least one construct signature.
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
@@ -4721,8 +4722,7 @@ namespace ts {
         // A valid base type is `any`, any non-generic object type or intersection of non-generic
         // object types.
         function isValidBaseType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Any) ||
-                type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive) && !isGenericMappedType(type) ||
+            return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any) && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
         }
 
@@ -5134,9 +5134,11 @@ namespace ts {
                     addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                    stringIndexInfo = stringIndexInfo || (instantiatedBaseType === anyType ?
-                                                          createIndexInfo(anyType, /*isReadonly*/ false) :
-                                                          getIndexInfoOfType(instantiatedBaseType, IndexKind.String));
+                    if (!stringIndexInfo) {
+                        stringIndexInfo = instantiatedBaseType === anyType ?
+                            createIndexInfo(anyType, /*isReadonly*/ false) :
+                            getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
+                    }
                     numberIndexInfo = numberIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.Number);
                 }
             }
