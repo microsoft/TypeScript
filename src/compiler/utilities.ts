@@ -1352,16 +1352,16 @@ namespace ts {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
-        const { expression, arguments } = callExpression as CallExpression;
+        const { expression, arguments: args } = callExpression as CallExpression;
 
         if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).text !== "require") {
             return false;
         }
 
-        if (arguments.length !== 1) {
+        if (args.length !== 1) {
             return false;
         }
-        const arg = arguments[0];
+        const arg = args[0];
         return !checkArgumentIsStringLiteral || arg.kind === SyntaxKind.StringLiteral || arg.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
