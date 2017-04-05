@@ -18,10 +18,6 @@ function walk(ctx: Lint.WalkContext<void>): void {
     }
 
     function checkCall(node: ts.CallExpression): void {
-        if (!node.arguments) {
-            return;
-        }
-
         for (const arg of node.arguments) {
             if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
                 continue;
