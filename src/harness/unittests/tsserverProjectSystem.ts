@@ -1427,7 +1427,7 @@ namespace ts.projectSystem {
             try {
                 projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
                 const proj = projectService.externalProjects[0];
-                assert.deepEqual(proj.getFileNames(true), [file1.path]);
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
             } finally {
                 projectService.resetSafeList();
