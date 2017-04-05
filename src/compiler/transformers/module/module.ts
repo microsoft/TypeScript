@@ -1162,7 +1162,7 @@ namespace ts {
                 statement = createStatement(
                     createExportExpression(
                         createIdentifier("__esModule"),
-                        createLiteral(true)
+                        createLiteral(/*value*/ true)
                     )
                 );
             }
@@ -1175,7 +1175,7 @@ namespace ts {
                             createIdentifier("exports"),
                             createLiteral("__esModule"),
                             createObjectLiteral([
-                                createPropertyAssignment("value", createLiteral(true))
+                                createPropertyAssignment("value", createLiteral(/*value*/ true))
                             ])
                         ]
                     )

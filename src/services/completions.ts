@@ -173,7 +173,7 @@ namespace ts.Completions {
             // a['/*completion position*/']
             return getStringLiteralCompletionEntriesFromElementAccess(node.parent, typeChecker, compilerOptions.target, log);
         }
-        else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, false)) {
+        else if (node.parent.kind === SyntaxKind.ImportDeclaration || isExpressionOfExternalModuleImportEqualsDeclaration(node) || isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
             // Get all known external module names or complete a path to a module
             // i.e. import * as ns from "/*completion position*/";
             //      import x = require("/*completion position*/");

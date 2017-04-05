@@ -1334,7 +1334,7 @@ namespace ts {
             name.charCodeAt(0) === name.charCodeAt(length - 1) &&
             (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
             return name.substring(1, length - 1);
-        };
+        }
         return name;
     }
 

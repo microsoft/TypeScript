@@ -151,7 +151,7 @@ namespace ts {
         it("module name as directory - handle invalid 'typings'", () => {
             testTypingsIgnored(["a", "b"]);
             testTypingsIgnored({ "a": "b" });
-            testTypingsIgnored(true);
+            testTypingsIgnored(/*typings*/true);
             /* tslint:disable no-null-keyword */
             testTypingsIgnored(null);
             /* tslint:enable no-null-keyword */

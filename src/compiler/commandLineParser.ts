@@ -1580,7 +1580,7 @@ namespace ts {
                         delete wildcardDirectories[key];
                     }
                 }
-            };
+            }
         }
 
         return wildcardDirectories;

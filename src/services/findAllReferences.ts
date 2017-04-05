@@ -701,7 +701,7 @@ namespace ts.FindAllReferences {
                     }
                 });
             }
-        };
+        }
         return result;
     }
 

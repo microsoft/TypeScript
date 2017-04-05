@@ -336,7 +336,7 @@ namespace ts {
                         // is an absolute file name.
                         directory == "" ? "." : directory,
                         watchedDirectoryChanged, /*recursive*/ true);
-                };
+                }
             }
             return configParseResult;
         }

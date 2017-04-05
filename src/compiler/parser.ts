@@ -1845,7 +1845,7 @@ namespace ts {
                 case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
                 case ParsingContext.JSDocRecordMembers: return Diagnostics.Property_assignment_expected;
             }
-        };
+        }
 
         // Parses a comma-delimited list of elements
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {

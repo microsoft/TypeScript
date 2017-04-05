@@ -1694,7 +1694,7 @@ namespace FourSlash {
                 if (ch === "\r") {
                     this.currentCaretPosition--;
                 }
-            };
+            }
         }
 
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {

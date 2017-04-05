@@ -300,7 +300,7 @@ namespace ts.server {
             }
         }
 
-        private setTimerHandle(timerHandle: any) {;
+        private setTimerHandle(timerHandle: any) {
             if (this.timerHandle !== undefined) {
                 this.operationHost.getServerHost().clearTimeout(this.timerHandle);
             }
@@ -1544,17 +1544,17 @@ namespace ts.server {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
                 this.projectService.openExternalProjects(request.arguments.projects);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
                 this.projectService.closeExternalProject(request.arguments.projectFileName);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
@@ -1578,7 +1578,7 @@ namespace ts.server {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
                 this.changeSeq++;
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.Exit]: () => {
                 this.exit();
@@ -1689,7 +1689,7 @@ namespace ts.server {
             },
             [CommandNames.Cleanup]: () => {
                 this.cleanup();
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
@@ -1763,7 +1763,7 @@ namespace ts.server {
             },
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
                 this.setCompilerOptionsForInferredProjects(request.arguments);
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
