@@ -22,7 +22,7 @@ namespace ts.projectSystem {
         content: JSON.stringify({
             "jquery": {
                 // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-                "match": "/jquery(-(\\.\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
+                "match": "/jquery(-(\\.?\\d+)+)?(\\.intellisense)?(\\.min)?\\.js$",
                 "types": ["jquery"]
             },
             "WinJS": {
