@@ -718,7 +718,7 @@ namespace ts.server {
     }
     catch (e) {
         cancellationToken = nullCancellationToken;
-    };
+    }
 
     let eventPort: number;
     {

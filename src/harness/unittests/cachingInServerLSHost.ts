@@ -123,7 +123,7 @@ namespace ts {
                 try {
                     // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
                     project.getLanguageService().getSemanticDiagnostics(imported.name);
-                    assert.isTrue(false, `should not find file '${imported.name}'`);
+                    assert.fail(false, `should not find file '${imported.name}'`);
                 }
                 catch (e) {
                     assert.isTrue(e.message.indexOf(`Could not find file: '${imported.name}'.`) === 0);

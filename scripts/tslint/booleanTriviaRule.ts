@@ -2,20 +2,13 @@ import * as Lint from "tslint/lib";
 import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING_FACTORY(name: string, currently?: string): string {
-        const current = currently ? ` (currently '${currently}')` : "";
-        return `Tag boolean argument as '${name}'${current}`;
-    }
-
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         // Cheat to get type checker
-        const program = ts.createProgram([sourceFile.fileName], Lint.createCompilerOptions());
-        const checker = program.getTypeChecker();
-        return this.applyWithFunction(program.getSourceFile(sourceFile.fileName), ctx => walk(ctx, checker));
+        return this.applyWithFunction(sourceFile, ctx => walk(ctx));
     }
 }
 
-function walk(ctx: Lint.WalkContext<void>, checker: ts.TypeChecker): void {
+function walk(ctx: Lint.WalkContext<void>): void {
     ts.forEachChild(ctx.sourceFile, recur);
     function recur(node: ts.Node): void {
         if (node.kind === ts.SyntaxKind.CallExpression) {
@@ -25,38 +18,37 @@ function walk(ctx: Lint.WalkContext<void>, checker: ts.TypeChecker): void {
     }
 
     function checkCall(node: ts.CallExpression): void {
-        if (!node.arguments || !node.arguments.some(arg => arg.kind === ts.SyntaxKind.TrueKeyword || arg.kind === ts.SyntaxKind.FalseKeyword)) {
+        if (!node.arguments) {
             return;
         }
 
-        const targetCallSignature = checker.getResolvedSignature(node);
-        if (!targetCallSignature) {
-            return;
-        }
-
-        const targetParameters = targetCallSignature.getParameters();
-        for (let index = 0; index < targetParameters.length; index++) {
-            const param = targetParameters[index];
-            const arg = node.arguments[index];
-            if (!(arg && param)) {
+        for (const arg of node.arguments) {
+            if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
                 continue;
             }
 
-            const argType = checker.getContextualType(arg);
-            if (argType && (argType.getFlags() & ts.TypeFlags.Boolean)) {
-                if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
+            if (node.expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
+                const methodName = (node.expression as ts.PropertyAccessExpression).name.text
+                // Skip certain method names whose parameter names are not informative
+                if (methodName === 'set' ||
+                    methodName === 'equal' ||
+                    methodName === 'fail' ||
+                    methodName === 'isTrue' ||
+                    methodName === 'assert') {
                     continue;
                 }
-                let triviaContent: string | undefined;
-                const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
-                if (ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia) {
-                    triviaContent = arg.getFullText().slice(ranges[0].pos + 2, ranges[0].end - 2); // +/-2 to remove /**/
+            }
+            else if (node.expression.kind === ts.SyntaxKind.Identifier) {
+                const functionName = (node.expression as ts.Identifier).text;
+                // Skip certain function names whose parameter names are not informative
+                if (functionName === 'assert') {
+                    continue;
                 }
+            }
 
-                const paramName = param.getName();
-                if (triviaContent !== paramName && triviaContent !== paramName + ":") {
-                    ctx.addFailureAtNode(arg, Rule.FAILURE_STRING_FACTORY(param.getName(), triviaContent));
-                }
+            const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
+            if (!(ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia)) {
+                ctx.addFailureAtNode(arg, 'Tag boolean argument with parameter name');
             }
         }
     }

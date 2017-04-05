@@ -9680,7 +9680,7 @@ namespace ts {
                 const original = getTypeOfSymbol(property);
                 const updated = f(original);
                 members.set(property.name, updated === original ? property : createSymbolWithType(property, updated));
-            };
+            }
             return members;
         }
 
@@ -9724,7 +9724,7 @@ namespace ts {
                 // Since get accessors already widen their return value there is no need to
                 // widen accessor based properties here.
                 members.set(prop.name, prop.flags & SymbolFlags.Property ? getWidenedProperty(prop) : prop);
-            };
+            }
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
             return createAnonymousType(type.symbol, members, emptyArray, emptyArray,
@@ -15100,7 +15100,7 @@ namespace ts {
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             break;
                         }
-                        const index = excludeArgument ? indexOf(excludeArgument, true) : -1;
+                        const index = excludeArgument ? indexOf(excludeArgument, /*value*/ true) : -1;
                         if (index < 0) {
                             return candidate;
                         }
@@ -18728,7 +18728,7 @@ namespace ts {
                         case SyntaxKind.ConstructorType:
                             checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
                             break;
-                    };
+                    }
                 }
             }
         }
