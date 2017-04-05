@@ -1389,26 +1389,9 @@ interface ArrayBuffer {
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
     new (byteLength: number): ArrayBuffer;
-    isView(arg: any): arg is ArrayBufferView;
+    isView(arg: any): arg is (Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView);
 }
 declare const ArrayBuffer: ArrayBufferConstructor;
-
-interface ArrayBufferView {
-    /**
-      * The ArrayBuffer instance referenced by the array.
-      */
-    buffer: ArrayBuffer;
-
-    /**
-      * The length in bytes of the array.
-      */
-    byteLength: number;
-
-    /**
-      * The offset in bytes of the array.
-      */
-    byteOffset: number;
-}
 
 interface DataView {
     readonly buffer: ArrayBuffer;
