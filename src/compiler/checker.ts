@@ -204,8 +204,6 @@ namespace ts {
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown");
-        const untypedModuleSymbol = createSymbol(SymbolFlags.ValueModule, "<untyped>");
-        untypedModuleSymbol.exports = createMap<Symbol>();
         const resolvingSymbol = createSymbol(0, "__resolving__");
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
@@ -1267,7 +1265,7 @@ namespace ts {
 
             if (moduleSymbol) {
                 let exportDefaultSymbol: Symbol;
-                if (isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol)) {
+                if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                     exportDefaultSymbol = moduleSymbol;
                 }
                 else {
@@ -1347,7 +1345,7 @@ namespace ts {
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
-                    if (isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol)) {
+                    if (isShorthandAmbientModuleSymbol(moduleSymbol)) {
                         return moduleSymbol;
                     }
 
@@ -1623,19 +1621,15 @@ namespace ts {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
-                    return undefined;
                 }
                 else if (noImplicitAny && moduleNotFoundError) {
                     error(errorNode,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
                         resolvedModule.resolvedFileName);
-                    return undefined;
                 }
-                // Unlike a failed import, an untyped module produces a dummy symbol.
-                // This is checked for by `isUntypedOrShorthandAmbientModuleSymbol`.
-                // This must be different than `unknownSymbol` because `getBaseConstructorTypeOfClass` won't fail for `unknownSymbol`.
-                return untypedModuleSymbol;
+                // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
+                return undefined;
             }
 
             if (moduleNotFoundError) {
@@ -4405,7 +4399,7 @@ namespace ts {
         function getTypeOfFuncClassEnumModule(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                if (symbol.flags & SymbolFlags.Module && isUntypedOrShorthandAmbientModuleSymbol(symbol)) {
+                if (symbol.flags & SymbolFlags.Module && isShorthandAmbientModuleSymbol(symbol)) {
                     links.type = anyType;
                 }
                 else {
@@ -4641,7 +4635,8 @@ namespace ts {
          * The base constructor of a class can resolve to
          * * undefinedType if the class has no extends clause,
          * * unknownType if an error occurred during resolution of the extends expression,
-         * * nullType if the extends expression is the null value, or
+         * * nullType if the extends expression is the null value,
+         * * anyType if the extends expression has type any, or
          * * an object type with at least one construct signature.
          */
         function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
@@ -4663,7 +4658,7 @@ namespace ts {
                     error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
                     return type.resolvedBaseConstructorType = unknownType;
                 }
-                if (baseConstructorType !== unknownType && baseConstructorType !== nullWideningType && !isConstructorType(baseConstructorType)) {
+                if (!(baseConstructorType.flags & TypeFlags.Any) && baseConstructorType !== nullWideningType && !isConstructorType(baseConstructorType)) {
                     error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
                     return type.resolvedBaseConstructorType = unknownType;
                 }
@@ -4695,7 +4690,7 @@ namespace ts {
         function resolveBaseTypesOfClass(type: InterfaceType): void {
             type.resolvedBaseTypes = type.resolvedBaseTypes || emptyArray;
             const baseConstructorType = getApparentType(getBaseConstructorTypeOfClass(type));
-            if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection))) {
+            if (!(baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.Any))) {
                 return;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
@@ -4707,6 +4702,9 @@ namespace ts {
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
                 baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
+            }
+            else if (baseConstructorType.flags & TypeFlags.Any) {
+                baseType = baseConstructorType;
             }
             else {
                 // The class derives from a "class-like" constructor function, check that we have at least one construct signature
@@ -4761,10 +4759,10 @@ namespace ts {
             return true;
         }
 
-        // A valid base type is any non-generic object type or intersection of non-generic
+        // A valid base type is `any`, any non-generic object type or intersection of non-generic
         // object types.
         function isValidBaseType(type: Type): boolean {
-            return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive) && !isGenericMappedType(type) ||
+            return type.flags & (TypeFlags.Object | TypeFlags.NonPrimitive | TypeFlags.Any) && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.Intersection && !forEach((<IntersectionType>type).types, t => !isValidBaseType(t));
         }
 
@@ -5176,7 +5174,11 @@ namespace ts {
                     addInheritedMembers(members, getPropertiesOfType(instantiatedBaseType));
                     callSignatures = concatenate(callSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Call));
                     constructSignatures = concatenate(constructSignatures, getSignaturesOfType(instantiatedBaseType, SignatureKind.Construct));
-                    stringIndexInfo = stringIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
+                    if (!stringIndexInfo) {
+                        stringIndexInfo = instantiatedBaseType === anyType ?
+                            createIndexInfo(anyType, /*isReadonly*/ false) :
+                            getIndexInfoOfType(instantiatedBaseType, IndexKind.String);
+                    }
                     numberIndexInfo = numberIndexInfo || getIndexInfoOfType(instantiatedBaseType, IndexKind.Number);
                 }
             }
@@ -5418,6 +5420,7 @@ namespace ts {
                 // Combinations of function, class, enum and module
                 let members = emptySymbols;
                 let constructSignatures: Signature[] = emptyArray;
+                let stringIndexInfo: IndexInfo = undefined;
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                 }
@@ -5432,9 +5435,12 @@ namespace ts {
                         members = createSymbolTable(getNamedMembers(members));
                         addInheritedMembers(members, getPropertiesOfType(baseConstructorType));
                     }
+                    else if (baseConstructorType === anyType) {
+                        stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
+                    }
                 }
                 const numberIndexInfo = symbol.flags & SymbolFlags.Enum ? enumNumberIndexInfo : undefined;
-                setStructuredTypeMembers(type, members, emptyArray, constructSignatures, undefined, numberIndexInfo);
+                setStructuredTypeMembers(type, members, emptyArray, constructSignatures, stringIndexInfo, numberIndexInfo);
                 // We resolve the members before computing the signatures because a signature may use
                 // typeof with a qualified name expression that circularly references the type we are
                 // in the process of resolving (see issue #6072). The temporarily empty signature list
@@ -22172,7 +22178,7 @@ namespace ts {
 
         function moduleExportsSomeValue(moduleReferenceExpression: Expression): boolean {
             let moduleSymbol = resolveExternalModuleName(moduleReferenceExpression.parent, moduleReferenceExpression);
-            if (!moduleSymbol || isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol)) {
+            if (!moduleSymbol || isShorthandAmbientModuleSymbol(moduleSymbol)) {
                 // If the module is not found or is shorthand, assume that it may export a value.
                 return true;
             }
