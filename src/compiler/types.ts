@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -1449,10 +1449,6 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
-    }
-
-    export interface ImportExpression extends PrimaryExpression {
-        kind: SyntaxKind.ImportKeyword;
     }
 
     export interface ImportCall extends CallExpression {
