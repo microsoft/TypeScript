@@ -64,24 +64,20 @@ namespace ts.server {
     const defaultTypeSafeList: SafeList = {
         "jquery": {
             // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
-            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/gi,
+            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
             "types": ["jquery"]
         },
         "WinJS": {
-            "match": /^(.*\/winjs)\/base\.js$/gi,        // If the winjs/base.js file is found..
+            "match": /^(.*\/winjs)\/base\.js$/i,        // If the winjs/base.js file is found..
             "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
             "types": ["winjs"]                           // And fetch the @types package for WinJS
         },
         "Kendo": {
-            "match": /^(.*\/kendo\/.+\.js$/gi,
+            "match": /^(.*\/kendo\/.+\.js$/i,
             "exclude": [["^", 1, "/.*"]]
         },
-        "Office Loc Files": {
-            "match": /^(.*\/office\/1\/\w\w-\w\w\/).+\.js$/gi, // Office NuGet package is installed under a "office/1" folder
-            "exclude": [["^", 1, "/.*"]]                     // Exclude that whole folder if the file indicated above is found in it
-        },
-        "Office Nuget": { // TODO this one
-            "match": /^(.*\/1\/office)\/excel\.debug\.js$/gi, // Office NuGet package is installed under a "1/office" folder
+        "Office Nuget": {
+            "match": /^(.*\/1\/office)\/excel\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
             "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
             "types": ["office"]                               // @types package to fetch instead
         }
