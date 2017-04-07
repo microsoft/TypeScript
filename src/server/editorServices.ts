@@ -619,7 +619,7 @@ namespace ts.server {
                             continue;
                         }
                         const defaultProject = f.getDefaultProject();
-                        if (isRootFileInInferredProject(info) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
+                        if (isRootFileInInferredProject(f) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
                             // open file used to be root in inferred project,
                             // this inferred project is different from the one we've just created for current file
                             // and new inferred project references this open file.
