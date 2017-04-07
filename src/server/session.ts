@@ -185,7 +185,6 @@ namespace ts.server {
         /* @internal */
         export const BreakpointStatement: protocol.CommandTypes.BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
-        export const LoadTypesMap: protocol.CommandTypes.LoadTypesMap = "loadTypesMap";
         export const GetCodeFixes: protocol.CommandTypes.GetCodeFixes = "getCodeFixes";
         /* @internal */
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
@@ -1754,11 +1753,6 @@ namespace ts.server {
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
                 this.setCompilerOptionsForInferredProjects(request.arguments);
                 return this.requiredResponse(true);
-            },
-            [CommandNames.LoadTypesMap]: (request: protocol.FileRequest) => {
-                const loadArgs = <protocol.FileRequestArgs>request.arguments;
-                this.projectService.loadSafeList(loadArgs.file);
-                return this.notRequired();
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));
