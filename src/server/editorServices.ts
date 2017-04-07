@@ -1441,7 +1441,7 @@ namespace ts.server {
             const raw: SafeList = JSON.parse(this.host.readFile(fileName, "utf-8"));
             // Parse the regexps
             for (const k of Object.keys(raw)) {
-                raw[k].match = new RegExp(raw[k].match as {} as string, "gi");
+                raw[k].match = new RegExp(raw[k].match as {} as string, "i");
             }
             // raw is now fixed and ready
             ProjectService.safelist = raw;
