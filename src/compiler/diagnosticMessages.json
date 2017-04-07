@@ -2099,6 +2099,10 @@
         "category": "Error",
         "code": 2707
     },
+    "props.children are specified twice. The attribute named 'children' will be overwritten.": {
+        "category": "Error",
+        "code": 2708
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

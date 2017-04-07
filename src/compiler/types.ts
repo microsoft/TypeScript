@@ -1,4 +1,4 @@
-namespace ts {
+﻿namespace ts {
     /**
      * Type of objects whose values are all of the same type.
      * The `in` and `for-in` operators can *not* be safely used,
@@ -10,7 +10,7 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
-        get(key: string): T;
+        get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
@@ -2975,6 +2975,8 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
+        /* @internal */
+        ContainsSynthesizedJsxChildren = 1 << 26,  // Jsx attributes type contains synthesized children property from Jsx element's children
 
         /* @internal */
         Nullable = Undefined | Null,
