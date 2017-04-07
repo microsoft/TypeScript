@@ -43,7 +43,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
 
             const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
             if (!(ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia)) {
-                ctx.addFailureAtNode(arg, 'Tag boolean argument with parameter name');
+                ctx.addFailureAtNode(arg, "Tag boolean argument with parameter name");
             }
         }
     }
