@@ -1454,10 +1454,12 @@ namespace ts.server {
 
             const excludeRules: string[] = [];
 
+            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
+
             for (const name of Object.keys(ProjectService.safelist)) {
                 const rule = ProjectService.safelist[name];
-                for (const root of rootFiles) {
-                    if (rule.match.test(root.fileName)) {
+                for (const root of normalizedNames) {
+                    if (rule.match.test(root)) {
                         this.logger.info(`Excluding files based on rule ${name}`);
 
                         // If the file matches, collect its types packages and exclude rules
@@ -1471,7 +1473,7 @@ namespace ts.server {
 
                         if (rule.exclude) {
                             for (const exclude of rule.exclude) {
-                                const processedRule = root.fileName.replace(rule.match, (...groups: Array<string>) => {
+                                const processedRule = root.replace(rule.match, (...groups: Array<string>) => {
                                     return exclude.map(groupNumberOrString => {
                                         // RegExp group numbers are 1-based, but the first element in groups
                                         // is actually the original string, so it all works out in the end.
@@ -1488,15 +1490,16 @@ namespace ts.server {
                                     }).join("");
                                 });
 
-                                if (excludeRules.indexOf(processedRule) == -1) {
+                                if (excludeRules.indexOf(processedRule) === -1) {
                                     excludeRules.push(processedRule);
                                 }
                             }
                         }
                         else {
                             // If not rules listed, add the default rule to exclude the matched file
-                            if (excludeRules.indexOf(root.fileName) < 0) {
-                                excludeRules.push(root.fileName);
+                            const escaped = ProjectService.escapeFilenameForRegex(root);
+                            if (excludeRules.indexOf(escaped) < 0) {
+                                excludeRules.push(escaped);
                             }
                         }
                     }
@@ -1510,7 +1513,7 @@ namespace ts.server {
             }
 
             const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
-            proj.rootFiles = proj.rootFiles.filter(file => !excludeRegexes.some(re => re.test(file.fileName)));
+            proj.rootFiles = proj.rootFiles.filter((_file, index) => !excludeRegexes.some(re => re.test(normalizedNames[index])));
         }
 
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
