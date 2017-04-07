@@ -10893,7 +10893,7 @@ namespace ts {
         // we defer subtype reduction until the evolving array type is finalized into a manifest
         // array type.
         function addEvolvingArrayElementType(evolvingArrayType: EvolvingArrayType, node: Expression): EvolvingArrayType {
-            const elementType = getBaseTypeOfLiteralType(getTypeOfExpression(node));
+            const elementType = getBaseTypeOfLiteralType(getContextFreeTypeOfExpression(node));
             return isTypeSubsetOf(elementType, evolvingArrayType.elementType) ? evolvingArrayType : getEvolvingArrayType(getUnionType([evolvingArrayType.elementType, elementType]));
         }
 
@@ -17064,10 +17064,12 @@ namespace ts {
             return type;
         }
 
-        // Returns the type of an expression. Unlike checkExpression, this function is simply concerned
-        // with computing the type and may not fully check all contained sub-expressions for errors.
-        // A cache argument of true indicates that if the function performs a full type check, it is ok
-        // to cache the result.
+        /**
+         * Returns the type of an expression. Unlike checkExpression, this function is simply concerned
+         * with computing the type and may not fully check all contained sub-expressions for errors.
+         * A cache argument of true indicates that if the function performs a full type check, it is ok
+         * to cache the result.
+         */
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
@@ -17082,6 +17084,21 @@ namespace ts {
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.
             return cache ? checkExpressionCached(node) : checkExpression(node);
+        }
+
+        /**
+         * Returns the type of an expression. Unlike checkExpression, this function is simply concerned
+         * with computing the type and may not fully check all contained sub-expressions for errors.
+         * It is intended for uses where you know there is no contextual type,
+         * and requesting the contextual type might cause a circularity or other bad behaviour.
+         * It sets the contextual type of the node to any before calling getTypeOfExpression.
+         */
+        function getContextFreeTypeOfExpression(node: Expression) {
+            const saveContextualType = node.contextualType;
+            node.contextualType = anyType;
+            const type = getTypeOfExpression(node);
+            node.contextualType = saveContextualType;
+            return type;
         }
 
         // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
