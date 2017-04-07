@@ -310,7 +310,7 @@ namespace ts.projectSystem {
         register(cb: (...args: any[]) => void, args: any[]) {
             const timeoutId = this.nextId;
             this.nextId++;
-            this.map[timeoutId] = cb.bind(undefined, ...args);
+            this.map[timeoutId] = cb.bind(/*this*/ undefined, ...args);
             return timeoutId;
         }
         unregister(id: any) {

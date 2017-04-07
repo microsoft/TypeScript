@@ -98,7 +98,7 @@ namespace Utils {
         useCaseSensitiveFileNames: boolean;
 
         constructor(currentDirectory: string, useCaseSensitiveFileNames: boolean) {
-            super(undefined, "");
+            super(/*fileSystem*/ undefined, "");
             this.fileSystem = this;
             this.root = new VirtualDirectory(this, "");
             this.currentDirectory = currentDirectory;

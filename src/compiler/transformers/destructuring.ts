@@ -518,7 +518,7 @@ namespace ts {
         }
         return createCall(
             getHelperName("__rest"),
-            undefined,
+            /*typeArguments*/ undefined,
             [
                 value,
                 setTextRange(

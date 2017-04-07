@@ -1218,7 +1218,7 @@ namespace ts {
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
                 const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
-                const importDecl = createImportDeclaration(undefined, undefined, undefined);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
                 externalHelpersModuleReference.parent = importDecl;
                 importDecl.parent = file;
                 imports = [externalHelpersModuleReference];

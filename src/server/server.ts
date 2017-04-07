@@ -1,8 +1,6 @@
 /// <reference types="node" />
 /// <reference path="shared.ts" />
 /// <reference path="session.ts" />
-// used in fs.writeSync
-/* tslint:disable:no-null-keyword */
 
 namespace ts.server {
 
@@ -196,7 +194,8 @@ namespace ts.server {
                 }
                 if (this.fd >= 0) {
                     const buf = new Buffer(s);
-                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                    // tslint:disable-next-line no-null-keyword
+                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
                 }
                 if (this.traceToConsole) {
                     console.warn(s);
@@ -702,7 +701,7 @@ namespace ts.server {
     }
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
-        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, /*cache*/ undefined, /*jsOnly*/ true);
         try {
             return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
         }
