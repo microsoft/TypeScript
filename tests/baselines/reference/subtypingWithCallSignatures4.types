@@ -447,14 +447,14 @@ var r6 = foo6(r6arg);
 >r6arg : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 
 var r6a = [r6arg, r6arg2];
->r6a : (<T extends Base>(x: (arg: T) => Derived) => T)[]
->[r6arg, r6arg2] : (<T extends Base>(x: (arg: T) => Derived) => T)[]
+>r6a : (<T extends Base, U extends Derived>(x: (arg: T) => U) => T)[]
+>[r6arg, r6arg2] : (<T extends Base, U extends Derived>(x: (arg: T) => U) => T)[]
 >r6arg : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 >r6arg2 : <T extends Base>(x: (arg: T) => Derived) => T
 
 var r6b = [r6arg2, r6arg];
->r6b : (<T extends Base>(x: (arg: T) => Derived) => T)[]
->[r6arg2, r6arg] : (<T extends Base>(x: (arg: T) => Derived) => T)[]
+>r6b : (<T extends Base, U extends Derived>(x: (arg: T) => U) => T)[]
+>[r6arg2, r6arg] : (<T extends Base, U extends Derived>(x: (arg: T) => U) => T)[]
 >r6arg2 : <T extends Base>(x: (arg: T) => Derived) => T
 >r6arg : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
 

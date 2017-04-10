@@ -291,14 +291,14 @@ module Errors {
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 
     var r2a = [r2arg2, r2arg];
->r2a : ((<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V) | ((x: (arg: Base) => Derived) => (r: Base) => Derived2))[]
->[r2arg2, r2arg] : ((<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V) | ((x: (arg: Base) => Derived) => (r: Base) => Derived2))[]
+>r2a : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
+>[r2arg2, r2arg] : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
 >r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 
     var r2b = [r2arg, r2arg2];
->r2b : ((<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V) | ((x: (arg: Base) => Derived) => (r: Base) => Derived2))[]
->[r2arg, r2arg2] : ((<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V) | ((x: (arg: Base) => Derived) => (r: Base) => Derived2))[]
+>r2b : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
+>[r2arg, r2arg2] : (<T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V)[]
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 >r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 
