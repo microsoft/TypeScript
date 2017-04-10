@@ -8157,7 +8157,7 @@ namespace ts {
         function isSignatureAssignableTo(source: Signature,
             target: Signature,
             ignoreReturnTypes: boolean): boolean {
-            return compareSignaturesRelated(source, target, /*strictVariance*/ false, ignoreReturnTypes, /*reportErrors*/ false,
+            return compareSignaturesRelated(source, target, /*checkAsCallback*/ false, ignoreReturnTypes, /*reportErrors*/ false,
                 /*errorReporter*/ undefined, compareTypesAssignable) !== Ternary.False;
         }
 
@@ -8168,7 +8168,7 @@ namespace ts {
          */
         function compareSignaturesRelated(source: Signature,
             target: Signature,
-            strictVariance: boolean,
+            checkAsCallback: boolean,
             ignoreReturnTypes: boolean,
             reportErrors: boolean,
             errorReporter: ErrorReporter,
@@ -8215,13 +8215,17 @@ namespace ts {
                 const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
                 const sourceSig = getSingleCallSignature(sourceType);
                 const targetSig = getSingleCallSignature(targetType);
-                // If the source and target parameters both have function types with a single call signature we are
-                // relating two callback parameters. In that case we compare the callback signatures with strict
-                // variance, meaning we require the callback parameters to be pairwise co-variant (because, similar
-                // to return values, callback parameters are output positions).
-                const related = sourceSig && targetSig ?
-                    compareSignaturesRelated(targetSig, sourceSig, /*strictVariance*/ true, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, compareTypes) :
-                    !strictVariance && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
+                // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
+                // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
+                // they naturally relate only contra-variantly). However, if the source and target parameters both have
+                // function types with a single call signature, we known we are relating two callback parameters. In
+                // that case it is sufficient to only relate the parameters of the signatures co-variantly because,
+                // similar to return values, callback parameters are output positions. This means that a Promise<T>,
+                // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
+                // with respect to T.
+                const related = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate ?
+                    compareSignaturesRelated(targetSig, sourceSig, /*checkAsCallback*/ true, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, compareTypes) :
+                    !checkAsCallback && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 if (!related) {
                     if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
@@ -8253,7 +8257,11 @@ namespace ts {
                     }
                 }
                 else {
-                    result &= compareTypes(sourceReturnType, targetReturnType, reportErrors);
+                    // When relating callback signatures, we still need to relate return types bi-variantly as otherwise
+                    // the containing type wouldn't be co-variant. For example, interface Foo<T> { add(cb: () => T): void }
+                    // wouldn't be co-variant for T without this rule.
+                    result &= checkAsCallback && compareTypes(targetReturnType, sourceReturnType, /*reportErrors*/ false) ||
+                        compareTypes(sourceReturnType, targetReturnType, reportErrors);
                 }
 
             }
@@ -9220,7 +9228,7 @@ namespace ts {
              * See signatureAssignableTo, compareSignaturesIdentical
              */
             function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
-                return compareSignaturesRelated(source, target, /*strictVariance*/ false, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
+                return compareSignaturesRelated(source, target, /*checkAsCallback*/ false, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
