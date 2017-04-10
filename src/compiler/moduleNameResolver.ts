@@ -954,17 +954,19 @@ namespace ts {
                 }
                 nodeModulesAtTypesExists = false;
             }
-            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state.host), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
+            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
         }
     }
 
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
-    function mangleScopedPackage(moduleName: string, host: ModuleResolutionHost): string {
+    function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
         if (startsWith(moduleName, "@")) {
             const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
             if (replaceSlash !== moduleName) {
                 const mangled = replaceSlash.slice(1); // Take off the "@"
-                trace(host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+                }
                 return mangled;
             }
         }
