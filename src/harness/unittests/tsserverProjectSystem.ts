@@ -1412,7 +1412,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
         });
 
-        it("ignores files excluded by the safe type list", () => {
+        it("ignores files excluded by a custom safe type list", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: "export let x = 5"
@@ -1429,6 +1429,44 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
+        it("ignores files excluded by the default type list", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const minFile = {
+                path: "/c/moment.min.js",
+                content: "unspecified"
+            };
+            const kendoFile1 = {
+                path: "/q/lib/kendo/kendo.all.min.js",
+                content: "unspecified"
+            };
+            const kendoFile2 = {
+                path: "/q/lib/kendo/kendo.ui.min.js",
+                content: "unspecified"
+            };
+            const officeFile1 = {
+                path: "/scripts/Office/1/excel-15.debug.js",
+                content: "unspecified"
+            };
+            const officeFile2 = {
+                path: "/scripts/Office/1/powerpoint.js",
+                content: "unspecified"
+            };
+            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles(files.map(f => f.path)) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
             } finally {
                 projectService.resetSafeList();
             }
