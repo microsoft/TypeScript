@@ -614,18 +614,23 @@ namespace ts.server {
                     // when creation inferred project for some file has added other open files into this project (i.e. as referenced files)
                     // we definitely don't want to delete the project that was just created
                     for (const f of this.openFiles) {
-                        if (f.containingProjects.length === 0) {
+                        if (f.containingProjects.length === 0 || !inferredProject.containsScriptInfo(f)) {
                             // this is orphaned file that we have not processed yet - skip it
                             continue;
                         }
-                        const defaultProject = f.getDefaultProject();
-                        if (isRootFileInInferredProject(f) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
-                            // open file used to be root in inferred project,
-                            // this inferred project is different from the one we've just created for current file
-                            // and new inferred project references this open file.
-                            // We should delete old inferred project and attach open file to the new one
-                            this.removeProject(defaultProject);
-                            f.attachToProject(inferredProject);
+
+                        for (const fContainingProject of f.containingProjects) {
+                            if (fContainingProject.projectKind === ProjectKind.Inferred &&
+                                fContainingProject.isRoot(f) &&
+                                fContainingProject !== inferredProject) {
+
+                                // open file used to be root in inferred project,
+                                // this inferred project is different from the one we've just created for current file
+                                // and new inferred project references this open file.
+                                // We should delete old inferred project and attach open file to the new one
+                                this.removeProject(fContainingProject);
+                                f.attachToProject(inferredProject);
+                            }
                         }
                     }
                 }
