@@ -1729,7 +1729,6 @@ namespace ts {
             // firstNonWhitespace = 0 to indicate that we want leading whitspace,
 
             while (pos < end) {
-                pos++;
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -1754,6 +1753,7 @@ namespace ts {
                 else if (!isWhiteSpaceSingleLine(char)) {
                     firstNonWhitespace = pos;
                 }
+                pos++;
             }
 
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;

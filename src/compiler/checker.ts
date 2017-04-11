@@ -13318,8 +13318,13 @@ namespace ts {
                 for (const child of (parent as JsxElement).children) {
                     // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
                     // because then type of children property will have constituent of string type.
-                    if (child.kind !== SyntaxKind.JsxTextAllWhiteSpaces) {
-                        childrenTypes.push(child.kind === SyntaxKind.JsxText ? stringType : checkExpression(child as Expression, checkMode));
+                    if (child.kind === SyntaxKind.JsxText) {
+                        if (!child.containsOnlyWhiteSpaces) {
+                            childrenTypes.push(stringType);
+                        }
+                    }
+                    else {
+                        childrenTypes.push(checkExpression(child, checkMode));
                     }
                 }
                 childrenPropSymbol.type = getUnionType(childrenTypes,  /*subtypeReduction*/ false);

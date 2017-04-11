@@ -1572,7 +1572,8 @@
     }
 
     export interface JsxText extends Node {
-        kind: SyntaxKind.JsxText;
+        kind: SyntaxKind.JsxText,
+        containsOnlyWhiteSpaces: boolean,
         parent?: JsxElement;
     }
 

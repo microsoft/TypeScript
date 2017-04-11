@@ -3825,7 +3825,8 @@ namespace ts {
         }
 
         function parseJsxText(): JsxText {
-            const node = <JsxText>createNode(currentToken, scanner.getStartPos());
+            const node = <JsxText>createNode(SyntaxKind.JsxText, scanner.getStartPos());
+            node.containsOnlyWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
             currentToken = scanner.scanJsxToken();
             return finishNode(node);
         }
