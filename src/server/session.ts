@@ -915,9 +915,8 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => project.getLanguageService().findReferences(file, position),
-                    undefined,
-                    // TODO: fixme
-                    undefined
+                    /*comparer*/ undefined,
+                    /*areEqual (TODO: fixme)*/ undefined
                 );
             }
 

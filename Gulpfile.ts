@@ -775,7 +775,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                     });
                     const finalMap = chain.apply();
                     file.sourceMap = finalMap;
-                    next(undefined, file);
+                    next(/*err*/ undefined, file);
                 });
         }))
         .pipe(sourcemaps.write(".", { includeContent: false }))

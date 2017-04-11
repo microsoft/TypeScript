@@ -3109,7 +3109,7 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
             if (isBindingPattern(node.variableDeclaration.name)) {
-                const temp = createTempVariable(undefined);
+                const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);
                 const vars = flattenDestructuringBinding(

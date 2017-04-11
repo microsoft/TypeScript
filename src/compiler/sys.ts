@@ -232,7 +232,7 @@ namespace ts {
 
                 try {
                     fd = _fs.openSync(fileName, "w");
-                    _fs.writeSync(fd, data, undefined, "utf8");
+                    _fs.writeSync(fd, data, /*position*/ undefined, "utf8");
                 }
                 finally {
                     if (fd !== undefined) {

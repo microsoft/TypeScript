@@ -418,7 +418,7 @@ namespace ts {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
             else {
@@ -447,13 +447,13 @@ namespace ts {
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
                         (symbolFlags & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
-                    const local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
+                    const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                     return local;
                 }
                 else {
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/undefined, node, symbolFlags, symbolExcludes);
                 }
             }
         }
@@ -1545,7 +1545,7 @@ namespace ts {
         function declareSourceFileMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return isExternalModule(file)
                 ? declareModuleMember(node, symbolFlags, symbolExcludes)
-                : declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
+                : declareSymbol(file.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
@@ -1721,7 +1721,7 @@ namespace ts {
                         blockScopeContainer.locals = createMap<Symbol>();
                         addToContainerChain(blockScopeContainer);
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
+                    declareSymbol(blockScopeContainer.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
 

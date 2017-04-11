@@ -2130,7 +2130,7 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
-                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.name = createIdentifier(/*isIdentifier*/ true);
                 node.type = parseParameterType();
                 return finishNode(node);
             }

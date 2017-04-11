@@ -214,7 +214,7 @@ namespace ts.Completions.PathCompletions {
                 // doesn't support. For now, this is safer but slower
                 const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
-                const matches = tryReadDirectory(host, baseDirectory, fileExtensions, undefined, [includeGlob]);
+                const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
                 if (matches) {
                     const result: string[] = [];
 

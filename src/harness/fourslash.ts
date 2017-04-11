@@ -3191,7 +3191,7 @@ ${code}
         }
 
         // Add the remaining text
-        flush(undefined);
+        flush(/*lastSafeCharIndex*/ undefined);
 
         if (openRanges.length > 0) {
             const openRange = openRanges[0];
