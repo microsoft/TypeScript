@@ -381,12 +381,12 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path]);
+            checkProjectActualFiles(p, [file2.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path]);
+            checkProjectActualFiles(p, [file2.path]);
         });
 
         it("external project - with type acquisition, with only js, d.ts files", () => {
