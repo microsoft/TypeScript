@@ -194,7 +194,7 @@ namespace ts.codefix {
             modifiers,
             name,
             optional,
-            /*typeParameters*/undefined,
+            /*typeParameters*/ undefined,
             parameters,
             /*returnType*/ undefined);
     }
@@ -217,9 +217,9 @@ namespace ts.codefix {
             [createThrow(
                 createNew(
                     createIdentifier("Error"),
-                    /*typeArguments*/undefined,
+                    /*typeArguments*/ undefined,
                     [createLiteral("Method not implemented.")]))],
-            /*multiline*/true);
+            /*multiline*/ true);
     }
 
     function createVisibilityModifier(flags: ModifierFlags) {

@@ -1795,9 +1795,9 @@ namespace ts.projectSystem {
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
-                /*changedFiles*/undefined,
-                /*closedFiles*/undefined);
+                /*openFiles*/ [{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*changedFiles*/ undefined,
+                /*closedFiles*/ undefined);
 
             // Now HTML file is included in the project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1810,9 +1810,9 @@ namespace ts.projectSystem {
 
             // Close HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/undefined,
-                /*changedFiles*/undefined,
-                /*closedFiles*/[file2.path]);
+                /*openFiles*/ undefined,
+                /*changedFiles*/ undefined,
+                /*closedFiles*/ [file2.path]);
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -2270,12 +2270,12 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
 
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             projectService.closeClientFile(f1.path);
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
     });
