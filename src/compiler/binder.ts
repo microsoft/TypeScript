@@ -453,7 +453,7 @@ namespace ts {
                     return local;
                 }
                 else {
-                    return declareSymbol(container.locals, /*parent*/undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
         }
@@ -2333,7 +2333,7 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/false);
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (container.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -2423,7 +2423,7 @@ namespace ts {
         function bindCallExpression(node: CallExpression) {
             // We're only inspecting call expressions to detect CommonJS modules, so we can skip
             // this check if we've already seen the module indicator
-            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteral*/false)) {
+            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteral*/ false)) {
                 setCommonJsModuleIndicator(node);
             }
         }

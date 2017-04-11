@@ -1455,7 +1455,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
         });
 
-        it("ignores files excluded by the safe type list", () => {
+        it("ignores files excluded by a custom safe type list", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
                 content: "export let x = 5"
@@ -1472,6 +1472,44 @@ namespace ts.projectSystem {
                 const proj = projectService.externalProjects[0];
                 assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
                 assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
+        it("ignores files excluded by the default type list", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const minFile = {
+                path: "/c/moment.min.js",
+                content: "unspecified"
+            };
+            const kendoFile1 = {
+                path: "/q/lib/kendo/kendo.all.min.js",
+                content: "unspecified"
+            };
+            const kendoFile2 = {
+                path: "/q/lib/kendo/kendo.ui.min.js",
+                content: "unspecified"
+            };
+            const officeFile1 = {
+                path: "/scripts/Office/1/excel-15.debug.js",
+                content: "unspecified"
+            };
+            const officeFile2 = {
+                path: "/scripts/Office/1/powerpoint.js",
+                content: "unspecified"
+            };
+            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles(files.map(f => f.path)) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
             } finally {
                 projectService.resetSafeList();
             }
@@ -1795,9 +1833,9 @@ namespace ts.projectSystem {
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
-                /*changedFiles*/undefined,
-                /*closedFiles*/undefined);
+                /*openFiles*/ [{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
+                /*changedFiles*/ undefined,
+                /*closedFiles*/ undefined);
 
             // Now HTML file is included in the project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -1810,9 +1848,9 @@ namespace ts.projectSystem {
 
             // Close HTML file
             projectService.applyChangesInOpenFiles(
-                /*openFiles*/undefined,
-                /*changedFiles*/undefined,
-                /*closedFiles*/[file2.path]);
+                /*openFiles*/ undefined,
+                /*changedFiles*/ undefined,
+                /*closedFiles*/ [file2.path]);
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
@@ -2270,12 +2308,12 @@ namespace ts.projectSystem {
             projectService.openClientFile(f1.path, "let x = 1;\nlet y = 2;");
 
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             projectService.closeClientFile(f1.path);
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/false).getNavigationBarItems(f1.path);
+            const navbar = projectService.externalProjects[0].getLanguageService(/*ensureSynchronized*/ false).getNavigationBarItems(f1.path);
             assert.equal(navbar[0].spans[0].length, f1.content.length);
         });
     });
