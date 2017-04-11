@@ -2620,7 +2620,7 @@ namespace ts {
                                 propertyName,
                                 optionalToken,
                                 propertyTypeNode,
-                               /*initializer*/undefined));
+                               /*initializer*/ undefined));
                         }
                     }
                     return typeElements.length ? typeElements : undefined;
@@ -2754,7 +2754,7 @@ namespace ts {
 
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
-                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/false);
+                    let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, /*useOnlyExternalAliasing*/ false);
                     let parentSymbol: Symbol;
 
                     if (!accessibleSymbolChain ||
@@ -4564,7 +4564,7 @@ namespace ts {
         // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
         function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] {
             const declaration = symbol.flags & SymbolFlags.Class ? symbol.valueDeclaration : getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
-            return appendOuterTypeParameters(undefined, declaration);
+            return appendOuterTypeParameters(/*typeParameters*/ undefined, declaration);
         }
 
         // The local type parameters are the combined set of type parameters from all declarations of the class,
@@ -7702,7 +7702,7 @@ namespace ts {
         }
 
         function createTypeEraser(sources: Type[]): TypeMapper {
-            return createTypeMapper(sources, undefined);
+            return createTypeMapper(sources, /*targets*/ undefined);
         }
 
         /**
@@ -8418,7 +8418,7 @@ namespace ts {
                 }
             }
             if (source.flags & TypeFlags.StructuredOrTypeVariable || target.flags & TypeFlags.StructuredOrTypeVariable) {
-                return checkTypeRelatedTo(source, target, relation, undefined, undefined, undefined);
+                return checkTypeRelatedTo(source, target, relation, /*errorNode*/ undefined);
             }
             return false;
         }
@@ -13386,7 +13386,7 @@ namespace ts {
         ///     non-intrinsic elements' attributes type is the element instance type)
         function getJsxElementPropertiesName() {
             // JSX
-            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
+            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             // JSX.ElementAttributesProperty [symbol]
             const attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
             // JSX.ElementAttributesProperty [type]
@@ -13665,7 +13665,7 @@ namespace ts {
             const links = getNodeLinks(node);
             if (!links.resolvedJsxElementAttributesType) {
                 const elemClassType = getJsxGlobalElementClassType();
-                return links.resolvedJsxElementAttributesType = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, undefined, elemClassType);
+                return links.resolvedJsxElementAttributesType = resolveCustomJsxElementAttributesType(node, shouldIncludeAllStatelessAttributesType, /*elementType*/ undefined, elemClassType);
             }
             return links.resolvedJsxElementAttributesType;
         }
@@ -15615,7 +15615,7 @@ namespace ts {
         }
 
         function isCommonJsRequire(node: Node) {
-            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+            if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 return false;
             }
                 // Make sure require is not a local function
@@ -15717,7 +15717,7 @@ namespace ts {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     if (!parameter) {
-                        signature.thisParameter = createSymbolWithType(context.thisParameter, undefined);
+                        signature.thisParameter = createSymbolWithType(context.thisParameter, /*type*/ undefined);
                     }
                     assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper, checkMode);
                 }
@@ -17071,7 +17071,7 @@ namespace ts {
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -17300,7 +17300,7 @@ namespace ts {
                             Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
-                        const leadingError = chainDiagnosticMessages(undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
+                        const leadingError = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
                             getTypeOfNode(parent.parameters[typePredicate.parameterIndex]),
                             node.type,
@@ -20507,7 +20507,7 @@ namespace ts {
                             const typeName1 = typeToString(existing.containingType);
                             const typeName2 = typeToString(base);
 
-                            let errorInfo = chainDiagnosticMessages(undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
+                            let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
                             errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
@@ -21859,7 +21859,7 @@ namespace ts {
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
                 const meaning = (entityName.parent.kind === SyntaxKind.TypeReference || entityName.parent.kind === SyntaxKind.JSDocTypeReference) ? SymbolFlags.Type : SymbolFlags.Namespace;
-                return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/true);
+                return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
             }
             else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {
                 return getJsxAttributePropertySymbol(<JsxAttribute>entityName.parent);
@@ -22682,7 +22682,7 @@ namespace ts {
                     ? SymbolFlags.Value | SymbolFlags.ExportValue
                     : SymbolFlags.Type | SymbolFlags.Namespace;
 
-                const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/true);
+                const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/ true);
                 return symbol && symbol !== unknownSymbol ? getTypeReferenceDirectivesForSymbol(symbol, meaning) : undefined;
             }
 

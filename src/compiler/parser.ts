@@ -2130,7 +2130,7 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
-                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.name = createIdentifier(/*isIdentifier*/ true);
                 node.type = parseParameterType();
                 return finishNode(node);
             }
@@ -3039,7 +3039,7 @@ namespace ts {
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
             const lastToken = token();
-            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody(isAsync)
                 : parseIdentifier();
@@ -3808,7 +3808,7 @@ namespace ts {
             // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
             // of one sort or another.
             if (inExpressionContext && token() === SyntaxKind.LessThanToken) {
-                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/true));
+                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true));
                 if (invalidElement) {
                     parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
                     const badNode = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, result.pos);
@@ -5818,7 +5818,7 @@ namespace ts {
         }
 
         function processReferenceComments(sourceFile: SourceFile): void {
-            const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
+            const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
             const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];

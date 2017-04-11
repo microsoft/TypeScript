@@ -384,7 +384,7 @@ function prependCopyright(outputCopyright: boolean = !useDebugMode) {
 }
 
 gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
-    const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    const localCompilerProject = tsc.createProject("src/compiler/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return localCompilerProject.src()
         .pipe(newer(builtLocalCompiler))
         .pipe(sourcemaps.init())
@@ -395,14 +395,14 @@ gulp.task(builtLocalCompiler, /*help*/ false, [servicesFile], () => {
 });
 
 gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
-    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/false));
+    const servicesProject = tsc.createProject("src/services/tsconfig.json", getCompilerSettings({ removeComments: false }, /*useBuiltCompiler*/ false));
     const {js, dts} = servicesProject.src()
         .pipe(newer(servicesFile))
         .pipe(sourcemaps.init())
         .pipe(servicesProject());
     const completedJs = js.pipe(prependCopyright())
         .pipe(sourcemaps.write("."));
-    const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/true))
+    const completedDts = dts.pipe(prependCopyright(/*outputCopyright*/ true))
         .pipe(insert.transform((contents, file) => {
             file.path = standaloneDefinitionsFile;
             return contents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4");
@@ -429,7 +429,7 @@ gulp.task(servicesFile, /*help*/ false, ["lib", "generate-diagnostics"], () => {
 // cancellationToken.js
 const cancellationTokenJs = path.join(builtLocalDirectory, "cancellationToken.js");
 gulp.task(cancellationTokenJs, /*help*/ false, [servicesFile], () => {
-    const cancellationTokenProject = tsc.createProject("src/server/cancellationToken/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    const cancellationTokenProject = tsc.createProject("src/server/cancellationToken/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return cancellationTokenProject.src()
         .pipe(newer(cancellationTokenJs))
         .pipe(sourcemaps.init())
@@ -442,7 +442,7 @@ gulp.task(cancellationTokenJs, /*help*/ false, [servicesFile], () => {
 // typingsInstallerFile.js
 const typingsInstallerJs = path.join(builtLocalDirectory, "typingsInstaller.js");
 gulp.task(typingsInstallerJs, /*help*/ false, [servicesFile], () => {
-    const cancellationTokenProject = tsc.createProject("src/server/typingsInstaller/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    const cancellationTokenProject = tsc.createProject("src/server/typingsInstaller/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return cancellationTokenProject.src()
         .pipe(newer(typingsInstallerJs))
         .pipe(sourcemaps.init())
@@ -455,7 +455,7 @@ gulp.task(typingsInstallerJs, /*help*/ false, [servicesFile], () => {
 const serverFile = path.join(builtLocalDirectory, "tsserver.js");
 
 gulp.task(serverFile, /*help*/ false, [servicesFile, typingsInstallerJs, cancellationTokenJs], () => {
-    const serverProject = tsc.createProject("src/server/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    const serverProject = tsc.createProject("src/server/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return serverProject.src()
         .pipe(newer(serverFile))
         .pipe(sourcemaps.init())
@@ -479,7 +479,7 @@ gulp.task(tsserverLibraryFile, /*help*/ false, [servicesFile], (done) => {
         js.pipe(prependCopyright())
             .pipe(sourcemaps.write("."))
             .pipe(gulp.dest("src/server")),
-        dts.pipe(prependCopyright(/*outputCopyright*/true))
+        dts.pipe(prependCopyright(/*outputCopyright*/ true))
             .pipe(insert.transform((content) => {
                 return content + "\r\nexport = ts;\r\nexport as namespace ts;";
             }))
@@ -551,7 +551,7 @@ gulp.task("LKG", "Makes a new LKG out of the built js files", ["clean", "dontUse
 // Task to build the tests infrastructure using the built compiler
 const run = path.join(builtLocalDirectory, "run.js");
 gulp.task(run, /*help*/ false, [servicesFile], () => {
-    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/true));
+    const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({}, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer(run))
         .pipe(sourcemaps.init())
@@ -757,7 +757,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
             browserify(intoStream(file.contents), { debug: true })
                 .bundle((err, res) => {
                     // assumes file.contents is a Buffer
-                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/true).toJSON());
+                    const maps = JSON.parse(convertMap.fromSource(res.toString(), /*largeSource*/ true).toJSON());
                     delete maps.sourceRoot;
                     maps.sources = maps.sources.map(s => path.resolve(s === "_stream_0.js" ? "built/local/_stream_0.js" : s));
                     // Strip browserify's inline comments away (could probably just let sorcery do this, but then we couldn't fix the paths)
@@ -775,7 +775,7 @@ gulp.task("browserify", "Runs browserify on run.js to produce a file suitable fo
                     });
                     const finalMap = chain.apply();
                     file.sourceMap = finalMap;
-                    next(undefined, file);
+                    next(/*err*/ undefined, file);
                 });
         }))
         .pipe(sourcemaps.write(".", { includeContent: false }))
