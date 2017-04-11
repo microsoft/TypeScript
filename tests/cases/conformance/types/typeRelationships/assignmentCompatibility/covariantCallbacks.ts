@@ -1,4 +1,5 @@
 // @target: es2015
+// @strict: true
 
 // Test that callback parameters are related covariantly
 
