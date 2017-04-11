@@ -210,7 +210,7 @@ namespace Harness.LanguageService {
         }
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
-            /*useCaseSensitiveFileNames*/false,
+                /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
