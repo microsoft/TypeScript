@@ -1381,7 +1381,7 @@ namespace ts {
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
-        while (isWhiteSpace(text.charCodeAt(position))) {
+        while (isWhiteSpaceLike(text.charCodeAt(position))) {
             position += 1;
         }
         return position;
