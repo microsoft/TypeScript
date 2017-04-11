@@ -13275,7 +13275,7 @@ namespace ts {
             const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ?
                 openingLikeElement.parent as JsxElement : undefined;
             let containsSynthesizedJsxChildren = false;
-            // Comment
+            // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
                 // Error if there is a attribute named "children" and children element.
                 // This is because children element will overwrite the value from attributes
@@ -13287,7 +13287,11 @@ namespace ts {
                 const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
                 const childrenTypes: Type[] = [];
                 for (const child of (parent as JsxElement).children) {
-                    childrenTypes.push(child.kind === SyntaxKind.JsxText ? stringType : checkExpression(child));
+                    // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
+                    // because then type of children property will have constituent of string type.
+                    if (child.kind !== SyntaxKind.JsxTextAllWhiteSpaces) {
+                        childrenTypes.push(child.kind === SyntaxKind.JsxText ? stringType : checkExpression(child as Expression, checkMode));
+                    }
                 }
                 childrenPropSymbol.type = getUnionType(childrenTypes,  /*subtypeReduction*/ false);
                 attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
@@ -17099,13 +17103,6 @@ namespace ts {
             return cache ? checkExpressionCached(node) : checkExpression(node);
         }
 
-        // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
-        // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
-        // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
-        // conjunction with the generic contextual type. When contextualMapper is equal to the identityMapper function
-        // object, it serves as an indicator that all contained function and arrow expressions should be considered to
-        // have the wildcard function type; this form of type check is used during overload resolution to exclude
-        // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
             let type: Type;
             if (node.kind === SyntaxKind.QualifiedName) {

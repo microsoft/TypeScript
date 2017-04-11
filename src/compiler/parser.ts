@@ -3825,7 +3825,7 @@ namespace ts {
         }
 
         function parseJsxText(): JsxText {
-            const node = <JsxText>createNode(SyntaxKind.JsxText, scanner.getStartPos());
+            const node = <JsxText>createNode(currentToken, scanner.getStartPos());
             currentToken = scanner.scanJsxToken();
             return finishNode(node);
         }
@@ -3833,6 +3833,7 @@ namespace ts {
         function parseJsxChild(): JsxChild {
             switch (token()) {
                 case SyntaxKind.JsxText:
+                case SyntaxKind.JsxTextAllWhiteSpaces:
                     return parseJsxText();
                 case SyntaxKind.OpenBraceToken:
                     return parseJsxExpression(/*inExpressionContext*/ false);
@@ -3862,7 +3863,10 @@ namespace ts {
                 else if (token() === SyntaxKind.ConflictMarkerTrivia) {
                     break;
                 }
-                result.push(parseJsxChild());
+                const child = parseJsxChild();
+                if (child) {
+                    result.push(child);
+                }
             }
 
             result.end = scanner.getTokenPos();
