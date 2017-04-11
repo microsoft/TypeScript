@@ -35,6 +35,10 @@ namespace ts.server {
         (event: ProjectServiceEvent): void;
     }
 
+    export interface SafeList {
+        [name: string]: { match: RegExp, exclude?: Array<Array<string | number>>, types?: string[] };
+    }
+
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
         const map: Map<Map<number>> = createMap<Map<number>>();
         for (const option of commandLineOptions) {
@@ -285,10 +289,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
-<<<<<<< HEAD
-=======
         private static safelist: SafeList = defaultTypeSafeList;
->>>>>>> 376cea6... Allow resetting so tests pass
 
         private changedFiles: ScriptInfo[];
 
@@ -1428,8 +1429,6 @@ namespace ts.server {
             this.refreshInferredProjects();
         }
 
-<<<<<<< HEAD
-=======
         /** Makes a filename safe to insert in a RegExp */
         private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
         private static escapeFilenameForRegex(filename: string) {
@@ -1518,7 +1517,6 @@ namespace ts.server {
             proj.rootFiles = proj.rootFiles.filter((_file, index) => !excludeRegexes.some(re => re.test(normalizedNames[index])));
         }
 
->>>>>>> 376cea6... Allow resetting so tests pass
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
             // typingOptions has been deprecated and is only supported for backward compatibility
             // purposes. It should be removed in future releases - use typeAcquisition instead.
