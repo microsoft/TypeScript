@@ -1007,7 +1007,7 @@ namespace ts {
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
+            const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
             for (const category in categorizedOptions) {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
@@ -1018,7 +1018,7 @@ namespace ts {
                 for (const option of categorizedOptions[category]) {
                     let optionName;
                     if (hasProperty(configurations.compilerOptions, option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}`;
+                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
