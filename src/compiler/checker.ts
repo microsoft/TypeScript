@@ -12635,6 +12635,35 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
+        function getContextualTypeForJsxExpression(node: JsxExpression): Type {
+            // JSX expression can appear in two position : JSX Element's children or JSX attribute
+            const jsxAttributes = isJsxAttributeLike(node.parent) ?
+                node.parent.parent :
+                node.parent.openingElement.attributes; // node.parent is JsxElement
+
+            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
+            // which is a type of the parameter of the signature we are trying out.
+            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
+            const attributesType = getContextualType(jsxAttributes);
+
+            if (!attributesType || isTypeAny(attributesType)) {
+                return undefined;
+            }
+
+            if (isJsxAttribute(node.parent)) {
+                // JSX expression is in JSX attribute
+                return getTypeOfPropertyOfType(attributesType, (node.parent as JsxAttribute).name.text);
+            }
+            else if (node.parent.kind === SyntaxKind.JsxElement) {
+                // JSX expression is in children of JSX Element, we will look for an atttribute named "chidlren"
+                return getTypeOfPropertyOfType(attributesType, jsxChildrenPropertyName);
+            }
+            else {
+                // JSX expression is in JSX spread attribute
+                return attributesType;
+            }
+        }
+
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
@@ -12718,7 +12747,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
-                    return getContextualType(<JsxExpression>parent);
+                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
