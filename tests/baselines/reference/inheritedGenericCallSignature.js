@@ -1,5 +1,4 @@
 //// [inheritedGenericCallSignature.ts]
-
 interface I1<T> {
 
     (a: T): T;

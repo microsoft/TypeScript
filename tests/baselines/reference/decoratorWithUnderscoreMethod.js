@@ -1,5 +1,4 @@
 //// [decoratorWithUnderscoreMethod.ts]
-
 declare var console : { log(arg: string): void };
 function dec(): Function {
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {

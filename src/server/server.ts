@@ -1,8 +1,6 @@
 /// <reference types="node" />
 /// <reference path="shared.ts" />
 /// <reference path="session.ts" />
-// used in fs.writeSync
-/* tslint:disable:no-null-keyword */
 
 namespace ts.server {
 
@@ -196,7 +194,8 @@ namespace ts.server {
                 }
                 if (this.fd >= 0) {
                     const buf = new Buffer(s);
-                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                    // tslint:disable-next-line no-null-keyword
+                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
                 }
                 if (this.traceToConsole) {
                     console.warn(s);
@@ -219,6 +218,7 @@ namespace ts.server {
             host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
+            readonly typingSafeListLocation: string,
             private newLine: string) {
             this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
@@ -259,6 +259,9 @@ namespace ts.server {
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
+            }
+            if (this.typingSafeListLocation) {
+                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
             }
             const execArgv: string[] = [];
             {
@@ -378,11 +381,12 @@ namespace ts.server {
             useSingleInferredProject: boolean,
             disableAutomaticTypingAcquisition: boolean,
             globalTypingsCacheLocation: string,
+            typingSafeListLocation: string,
             telemetryEnabled: boolean,
             logger: server.Logger) {
                 const typingsInstaller = disableAutomaticTypingAcquisition
                     ? undefined
-                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine);
+                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, host.newLine);
 
                 super(
                     host,
@@ -697,7 +701,7 @@ namespace ts.server {
     }
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
-        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, /*cache*/ undefined, /*jsOnly*/ true);
         try {
             return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
         }
@@ -713,7 +717,7 @@ namespace ts.server {
     }
     catch (e) {
         cancellationToken = nullCancellationToken;
-    };
+    }
 
     let eventPort: number;
     {
@@ -729,6 +733,8 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    const typingSafeListLocation = findArgument("--typingSafeListLocation");
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
@@ -741,6 +747,7 @@ namespace ts.server {
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
         getGlobalTypingsCacheLocation(),
+        typingSafeListLocation,
         telemetryEnabled,
         logger);
     process.on("uncaughtException", function (err: Error) {

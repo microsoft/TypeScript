@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportDts.ts] ////
 
 //// [server.ts]
-
 export class a { }
 export class x { }
 export class m { }

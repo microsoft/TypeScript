@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFilePrivateMethodOverloads.ts ===
-
 interface IContext {
 >IContext : IContext
 

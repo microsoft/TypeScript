@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyCannotNameAccessorDeclFile.ts] ////
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.ts]
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;

@@ -1,5 +1,4 @@
 //// [declarationEmitExpressionInExtends3.ts]
-
 export class ExportedClass<T> {
 	x: T;
 }

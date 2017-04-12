@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeofClass.ts ===
-
 class c {
 >c : c
 

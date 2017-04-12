@@ -18,68 +18,121 @@ namespace ts.codefix {
             return undefined;
         }
 
-        const classDeclaration = getContainingClass(token);
-        if (!classDeclaration) {
+        if (!isPropertyAccessExpression(token.parent) || token.parent.expression.kind !== SyntaxKind.ThisKeyword) {
             return undefined;
         }
 
-        if (!(token.parent && token.parent.kind === SyntaxKind.PropertyAccessExpression)) {
+        const classMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false);
+        if (!isClassElement(classMemberDeclaration)) {
             return undefined;
         }
 
-        if ((token.parent as PropertyAccessExpression).expression.kind !== SyntaxKind.ThisKeyword) {
+        const classDeclaration = <ClassLikeDeclaration>classMemberDeclaration.parent;
+        if (!classDeclaration || !isClassLike(classDeclaration)) {
             return undefined;
         }
 
-        let typeNode: TypeNode;
+        const isStatic = hasModifier(classMemberDeclaration, ModifierFlags.Static);
 
-        if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
-            const binaryExpression = token.parent.parent as BinaryExpression;
+        return isInJavaScriptFile(sourceFile) ? getActionsForAddMissingMemberInJavaScriptFile() : getActionsForAddMissingMemberInTypeScriptFile();
 
-            const checker = context.program.getTypeChecker();
-            const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-            typeNode = checker.typeToTypeNode(widenedType, classDeclaration) || typeNode;
+        function getActionsForAddMissingMemberInJavaScriptFile(): CodeAction[] | undefined {
+            const memberName = token.getText();
+
+            if (isStatic) {
+                if (classDeclaration.kind === SyntaxKind.ClassExpression) {
+                    return undefined;
+                }
+
+                const className = classDeclaration.name.getText();
+
+                return [{
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [memberName]),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: [{
+                            span: { start: classDeclaration.getEnd(), length: 0 },
+                            newText: `${context.newLineCharacter}${className}.${memberName} = undefined;${context.newLineCharacter}`
+                        }]
+                    }]
+                }];
+
+            }
+            else {
+                const classConstructor = getFirstConstructorWithBody(classDeclaration);
+                if (!classConstructor) {
+                    return undefined;
+                }
+
+                return [{
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [memberName]),
+                    changes: [{
+                        fileName: sourceFile.fileName,
+                        textChanges: [{
+                            span: { start: classConstructor.body.getEnd() - 1, length: 0 },
+                            newText: `this.${memberName} = undefined;${context.newLineCharacter}`
+                        }]
+                    }]
+                }];
+            }
         }
 
-        typeNode = typeNode ? typeNode : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
+            let typeNode: TypeNode;
 
-        const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
+            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
+                const binaryExpression = token.parent.parent as BinaryExpression;
 
-        const property = createProperty(
-            /*decorators*/undefined,
-            /*modifiers*/ undefined,
-            token.getText(sourceFile),
-            /*questionToken*/ undefined,
-            typeNode,
-            /*initializer*/ undefined);
-        const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-        propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
+                const checker = context.program.getTypeChecker();
+                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
+                typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+            }
 
-        const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
-        const indexingParameter = createParameter(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            /*dotDotDotToken*/ undefined,
-            "x",
-            /*questionToken*/ undefined,
-            stringTypeNode,
-            /*initializer*/ undefined);
-        const indexSignature = createIndexSignatureDeclaration(
-            /*decorators*/undefined,
-            /*modifiers*/ undefined,
-            [indexingParameter],
-            typeNode);
+            typeNode = typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
 
-        const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-        indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
+            const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 
-        return [{
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
-            changes: propertyChangeTracker.getChanges()
-        },
-        {
-            description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
-            changes: indexSignatureChangeTracker.getChanges()
-        }];
+            const property = createProperty(
+                /*decorators*/undefined,
+                /*modifiers*/ isStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+                token.getText(sourceFile),
+                /*questionToken*/ undefined,
+                typeNode,
+                /*initializer*/ undefined);
+            const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+            propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
+
+            const actions = [{
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
+                changes: propertyChangeTracker.getChanges()
+            }];
+
+            if (!isStatic) {
+                const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
+                const indexingParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                    "x",
+                /*questionToken*/ undefined,
+                    stringTypeNode,
+                /*initializer*/ undefined);
+                const indexSignature = createIndexSignatureDeclaration(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                    [indexingParameter],
+                    typeNode);
+
+                const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
+
+                actions.push({
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
+                    changes: indexSignatureChangeTracker.getChanges()
+                });
+            }
+
+            return actions;
+        }
     }
 }

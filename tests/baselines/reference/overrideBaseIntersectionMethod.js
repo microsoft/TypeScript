@@ -1,5 +1,4 @@
 //// [overrideBaseIntersectionMethod.ts]
-
 // Repro from #14615
 
 type Constructor<T> = new (...args: any[]) => T;
@@ -32,8 +31,8 @@ class Foo extends WithLocation(Point) {
 
 
 //// [overrideBaseIntersectionMethod.js]
-// Repro from #14615
 "use strict";
+// Repro from #14615
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||

@@ -1,19 +1,18 @@
 === tests/cases/compiler/narrowedConstInMethod.ts ===
-
 function f() {
 >f : Symbol(f, Decl(narrowedConstInMethod.ts, 0, 0))
 
     const x: string | null = <any>{};
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 1, 9))
 
     if (x !== null) {
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 1, 9))
 
         return {
             bar() { return x.length; }  // Error: possibly null x
->bar : Symbol(bar, Decl(narrowedConstInMethod.ts, 4, 16))
+>bar : Symbol(bar, Decl(narrowedConstInMethod.ts, 3, 16))
 >x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 2, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 1, 9))
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         };
@@ -21,19 +20,19 @@ function f() {
 }
 
 function f2() {
->f2 : Symbol(f2, Decl(narrowedConstInMethod.ts, 8, 1))
+>f2 : Symbol(f2, Decl(narrowedConstInMethod.ts, 7, 1))
 
     const x: string | null = <any>{};
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 10, 9))
 
     if (x !== null) {
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 10, 9))
 
         return class {
             bar() { return x.length; }  // Error: possibly null x
->bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 13, 22))
+>bar : Symbol((Anonymous class).bar, Decl(narrowedConstInMethod.ts, 12, 22))
 >x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->x : Symbol(x, Decl(narrowedConstInMethod.ts, 11, 9))
+>x : Symbol(x, Decl(narrowedConstInMethod.ts, 10, 9))
 >length : Symbol(String.length, Decl(lib.d.ts, --, --))
 
         };

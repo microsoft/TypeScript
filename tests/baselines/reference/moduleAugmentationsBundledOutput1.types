@@ -1,5 +1,4 @@
 === tests/cases/compiler/m1.ts ===
-
 export class Cls {
 >Cls : Cls
 }

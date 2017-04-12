@@ -1,5 +1,4 @@
 //// [modifierOnClassDeclarationMemberInFunction.ts]
-
 function f() {
     class C {
         public baz = 1;

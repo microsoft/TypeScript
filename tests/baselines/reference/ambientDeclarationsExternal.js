@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/ambient/ambientDeclarationsExternal.ts] ////
 
 //// [decls.ts]
-
 // Ambient external module with export assignment
 declare module 'equ' {
     var x;

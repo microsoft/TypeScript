@@ -1,5 +1,4 @@
 //// [sourceMap-StringLiteralWithNewLine.ts]
-
 interface Document {
 }
 interface Window {

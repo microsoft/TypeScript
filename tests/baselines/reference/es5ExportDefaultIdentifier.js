@@ -1,5 +1,4 @@
 //// [es5ExportDefaultIdentifier.ts]
-
 export function f() { }
 
 export default f;

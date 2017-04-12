@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/expressions/asOperator/asOperator4.ts] ////
 
 //// [foo.ts]
-
 export function foo() { }
 
 //// [bar.ts]

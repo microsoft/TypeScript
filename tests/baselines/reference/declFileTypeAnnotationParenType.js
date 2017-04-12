@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationParenType.ts]
-
 class c {
     private p: string;
 }

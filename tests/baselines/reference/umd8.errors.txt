@@ -13,7 +13,6 @@ tests/cases/conformance/externalModules/a.ts(7,14): error TS2686: 'Foo' refers t
 !!! error TS2686: 'Foo' refers to a UMD global, but the current file is a module. Consider adding an import instead.
     
 ==== tests/cases/conformance/externalModules/foo.d.ts (0 errors) ====
-    
     declare class Thing {
     	foo(): number;
     }

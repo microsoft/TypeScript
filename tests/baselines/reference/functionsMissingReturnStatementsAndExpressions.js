@@ -1,6 +1,4 @@
 //// [functionsMissingReturnStatementsAndExpressions.ts]
-
-
 function f1(): string {
     // errors because there are no return statements
 }

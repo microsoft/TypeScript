@@ -23,6 +23,8 @@ namespace ts {
         isIdentifier(): boolean;
         isReservedWord(): boolean;
         isUnterminated(): boolean;
+        /* @internal */
+        getNumericLiteralFlags(): NumericLiteralFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
@@ -736,11 +738,11 @@ namespace ts {
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     /** Optionally, get the shebang */
@@ -802,6 +804,7 @@ namespace ts {
         let precedingLineBreak: boolean;
         let hasExtendedUnicodeEscape: boolean;
         let tokenIsUnterminated: boolean;
+        let numericLiteralFlags: NumericLiteralFlags;
 
         setText(text, start, length);
 
@@ -817,6 +820,7 @@ namespace ts {
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => tokenIsUnterminated,
+            getNumericLiteralFlags: () => numericLiteralFlags,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
@@ -853,6 +857,7 @@ namespace ts {
             let end = pos;
             if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
                 pos++;
+                numericLiteralFlags = NumericLiteralFlags.Scientific;
                 if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
                 if (isDigit(text.charCodeAt(pos))) {
                     pos++;
@@ -1224,6 +1229,7 @@ namespace ts {
             hasExtendedUnicodeEscape = false;
             precedingLineBreak = false;
             tokenIsUnterminated = false;
+            numericLiteralFlags = 0;
             while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
@@ -1422,6 +1428,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.HexSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
@@ -1432,6 +1439,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.BinarySpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
@@ -1442,11 +1450,13 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.OctalSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
+                            numericLiteralFlags = NumericLiteralFlags.Octal;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero

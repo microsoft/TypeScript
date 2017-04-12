@@ -1,30 +1,29 @@
 === tests/cases/compiler/server.ts ===
-
 export interface I {
 >I : Symbol(I, Decl(server.ts, 0, 0))
 
     prop: string;
->prop : Symbol(I.prop, Decl(server.ts, 1, 20))
+>prop : Symbol(I.prop, Decl(server.ts, 0, 20))
 }
 export interface I2 {
->I2 : Symbol(I2, Decl(server.ts, 3, 1))
+>I2 : Symbol(I2, Decl(server.ts, 2, 1))
 
     prop2: string;
->prop2 : Symbol(I2.prop2, Decl(server.ts, 4, 21))
+>prop2 : Symbol(I2.prop2, Decl(server.ts, 3, 21))
 }
 export class C implements I {
->C : Symbol(C, Decl(server.ts, 6, 1))
+>C : Symbol(C, Decl(server.ts, 5, 1))
 >I : Symbol(I, Decl(server.ts, 0, 0))
 
     prop = "hello";
->prop : Symbol(C.prop, Decl(server.ts, 7, 29))
+>prop : Symbol(C.prop, Decl(server.ts, 6, 29))
 }
 export class C2 implements I2 {
->C2 : Symbol(C2, Decl(server.ts, 9, 1))
->I2 : Symbol(I2, Decl(server.ts, 3, 1))
+>C2 : Symbol(C2, Decl(server.ts, 8, 1))
+>I2 : Symbol(I2, Decl(server.ts, 2, 1))
 
     prop2 = "world";
->prop2 : Symbol(C2.prop2, Decl(server.ts, 10, 31))
+>prop2 : Symbol(C2.prop2, Decl(server.ts, 9, 31))
 }
 
 === tests/cases/compiler/client.ts ===

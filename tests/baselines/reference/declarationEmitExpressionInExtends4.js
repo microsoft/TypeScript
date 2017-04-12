@@ -1,5 +1,4 @@
 //// [declarationEmitExpressionInExtends4.ts]
-
 function getSomething() {
     return class D { }
 }

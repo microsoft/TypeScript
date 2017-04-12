@@ -1,5 +1,4 @@
 //// [discriminantsAndNullOrUndefined.ts]
-
 // Repro from #10228
 
 interface A { kind: 'A'; }

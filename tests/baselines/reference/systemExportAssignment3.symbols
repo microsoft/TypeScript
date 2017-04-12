@@ -1,11 +1,10 @@
 === tests/cases/compiler/modules.d.ts ===
-
 declare module "a" {
     var a: number;
->a : Symbol(a, Decl(modules.d.ts, 2, 7))
+>a : Symbol(a, Decl(modules.d.ts, 1, 7))
 
     export = a;  // OK, in ambient context
->a : Symbol(a, Decl(modules.d.ts, 2, 7))
+>a : Symbol(a, Decl(modules.d.ts, 1, 7))
 }
 
 === tests/cases/compiler/b.ts ===

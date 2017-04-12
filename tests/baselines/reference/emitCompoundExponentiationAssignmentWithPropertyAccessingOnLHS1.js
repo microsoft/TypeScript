@@ -1,5 +1,4 @@
 //// [emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts]
-
 var globalCounter = 0;
 function foo() {
     globalCounter += 1;

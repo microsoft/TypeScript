@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportNoExportMember.ts] ////
 
 //// [es6ImportNamedImportNoExportMember_0.ts]
-
 export var a = 10;
 export var x = a;
 

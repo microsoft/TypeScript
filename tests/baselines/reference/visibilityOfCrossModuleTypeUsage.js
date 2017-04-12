@@ -29,8 +29,8 @@ function run(configuration: commands.IConfiguration) {
 "use strict";
 exports.__esModule = true;
 //// [visibilityOfCrossModuleTypeUsage_commands.js]
-//visibilityOfCrossModuleTypeUsage
 "use strict";
+//visibilityOfCrossModuleTypeUsage
 exports.__esModule = true;
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
 "use strict";

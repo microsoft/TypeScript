@@ -1,5 +1,4 @@
 //// [classStaticPropertyTypeGuard.ts]
-
 // Repro from #8923
 
 class A {

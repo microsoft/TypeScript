@@ -1,5 +1,4 @@
 //// [commentOnIfStatement1.ts]
-
 // Test
 if (true) {
 }

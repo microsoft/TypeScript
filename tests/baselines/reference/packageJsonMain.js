@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/packageJsonMain.ts] ////
 
 //// [package.json]
-
 { "main": "oof" }
 
 //// [oof.js]

@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target2.ts]
-
 export default class C {
     static s = 0;
     p = 1;

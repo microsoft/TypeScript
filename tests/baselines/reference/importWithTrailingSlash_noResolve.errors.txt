@@ -1,8 +1,7 @@
-/a.ts(2,17): error TS2307: Cannot find module './foo/'.
+/a.ts(1,17): error TS2307: Cannot find module './foo/'.
 
 
 ==== /a.ts (1 errors) ====
-    
     import foo from "./foo/";
                     ~~~~~~~~
 !!! error TS2307: Cannot find module './foo/'.

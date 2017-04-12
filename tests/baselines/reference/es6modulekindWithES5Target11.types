@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6modulekindWithES5Target11.ts ===
-
 declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
 >args : any[]

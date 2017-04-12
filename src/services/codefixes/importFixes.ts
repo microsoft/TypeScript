@@ -543,12 +543,12 @@ namespace ts.codefix {
                     }
 
                     function getRelativePathIfInDirectory(path: string, directoryPath: string) {
-                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                         return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
                     }
 
                     function getRelativePath(path: string, directoryPath: string) {
-                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                         return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
                     }
                 }

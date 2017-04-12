@@ -169,9 +169,9 @@ namespace Harness.LanguageService {
         }
 
         /**
-          * @param line 0 based index
-          * @param col 0 based index
-          */
+         * @param line 0 based index
+         * @param col 0 based index
+         */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);
@@ -210,7 +210,7 @@ namespace Harness.LanguageService {
         }
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
-            /*useCaseSensitiveFileNames*/false,
+                /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
@@ -795,7 +795,7 @@ namespace Harness.LanguageService {
 
             function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
                 // tslint:disable-next-line:no-null-keyword
-                const proxy = Object.create(null);
+                const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
                     proxy[k] = function () {

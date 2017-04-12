@@ -1,16 +1,15 @@
-tests/cases/conformance/jsx/tsxAttributeErrors.tsx(15,6): error TS2322: Type '{ text: 42; }' is not assignable to type '{ text?: string; width?: number; }'.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(14,6): error TS2322: Type '{ text: 42; }' is not assignable to type '{ text?: string; width?: number; }'.
   Types of property 'text' are incompatible.
     Type '42' is not assignable to type 'string'.
-tests/cases/conformance/jsx/tsxAttributeErrors.tsx(18,6): error TS2322: Type '{ width: "foo"; }' is not assignable to type '{ text?: string; width?: number; }'.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(17,6): error TS2322: Type '{ width: "foo"; }' is not assignable to type '{ text?: string; width?: number; }'.
   Types of property 'width' are incompatible.
     Type '"foo"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/tsxAttributeErrors.tsx(22,6): error TS2322: Type '{ text: number; }' is not assignable to type '{ text?: string; width?: number; }'.
+tests/cases/conformance/jsx/tsxAttributeErrors.tsx(21,6): error TS2322: Type '{ text: number; }' is not assignable to type '{ text?: string; width?: number; }'.
   Types of property 'text' are incompatible.
     Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/tsxAttributeErrors.tsx (3 errors) ====
-    
     declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {

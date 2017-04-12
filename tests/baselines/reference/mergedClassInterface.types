@@ -1,6 +1,4 @@
 === tests/cases/conformance/classes/classDeclarations/file1.ts ===
-
-
 declare class C1 { }
 >C1 : C1
 
@@ -79,7 +77,6 @@ c5.x4;
 >x4 : number
 
 === tests/cases/conformance/classes/classDeclarations/file2.ts ===
-
 declare class C6 { }
 >C6 : C6
 
@@ -87,7 +84,6 @@ interface C7 { }
 >C7 : C7
 
 === tests/cases/conformance/classes/classDeclarations/file3.ts ===
-
 interface C6 { }
 >C6 : C6
 

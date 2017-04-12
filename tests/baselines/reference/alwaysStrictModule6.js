@@ -1,5 +1,4 @@
 //// [alwaysStrictModule6.ts]
-
 // Targeting ES5
 export const a = 1; 
 

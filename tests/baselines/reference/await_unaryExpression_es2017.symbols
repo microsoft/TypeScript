@@ -1,5 +1,4 @@
 === tests/cases/conformance/async/es2017/await_unaryExpression_es2017.ts ===
-
 async function bar() {
 >bar : Symbol(bar, Decl(await_unaryExpression_es2017.ts, 0, 0))
 
@@ -7,19 +6,19 @@ async function bar() {
 }
 
 async function bar1() {
->bar1 : Symbol(bar1, Decl(await_unaryExpression_es2017.ts, 3, 1))
+>bar1 : Symbol(bar1, Decl(await_unaryExpression_es2017.ts, 2, 1))
 
     +await 42; // OK
 }
 
 async function bar3() {
->bar3 : Symbol(bar3, Decl(await_unaryExpression_es2017.ts, 7, 1))
+>bar3 : Symbol(bar3, Decl(await_unaryExpression_es2017.ts, 6, 1))
 
     -await 42; // OK
 }
 
 async function bar4() {
->bar4 : Symbol(bar4, Decl(await_unaryExpression_es2017.ts, 11, 1))
+>bar4 : Symbol(bar4, Decl(await_unaryExpression_es2017.ts, 10, 1))
 
     ~await 42; // OK
 }

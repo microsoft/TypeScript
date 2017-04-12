@@ -1,5 +1,4 @@
 //// [enumDecl1.ts]
-
 declare module mAmbient {
     enum e {
         x,

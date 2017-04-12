@@ -1,5 +1,4 @@
 //// [classOrder2.ts]
-
 class A extends B {
 
   foo() { this.bar(); }

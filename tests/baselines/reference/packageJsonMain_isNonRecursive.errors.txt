@@ -7,7 +7,6 @@
 !!! error TS2307: Cannot find module 'foo'.
     
 ==== /node_modules/foo/package.json (0 errors) ====
-    
     { "main": "oof" }
     
 ==== /node_modules/foo/oof/package.json (0 errors) ====

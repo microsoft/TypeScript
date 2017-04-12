@@ -1,5 +1,4 @@
 //// [systemModule8.ts]
-
 export var x;
 x = 1;
 x++;
