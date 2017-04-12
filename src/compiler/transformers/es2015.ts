@@ -2869,7 +2869,12 @@ namespace ts {
                 !state.labeledNonLocalContinues;
 
             const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
-            const callResult = isAsyncBlockContainingAwait ? createYield(createToken(SyntaxKind.AsteriskToken), call) : call;
+            const callResult = isAsyncBlockContainingAwait
+                ? createYield(
+                    createToken(SyntaxKind.AsteriskToken),
+                    setEmitFlags(call, EmitFlags.Iterator)
+                )
+                : call;
             if (isSimpleLoop) {
                 statements.push(createStatement(callResult));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
