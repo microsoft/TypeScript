@@ -1103,9 +1103,9 @@ namespace ts {
 
         let options = (() => {
             const { include, exclude, files, options } = parseConfig(json, host, basePath, configFileName, resolutionStack, errors);
-            if (include) json.include = include;
-            if (exclude) json.exclude = exclude;
-            if (files) json.files = files;
+            if (include) { json.include = include; }
+            if (exclude) { json.exclude = exclude; }
+            if (files) { json.files = files; }
             return options;
         })();
 
@@ -1203,7 +1203,7 @@ namespace ts {
             host: ParseConfigHost,
             basePath: string,
             configFileName: string,
-            resolutionStack: Path[] = [],
+            resolutionStack: Path[],
             errors: Diagnostic[],
             ): ParsedTsconfig {
 
@@ -1251,8 +1251,10 @@ namespace ts {
             return undefined;
         }
 
+        extended = normalizeSlashes(extended);
+
         // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
-        if (!(isRootedDiskPath(extended) || startsWith(normalizeSlashes(extended), "./") || startsWith(normalizeSlashes(extended), "../"))) {
+        if (!(isRootedDiskPath(extended) || startsWith(extended, "./") || startsWith(extended, "../"))) {
             errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extended));
             return undefined;
         }
