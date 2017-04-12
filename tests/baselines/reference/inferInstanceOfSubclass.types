@@ -1,0 +1,49 @@
+=== tests/cases/compiler/inferInstanceOfSubclass.ts ===
+function create<T>(ctor: { new(): T }) {
+>create : <T>(ctor: new () => T) => T
+>T : T
+>ctor : new () => T
+>T : T
+
+    return new ctor();
+>new ctor() : T
+>ctor : new () => T
+}
+class C<U> { c: U }
+>C : C<U>
+>U : U
+>c : U
+>U : U
+
+class D<V> extends C<V> { d: V }
+>D : D<V>
+>V : V
+>C : C<V>
+>V : V
+>d : V
+>V : V
+
+let d = create(D);
+>d : D<any>
+>create(D) : D<any>
+>create : <T>(ctor: new () => T) => T
+>D : typeof D
+
+class A { a: number }
+>A : A
+>a : number
+
+class B<T> extends A { b: T }
+>B : B<T>
+>T : T
+>A : A
+>b : T
+>T : T
+
+let b = create(B);
+>b : B<any>
+>create(B) : B<any>
+>create : <T>(ctor: new () => T) => T
+>B : typeof B
+
+
