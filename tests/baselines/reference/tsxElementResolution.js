@@ -1,5 +1,4 @@
 //// [tsxElementResolution.tsx]
-
 declare namespace JSX {
 	interface IntrinsicElements {
 		foundFirst: { x: string };

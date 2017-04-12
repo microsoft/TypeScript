@@ -1,5 +1,4 @@
 //// [es5ExportDefaultClassDeclaration2.ts]
-
 export default class {
     method() { }
 }

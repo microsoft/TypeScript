@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
-
 interface Foo {
 >Foo : Foo
 

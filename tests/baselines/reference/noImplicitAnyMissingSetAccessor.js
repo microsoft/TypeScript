@@ -1,5 +1,4 @@
 //// [noImplicitAnyMissingSetAccessor.ts]
-
 abstract class Parent
 {
     public abstract get message();

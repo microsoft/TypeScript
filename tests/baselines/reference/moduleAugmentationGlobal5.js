@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal5.ts] ////
 
 //// [f1.d.ts]
-
 declare module "A" {
     global {
         interface Something {x}

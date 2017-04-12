@@ -15,7 +15,6 @@ module B {
 
 
 === tests/cases/compiler/A.ts ===
-
 module A { export interface I {} }
 >A : typeof A
 >I : I

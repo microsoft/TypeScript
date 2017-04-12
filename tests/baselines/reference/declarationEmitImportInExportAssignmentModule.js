@@ -1,5 +1,4 @@
 //// [declarationEmitImportInExportAssignmentModule.ts]
-
 module m {
     export module c {
         export class c {

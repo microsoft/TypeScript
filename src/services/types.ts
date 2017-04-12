@@ -4,7 +4,11 @@ namespace ts {
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
         getChildren(sourceFile?: SourceFile): Node[];
+        /* @internal */
+        getChildren(sourceFile?: SourceFileLike): Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
+        /* @internal */
+        getStart(sourceFile?: SourceFileLike, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
         getWidth(sourceFile?: SourceFile): number;
@@ -14,6 +18,8 @@ namespace ts {
         getText(sourceFile?: SourceFile): string;
         getFirstToken(sourceFile?: SourceFile): Node;
         getLastToken(sourceFile?: SourceFile): Node;
+        // See ts.forEachChild for documentation.
+        forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
     }
 
     export interface Symbol {
@@ -21,6 +27,7 @@ namespace ts {
         getName(): string;
         getDeclarations(): Declaration[];
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface Type {
@@ -39,10 +46,11 @@ namespace ts {
 
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): Type[];
+        getTypeParameters(): TypeParameter[];
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
+        getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface SourceFile {
@@ -57,6 +65,10 @@ namespace ts {
         getLineStarts(): number[];
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
+    }
+
+    export interface SourceFileLike {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
     /**
@@ -170,6 +182,11 @@ namespace ts {
          * completions will not be provided
          */
         getDirectories?(directoryName: string): string[];
+
+        /**
+         * Gets a set of custom transformers to use during emit.
+         */
+        getCustomTransformers?(): CustomTransformers | undefined;
     }
 
     //
@@ -243,7 +260,7 @@ namespace ts {
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[]): CodeAction[];
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -341,21 +358,23 @@ namespace ts {
         caretOffset: number;
     }
 
-    export interface RenameLocation {
+    export interface DocumentSpan {
         textSpan: TextSpan;
         fileName: string;
     }
 
-    export interface ReferenceEntry {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface RenameLocation extends DocumentSpan {
+    }
+
+    export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
         isDefinition: boolean;
+        isInString?: true;
     }
 
-    export interface ImplementationLocation {
-        textSpan: TextSpan;
-        fileName: string;
+    export interface ImplementationLocation extends DocumentSpan {
+        kind: string;
+        displayParts: SymbolDisplayPart[];
     }
 
     export interface DocumentHighlights {
@@ -372,6 +391,7 @@ namespace ts {
 
     export interface HighlightSpan {
         fileName?: string;
+        isInString?: true;
         textSpan: TextSpan;
         kind: string;
     }
@@ -463,9 +483,12 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface ReferencedSymbol {
+    export interface ReferencedSymbolOf<T extends DocumentSpan> {
         definition: ReferencedSymbolDefinitionInfo;
-        references: ReferenceEntry[];
+        references: T[];
+    }
+
+    export interface ReferencedSymbol extends ReferencedSymbolOf<ReferenceEntry> {
     }
 
     export enum SymbolDisplayPartKind {
@@ -498,12 +521,18 @@ namespace ts {
         kind: string; // A ScriptElementKind
     }
 
+    export interface JSDocTagInfo {
+        name: string;
+        text?: string;
+    }
+
     export interface QuickInfo {
         kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     export interface RenameInfo {
@@ -537,6 +566,7 @@ namespace ts {
         separatorDisplayParts: SymbolDisplayPart[];
         parameters: SignatureHelpParameter[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     /**
@@ -567,10 +597,10 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         sortText: string;
         /**
-          * An optional span that indicates the text to be replaced by this completion item. It will be
-          * set if the required span differs from the one generated by the default replacement behavior and should
-          * be used in that case
-          */
+         * An optional span that indicates the text to be replaced by this completion item. It will be
+         * set if the required span differs from the one generated by the default replacement behavior and should
+         * be used in that case
+         */
         replacementSpan?: TextSpan;
     }
 
@@ -580,6 +610,7 @@ namespace ts {
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
+        tags: JSDocTagInfo[];
     }
 
     export interface OutliningSpan {
@@ -593,9 +624,9 @@ namespace ts {
         bannerText: string;
 
         /**
-          * Whether or not this region should be automatically collapsed when
-          * the 'Collapse to Definitions' command is invoked.
-          */
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
         autoCollapse: boolean;
     }
 
@@ -701,8 +732,7 @@ namespace ts {
 
         /** enum E */
         export const enumElement = "enum";
-        // TODO: GH#9983
-        export const enumMemberElement = "const";
+        export const enumMemberElement = "enum member";
 
         /**
          * Inside module and script only
@@ -765,6 +795,11 @@ namespace ts {
         export const directory = "directory";
 
         export const externalModuleName = "external module name";
+
+        /**
+         * <JsxTagName attribute1 attribute2={0} />
+         */
+        export const jsxAttribute = "JSX attribute";
     }
 
     export namespace ScriptElementKindModifier {

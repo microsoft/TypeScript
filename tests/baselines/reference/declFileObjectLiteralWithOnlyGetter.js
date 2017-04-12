@@ -1,5 +1,4 @@
 //// [declFileObjectLiteralWithOnlyGetter.ts]
-
 function /*1*/makePoint(x: number) { 
     return {
         get x() { return x; },

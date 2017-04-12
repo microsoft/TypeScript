@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/mixinClassesAnnotated.ts ===
-
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
 >T : T

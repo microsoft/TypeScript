@@ -1,5 +1,4 @@
 === tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
-
 var s = Symbol();
 >s : symbol
 >Symbol() : symbol

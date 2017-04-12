@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports16.ts] ////
 
 //// [foo.tsx]
-
 import Element = require("react");
 
 export const FooComponent = <div></div>

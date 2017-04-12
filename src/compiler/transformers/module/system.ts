@@ -1,5 +1,6 @@
-﻿/// <reference path="../../factory.ts" />
+/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -136,7 +137,6 @@ namespace ts {
             contextObject = undefined;
             hoistedStatements = undefined;
             enclosingBlockScopedContainer = undefined;
-
             return aggregateTransformFlags(updated);
         }
 
@@ -151,18 +151,20 @@ namespace ts {
             for (let i = 0; i < externalImports.length; i++) {
                 const externalImport = externalImports[i];
                 const externalModuleName = getExternalModuleNameLiteral(externalImport, currentSourceFile, host, resolver, compilerOptions);
-                const text = externalModuleName.text;
-                const groupIndex = groupIndices.get(text);
-                if (groupIndex !== undefined) {
-                    // deduplicate/group entries in dependency list by the dependency name
-                    dependencyGroups[groupIndex].externalImports.push(externalImport);
-                }
-                else {
-                    groupIndices.set(text, dependencyGroups.length);
-                    dependencyGroups.push({
-                        name: externalModuleName,
-                        externalImports: [externalImport]
-                    });
+                if (externalModuleName) {
+                    const text = externalModuleName.text;
+                    const groupIndex = groupIndices.get(text);
+                    if (groupIndex !== undefined) {
+                        // deduplicate/group entries in dependency list by the dependency name
+                        dependencyGroups[groupIndex].externalImports.push(externalImport);
+                    }
+                    else {
+                        groupIndices.set(text, dependencyGroups.length);
+                        dependencyGroups.push({
+                            name: externalModuleName,
+                            externalImports: [externalImport]
+                        });
+                    }
                 }
             }
 
@@ -225,7 +227,8 @@ namespace ts {
             startLexicalEnvironment();
 
             // Add any prologue directives.
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
@@ -245,7 +248,7 @@ namespace ts {
             );
 
             // Visit the synthetic external helpers import declaration if present
-            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true);
+            visitNode(moduleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement);
 
             // Visit the statements of the source file, emitting any transformations into
             // the `executeStatements` array. We do this *before* we fill the `setters` array
@@ -669,6 +672,7 @@ namespace ts {
                         node,
                         node.decorators,
                         visitNodes(node.modifiers, modifierVisitor, isModifier),
+                        node.asteriskToken,
                         getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
                         visitNodes(node.parameters, destructuringVisitor, isParameterDeclaration),
@@ -1218,8 +1222,8 @@ namespace ts {
             node = updateFor(
                 node,
                 visitForInitializer(node.initializer),
-                visitNode(node.condition, destructuringVisitor, isExpression, /*optional*/ true),
-                visitNode(node.incrementor, destructuringVisitor, isExpression, /*optional*/ true),
+                visitNode(node.condition, destructuringVisitor, isExpression),
+                visitNode(node.incrementor, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
             );
 
@@ -1240,7 +1244,7 @@ namespace ts {
                 node,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1258,9 +1262,10 @@ namespace ts {
 
             node = updateForOf(
                 node,
+                node.awaitModifier,
                 visitForInitializer(node.initializer),
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
             enclosingBlockScopedContainer = savedEnclosingBlockScopedContainer;
@@ -1284,6 +1289,10 @@ namespace ts {
          * @param node The node to visit.
          */
         function visitForInitializer(node: ForInitializer): ForInitializer {
+            if (!node) {
+                return node;
+            }
+
             if (shouldHoistForInitializer(node)) {
                 let expressions: Expression[];
                 for (const variable of node.declarations) {
@@ -1305,7 +1314,7 @@ namespace ts {
         function visitDoStatement(node: DoStatement): VisitResult<Statement> {
             return updateDo(
                 node,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock),
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock),
                 visitNode(node.expression, destructuringVisitor, isExpression)
             );
         }
@@ -1319,7 +1328,7 @@ namespace ts {
             return updateWhile(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1332,7 +1341,7 @@ namespace ts {
             return updateLabel(
                 node,
                 node.label,
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1345,7 +1354,7 @@ namespace ts {
             return updateWith(
                 node,
                 visitNode(node.expression, destructuringVisitor, isExpression),
-                visitNode(node.statement, nestedElementVisitor, isStatement, /*optional*/ false, liftToBlock)
+                visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
 
@@ -1492,7 +1501,7 @@ namespace ts {
          * @param node The destructuring target.
          */
         function hasExportedReferenceInDestructuringTarget(node: Expression | ObjectLiteralElementLike): boolean {
-            if (isAssignmentExpression(node)) {
+            if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true)) {
                 return hasExportedReferenceInDestructuringTarget(node.left);
             }
             else if (isSpreadExpression(node)) {
@@ -1625,6 +1634,7 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }
+
                 return node;
             }
 

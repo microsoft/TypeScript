@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 const Foo = (props: any) => <div/>;

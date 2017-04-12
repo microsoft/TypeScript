@@ -1,5 +1,4 @@
 === tests/cases/compiler/es2017basicAsync.ts ===
-
 async (): Promise<void> => {
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
@@ -7,20 +6,20 @@ async (): Promise<void> => {
 }
 
 async function asyncFunc() {
->asyncFunc : Symbol(asyncFunc, Decl(es2017basicAsync.ts, 3, 1))
+>asyncFunc : Symbol(asyncFunc, Decl(es2017basicAsync.ts, 2, 1))
 
     await 0;
 }
 
 const asyncArrowFunc = async (): Promise<void> => {
->asyncArrowFunc : Symbol(asyncArrowFunc, Decl(es2017basicAsync.ts, 9, 5))
+>asyncArrowFunc : Symbol(asyncArrowFunc, Decl(es2017basicAsync.ts, 8, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
     await 0;
 }
 
 async function asyncIIFE() {
->asyncIIFE : Symbol(asyncIIFE, Decl(es2017basicAsync.ts, 11, 1))
+>asyncIIFE : Symbol(asyncIIFE, Decl(es2017basicAsync.ts, 10, 1))
 
     await 0;
 
@@ -31,7 +30,7 @@ async function asyncIIFE() {
     })();
     
     await (async function asyncNamedFunc(): Promise<void> {
->asyncNamedFunc : Symbol(asyncNamedFunc, Decl(es2017basicAsync.ts, 20, 11))
+>asyncNamedFunc : Symbol(asyncNamedFunc, Decl(es2017basicAsync.ts, 19, 11))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
         await 1;
@@ -45,32 +44,32 @@ async function asyncIIFE() {
 }
 
 class AsyncClass {
->AsyncClass : Symbol(AsyncClass, Decl(es2017basicAsync.ts, 27, 1))
+>AsyncClass : Symbol(AsyncClass, Decl(es2017basicAsync.ts, 26, 1))
 
     asyncPropFunc = async function(): Promise<void> {
->asyncPropFunc : Symbol(AsyncClass.asyncPropFunc, Decl(es2017basicAsync.ts, 29, 18))
+>asyncPropFunc : Symbol(AsyncClass.asyncPropFunc, Decl(es2017basicAsync.ts, 28, 18))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
         await 2;
     }
     
     asyncPropNamedFunc = async function namedFunc(): Promise<void> {
->asyncPropNamedFunc : Symbol(AsyncClass.asyncPropNamedFunc, Decl(es2017basicAsync.ts, 32, 5))
->namedFunc : Symbol(namedFunc, Decl(es2017basicAsync.ts, 34, 24))
+>asyncPropNamedFunc : Symbol(AsyncClass.asyncPropNamedFunc, Decl(es2017basicAsync.ts, 31, 5))
+>namedFunc : Symbol(namedFunc, Decl(es2017basicAsync.ts, 33, 24))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
         await 2;
     }
 
     asyncPropArrowFunc = async (): Promise<void> => {
->asyncPropArrowFunc : Symbol(AsyncClass.asyncPropArrowFunc, Decl(es2017basicAsync.ts, 36, 5))
+>asyncPropArrowFunc : Symbol(AsyncClass.asyncPropArrowFunc, Decl(es2017basicAsync.ts, 35, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
         await 2;
     }
 
     async asyncMethod(): Promise<void> {
->asyncMethod : Symbol(AsyncClass.asyncMethod, Decl(es2017basicAsync.ts, 40, 5))
+>asyncMethod : Symbol(AsyncClass.asyncMethod, Decl(es2017basicAsync.ts, 39, 5))
 >Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 
         await 2;

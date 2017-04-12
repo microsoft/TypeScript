@@ -1,8 +1,7 @@
-tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts(5,25): error TS4081: Exported type alias 'SubFoo' has or is using private name 'Foo'.
+tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts(4,25): error TS4081: Exported type alias 'SubFoo' has or is using private name 'Foo'.
 
 
 ==== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters5.ts (1 errors) ====
-    
     type Foo<T, Y> = {
         foo<U, J>(): Foo<U, J>
     };

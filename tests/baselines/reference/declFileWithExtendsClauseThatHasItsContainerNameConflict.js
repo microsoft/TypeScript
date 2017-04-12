@@ -1,5 +1,4 @@
 //// [declFileWithExtendsClauseThatHasItsContainerNameConflict.ts]
-
 declare module A.B.C {
     class B {
     }

@@ -1,5 +1,4 @@
 //// [defaultExportWithOverloads01.ts]
-
 export default function f();
 export default function f(x: string);
 export default function f(...args: any[]) {

@@ -101,6 +101,7 @@ namespace ts {
             if (isIdentifier(node) && hint === EmitHint.Expression) {
                 return substituteExpressionIdentifier(node);
             }
+
             return node;
         }
 

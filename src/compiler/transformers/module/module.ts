@@ -1,5 +1,6 @@
-﻿/// <reference path="../../factory.ts" />
+/// <reference path="../../factory.ts" />
 /// <reference path="../../visitor.ts" />
+/// <reference path="../destructuring.ts" />
 
 /*@internal*/
 namespace ts {
@@ -54,9 +55,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)
-                || !(isExternalModule(node)
-                    || compilerOptions.isolatedModules)) {
+            if (isDeclarationFile(node) || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
                 return node;
             }
 
@@ -73,6 +72,14 @@ namespace ts {
             return aggregateTransformFlags(updated);
         }
 
+
+        function shouldEmitUnderscoreUnderscoreESModule() {
+            if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
+                return true;
+            }
+            return false;
+        }
+
         /**
          * Transforms a SourceFile into a CommonJS module.
          *
@@ -82,19 +89,22 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
-            if (!currentModuleInfo.exportEquals) {
+            if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
-            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
-            addRange(statements, endLexicalEnvironment());
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
+            addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues) {
+                // If we have any `export * from ...` declarations
+                // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
             return updated;
@@ -349,15 +359,20 @@ namespace ts {
 
                 // Find the name of the module alias, if there is one
                 const importAliasName = getLocalNameForExternalImport(importNode, currentSourceFile);
-                if (includeNonAmdDependencies && importAliasName) {
-                    // Set emitFlags on the name of the classDeclaration
-                    // This is so that when printer will not substitute the identifier
-                    setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
-                    aliasedModuleNames.push(externalModuleName);
-                    importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
-                }
-                else {
-                    unaliasedModuleNames.push(externalModuleName);
+                // It is possible that externalModuleName is undefined if it is not string literal.
+                // This can happen in the invalid import syntax.
+                // E.g : "import * from alias from 'someLib';"
+                if (externalModuleName) {
+                    if (includeNonAmdDependencies && importAliasName) {
+                        // Set emitFlags on the name of the classDeclaration
+                        // This is so that when printer will not substitute the identifier
+                        setEmitFlags(importAliasName, EmitFlags.NoSubstitution);
+                        aliasedModuleNames.push(externalModuleName);
+                        importAliasNames.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, importAliasName));
+                    }
+                    else {
+                        unaliasedModuleNames.push(externalModuleName);
+                    }
                 }
             }
 
@@ -375,20 +390,20 @@ namespace ts {
             const statements: Statement[] = [];
             const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
-            if (!currentModuleInfo.exportEquals) {
+            if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
             }
 
             // Visit each statement of the module body.
-            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement, /*optional*/ true));
+            append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
+
+            // Append the 'export =' statement if provided.
+            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
             addRange(statements, endLexicalEnvironment());
-
-            // Append the 'export =' statement if provided.
-            addExportEqualsIfNeeded(statements, /*emitAsReturn*/ true);
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues) {
@@ -1147,9 +1162,9 @@ namespace ts {
                 statement = createStatement(
                     createExportExpression(
                         createIdentifier("__esModule"),
-                        createLiteral(true)
+                        createLiteral(/*value*/ true)
                     )
-                )
+                );
             }
             else {
                 statement = createStatement(
@@ -1160,7 +1175,7 @@ namespace ts {
                             createIdentifier("exports"),
                             createLiteral("__esModule"),
                             createObjectLiteral([
-                                createPropertyAssignment("value", createLiteral(true))
+                                createPropertyAssignment("value", createLiteral(/*value*/ true))
                             ])
                         ]
                     )
@@ -1334,6 +1349,7 @@ namespace ts {
                 if (externalHelpersModuleName) {
                     return createPropertyAccess(externalHelpersModuleName, node);
                 }
+
                 return node;
             }
 

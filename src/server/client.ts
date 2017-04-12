@@ -33,7 +33,7 @@ namespace ts.server {
     }
 
     export class SessionClient implements LanguageService {
-        private sequence: number = 0;
+        private sequence = 0;
         private lineMaps: ts.Map<number[]> = ts.createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
@@ -178,7 +178,8 @@ namespace ts.server {
                 kindModifiers: response.body.kindModifiers,
                 textSpan: ts.createTextSpanFromBounds(start, end),
                 displayParts: [{ kind: "text", text: response.body.displayString }],
-                documentation: [{ kind: "text", text: response.body.documentation }]
+                documentation: [{ kind: "text", text: response.body.documentation }],
+                tags: response.body.tags
             };
         }
 
@@ -382,7 +383,9 @@ namespace ts.server {
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end)
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: ScriptElementKind.unknown,
+                    displayParts: []
                 };
             });
         }

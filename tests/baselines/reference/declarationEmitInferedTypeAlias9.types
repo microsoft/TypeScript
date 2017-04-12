@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitInferedTypeAlias9.ts ===
-
 type Foo<T> = T | { x: Foo<T> };
 >Foo : T | { x: T | any; }
 >T : T

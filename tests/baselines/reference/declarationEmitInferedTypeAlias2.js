@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationEmitInferedTypeAlias2.ts] ////
 
 //// [0.ts]
-
 {
     type Data = string | boolean;
     let obj: Data = true;

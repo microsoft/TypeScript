@@ -85,6 +85,37 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
+        if (isJsxOpeningLikeElement(node.parent)) {
+            // If there are errors when trying to figure out stateless component function, just return the first declaration
+            // For example:
+            //      declare function /*firstSource*/MainButton(buttonProps: ButtonProps): JSX.Element;
+            //      declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
+            //      declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
+            //      let opt = <Main/*firstTarget*/Button />;  // Error - We get undefined for resolved signature indicating an error, then just return the first declaration
+            const {symbolName, symbolKind, containerName} = getSymbolInfo(typeChecker, symbol, node);
+            return [createDefinitionInfo(symbol.valueDeclaration, symbolKind, symbolName, containerName)];
+        }
+
+        // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
+        // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
+        // For example
+        //      interface Props{
+        //          /*first*/prop1: number
+        //          prop2: boolean
+        //      }
+        //      function Foo(arg: Props) {}
+        //      Foo( { pr/*1*/op1: 10, prop2: true })
+        const element = getContainingObjectLiteralElement(node);
+        if (element) {
+            if (typeChecker.getContextualType(element.parent as Expression)) {
+                const result: DefinitionInfo[] = [];
+                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, element);
+                for (const propertySymbol of propertySymbols) {
+                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+                }
+                return result;
+            }
+        }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
@@ -167,7 +198,11 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[], selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+            if (!signatureDeclarations) {
+                return false;
+            }
+
             const declarations: Declaration[] = [];
             let definition: Declaration | undefined;
 
@@ -262,9 +297,12 @@ namespace ts.GoToDefinition {
 
     function tryGetSignatureDeclaration(typeChecker: TypeChecker, node: Node): SignatureDeclaration | undefined {
         const callLike = getAncestorCallLikeExpression(node);
-        const decl = callLike && typeChecker.getResolvedSignature(callLike).declaration;
-        if (decl && isSignatureDeclaration(decl)) {
-            return decl;
+        const signature = callLike && typeChecker.getResolvedSignature(callLike);
+        if (signature) {
+            const decl = signature.declaration;
+            if (decl && isSignatureDeclaration(decl)) {
+                return decl;
+            }
         }
         // Don't go to a function type, go to the value having that type.
         return undefined;

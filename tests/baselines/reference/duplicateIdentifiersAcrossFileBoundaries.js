@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/duplicateIdentifiersAcrossFileBoundaries.ts] ////
 
 //// [file1.ts]
-
 interface I { }
 class C1 { }
 class C2 { }

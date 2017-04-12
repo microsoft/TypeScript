@@ -4,7 +4,7 @@
 ////     constructor(public x: number) { }
 //// }
 ////
-//// class B implements A {[|   |]}
+//// class B implements A {[| |]}
 
 verify.not.codeFixAvailable();
 

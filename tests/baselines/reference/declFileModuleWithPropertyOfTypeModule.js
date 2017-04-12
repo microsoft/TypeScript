@@ -1,5 +1,4 @@
 //// [declFileModuleWithPropertyOfTypeModule.ts]
-
 module m {
     export class c {
     }

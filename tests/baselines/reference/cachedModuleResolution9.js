@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/cachedModuleResolution9.ts] ////
 
 //// [lib.ts]
-
 import {x} from "foo";
 
 

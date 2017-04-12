@@ -1,5 +1,4 @@
 //// [newOperatorErrorCases.ts]
-
 class C0 {
 
 }

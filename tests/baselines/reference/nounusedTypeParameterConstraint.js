@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/nounusedTypeParameterConstraint.ts] ////
 
 //// [bar.ts]
-
 export interface IEventSourcedEntity { }
 
 //// [test.ts]

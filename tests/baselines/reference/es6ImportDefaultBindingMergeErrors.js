@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingMergeErrors.ts] ////
 
 //// [es6ImportDefaultBindingMergeErrors_0.ts]
-
 var a = 10;
 export default a;
 

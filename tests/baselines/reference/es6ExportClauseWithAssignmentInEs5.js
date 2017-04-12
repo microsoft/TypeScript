@@ -1,5 +1,4 @@
 //// [server.ts]
-
 var foo = 2;
 foo = 3;
 

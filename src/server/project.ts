@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -723,7 +723,7 @@ namespace ts.server {
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles.set(typeFilePath, true);
-                })
+                });
             }
 
             const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
@@ -745,7 +745,7 @@ namespace ts.server {
                 const id = nextId;
                 nextId++;
                 return makeInferredProjectName(id);
-            }
+            };
         })();
 
         private _isJsInferredProject = false;
@@ -1031,7 +1031,7 @@ namespace ts.server {
 
     export class ExternalProject extends Project {
         private typeAcquisition: TypeAcquisition;
-        constructor(externalProjectName: string,
+        constructor(public externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,

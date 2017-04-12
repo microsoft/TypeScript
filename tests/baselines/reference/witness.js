@@ -1,8 +1,4 @@
 //// [witness.ts]
-
-
-
-
 // Initializers
 var varInit = varInit; // any
 var pInit: any;

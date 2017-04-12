@@ -1,5 +1,4 @@
 //// [ES5for-of32.ts]
-
 var array = [1,2,3];
 var sum = 0;
 

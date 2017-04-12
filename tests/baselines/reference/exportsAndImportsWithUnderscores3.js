@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImportsWithUnderscores3.ts] ////
 
 //// [m1.ts]
-
 var R: any
 export default R = {
     "___": 30,

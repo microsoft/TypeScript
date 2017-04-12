@@ -1,5 +1,4 @@
 === tests/cases/compiler/constEnumDeclarations.ts ===
-
 const enum E {
 >E : E
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingAmd.ts] ////
 
 //// [es6ImportDefaultBindingAmd_0.ts]
-
 var a = 10;
 export default a;
 

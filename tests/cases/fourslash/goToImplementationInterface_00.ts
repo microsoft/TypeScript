@@ -8,12 +8,12 @@
 ////
 //// interface Baz extends Foo {}
 ////
-//// var bar: Foo = [|{ hello: helloImpl /**0*/ }|];
+//// var bar: Foo = [|{|"parts": ["(","object literal",")"], "kind": "interface"|}{ hello: helloImpl /**0*/ }|];
 //// var baz: Foo[] = [|[{ hello: helloImpl /**4*/ }]|];
 ////
 //// function helloImpl () {}
 ////
-//// function whatever(x: Foo = [|{ hello() {/**1*/} }|] ) {
+//// function whatever(x: Foo = [|{|"parts": ["(","object literal",")"], "kind": "interface"|}{ hello() {/**1*/} }|] ) {
 //// }
 ////
 //// class Bar {

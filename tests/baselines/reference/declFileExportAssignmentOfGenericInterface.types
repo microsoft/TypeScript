@@ -13,7 +13,6 @@ x.a;
 >a : string
 
 === tests/cases/compiler/declFileExportAssignmentOfGenericInterface_0.ts ===
-
 interface Foo<T> {
 >Foo : Foo<T>
 >T : T

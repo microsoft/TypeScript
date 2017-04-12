@@ -1,5 +1,4 @@
 //// [contextuallyTypedClassExpressionMethodDeclaration02.ts]
-
 interface A {
     numProp: number;
 }

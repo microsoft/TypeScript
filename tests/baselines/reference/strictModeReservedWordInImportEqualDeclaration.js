@@ -1,5 +1,4 @@
 //// [strictModeReservedWordInImportEqualDeclaration.ts]
-
 "use strict"
 import public = require("1");
 

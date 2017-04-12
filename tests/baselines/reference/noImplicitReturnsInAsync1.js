@@ -1,5 +1,4 @@
 //// [noImplicitReturnsInAsync1.ts]
-
 async function test(isError: boolean = false) {
     if (isError === true) {
         return;

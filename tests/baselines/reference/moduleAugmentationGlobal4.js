@@ -1,13 +1,11 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal4.ts] ////
 
 //// [f1.ts]
-
 declare global {
     interface Something {x}
 }
 export {};
 //// [f2.ts]
-
 declare global {
     interface Something {y}
 }

@@ -1,5 +1,4 @@
 //// [noImplicitUseStrict_umd.ts]
-
 export var x = 0;
 
 //// [noImplicitUseStrict_umd.js]

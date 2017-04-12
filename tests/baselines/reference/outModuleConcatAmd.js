@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatAmd.ts] ////
 
 //// [a.ts]
-
 export class A { }
 
 //// [b.ts]

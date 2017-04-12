@@ -205,7 +205,6 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
 !!! error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
     
 ==== tests/cases/compiler/modules.d.ts (0 errors) ====
-    
     declare module "interface" {
         interface Foo {
             x: number;

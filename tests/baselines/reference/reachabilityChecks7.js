@@ -1,5 +1,4 @@
 //// [reachabilityChecks7.ts]
-
 // async function without return type annotation - error
 async function f1() {    
 }

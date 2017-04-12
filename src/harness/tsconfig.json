@@ -1,4 +1,4 @@
-{
+﻿{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -6,6 +6,10 @@
         "declaration": false,
         "types": [
             "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
         ]
     },
     "files": [
@@ -77,8 +81,9 @@
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
-        "../services/harness.ts",
+        "../services/codefixes/disableJsDiagnostics.ts",
 
+        "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
         "fourslash.ts",
@@ -91,7 +96,7 @@
         "rwcRunner.ts",
         "test262Runner.ts",
         "runner.ts",
-        "../server/protocol.d.ts",
+        "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
@@ -119,6 +124,9 @@
         "./unittests/compileOnSave.ts",
         "./unittests/typingsInstaller.ts",
         "./unittests/projectErrors.ts",
-        "./unittests/printer.ts"
+        "./unittests/printer.ts",
+        "./unittests/transform.ts",
+        "./unittests/customTransforms.ts",
+        "./unittests/textChanges.ts"
     ]
 }

@@ -1,5 +1,4 @@
 === tests/cases/compiler/event.ts ===
-
 export interface Event { title: string };
 >Event : Event
 >title : string

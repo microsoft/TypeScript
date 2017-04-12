@@ -1,5 +1,4 @@
 //// [neverTypeErrors2.ts]
-
 function f1() {
     let x: never;
     x = 1;

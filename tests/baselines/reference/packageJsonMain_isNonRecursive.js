@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/packageJsonMain_isNonRecursive.ts] ////
 
 //// [package.json]
-
 { "main": "oof" }
 
 //// [package.json]

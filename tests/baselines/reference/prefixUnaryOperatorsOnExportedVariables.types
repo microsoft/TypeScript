@@ -1,5 +1,4 @@
 === tests/cases/compiler/prefixUnaryOperatorsOnExportedVariables.ts ===
-
 export var x = false;
 >x : boolean
 >false : false
