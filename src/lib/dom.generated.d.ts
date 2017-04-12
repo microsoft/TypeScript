@@ -5464,6 +5464,10 @@ declare var HTMLLegendElement: {
 
 interface HTMLLinkElement extends HTMLElement, LinkStyle {
     /**
+     * Sets or retrieves the target attribute.
+     */
+    as: string;
+    /**
       * Sets or retrieves the character set used to encode the object.
       */
     charset: string;
