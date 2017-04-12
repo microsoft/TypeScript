@@ -22,17 +22,23 @@ tests/cases/conformance/jsx/file.tsx(26,29): error TS2322: Type '{ yy: "hello"; 
   Type '{ yy: "hello"; direction: "left"; }' is not assignable to type '{ yy: string; direction?: number; }'.
     Types of property 'direction' are incompatible.
       Type '"left"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(32,29): error TS2322: Type '{ y1: true; y3: "hello"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: true; y3: "hello"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
   Type '{ y1: true; y3: "hello"; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
     Types of property 'y3' are incompatible.
       Type '"hello"' is not assignable to type 'boolean'.
-tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
   Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
+    Types of property 'y1' are incompatible.
+      Type '"hello"' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type '{ y1: "hello"; y2: 1000; children: "hi"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+  Property 'children' does not exist on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '{ y1: "hello"; y2: 1000; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+  Type '{ y1: "hello"; y2: 1000; children: string; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
     Types of property 'y1' are incompatible.
       Type '"hello"' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (10 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (12 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -93,6 +99,7 @@ tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: "hello"; 
 !!! error TS2322:       Type '"left"' is not assignable to type 'number'.
     
     declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
+    declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
     declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
     
     // Error
@@ -106,6 +113,16 @@ tests/cases/conformance/jsx/file.tsx(33,29): error TS2322: Type '{ y1: "hello"; 
                                 ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
 !!! error TS2322:   Type '{ y1: "hello"; y2: 1000; y3: true; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
+!!! error TS2322:     Types of property 'y1' are incompatible.
+!!! error TS2322:       Type '"hello"' is not assignable to type 'boolean'.
+    const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ y1: "hello"; y2: 1000; children: "hi"; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+!!! error TS2322:   Property 'children' does not exist on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+    const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
+                                ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ y1: "hello"; y2: 1000; children: string; }' is not assignable to type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
+!!! error TS2322:   Type '{ y1: "hello"; y2: 1000; children: string; }' is not assignable to type '{ y1: boolean; y2?: number; y3: boolean; }'.
 !!! error TS2322:     Types of property 'y1' are incompatible.
 !!! error TS2322:       Type '"hello"' is not assignable to type 'boolean'.
     

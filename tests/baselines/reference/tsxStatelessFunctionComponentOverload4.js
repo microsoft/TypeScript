@@ -27,11 +27,14 @@ const d1 = <TestingOneThing extra-data />
 const d2 = <TestingOneThing yy="hello" direction="left" />
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
+declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 
 // Error
 const e1 = <TestingOptional y1 y3="hello"/>
 const e2 = <TestingOptional y1="hello" y2={1000} y3 />
+const e3 = <TestingOptional y1="hello" y2={1000} children="hi" />
+const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
 
 
 //// [file.jsx]
@@ -58,4 +61,6 @@ define(["require", "exports", "react"], function (require, exports, React) {
     // Error
     var e1 = <TestingOptional y1 y3="hello"/>;
     var e2 = <TestingOptional y1="hello" y2={1000} y3/>;
+    var e3 = <TestingOptional y1="hello" y2={1000} children="hi"/>;
+    var e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>;
 });

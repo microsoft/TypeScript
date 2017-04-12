@@ -14,8 +14,16 @@ function Comp(p: Prop) {
 // Error: missing children
 let k = <Comp a={10} b="hi" />;
 
-let k1 =
+let k0 =
     <Comp a={10} b="hi" children="Random" >
+        hi hi hi!
+    </Comp>;
+
+let o = {
+     children:"Random"
+}
+let k1 =
+    <Comp a={10} b="hi" {...o} >
         hi hi hi!
     </Comp>;
 
@@ -53,7 +61,13 @@ function Comp(p) {
 }
 // Error: missing children
 var k = <Comp a={10} b="hi"/>;
-var k1 = <Comp a={10} b="hi" children="Random">
+var k0 = <Comp a={10} b="hi" children="Random">
+        hi hi hi!
+    </Comp>;
+var o = {
+    children: "Random"
+};
+var k1 = <Comp a={10} b="hi" {...o}>
         hi hi hi!
     </Comp>;
 // Error: incorrect type

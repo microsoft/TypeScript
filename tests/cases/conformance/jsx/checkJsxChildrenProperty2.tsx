@@ -18,8 +18,16 @@ function Comp(p: Prop) {
 // Error: missing children
 let k = <Comp a={10} b="hi" />;
 
-let k1 =
+let k0 =
     <Comp a={10} b="hi" children="Random" >
+        hi hi hi!
+    </Comp>;
+
+let o = {
+     children:"Random"
+}
+let k1 =
+    <Comp a={10} b="hi" {...o} >
         hi hi hi!
     </Comp>;
 
