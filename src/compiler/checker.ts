@@ -5495,7 +5495,7 @@ namespace ts {
                     prop.checkFlags = templateReadonly || modifiersProp && isReadonlySymbol(modifiersProp) ? CheckFlags.Readonly : 0;
                     prop.type = propType;
                     if (propertySymbol) {
-                        prop.mappedTypeOrigin = propertySymbol;
+                        prop.syntheticOrigin = propertySymbol;
                     }
                     members.set(propName, prop);
                 }
@@ -7449,7 +7449,6 @@ namespace ts {
                         const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.name);
-                        result.checkFlags = 0;
                         result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
@@ -7465,15 +7464,14 @@ namespace ts {
         }
 
         function getNonReadonlySymbol(prop: Symbol) {
-            if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.Readonly)) {
+            if (!isReadonlySymbol(prop)) {
                 return prop;
             }
-            const declarations: Declaration[] = prop.declarations;
             const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
             const result = createSymbol(flags, prop.name);
-            result.checkFlags = 0;
             result.type = getTypeOfSymbol(prop);
-            result.declarations = declarations;
+            result.declarations = prop.declarations;
+            result.syntheticOrigin = prop;
             return result;
         }
 
@@ -22140,10 +22138,10 @@ namespace ts {
             else if (symbol.flags & SymbolFlags.Transient) {
                 if ((symbol as SymbolLinks).leftSpread) {
                     const links = symbol as SymbolLinks;
-                    return [links.leftSpread, links.rightSpread];
+                    return [...getRootSymbols(links.leftSpread), ...getRootSymbols(links.rightSpread)];
                 }
-                if ((symbol as SymbolLinks).mappedTypeOrigin) {
-                    return getRootSymbols((symbol as SymbolLinks).mappedTypeOrigin);
+                if ((symbol as SymbolLinks).syntheticOrigin) {
+                    return getRootSymbols((symbol as SymbolLinks).syntheticOrigin);
                 }
 
                 let target: Symbol;
