@@ -17,6 +17,16 @@ namespace ts.projectSystem {
         })
     };
 
+    const customSafeList = {
+        path: <Path>"/typeMapList.json",
+        content: JSON.stringify({
+            "quack": {
+                "match": "/duckquack-(\\d+)\\.min\\.js",
+                "types": ["duck-types"]
+            },
+        })
+    };
+
     export interface PostExecAction {
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
@@ -1443,6 +1453,28 @@ namespace ts.projectSystem {
 
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
+        });
+
+        it("ignores files excluded by the safe type list", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const office = {
+                path: "/lib/duckquack-3.min.js",
+                content: "whoa do @@ not parse me ok thanks!!!"
+            };
+            const host = createServerHost([customSafeList, file1, office]);
+            const projectService = createProjectService(host);
+            projectService.loadSafeList(customSafeList.path);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
+            } finally {
+                projectService.resetSafeList();
+            }
         });
 
         it("open file become a part of configured project if it is referenced from root file", () => {
