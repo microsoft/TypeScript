@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarFromEmptyModule.ts] ////
 
 //// [exportStarFromEmptyModule_module1.ts]
-
 export class A {
     static r;
 }

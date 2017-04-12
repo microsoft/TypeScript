@@ -1,5 +1,4 @@
 //// [incompatibleGenericTypes.ts]
-
 interface I1<T> {
 
   m1<U>(callback: (p: T) => U): I1<U>;

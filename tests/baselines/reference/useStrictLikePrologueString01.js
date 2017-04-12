@@ -1,5 +1,4 @@
 //// [useStrictLikePrologueString01.ts]
-
 "hey!"
 " use strict "
 export function f() {   

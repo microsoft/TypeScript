@@ -1,7 +1,6 @@
 === /a/b/c/app.ts ===
-
 export let x = 1;
->x : Symbol(x, Decl(app.ts, 1, 10))
+>x : Symbol(x, Decl(app.ts, 0, 10))
 
 === /a/b/c/lib1.ts ===
 export let x = 1;

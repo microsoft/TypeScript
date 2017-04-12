@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportGlobalDeclaration2.ts] ////
 
 //// [file1.d.ts]
-
 declare interface I1 {
     x: number
 }

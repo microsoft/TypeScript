@@ -358,7 +358,7 @@ namespace ts.FindAllReferences {
             if (sourceFile.flags & NodeFlags.JavaScriptFile) {
                 // Find all 'require()' calls.
                 sourceFile.forEachChild(function recur(node: Node): void {
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+                    if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                         action(node, node.arguments[0] as StringLiteral);
                     } else {
                         node.forEachChild(recur);

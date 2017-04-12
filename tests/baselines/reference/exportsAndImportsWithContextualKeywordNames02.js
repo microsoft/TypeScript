@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImportsWithContextualKeywordNames02.ts] ////
 
 //// [t1.ts]
-
 let as = 100;
 
 export { as as return, as };

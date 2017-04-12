@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersTypeAliases.ts]
-
 // used in a declaration
 type handler1 = () => void;
 export interface I1 {

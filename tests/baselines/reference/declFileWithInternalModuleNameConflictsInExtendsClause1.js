@@ -1,5 +1,4 @@
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.ts]
-
 module X.A.C {
     export interface Z {
     }

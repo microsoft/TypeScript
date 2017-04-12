@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution11.tsx] ////
 
 //// [react.d.ts]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {

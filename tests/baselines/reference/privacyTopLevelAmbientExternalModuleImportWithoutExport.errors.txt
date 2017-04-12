@@ -26,7 +26,6 @@ tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_cor
 !!! error TS2323: Cannot redeclare exported variable 'publicUse_im_private_mi_public'.
     
 ==== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts (0 errors) ====
-    
     // Public elements
     export class c_public {
         foo: string;

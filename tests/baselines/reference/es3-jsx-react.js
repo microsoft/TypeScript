@@ -1,5 +1,4 @@
 //// [es3-jsx-react.tsx]
-
 const React: any = null;
 
 const elem = <div></div>;

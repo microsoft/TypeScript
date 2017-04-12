@@ -1,5 +1,4 @@
 //// [emptyAssignmentPatterns03_ES5iterable.ts]
-
 var a: any;
 
 ({} = {} = a);

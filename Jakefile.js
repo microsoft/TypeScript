@@ -946,7 +946,7 @@ task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
 // Browser tests
 var nodeServerOutFile = "tests/webTestServer.js";
 var nodeServerInFile = "tests/webTestServer.ts";
-compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true });
+compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile], [], /*useBuiltCompiler:*/ true, { noOutFile: true, lib: "es6" });
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
@@ -1197,7 +1197,7 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {

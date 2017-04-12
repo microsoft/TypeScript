@@ -1827,6 +1827,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Generic type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2550
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -3480,6 +3484,24 @@
         "category": "Message",
         "code": 90017
     },
+    "Disable checking for this file.": {
+        "category": "Message",
+        "code": 90018
+    },
+    "Ignore this error message.": {
+        "category": "Message",
+        "code": 90019
+    },
+    "Initialize property '{0}' in the constructor.": {
+        "category": "Message",
+        "code": 90020
+    },
+    "Initialize static property '{0}'.": {
+        "category": "Message",
+        "code": 90021
+    },
+
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
@@ -3487,5 +3509,9 @@
     "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8018
+    },
+    "Report errors in .js files.": {
+        "category": "Message",
+        "code": 8019
     }
 }

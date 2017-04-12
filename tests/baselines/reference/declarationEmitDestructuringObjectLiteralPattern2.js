@@ -1,5 +1,4 @@
 //// [declarationEmitDestructuringObjectLiteralPattern2.ts]
-
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
 
 function f15() {

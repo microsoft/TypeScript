@@ -1,5 +1,4 @@
 //// [unusedFunctionsinNamespaces1.ts]
-
 namespace Validation {
     function function1() {
     }

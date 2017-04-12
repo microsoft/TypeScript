@@ -1,5 +1,4 @@
 === tests/cases/compiler/A.ts ===
-
 namespace ts {
 >ts : typeof ts
 

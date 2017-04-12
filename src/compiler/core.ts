@@ -30,7 +30,7 @@ namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(null); // tslint:disable-line:no-null-keyword
+        const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -1360,7 +1360,7 @@ namespace ts {
 
     /**
      * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
-    */
+     */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1457,7 +1457,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
@@ -2361,5 +2361,9 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

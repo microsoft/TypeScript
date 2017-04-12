@@ -22,7 +22,7 @@ namespace ts {
             });
 
             it("Converts simple code snippet correctly", () => {
-                runTest(`/// <reference path="file.ts" /> 
+                runTest(`/// <reference path="file.ts" />
 var x: string = "string";
 console.log(x);`);
             });

@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
-
 declare var React: any;
 >React : any
 

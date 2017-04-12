@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6modulekindWithES5Target5.ts ===
-
 export enum E1 {
 >E1 : E1
 

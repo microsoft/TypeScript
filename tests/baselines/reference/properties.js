@@ -1,5 +1,4 @@
 //// [properties.ts]
-
 class MyClass
 {
     public get Count(): number

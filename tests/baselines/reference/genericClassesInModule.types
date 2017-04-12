@@ -1,5 +1,4 @@
 === tests/cases/compiler/genericClassesInModule.ts ===
-
 module Foo {
 >Foo : typeof Foo
 

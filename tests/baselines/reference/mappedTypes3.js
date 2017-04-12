@@ -1,5 +1,4 @@
 //// [mappedTypes3.ts]
-
 class Box<P> {
     value: P;
 }

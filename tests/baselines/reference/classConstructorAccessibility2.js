@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility2.ts]
-
 class BaseA {
     public constructor(public x: number) { }
     createInstance() { new BaseA(1); }

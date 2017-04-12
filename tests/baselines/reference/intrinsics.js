@@ -1,5 +1,4 @@
 //// [intrinsics.ts]
-
 var hasOwnProperty: hasOwnProperty; // Error
 
 module m1 {

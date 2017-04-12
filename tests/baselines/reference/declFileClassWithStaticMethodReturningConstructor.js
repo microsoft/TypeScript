@@ -1,5 +1,4 @@
 //// [declFileClassWithStaticMethodReturningConstructor.ts]
-
 export class Enhancement {
     public static getType() {
         return this;

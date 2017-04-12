@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern4.ts ===
-
 var [x] = [1, 2];
 >x : number
 >[1, 2] : [number, number]

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportDts.ts] ////
 
 //// [server.ts]
-
 export class c { };  
 
 //// [client.ts]

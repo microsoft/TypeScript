@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyFunctionReturnTypeDeclFile.ts] ////
 
 //// [privacyFunctionReturnTypeDeclFile_externalModule.ts]
-
 class privateClass {
 }
 

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/moduleResolutionWithExtensions.ts] ////
 
 //// [a.ts]
-
 export default 0;
 
 // No extension: '.ts' added

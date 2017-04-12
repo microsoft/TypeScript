@@ -1,5 +1,4 @@
 //// [contextuallyTypedStringLiteralsInJsxAttributes01.tsx]
-
 namespace JSX {
     export interface IntrinsicElements {
         span: {};

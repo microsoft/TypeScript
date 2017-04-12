@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileIndexSignatures_0.ts ===
-
 export interface IStringIndexSignature {
 >IStringIndexSignature : IStringIndexSignature
 

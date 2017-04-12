@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/constDeclarations-access5.ts] ////
 
 //// [constDeclarations_access_1.ts]
-
-
 export const x = 0;
 
 //// [constDeclarations_access_2.ts]

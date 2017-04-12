@@ -2,7 +2,6 @@
 
 //// [b.js]
 
-
 //// [index.ts]
 export default 0;
 

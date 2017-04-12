@@ -7,7 +7,6 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(13,7): error TS2322: Type '() => AsyncIterableIterator<"a">' is not assignable to type '() => AsyncIterableIterator<number>'.
   Type 'AsyncIterableIterator<"a">' is not assignable to type 'AsyncIterableIterator<number>'.
-    Type '"a"' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(16,7): error TS2322: Type '() => AsyncIterableIterator<"a">' is not assignable to type '() => AsyncIterable<number>'.
   Type 'AsyncIterableIterator<"a">' is not assignable to type 'AsyncIterable<number>'.
     Types of property '[Symbol.asyncIterator]' are incompatible.
@@ -84,7 +83,6 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
           ~~~~~~~~~~~~~~
 !!! error TS2322: Type '() => AsyncIterableIterator<"a">' is not assignable to type '() => AsyncIterableIterator<number>'.
 !!! error TS2322:   Type 'AsyncIterableIterator<"a">' is not assignable to type 'AsyncIterableIterator<number>'.
-!!! error TS2322:     Type '"a"' is not assignable to type 'number'.
         yield* (async function * () { yield "a"; })();
     };
     const assignability4: () => AsyncIterable<number> = async function * () {

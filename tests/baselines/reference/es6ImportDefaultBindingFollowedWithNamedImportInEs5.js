@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportInEs5.ts] ////
 
 //// [es6ImportDefaultBindingFollowedWithNamedImportInEs5_0.ts]
-
 export var a = 10;
 export var x = a;
 export var m = a;

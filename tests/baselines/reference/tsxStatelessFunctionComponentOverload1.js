@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 declare function OneThing(k: {yxx: string}): JSX.Element;

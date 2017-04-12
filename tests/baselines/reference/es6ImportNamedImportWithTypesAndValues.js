@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportWithTypesAndValues.ts] ////
 
 //// [server.ts]
-
 export interface I {
     prop: string;
 }

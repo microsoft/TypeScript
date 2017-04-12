@@ -1,5 +1,4 @@
 //// [declFilePrivateMethodOverloads.ts]
-
 interface IContext {
     someMethod();
 }

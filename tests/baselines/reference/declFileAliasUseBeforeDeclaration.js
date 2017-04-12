@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileAliasUseBeforeDeclaration.ts] ////
 
 //// [declFileAliasUseBeforeDeclaration_foo.ts]
-
 export class Foo { }
 
 //// [declFileAliasUseBeforeDeclaration_test.ts]

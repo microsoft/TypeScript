@@ -1,5 +1,4 @@
 //// [implicitAnyAmbients.ts]
-
 declare module m {
     var x; // error
     var y: any;

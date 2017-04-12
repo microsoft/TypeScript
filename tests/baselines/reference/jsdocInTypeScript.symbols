@@ -1,0 +1,19 @@
+=== tests/cases/compiler/jsdocInTypeScript.ts ===
+// JSDoc typedef tags are not bound TypeScript files.
+/** @typedef {function} T */
+declare const x: T;
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 2, 13))
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 2, 19))
+
+class T {
+>T : Symbol(T, Decl(jsdocInTypeScript.ts, 2, 19))
+
+    prop: number;
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+}
+
+x.prop;
+>x.prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+>x : Symbol(x, Decl(jsdocInTypeScript.ts, 2, 13))
+>prop : Symbol(T.prop, Decl(jsdocInTypeScript.ts, 4, 9))
+

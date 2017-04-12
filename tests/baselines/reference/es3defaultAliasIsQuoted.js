@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es3defaultAliasIsQuoted.ts] ////
 
 //// [es3defaultAliasQuoted_file0.ts]
-
 export class Foo {
     static CONSTANT = "Foo";
 }

@@ -1,17 +1,16 @@
-tests/cases/conformance/jsx/file.tsx(18,19): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(17,19): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
   Type '{}' is not assignable to type 'PoisonedProp'.
     Property 'x' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(19,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(18,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
   Type '{}' is not assignable to type 'PoisonedProp'.
     Property 'x' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ x: true; y: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(19,19): error TS2322: Type '{ x: true; y: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
   Type '{ x: true; y: true; }' is not assignable to type 'PoisonedProp'.
     Types of property 'x' are incompatible.
       Type 'true' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
-    
     import React = require('react');
     
     interface PoisonedProp {

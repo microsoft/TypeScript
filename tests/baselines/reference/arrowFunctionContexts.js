@@ -1,5 +1,4 @@
 //// [arrowFunctionContexts.ts]
-
 // Arrow function used in with statement
 with (window) {
     var p = () => this;

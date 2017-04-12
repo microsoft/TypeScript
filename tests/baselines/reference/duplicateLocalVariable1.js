@@ -1,5 +1,4 @@
 //// [duplicateLocalVariable1.ts]
-
 / /@module: commonjs
 
 //import FileManager = require('filemanager');

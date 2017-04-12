@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 export interface ClickableProps {

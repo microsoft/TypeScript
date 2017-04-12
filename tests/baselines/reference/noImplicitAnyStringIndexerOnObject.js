@@ -1,5 +1,4 @@
 //// [noImplicitAnyStringIndexerOnObject.ts]
-
 var x = {}["hello"];
 
 //// [noImplicitAnyStringIndexerOnObject.js]

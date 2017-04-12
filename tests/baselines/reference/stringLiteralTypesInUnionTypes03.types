@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
-
 type T = number | "foo" | "bar";
 >T : number | "foo" | "bar"
 

@@ -1,12 +1,11 @@
 === A:/bar.ts ===
-
 import {z} from "./foo";
->z : Symbol(z, Decl(bar.ts, 1, 8))
+>z : Symbol(z, Decl(bar.ts, 0, 8))
 
 export var x = z + z;
->x : Symbol(x, Decl(bar.ts, 2, 10))
->z : Symbol(z, Decl(bar.ts, 1, 8))
->z : Symbol(z, Decl(bar.ts, 1, 8))
+>x : Symbol(x, Decl(bar.ts, 1, 10))
+>z : Symbol(z, Decl(bar.ts, 0, 8))
+>z : Symbol(z, Decl(bar.ts, 0, 8))
 
 === A:/foo.ts ===
 import {pi} from "B:/baz";

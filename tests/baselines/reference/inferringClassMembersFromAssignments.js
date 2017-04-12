@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/salsa/inferringClassMembersFromAssignments.ts] ////
 
 //// [a.js]
-
 class C {
     constructor() {
         if (Math.random()) {

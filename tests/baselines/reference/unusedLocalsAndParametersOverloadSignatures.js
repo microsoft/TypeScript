@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersOverloadSignatures.ts]
-
 export function func(details: number, message: string, ...args: any[]): void;
 export function func(details: number, message: string): any {
     return details + message;

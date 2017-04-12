@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/tsxDefaultImports.ts] ////
 
 //// [a.ts]
-
 enum SomeEnum {
   one,
 }

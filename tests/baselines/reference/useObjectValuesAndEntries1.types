@@ -1,5 +1,4 @@
 === tests/cases/conformance/es2017/useObjectValuesAndEntries1.ts ===
-
 var o = { a: 1, b: 2 };
 >o : { a: number; b: number; }
 >{ a: 1, b: 2 } : { a: number; b: number; }

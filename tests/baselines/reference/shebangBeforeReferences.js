@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/shebangBeforeReferences.ts] ////
 
 //// [f.d.ts]
-
 declare module "test" {
     let x: number;
 }

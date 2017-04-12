@@ -1,5 +1,4 @@
 === tests/cases/conformance/salsa/a.ts ===
-
 import b = require("./b.js");
 >b : Symbol(b, Decl(a.ts, 0, 0))
 

@@ -210,6 +210,7 @@ declare namespace FourSlashInterface {
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
         currentSignatureHelpDocCommentIs(docComment: string): void;
+        currentSignatureHelpTagsAre(tags: ts.JSDocTagInfo[]): void;
         signatureHelpCountIs(expected: number): void;
         signatureHelpArgumentCountIs(expected: number): void;
         signatureHelpCurrentArgumentListIsVariadic(expected: boolean);
@@ -273,7 +274,7 @@ declare namespace FourSlashInterface {
         verifyQuickInfoDisplayParts(kind: string, kindModifiers: string, textSpan: {
             start: number;
             length: number;
-        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[]): void;
+        }, displayParts: ts.SymbolDisplayPart[], documentation: ts.SymbolDisplayPart[], tags: ts.JSDocTagInfo[]): void;
         getSyntacticDiagnostics(expected: string): void;
         getSemanticDiagnostics(expected: string): void;
         ProjectInfo(expected: string[]): void;
@@ -300,6 +301,7 @@ declare namespace FourSlashInterface {
         printCurrentQuickInfo(): void;
         printCurrentSignatureHelp(): void;
         printCompletionListMembers(): void;
+        printAvailableCodeFixes(): void;
         printBreakpointLocation(pos: number): void;
         printBreakpointAtCurrentLocation(): void;
         printNameOrDottedNameSpans(pos: number): void;

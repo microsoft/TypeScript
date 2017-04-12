@@ -148,8 +148,6 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     }
     
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts (0 errors) ====
-    
-    
     declare module "GlobalWidgets" {
         export class Widget3 {
             name: string;

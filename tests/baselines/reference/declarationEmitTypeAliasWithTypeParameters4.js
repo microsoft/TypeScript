@@ -1,5 +1,4 @@
 //// [declarationEmitTypeAliasWithTypeParameters4.ts]
-
 type Foo<T, Y> = {
     foo<U, J>(): Foo<U, J>
 };

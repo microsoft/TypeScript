@@ -1,5 +1,4 @@
 //// [unusedTypeParameters2.ts]
-
 class greeter<typeparameter1, typeparameter2> {
     private x: typeparameter2;
 

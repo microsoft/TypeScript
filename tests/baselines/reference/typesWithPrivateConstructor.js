@@ -1,5 +1,4 @@
 //// [typesWithPrivateConstructor.ts]
-
 class C {
     private constructor() { }
 }

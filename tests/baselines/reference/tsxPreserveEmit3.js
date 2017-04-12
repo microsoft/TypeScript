@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
 
 //// [file.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {

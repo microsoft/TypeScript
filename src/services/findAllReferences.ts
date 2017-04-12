@@ -333,7 +333,7 @@ namespace ts.FindAllReferences.Core {
 
         const result: SymbolAndEntries[] = [];
         const state = createState(sourceFiles, node, checker, cancellationToken, searchMeaning, options, result);
-        const search = state.createSearch(node, symbol, /*comingFrom*/undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
+        const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
         // Try to get the smallest valid scope that we can limit our search to;
         // otherwise we'll need to search globally (i.e. include each file).
@@ -992,7 +992,7 @@ namespace ts.FindAllReferences.Core {
                     }
                 });
             }
-        };
+        }
     }
 
     function addImplementationReferences(refNode: Node, addReference: (node: Node) => void, state: State): void {
@@ -1336,7 +1336,7 @@ namespace ts.FindAllReferences.Core {
             for (const position of possiblePositions) {
                 const node = getTouchingWord(sourceFile, position);
                 if (node && node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).text === searchText) {
-                    references.push(nodeEntry(node, /*isInString*/true));
+                    references.push(nodeEntry(node, /*isInString*/ true));
                 }
             }
         }

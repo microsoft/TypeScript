@@ -1,5 +1,4 @@
 //// [transformsElideNullUndefinedType.ts]
-
 var v0: null;
 var v1: undefined;
 

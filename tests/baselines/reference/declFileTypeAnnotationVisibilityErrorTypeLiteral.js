@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.ts]
-
 module m {
     class private1 {
     }
