@@ -366,7 +366,7 @@ namespace ts {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
-    export function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpaceLike(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
     }
 
@@ -510,7 +510,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                           pos++;
                           continue;
                       }
@@ -691,7 +691,7 @@ namespace ts {
                     }
                     break scan;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                         if (hasPendingCommentRange && isLineBreak(ch)) {
                             pendingHasTrailingNewLine = true;
                         }
@@ -1750,7 +1750,7 @@ namespace ts {
                 if (isLineBreak(char) && firstNonWhitespace === 0) {
                     firstNonWhitespace = -1;
                 }
-                else if (!isWhiteSpaceSingleLine(char)) {
+                else if (!isWhiteSpaceLike(char)) {
                     firstNonWhitespace = pos;
                 }
                 pos++;

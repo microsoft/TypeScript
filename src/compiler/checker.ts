@@ -13327,7 +13327,9 @@ namespace ts {
                         childrenTypes.push(checkExpression(child, checkMode));
                     }
                 }
-                childrenPropSymbol.type = getUnionType(childrenTypes,  /*subtypeReduction*/ false);
+                childrenPropSymbol.type = childrenTypes.length === 1 ?
+                    childrenTypes[0] :
+                    createArrayType(getUnionType(childrenTypes,  /*subtypeReduction*/ false));
                 attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
                 containsSynthesizedJsxChildren = true;
             }
