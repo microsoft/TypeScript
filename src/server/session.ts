@@ -219,7 +219,7 @@ namespace ts.server {
         getCurrentRequestId(): number;
         sendRequestCompletedEvent(requestId: number): void;
         getServerHost(): ServerHost;
-        isCancellationRequested():  boolean;
+        isCancellationRequested(): boolean;
         executeWithRequestId(requestId: number, action: () => void): void;
         logError(error: Error, message: string): void;
     }
@@ -300,7 +300,7 @@ namespace ts.server {
             }
         }
 
-        private setTimerHandle(timerHandle: any) {;
+        private setTimerHandle(timerHandle: any) {
             if (this.timerHandle !== undefined) {
                 this.operationHost.getServerHost().clearTimeout(this.timerHandle);
             }
@@ -758,6 +758,17 @@ namespace ts.server {
             return projects;
         }
 
+        private getDefaultProject(args: protocol.FileRequestArgs) {
+            if (args.projectFileName) {
+                const project = this.getProject(args.projectFileName);
+                if (project) {
+                    return project;
+                }
+            }
+            const info = this.projectService.getScriptInfo(args.file);
+            return info.getDefaultProject();
+        }
+
         private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | RenameLocation[] {
             const file = toNormalizedPath(args.file);
             const info = this.projectService.getScriptInfoForNormalizedPath(file);
@@ -765,7 +776,7 @@ namespace ts.server {
             const projects = this.getProjects(args);
             if (simplifiedResult) {
 
-                const defaultProject = projects[0];
+                const defaultProject = this.getDefaultProject(args);
                 // The rename info should be the same for every project
                 const renameInfo = defaultProject.getLanguageService().getRenameInfo(file, position);
                 if (!renameInfo) {
@@ -864,7 +875,7 @@ namespace ts.server {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
 
-            const defaultProject = projects[0];
+            const defaultProject = this.getDefaultProject(args);
             const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
             if (simplifiedResult) {
@@ -915,9 +926,8 @@ namespace ts.server {
                 return combineProjectOutput(
                     projects,
                     project => project.getLanguageService().findReferences(file, position),
-                    undefined,
-                    // TODO: fixme
-                    undefined
+                    /*comparer*/ undefined,
+                    /*areEqual (TODO: fixme)*/ undefined
                 );
             }
 
@@ -1544,17 +1554,17 @@ namespace ts.server {
             [CommandNames.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
                 this.projectService.openExternalProject(request.arguments, /*suppressRefreshOfInferredProjects*/ false);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.OpenExternalProjects]: (request: protocol.OpenExternalProjectsRequest) => {
                 this.projectService.openExternalProjects(request.arguments.projects);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
                 this.projectService.closeExternalProject(request.arguments.projectFileName);
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
@@ -1578,7 +1588,7 @@ namespace ts.server {
                 this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles, request.arguments.closedFiles);
                 this.changeSeq++;
                 // TODO: report errors
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.Exit]: () => {
                 this.exit();
@@ -1689,7 +1699,7 @@ namespace ts.server {
             },
             [CommandNames.Cleanup]: () => {
                 this.cleanup();
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.SemanticDiagnosticsSync]: (request: protocol.SemanticDiagnosticsSyncRequest) => {
                 return this.requiredResponse(this.getSemanticDiagnosticsSync(request.arguments));
@@ -1763,7 +1773,7 @@ namespace ts.server {
             },
             [CommandNames.CompilerOptionsForInferredProjects]: (request: protocol.SetCompilerOptionsForInferredProjectsRequest) => {
                 this.setCompilerOptionsForInferredProjects(request.arguments);
-                return this.requiredResponse(true);
+                return this.requiredResponse(/*response*/ true);
             },
             [CommandNames.ProjectInfo]: (request: protocol.ProjectInfoRequest) => {
                 return this.requiredResponse(this.getProjectInfo(request.arguments));

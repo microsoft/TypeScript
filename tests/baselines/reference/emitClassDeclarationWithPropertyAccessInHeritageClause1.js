@@ -1,11 +1,4 @@
 //// [emitClassDeclarationWithPropertyAccessInHeritageClause1.ts]
-interface I {}
-interface CTor {
-    new (hour: number, minute: number): I
-}
-var x: {
-    B : CTor
-};
 class B {}
 function foo() {
     return {B: B};
@@ -23,7 +16,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var x;
 var B = (function () {
     function B() {
     }

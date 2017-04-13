@@ -1694,7 +1694,7 @@ namespace FourSlash {
                 if (ch === "\r") {
                     this.currentCaretPosition--;
                 }
-            };
+            }
         }
 
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
@@ -2205,7 +2205,7 @@ namespace FourSlash {
         /**
          * Applies fixes for the errors in fileName and compares the results to
          * expectedContents after all fixes have been applied.
-
+         *
          * Note: applying one codefix may generate another (eg: remove duplicate implements
          * may generate an extends -> interface conversion fix).
          * @param expectedContents The contents of the file after the fixes are applied.
@@ -3191,7 +3191,7 @@ ${code}
         }
 
         // Add the remaining text
-        flush(undefined);
+        flush(/*lastSafeCharIndex*/ undefined);
 
         if (openRanges.length > 0) {
             const openRange = openRanges[0];
@@ -3787,11 +3787,11 @@ namespace FourSlashInterface {
         }
 
         public printCurrentFileStateWithWhitespace() {
-            this.state.printCurrentFileState(/*makeWhitespaceVisible*/true);
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ true);
         }
 
         public printCurrentFileStateWithoutCaret() {
-            this.state.printCurrentFileState(/*makeWhitespaceVisible*/false, /*makeCaretVisible*/false);
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ false, /*makeCaretVisible*/ false);
         }
 
         public printCurrentQuickInfo() {

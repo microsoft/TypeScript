@@ -1,0 +1,94 @@
+=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+// Empty object type literals are removed from intersections types
+// that contain other object types
+
+type A = { a: number };
+>A : A
+>a : number
+
+type B = { b: string };
+>B : B
+>b : string
+
+type C = {};
+>C : C
+
+let x01: A & B;
+>x01 : A & B
+>A : A
+>B : B
+
+let x02: A & C;
+>x02 : A
+>A : A
+>C : C
+
+let x03: B & C;
+>x03 : B
+>B : B
+>C : C
+
+let x04: A & B & C;
+>x04 : A & B
+>A : A
+>B : B
+>C : C
+
+let x05: string & C;
+>x05 : string & {}
+>C : C
+
+let x06: C & string;
+>x06 : string & {}
+>C : C
+
+let x07: C;
+>x07 : C
+>C : C
+
+let x08: C & {};
+>x08 : {}
+>C : C
+
+let x09: {} & A & {} & B & {} & C & {};
+>x09 : A & B
+>A : A
+>B : B
+>C : C
+
+interface D {}
+>D : D
+
+interface E {}
+>E : E
+
+let x10: A & D;
+>x10 : A & D
+>A : A
+>D : D
+
+let x11: C & D;
+>x11 : D
+>C : C
+>D : D
+
+let x12: A & B & C & D;
+>x12 : A & B & D
+>A : A
+>B : B
+>C : C
+>D : D
+
+let x13: D & E;
+>x13 : D & E
+>D : D
+>E : E
+
+let x14: A & B & C & D & E;
+>x14 : A & B & D & E
+>A : A
+>B : B
+>C : C
+>D : D
+>E : E
+

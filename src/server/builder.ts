@@ -191,7 +191,7 @@ namespace ts.server {
             const l = lf.scriptInfo.fileName;
             const r = rf.scriptInfo.fileName;
             return (l < r ? -1 : (l > r ? 1 : 0));
-        };
+        }
 
         static addToReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
             if (array.length === 0) {
