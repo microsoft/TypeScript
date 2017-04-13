@@ -119,9 +119,9 @@ interface TextStreamReader extends TextStreamBase {
 
 declare var WScript: {
     /**
-    * Outputs text to either a message box (under WScript.exe) or the command console window followed by
-    * a newline (under CScript.exe).
-    */
+     * Outputs text to either a message box (under WScript.exe) or the command console window followed by
+     * a newline (under CScript.exe).
+     */
     Echo(s: any): void;
 
     /**

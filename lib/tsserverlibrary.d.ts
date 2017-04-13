@@ -2199,6 +2199,7 @@ declare namespace ts {
         CustomPrologue = 524288,
         NoHoisting = 1048576,
         HasEndOfDeclarationMarker = 2097152,
+        Iterator = 4194304,
     }
     interface EmitHelper {
         readonly name: string;
@@ -2251,7 +2252,6 @@ declare namespace ts {
         substituteNode?(hint: EmitHint, node: Node): Node;
     }
     interface PrinterOptions {
-        target?: ScriptTarget;
         removeComments?: boolean;
         newLine?: NewLineKind;
     }
@@ -2268,7 +2268,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.3.0";
+    const version = "2.3.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -4491,6 +4491,7 @@ declare namespace ts.server {
         private getProjectInfoWorker(uncheckedFileName, projectFileName, needFileNameList);
         private getRenameInfo(args);
         private getProjects(args);
+        private getDefaultProject(args);
         private getRenameLocations(args, simplifiedResult);
         private getReferences(args, simplifiedResult);
         private openClientFile(fileName, fileContent?, scriptKind?);
@@ -4990,6 +4991,13 @@ declare namespace ts.server {
     interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
     }
+    interface SafeList {
+        [name: string]: {
+            match: RegExp;
+            exclude?: Array<Array<string | number>>;
+            types?: string[];
+        };
+    }
     function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings;
     function convertCompilerOptions(protocolOptions: protocol.ExternalProjectCompilerOptions): CompilerOptions & protocol.CompileOnSaveMixin;
     function tryConvertScriptKindName(scriptKindName: protocol.ScriptKindName | ScriptKind): ScriptKind;
@@ -5026,6 +5034,7 @@ declare namespace ts.server {
         private readonly directoryWatchers;
         private readonly throttledOperations;
         private readonly hostConfiguration;
+        private static safelist;
         private changedFiles;
         readonly toCanonicalFileName: (f: string) => string;
         lastDeletedFile: ScriptInfo;
@@ -5085,6 +5094,11 @@ declare namespace ts.server {
         private closeConfiguredProject(configFile);
         closeExternalProject(uncheckedFileName: string, suppressRefresh?: boolean): void;
         openExternalProjects(projects: protocol.ExternalProject[]): void;
+        private static filenameEscapeRegexp;
+        private static escapeFilenameForRegex(filename);
+        resetSafeList(): void;
+        loadSafeList(fileName: string): void;
+        applySafeList(proj: protocol.ExternalProject): void;
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects?: boolean): void;
     }
 }

@@ -645,7 +645,7 @@ declare namespace ts {
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
     }
-    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
         parent?: ClassDeclaration | ClassExpression;
@@ -936,11 +936,11 @@ declare namespace ts {
         expression: Expression;
     }
     /**
-      * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
-      * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
-      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
-      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
-     **/
+     * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+     * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+     * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+     * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     */
     interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
@@ -1592,9 +1592,9 @@ declare namespace ts {
         useCaseSensitiveFileNames: boolean;
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
         /**
-          * Gets a value indicating whether the specified path exists and is a file.
-          * @param path The path to test.
-          */
+         * Gets a value indicating whether the specified path exists and is a file.
+         * @param path The path to test.
+         */
         fileExists(path: string): boolean;
         readFile(path: string): string;
     }
@@ -2321,6 +2321,7 @@ declare namespace ts {
         CustomPrologue = 524288,
         NoHoisting = 1048576,
         HasEndOfDeclarationMarker = 2097152,
+        Iterator = 4194304,
     }
     interface EmitHelper {
         readonly name: string;
@@ -2491,7 +2492,6 @@ declare namespace ts {
         substituteNode?(hint: EmitHint, node: Node): Node;
     }
     interface PrinterOptions {
-        target?: ScriptTarget;
         removeComments?: boolean;
         newLine?: NewLineKind;
     }
@@ -2509,7 +2509,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the TypeScript compiler release */
-    const version = "2.3.0";
+    const version = "2.3.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -2649,9 +2649,9 @@ declare namespace ts {
     function getCombinedModifierFlags(node: Node): ModifierFlags;
     function getCombinedNodeFlags(node: Node): NodeFlags;
     /**
-      * Checks to see if the locale is in the appropriate format,
-      * and if it is, attempts to set the appropriate language.
-      */
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     function validateLocaleAndSetLanguage(locale: string, sys: {
         getExecutingFilePath(): string;
         resolvePath(path: string): string;
@@ -3083,13 +3083,13 @@ declare namespace ts {
      */
     function resolveTypeReferenceDirective(typeReferenceDirectiveName: string, containingFile: string | undefined, options: CompilerOptions, host: ModuleResolutionHost): ResolvedTypeReferenceDirectiveWithFailedLookupLocations;
     /**
-      * Given a set of options, returns the set of type directive names
-      *   that should be included for this program automatically.
-      * This list could either come from the config file,
-      *   or from enumerating the types root + initial secondary types lookup location.
-      * More type directives might appear in the program later as a result of loading actual source files;
-      *   this list is only the set of defaults that are implicitly included.
-      */
+     * Given a set of options, returns the set of type directive names
+     *   that should be included for this program automatically.
+     * This list could either come from the config file,
+     *   or from enumerating the types root + initial secondary types lookup location.
+     * More type directives might appear in the program later as a result of loading actual source files;
+     *   this list is only the set of defaults that are implicitly included.
+     */
     function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[];
     /**
      * Cached module resolutions per containing directory.
@@ -3215,29 +3215,29 @@ declare namespace ts {
 declare namespace ts {
     function parseCommandLine(commandLine: string[], readFile?: (path: string) => string): ParsedCommandLine;
     /**
-      * Read tsconfig.json file
-      * @param fileName The path to the config file
-      */
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
     function readConfigFile(fileName: string, readFile: (path: string) => string): {
         config?: any;
         error?: Diagnostic;
     };
     /**
-      * Parse the text of the tsconfig.json file
-      * @param fileName The path to the config file
-      * @param jsonText The text of the config file
-      */
+     * Parse the text of the tsconfig.json file
+     * @param fileName The path to the config file
+     * @param jsonText The text of the config file
+     */
     function parseConfigFileTextToJson(fileName: string, jsonText: string, stripComments?: boolean): {
         config?: any;
         error?: Diagnostic;
     };
     /**
-      * Parse the contents of a config file (tsconfig.json).
-      * @param json The contents of the config file to parse
-      * @param host Instance of ParseConfigHost used to enumerate files in folder.
-      * @param basePath A root directory to resolve relative path entries in the config
-      *    file to. e.g. outDir
-      */
+     * Parse the contents of a config file (tsconfig.json).
+     * @param json The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
     function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: JsFileExtensionInfo[]): ParsedCommandLine;
     function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
@@ -3698,10 +3698,10 @@ declare namespace ts {
         kindModifiers: string;
         sortText: string;
         /**
-          * An optional span that indicates the text to be replaced by this completion item. It will be
-          * set if the required span differs from the one generated by the default replacement behavior and should
-          * be used in that case
-          */
+         * An optional span that indicates the text to be replaced by this completion item. It will be
+         * set if the required span differs from the one generated by the default replacement behavior and should
+         * be used in that case
+         */
         replacementSpan?: TextSpan;
     }
     interface CompletionEntryDetails {
@@ -3720,9 +3720,9 @@ declare namespace ts {
         /** The text to display in the editor for the collapsed region. */
         bannerText: string;
         /**
-          * Whether or not this region should be automatically collapsed when
-          * the 'Collapse to Definitions' command is invoked.
-          */
+         * Whether or not this region should be automatically collapsed when
+         * the 'Collapse to Definitions' command is invoked.
+         */
         autoCollapse: boolean;
     }
     interface EmitOutput {
@@ -3855,7 +3855,7 @@ declare namespace ts {
         const externalModuleName = "external module name";
         /**
          * <JsxTagName attribute1 attribute2={0} />
-         **/
+         */
         const jsxAttribute = "JSX attribute";
     }
     namespace ScriptElementKindModifier {
@@ -3925,61 +3925,61 @@ declare namespace ts {
 }
 declare namespace ts {
     /**
-      * The document registry represents a store of SourceFile objects that can be shared between
-      * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
-      * of files in the context.
-      * SourceFile objects account for most of the memory usage by the language service. Sharing
-      * the same DocumentRegistry instance between different instances of LanguageService allow
-      * for more efficient memory utilization since all projects will share at least the library
-      * file (lib.d.ts).
-      *
-      * A more advanced use of the document registry is to serialize sourceFile objects to disk
-      * and re-hydrate them when needed.
-      *
-      * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
-      * to all subsequent createLanguageService calls.
-      */
+     * The document registry represents a store of SourceFile objects that can be shared between
+     * multiple LanguageService instances. A LanguageService instance holds on the SourceFile (AST)
+     * of files in the context.
+     * SourceFile objects account for most of the memory usage by the language service. Sharing
+     * the same DocumentRegistry instance between different instances of LanguageService allow
+     * for more efficient memory utilization since all projects will share at least the library
+     * file (lib.d.ts).
+     *
+     * A more advanced use of the document registry is to serialize sourceFile objects to disk
+     * and re-hydrate them when needed.
+     *
+     * To create a default DocumentRegistry, use createDocumentRegistry to create one, and pass it
+     * to all subsequent createLanguageService calls.
+     */
     interface DocumentRegistry {
         /**
-          * Request a stored SourceFile with a given fileName and compilationSettings.
-          * The first call to acquire will call createLanguageServiceSourceFile to generate
-          * the SourceFile if was not found in the registry.
-          *
-          * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the
-          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-          * multiple copies of the same file for different compilation settings.
-          * @parm scriptSnapshot Text of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          * @parm version Current version of the file. Only used if the file was not found
-          * in the registry and a new one was created.
-          */
+         * Request a stored SourceFile with a given fileName and compilationSettings.
+         * The first call to acquire will call createLanguageServiceSourceFile to generate
+         * the SourceFile if was not found in the registry.
+         *
+         * @param fileName The name of the file requested
+         * @param compilationSettings Some compilation settings like target affects the
+         * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+         * multiple copies of the same file for different compilation settings.
+         * @parm scriptSnapshot Text of the file. Only used if the file was not found
+         * in the registry and a new one was created.
+         * @parm version Current version of the file. Only used if the file was not found
+         * in the registry and a new one was created.
+         */
         acquireDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         acquireDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         /**
-          * Request an updated version of an already existing SourceFile with a given fileName
-          * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
-          * to get an updated SourceFile.
-          *
-          * @param fileName The name of the file requested
-          * @param compilationSettings Some compilation settings like target affects the
-          * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
-          * multiple copies of the same file for different compilation settings.
-          * @param scriptSnapshot Text of the file.
-          * @param version Current version of the file.
-          */
+         * Request an updated version of an already existing SourceFile with a given fileName
+         * and compilationSettings. The update will in-turn call updateLanguageServiceSourceFile
+         * to get an updated SourceFile.
+         *
+         * @param fileName The name of the file requested
+         * @param compilationSettings Some compilation settings like target affects the
+         * shape of a the resulting SourceFile. This allows the DocumentRegistry to store
+         * multiple copies of the same file for different compilation settings.
+         * @param scriptSnapshot Text of the file.
+         * @param version Current version of the file.
+         */
         updateDocument(fileName: string, compilationSettings: CompilerOptions, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         updateDocumentWithKey(fileName: string, path: Path, compilationSettings: CompilerOptions, key: DocumentRegistryBucketKey, scriptSnapshot: IScriptSnapshot, version: string, scriptKind?: ScriptKind): SourceFile;
         getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey;
         /**
-          * Informs the DocumentRegistry that a file is not needed any longer.
-          *
-          * Note: It is not allowed to call release on a SourceFile that was not acquired from
-          * this registry originally.
-          *
-          * @param fileName The name of the file to be released
-          * @param compilationSettings The compilation settings used to acquire the file
-          */
+         * Informs the DocumentRegistry that a file is not needed any longer.
+         *
+         * Note: It is not allowed to call release on a SourceFile that was not acquired from
+         * this registry originally.
+         *
+         * @param fileName The name of the file to be released
+         * @param compilationSettings The compilation settings used to acquire the file
+         */
         releaseDocument(fileName: string, compilationSettings: CompilerOptions): void;
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
         reportStats(): string;
@@ -4023,10 +4023,10 @@ declare namespace ts {
     function updateLanguageServiceSourceFile(sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile;
     function createLanguageService(host: LanguageServiceHost, documentRegistry?: DocumentRegistry): LanguageService;
     /**
-      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
-      * node package.
-      * The functionality is not supported if the ts module is consumed outside of a node module.
-      */
+     * Get the path of the default library files (lib.d.ts) as distributed with the typescript
+     * node package.
+     * The functionality is not supported if the ts module is consumed outside of a node module.
+     */
     function getDefaultLibFilePath(options: CompilerOptions): string;
 }
 declare namespace ts {
