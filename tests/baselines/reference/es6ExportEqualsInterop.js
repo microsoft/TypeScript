@@ -232,8 +232,6 @@ z7.a;
 z8.a;
 z9.a;
 z0.a;
-// namespace import
-var y1 = require("interface");
 var y2 = require("variable");
 var y3 = require("interface-variable");
 var y4 = require("module");

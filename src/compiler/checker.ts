@@ -1287,7 +1287,7 @@ namespace ts {
 
         function getTargetOfNamespaceImport(node: NamespaceImport): Symbol {
             const moduleSpecifier = (<ImportDeclaration>node.parent.parent).moduleSpecifier;
-            return resolveESModuleSymbol(resolveExternalModuleName(node, moduleSpecifier), moduleSpecifier);
+            return resolveExternalModuleSymbol(resolveExternalModuleName(node, moduleSpecifier));
         }
 
         // This function creates a synthetic symbol that combines the value side of one symbol with the
@@ -1341,7 +1341,7 @@ namespace ts {
 
         function getExternalModuleMember(node: ImportDeclaration | ExportDeclaration, specifier: ImportOrExportSpecifier): Symbol {
             const moduleSymbol = resolveExternalModuleName(node, node.moduleSpecifier);
-            const targetSymbol = resolveESModuleSymbol(moduleSymbol, node.moduleSpecifier);
+            const targetSymbol = resolveExternalModuleSymbol(moduleSymbol);
             if (targetSymbol) {
                 const name = specifier.propertyName || specifier.name;
                 if (name.text) {
@@ -1393,6 +1393,7 @@ namespace ts {
             return resolveEntityName(<EntityNameExpression>node.expression, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace);
         }
 
+        
         function getTargetOfAliasDeclaration(node: Declaration): Symbol {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
@@ -1655,18 +1656,6 @@ namespace ts {
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol): Symbol {
             return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export="))) || moduleSymbol;
-        }
-
-        // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
-        // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
-        // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
-        function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression): Symbol {
-            let symbol = resolveExternalModuleSymbol(moduleSymbol);
-            if (symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
-                error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
-                symbol = undefined;
-            }
-            return symbol;
         }
 
         function hasExportAssignmentSymbol(moduleSymbol: Symbol): boolean {
