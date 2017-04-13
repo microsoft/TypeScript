@@ -17,6 +17,16 @@ namespace ts.projectSystem {
         })
     };
 
+    const customSafeList = {
+        path: <Path>"/typeMapList.json",
+        content: JSON.stringify({
+            "quack": {
+                "match": "/duckquack-(\\d+)\\.min\\.js",
+                "types": ["duck-types"]
+            },
+        })
+    };
+
     export interface PostExecAction {
         readonly success: boolean;
         readonly callback: TI.RequestCompletedAction;
@@ -1402,6 +1412,66 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file3.path]);
         });
 
+        it("ignores files excluded by a custom safe type list", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const office = {
+                path: "/lib/duckquack-3.min.js",
+                content: "whoa do @@ not parse me ok thanks!!!"
+            };
+            const host = createServerHost([customSafeList, file1, office]);
+            const projectService = createProjectService(host);
+            projectService.loadSafeList(customSafeList.path);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, office.path]) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["duck-types"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
+        it("ignores files excluded by the default type list", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "export let x = 5"
+            };
+            const minFile = {
+                path: "/c/moment.min.js",
+                content: "unspecified"
+            };
+            const kendoFile1 = {
+                path: "/q/lib/kendo/kendo.all.min.js",
+                content: "unspecified"
+            };
+            const kendoFile2 = {
+                path: "/q/lib/kendo/kendo.ui.min.js",
+                content: "unspecified"
+            };
+            const officeFile1 = {
+                path: "/scripts/Office/1/excel-15.debug.js",
+                content: "unspecified"
+            };
+            const officeFile2 = {
+                path: "/scripts/Office/1/powerpoint.js",
+                content: "unspecified"
+            };
+            const files = [file1, minFile, kendoFile1, kendoFile2, officeFile1, officeFile2];
+            const host = createServerHost(files);
+            const projectService = createProjectService(host);
+            try {
+                projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles(files.map(f => f.path)) });
+                const proj = projectService.externalProjects[0];
+                assert.deepEqual(proj.getFileNames(/*excludeFilesFromExternalLibraries*/ true), [file1.path]);
+                assert.deepEqual(proj.getTypeAcquisition().include, ["kendo-ui", "office"]);
+            } finally {
+                projectService.resetSafeList();
+            }
+        });
+
         it("open file become a part of configured project if it is referenced from root file", () => {
             const file1 = {
                 path: "/a/b/f1.ts",
@@ -1652,7 +1722,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[1], [file2.path]);
         });
 
-        it ("loading files with correct priority", () => {
+        it("loading files with correct priority", () => {
             const f1 = {
                 path: "/a/main.ts",
                 content: "let x = 1"
@@ -1677,14 +1747,14 @@ namespace ts.projectSystem {
             });
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
 
             projectService.closeClientFile(f1.path);
 
             projectService.openClientFile(f2.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [ f1.path ]);
-            checkProjectActualFiles(projectService.inferredProjects[0], [ f2.path ]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
         });
 
         it("tsconfig script block support", () => {
@@ -1802,7 +1872,7 @@ namespace ts.projectSystem {
             //  #3. Ensure no errors when compiler options aren't specified
             const config3 = {
                 path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ })
+                content: JSON.stringify({})
             };
 
             host = createServerHost([file1, file2, config3, libFile], { executingFilePath: combinePaths(getDirectoryPath(libFile.path), "tsc.js") });
@@ -3311,13 +3381,13 @@ namespace ts.projectSystem {
             assert.equal((<protocol.CompileOnSaveAffectedFileListSingleProject[]>response)[0].projectUsesOutFile, expectedUsesOutFile, "usesOutFile");
         }
 
-        it ("projectUsesOutFile should not be returned if not set", () => {
+        it("projectUsesOutFile should not be returned if not set", () => {
             test({}, /*expectedUsesOutFile*/ false);
         });
-        it ("projectUsesOutFile should be true if outFile is set", () => {
+        it("projectUsesOutFile should be true if outFile is set", () => {
             test({ outFile: "/a/out.js" }, /*expectedUsesOutFile*/ true);
         });
-        it ("projectUsesOutFile should be true if out is set", () => {
+        it("projectUsesOutFile should be true if out is set", () => {
             test({ out: "/a/out.js" }, /*expectedUsesOutFile*/ true);
         });
     });
@@ -3412,7 +3482,7 @@ namespace ts.projectSystem {
                 }
             })();
             const host = createServerHost([f1, config]);
-            const session = createSession(host, /*typingsInstaller*/ undefined, () => {}, cancellationToken);
+            const session = createSession(host, /*typingsInstaller*/ undefined, () => { }, cancellationToken);
             {
                 session.executeCommandSeq(<protocol.OpenRequest>{
                     command: "open",

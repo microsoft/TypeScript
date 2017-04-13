@@ -35,6 +35,10 @@ namespace ts.server {
         (event: ProjectServiceEvent): void;
     }
 
+    export interface SafeList {
+        [name: string]: { match: RegExp, exclude?: Array<Array<string | number>>, types?: string[] };
+    }
+
     function prepareConvertersForEnumLikeCompilerOptions(commandLineOptions: CommandLineOption[]): Map<Map<number>> {
         const map: Map<Map<number>> = createMap<Map<number>>();
         for (const option of commandLineOptions) {
@@ -56,6 +60,55 @@ namespace ts.server {
         "block": IndentStyle.Block,
         "smart": IndentStyle.Smart
     });
+
+    /**
+     * How to understand this block:
+     *  * The 'match' property is a regexp that matches a filename.
+     *  * If 'match' is successful, then:
+     *     * All files from 'exclude' are removed from the project. See below.
+     *     * All 'types' are included in ATA
+     *  * What the heck is 'exclude' ?
+     *     * An array of an array of strings and numbers
+     *     * Each array is:
+     *       * An array of strings and numbers
+     *       * The strings are literals
+     *       * The numbers refer to capture group indices from the 'match' regexp
+     *          * Remember that '1' is the first group
+     *       * These are concatenated together to form a new regexp
+     *       * Filenames matching these regexps are excluded from the project
+     * This default value is tested in tsserverProjectSystem.ts; add tests there
+     *   if you are changing this so that you can be sure your regexp works!
+     */
+    const defaultTypeSafeList: SafeList = {
+        "jquery": {
+            // jquery files can have names like "jquery-1.10.2.min.js" (or "jquery.intellisense.js")
+            "match": /jquery(-(\.?\d+)+)?(\.intellisense)?(\.min)?\.js$/i,
+            "types": ["jquery"]
+        },
+        "WinJS": {
+            // e.g. c:/temp/UWApp1/lib/winjs-4.0.1/js/base.js
+            "match": /^(.*\/winjs-[.\d]+)\/js\/base\.js$/i,        // If the winjs/base.js file is found..
+            "exclude": [["^", 1, "/.*"]],                // ..then exclude all files under the winjs folder
+            "types": ["winjs"]                           // And fetch the @types package for WinJS
+        },
+        "Kendo": {
+            // e.g. /Kendo3/wwwroot/lib/kendo/kendo.all.min.js
+            "match": /^(.*\/kendo)\/kendo\.all\.min\.js$/i,
+            "exclude": [["^", 1, "/.*"]],
+            "types": ["kendo-ui"]
+        },
+        "Office Nuget": {
+            // e.g. /scripts/Office/1/excel-15.debug.js
+            "match": /^(.*\/office\/1)\/excel-\d+\.debug\.js$/i, // Office NuGet package is installed under a "1/office" folder
+            "exclude": [["^", 1, "/.*"]],                     // Exclude that whole folder if the file indicated above is found in it
+            "types": ["office"]                               // @types package to fetch instead
+        },
+        "Minified files": {
+            // e.g. /whatever/blah.min.js
+            "match": /^(.+\.min\.js)$/i,
+            "exclude": [["^", 1, "$"]]
+        }
+    };
 
     export function convertFormatOptions(protocolOptions: protocol.FormatCodeSettings): FormatCodeSettings {
         if (typeof protocolOptions.indentStyle === "string") {
@@ -259,6 +312,7 @@ namespace ts.server {
         private readonly throttledOperations: ThrottledOperations;
 
         private readonly hostConfiguration: HostConfiguration;
+        private static safelist: SafeList = defaultTypeSafeList;
 
         private changedFiles: ScriptInfo[];
 
@@ -282,8 +336,6 @@ namespace ts.server {
             this.typingsInstaller.attach(this);
 
             this.typingsCache = new TypingsCache(this.typingsInstaller);
-
-            // ts.disableIncrementalParsing = true;
 
             this.hostConfiguration = {
                 formatCodeOptions: getDefaultFormatCodeSettings(this.host),
@@ -835,7 +887,7 @@ namespace ts.server {
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
                 configFilename,
-                /*resolutionStack*/ [],
+                /*resolutionStack*/[],
                 this.hostConfiguration.extraFileExtensions);
 
             if (parsedCommandLine.errors.length) {
@@ -1403,6 +1455,94 @@ namespace ts.server {
             this.refreshInferredProjects();
         }
 
+        /** Makes a filename safe to insert in a RegExp */
+        private static filenameEscapeRegexp = /[-\/\\^$*+?.()|[\]{}]/g;
+        private static escapeFilenameForRegex(filename: string) {
+            return filename.replace(this.filenameEscapeRegexp, "\\$&");
+        }
+
+        resetSafeList(): void {
+            ProjectService.safelist = defaultTypeSafeList;
+        }
+
+        loadSafeList(fileName: string): void {
+            const raw: SafeList = JSON.parse(this.host.readFile(fileName, "utf-8"));
+            // Parse the regexps
+            for (const k of Object.keys(raw)) {
+                raw[k].match = new RegExp(raw[k].match as {} as string, "i");
+            }
+            // raw is now fixed and ready
+            ProjectService.safelist = raw;
+        }
+
+        applySafeList(proj: protocol.ExternalProject): void {
+            const { rootFiles, typeAcquisition } = proj;
+            const types = (typeAcquisition && typeAcquisition.include) || [];
+
+            const excludeRules: string[] = [];
+
+            const normalizedNames = rootFiles.map(f => normalizeSlashes(f.fileName));
+
+            for (const name of Object.keys(ProjectService.safelist)) {
+                const rule = ProjectService.safelist[name];
+                for (const root of normalizedNames) {
+                    if (rule.match.test(root)) {
+                        this.logger.info(`Excluding files based on rule ${name}`);
+
+                        // If the file matches, collect its types packages and exclude rules
+                        if (rule.types) {
+                            for (const type of rule.types) {
+                                if (types.indexOf(type) < 0) {
+                                    types.push(type);
+                                }
+                            }
+                        }
+
+                        if (rule.exclude) {
+                            for (const exclude of rule.exclude) {
+                                const processedRule = root.replace(rule.match, (...groups: Array<string>) => {
+                                    return exclude.map(groupNumberOrString => {
+                                        // RegExp group numbers are 1-based, but the first element in groups
+                                        // is actually the original string, so it all works out in the end.
+                                        if (typeof groupNumberOrString === "number") {
+                                            if (typeof groups[groupNumberOrString] !== "string") {
+                                                // Specification was wrong - exclude nothing!
+                                                this.logger.info(`Incorrect RegExp specification in safelist rule ${name} - not enough groups`);
+                                                // * can't appear in a filename; escape it because it's feeding into a RegExp
+                                                return "\\*";
+                                            }
+                                            return ProjectService.escapeFilenameForRegex(groups[groupNumberOrString]);
+                                        }
+                                        return groupNumberOrString;
+                                    }).join("");
+                                });
+
+                                if (excludeRules.indexOf(processedRule) === -1) {
+                                    excludeRules.push(processedRule);
+                                }
+                            }
+                        }
+                        else {
+                            // If not rules listed, add the default rule to exclude the matched file
+                            const escaped = ProjectService.escapeFilenameForRegex(root);
+                            if (excludeRules.indexOf(escaped) < 0) {
+                                excludeRules.push(escaped);
+                            }
+                        }
+                    }
+                }
+
+                // Copy back this field into the project if needed
+                if (types.length > 0) {
+                    proj.typeAcquisition = proj.typeAcquisition || {};
+                    proj.typeAcquisition.include = types;
+                }
+            }
+
+            const excludeRegexes = excludeRules.map(e => new RegExp(e, "i"));
+            proj.rootFiles = proj.rootFiles.filter((_file, index) => !excludeRegexes.some(re => re.test(normalizedNames[index])));
+        }
+
         openExternalProject(proj: protocol.ExternalProject, suppressRefreshOfInferredProjects = false): void {
             // typingOptions has been deprecated and is only supported for backward compatibility
             // purposes. It should be removed in future releases - use typeAcquisition instead.
@@ -1410,6 +1550,9 @@ namespace ts.server {
                 const typeAcquisition = convertEnableAutoDiscoveryToEnable(proj.typingOptions);
                 proj.typeAcquisition = typeAcquisition;
             }
+
+            this.applySafeList(proj);
+
             let tsConfigFiles: NormalizedPath[];
             const rootFiles: protocol.ExternalFile[] = [];
             for (const file of proj.rootFiles) {
