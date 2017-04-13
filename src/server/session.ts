@@ -751,6 +751,17 @@ namespace ts.server {
             return projects;
         }
 
+        private getDefaultProject(args: protocol.FileRequestArgs) {
+            if (args.projectFileName) {
+                const project = this.getProject(args.projectFileName);
+                if (project) {
+                    return project;
+                }
+            }
+            const info = this.projectService.getScriptInfo(args.file);
+            return info.getDefaultProject();
+        }
+
         private getRenameLocations(args: protocol.RenameRequestArgs, simplifiedResult: boolean): protocol.RenameResponseBody | RenameLocation[] {
             const file = toNormalizedPath(args.file);
             const info = this.projectService.getScriptInfoForNormalizedPath(file);
@@ -758,7 +769,7 @@ namespace ts.server {
             const projects = this.getProjects(args);
             if (simplifiedResult) {
 
-                const defaultProject = projects[0];
+                const defaultProject = this.getDefaultProject(args);
                 // The rename info should be the same for every project
                 const renameInfo = defaultProject.getLanguageService().getRenameInfo(file, position);
                 if (!renameInfo) {
@@ -857,7 +868,7 @@ namespace ts.server {
             const file = toNormalizedPath(args.file);
             const projects = this.getProjects(args);
 
-            const defaultProject = projects[0];
+            const defaultProject = this.getDefaultProject(args);
             const scriptInfo = defaultProject.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
             if (simplifiedResult) {

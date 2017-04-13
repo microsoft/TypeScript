@@ -261,10 +261,26 @@ namespace ts.server {
         }
 
         getDefaultProject() {
-            if (this.containingProjects.length === 0) {
-                return Errors.ThrowNoProject();
+            switch (this.containingProjects.length) {
+                case 0:
+                    return Errors.ThrowNoProject();
+                case 1:
+                    return this.containingProjects[0];
+                default:
+                    // if this file belongs to multiple projects, the first configured project should be
+                    // the default project; if no configured projects, the first external project should
+                    // be the default project; otherwise the first inferred project should be the default.
+                    let firstExternalProject;
+                    for (const project of this.containingProjects) {
+                        if (project.projectKind === ProjectKind.Configured) {
+                            return project;
+                        }
+                        else if (project.projectKind === ProjectKind.External && !firstExternalProject) {
+                            firstExternalProject = project;
+                        }
+                    }
+                    return firstExternalProject || this.containingProjects[0];
             }
-            return this.containingProjects[0];
         }
 
         registerFileUpdate(): void {
