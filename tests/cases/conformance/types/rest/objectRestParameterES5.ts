@@ -1,4 +1,4 @@
-// @target: es2015
+// @target: es5
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 }
 

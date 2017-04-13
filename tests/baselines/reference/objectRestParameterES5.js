@@ -1,4 +1,4 @@
-//// [objectRestParameter.ts]
+//// [objectRestParameterES5.ts]
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 }
 
@@ -21,7 +21,7 @@ foobar({ baz: 'hello' });
 foobar({ bar: { greeting: 'hello' } });
 
 
-//// [objectRestParameter.js]
+//// [objectRestParameterES5.js]
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -32,28 +32,37 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 function cloneAgain(_a) {
-    var { a } = _a, clone = __rest(_a, ["a"]);
+    var a = _a.a, clone = __rest(_a, ["a"]);
 }
-suddenly((_a) => {
-    var { x: a } = _a, rest = __rest(_a, ["x"]);
+suddenly(function (_a) {
+    var a = _a.x, rest = __rest(_a, ["x"]);
     return rest.y;
 });
-suddenly((_a = { x: { z: 1, ka: 1 }, y: 'noo' }) => {
-    var _b = _a.x, { z = 12 } = _b, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
+suddenly(function (_a) {
+    if (_a === void 0) { _a = { x: { z: 1, ka: 1 }, y: 'noo' }; }
+    var _b = _a.x, _c = _b.z, z = _c === void 0 ? 12 : _c, nested = __rest(_b, ["z"]), rest = __rest(_a, ["x"]);
     return rest.y + nested.ka;
 });
-class C {
-    m(_a) {
-        var { a } = _a, clone = __rest(_a, ["a"]);
-        // actually, never mind, don't clone
+var C = (function () {
+    function C() {
     }
-    set p(_a) {
-        var { a } = _a, clone = __rest(_a, ["a"]);
+    C.prototype.m = function (_a) {
+        var a = _a.a, clone = __rest(_a, ["a"]);
         // actually, never mind, don't clone
-    }
-}
-function foobar(_a = {}) {
-    var { bar = {} } = _a, opts = __rest(_a, ["bar"]);
+    };
+    Object.defineProperty(C.prototype, "p", {
+        set: function (_a) {
+            var a = _a.a, clone = __rest(_a, ["a"]);
+            // actually, never mind, don't clone
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return C;
+}());
+function foobar(_a) {
+    if (_a === void 0) { _a = {}; }
+    var _b = _a.bar, bar = _b === void 0 ? {} : _b, opts = __rest(_a, ["bar"]);
 }
 foobar();
 foobar({ baz: 'hello' });
