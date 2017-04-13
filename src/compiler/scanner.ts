@@ -616,7 +616,11 @@ namespace ts {
         let pendingKind: CommentKind;
         let pendingHasTrailingNewLine: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        const beginningOfFile = /^\s*$/.test(text.substr(0, pos));
+        if (trailing && beginningOfFile) {
+            return initial;
+        }
+        let collecting = trailing || beginningOfFile;
         let accumulator = initial;
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
