@@ -2158,11 +2158,11 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void;
     fill(fillRule?: string): void;
     fillRect(x: number, y: number, w: number, h: number): void;
-    fillText(text: string, x: number, y: number, maxWidth?: number): void;
+    fillText(text: string | number, x: number, y: number, maxWidth?: number): void;
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
     isPointInPath(x: number, y: number, fillRule?: string): boolean;
-    measureText(text: string): TextMetrics;
+    measureText(text: string | number): TextMetrics;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void;
     restore(): void;
     rotate(angle: number): void;
