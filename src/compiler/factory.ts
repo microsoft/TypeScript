@@ -3059,7 +3059,7 @@ namespace ts {
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
     export function addPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
-        const offset = addPrologueDirectives(target, source, ensureUseStrict);
+        const offset = addStandardPrologue(target, source, ensureUseStrict);
         return addCustomPrologue(target, source, offset, visitor);
     }
 
@@ -3069,7 +3069,7 @@ namespace ts {
      * This function needs to be called whenever we transform the statement
      * list of a source file, namespace, or function-like body.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
+    export function addStandardPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;

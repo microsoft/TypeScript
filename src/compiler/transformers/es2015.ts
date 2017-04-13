@@ -515,7 +515,7 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            let statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false);
+            let statementOffset = addStandardPrologue(statements, node.statements, /*ensureUseStrict*/ false);
             addCaptureThisForNodeIfNeeded(statements, node);
             statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
@@ -925,7 +925,7 @@ namespace ts {
                 statementOffset = 0;
             }
             else if (constructor) {
-                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addStandardPrologue(statements, constructor.body.statements, /*ensureUseStrict*/ false);
             }
 
             if (constructor) {
@@ -1825,8 +1825,8 @@ namespace ts {
             resumeLexicalEnvironment();
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
-                // addPrologueDirectives will put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false);
+                // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
+                statementOffset = addStandardPrologue(statements, body.statements, /*ensureUseStrict*/ false);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);
