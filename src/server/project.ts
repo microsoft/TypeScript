@@ -885,6 +885,9 @@ namespace ts.server {
             }
             // Enable global plugins with synthetic configuration entries
             for (const globalPluginName of this.projectService.globalPlugins) {
+                // Skip already-locally-loaded plugins
+                if (options.plugins.some(p => p.name === globalPluginName)) continue;
+                
                 // Provide global: true so plugins can detect why they can't find their config
                 this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
             }
