@@ -1,5 +1,4 @@
 //// [visibilityOfTypeParameters.ts]
-
 export class MyClass {
     protected myMethod<T>(val: T): T {
         return val;

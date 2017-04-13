@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/noErrorUsingImportExportModuleAugmentationInDeclarationFile2.ts] ////
 
 //// [1.ts]
-
 export var j = "hello"; // error
 
 //// [0.d.ts]

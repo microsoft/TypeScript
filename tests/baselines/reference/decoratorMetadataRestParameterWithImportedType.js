@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/decoratorMetadataRestParameterWithImportedType.ts] ////
 
 //// [aux.ts]
-
 export class SomeClass {
     field: string;
 }

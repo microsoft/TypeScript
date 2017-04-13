@@ -326,7 +326,7 @@ namespace ts.server {
             send(msg: protocol.Message) {
                 this.lastSent = msg;
             }
-        };
+        }
 
         it("can override methods such as send", () => {
             const session = new TestSession();
@@ -367,7 +367,7 @@ namespace ts.server {
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            };
+            }
             new ServiceSession();
         });
     });
@@ -462,7 +462,7 @@ namespace ts.server {
                 });
                 this.callbacks[this.seq] = callback;
             }
-        };
+        }
 
         it("can be constructed and respond to commands", (done) => {
             const cli = new InProcClient();

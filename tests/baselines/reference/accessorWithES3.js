@@ -1,5 +1,4 @@
 //// [accessorWithES3.ts]
-
 // error to use accessors in ES3 mode
 
 class C {

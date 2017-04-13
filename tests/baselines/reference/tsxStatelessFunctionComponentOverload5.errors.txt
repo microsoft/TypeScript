@@ -1,25 +1,24 @@
-tests/cases/conformance/jsx/file.tsx(49,24): error TS2322: Type '{ to: "/some/path"; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(48,24): error TS2322: Type '{ to: "/some/path"; onClick: (e: MouseEvent<any>) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(50,24): error TS2322: Type '{ to: string; onClick: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(49,24): error TS2322: Type '{ to: string; onClick: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(51,24): error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(50,24): error TS2322: Type '{ onClick: () => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(52,24): error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(51,24): error TS2322: Type '{ onClick: (k: MouseEvent<any>) => void; to: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(53,24): error TS2322: Type '{ to: string; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: 10; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(54,24): error TS2322: Type '{ children: 10; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ children: "hello"; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: "hello"; className: true; onClick(e: any): void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(57,24): error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
     Types of property '"data-format"' are incompatible.
       Type 'true' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
-    
     import React = require('react')
     
     export interface ClickableProps {

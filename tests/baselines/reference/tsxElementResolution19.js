@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution19.tsx] ////
 
 //// [react.d.ts]
-
 declare module "react" {
 
 }
@@ -13,7 +12,6 @@ declare module JSX {
 export class MyClass { }
 
 //// [file2.tsx]
-
 // Should not elide React import
 import * as React from 'react';
 import {MyClass} from './file1';

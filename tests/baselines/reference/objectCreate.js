@@ -1,5 +1,4 @@
 //// [objectCreate.ts]
-
 declare var union: null | { a: number, b: string };
 
 var n = Object.create(null);             // object

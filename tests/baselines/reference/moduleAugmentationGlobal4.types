@@ -1,5 +1,4 @@
 === tests/cases/compiler/f1.ts ===
-
 declare global {
 >global : any
 
@@ -9,7 +8,6 @@ declare global {
 }
 export {};
 === tests/cases/compiler/f2.ts ===
-
 declare global {
 >global : any
 

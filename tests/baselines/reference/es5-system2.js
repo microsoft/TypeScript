@@ -1,5 +1,4 @@
 //// [es5-system2.ts]
-
 export var __esModule = 1;
 
 //// [es5-system2.js]

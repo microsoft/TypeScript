@@ -1,5 +1,4 @@
 //// [prefixUnaryOperatorsOnExportedVariables.ts]
-
 export var x = false;
 export var y = 1;
 if (!x) {

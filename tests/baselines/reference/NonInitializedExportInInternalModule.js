@@ -1,5 +1,4 @@
 //// [NonInitializedExportInInternalModule.ts]
-
 module Inner {
     var;
     let;

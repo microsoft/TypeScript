@@ -1,5 +1,4 @@
 //// [optionalBindingParameters2.ts]
-
 function foo({ x, y, z }?: { x: string; y: number; z: boolean }) {
 
 }

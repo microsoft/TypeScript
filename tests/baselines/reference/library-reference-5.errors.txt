@@ -6,7 +6,6 @@
     /// <reference types="bar" />
     
 ==== /node_modules/foo/index.d.ts (0 errors) ====
-    
     // Secondary references may not be duplicated if they disagree in content
     
     /// <reference types="alpha" />

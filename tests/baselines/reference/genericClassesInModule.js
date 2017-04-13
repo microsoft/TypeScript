@@ -1,5 +1,4 @@
 //// [genericClassesInModule.ts]
-
 module Foo {
 
     export class B<T>{ }

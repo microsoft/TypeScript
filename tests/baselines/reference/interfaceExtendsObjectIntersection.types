@@ -1,5 +1,4 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersection.ts ===
-
 type T1 = { a: number };
 >T1 : T1
 >a : number

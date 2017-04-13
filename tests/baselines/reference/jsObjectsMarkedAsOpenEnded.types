@@ -1,5 +1,4 @@
 === tests/cases/conformance/salsa/a.js ===
-
 var variable = {};
 >variable : { [x: string]: any; }
 >{} : { [x: string]: any; }

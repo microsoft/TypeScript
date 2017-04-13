@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/nodeResolution8.ts] ////
 
 //// [ref.ts]
-
 var x = 1;
 
 //// [index.d.ts]

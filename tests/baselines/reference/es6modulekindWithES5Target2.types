@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6modulekindWithES5Target2.ts ===
-
 export default class C {
 >C : C
 

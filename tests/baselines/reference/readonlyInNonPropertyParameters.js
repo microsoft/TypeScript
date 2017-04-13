@@ -1,5 +1,4 @@
 //// [readonlyInNonPropertyParameters.ts]
-
 // `readonly` won't work outside of property parameters
 class X {
 	method(readonly x: number) {}

@@ -1,5 +1,4 @@
 //// [optionalParameterProperty.ts]
-
 class C {
     p: number;
 }

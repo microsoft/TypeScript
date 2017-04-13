@@ -1,5 +1,4 @@
 === tests/cases/conformance/salsa/a.js ===
-
 /** @type {String} */
 var S;
 >S : string

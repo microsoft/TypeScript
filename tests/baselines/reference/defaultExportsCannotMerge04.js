@@ -1,5 +1,4 @@
 //// [defaultExportsCannotMerge04.ts]
-
 export default function Foo() {
 }
 

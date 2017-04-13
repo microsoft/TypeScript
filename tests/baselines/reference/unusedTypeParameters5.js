@@ -1,5 +1,4 @@
 //// [unusedTypeParameters5.ts]
-
 class A<Dummy> {
     public x: Dummy;
 }

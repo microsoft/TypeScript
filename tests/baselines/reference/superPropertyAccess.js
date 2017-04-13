@@ -1,5 +1,4 @@
 //// [superPropertyAccess.ts]
-
 class MyBase {
     m1(a: string) { return a; }
     private p1() { }

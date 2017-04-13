@@ -1,5 +1,4 @@
 //// [fallFromLastCase2.ts]
-
 declare function use(a: string);
 
 function foo1(a: number) {

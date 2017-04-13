@@ -1,5 +1,4 @@
 //// [forStatementsMultipleValidDecl.ts]
-
 // all expected to be valid
 
 for (var x: number; ;) { }

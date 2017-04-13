@@ -1,5 +1,4 @@
 === tests/cases/compiler/asyncFunctionsAndStrictNullChecks.ts ===
-
 declare namespace Windows.Foundation {
 >Windows : any
 >Foundation : any

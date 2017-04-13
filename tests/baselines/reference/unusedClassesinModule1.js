@@ -1,5 +1,4 @@
 //// [unusedClassesinModule1.ts]
-
 module A {
     class Calculator {
         public handelChar() {

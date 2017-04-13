@@ -1,5 +1,4 @@
 //// [mappedTypes1.ts]
-
 type Item = { a: string, b: number, c: boolean };
 
 type T00 = { [P in "x" | "y"]: number };

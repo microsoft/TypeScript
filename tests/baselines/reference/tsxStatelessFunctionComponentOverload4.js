@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 declare function OneThing(): JSX.Element;
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;

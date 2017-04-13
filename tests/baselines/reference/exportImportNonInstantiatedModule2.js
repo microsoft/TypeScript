@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportImportNonInstantiatedModule2.ts] ////
 
 //// [w1.ts]
-
 export = Widget1
 interface Widget1 { name: string; }
 

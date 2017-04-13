@@ -1,5 +1,4 @@
 //// [doNotEmitPinnedCommentOnNotEmittedNodets.ts]
-
 class C {
     /*! remove pinned comment anywhere else */
     public foo(x: string, y: any)

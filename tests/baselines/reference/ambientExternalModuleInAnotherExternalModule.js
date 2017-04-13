@@ -1,5 +1,4 @@
 //// [ambientExternalModuleInAnotherExternalModule.ts]
-
 class D { }
 export = D;
 

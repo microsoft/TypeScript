@@ -1,5 +1,4 @@
 === tests/cases/compiler/moduledecl.ts ===
-
 module a {
 >a : any
 }

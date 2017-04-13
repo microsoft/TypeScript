@@ -1,5 +1,4 @@
 //// [es5ExportDefaultFunctionDeclaration3.ts]
-
 var before: typeof func = func();
 
 export default function func(): typeof func {

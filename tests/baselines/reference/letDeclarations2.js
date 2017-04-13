@@ -1,5 +1,4 @@
 //// [letDeclarations2.ts]
-
 module M {
     let l1 = "s";
     export let l2 = 0;

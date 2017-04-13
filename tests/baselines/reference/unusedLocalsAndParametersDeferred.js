@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersDeferred.ts]
-
 export { };
 
 function defered<T>(a: () => T): T {

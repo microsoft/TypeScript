@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals4_1.ts] ////
 
 //// [file1.d.ts]
-
 declare module "file1" {
     class foo {}
     namespace foo {

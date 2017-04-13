@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemModuleExportDefault.ts] ////
 
 //// [file1.ts]
-
 export default function() {}
 
 //// [file2.ts]

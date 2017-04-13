@@ -1,5 +1,4 @@
 //// [typeGuardsAsAssertions.ts]
-
 // Repro from #8513
 
 let cond: boolean;
@@ -123,8 +122,8 @@ function f6() {
 
 
 //// [typeGuardsAsAssertions.js]
-// Repro from #8513
 "use strict";
+// Repro from #8513
 exports.__esModule = true;
 var cond;
 exports.none = { none: '' };

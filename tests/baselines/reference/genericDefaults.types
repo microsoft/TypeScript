@@ -1094,7 +1094,7 @@ declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 
 // inference
 f12();
->f12() : [{}, {} & B]
+>f12() : [{}, B]
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
 
 f12(a);
@@ -1856,7 +1856,7 @@ declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 
 // inference
 f19();
->f19() : [{}, {} & B]
+>f19() : [{}, B]
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
 
 f19(a);
@@ -1950,11 +1950,11 @@ declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f20();
->f20() : [{}, {}, {} & C]
+>f20() : [{}, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f20(a);
->f20(a) : [A, {}, {} & C]
+>f20(a) : [A, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1973,25 +1973,25 @@ f20(a, b, c);
 
 // no inference, partially supplied
 f20<A>();
->f20<A>() : [A, {}, {} & C]
+>f20<A>() : [A, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 
 f20<A>(a);
->f20<A>(a) : [A, {}, {} & C]
+>f20<A>(a) : [A, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 
 f20<A>(a, b);
->f20<A>(a, b) : [A, {}, {} & C]
+>f20<A>(a, b) : [A, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A
 >b : B
 
 f20<A>(a, b, bc);
->f20<A>(a, b, bc) : [A, {}, {} & C]
+>f20<A>(a, b, bc) : [A, {}, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >A : A
 >a : A

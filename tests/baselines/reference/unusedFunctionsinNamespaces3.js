@@ -1,5 +1,4 @@
 //// [unusedFunctionsinNamespaces3.ts]
-
 namespace Validation {
     var function1 = function(param1:string) {
     }

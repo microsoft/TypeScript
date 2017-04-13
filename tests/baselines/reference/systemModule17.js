@@ -1,13 +1,10 @@
 //// [tests/cases/compiler/systemModule17.ts] ////
 
 //// [f1.ts]
-
-
 export class A {}
 export interface I {}
 
 //// [f2.ts]
-
 var x = 1;
 interface I { }
 

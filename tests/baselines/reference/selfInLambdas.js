@@ -1,5 +1,4 @@
 //// [selfInLambdas.ts]
-
 interface MouseEvent {
     x: number;
     y: number;

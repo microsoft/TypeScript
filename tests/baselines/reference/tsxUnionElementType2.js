@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 function SFC1(prop: { x: number }) {

@@ -1,5 +1,4 @@
 === tests/cases/compiler/modularizeLibrary_Dom.iterable.ts ===
-
 for (const element of document.getElementsByTagName("a")) {
 >element : HTMLAnchorElement
 >document.getElementsByTagName("a") : NodeListOf<HTMLAnchorElement>

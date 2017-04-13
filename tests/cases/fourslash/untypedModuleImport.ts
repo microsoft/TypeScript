@@ -12,7 +12,7 @@ verify.numberOfErrorsInCurrentFile(0);
 
 goTo.marker("fooModule");
 verify.goToDefinitionIs([]);
-verify.quickInfoIs("module <untyped>");
+verify.quickInfoIs("");
 verify.noReferences();
 
 goTo.marker("foo");

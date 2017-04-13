@@ -1,5 +1,5 @@
-tests/cases/compiler/w1.ts(2,1): error TS2449: Class 'Widget1' used before its declaration.
-tests/cases/compiler/w1.ts(2,10): error TS2449: Class 'Widget1' used before its declaration.
+tests/cases/compiler/w1.ts(1,1): error TS2449: Class 'Widget1' used before its declaration.
+tests/cases/compiler/w1.ts(1,10): error TS2449: Class 'Widget1' used before its declaration.
 
 
 ==== tests/cases/compiler/consumer.ts (0 errors) ====
@@ -9,7 +9,6 @@ tests/cases/compiler/w1.ts(2,10): error TS2449: Class 'Widget1' used before its 
         return new e.w();
     }
 ==== tests/cases/compiler/w1.ts (2 errors) ====
-    
     export = Widget1
     ~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'Widget1' used before its declaration.

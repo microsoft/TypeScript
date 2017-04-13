@@ -1,5 +1,4 @@
 //// [declFileAliasUseBeforeDeclaration2.ts]
-
 declare module "test" {
     module A {
         class C {

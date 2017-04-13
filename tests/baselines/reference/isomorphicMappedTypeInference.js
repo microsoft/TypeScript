@@ -1,5 +1,4 @@
 //// [isomorphicMappedTypeInference.ts]
-
 type Box<T> = {
     value: T;
 }

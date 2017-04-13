@@ -1,5 +1,4 @@
 //// [giant.ts]
-
 /*
     Prefixes
     p -> public

@@ -1,14 +1,13 @@
 === tests/cases/compiler/exp.ts ===
-
 var x = {
->x : Symbol(x, Decl(exp.ts, 1, 3))
+>x : Symbol(x, Decl(exp.ts, 0, 3))
 
     "greeting": "hello, world",
     "default": 42
 };
 
 export = x
->x : Symbol(x, Decl(exp.ts, 1, 3))
+>x : Symbol(x, Decl(exp.ts, 0, 3))
 
 === tests/cases/compiler/imp.ts ===
 import foo from "./exp";

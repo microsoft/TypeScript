@@ -1,5 +1,4 @@
 //// [objectSpreadStrictNull.ts]
-
 function f(
     definiteBoolean: { sn: boolean },
     definiteString: { sn: string },

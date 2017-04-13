@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileFunctions.ts] ////
 
 //// [declFileFunctions_0.ts]
-
 /** This comment should appear for foo*/
 export function foo() {
 }

@@ -1,5 +1,4 @@
 //// [accessibilityModifiers.ts]
-
 // No errors
 class C {
     private static privateProperty;
