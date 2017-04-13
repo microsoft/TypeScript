@@ -864,12 +864,6 @@ namespace ts.server {
             const host = this.projectService.host;
             const options = this.getCompilerOptions();
 
-            if (!(options.plugins && options.plugins.length)) {
-                this.projectService.logger.info("No plugins exist");
-                // No plugins
-                return;
-            }
-
             if (!host.require) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
@@ -880,16 +874,21 @@ namespace ts.server {
             const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
 
             // Enable tsconfig-specified plugins
-            for (const pluginConfigEntry of options.plugins) {
-                this.enablePlugin(pluginConfigEntry, searchPaths);
+            if (options.plugins) {
+                for (const pluginConfigEntry of options.plugins) {
+                    this.enablePlugin(pluginConfigEntry, searchPaths);
+                }
             }
-            // Enable global plugins with synthetic configuration entries
-            for (const globalPluginName of this.projectService.globalPlugins) {
-                // Skip already-locally-loaded plugins
-                if (options.plugins.some(p => p.name === globalPluginName)) continue;
-                
-                // Provide global: true so plugins can detect why they can't find their config
-                this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+
+            if (this.projectService.globalPlugins) {
+                // Enable global plugins with synthetic configuration entries
+                for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip already-locally-loaded plugins
+                    if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+
+                    // Provide global: true so plugins can detect why they can't find their config
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+                }
             }
         }
 
