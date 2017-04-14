@@ -411,6 +411,9 @@ namespace ts {
 
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
+        let _jsxElementAttribPropInterfaceSymbol: Symbol;  // JSX.ElementAttributesProperty [symbol] 
+        let _jsxElementPropertiesName: string;
+        let _jsxElementChildrenPropertyName: string;
 
         /** Things we lazy load from the JSX namespace */
         const jsxTypes = createMap<Type>();
@@ -423,8 +426,6 @@ namespace ts {
             IntrinsicAttributes: "IntrinsicAttributes",
             IntrinsicClassAttributes: "IntrinsicClassAttributes"
         };
-
-        const jsxChildrenPropertyName = "children";
 
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
@@ -458,7 +459,7 @@ namespace ts {
         return checker;
 
         function getJsxNamespace(): string {
-            if (_jsxNamespace === undefined) {
+            if (!_jsxNamespace) {
                 _jsxNamespace = "React";
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
@@ -12652,8 +12653,9 @@ namespace ts {
                 return getTypeOfPropertyOfType(attributesType, (node.parent as JsxAttribute).name.text);
             }
             else if (node.parent.kind === SyntaxKind.JsxElement) {
-                // JSX expression is in children of JSX Element, we will look for an atttribute named "chidlren"
-                return getTypeOfPropertyOfType(attributesType, jsxChildrenPropertyName);
+                // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
+                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                return jsxChildrenPropertyName ? getTypeOfPropertyOfType(attributesType, jsxChildrenPropertyName) : anyType;
             }
             else {
                 // JSX expression is in JSX spread attribute
@@ -13298,18 +13300,9 @@ namespace ts {
             }
 
             // Handle children attribute
-            const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ?
-                openingLikeElement.parent as JsxElement : undefined;
+            const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
             // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
-                // Error if there is a attribute named "children" and children element.
-                // This is because children element will overwrite the value from attributes
-                if (attributesTable.has(jsxChildrenPropertyName)) {
-                    error(attributes, Diagnostics.props_children_are_specified_twice_The_attribute_named_children_will_be_overwritten);
-                }
-
-                // If there are children in the body of JSX element, create dummy attribute "children" with anyType so that it will pass the attribute checking process
-                const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
                 const childrenTypes: Type[] = [];
                 for (const child of (parent as JsxElement).children) {
                     // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
@@ -13323,11 +13316,22 @@ namespace ts {
                         childrenTypes.push(checkExpression(child, checkMode));
                     }
                 }
-                childrenPropSymbol.type = childrenTypes.length === 1 ?
-                    childrenTypes[0] :
-                    createArrayType(getUnionType(childrenTypes,  /*subtypeReduction*/ false));
-                attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
-                containsSynthesizedJsxChildren = true;
+
+                // Error if there is a attribute named "children" and children element.
+                // This is because children element will overwrite the value from attributes
+                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                if (jsxChildrenPropertyName) {
+                    if (attributesTable.has(jsxChildrenPropertyName)) {
+                        error(attributes, Diagnostics.props_children_are_specified_twice_The_attribute_named_children_will_be_overwritten);
+                    }
+
+                    // If there are children in the body of JSX element, create dummy attribute "children" with anyType so that it will pass the attribute checking process
+                    const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
+                    childrenPropSymbol.type = childrenTypes.length === 1 ?
+                        childrenTypes[0] :
+                        createArrayType(getUnionType(childrenTypes,  /*subtypeReduction*/ false));
+                    attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
+                }
             }
 
             return createJsxAttributesType(attributes.symbol, attributesTable);
@@ -13429,41 +13433,85 @@ namespace ts {
             return getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
+        function getPropertiesFromJsxElementAttributesProperty() {
+            if (!_jsxElementAttribPropInterfaceSymbol) {
+                // JSX
+                const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
+                // JSX.ElementAttributesProperty [symbol]
+                _jsxElementAttribPropInterfaceSymbol = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
+            }
+            return _jsxElementAttribPropInterfaceSymbol;
+        }
+
         /// e.g. "props" for React.d.ts,
         /// or 'undefined' if ElementAttributesProperty doesn't exist (which means all
         ///     non-intrinsic elements' attributes type is 'any'),
         /// or '' if it has 0 properties (which means every
         ///     non-intrinsic elements' attributes type is the element instance type)
         function getJsxElementPropertiesName() {
-            // JSX
-            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
-            // JSX.ElementAttributesProperty [symbol]
-            const attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
-            // JSX.ElementAttributesProperty [type]
-            const attribPropType = attribsPropTypeSym && getDeclaredTypeOfSymbol(attribsPropTypeSym);
-            // The properties of JSX.ElementAttributesProperty
-            const attribProperties = attribPropType && getPropertiesOfType(attribPropType);
+            if (!_jsxElementPropertiesName) {
+                const jsxElementAttribPropInterfaceSym = getPropertiesFromJsxElementAttributesProperty();
+                // JSX.ElementAttributesProperty [type]
+                const jsxElementAttribPropInterfaceType = jsxElementAttribPropInterfaceSym && getDeclaredTypeOfSymbol(jsxElementAttribPropInterfaceSym);
+                // The properties of JSX.ElementAttributesProperty
+                const propertiesOfJsxElementAttribPropInterface = jsxElementAttribPropInterfaceType && getPropertiesOfType(jsxElementAttribPropInterfaceType);
 
-            if (attribProperties) {
-                // Element Attributes has zero properties, so the element attributes type will be the class instance type
-                if (attribProperties.length === 0) {
-                    return "";
+                // if there is a property in JSX.ElementAttributesProperty
+                // i.e.
+                // interface ElementAttributesProperty {
+                //     props: {
+                //         children?: any;
+                //     };
+                // }
+                if (propertiesOfJsxElementAttribPropInterface) {
+                    // Element Attributes has zero properties, so the element attributes type will be the class instance type
+                    if (propertiesOfJsxElementAttribPropInterface.length === 0) {
+                        _jsxElementPropertiesName = "";
+                    }
+                    // Element Attributes has one property, so the element attributes type will be the type of the corresponding
+                    // property of the class instance type
+                    else if (propertiesOfJsxElementAttribPropInterface.length === 1) {
+                        _jsxElementPropertiesName = propertiesOfJsxElementAttribPropInterface[0].name;
+                    }
+                    // More than one property on ElementAttributesProperty is an error
+                    else {
+                        error(jsxElementAttribPropInterfaceSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
+                        _jsxElementPropertiesName = undefined;
+                    }
                 }
-                // Element Attributes has one property, so the element attributes type will be the type of the corresponding
-                // property of the class instance type
-                else if (attribProperties.length === 1) {
-                    return attribProperties[0].name;
-                }
-                // More than one property on ElementAttributesProperty is an error
                 else {
-                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
-                    return undefined;
+                    // No interface exists, so the element attributes type will be an implicit any
+                    _jsxElementPropertiesName = undefined;
                 }
             }
-            else {
-                // No interface exists, so the element attributes type will be an implicit any
-                return undefined;
+
+            return _jsxElementPropertiesName;
+        }
+
+        function getJsxElementChildrenPropertyname(): string {
+            if (!_jsxElementChildrenPropertyName) {
+                const jsxElementAttribPropInterfaceSym = getPropertiesFromJsxElementAttributesProperty();
+                // JSX.ElementAttributesProperty [type]
+                const jsxElementAttribPropInterfaceType = jsxElementAttribPropInterfaceSym && getDeclaredTypeOfSymbol(jsxElementAttribPropInterfaceSym);
+                // The properties of JSX.ElementAttributesProperty
+                const propertiesOfJsxElementAttribPropInterface = jsxElementAttribPropInterfaceType && getPropertiesOfType(jsxElementAttribPropInterfaceType);
+                // if there is a property in JSX.ElementAttributesProperty
+                // i.e.
+                // interface ElementAttributesProperty {
+                //     props: {
+                //         children?: any;
+                //     };
+                // }
+                if (propertiesOfJsxElementAttribPropInterface && propertiesOfJsxElementAttribPropInterface.length === 1) {
+                    const propsType = getTypeOfSymbol(propertiesOfJsxElementAttribPropInterface[0]);
+                    const propertiesOfProps = propsType && getPropertiesOfType(propsType);
+                    if (propertiesOfProps && propertiesOfProps.length === 1) {
+                        _jsxElementChildrenPropertyName = propertiesOfProps[0].name; 
+                    }
+                }
             }
+
+            return _jsxElementChildrenPropertyName;
         }
 
         /**
