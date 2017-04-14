@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/metadataOfClassFromAlias2.ts] ////
 
 //// [auxiliry.ts]
-
 export class SomeClass {
     field: string;
 }
@@ -17,6 +16,7 @@ export class ClassA {
 
 //// [auxiliry.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SomeClass = (function () {
     function SomeClass() {
     }
@@ -34,6 +34,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 function annotation() {
     return function (target) { };
 }

@@ -18625,33 +18625,36 @@ namespace ts {
             }
         }
 
+        /**
+         * This function marks the type used for metadata decorator as referenced if it is import
+         * from external module.
+         * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
+         * union and intersection type
+         * @param node
+         */
         function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode): void {
-            const entityNameOrToken = getEntityNameForDecoratoryMetadata(node);
-            if (entityNameOrToken && isEntityName(entityNameOrToken)) {
-                markEntityNameOrEntityExpressionAsReference(entityNameOrToken);
+            const entityName = getEntityNameForDecoratorMetadata(node);
+            if (entityName && isEntityName(entityName)) {
+                markEntityNameOrEntityExpressionAsReference(entityName);
             }
         }
 
-        type voidUndefinedNullOrNeverTypeNode = Token<SyntaxKind.VoidKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.NullKeyword | SyntaxKind.NeverKeyword>;
-
-        function getEntityNameForDecoratoryMetadata(node: TypeNode): EntityName | voidUndefinedNullOrNeverTypeNode {
+        function getEntityNameForDecoratorMetadata(node: TypeNode): EntityName {
             if (node) {
                 switch (node.kind) {
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.UnionType:
-                        let commonEntityName: EntityName | voidUndefinedNullOrNeverTypeNode;
+                        let commonEntityName: EntityName;
                         for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
-                            const individualEntityName = getEntityNameForDecoratoryMetadata(typeNode);
+                            const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
                             if (!individualEntityName) {
-                                // Individual is something like string number 
-                                // So it would be serialized to either that type or object 
+                                // Individual is something like string number
+                                // So it would be serialized to either that type or object
                                 // Safe to return here
                                 return undefined;
                             }
 
-                            const isCommonEntityName = commonEntityName && isEntityName(commonEntityName);
-                            const isIndividualEntityName = isEntityName(individualEntityName);
-                            if (isCommonEntityName && isIndividualEntityName) {
+                            if (commonEntityName) {
                                 // Note this is in sync with the transformation that happens for type node.
                                 // Keep this in sync with serializeUnionOrIntersectionType
                                 // Verify if they refer to same entity and is identifier
@@ -18662,24 +18665,17 @@ namespace ts {
                                     return undefined;
                                 }
                             }
-                            else if (!isCommonEntityName) {
+                            else {
                                 commonEntityName = individualEntityName;
                             }
                         }
                         return commonEntityName;
 
                     case SyntaxKind.ParenthesizedType:
-                        return getEntityNameForDecoratoryMetadata((<ParenthesizedTypeNode>node).type);
+                        return getEntityNameForDecoratorMetadata((<ParenthesizedTypeNode>node).type);
 
                     case SyntaxKind.TypeReference:
                         return (<TypeReferenceNode>node).typeName;
-
-                    case SyntaxKind.VoidKeyword:
-                    case SyntaxKind.UndefinedKeyword:
-                    case SyntaxKind.NullKeyword:
-                    case SyntaxKind.NeverKeyword:
-                        return <voidUndefinedNullOrNeverTypeNode>node;
-
                 }
             }
         }
