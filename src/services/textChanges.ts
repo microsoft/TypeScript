@@ -421,7 +421,7 @@ namespace ts.textChanges {
                 let changesInFile = changesPerFile.get(c.sourceFile.path);
                 if (!changesInFile) {
                     changesPerFile.set(c.sourceFile.path, changesInFile = []);
-                };
+                }
                 changesInFile.push(c);
             }
             // convert changes

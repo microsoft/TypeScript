@@ -5,9 +5,9 @@
 ////    set: function (x) {
 ////        this._x = x;
 ////    },
-////    copy: function (/**/[|x|]) {
+////    copy: function ([|x|]) {
 ////        this._x = [|x|].prop;
 ////    }
 ////};
-goTo.marker();
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
+
+verify.rangesAreRenameLocations();

@@ -5,7 +5,6 @@
 ////function bar() {
 ////}
 ////bar.[|foo|] = "foo";
-////console.log(bar./**/[|foo|]);
+////console.log(bar.[|foo|]);
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations();

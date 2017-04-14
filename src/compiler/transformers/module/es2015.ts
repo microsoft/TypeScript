@@ -24,7 +24,7 @@ namespace ts {
                 const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(node, compilerOptions);
                 if (externalHelpersModuleName) {
                     const statements: Statement[] = [];
-                    const statementOffset = addPrologueDirectives(statements, node.statements);
+                    const statementOffset = addPrologue(statements, node.statements);
                     append(statements,
                         createImportDeclaration(
                             /*decorators*/ undefined,
