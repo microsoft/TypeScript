@@ -3087,11 +3087,9 @@ declare namespace ts {
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
         displayParts: SymbolDisplayPart[];
     }
-    interface ReferencedSymbolOf<T extends DocumentSpan> {
+    interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: T[];
-    }
-    interface ReferencedSymbol extends ReferencedSymbolOf<ReferenceEntry> {
+        references: ReferenceEntry[];
     }
     enum SymbolDisplayPartKind {
         aliasName = 0,
@@ -4445,22 +4443,35 @@ declare namespace ts.server {
         const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes;
     }
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
+    interface SessionOptions {
+        host: ServerHost;
+        cancellationToken: ServerCancellationToken;
+        useSingleInferredProject: boolean;
+        typingsInstaller: ITypingsInstaller;
+        byteLength: (buf: string, encoding?: string) => number;
+        hrtime: (start?: number[]) => number[];
+        logger: Logger;
+        canUseEvents: boolean;
+        eventHandler?: ProjectServiceEventHandler;
+        throttleWaitMilliseconds?: number;
+        globalPlugins?: string[];
+        pluginProbeLocations?: string[];
+    }
     class Session implements EventSender {
+        private readonly gcTimer;
+        protected projectService: ProjectService;
+        private changeSeq;
+        private currentRequestId;
+        private errorCheck;
+        private eventHandler;
         private host;
         private readonly cancellationToken;
         protected readonly typingsInstaller: ITypingsInstaller;
         private byteLength;
         private hrtime;
         protected logger: Logger;
-        protected readonly canUseEvents: boolean;
-        private readonly throttleWaitMilliseconds;
-        private readonly gcTimer;
-        protected projectService: ProjectService;
-        private changeSeq;
-        private currentRequestId;
-        private errorCheck;
-        private eventHander;
-        constructor(host: ServerHost, cancellationToken: ServerCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler, throttleWaitMilliseconds?: number);
+        private canUseEvents;
+        constructor(opts: SessionOptions);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         logError(err: Error, cmd: string): void;
@@ -4918,7 +4929,6 @@ declare namespace ts.server {
         getTypeAcquisition(): TypeAcquisition;
     }
     class ConfiguredProject extends Project {
-        private configFileName;
         private wildcardDirectories;
         compileOnSaveEnabled: boolean;
         private typeAcquisition;
@@ -4932,6 +4942,7 @@ declare namespace ts.server {
         constructor(configFileName: NormalizedPath, projectService: ProjectService, documentRegistry: ts.DocumentRegistry, hasExplicitListOfFiles: boolean, compilerOptions: CompilerOptions, wildcardDirectories: Map<WatchDirectoryFlags>, languageServiceEnabled: boolean, compileOnSaveEnabled: boolean);
         getConfigFilePath(): string;
         enablePlugins(): void;
+        private enablePlugin(pluginConfigEntry, searchPaths);
         private enableProxy(pluginModuleFactory, configEntry);
         getProjectRootPath(): string;
         setProjectErrors(projectErrors: Diagnostic[]): void;
@@ -5012,14 +5023,18 @@ declare namespace ts.server {
         configFileName?: NormalizedPath;
         configFileErrors?: Diagnostic[];
     }
+    interface ProjectServiceOptions {
+        host: ServerHost;
+        logger: Logger;
+        cancellationToken: HostCancellationToken;
+        useSingleInferredProject: boolean;
+        typingsInstaller: ITypingsInstaller;
+        eventHandler?: ProjectServiceEventHandler;
+        throttleWaitMilliseconds?: number;
+        globalPlugins?: string[];
+        pluginProbeLocations?: string[];
+    }
     class ProjectService {
-        readonly host: ServerHost;
-        readonly logger: Logger;
-        readonly cancellationToken: HostCancellationToken;
-        readonly useSingleInferredProject: boolean;
-        readonly typingsInstaller: ITypingsInstaller;
-        private readonly eventHandler;
-        readonly throttleWaitMilliseconds: number;
         readonly typingsCache: TypingsCache;
         private readonly documentRegistry;
         private readonly filenameToScriptInfo;
@@ -5038,7 +5053,16 @@ declare namespace ts.server {
         private changedFiles;
         readonly toCanonicalFileName: (f: string) => string;
         lastDeletedFile: ScriptInfo;
-        constructor(host: ServerHost, logger: Logger, cancellationToken: HostCancellationToken, useSingleInferredProject: boolean, typingsInstaller?: ITypingsInstaller, eventHandler?: ProjectServiceEventHandler, throttleWaitMilliseconds?: number);
+        readonly host: ServerHost;
+        readonly logger: Logger;
+        readonly cancellationToken: HostCancellationToken;
+        readonly useSingleInferredProject: boolean;
+        readonly typingsInstaller: ITypingsInstaller;
+        readonly throttleWaitMilliseconds?: number;
+        private readonly eventHandler?;
+        readonly globalPlugins: ReadonlyArray<string>;
+        readonly pluginProbeLocations: ReadonlyArray<string>;
+        constructor(opts: ProjectServiceOptions);
         ensureInferredProjectsUpToDate_TestOnly(): void;
         getCompilerOptionsForInferredProjects(): CompilerOptions;
         onUpdateLanguageServiceStateForProject(project: Project, languageServiceEnabled: boolean): void;
