@@ -16,4 +16,4 @@
 ////}
 
 verify.quickInfoAt("1", "(property) M2.A.foo: string", undefined);
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

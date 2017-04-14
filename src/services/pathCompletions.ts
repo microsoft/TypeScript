@@ -12,11 +12,11 @@ namespace ts.Completions.PathCompletions {
             const extensions = getSupportedExtensions(compilerOptions);
             if (compilerOptions.rootDirs) {
                 entries = getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/false, span, compilerOptions, host, scriptPath);
+                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, span, compilerOptions, host, scriptPath);
             }
             else {
                 entries = getCompletionEntriesForDirectoryFragment(
-                    literalValue, scriptDirectory, extensions, /*includeExtensions*/false, span, host, scriptPath);
+                    literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, span, host, scriptPath);
             }
         }
         else {
@@ -94,7 +94,7 @@ namespace ts.Completions.PathCompletions {
 
         if (tryDirectoryExists(host, baseDirectory)) {
             // Enumerate the available files if possible
-            const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/undefined, /*include*/["./*"]);
+            const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/ undefined, /*include*/ ["./*"]);
 
             if (files) {
                 /**
@@ -153,7 +153,7 @@ namespace ts.Completions.PathCompletions {
             const fileExtensions = getSupportedExtensions(compilerOptions);
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = isRootedDiskPath(baseUrl) ? baseUrl : combinePaths(projectDir, baseUrl);
-            result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/false, span, host);
+            result = getCompletionEntriesForDirectoryFragment(fragment, normalizePath(absolute), fileExtensions, /*includeExtensions*/ false, span, host);
 
             if (paths) {
                 for (const path in paths) {
@@ -214,7 +214,7 @@ namespace ts.Completions.PathCompletions {
                 // doesn't support. For now, this is safer but slower
                 const includeGlob = normalizedSuffix ? "**/*" : "./*";
 
-                const matches = tryReadDirectory(host, baseDirectory, fileExtensions, undefined, [includeGlob]);
+                const matches = tryReadDirectory(host, baseDirectory, fileExtensions, /*exclude*/ undefined, [includeGlob]);
                 if (matches) {
                     const result: string[] = [];
 
@@ -267,7 +267,7 @@ namespace ts.Completions.PathCompletions {
                     nonRelativeModules.push(visibleModule.moduleName);
                 }
                 else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
-                    const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/undefined, /*include*/["./*"]);
+                    const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
                     if (nestedFiles) {
                         for (let f of nestedFiles) {
                             f = normalizePath(f);
@@ -327,7 +327,7 @@ namespace ts.Completions.PathCompletions {
             if (kind === "path") {
                 // Give completions for a relative path
                 const span: TextSpan = getDirectoryFragmentTextSpan(toComplete, range.pos + prefix.length);
-                completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/true, span, host, sourceFile.path);
+                completionInfo.entries = getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/ true, span, host, sourceFile.path);
             }
             else {
                 // Give completions based on the typings available

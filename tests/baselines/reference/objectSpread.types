@@ -211,7 +211,7 @@ let getter: { a: number, c: number } =
 >c : number
 
     { ...op, c: 7 }
->{ ...op, c: 7 } : { c: number; readonly a: number; }
+>{ ...op, c: 7 } : { c: number; a: number; }
 >op : { readonly a: number; }
 >c : number
 >7 : 7

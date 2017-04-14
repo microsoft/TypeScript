@@ -18,7 +18,7 @@
 ////const x = foo/*foo_value*/;
 ////const i: foo/*foo_type*/ = { x: 1, y: 2 };
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
 verify.navigationItemsListCount(2, "foo", "exact");
 verify.navigationItemsListContains("foo", "alias", "foo", "exact");
@@ -49,7 +49,6 @@ verify.goToDefinitionIs("foo_type_declaration");
 ////const x = bar/*bar_value*/;
 ////const i: bar/*bar_type*/ = { x: 1, y: 2 };
 
-verify.numberOfErrorsInCurrentFile(0);
 verify.navigationItemsListCount(2, "bar", "exact");
 verify.navigationItemsListContains("bar", "alias", "bar", "exact");
 verify.navigationItemsListContains("bar", "interface", "bar", "exact");
