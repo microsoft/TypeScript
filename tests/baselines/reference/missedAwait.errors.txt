@@ -1,0 +1,36 @@
+tests/cases/compiler/missedAwait.ts(18,5): error TS2710: Return value of async function call was discarded. Did you mean to 'await' its result?
+tests/cases/compiler/missedAwait.ts(19,5): error TS2710: Return value of async function call was discarded. Did you mean to 'await' its result?
+
+
+==== tests/cases/compiler/missedAwait.ts (2 errors) ====
+    async function isAsync() {
+        return 10;
+    }
+    
+    class SomeClass {
+        async foo() {
+            return "ok";
+        }
+    }
+    
+    var x = new SomeClass();
+    function notAsync() {
+        isAsync(); // OK
+        x.foo(); // OK
+    }
+    
+    async function alsoAsync() {
+        isAsync(); // No
+        ~~~~~~~~~
+!!! error TS2710: Return value of async function call was discarded. Did you mean to 'await' its result?
+        x.foo(); // No
+        ~~~~~~~
+!!! error TS2710: Return value of async function call was discarded. Did you mean to 'await' its result?
+        void isAsync(); // OK
+        void x.foo(); // OK
+    
+        var j = x.foo(); // OK
+        j = x.foo(); // OK
+        await isAsync(); // OK
+        await x.foo(); // OK
+    }

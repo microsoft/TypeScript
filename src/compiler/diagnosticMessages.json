@@ -2107,6 +2107,10 @@
         "category": "Error",
         "code": 2709
     },
+    "Return value of async function call was discarded. Did you mean to 'await' its result?": {
+        "category": "Error",
+        "code": 2710
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
