@@ -483,12 +483,9 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
     }
 
-    export interface ReferencedSymbolOf<T extends DocumentSpan> {
+    export interface ReferencedSymbol {
         definition: ReferencedSymbolDefinitionInfo;
-        references: T[];
-    }
-
-    export interface ReferencedSymbol extends ReferencedSymbolOf<ReferenceEntry> {
+        references: ReferenceEntry[];
     }
 
     export enum SymbolDisplayPartKind {

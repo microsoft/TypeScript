@@ -587,7 +587,7 @@ namespace ts {
             // Build the generator
             resumeLexicalEnvironment();
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 

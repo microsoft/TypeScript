@@ -843,7 +843,7 @@ namespace ts.server {
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
-        constructor(private configFileName: NormalizedPath,
+        constructor(configFileName: NormalizedPath,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             hasExplicitListOfFiles: boolean,
@@ -863,28 +863,48 @@ namespace ts.server {
         enablePlugins() {
             const host = this.projectService.host;
             const options = this.getCompilerOptions();
-            const log = (message: string) => {
-                this.projectService.logger.info(message);
-            };
-
-            if (!(options.plugins && options.plugins.length)) {
-                this.projectService.logger.info("No plugins exist");
-                // No plugins
-                return;
-            }
 
             if (!host.require) {
                 this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
                 return;
             }
 
-            for (const pluginConfigEntry of options.plugins) {
-                const searchPath = getDirectoryPath(this.configFileName);
-                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, host, log);
-                if (resolvedModule) {
-                    this.enableProxy(resolvedModule, pluginConfigEntry);
+            // Search our peer node_modules, then any globally-specified probe paths
+            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+            const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+
+            // Enable tsconfig-specified plugins
+            if (options.plugins) {
+                for (const pluginConfigEntry of options.plugins) {
+                    this.enablePlugin(pluginConfigEntry, searchPaths);
                 }
             }
+
+            if (this.projectService.globalPlugins) {
+                // Enable global plugins with synthetic configuration entries
+                for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip already-locally-loaded plugins
+                    if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+
+                    // Provide global: true so plugins can detect why they can't find their config
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+                }
+            }
+        }
+
+        private enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+            const log = (message: string) => {
+                this.projectService.logger.info(message);
+            };
+
+            for (const searchPath of searchPaths) {
+                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log);
+                if (resolvedModule) {
+                    this.enableProxy(resolvedModule, pluginConfigEntry);
+                    return;
+                }
+            }
+            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name} anywhere in paths: ${searchPaths.join(",")}`);
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {

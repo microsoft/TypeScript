@@ -319,6 +319,22 @@ namespace ts.server {
         }
     }
 
+    export interface SessionOptions {
+        host: ServerHost;
+        cancellationToken: ServerCancellationToken;
+        useSingleInferredProject: boolean;
+        typingsInstaller: ITypingsInstaller;
+        byteLength: (buf: string, encoding?: string) => number;
+        hrtime: (start?: number[]) => number[];
+        logger: Logger;
+        canUseEvents: boolean;
+        eventHandler?: ProjectServiceEventHandler;
+        throttleWaitMilliseconds?: number;
+
+        globalPlugins?: string[];
+        pluginProbeLocations?: string[];
+    }
+
     export class Session implements EventSender {
         private readonly gcTimer: GcTimer;
         protected projectService: ProjectService;
@@ -327,22 +343,29 @@ namespace ts.server {
         private currentRequestId: number;
         private errorCheck: MultistepOperation;
 
-        private eventHander: ProjectServiceEventHandler;
+        private eventHandler: ProjectServiceEventHandler;
 
-        constructor(
-            private host: ServerHost,
-            private readonly cancellationToken: ServerCancellationToken,
-            useSingleInferredProject: boolean,
-            protected readonly typingsInstaller: ITypingsInstaller,
-            private byteLength: (buf: string, encoding?: string) => number,
-            private hrtime: (start?: number[]) => number[],
-            protected logger: Logger,
-            protected readonly canUseEvents: boolean,
-            eventHandler?: ProjectServiceEventHandler,
-            private readonly throttleWaitMilliseconds?: number) {
+        private host: ServerHost;
+        private readonly cancellationToken: ServerCancellationToken;
+        protected readonly typingsInstaller: ITypingsInstaller;
+        private byteLength: (buf: string, encoding?: string) => number;
+        private hrtime: (start?: number[]) => number[];
+        protected logger: Logger;
+        private canUseEvents: boolean;
 
-            this.eventHander = canUseEvents
-                ? eventHandler || (event => this.defaultEventHandler(event))
+        constructor(opts: SessionOptions) {
+            this.host = opts.host;
+            this.cancellationToken = opts.cancellationToken;
+            this.typingsInstaller = opts.typingsInstaller;
+            this.byteLength = opts.byteLength;
+            this.hrtime = opts.hrtime;
+            this.logger = opts.logger;
+            this.canUseEvents = opts.canUseEvents;
+
+            const { throttleWaitMilliseconds } = opts;
+
+            this.eventHandler = this.canUseEvents
+                ? opts.eventHandler || (event => this.defaultEventHandler(event))
                 : undefined;
 
             const multistepOperationHost: MultistepOperationHost = {
@@ -351,11 +374,22 @@ namespace ts.server {
                 getServerHost: () => this.host,
                 logError: (err, cmd) => this.logError(err, cmd),
                 sendRequestCompletedEvent: requestId => this.sendRequestCompletedEvent(requestId),
-                isCancellationRequested: () => cancellationToken.isCancellationRequested()
+                isCancellationRequested: () => this.cancellationToken.isCancellationRequested()
             };
             this.errorCheck = new MultistepOperation(multistepOperationHost);
-            this.projectService = new ProjectService(host, logger, cancellationToken, useSingleInferredProject, typingsInstaller, this.eventHander, this.throttleWaitMilliseconds);
-            this.gcTimer = new GcTimer(host, /*delay*/ 7000, logger);
+            const settings: ProjectServiceOptions = {
+                host: this.host,
+                logger: this.logger,
+                cancellationToken: this.cancellationToken,
+                useSingleInferredProject: opts.useSingleInferredProject,
+                typingsInstaller: this.typingsInstaller,
+                throttleWaitMilliseconds,
+                eventHandler: this.eventHandler,
+                globalPlugins: opts.globalPlugins,
+                pluginProbeLocations: opts.pluginProbeLocations
+            };
+            this.projectService = new ProjectService(settings);
+            this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
         }
 
         private sendRequestCompletedEvent(requestId: number): void {
@@ -947,8 +981,8 @@ namespace ts.server {
          */
         private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind) {
             const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind);
-            if (this.eventHander) {
-                this.eventHander({
+            if (this.eventHandler) {
+                this.eventHandler({
                     eventName: "configFileDiag",
                     data: { triggerFile: fileName, configFileName, diagnostics: configFileErrors || [] }
                 });

@@ -2298,7 +2298,7 @@ namespace ts {
 
         function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
             if (node.kind === SyntaxKind.Identifier) {
-                const symbol = container.locals.get((<Identifier>node).text);
+                const symbol = lookupSymbolForName((<Identifier>node).text);
                 if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
                     const declaration = symbol.valueDeclaration as VariableDeclaration;
                     if (declaration.initializer) {
@@ -2400,8 +2400,12 @@ namespace ts {
             }
         }
 
+        function lookupSymbolForName(name: string) {
+            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || container.locals.get(name);
+        }
+
         function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
-            let targetSymbol = container.locals.get(functionName);
+            let targetSymbol = lookupSymbolForName(functionName);
 
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;

@@ -273,6 +273,18 @@ namespace ts.server {
         }
     }
 
+    export interface ProjectServiceOptions {
+        host: ServerHost;
+        logger: Logger;
+        cancellationToken: HostCancellationToken;
+        useSingleInferredProject: boolean;
+        typingsInstaller: ITypingsInstaller;
+        eventHandler?: ProjectServiceEventHandler;
+        throttleWaitMilliseconds?: number;
+        globalPlugins?: string[];
+        pluginProbeLocations?: string[];
+    }
+
     export class ProjectService {
 
         public readonly typingsCache: TypingsCache;
@@ -320,19 +332,33 @@ namespace ts.server {
 
         public lastDeletedFile: ScriptInfo;
 
-        constructor(public readonly host: ServerHost,
-            public readonly logger: Logger,
-            public readonly cancellationToken: HostCancellationToken,
-            public readonly useSingleInferredProject: boolean,
-            readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
-            private readonly eventHandler?: ProjectServiceEventHandler,
-            public readonly throttleWaitMilliseconds?: number) {
+        public readonly host: ServerHost;
+        public readonly logger: Logger;
+        public readonly cancellationToken: HostCancellationToken;
+        public readonly useSingleInferredProject: boolean;
+        public readonly typingsInstaller: ITypingsInstaller;
+        public readonly throttleWaitMilliseconds?: number;
+        private readonly eventHandler?: ProjectServiceEventHandler;
 
-            Debug.assert(!!host.createHash, "'ServerHost.createHash' is required for ProjectService");
+        public readonly globalPlugins: ReadonlyArray<string>;
+        public readonly pluginProbeLocations: ReadonlyArray<string>;
 
-            this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        constructor(opts: ProjectServiceOptions) {
+            this.host = opts.host;
+            this.logger = opts.logger;
+            this.cancellationToken = opts.cancellationToken;
+            this.useSingleInferredProject = opts.useSingleInferredProject;
+            this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
+            this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
+            this.eventHandler = opts.eventHandler;
+            this.globalPlugins = opts.globalPlugins || emptyArray;
+            this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+
+            Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
+
+            this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
-            this.throttledOperations = new ThrottledOperations(host);
+            this.throttledOperations = new ThrottledOperations(this.host);
 
             this.typingsInstaller.attach(this);
 
@@ -344,7 +370,7 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
+            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.host.getCurrentDirectory());
         }
 
         /* @internal */

@@ -818,13 +818,17 @@ namespace Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
-            const server = new ts.server.Session(serverHost,
-                ts.server.nullCancellationToken,
-                /*useOneInferredProject*/ false,
-                /*typingsInstaller*/ undefined,
-                Utils.byteLength,
-                process.hrtime, serverHost,
-                /*canUseEvents*/ true);
+            const opts: ts.server.SessionOptions = {
+                host: serverHost,
+                cancellationToken: ts.server.nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: undefined,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: serverHost,
+                canUseEvents: true
+            };
+            const server = new ts.server.Session(opts);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

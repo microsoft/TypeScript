@@ -10,8 +10,8 @@
 goTo.marker('1');
 edit.backspace(6);
 edit.insert('T');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
 goTo.marker('2');
 edit.insertLine('');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
