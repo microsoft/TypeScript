@@ -945,7 +945,7 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p of getOwnKeys(arg)) {
+            for (const p in arg) if (hasProperty(arg, p)) {
                 t[p] = arg[p];
             }
         }
