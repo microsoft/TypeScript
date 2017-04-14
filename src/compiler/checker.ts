@@ -9624,6 +9624,7 @@ namespace ts {
                     }
                 }
 
+                Debug.assert(score < types.length, "types.length - 1 is the maximum score, given that getCommonSuperType returned false");
                 Debug.assert(!!downfallType, "If there is no common supertype, each type should have a downfallType");
 
                 if (score > bestSupertypeScore) {
@@ -9632,7 +9633,6 @@ namespace ts {
                     bestSupertypeScore = score;
                 }
 
-                // types.length - 1 is the maximum score, given that getCommonSupertype returned false
                 if (bestSupertypeScore === types.length - 1) {
                     break;
                 }
@@ -10322,9 +10322,20 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
         }
 
-        function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
-            const inferences = context.inferences[index];
-            return inferences.primary || inferences.secondary || emptyArray;
+        /**
+         * We widen inferred literal types if
+         * all inferences were made to top-level ocurrences of the type parameter, and
+         * the type parameter has no constraint or its constraint includes no primitive or literal types, and
+         * the type parameter was fixed during inference or does not occur at top-level in the return type.
+         */
+        function getInferenceCandidates(context: InferenceContext, index: number) {
+            const infier = context.inferences[index];
+            const inferences = infier.primary || infier.secondary || emptyArray;
+            const signature = context.signature;
+            const widenLiteralTypes = infier.topLevel &&
+                !hasPrimitiveConstraint(signature.typeParameters[index]) &&
+                (infier.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
+            return widenLiteralTypes ? sameMap(inferences, getWidenedLiteralType) : inferences;
         }
 
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
@@ -10338,17 +10349,8 @@ namespace ts {
             if (!inferredType) {
                 const inferences = getInferenceCandidates(context, index);
                 if (inferences.length) {
-                    // We widen inferred literal types if
-                    // all inferences were made to top-level ocurrences of the type parameter, and
-                    // the type parameter has no constraint or its constraint includes no primitive or literal types, and
-                    // the type parameter was fixed during inference or does not occur at top-level in the return type.
-                    const signature = context.signature;
-                    const widenLiteralTypes = context.inferences[index].topLevel &&
-                        !hasPrimitiveConstraint(signature.typeParameters[index]) &&
-                        (context.inferences[index].isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
-                    const baseInferences = widenLiteralTypes ? sameMap(inferences, getWidenedLiteralType) : inferences;
                     // Infer widened union or supertype, or the unknown type for no common supertype
-                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
+                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(inferences, /*subtypeReduction*/ true) : getCommonSupertype(inferences);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
