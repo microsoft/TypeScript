@@ -1707,6 +1707,9 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                     return createIdentifier("String");
 
+                case SyntaxKind.ObjectKeyword:
+                    return createIdentifier("Object");
+
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
                         case SyntaxKind.StringLiteral:
