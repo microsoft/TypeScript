@@ -29,7 +29,6 @@ let k3 = <Comp a={10} b="hi">    <Button />
     <AnotherButton /></Comp>;
 let k4 = <Comp a={10} b="hi"><Button />  </Comp>;
 
-
 //// [file.jsx]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
