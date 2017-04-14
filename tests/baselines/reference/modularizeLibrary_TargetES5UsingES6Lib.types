@@ -177,9 +177,9 @@ var p = new Proxy(t, {});
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible({}) : boolean
->Reflect.isExtensible : (target: any) => boolean
+>Reflect.isExtensible : (target: object) => boolean
 >Reflect : typeof Reflect
->isExtensible : (target: any) => boolean
+>isExtensible : (target: object) => boolean
 >{} : {}
 
 // Using Es6 regexp

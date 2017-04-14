@@ -311,7 +311,7 @@ interface ObjectConstructor {
      * @param target The target object to copy to.
      * @param sources One or more source objects from which to copy properties
      */
-    assign(target: any, ...sources: any[]): any;
+    assign(target: object, ...sources: any[]): any;
 
     /**
      * Returns an array of all symbol properties found directly on object o.

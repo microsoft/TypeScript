@@ -118,10 +118,10 @@ interface SetConstructor {
     new <T>(iterable: Iterable<T>): Set<T>;
 }
 
-interface WeakSet<T> { }
+interface WeakSet<T extends object> { }
 
 interface WeakSetConstructor {
-    new <T>(iterable: Iterable<T>): WeakSet<T>;
+    new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
 }
 
 interface Promise<T> { }
@@ -145,7 +145,7 @@ interface PromiseConstructor {
 }
 
 declare namespace Reflect {
-    function enumerate(target: any): IterableIterator<any>;
+    function enumerate(target: object): IterableIterator<any>;
 }
 
 interface String {
