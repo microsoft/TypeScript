@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationFilesWithTypeReferences4.ts] ////
 
 //// [index.d.ts]
-
 interface Error {
     stack2: string;
 }

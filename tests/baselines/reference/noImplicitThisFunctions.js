@@ -1,5 +1,4 @@
 //// [noImplicitThisFunctions.ts]
-
 function f1(x) {
     // implicit any is still allowed
     return x + 1;

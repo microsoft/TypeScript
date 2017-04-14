@@ -1,7 +1,6 @@
 === tests/cases/compiler/emitPostComments.ts ===
-
 var y = 10;
->y : Symbol(y, Decl(emitPostComments.ts, 1, 3))
+>y : Symbol(y, Decl(emitPostComments.ts, 0, 3))
 
 /**
 * @name Foo

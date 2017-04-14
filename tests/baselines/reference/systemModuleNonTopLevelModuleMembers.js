@@ -1,5 +1,4 @@
 //// [systemModuleNonTopLevelModuleMembers.ts]
-
 export class TopLevelClass {}
 export module TopLevelModule {var v;}
 export function TopLevelFunction(): void {}

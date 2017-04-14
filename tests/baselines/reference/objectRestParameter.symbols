@@ -64,5 +64,20 @@ class C {
         // actually, never mind, don't clone
     }
 }
+function foobar({ bar={}, ...opts }: any = {}) {
+>foobar : Symbol(foobar, Decl(objectRestParameter.ts, 14, 1))
+>bar : Symbol(bar, Decl(objectRestParameter.ts, 15, 17))
+>opts : Symbol(opts, Decl(objectRestParameter.ts, 15, 25))
+}
+foobar();
+>foobar : Symbol(foobar, Decl(objectRestParameter.ts, 14, 1))
 
+foobar({ baz: 'hello' });
+>foobar : Symbol(foobar, Decl(objectRestParameter.ts, 14, 1))
+>baz : Symbol(baz, Decl(objectRestParameter.ts, 18, 8))
+
+foobar({ bar: { greeting: 'hello' } });
+>foobar : Symbol(foobar, Decl(objectRestParameter.ts, 14, 1))
+>bar : Symbol(bar, Decl(objectRestParameter.ts, 19, 8))
+>greeting : Symbol(greeting, Decl(objectRestParameter.ts, 19, 15))
 

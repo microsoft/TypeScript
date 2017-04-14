@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal5.ts] ////
 
 //// [f1.d.ts]
-
 declare module "A" {
     global {
         interface Something {x}
@@ -23,6 +22,7 @@ import "B";
 
 //// [f3.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="f1.d.ts"/>
 /// <reference path="f2.d.ts"/>
 require("A");

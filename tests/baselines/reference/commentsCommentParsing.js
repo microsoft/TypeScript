@@ -1,5 +1,4 @@
 //// [commentsCommentParsing.ts]
-
 /// This is simple /// comments
 function simple() {
 }

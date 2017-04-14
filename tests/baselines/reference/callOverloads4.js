@@ -1,5 +1,4 @@
 //// [callOverloads4.ts]
-
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error
 class Foo { // error

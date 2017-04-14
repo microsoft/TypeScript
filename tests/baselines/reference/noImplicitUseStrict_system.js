@@ -1,5 +1,4 @@
 //// [noImplicitUseStrict_system.ts]
-
 export var x = 0;
 
 //// [noImplicitUseStrict_system.js]

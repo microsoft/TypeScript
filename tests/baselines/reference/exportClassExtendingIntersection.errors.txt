@@ -1,0 +1,39 @@
+tests/cases/compiler/FinalClass.ts(4,14): error TS4093: 'extends' clause of exported class 'MyExtendedClass' refers to a type whose name cannot be referenced.
+
+
+==== tests/cases/compiler/BaseClass.ts (0 errors) ====
+    export type Constructor<T> = new (...args: any[]) => T;
+    
+    export class MyBaseClass<T> {
+        baseProperty: string;
+        constructor(value: T) {}
+    }
+==== tests/cases/compiler/MixinClass.ts (0 errors) ====
+    import { Constructor, MyBaseClass } from './BaseClass';
+    
+    export interface MyMixin {
+        mixinProperty: string;
+    }
+    
+    export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
+        return class extends base {
+            mixinProperty: string;
+        }
+    }
+==== tests/cases/compiler/FinalClass.ts (1 errors) ====
+    import { MyBaseClass } from './BaseClass';
+    import { MyMixin } from './MixinClass';
+    
+    export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
+                 ~~~~~~~~~~~~~~~
+!!! error TS4093: 'extends' clause of exported class 'MyExtendedClass' refers to a type whose name cannot be referenced.
+        extendedClassProperty: number;
+    }
+==== tests/cases/compiler/Main.ts (0 errors) ====
+    import { MyExtendedClass } from './FinalClass';
+    import { MyMixin } from './MixinClass';
+    
+    const myExtendedClass = new MyExtendedClass('string');
+    
+    const AnotherMixedClass = MyMixin(MyExtendedClass);
+    

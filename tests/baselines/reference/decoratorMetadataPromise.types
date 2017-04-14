@@ -1,5 +1,4 @@
 === tests/cases/compiler/decoratorMetadataPromise.ts ===
-
 declare const decorator: MethodDecorator;
 >decorator : MethodDecorator
 >MethodDecorator : MethodDecorator

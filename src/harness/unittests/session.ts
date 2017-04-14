@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 
 const expect: typeof _chai.expect = _chai.expect;
 
@@ -27,7 +27,7 @@ namespace ts.server {
         clearImmediate: noop,
         createHash: s => s
     };
-    const nullCancellationToken: HostCancellationToken = { isCancellationRequested: () => false };
+
     const mockLogger: Logger = {
         close: noop,
         hasLevel(): boolean { return false; },
@@ -50,8 +50,22 @@ namespace ts.server {
         let session: TestSession;
         let lastSent: protocol.Message;
 
+        function createSession(): TestSession {
+            const opts: server.SessionOptions = {
+                host: mockHost,
+                cancellationToken: nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: undefined,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: mockLogger,
+                canUseEvents: true
+            };
+            return new TestSession(opts);
+        }
+
         beforeEach(() => {
-            session = new TestSession(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+            session = createSession();
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -318,7 +332,16 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: mockLogger,
+                    canUseEvents: true
+                });
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -326,7 +349,7 @@ namespace ts.server {
             send(msg: protocol.Message) {
                 this.lastSent = msg;
             }
-        };
+        }
 
         it("can override methods such as send", () => {
             const session = new TestSession();
@@ -367,7 +390,7 @@ namespace ts.server {
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            };
+            }
             new ServiceSession();
         });
     });
@@ -376,7 +399,16 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: mockLogger,
+                    canUseEvents: true
+                });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -462,7 +494,7 @@ namespace ts.server {
                 });
                 this.callbacks[this.seq] = callback;
             }
-        };
+        }
 
         it("can be constructed and respond to commands", (done) => {
             const cli = new InProcClient();

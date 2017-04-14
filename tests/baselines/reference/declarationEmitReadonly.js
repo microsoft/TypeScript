@@ -1,5 +1,4 @@
 //// [declarationEmitReadonly.ts]
-
 class C {
     constructor(readonly x: number) {}
 }

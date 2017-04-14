@@ -1,5 +1,4 @@
 === tests/cases/compiler/constDeclarations-es5.ts ===
-
 const z7 = false;
 >z7 : false
 >false : false

@@ -1,5 +1,5 @@
-tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts(3,5): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode
-tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts(10,1): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode
+tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts(3,5): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts(10,1): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
 tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface05.ts(11,1): error TS2304: Cannot find name 'I'.
 
 
@@ -8,7 +8,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInt
     
     var interface: number;
         ~~~~~~~~~
-!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode
+!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
     
     // 'interface' is a strict mode reserved word, and so it would be permissible
     // to allow 'interface' and the name of the interface to be on separate lines;
@@ -17,7 +17,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInt
     
     interface   // This should be the identifier 'interface'
     ~~~~~~~~~
-!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode
+!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
     I           // This should be the identifier 'I'
     ~
 !!! error TS2304: Cannot find name 'I'.

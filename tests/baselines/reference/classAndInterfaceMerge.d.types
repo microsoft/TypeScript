@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts ===
-
 interface C { }
 >C : C
 

@@ -7,7 +7,7 @@ declare module JSX {
 }
 declare var React: any;
 
-var p;
+var p: any;
 var openClosed1 = <div>
 
    {blah}

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationGlobal1.ts] ////
 
 //// [f1.ts]
-
 export class A {x: number;}
 
 //// [f2.ts]
@@ -20,6 +19,7 @@ let y = x.getA().x;
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
 var A = (function () {
     function A() {
     }
@@ -28,6 +28,7 @@ var A = (function () {
 exports.A = A;
 //// [f2.js]
 "use strict";
+exports.__esModule = true;
 var x = [1];
 var y = x.getA().x;
 

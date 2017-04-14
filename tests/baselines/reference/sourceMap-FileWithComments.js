@@ -1,5 +1,4 @@
 //// [sourceMap-FileWithComments.ts]
-
 // Interface
 interface IPoint {
     getDist(): number;

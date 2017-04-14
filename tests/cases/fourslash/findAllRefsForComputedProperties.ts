@@ -1,16 +1,26 @@
 /// <reference path='fourslash.ts'/>
 
-
 ////interface I {
-////    ["[|prop1|]"]: () => void;
+////    ["[|{| "isDefinition": true |}prop1|]"]: () => void;
 ////}
 ////
 ////class C implements I {
-////    ["[|prop1|]"]: any;
+////    ["[|{| "isDefinition": true |}prop1|]"]: any;
 ////}
 ////
 ////var x: I = {
-////    ["[|prop1|]"]: function () { },
+////    ["[|{| "isDefinition": true |}prop1|]"]: function () { },
 ////}
 
-verify.rangesReferenceEachOther();
+const ranges = test.ranges();
+const [r0, r1, r2] = ranges;
+verify.referenceGroups(r0, [{ definition: '(property) I[["prop1"]]: () => void', ranges }]);
+verify.referenceGroups(r1, [
+    { definition: '(property) I[["prop1"]]: () => void', ranges: [r0, r2] },
+    { definition: '(property) C[["prop1"]]: any', ranges: [r1] }
+]);
+verify.referenceGroups(r2, [
+    { definition: '(property) I[["prop1"]]: () => void', ranges: [r0, r1] },
+    { definition: '(property) ["prop1"]: () => void', ranges: [r2] }
+]);
+

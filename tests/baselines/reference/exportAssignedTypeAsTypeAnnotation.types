@@ -8,7 +8,6 @@ var t2: test; // should not raise a 'container type' error
 >test : test
 
 === tests/cases/compiler/exportAssignedTypeAsTypeAnnotation_0.ts ===
-
 interface x {
 >x : x
 

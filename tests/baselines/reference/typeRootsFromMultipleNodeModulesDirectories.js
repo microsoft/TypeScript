@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/typeRootsFromMultipleNodeModulesDirectories.ts] ////
 
 //// [index.d.ts]
-
 declare module "xyz" {
     export const x: number;
 }
@@ -25,6 +24,7 @@ x + y + z;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var xyz_1 = require("xyz");
 var pdq_1 = require("pdq");
 var abc_1 = require("abc");

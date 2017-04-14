@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/multipleDefaultExports02.ts] ////
 
 //// [m1.ts]
-
 export default function foo() {
 
 }
@@ -17,15 +16,15 @@ Entity();
 
 //// [m1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function foo() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = foo;
 function bar() {
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = bar;
 //// [m2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("./m1");
 m1_1.default();

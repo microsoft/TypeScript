@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
-
 var a1 = null;
 >a1 : null
 >null : null

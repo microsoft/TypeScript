@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 /// <reference path="..\..\harness\harnessLanguageService.ts" />
 
 namespace ts {
@@ -323,7 +323,7 @@ namespace ts {
 
             const program_1 = newProgram(files, ["a.ts"], options);
             checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
-            checkResolvedModulesCache(program_1, "b.ts", undefined);
+            checkResolvedModulesCache(program_1, "b.ts", /*expectedContent*/ undefined);
 
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
@@ -332,14 +332,14 @@ namespace ts {
 
             // content of resolution cache should not change
             checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
-            checkResolvedModulesCache(program_1, "b.ts", undefined);
+            checkResolvedModulesCache(program_1, "b.ts", /*expectedContent*/ undefined);
 
             // imports has changed - program is not reused
             const program_3 = updateProgram(program_2, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateImportsAndExports("");
             });
             assert.isTrue(!program_2.structureIsReused);
-            checkResolvedModulesCache(program_3, "a.ts", undefined);
+            checkResolvedModulesCache(program_3, "a.ts", /*expectedContent*/ undefined);
 
             const program_4 = updateProgram(program_3, ["a.ts"], options, files => {
                 const newImports = `import x from 'b'
@@ -360,7 +360,7 @@ namespace ts {
 
             const program_1 = newProgram(files, ["/a.ts"], options);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
-            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
+            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
@@ -369,7 +369,7 @@ namespace ts {
 
             // content of resolution cache should not change
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
-            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", undefined);
+            checkResolvedTypeDirectivesCache(program_1, "/types/typedefs/index.d.ts", /*expectedContent*/ undefined);
 
             // type reference directives has changed - program is not reused
             const program_3 = updateProgram(program_2, ["/a.ts"], options, files => {
@@ -377,7 +377,7 @@ namespace ts {
             });
 
             assert.isTrue(!program_2.structureIsReused);
-            checkResolvedTypeDirectivesCache(program_3, "/a.ts", undefined);
+            checkResolvedTypeDirectivesCache(program_3, "/a.ts", /*expectedContent*/ undefined);
 
             updateProgram(program_3, ["/a.ts"], options, files => {
                 const newReferences = `/// <reference types="typedefs"/>

@@ -1,5 +1,4 @@
 //// [circularIndexedAccessErrors.ts]
-
 type T1 = {
     x: T1["x"];  // Error
 };

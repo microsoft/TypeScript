@@ -1,5 +1,4 @@
 //// [reachabilityChecks6.ts]
-
 function f0(x) {
     while (true);
 }

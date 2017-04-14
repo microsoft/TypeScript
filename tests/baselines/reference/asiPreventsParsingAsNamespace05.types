@@ -1,5 +1,4 @@
 === tests/cases/conformance/internalModules/moduleDeclarations/asiPreventsParsingAsNamespace05.ts ===
-
 let namespace = 10;
 >namespace : number
 >10 : 10

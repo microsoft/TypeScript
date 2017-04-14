@@ -1,5 +1,4 @@
 //// [declarationEmitClassMemberNameConflict.ts]
-
 export class C1 {
     C1() { } // has to be the same as the class name
 
@@ -38,6 +37,7 @@ export class C4 {
 
 //// [declarationEmitClassMemberNameConflict.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var C1 = (function () {
     function C1() {
     }

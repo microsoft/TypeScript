@@ -4,7 +4,7 @@
 ////    x: T;
 //// }
 ////
-//// class C<U> implements I<U> {[|  |]} 
+//// class C<U> implements I<U> {[| |]} 
 
 verify.rangeAfterCodeFix(`
     x: U;

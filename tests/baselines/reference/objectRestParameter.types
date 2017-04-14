@@ -75,5 +75,30 @@ class C {
         // actually, never mind, don't clone
     }
 }
+function foobar({ bar={}, ...opts }: any = {}) {
+>foobar : ({bar, ...opts}?: any) => void
+>bar : {}
+>{} : {}
+>opts : any
+>{} : {}
+}
+foobar();
+>foobar() : void
+>foobar : ({bar, ...opts}?: any) => void
 
+foobar({ baz: 'hello' });
+>foobar({ baz: 'hello' }) : void
+>foobar : ({bar, ...opts}?: any) => void
+>{ baz: 'hello' } : { baz: string; }
+>baz : string
+>'hello' : "hello"
+
+foobar({ bar: { greeting: 'hello' } });
+>foobar({ bar: { greeting: 'hello' } }) : void
+>foobar : ({bar, ...opts}?: any) => void
+>{ bar: { greeting: 'hello' } } : { bar: { greeting: string; }; }
+>bar : { greeting: string; }
+>{ greeting: 'hello' } : { greeting: string; }
+>greeting : string
+>'hello' : "hello"
 

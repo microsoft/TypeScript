@@ -1,5 +1,4 @@
 //// [typeGuardsNestedAssignments.ts]
-
 class Foo {
     x: string;
 }

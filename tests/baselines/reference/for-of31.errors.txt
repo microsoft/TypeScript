@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/for-ofStatements/for-of31.ts(1,15): error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
+tests/cases/conformance/es6/for-ofStatements/for-of31.ts(14,15): error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
   Types of property '[Symbol.iterator]' are incompatible.
     Type '() => StringIterator' is not assignable to type '() => Iterator<string>'.
       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
@@ -9,17 +9,6 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(1,15): error TS2322: Ty
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of31.ts (1 errors) ====
-    for (var v of new StringIterator) { }
-                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
-!!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2322:     Type '() => StringIterator' is not assignable to type '() => Iterator<string>'.
-!!! error TS2322:       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
-!!! error TS2322:         Types of property 'next' are incompatible.
-!!! error TS2322:           Type '() => { value: string; }' is not assignable to type '(value?: any) => IteratorResult<string>'.
-!!! error TS2322:             Type '{ value: string; }' is not assignable to type 'IteratorResult<string>'.
-!!! error TS2322:               Property 'done' is missing in type '{ value: string; }'.
-    
     class StringIterator {
         next() {
             return {
@@ -32,3 +21,14 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(1,15): error TS2322: Ty
             return this;
         }
     }
+    
+    for (var v of new StringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
+!!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
+!!! error TS2322:     Type '() => StringIterator' is not assignable to type '() => Iterator<string>'.
+!!! error TS2322:       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
+!!! error TS2322:         Types of property 'next' are incompatible.
+!!! error TS2322:           Type '() => { value: string; }' is not assignable to type '(value?: any) => IteratorResult<string>'.
+!!! error TS2322:             Type '{ value: string; }' is not assignable to type 'IteratorResult<string>'.
+!!! error TS2322:               Property 'done' is missing in type '{ value: string; }'.

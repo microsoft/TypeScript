@@ -1,5 +1,4 @@
 //// [thisTypeInBasePropertyAndDerivedContainerOfBase01.ts]
-
 interface BoxOfFoo<T extends Foo> {
     item: T
 }

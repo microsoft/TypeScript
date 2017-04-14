@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators01.ts ===
-
 let abc: "ABC" = "ABC";
 >abc : "ABC"
 >"ABC" : "ABC"

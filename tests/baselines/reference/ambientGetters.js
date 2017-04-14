@@ -1,5 +1,4 @@
 //// [ambientGetters.ts]
-
 declare class A {
     get length() : number;
 }

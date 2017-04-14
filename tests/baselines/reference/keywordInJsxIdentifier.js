@@ -1,5 +1,4 @@
 //// [keywordInJsxIdentifier.tsx]
-
 declare var React: any;
 <foo class-id/>;
 <foo class/>;

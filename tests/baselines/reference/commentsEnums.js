@@ -1,5 +1,4 @@
 //// [commentsEnums.ts]
-
 /** Enum of colors*/
 enum Colors {
     /** Fancy name for 'blue'*/

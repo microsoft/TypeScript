@@ -1,4 +1,4 @@
-﻿/// <reference path="../harness.ts" />
+/// <reference path="../harness.ts" />
 /// <reference path="./tsserverProjectSystem.ts" />
 /// <reference path="../../server/typingsInstaller/typingsInstaller.ts" />
 
@@ -43,6 +43,47 @@ namespace ts.projectSystem {
             cb(success);
         });
     }
+
+    import typingsName = server.typingsInstaller.typingsName;
+
+    describe("local module", () => {
+        it("should not be picked up", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "const c = require('./config');"
+            };
+            const f2 = {
+                path: "/a/config.js",
+                content: "export let x = 1"
+            };
+            const typesCache = "/cache";
+            const typesConfig = {
+                path: typesCache + "/node_modules/@types/config/index.d.ts",
+                content: "export let y: number;"
+            };
+            const config = {
+                path: "/a/jsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: { moduleResolution: "commonjs" },
+                    typeAcquisition: { enable: true }
+                })
+            };
+            const host = createServerHost([f1, f2, config, typesConfig]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
+                    assert(false, "should not be called");
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(f1.path);
+            service.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path]);
+            installer.installAll(0);
+        });
+    });
 
     describe("typingsInstaller", () => {
         it("configured projects (typings installed) 1", () => {
@@ -340,12 +381,12 @@ namespace ts.projectSystem {
 
             const p = projectService.externalProjects[0];
             projectService.checkNumberOfProjects({ externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path]);
+            checkProjectActualFiles(p, [file2.path]);
 
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, file2.path]);
+            checkProjectActualFiles(p, [file2.path]);
         });
 
         it("external project - with type acquisition, with only js, d.ts files", () => {
@@ -519,32 +560,32 @@ namespace ts.projectSystem {
             const commander = {
                 path: "/a/data/node_modules/@types/commander/index.d.ts",
                 content: "declare const commander: { x: number }",
-                typings: "@types/commander"
+                typings: typingsName("commander")
             };
             const jquery = {
                 path: "/a/data/node_modules/@types/jquery/index.d.ts",
                 content: "declare const jquery: { x: number }",
-                typings: "@types/jquery"
+                typings: typingsName("jquery")
             };
             const lodash = {
                 path: "/a/data/node_modules/@types/lodash/index.d.ts",
                 content: "declare const lodash: { x: number }",
-                typings: "@types/lodash"
+                typings: typingsName("lodash")
             };
             const cordova = {
                 path: "/a/data/node_modules/@types/cordova/index.d.ts",
                 content: "declare const cordova: { x: number }",
-                typings: "@types/cordova"
+                typings: typingsName("cordova")
             };
             const grunt = {
                 path: "/a/data/node_modules/@types/grunt/index.d.ts",
                 content: "declare const grunt: { x: number }",
-                typings: "@types/grunt"
+                typings: typingsName("grunt")
             };
             const gulp = {
                 path: "/a/data/node_modules/@types/gulp/index.d.ts",
                 content: "declare const gulp: { x: number }",
-                typings: "@types/gulp"
+                typings: typingsName("gulp")
             };
 
             const host = createServerHost([lodashJs, commanderJs, file3]);
@@ -554,7 +595,7 @@ namespace ts.projectSystem {
                 }
                 installWorker(_requestId: number, args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
                     let typingFiles: (FileOrFolder & { typings: string })[] = [];
-                    if (args.indexOf("@types/commander") >= 0) {
+                    if (args.indexOf(typingsName("commander")) >= 0) {
                         typingFiles = [commander, jquery, lodash, cordova];
                     }
                     else {
@@ -651,7 +692,54 @@ namespace ts.projectSystem {
             checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
         });
 
-        it("configured projects discover from bower.josn", () => {
+        it("configured projects discover from bower_components", () => {
+            const app = {
+                path: "/app.js",
+                content: ""
+            };
+            const jsconfig = {
+                path: "/jsconfig.json",
+                content: JSON.stringify({})
+            };
+            const jquery = {
+                path: "/bower_components/jquery/index.js",
+                content: ""
+            };
+            const jqueryPackage = {
+                path: "/bower_components/jquery/package.json",
+                content: JSON.stringify({ name: "jquery" })
+            };
+            const jqueryDTS = {
+                path: "/tmp/node_modules/@types/jquery/index.d.ts",
+                content: ""
+            };
+            const host = createServerHost([app, jsconfig, jquery, jqueryPackage]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                    const installedTypings = ["@types/jquery"];
+                    const typingFiles = [jqueryDTS];
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+
+            const projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(app.path);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const p = projectService.configuredProjects[0];
+            checkProjectActualFiles(p, [app.path]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
+
+            installer.installAll(/*expectedCount*/ 1);
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+        });
+
+        it("configured projects discover from bower.json", () => {
             const app = {
                 path: "/app.js",
                 content: ""
@@ -934,7 +1022,7 @@ namespace ts.projectSystem {
             }
         });
 
-        it("should use cached locaitons", () => {
+        it("should use cached locations", () => {
             const f = {
                 path: "/a/b/app.js",
                 content: ""
@@ -982,7 +1070,7 @@ namespace ts.projectSystem {
                         return;
                     }
                     if (response.kind === server.EventEndInstallTypes) {
-                        assert.deepEqual(response.packagesToInstall, ["@types/commander"]);
+                        assert.deepEqual(response.packagesToInstall, [typingsName("commander")]);
                         seenTelemetryEvent = true;
                         return;
                     }

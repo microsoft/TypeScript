@@ -1,5 +1,4 @@
 //// [unusedLocalsInMethod1.ts]
-
 class greeter {
     public function1() {
         var x = 10;

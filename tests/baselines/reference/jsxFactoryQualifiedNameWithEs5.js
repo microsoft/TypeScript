@@ -1,5 +1,4 @@
 //// [index.tsx]
-
 import "./jsx";
 
 var skate: any;
@@ -13,6 +12,7 @@ class Component {
 
 //// [index.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 require("./jsx");
 var skate;
 var React = { createElement: skate.h };

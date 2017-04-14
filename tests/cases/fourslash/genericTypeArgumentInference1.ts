@@ -30,4 +30,4 @@ verify.quickInfos({
     4: "var r4: any",
     41: "(method) Underscore.Static.all<any>(list: any[], iterator?: Underscore.Iterator<any, boolean>, context?: any): any"
 });
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -18,6 +18,7 @@ y2 = ext;
 
 //// [typeofExternalModules_external.js]
 "use strict";
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
@@ -34,6 +35,7 @@ var D = (function () {
 module.exports = D;
 //// [typeofExternalModules_core.js]
 "use strict";
+exports.__esModule = true;
 var ext = require("./typeofExternalModules_external");
 var exp = require("./typeofExternalModules_exportAssign");
 var y1 = ext;

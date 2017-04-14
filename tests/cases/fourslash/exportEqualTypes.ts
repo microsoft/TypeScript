@@ -21,4 +21,4 @@ verify.quickInfos({
 });
 goTo.marker('4');
 verify.completionListContains('foo');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

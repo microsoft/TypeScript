@@ -2,7 +2,6 @@
 
 //// [file0.ts]
 
-
 //// [file1.ts]
 
 //// [file2.ts]

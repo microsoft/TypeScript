@@ -1,5 +1,4 @@
 //// [localTypes1.ts]
-
 function f1() {
     enum E {
         A, B, C

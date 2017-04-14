@@ -1,5 +1,4 @@
 //// [giant.ts]
-
 /*
     Prefixes
     p -> public
@@ -684,6 +683,7 @@ export declare module eaM {
 //// [giant.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     /*
         Prefixes
         p -> public

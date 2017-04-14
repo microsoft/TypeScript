@@ -1,5 +1,4 @@
 //// [declFileWithClassNameConflictingWithClassReferredByExtendsClause.ts]
-
 declare module A.B.Base {
     export class W {
         id: number;

@@ -12,4 +12,4 @@
 //// let x = new Person(100);
 //// x.canVote/**/;
 
-verify.quickInfoAt("", "(property) Person.canVote: true | 23");
+verify.quickInfoAt("", "(property) Person.canVote: number | boolean");

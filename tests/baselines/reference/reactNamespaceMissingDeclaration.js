@@ -1,5 +1,4 @@
 //// [reactNamespaceMissingDeclaration.tsx]
-
 // Error myReactLib not declared
 <foo data/>
 

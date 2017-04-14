@@ -1,5 +1,4 @@
 //// [await_unaryExpression_es6_2.ts]
-
 async function bar1() {
     delete await 42;
 }

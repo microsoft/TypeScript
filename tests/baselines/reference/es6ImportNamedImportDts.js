@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportDts.ts] ////
 
 //// [server.ts]
-
 export class a { }
 export class a11 { }
 export class a12 { }
@@ -48,6 +47,7 @@ import { aaaa1 as bbbb } from "./server";
 
 //// [server.js]
 "use strict";
+exports.__esModule = true;
 var a = (function () {
     function a() {
     }
@@ -134,6 +134,7 @@ var aaaa1 = (function () {
 exports.aaaa1 = aaaa1;
 //// [client.js]
 "use strict";
+exports.__esModule = true;
 var server_1 = require("./server");
 exports.xxxx = new server_1.a();
 var server_2 = require("./server");

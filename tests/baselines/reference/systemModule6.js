@@ -1,5 +1,4 @@
 //// [systemModule6.ts]
-
 export class C {}
 function foo() {
     new C();

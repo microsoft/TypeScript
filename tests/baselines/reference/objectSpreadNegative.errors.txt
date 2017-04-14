@@ -14,11 +14,12 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(37,19): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(42,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(46,12): error TS2339: Property 'b' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(52,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(56,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(57,11): error TS2339: Property 'a' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(61,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(64,14): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (15 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (16 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -100,6 +101,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(59,14): error TS269
     spreadC.m(); // error 'm' is not in '{ ... c }'
             ~
 !!! error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+    
+    // non primitive
+    let obj: object = { a: 123 };
+    let spreadObj = { ...obj };
+    spreadObj.a; // error 'a' is not in {}
+              ~
+!!! error TS2339: Property 'a' does not exist on type '{}'.
     
     // generics
     function f<T, U>(t: T, u: U) {

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportDefaultAsyncFunction2.ts] ////
 
 //// [asyncawait.ts]
-
 export function async<T>(...args: any[]): any { }
 export function await(...args: any[]): any { }
 

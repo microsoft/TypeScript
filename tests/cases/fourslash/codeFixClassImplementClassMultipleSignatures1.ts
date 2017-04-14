@@ -9,6 +9,6 @@
 verify.rangeAfterCodeFix(`
     method(a: number, b: string): boolean;
     method(a: string | number, b?: string | number): boolean | Function {
-        throw new Error('Method not implemented.');
+        throw new Error("Method not implemented.");
     }
 `);

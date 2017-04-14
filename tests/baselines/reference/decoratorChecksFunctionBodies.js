@@ -1,5 +1,4 @@
 //// [decoratorChecksFunctionBodies.ts]
-
 // from #2971
 function func(s: string): void {
 }

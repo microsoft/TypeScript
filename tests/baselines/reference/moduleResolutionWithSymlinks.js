@@ -40,9 +40,10 @@ tsc app.ts # Should write to library-a/index.js, library-b/index.js, and app.js
 
 
 //// [/src/library-a/index.js]
+"use strict";
 // When symlinked files are in node_modules, they are resolved with realpath;
 // so a linked file does not create a duplicate SourceFile of the real one.
-"use strict";
+exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {
     }
@@ -51,10 +52,12 @@ var MyClass = (function () {
 exports.MyClass = MyClass;
 //// [/src/library-b/index.js]
 "use strict";
+exports.__esModule = true;
 var library_a_1 = require("library-a");
 exports.MyClass2 = library_a_1.MyClass;
 //// [/src/app.js]
 "use strict";
+exports.__esModule = true;
 var x;
 var y;
 x = y;

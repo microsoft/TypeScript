@@ -1,5 +1,4 @@
 //// [continueNotInIterationStatement4.ts]
-
 TWO:
 while (true){
   var x = () => {

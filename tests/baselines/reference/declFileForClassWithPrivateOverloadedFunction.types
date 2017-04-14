@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileForClassWithPrivateOverloadedFunction.ts ===
-
 class C {
 >C : C
 

@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.ts ===
-
 import a = require('./b');
 >a : typeof a
 
