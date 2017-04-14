@@ -1,5 +1,4 @@
 //// [mappedTypeErrors.ts]
-
 interface Shape {
     name: string;
     width: number;

@@ -1267,6 +1267,7 @@ namespace ts {
         function nextTokenIsClassOrFunctionOrAsync(): boolean {
             nextToken();
             return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
+                (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
                 (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
         }
 
@@ -1844,7 +1845,7 @@ namespace ts {
                 case ParsingContext.JSDocTupleTypes: return Diagnostics.Type_expected;
                 case ParsingContext.JSDocRecordMembers: return Diagnostics.Property_assignment_expected;
             }
-        };
+        }
 
         // Parses a comma-delimited list of elements
         function parseDelimitedList<T extends Node>(kind: ParsingContext, parseElement: () => T, considerSemicolonAsDelimiter?: boolean): NodeArray<T> {
@@ -2030,22 +2031,18 @@ namespace ts {
                 node.isUnterminated = true;
             }
 
-            const tokenPos = scanner.getTokenPos();
-            nextToken();
-            finishNode(node);
-
             // Octal literals are not allowed in strict mode or ES5
             // Note that theoretically the following condition would hold true literals like 009,
             // which is not octal.But because of how the scanner separates the tokens, we would
             // never get a token like this. Instead, we would get 00 and 9 as two separate tokens.
             // We also do not need to check for negatives because any prefix operator would be part of a
             // parent unary expression.
-            if (node.kind === SyntaxKind.NumericLiteral
-                && sourceText.charCodeAt(tokenPos) === CharacterCodes._0
-                && isOctalDigit(sourceText.charCodeAt(tokenPos + 1))) {
-
-                node.isOctalLiteral = true;
+            if (node.kind === SyntaxKind.NumericLiteral) {
+                (<NumericLiteral>node).numericLiteralFlags = scanner.getNumericLiteralFlags();
             }
+
+            nextToken();
+            finishNode(node);
 
             return node;
         }
@@ -2053,9 +2050,8 @@ namespace ts {
         // TYPES
 
         function parseTypeReference(): TypeReferenceNode {
-            const typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
-            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference, typeName.pos);
-            node.typeName = typeName;
+            const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
+            node.typeName = parseEntityName(/*allowReservedWords*/ false, Diagnostics.Type_expected);
             if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
@@ -2134,7 +2130,7 @@ namespace ts {
         function parseParameter(): ParameterDeclaration {
             const node = <ParameterDeclaration>createNode(SyntaxKind.Parameter);
             if (token() === SyntaxKind.ThisKeyword) {
-                node.name = createIdentifier(/*isIdentifier*/true, undefined);
+                node.name = createIdentifier(/*isIdentifier*/ true);
                 node.type = parseParameterType();
                 return finishNode(node);
             }
@@ -3043,7 +3039,7 @@ namespace ts {
             // If we have an arrow, then try to parse the body. Even if not, try to parse if we
             // have an opening brace, just in case we're in an error state.
             const lastToken = token();
-            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/false, Diagnostics._0_expected, "=>");
+            arrowFunction.equalsGreaterThanToken = parseExpectedToken(SyntaxKind.EqualsGreaterThanToken, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, "=>");
             arrowFunction.body = (lastToken === SyntaxKind.EqualsGreaterThanToken || lastToken === SyntaxKind.OpenBraceToken)
                 ? parseArrowFunctionExpressionBody(isAsync)
                 : parseIdentifier();
@@ -3812,7 +3808,7 @@ namespace ts {
             // Since JSX elements are invalid < operands anyway, this lookahead parse will only occur in error scenarios
             // of one sort or another.
             if (inExpressionContext && token() === SyntaxKind.LessThanToken) {
-                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/true));
+                const invalidElement = tryParse(() => parseJsxElementOrSelfClosingElement(/*inExpressionContext*/ true));
                 if (invalidElement) {
                     parseErrorAtCurrentToken(Diagnostics.JSX_expressions_must_have_one_parent_element);
                     const badNode = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, result.pos);
@@ -4659,6 +4655,11 @@ namespace ts {
         function nextTokenIsIdentifierOrKeywordOnSameLine() {
             nextToken();
             return tokenIsIdentifierOrKeyword(token()) && !scanner.hasPrecedingLineBreak();
+        }
+
+        function nextTokenIsClassKeywordOnSameLine() {
+            nextToken();
+            return token() === SyntaxKind.ClassKeyword && !scanner.hasPrecedingLineBreak();
         }
 
         function nextTokenIsFunctionKeywordOnSameLine() {
@@ -5817,11 +5818,12 @@ namespace ts {
         }
 
         function processReferenceComments(sourceFile: SourceFile): void {
-            const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/false, LanguageVariant.Standard, sourceText);
+            const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
             const typeReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
+            let checkJsDirective: CheckJsDirective = undefined;
 
             // Keep scanning all the leading trivia in the file until we get to something that
             // isn't trivia.  Any single line comment will be analyzed to see if it is a
@@ -5883,6 +5885,16 @@ namespace ts {
                             amdDependencies.push(amdDependency);
                         }
                     }
+
+                    const checkJsDirectiveRegEx = /^\/\/\/?\s*(@ts-check|@ts-nocheck)\s*$/gim;
+                    const checkJsDirectiveMatchResult = checkJsDirectiveRegEx.exec(comment);
+                    if (checkJsDirectiveMatchResult) {
+                        checkJsDirective = {
+                            enabled: compareStrings(checkJsDirectiveMatchResult[1], "@ts-check", /*ignoreCase*/ true) === Comparison.EqualTo,
+                            end: range.end,
+                            pos: range.pos
+                        };
+                    }
                 }
             }
 
@@ -5890,6 +5902,7 @@ namespace ts {
             sourceFile.typeReferenceDirectives = typeReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
+            sourceFile.checkJsDirective = checkJsDirective;
         }
 
         function setExternalModuleIndicator(sourceFile: SourceFile) {
@@ -6516,7 +6529,7 @@ namespace ts {
 
                 function parseTagComments(indent: number) {
                     const comments: string[] = [];
-                    let state = JSDocState.SawAsterisk;
+                    let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
                     function pushComment(text: string) {
                         if (!margin) {

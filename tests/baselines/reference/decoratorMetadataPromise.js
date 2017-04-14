@@ -1,5 +1,4 @@
 //// [decoratorMetadataPromise.ts]
-
 declare const decorator: MethodDecorator;
 
 class A {

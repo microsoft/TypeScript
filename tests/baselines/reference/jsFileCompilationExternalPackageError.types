@@ -1,5 +1,4 @@
 === tests/cases/compiler/moduleA/a.js ===
-
 import {a} from "b";
 >a : any
 

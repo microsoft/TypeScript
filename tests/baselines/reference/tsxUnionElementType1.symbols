@@ -1,12 +1,11 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 function SFC1(prop: { x: number }) {
->SFC1 : Symbol(SFC1, Decl(file.tsx, 1, 32))
->prop : Symbol(prop, Decl(file.tsx, 3, 14))
->x : Symbol(x, Decl(file.tsx, 3, 21))
+>SFC1 : Symbol(SFC1, Decl(file.tsx, 0, 32))
+>prop : Symbol(prop, Decl(file.tsx, 2, 14))
+>x : Symbol(x, Decl(file.tsx, 2, 21))
 
     return <div>hello</div>;
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2397, 45))
@@ -15,9 +14,9 @@ function SFC1(prop: { x: number }) {
 };
 
 function SFC2(prop: { x: boolean }) {
->SFC2 : Symbol(SFC2, Decl(file.tsx, 5, 2))
->prop : Symbol(prop, Decl(file.tsx, 7, 14))
->x : Symbol(x, Decl(file.tsx, 7, 21))
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 4, 2))
+>prop : Symbol(prop, Decl(file.tsx, 6, 14))
+>x : Symbol(x, Decl(file.tsx, 6, 21))
 
     return <h1>World </h1>;
 >h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2407, 47))
@@ -25,11 +24,11 @@ function SFC2(prop: { x: boolean }) {
 }
 
 var SFCComp = SFC1 || SFC2;
->SFCComp : Symbol(SFCComp, Decl(file.tsx, 11, 3))
->SFC1 : Symbol(SFC1, Decl(file.tsx, 1, 32))
->SFC2 : Symbol(SFC2, Decl(file.tsx, 5, 2))
+>SFCComp : Symbol(SFCComp, Decl(file.tsx, 10, 3))
+>SFC1 : Symbol(SFC1, Decl(file.tsx, 0, 32))
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 4, 2))
 
 <SFCComp x />
->SFCComp : Symbol(SFCComp, Decl(file.tsx, 11, 3))
->x : Symbol(x, Decl(file.tsx, 12, 8))
+>SFCComp : Symbol(SFCComp, Decl(file.tsx, 10, 3))
+>x : Symbol(x, Decl(file.tsx, 11, 8))
 

@@ -1,5 +1,4 @@
 //// [namespacesDeclaration1.ts]
-
 module M {
    export namespace N {
       export module M2 {

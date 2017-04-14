@@ -1,5 +1,4 @@
 //// [duplicateIdentifierBindingElementInParameterDeclaration1.ts]
-
 function f0(a, [a, [b]], {b}) { }
 function f1([a, a]) { }
 function f2({b}, {b}) { }

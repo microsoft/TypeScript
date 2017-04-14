@@ -1,5 +1,4 @@
 //// [unusedVariablesinForLoop.ts]
-
 function f1 () {
     for(var i = 0; ;) {
 

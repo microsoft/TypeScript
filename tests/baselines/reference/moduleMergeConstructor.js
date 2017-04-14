@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleMergeConstructor.ts] ////
 
 //// [foo.d.ts]
-
 declare module "foo" {
     export class Foo {
         constructor();

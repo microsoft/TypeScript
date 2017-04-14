@@ -302,6 +302,10 @@ namespace ts {
         // symbol has no doc comment, then the empty string will be returned.
         documentationComment: SymbolDisplayPart[];
 
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no JSDoc tags, then the empty array will be returned.
+        tags: JSDocTagInfo[];
+
         constructor(flags: SymbolFlags, name: string) {
             this.flags = flags;
             this.name = name;
@@ -325,6 +329,14 @@ namespace ts {
             }
 
             return this.documentationComment;
+        }
+
+        getJsDocTags(): JSDocTagInfo[] {
+            if (this.tags === undefined) {
+                this.tags = JsDoc.getJsDocTagsFromDeclarations(this.declarations);
+            }
+
+            return this.tags;
         }
     }
 
@@ -415,6 +427,10 @@ namespace ts {
         // symbol has no doc comment, then the empty string will be returned.
         documentationComment: SymbolDisplayPart[];
 
+        // Undefined is used to indicate the value has not been computed. If, after computing, the
+        // symbol has no doc comment, then the empty array will be returned.
+        jsDocTags: JSDocTagInfo[];
+
         constructor(checker: TypeChecker) {
             this.checker = checker;
         }
@@ -437,6 +453,14 @@ namespace ts {
             }
 
             return this.documentationComment;
+        }
+
+        getJsDocTags(): JSDocTagInfo[] {
+            if (this.jsDocTags === undefined) {
+                this.jsDocTags = this.declaration ? JsDoc.getJsDocTagsFromDeclarations([this.declaration]) : [];
+            }
+
+            return this.jsDocTags;
         }
     }
 
@@ -482,6 +506,7 @@ namespace ts {
         public moduleAugmentations: LiteralExpression[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
+        public checkJsDirective: CheckJsDirective | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);
@@ -981,6 +1006,36 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    /** A cancellation that throttles calls to the host */
+    export class ThrottledCancellationToken implements CancellationToken {
+        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
+        // to marshall over to the host layer).  So we only bother actually checking once enough
+        // time has passed.
+        private lastCancellationCheckTime = 0;
+
+        constructor(private hostCancellationToken: HostCancellationToken, private readonly throttleWaitMilliseconds = 20) {
+        }
+
+        public isCancellationRequested(): boolean {
+            const time = timestamp();
+            const duration = Math.abs(time - this.lastCancellationCheckTime);
+            if (duration >= this.throttleWaitMilliseconds) {
+                // Check no more than once every throttle wait milliseconds
+                this.lastCancellationCheckTime = time;
+                return this.hostCancellationToken.isCancellationRequested();
+            }
+
+            return false;
+        }
+
+        public throwIfCancellationRequested(): void {
+            if (this.isCancellationRequested()) {
+                throw new OperationCanceledException();
+            }
+        }
+    }
+
     export function createLanguageService(host: LanguageServiceHost,
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
@@ -1329,7 +1384,8 @@ namespace ts {
                                 kindModifiers: ScriptElementKindModifier.none,
                                 textSpan: createTextSpan(node.getStart(), node.getWidth()),
                                 displayParts: typeToDisplayParts(typeChecker, type, getContainerNode(node)),
-                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined
+                                documentation: type.symbol ? type.symbol.getDocumentationComment() : undefined,
+                                tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                             };
                         }
                 }
@@ -1343,7 +1399,8 @@ namespace ts {
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
                 textSpan: createTextSpan(node.getStart(), node.getWidth()),
                 displayParts: displayPartsDocumentationsAndKind.displayParts,
-                documentation: displayPartsDocumentationsAndKind.documentation
+                documentation: displayPartsDocumentationsAndKind.documentation,
+                tags: displayPartsDocumentationsAndKind.tags
             };
         }
 
@@ -1415,17 +1472,17 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments, /*isForRename*/true);
+            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments, /*isForRename*/ true);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/ false);
             return FindAllReferences.convertReferences(referencedSymbols);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
+            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/ false);
             // Only include referenced symbols that have a valid definition.
             return filter(referencedSymbols, rs => !!rs.definition);
         }
@@ -1552,11 +1609,11 @@ namespace ts {
         }
 
         function getNavigationBarItems(fileName: string): NavigationBarItem[] {
-            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationBarItems(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function getNavigationTree(fileName: string): NavigationTree {
-            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName));
+            return NavigationBar.getNavigationTree(syntaxTreeCache.getCurrentSourceFile(fileName), cancellationToken);
         }
 
         function isTsOrTsxFile(fileName: string): boolean {
@@ -1595,7 +1652,7 @@ namespace ts {
         function getOutliningSpans(fileName: string): OutliningSpan[] {
             // doesn't use compiler - no need to synchronize with host
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return OutliningElementsCollector.collectElements(sourceFile);
+            return OutliningElementsCollector.collectElements(sourceFile, cancellationToken);
         }
 
         function getBraceMatchingAtPosition(fileName: string, position: number) {
@@ -2074,10 +2131,10 @@ namespace ts {
     declare const __dirname: string;
 
     /**
-      * Get the path of the default library files (lib.d.ts) as distributed with the typescript
-      * node package.
-      * The functionality is not supported if the ts module is consumed outside of a node module.
-      */
+     * Get the path of the default library files (lib.d.ts) as distributed with the typescript
+     * node package.
+     * The functionality is not supported if the ts module is consumed outside of a node module.
+     */
     export function getDefaultLibFilePath(options: CompilerOptions): string {
         // Check __dirname is defined and that we are on a node.js system.
         if (typeof __dirname !== "undefined") {

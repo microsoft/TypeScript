@@ -4,7 +4,6 @@ tests/cases/compiler/bar.ts(3,1): error TS2346: Supplied parameters do not match
 
 
 ==== tests/cases/compiler/foo.js (0 errors) ====
-    
     /**
      * @param a
      * @param b

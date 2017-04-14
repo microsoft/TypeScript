@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6modulekindWithES5Target7.ts ===
-
 export namespace N {
 >N : typeof N
 

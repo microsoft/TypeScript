@@ -14,7 +14,6 @@ let x = Test; // emit test_1.default
 >Test : typeof Test
 
 === tests/cases/compiler/component.d.ts ===
-
 declare module "Test" {
 	export default class Text { }
 >Text : Text

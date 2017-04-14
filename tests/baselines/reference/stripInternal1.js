@@ -1,5 +1,4 @@
 //// [stripInternal1.ts]
-
 class C {
   foo(): void { }
   // @internal

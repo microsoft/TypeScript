@@ -1,5 +1,4 @@
 //// [implicitAnyGenerics.ts]
-
 class C<T> {
     x: T;
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/keepImportsInDts2.ts] ////
 
 //// [test.ts]
-
 export {};
 //// [main.ts]
 import "./folder/test"

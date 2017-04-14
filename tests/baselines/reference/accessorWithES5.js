@@ -1,5 +1,4 @@
 //// [accessorWithES5.ts]
-
 class C {
     get x() {
         return 1;

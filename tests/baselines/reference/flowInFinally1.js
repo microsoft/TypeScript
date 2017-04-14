@@ -1,5 +1,4 @@
 //// [flowInFinally1.ts]
-
 class A {
   constructor() { }
   method() { }

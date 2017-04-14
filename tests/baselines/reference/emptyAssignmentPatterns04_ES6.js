@@ -1,5 +1,4 @@
 //// [emptyAssignmentPatterns04_ES6.ts]
-
 var a: any;
 let x, y, z, a1, a2, a3;
 

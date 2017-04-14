@@ -1,5 +1,4 @@
 //// [typeCheckTypeArgument.ts]
-
 var f: <T extends UNKNOWN>() => void;
 
 interface IFoo<T extends UNKNOWN> { }

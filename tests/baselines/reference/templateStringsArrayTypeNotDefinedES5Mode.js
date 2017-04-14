@@ -1,5 +1,4 @@
 //// [templateStringsArrayTypeNotDefinedES5Mode.ts]
-
 function f(x: TemplateStringsArray, y: number, z: number) {
 }
 

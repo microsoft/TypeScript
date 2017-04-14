@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments14_ES6.ts]
-
 function f() {
     if (Math.random()) {
         let arguments = 100;

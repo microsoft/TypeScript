@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxInArrowFunction.tsx ===
-
 declare namespace JSX {
 >JSX : any
 

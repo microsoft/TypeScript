@@ -1,5 +1,4 @@
 //// [typeofStrictNull.ts]
-
 let a: number;
 let b: typeof a;
 

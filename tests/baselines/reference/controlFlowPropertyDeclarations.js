@@ -149,8 +149,8 @@ export class StyleParser {
 }
 
 //// [controlFlowPropertyDeclarations.js]
-// Repro from ##8913
 "use strict";
+// Repro from ##8913
 exports.__esModule = true;
 var HTMLDOMPropertyConfig = require('react/lib/HTMLDOMPropertyConfig');
 // Populate property map with ReactJS's attribute and property mappings

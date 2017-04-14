@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/constDeclarations-useBeforeDefinition2.ts] ////
 
 //// [file1.ts]
-
 c;
 
 //// [file2.ts]

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyAccessorDeclFile.ts] ////
 
 //// [privacyAccessorDeclFile_externalModule.ts]
-
 class privateClass {
 }
 

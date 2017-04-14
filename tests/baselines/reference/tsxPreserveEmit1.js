@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxPreserveEmit1.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	var x: any;
 	export = x;

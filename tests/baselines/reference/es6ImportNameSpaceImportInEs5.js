@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportInEs5.ts] ////
 
 //// [es6ImportNameSpaceImportInEs5_0.ts]
-
 export var a = 10;  
 
 //// [es6ImportNameSpaceImportInEs5_1.ts]

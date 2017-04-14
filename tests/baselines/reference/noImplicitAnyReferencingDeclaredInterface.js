@@ -1,5 +1,4 @@
 //// [noImplicitAnyReferencingDeclaredInterface.ts]
-
 interface Entry {
     // Should return error for implicit any.
     new ();

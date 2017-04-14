@@ -954,7 +954,7 @@ namespace ts {
             if (ctor.body) {
                 const statements = ctor.body.statements;
                 // add prologue directives to the list (if any)
-                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, visitor);
+                const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
                 if (index === statements.length) {
                     // list contains nothing but prologue directives (or empty) - exit
                     return index;
@@ -2049,6 +2049,7 @@ namespace ts {
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -2323,13 +2324,13 @@ namespace ts {
                 // code if the casted expression has a lower precedence than the rest of the
                 // expression.
                 //
+                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
+                // preserve the position information of the original expression.
+                //
                 // Due to the auto-parenthesization rules used by the visitor and factory functions
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
-                //
-                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
-                // preserve the position information of the original expression.
                 return createPartiallyEmittedExpression(expression, node);
             }
 

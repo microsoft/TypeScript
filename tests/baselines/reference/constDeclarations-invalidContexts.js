@@ -1,5 +1,4 @@
 //// [constDeclarations-invalidContexts.ts]
-
 // Errors, const must be defined inside a block
 if (true) 
     const c1 = 0;

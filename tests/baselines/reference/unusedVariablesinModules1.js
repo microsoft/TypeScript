@@ -1,5 +1,4 @@
 //// [unusedVariablesinModules1.ts]
-
 export {};
 
 var x: string;

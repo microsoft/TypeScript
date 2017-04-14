@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport.ts] ////
 
 //// [privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts]
-
 // Public elements
 export class c_public {
     foo: string;

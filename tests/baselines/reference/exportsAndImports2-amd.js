@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports2-amd.ts] ////
 
 //// [t1.ts]
-
 export var x = "x";
 export var y = "y";
 

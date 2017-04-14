@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/literalTypes1.ts ===
-
 let zero: 0 = 0;
 >zero : 0
 >0 : 0

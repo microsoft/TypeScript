@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesAMD.ts]
-
 var;
 let;
 const;

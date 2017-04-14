@@ -1,5 +1,4 @@
 //// [interfaceWithOptionalProperty.ts]
-
 interface I {
     x?: number;
 }

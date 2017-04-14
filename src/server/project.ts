@@ -1031,7 +1031,7 @@ namespace ts.server {
 
     export class ExternalProject extends Project {
         private typeAcquisition: TypeAcquisition;
-        constructor(externalProjectName: string,
+        constructor(public externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,

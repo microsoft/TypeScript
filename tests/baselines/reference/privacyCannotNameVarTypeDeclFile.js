@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/privacyCannotNameVarTypeDeclFile.ts] ////
 
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts]
-
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxViaImport.2.tsx] ////
 
 //// [component.d.ts]
-
 declare module JSX {
   interface ElementAttributesProperty { props; }
 }

@@ -1,8 +1,7 @@
-tests/cases/compiler/a.js(4,12): error TS8010: 'types' can only be used in a .ts file.
+tests/cases/compiler/a.js(3,12): error TS8010: 'types' can only be used in a .ts file.
 
 
 ==== tests/cases/compiler/a.js (1 errors) ====
-    
     @SomeDecorator
     class SomeClass {
         foo(x: number) {

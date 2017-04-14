@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/bangInModuleName.ts] ////
 
 //// [a.d.ts]
-
-
 declare module "http" {
 }
 
@@ -12,7 +10,6 @@ declare module 'intern/dojo/node!http' {
 }
 
 //// [a.ts]
-
 /// <reference path="a.d.ts"/>
 
 import * as http from 'intern/dojo/node!http';
