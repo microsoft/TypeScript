@@ -2977,8 +2977,6 @@ namespace ts {
         NonPrimitive            = 1 << 24,  // intrinsic object type
         /* @internal */
         JsxAttributes           = 1 << 25,  // Jsx attributes type
-        /* @internal */
-        ContainsSynthesizedJsxChildren = 1 << 26,  // Jsx attributes type contains synthesized children property from Jsx element's children
 
         /* @internal */
         Nullable = Undefined | Null,

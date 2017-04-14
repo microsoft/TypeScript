@@ -8650,7 +8650,7 @@ namespace ts {
             // is considered known if the object type is empty and the check is for assignability, if the object type has
             // index signatures, or if the property is actually declared in the object type. In a union or intersection
             // type, a property is considered known if it is known in any constituent type.
-            function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean, containsSynthesizedJsxChildren: boolean): boolean {
+            function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
                 if (type.flags & TypeFlags.Object) {
                     const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
@@ -8660,16 +8660,14 @@ namespace ts {
                     else if (resolved.stringIndexInfo || (resolved.numberIndexInfo && isNumericLiteralName(name))) {
                         return true;
                     }
-                    else if (getPropertyOfType(type, name) || containsSynthesizedJsxChildren || (isComparingJsxAttributes && !isUnhyphenatedJsxName(name))) {
-                        // For JSXAttributes, consider that the attribute to be known if
-                        //      1. the attribute has a hyphenated name
-                        //      2. "children" attribute that is synthesized from children property of Jsx element
+                    else if (getPropertyOfType(type, name) || (isComparingJsxAttributes && !isUnhyphenatedJsxName(name))) {
+                        // For JSXAttributes, consider that the attribute to be known if the attribute has a hyphenated name
                         return true;
                     }
                 }
                 else if (type.flags & TypeFlags.UnionOrIntersection) {
                     for (const t of (<UnionOrIntersectionType>type).types) {
-                        if (isKnownProperty(t, name, isComparingJsxAttributes, containsSynthesizedJsxChildren)) {
+                        if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                             return true;
                         }
                     }
@@ -8680,15 +8678,14 @@ namespace ts {
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
-                    const containsSynthesizedJsxChildren = !!(source.flags & TypeFlags.ContainsSynthesizedJsxChildren);
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (!isKnownProperty(target, prop.name, isComparingJsxAttributes, containsSynthesizedJsxChildren)) {
+                        if (!isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
                                 Debug.assert(!!errorNode);
-                                if (isJsxAttributes(errorNode)) {
+                                if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
@@ -13303,7 +13300,6 @@ namespace ts {
             // Handle children attribute
             const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ?
                 openingLikeElement.parent as JsxElement : undefined;
-            let containsSynthesizedJsxChildren = false;
             // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
             if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
                 // Error if there is a attribute named "children" and children element.
@@ -13344,8 +13340,7 @@ namespace ts {
             function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                 const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-                const containsSynthesizedJsxChildrenFlag = containsSynthesizedJsxChildren ? TypeFlags.ContainsSynthesizedJsxChildren : 0;
-                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | containsSynthesizedJsxChildrenFlag;
+                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
