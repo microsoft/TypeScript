@@ -19391,8 +19391,8 @@ namespace ts {
             const type = checkExpression(node.expression);
 
             // Check for missing 'await' keyword in async functions
-            if (type && 
-                type.symbol === getGlobalPromiseType(false).symbol && 
+            if (type &&
+                type.symbol === getGlobalPromiseType(/*reportErrors*/ false).symbol &&
                 node.expression.kind === ts.SyntaxKind.CallExpression) {
                 // Calls to async functions without await inside async functions are disallowed
                 const container = getContainingFunction(node);
