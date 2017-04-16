@@ -5,9 +5,13 @@
 
 This file is not read.
 
+//// [index.js]
+Nor is this one.
+
 //// [a.ts]
 import Foo from "foo";
-class A extends Foo { }
+import Bar from "bar"; // error: unused
+export class A extends Foo { }
 
 
 //// [a.js]
@@ -31,3 +35,4 @@ var A = (function (_super) {
     }
     return A;
 }(foo_1["default"]));
+exports.A = A;

@@ -3058,7 +3058,18 @@ namespace ts {
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+    export function addPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+        const offset = addStandardPrologue(target, source, ensureUseStrict);
+        return addCustomPrologue(target, source, offset, visitor);
+    }
+
+    /**
+     * Add just the standard (string-expression) prologue-directives into target statement-array.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
+     */
+    export function addStandardPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
@@ -3066,7 +3077,7 @@ namespace ts {
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (isPrologueDirective(statement)) {
-                if (isUseStrictPrologue(statement as ExpressionStatement)) {
+                if (isUseStrictPrologue(statement)) {
                     foundUseStrict = true;
                 }
                 target.push(statement);
@@ -3079,6 +3090,17 @@ namespace ts {
         if (ensureUseStrict && !foundUseStrict) {
             target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
         }
+        return statementOffset;
+    }
+
+    /**
+     * Add just the custom prologue-directives into target statement-array.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
+     */
+    export function addCustomPrologue(target: Statement[], source: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
+        const numStatements = source.length;
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {
@@ -3489,8 +3511,7 @@ namespace ts {
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        const emittedBody = skipPartiallyEmittedExpressions(body);
-        if (emittedBody.kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && getLeftmostExpression(body).kind === SyntaxKind.ObjectLiteralExpression) {
             return setTextRange(createParen(<Expression>body), body);
         }
 

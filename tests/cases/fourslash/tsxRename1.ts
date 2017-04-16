@@ -11,7 +11,6 @@
 ////         span: { n: string; };
 ////     }
 //// }
-//// var x = <[|di/*ds*/v|] />;
+//// var x = <[|div|] />;
 
-goTo.marker('ds');
-verify.renameLocations(false, false);
+verify.rangesAreRenameLocations();

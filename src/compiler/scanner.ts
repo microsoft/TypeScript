@@ -735,11 +735,11 @@ namespace ts {
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     /** Optionally, get the shebang */

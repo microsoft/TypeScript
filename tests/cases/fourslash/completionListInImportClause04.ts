@@ -12,6 +12,6 @@
 ////import {/*1*/} from './foo';
 
 verify.completionsAt("1", ["prototype", "prop1", "prop2"]);
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 goTo.marker('2');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -13,4 +13,4 @@
 goTo.marker();
 edit.backspace(6);
 edit.insert("var");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

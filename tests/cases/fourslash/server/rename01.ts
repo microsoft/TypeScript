@@ -1,11 +1,11 @@
 /// <reference path="../fourslash.ts"/>
 
-///////<reference path="./Bar.ts" /> 
+///////<reference path="./Bar.ts" />
 
-////function /**/[|Bar|]() {
+////function [|Bar|]() {
 ////    // This is a reference to [|Bar|] in a comment.
 ////    "this is a reference to [|Bar|] in a string"
 ////}
 
-goTo.marker();
-verify.renameLocations(/*findInStrings:*/ true, /*findInComments:*/ true);
+const ranges = test.ranges();
+verify.renameLocations(ranges[0], { findInStrings: true, findInComments: true, ranges });

@@ -379,9 +379,9 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
-    export function isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return !moduleSymbol.declarations || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    /** Given a symbol for a module, checks that it is a shorthand ambient module. */
+    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
+        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -1036,13 +1036,13 @@ namespace ts {
     }
 
     /**
-      * Given an super call/property node, returns the closest node where
-      * - a super call/property access is legal in the node and not legal in the parent node the node.
-      *   i.e. super call is legal in constructor but not legal in the class body.
-      * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
-      * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
-      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
-      */
+     * Given an super call/property node, returns the closest node where
+     * - a super call/property access is legal in the node and not legal in the parent node the node.
+     *   i.e. super call is legal in constructor but not legal in the class body.
+     * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
+     * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
+     *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+     */
     export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -1352,16 +1352,16 @@ namespace ts {
         if (callExpression.kind !== SyntaxKind.CallExpression) {
             return false;
         }
-        const { expression, arguments } = callExpression as CallExpression;
+        const { expression, arguments: args } = callExpression as CallExpression;
 
         if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).text !== "require") {
             return false;
         }
 
-        if (arguments.length !== 1) {
+        if (args.length !== 1) {
             return false;
         }
-        const arg = arguments[0];
+        const arg = args[0];
         return !checkArgumentIsStringLiteral || arg.kind === SyntaxKind.StringLiteral || arg.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
@@ -3134,7 +3134,7 @@ namespace ts {
         return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+    function isExportDefaultSymbol(symbol: Symbol): boolean {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
@@ -4202,12 +4202,13 @@ namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
             case ScriptTarget.ESNext:
+                return "lib.esnext.full.d.ts";
             case ScriptTarget.ES2017:
-                return "lib.es2017.d.ts";
+                return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:
-                return "lib.es2016.d.ts";
+                return "lib.es2016.full.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es6.d.ts";
+                return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
             default:
                 return "lib.d.ts";
         }
@@ -4499,9 +4500,9 @@ namespace ts {
     }
 
     /**
-      * Checks to see if the locale is in the appropriate format,
-      * and if it is, attempts to set the appropriate language.
-      */
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     export function validateLocaleAndSetLanguage(
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },
