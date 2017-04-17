@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationMerging2.ts] ////
 
 //// [a.ts]
-
 export class A {
     protected _f: number;
     getF() { return this._f; }
@@ -18,6 +17,7 @@ declare module "./a" {
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
@@ -29,4 +29,5 @@ define(["require", "exports"], function (require, exports) {
 //// [b.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });

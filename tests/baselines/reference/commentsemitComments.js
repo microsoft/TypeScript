@@ -1,5 +1,4 @@
 //// [commentsemitComments.ts]
-
 /** Variable comments*/
 var myVariable = 10;
 

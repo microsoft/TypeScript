@@ -1,5 +1,4 @@
 //// [reactNamespaceJSXEmit.tsx]
-
 declare var myReactLib: any;
 declare var foo: any;
 declare var Bar: any;

@@ -1,5 +1,4 @@
 //// [implicitAnyFromCircularInference.ts]
-
 // Error expected
 var a: typeof a;
 

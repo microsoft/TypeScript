@@ -1,5 +1,4 @@
 //// [es2015modulekindWithES6Target.ts]
-
 export default class A
 {
     constructor ()

@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts ===
-
 var [x = 20] = [1, 2];
->x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts, 1, 5))
+>x : Symbol(x, Decl(sourceMapValidationDestructuringVariableStatementArrayBindingPattern6.ts, 0, 5))
 

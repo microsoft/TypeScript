@@ -10,11 +10,10 @@ export default {
 
 //// [multipleExportDefault1.js]
 "use strict";
+exports.__esModule = true;
 function Foo() {
 }
-exports.__esModule = true;
 exports["default"] = Foo;
-exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/emitTopOfFileTripleSlashCommentOnNotEmittedNodeIfRemoveCommentsIsFalse.ts] ////
 
 //// [file0.ts]
-
 var x = 10
 
 //// [file1.ts]

@@ -52,6 +52,11 @@ let c: C = new C()
 let spreadC = { ...c }
 spreadC.m(); // error 'm' is not in '{ ... c }'
 
+// non primitive
+let obj: object = { a: 123 };
+let spreadObj = { ...obj };
+spreadObj.a; // error 'a' is not in {}
+
 // generics
 function f<T, U>(t: T, u: U) {
     return { ...t, ...u, id: 'id' };
@@ -132,6 +137,10 @@ var C = (function () {
 var c = new C();
 var spreadC = __assign({}, c);
 spreadC.m(); // error 'm' is not in '{ ... c }'
+// non primitive
+var obj = { a: 123 };
+var spreadObj = __assign({}, obj);
+spreadObj.a; // error 'a' is not in {}
 // generics
 function f(t, u) {
     return __assign({}, t, u, { id: 'id' });

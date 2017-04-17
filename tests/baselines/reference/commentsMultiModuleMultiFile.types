@@ -23,7 +23,6 @@ new multiM.d();
 >d : typeof multiM.d
 
 === tests/cases/compiler/commentsMultiModuleMultiFile_0.ts ===
-
 /** this is multi declare module*/
 export module multiM {
 >multiM : typeof multiM

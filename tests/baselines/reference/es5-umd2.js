@@ -1,5 +1,4 @@
 //// [es5-umd2.ts]
-
 export class A
 {
     constructor ()
@@ -25,6 +24,7 @@ export class A
     }
 })(function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }

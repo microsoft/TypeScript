@@ -1,4 +1,4 @@
-﻿/// <reference path="..\harness.ts" />
+/// <reference path="..\harness.ts" />
 
 namespace ts {
     interface File {
@@ -64,8 +64,16 @@ namespace ts {
             getLogFileName: (): string => undefined
         };
 
-        const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false }, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
-        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true, /*containingProject*/ undefined);
+        const svcOpts: server.ProjectServiceOptions = {
+            host: serverHost,
+            logger,
+            cancellationToken: { isCancellationRequested: () => false },
+            useSingleInferredProject: false,
+            typingsInstaller: undefined
+        };
+        const projectService = new server.ProjectService(svcOpts);
+        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
+
         const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {

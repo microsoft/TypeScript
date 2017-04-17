@@ -49,7 +49,7 @@ namespace ts {
         error(s: string): void;
     }
 
-    /** Public interface of the host of a language service shim instance.*/
+    /** Public interface of the host of a language service shim instance. */
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 
@@ -385,7 +385,10 @@ namespace ts {
             if (settingsJson == null || settingsJson == "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
-            return <CompilerOptions>JSON.parse(settingsJson);
+            const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
+            // permit language service to handle all files (filtering should be performed on the host side)
+            compilerOptions.allowNonTsExtensions = true;
+            return compilerOptions;
         }
 
         public getScriptFileNames(): string[] {
@@ -463,29 +466,6 @@ namespace ts {
 
         public fileExists(path: string): boolean {
             return this.shimHost.fileExists(path);
-        }
-    }
-
-    /** A cancellation that throttles calls to the host */
-    class ThrottledCancellationToken implements HostCancellationToken {
-        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
-        // to marshall over to the host layer).  So we only bother actually checking once enough
-        // time has passed.
-        private lastCancellationCheckTime = 0;
-
-        constructor(private hostCancellationToken: HostCancellationToken) {
-        }
-
-        public isCancellationRequested(): boolean {
-            const time = timestamp();
-            const duration = Math.abs(time - this.lastCancellationCheckTime);
-            if (duration > 10) {
-                // Check no more than once every 10 ms.
-                this.lastCancellationCheckTime = time;
-                return this.hostCancellationToken.isCancellationRequested();
-            }
-
-            return false;
         }
     }
 
@@ -1061,12 +1041,6 @@ namespace ts {
                 const compilerOptions = <CompilerOptions>JSON.parse(compilerOptionsJson);
                 const result = resolveModuleName(moduleName, normalizeSlashes(fileName), compilerOptions, this.host);
                 const resolvedFileName = result.resolvedModule ? result.resolvedModule.resolvedFileName : undefined;
-                if (resolvedFileName && !compilerOptions.allowJs && fileExtensionIs(resolvedFileName, ".js")) {
-                    return {
-                        resolvedFileName: undefined,
-                        failedLookupLocations: []
-                    };
-                }
                 return {
                     resolvedFileName,
                     failedLookupLocations: result.failedLookupLocations
@@ -1252,7 +1226,7 @@ namespace ts {
 
     // Here we expose the TypeScript services as an external module
     // so that it may be consumed easily like a node module.
-    declare var module: any;
+    declare const module: any;
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
     }
@@ -1272,4 +1246,4 @@ namespace TypeScript.Services {
 // TODO: it should be moved into a namespace though.
 
 /* @internal */
-const toolsVersion = "2.2";
+const toolsVersion = "2.3";

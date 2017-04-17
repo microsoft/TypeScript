@@ -1,5 +1,4 @@
 //// [unusedLocalsinConstructor1.ts]
-
 class greeter {
     constructor() {
         var unused = 20;

@@ -1,5 +1,4 @@
 //// [modularizeLibrary_ErrorFromUsingWellknownSymbolWithOutES6WellknownSymbolLib.ts]
-
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);
 }

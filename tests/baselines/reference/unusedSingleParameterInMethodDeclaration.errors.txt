@@ -1,9 +1,8 @@
-tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(3,20): error TS6133: 'person' is declared but never used.
-tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(4,13): error TS6133: 'unused' is declared but never used.
+tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedSingleParameterInMethodDeclaration.ts (2 errors) ====
-    
     class Dummy {
         public greeter(person: string) {
                        ~~~~~~

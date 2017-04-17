@@ -1,4 +1,4 @@
-﻿/// <reference path="core.ts"/>
+/// <reference path="core.ts"/>
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -54,19 +54,27 @@ namespace ts {
         referenceCount: number;
     }
 
-    declare var require: any;
-    declare var process: any;
-    declare var global: any;
-    declare var __filename: string;
+    declare const require: any;
+    declare const process: any;
+    declare const global: any;
+    declare const __filename: string;
 
-    declare class Enumerator {
-        public atEnd(): boolean;
-        public moveNext(): boolean;
-        public item(): any;
-        constructor(o: any);
+    export function getNodeMajorVersion() {
+        if (typeof process === "undefined") {
+            return undefined;
+        }
+        const version: string = process.version;
+        if (!version) {
+            return undefined;
+        }
+        const dot = version.indexOf(".");
+        if (dot === -1) {
+            return undefined;
+        }
+        return parseInt(version.substring(1, dot));
     }
 
-    declare var ChakraHost: {
+    declare const ChakraHost: {
         args: string[];
         currentDirectory: string;
         executingFile: string;
@@ -89,152 +97,6 @@ namespace ts {
     };
 
     export let sys: System = (function() {
-
-        function getWScriptSystem(): System {
-
-            const fso = new ActiveXObject("Scripting.FileSystemObject");
-            const shell = new ActiveXObject("WScript.Shell");
-
-            const fileStream = new ActiveXObject("ADODB.Stream");
-            fileStream.Type = 2 /*text*/;
-
-            const binaryStream = new ActiveXObject("ADODB.Stream");
-            binaryStream.Type = 1 /*binary*/;
-
-            const args: string[] = [];
-            for (let i = 0; i < WScript.Arguments.length; i++) {
-                args[i] = WScript.Arguments.Item(i);
-            }
-
-            function readFile(fileName: string, encoding?: string): string {
-                if (!fso.FileExists(fileName)) {
-                    return undefined;
-                }
-                fileStream.Open();
-                try {
-                    if (encoding) {
-                        fileStream.Charset = encoding;
-                        fileStream.LoadFromFile(fileName);
-                    }
-                    else {
-                        // Load file and read the first two bytes into a string with no interpretation
-                        fileStream.Charset = "x-ansi";
-                        fileStream.LoadFromFile(fileName);
-                        const bom = fileStream.ReadText(2) || "";
-                        // Position must be at 0 before encoding can be changed
-                        fileStream.Position = 0;
-                        // [0xFF,0xFE] and [0xFE,0xFF] mean utf-16 (little or big endian), otherwise default to utf-8
-                        fileStream.Charset = bom.length >= 2 && (bom.charCodeAt(0) === 0xFF && bom.charCodeAt(1) === 0xFE || bom.charCodeAt(0) === 0xFE && bom.charCodeAt(1) === 0xFF) ? "unicode" : "utf-8";
-                    }
-                    // ReadText method always strips byte order mark from resulting string
-                    return fileStream.ReadText();
-                }
-                catch (e) {
-                    throw e;
-                }
-                finally {
-                    fileStream.Close();
-                }
-            }
-
-            function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-                fileStream.Open();
-                binaryStream.Open();
-                try {
-                    // Write characters in UTF-8 encoding
-                    fileStream.Charset = "utf-8";
-                    fileStream.WriteText(data);
-                    // If we don't want the BOM, then skip it by setting the starting location to 3 (size of BOM).
-                    // If not, start from position 0, as the BOM will be added automatically when charset==utf8.
-                    if (writeByteOrderMark) {
-                        fileStream.Position = 0;
-                    }
-                    else {
-                        fileStream.Position = 3;
-                    }
-                    fileStream.CopyTo(binaryStream);
-                    binaryStream.SaveToFile(fileName, 2 /*overwrite*/);
-                }
-                finally {
-                    binaryStream.Close();
-                    fileStream.Close();
-                }
-            }
-
-            function getNames(collection: any): string[] {
-                const result: string[] = [];
-                for (const e = new Enumerator(collection); !e.atEnd(); e.moveNext()) {
-                    result.push(e.item().Name);
-                }
-                return result.sort();
-            }
-
-            function getDirectories(path: string): string[] {
-                const folder = fso.GetFolder(path);
-                return getNames(folder.subfolders);
-            }
-
-            function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-                try {
-                    const folder = fso.GetFolder(path || ".");
-                    const files = getNames(folder.files);
-                    const directories = getNames(folder.subfolders);
-                    return { files, directories };
-                }
-                catch (e) {
-                    return { files: [], directories: [] };
-                }
-            }
-
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
-                return matchFiles(path, extensions, excludes, includes, /*useCaseSensitiveFileNames*/ false, shell.CurrentDirectory, getAccessibleFileSystemEntries);
-            }
-
-            const wscriptSystem: System = {
-                args,
-                newLine: "\r\n",
-                useCaseSensitiveFileNames: false,
-                write(s: string): void {
-                    WScript.StdOut.Write(s);
-                },
-                readFile,
-                writeFile,
-                resolvePath(path: string): string {
-                    return fso.GetAbsolutePathName(path);
-                },
-                fileExists(path: string): boolean {
-                    return fso.FileExists(path);
-                },
-                directoryExists(path: string) {
-                    return fso.FolderExists(path);
-                },
-                createDirectory(directoryName: string) {
-                    if (!wscriptSystem.directoryExists(directoryName)) {
-                        fso.CreateFolder(directoryName);
-                    }
-                },
-                getExecutingFilePath() {
-                    return WScript.ScriptFullName;
-                },
-                getCurrentDirectory() {
-                    return shell.CurrentDirectory;
-                },
-                getDirectories,
-                getEnvironmentVariable(name: string) {
-                    return new ActiveXObject("WScript.Shell").ExpandEnvironmentStrings(`%${name}%`);
-                },
-                readDirectory,
-                exit(exitCode?: number): void {
-                    try {
-                        WScript.Quit(exitCode);
-                    }
-                    catch (e) {
-                    }
-                }
-            };
-            return wscriptSystem;
-        }
-
         function getNodeSystem(): System {
             const _fs = require("fs");
             const _path = require("path");
@@ -315,9 +177,8 @@ namespace ts {
             }
             const watchedFileSet = createWatchedFileSet();
 
-            function isNode4OrLater(): boolean {
-                return parseInt(process.version.charAt(1)) >= 4;
-            }
+            const nodeVersion = getNodeMajorVersion();
+            const isNode4OrLater = nodeVersion >= 4;
 
             function isFileSystemCaseSensitive(): boolean {
                 // win32\win64 are case insensitive platforms
@@ -341,7 +202,7 @@ namespace ts {
                 if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
                     // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
                     // flip all byte pairs and treat as little endian.
-                    len &= ~1;
+                    len &= ~1; // Round down to a multiple of 2
                     for (let i = 0; i < len; i += 2) {
                         const temp = buffer[i];
                         buffer[i] = buffer[i + 1];
@@ -371,7 +232,7 @@ namespace ts {
 
                 try {
                     fd = _fs.openSync(fileName, "w");
-                    _fs.writeSync(fd, data, undefined, "utf8");
+                    _fs.writeSync(fd, data, /*position*/ undefined, "utf8");
                 }
                 finally {
                     if (fd !== undefined) {
@@ -486,10 +347,11 @@ namespace ts {
                     // (ref: https://github.com/nodejs/node/pull/2649 and https://github.com/Microsoft/TypeScript/issues/4643)
                     let options: any;
                     if (!directoryExists(directoryName)) {
+                        // do nothing if target folder does not exist
                         return noOpFileWatcher;
                     }
 
-                    if (isNode4OrLater() && (process.platform === "win32" || process.platform === "darwin")) {
+                    if (isNode4OrLater && (process.platform === "win32" || process.platform === "darwin")) {
                         options = { persistent: true, recursive: !!recursive };
                     }
                     else {
@@ -506,7 +368,7 @@ namespace ts {
                             if (eventName === "rename") {
                                 // When deleting a file, the passed baseFileName is null
                                 callback(!relativeFileName ? relativeFileName : normalizePath(combinePaths(directoryName, relativeFileName)));
-                            };
+                            }
                         }
                     );
                 },
@@ -630,9 +492,6 @@ namespace ts {
         let sys: System;
         if (typeof ChakraHost !== "undefined") {
             sys = getChakraSystem();
-        }
-        else if (typeof WScript !== "undefined" && typeof ActiveXObject === "function") {
-            sys = getWScriptSystem();
         }
         else if (typeof process !== "undefined" && process.nextTick && !process.browser && typeof require !== "undefined") {
             // process and process.nextTick checks if current environment is node-like

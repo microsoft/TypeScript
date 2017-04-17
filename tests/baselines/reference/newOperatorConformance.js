@@ -1,5 +1,4 @@
 //// [newOperatorConformance.ts]
-
 class C0 {
 
 }

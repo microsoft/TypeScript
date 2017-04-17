@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileConstructSignatures_0.ts ===
-
 export interface IConstructSignature {
 >IConstructSignature : IConstructSignature
 

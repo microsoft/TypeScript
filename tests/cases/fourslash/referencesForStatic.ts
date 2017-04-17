@@ -6,7 +6,7 @@
 ////var n = 43;
 ////
 ////class foo {
-////    static [|n|] = '';
+////    static [|{| "isWriteAccess": true, "isDefinition": true |}n|] = '';
 ////
 ////    public bar() {
 ////        foo.[|n|] = "'";
@@ -30,4 +30,4 @@
 // @Filename: referencesOnStatic_2.ts
 ////var q = foo.[|n|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) foo.n: string");

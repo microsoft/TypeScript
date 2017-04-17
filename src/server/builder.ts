@@ -1,7 +1,6 @@
-﻿/// <reference path="..\compiler\commandLineParser.ts" />
+/// <reference path="..\compiler\commandLineParser.ts" />
 /// <reference path="..\services\services.ts" />
 /// <reference path="session.ts" />
-/// <reference types="node" />
 
 namespace ts.server {
 
@@ -192,7 +191,7 @@ namespace ts.server {
             const l = lf.scriptInfo.fileName;
             const r = rf.scriptInfo.fileName;
             return (l < r ? -1 : (l > r ? 1 : 0));
-        };
+        }
 
         static addToReferenceList(array: ModuleBuilderFileInfo[], fileInfo: ModuleBuilderFileInfo) {
             if (array.length === 0) {

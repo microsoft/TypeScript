@@ -1,5 +1,4 @@
 //// [declarationEmitExpressionInExtends2.ts]
-
 class C<T, U> {
     x: T;
     y: U;

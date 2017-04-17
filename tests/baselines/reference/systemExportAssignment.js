@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemExportAssignment.ts] ////
 
 //// [a.d.ts]
-
 declare var a: number;
 export = a;  // OK, in ambient context
 

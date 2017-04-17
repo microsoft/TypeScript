@@ -1,5 +1,4 @@
 //// [declarationEmitThisPredicatesWithPrivateName01.ts]
-
 export class C {
     m(): this is D {
         return this instanceof D;
@@ -21,6 +20,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }

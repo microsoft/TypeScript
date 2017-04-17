@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInClass.ts]
-
 class C {
     // No implicit-'any' errors.
     public pub_f1(): void { }

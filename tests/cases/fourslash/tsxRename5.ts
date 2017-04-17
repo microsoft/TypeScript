@@ -12,9 +12,8 @@
 ////     name?: string;
 ////     size?: number;
 //// }
-//// 
+////
 //// var [|nn|]: string;
-//// var x = <MyClass name={[|n/**/n|]}></MyClass>;
+//// var x = <MyClass name={[|nn|]}></MyClass>;
 
-goTo.marker();
-verify.renameLocations(false, false);
+verify.rangesAreRenameLocations();

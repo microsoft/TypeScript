@@ -1,4 +1,4 @@
-﻿/// <reference path="..\services\services.ts" />
+/// <reference path="..\services\services.ts" />
 /// <reference path="utilities.ts"/>
 /// <reference path="scriptInfo.ts"/>
 /// <reference path="lsHost.ts"/>
@@ -91,18 +91,37 @@ namespace ts.server {
         }
     }
 
+    export interface PluginCreateInfo {
+        project: Project;
+        languageService: LanguageService;
+        languageServiceHost: LanguageServiceHost;
+        serverHost: ServerHost;
+        config: any;
+    }
+
+    export interface PluginModule {
+        create(createInfo: PluginCreateInfo): LanguageService;
+        getExternalFiles?(proj: Project): string[];
+    }
+
+    export interface PluginModuleFactory {
+        (mod: { typescript: typeof ts }): PluginModule;
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
-        private lsHost: LSHost;
         private program: ts.Program;
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
 
-        private readonly languageService: LanguageService;
+        // wrapper over the real language service that will suppress all semantic operations
+        protected languageService: LanguageService;
 
         public languageServiceEnabled = true;
+
+        protected readonly lsHost: LSHost;
 
         builder: Builder;
         /**
@@ -150,6 +169,17 @@ namespace ts.server {
             return this.cachedUnresolvedImportsPerFile;
         }
 
+        public static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} {
+            const resolvedPath = normalizeSlashes(host.resolvePath(combinePaths(initialDir, "node_modules")));
+            log(`Loading ${moduleName} from ${initialDir} (resolved to ${resolvedPath})`);
+            const result = host.require(resolvedPath, moduleName);
+            if (result.error) {
+                log(`Failed to load module: ${JSON.stringify(result.error)}`);
+                return undefined;
+            }
+            return result.module;
+        }
+
         constructor(
             private readonly projectName: string,
             readonly projectKind: ProjectKind,
@@ -165,8 +195,8 @@ namespace ts.server {
                 this.compilerOptions.allowNonTsExtensions = true;
                 this.compilerOptions.allowJs = true;
             }
-            else if (hasExplicitListOfFiles) {
-                // If files are listed explicitly, allow all extensions
+            else if (hasExplicitListOfFiles || this.compilerOptions.allowJs) {
+                // If files are listed explicitly or allowJs is specified, allow all extensions
                 this.compilerOptions.allowNonTsExtensions = true;
             }
 
@@ -236,6 +266,10 @@ namespace ts.server {
         }
         abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
+
+        getExternalFiles(): string[] {
+            return [];
+        }
 
         getSourceFile(path: Path) {
             if (!this.program) {
@@ -689,7 +723,7 @@ namespace ts.server {
                     const fileName = resolvedTypeReferenceDirective.resolvedFileName;
                     const typeFilePath = toPath(fileName, currentDirectory, getCanonicalFileName);
                     referencedFiles.set(typeFilePath, true);
-                })
+                });
             }
 
             const allFileNames = arrayFrom(referencedFiles.keys()) as Path[];
@@ -711,7 +745,7 @@ namespace ts.server {
                 const id = nextId;
                 nextId++;
                 return makeInferredProjectName(id);
-            }
+            };
         })();
 
         private _isJsInferredProject = false;
@@ -804,6 +838,8 @@ namespace ts.server {
         private typeRootsWatchers: FileWatcher[];
         readonly canonicalConfigFilePath: NormalizedPath;
 
+        private plugins: PluginModule[] = [];
+
         /** Used for configured projects which may have multiple open roots */
         openRefCount = 0;
 
@@ -817,10 +853,82 @@ namespace ts.server {
             public compileOnSaveEnabled: boolean) {
             super(configFileName, ProjectKind.Configured, projectService, documentRegistry, hasExplicitListOfFiles, languageServiceEnabled, compilerOptions, compileOnSaveEnabled);
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
+            this.enablePlugins();
         }
 
         getConfigFilePath() {
             return this.getProjectName();
+        }
+
+        enablePlugins() {
+            const host = this.projectService.host;
+            const options = this.getCompilerOptions();
+
+            if (!host.require) {
+                this.projectService.logger.info("Plugins were requested but not running in environment that supports 'require'. Nothing will be loaded");
+                return;
+            }
+
+            // Search our peer node_modules, then any globally-specified probe paths
+            // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
+            const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+
+            // Enable tsconfig-specified plugins
+            if (options.plugins) {
+                for (const pluginConfigEntry of options.plugins) {
+                    this.enablePlugin(pluginConfigEntry, searchPaths);
+                }
+            }
+
+            if (this.projectService.globalPlugins) {
+                // Enable global plugins with synthetic configuration entries
+                for (const globalPluginName of this.projectService.globalPlugins) {
+                    // Skip already-locally-loaded plugins
+                    if (options.plugins && options.plugins.some(p => p.name === globalPluginName)) continue;
+
+                    // Provide global: true so plugins can detect why they can't find their config
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+                }
+            }
+        }
+
+        private enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+            const log = (message: string) => {
+                this.projectService.logger.info(message);
+            };
+
+            for (const searchPath of searchPaths) {
+                const resolvedModule = <PluginModuleFactory>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log);
+                if (resolvedModule) {
+                    this.enableProxy(resolvedModule, pluginConfigEntry);
+                    return;
+                }
+            }
+            this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name} anywhere in paths: ${searchPaths.join(",")}`);
+        }
+
+        private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
+            try {
+                if (typeof pluginModuleFactory !== "function") {
+                    this.projectService.logger.info(`Skipped loading plugin ${configEntry.name} because it did expose a proper factory function`);
+                    return;
+                }
+
+                const info: PluginCreateInfo = {
+                    config: configEntry,
+                    project: this,
+                    languageService: this.languageService,
+                    languageServiceHost: this.lsHost,
+                    serverHost: this.projectService.host
+                };
+
+                const pluginModule = pluginModuleFactory({ typescript: ts });
+                this.languageService = pluginModule.create(info);
+                this.plugins.push(pluginModule);
+            }
+            catch (e) {
+                this.projectService.logger.info(`Plugin activation failed: ${e}`);
+            }
         }
 
         getProjectRootPath() {
@@ -837,6 +945,21 @@ namespace ts.server {
 
         getTypeAcquisition() {
             return this.typeAcquisition;
+        }
+
+        getExternalFiles(): string[] {
+            const items: string[] = [];
+            for (const plugin of this.plugins) {
+                if (typeof plugin.getExternalFiles === "function") {
+                    try {
+                        items.push(...plugin.getExternalFiles(this));
+                    }
+                    catch (e) {
+                        this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
+                    }
+                }
+            }
+            return items;
         }
 
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
@@ -928,7 +1051,7 @@ namespace ts.server {
 
     export class ExternalProject extends Project {
         private typeAcquisition: TypeAcquisition;
-        constructor(externalProjectName: string,
+        constructor(public externalProjectName: string,
             projectService: ProjectService,
             documentRegistry: ts.DocumentRegistry,
             compilerOptions: CompilerOptions,

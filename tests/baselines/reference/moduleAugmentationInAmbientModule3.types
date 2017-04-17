@@ -26,7 +26,6 @@ x.foo2().x2;
 >x2 : number
 
 === tests/cases/compiler/O.d.ts ===
-
 declare module "Observable" {
     class Observable {}
 >Observable : Observable

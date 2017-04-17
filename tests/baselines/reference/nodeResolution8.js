@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/nodeResolution8.ts] ////
 
 //// [ref.ts]
-
 var x = 1;
 
 //// [index.d.ts]
@@ -14,3 +13,4 @@ import y = require("a");
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;

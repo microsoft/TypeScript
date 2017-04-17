@@ -1,5 +1,4 @@
 //// [declFileTypeofClass.ts]
-
 class c {
     static x : string;
     private static y: number;

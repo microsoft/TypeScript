@@ -1,6 +1,4 @@
 //// [es6MemberScoping.ts]
-
-
 class Foo {
     constructor(store: string) { }
 

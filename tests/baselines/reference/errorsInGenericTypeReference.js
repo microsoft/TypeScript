@@ -1,5 +1,4 @@
 //// [errorsInGenericTypeReference.ts]
-
 interface IFoo<T> { }
 
 class Foo<T> { }

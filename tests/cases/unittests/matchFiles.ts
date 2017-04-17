@@ -830,6 +830,33 @@ namespace ts {
                 };
                 validateMatches(expected, json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
             });
+            it("with jsx=react-native, allowJs=false", () => {
+                const json = {
+                    compilerOptions: {
+                        jsx: "react-native",
+                        allowJs: false
+                    }
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        jsx: ts.JsxEmit.ReactNative,
+                        allowJs: false
+                    },
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.tsx",
+                        "c:/dev/c.tsx",
+                    ],
+                    wildcardDirectories: {
+                        "c:/dev": ts.WatchDirectoryFlags.Recursive
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
+            });
             it("with jsx=none, allowJs=true", () => {
                 const json = {
                     compilerOptions: {
@@ -879,6 +906,35 @@ namespace ts {
                     }
                 };
                 validateMatches(expected, json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
+            });
+            it("with jsx=react-native, allowJs=true", () => {
+                const json = {
+                    compilerOptions: {
+                        jsx: "react-native",
+                        allowJs: true
+                    }
+                };
+                const expected: ts.ParsedCommandLine = {
+                    options: {
+                        jsx: ts.JsxEmit.ReactNative,
+                        allowJs: true
+                    },
+                    errors: [],
+                    fileNames: [
+                        "c:/dev/a.ts",
+                        "c:/dev/b.tsx",
+                        "c:/dev/c.tsx",
+                        "c:/dev/d.js",
+                        "c:/dev/e.jsx",
+                    ],
+                    wildcardDirectories: {
+                        "c:/dev": ts.WatchDirectoryFlags.Recursive
+                    }
+                };
+                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
+                assert.deepEqual(actual.fileNames, expected.fileNames);
+                assert.deepEqual(actual.wildcardDirectories, expected.wildcardDirectories);
+                assert.deepEqual(actual.errors, expected.errors);
             });
             describe("with trailing recursive directory", () => {
                 it("in includes", () => {

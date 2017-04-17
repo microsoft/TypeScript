@@ -1,5 +1,4 @@
 //// [staticVisibility.ts]
-
 class C1 {
     
     p: any;

@@ -1,5 +1,4 @@
 //// [emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts]
-
 var array0 = [1, 2, 3]
 var i0 = 0;
 array0[++i0] **= 2;

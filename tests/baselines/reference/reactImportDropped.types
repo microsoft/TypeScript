@@ -1,0 +1,73 @@
+=== tests/cases/compiler/react.d.ts ===
+export = React;
+>React : typeof React
+
+export as namespace React;
+>React : typeof React
+
+declare namespace React {
+>React : typeof React
+
+    function createClass(spec: any): ClassicComponentClass;
+>createClass : (spec: any) => ClassicComponentClass
+>spec : any
+>ClassicComponentClass : ClassicComponentClass
+
+    interface ClassicComponentClass {
+>ClassicComponentClass : ClassicComponentClass
+
+        new (props?: any): ClassicComponentClass;
+>props : any
+>ClassicComponentClass : ClassicComponentClass
+    }
+}
+
+declare global {
+>global : any
+
+    namespace JSX {
+>JSX : any
+
+        interface ElementAttributesProperty { }
+>ElementAttributesProperty : ElementAttributesProperty
+    }
+}
+
+
+=== tests/cases/compiler/src/components/TabBar.js ===
+export default React.createClass({
+>React.createClass({  render() {    return (      null    );  }}) : React.ClassicComponentClass
+>React.createClass : (spec: any) => React.ClassicComponentClass
+>React : typeof React
+>createClass : (spec: any) => React.ClassicComponentClass
+>{  render() {    return (      null    );  }} : { render(): any; }
+
+  render() {
+>render : () => any
+
+    return (
+>(      null    ) : null
+
+      null
+>null : null
+
+    );
+  }
+});
+
+=== tests/cases/compiler/src/modules/navigation/NavigationView.js ===
+import TabBar from '../../components/TabBar';
+>TabBar : React.ClassicComponentClass
+
+import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
+>layout : any
+
+const x = <TabBar height={layout.footerHeight} />;
+>x : any
+><TabBar height={layout.footerHeight} /> : any
+>TabBar : React.ClassicComponentClass
+>height : any
+>layout.footerHeight : any
+>layout : any
+>footerHeight : any
+

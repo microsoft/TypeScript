@@ -1,10 +1,22 @@
 /// <reference types="node" />
 /// <reference path="shared.ts" />
 /// <reference path="session.ts" />
-// used in fs.writeSync
-/* tslint:disable:no-null-keyword */
 
 namespace ts.server {
+    interface IOSessionOptions {
+        host: ServerHost;
+        cancellationToken: ServerCancellationToken;
+        canUseEvents: boolean;
+        installerEventPort: number;
+        useSingleInferredProject: boolean;
+        disableAutomaticTypingAcquisition: boolean;
+        globalTypingsCacheLocation: string;
+        logger: Logger;
+        typingSafeListLocation: string;
+        telemetryEnabled: boolean;
+        globalPlugins: string[];
+        pluginProbeLocations: string[];
+    }
 
     const net: {
         connect(options: { port: number }, onConnect?: () => void): NodeSocket
@@ -12,6 +24,7 @@ namespace ts.server {
 
     const childProcess: {
         fork(modulePath: string, args: string[], options?: { execArgv: string[], env?: MapLike<string> }): NodeChildProcess;
+        execFileSync(file: string, args: string[], options: { stdio: "ignore", env: MapLike<string> }): string | Buffer;
     } = require("child_process");
 
     const os: {
@@ -46,20 +59,20 @@ namespace ts.server {
         if (process.env.XDG_CACHE_HOME) {
             return process.env.XDG_CACHE_HOME;
         }
-        const usersDir = platformIsDarwin ? "Users" : "home"
+        const usersDir = platformIsDarwin ? "Users" : "home";
         const homePath = (os.homedir && os.homedir()) ||
             process.env.HOME ||
             ((process.env.LOGNAME || process.env.USER) && `/${usersDir}/${process.env.LOGNAME || process.env.USER}`) ||
             os.tmpdir();
         const cacheFolder = platformIsDarwin
             ? "Library/Caches"
-            : ".cache"
+            : ".cache";
         return combinePaths(normalizeSlashes(homePath), cacheFolder);
     }
 
     interface NodeChildProcess {
         send(message: any, sendHandle?: any): void;
-        on(message: "message", f: (m: any) => void): void;
+        on(message: "message" | "exit", f: (m: any) => void): void;
         kill(): void;
         pid: number;
     }
@@ -99,6 +112,8 @@ namespace ts.server {
         birthtime: Date;
     }
 
+    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: {} };
+
     const readline: {
         createInterface(options: ReadLineOptions): NodeJS.EventEmitter;
     } = require("readline");
@@ -128,6 +143,14 @@ namespace ts.server {
         constructor(private readonly logFilename: string,
             private readonly traceToConsole: boolean,
             private readonly level: LogLevel) {
+            if (this.logFilename) {
+                try {
+                    this.fd = fs.openSync(this.logFilename, "w");
+                }
+                catch (_) {
+                    // swallow the error and keep logging disabled if file cannot be opened
+                }
+            }
         }
 
         static padStringRight(str: string, padding: string) {
@@ -172,11 +195,6 @@ namespace ts.server {
         }
 
         msg(s: string, type: Msg.Types = Msg.Err) {
-            if (this.fd < 0) {
-                if (this.logFilename) {
-                    this.fd = fs.openSync(this.logFilename, "w");
-                }
-            }
             if (this.fd >= 0 || this.traceToConsole) {
                 s = s + "\n";
                 const prefix = Logger.padStringRight(type + " " + this.seq.toString(), "          ");
@@ -190,7 +208,8 @@ namespace ts.server {
                 }
                 if (this.fd >= 0) {
                     const buf = new Buffer(s);
-                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                    // tslint:disable-next-line no-null-keyword
+                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
                 }
                 if (this.traceToConsole) {
                     console.warn(s);
@@ -213,6 +232,7 @@ namespace ts.server {
             host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
+            readonly typingSafeListLocation: string,
             private newLine: string) {
             this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
@@ -253,6 +273,9 @@ namespace ts.server {
             }
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
+            }
+            if (this.typingSafeListLocation) {
+                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
             }
             const execArgv: string[] = [];
             {
@@ -298,9 +321,21 @@ namespace ts.server {
             });
         }
 
-        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+        private handleMessage(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response: ${JSON.stringify(response)}`);
+            }
+
+            if (response.kind === EventInitializationFailed) {
+                if (!this.eventSender) {
+                    return;
+                }
+                const body: protocol.TypesInstallerInitializationFailedEventBody = {
+                    message: response.message
+                };
+                const eventName: protocol.TypesInstallerInitializationFailedEventName = "typesInstallerInitializationFailed";
+                this.eventSender.event(body, eventName);
+                return;
             }
 
             if (response.kind === EventBeginInstallTypes) {
@@ -352,33 +387,25 @@ namespace ts.server {
     }
 
     class IOSession extends Session {
-        constructor(
-            host: ServerHost,
-            cancellationToken: HostCancellationToken,
-            installerEventPort: number,
-            canUseEvents: boolean,
-            useSingleInferredProject: boolean,
-            disableAutomaticTypingAcquisition: boolean,
-            globalTypingsCacheLocation: string,
-            telemetryEnabled: boolean,
-            logger: server.Logger) {
-                const typingsInstaller = disableAutomaticTypingAcquisition
-                    ? undefined
-                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine);
+        constructor(options: IOSessionOptions) {
+            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, canUseEvents } = options;
+            const typingsInstaller = disableAutomaticTypingAcquisition
+                ? undefined
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, host.newLine);
 
-                super(
-                    host,
-                    cancellationToken,
-                    useSingleInferredProject,
-                    typingsInstaller || nullTypingsInstaller,
-                    Buffer.byteLength,
-                    process.hrtime,
-                    logger,
-                    canUseEvents);
+            super({
+                host,
+                cancellationToken,
+                useSingleInferredProject,
+                typingsInstaller: typingsInstaller || nullTypingsInstaller,
+                byteLength: Buffer.byteLength,
+                hrtime: process.hrtime,
+                logger,
+                canUseEvents});
 
-                if (telemetryEnabled && typingsInstaller) {
-                    typingsInstaller.setTelemetrySender(this);
-                }
+            if (telemetryEnabled && typingsInstaller) {
+                typingsInstaller.setTelemetrySender(this);
+            }
         }
 
         exit() {
@@ -407,6 +434,9 @@ namespace ts.server {
     }
 
     function parseLoggingEnvironmentString(logEnvStr: string): LogOptions {
+        if (!logEnvStr) {
+            return {};
+        }
         const logEnv: LogOptions = { logToFile: true };
         const args = logEnvStr.split(" ");
         const len = args.length - 1;
@@ -419,8 +449,8 @@ namespace ts.server {
                         logEnv.file = stripQuotes(value);
                         break;
                     case "-level":
-                        const level: LogLevel = (<any>LogLevel)[value];
-                        logEnv.detailLevel = typeof level === "number" ? level : LogLevel.normal;
+                        const level = getLogLevel(value);
+                        logEnv.detailLevel = level !== undefined ? level : LogLevel.normal;
                         break;
                     case "-traceToConsole":
                         logEnv.traceToConsole = value.toLowerCase() === "true";
@@ -434,28 +464,32 @@ namespace ts.server {
         return logEnv;
     }
 
-    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
-    function createLoggerFromEnv() {
-        let fileName: string = undefined;
-        let detailLevel = LogLevel.normal;
-        let traceToConsole = false;
-        const logEnvStr = process.env["TSS_LOG"];
-        if (logEnvStr) {
-            const logEnv = parseLoggingEnvironmentString(logEnvStr);
-            if (logEnv.logToFile) {
-                if (logEnv.file) {
-                    fileName = logEnv.file;
-                }
-                else {
-                    fileName = __dirname + "/.log" + process.pid.toString();
+    function getLogLevel(level: string) {
+        if (level) {
+            const l = level.toLowerCase();
+            for (const name in LogLevel) {
+                if (isNaN(+name) && l === name.toLowerCase()) {
+                    return <LogLevel><any>LogLevel[name];
                 }
             }
-            if (logEnv.detailLevel) {
-                detailLevel = logEnv.detailLevel;
-            }
-            traceToConsole = logEnv.traceToConsole;
         }
-        return new Logger(fileName, traceToConsole, detailLevel);
+        return undefined;
+    }
+
+    // TSS_LOG "{ level: "normal | verbose | terse", file?: string}"
+    function createLogger() {
+        const cmdLineLogFileName = findArgument("--logFile");
+        const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
+        const envLogOptions = parseLoggingEnvironmentString(process.env["TSS_LOG"]);
+
+        const logFileName = cmdLineLogFileName
+            ? stripQuotes(cmdLineLogFileName)
+            : envLogOptions.logToFile
+                ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
+                : undefined;
+
+        const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
+        return new Logger(logFileName, envLogOptions.traceToConsole, logVerbosity);
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -552,7 +586,6 @@ namespace ts.server {
     // to increase the chunk size or decrease the interval
     // time dynamically to match the large reference set?
     const pollingWatchedFileSet = createPollingWatchedFileSet();
-    const logger = createLoggerFromEnv();
 
     const pending: Buffer[] = [];
     let canWrite = true;
@@ -574,7 +607,86 @@ namespace ts.server {
         }
     }
 
+    function extractWatchDirectoryCacheKey(path: string, currentDriveKey: string) {
+        path = normalizeSlashes(path);
+        if (isUNCPath(path)) {
+            // UNC path: extract server name
+            // //server/location
+            //         ^ <- from 0 to this position
+            const firstSlash = path.indexOf(directorySeparator, 2);
+            return firstSlash !== -1 ? path.substring(0, firstSlash).toLowerCase() : path;
+        }
+        const rootLength = getRootLength(path);
+        if (rootLength === 0) {
+            // relative path - assume file is on the current drive
+            return currentDriveKey;
+        }
+        if (path.charCodeAt(1) === CharacterCodes.colon && path.charCodeAt(2) === CharacterCodes.slash) {
+            // rooted path that starts with c:/... - extract drive letter
+            return path.charAt(0).toLowerCase();
+        }
+        if (path.charCodeAt(0) === CharacterCodes.slash && path.charCodeAt(1) !== CharacterCodes.slash) {
+            // rooted path that starts with slash - /somename - use key for current drive
+            return currentDriveKey;
+        }
+        // do not cache any other cases
+        return undefined;
+    }
+
+    function isUNCPath(s: string): boolean {
+        return s.length > 2 && s.charCodeAt(0) === CharacterCodes.slash && s.charCodeAt(1) === CharacterCodes.slash;
+    }
+
+    const logger = createLogger();
+
     const sys = <ServerHost>ts.sys;
+    // use watchGuard process on Windows when node version is 4 or later
+    const useWatchGuard = process.platform === "win32" && getNodeMajorVersion() >= 4;
+    if (useWatchGuard) {
+        const currentDrive = extractWatchDirectoryCacheKey(sys.resolvePath(sys.getCurrentDirectory()), /*currentDriveKey*/ undefined);
+        const statusCache = createMap<boolean>();
+        const originalWatchDirectory = sys.watchDirectory;
+        sys.watchDirectory = function (path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher {
+            const cacheKey = extractWatchDirectoryCacheKey(path, currentDrive);
+            let status = cacheKey && statusCache.get(cacheKey);
+            if (status === undefined) {
+                if (logger.hasLevel(LogLevel.verbose)) {
+                    logger.info(`${cacheKey} for path ${path} not found in cache...`);
+                }
+                try {
+                    const args = [combinePaths(__dirname, "watchGuard.js"), path];
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`Starting ${process.execPath} with args ${JSON.stringify(args)}`);
+                    }
+                    childProcess.execFileSync(process.execPath, args, { stdio: "ignore", env: { "ELECTRON_RUN_AS_NODE": "1" } });
+                    status = true;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: OK`);
+                    }
+                }
+                catch (e) {
+                    status = false;
+                    if (logger.hasLevel(LogLevel.verbose)) {
+                        logger.info(`WatchGuard for path ${path} returned: ${e.message}`);
+                    }
+                }
+                if (cacheKey) {
+                    statusCache.set(cacheKey, status);
+                }
+            }
+            else if (logger.hasLevel(LogLevel.verbose)) {
+                logger.info(`watchDirectory for ${path} uses cached drive information.`);
+            }
+            if (status) {
+                // this drive is safe to use - call real 'watchDirectory'
+                return originalWatchDirectory.call(sys, path, callback, recursive);
+            }
+            else {
+                // this drive is unsafe - return no-op watcher
+                return { close() { } };
+            }
+        };
+    }
 
     // Override sys.write because fs.writeSync is not reliable on Node 4
     sys.write = (s: string) => writeMessage(new Buffer(s, "utf8"));
@@ -593,16 +705,24 @@ namespace ts.server {
         sys.gc = () => global.gc();
     }
 
-    let cancellationToken: HostCancellationToken;
+    sys.require = (initialDir: string, moduleName: string): RequireResult => {
+        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, /*cache*/ undefined, /*jsOnly*/ true);
+        try {
+            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+        }
+        catch (e) {
+            return { module: undefined, error: e };
+        }
+    };
+
+    let cancellationToken: ServerCancellationToken;
     try {
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
     catch (e) {
-        cancellationToken = {
-            isCancellationRequested: () => false
-        };
-    };
+        cancellationToken = nullCancellationToken;
+    }
 
     let eventPort: number;
     {
@@ -618,20 +738,31 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    const typingSafeListLocation = findArgument("--typingSafeListLocation");
+
+    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
+    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const ioSession = new IOSession(
-        sys,
+    const options: IOSessionOptions = {
+        host: sys,
         cancellationToken,
-        eventPort,
-        /*canUseEvents*/ eventPort === undefined,
+        installerEventPort: eventPort,
+        canUseEvents: eventPort === undefined,
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
-        getGlobalTypingsCacheLocation(),
+        globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
+        typingSafeListLocation,
         telemetryEnabled,
-        logger);
+        logger,
+        globalPlugins,
+        pluginProbeLocations
+    };
+
+    const ioSession = new IOSession(options);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

@@ -16,6 +16,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
+            this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
             if (host.trace) {
@@ -28,7 +29,7 @@ namespace ts.server {
                     : undefined;
                 const primaryResult = resolveModuleName(moduleName, containingFile, compilerOptions, host);
                 // return result immediately only if it is .ts, .tsx or .d.ts
-                if (!(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
+                if (moduleHasNonRelativeName(moduleName) && !(primaryResult.resolvedModule && extensionIsTypeScript(primaryResult.resolvedModule.extension)) && globalCache !== undefined) {
                     // otherwise try to load typings from @types
 
                     // create different collection of failed lookup locations for second pass

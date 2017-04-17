@@ -1,5 +1,4 @@
 === tests/cases/compiler/modules.d.ts ===
-
 declare module "my-React-Lib" {
     var a: any;
 >a : any
@@ -18,5 +17,5 @@ declare var foo: any;
 <foo data/>;
 ><foo data/> : any
 >foo : any
->data : any
+>data : true
 

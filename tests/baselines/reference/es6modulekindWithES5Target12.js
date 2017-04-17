@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target12.ts]
-
 export class C {
 }
 

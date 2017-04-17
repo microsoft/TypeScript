@@ -3,12 +3,11 @@
 No type information for this code./// <reference types="bar" />
 No type information for this code.
 No type information for this code.=== /node_modules/foo/index.d.ts ===
-
 // Secondary references may be duplicated if they agree in content
 
 /// <reference types="alpha" />
 declare var foo: any;
->foo : Symbol(foo, Decl(index.d.ts, 4, 11))
+>foo : Symbol(foo, Decl(index.d.ts, 3, 11))
 
 === /node_modules/foo/node_modules/alpha/index.d.ts ===
 declare var alpha: any;

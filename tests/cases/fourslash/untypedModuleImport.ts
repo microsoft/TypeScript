@@ -4,7 +4,7 @@
 ////{}
 
 // @Filename: a.ts
-////import /*foo*/[|foo|] from /*fooModule*/"foo";
+////import /*foo*/[|{| "isWriteAccess": true, "isDefinition": true |}foo|] from /*fooModule*/"[|{| "isInString": true |}foo|]";
 ////[|foo|]();
 
 goTo.file("a.ts");
@@ -13,9 +13,10 @@ verify.numberOfErrorsInCurrentFile(0);
 goTo.marker("fooModule");
 verify.goToDefinitionIs([]);
 verify.quickInfoIs("");
-verify.referencesAre([])
+const [r0, r1, r2] = test.ranges();
+verify.singleReferenceGroup('"foo"', [r1]);
 
 goTo.marker("foo");
 verify.goToDefinitionIs([]);
 verify.quickInfoIs("import foo");
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("import foo", [r0, r2]);

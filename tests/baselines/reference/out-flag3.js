@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/out-flag3.ts] ////
 
 //// [a.ts]
-
 // --out and --outFile error
 
 class A { }

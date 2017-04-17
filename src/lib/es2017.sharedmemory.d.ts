@@ -3,8 +3,8 @@
 
 interface SharedArrayBuffer {
     /**
-      * Read-only. The length of the ArrayBuffer (in bytes).
-      */
+     * Read-only. The length of the ArrayBuffer (in bytes).
+     */
     readonly byteLength: number;
 
     /*
@@ -12,9 +12,9 @@ interface SharedArrayBuffer {
      */
     length: number;
     /**
-      * Returns a section of an SharedArrayBuffer.
-      */ 
-    slice(begin:number, end?:number): SharedArrayBuffer;
+     * Returns a section of an SharedArrayBuffer.
+     */
+    slice(begin: number, end?: number): SharedArrayBuffer;
     readonly [Symbol.species]: SharedArrayBuffer;
     readonly [Symbol.toStringTag]: "SharedArrayBuffer";
 }

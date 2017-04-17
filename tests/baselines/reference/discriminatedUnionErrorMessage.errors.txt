@@ -1,0 +1,23 @@
+tests/cases/compiler/discriminatedUnionErrorMessage.ts(8,5): error TS2322: Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Shape'.
+  Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Square'.
+    Property 'size' is missing in type '{ kind: "sq"; x: number; y: number; }'.
+
+
+==== tests/cases/compiler/discriminatedUnionErrorMessage.ts (1 errors) ====
+    type Square = { kind: "sq", size: number }
+    type Rectangle = { kind: "rt", x: number, y: number }
+    type Circle = { kind: "cr", radius: number }
+    type Shape =
+        | Square
+        | Rectangle
+        | Circle;
+    let shape: Shape = {
+        ~~~~~
+!!! error TS2322: Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Shape'.
+!!! error TS2322:   Type '{ kind: "sq"; x: number; y: number; }' is not assignable to type 'Square'.
+!!! error TS2322:     Property 'size' is missing in type '{ kind: "sq"; x: number; y: number; }'.
+        kind: "sq",
+        x: 12,
+        y: 13,
+    }
+    

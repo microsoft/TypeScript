@@ -2,6 +2,7 @@
 
 // @noUnusedLocals: true
 //// [| namespace greeter {
+////   // some legit comments
 ////   function function1() {
 ////   }/*1*/
 //// } |]

@@ -1,5 +1,4 @@
 //// [unusedParametersThis.ts]
-
 class A {
     public a: number;
 

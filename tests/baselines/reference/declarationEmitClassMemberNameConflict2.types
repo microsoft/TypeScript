@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitClassMemberNameConflict2.ts ===
-
 const Bar = 'bar';
 >Bar : "bar"
 >'bar' : "bar"

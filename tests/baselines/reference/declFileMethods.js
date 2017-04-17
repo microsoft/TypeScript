@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileMethods.ts] ////
 
 //// [declFileMethods_0.ts]
-
 export class c1 {
     /** This comment should appear for foo*/
     public foo() {
@@ -192,6 +191,7 @@ interface I2 {
 
 //// [declFileMethods_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c1 = (function () {
     function c1() {
     }

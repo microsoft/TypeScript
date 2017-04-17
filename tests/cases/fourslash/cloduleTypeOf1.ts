@@ -30,4 +30,4 @@ edit.insert('x;');
 
 verify.quickInfoAt("5", "(local var) r2: number");
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
