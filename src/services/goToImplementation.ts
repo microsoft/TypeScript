@@ -18,7 +18,7 @@ namespace ts.GoToImplementation {
         else {
             // Perform "Find all References" and retrieve only those that are implementations
             const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(context,
-                node, sourceFiles, /*findInStrings*/false, /*findInComments*/false, /*isForRename*/false, /*implementations*/true);
+                node, sourceFiles, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/ false, /*implementations*/ true);
             const result = flatMap(referencedSymbols, symbol => symbol.references);
 
             return result && result.length > 0 ? result : undefined;

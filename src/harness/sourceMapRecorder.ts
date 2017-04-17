@@ -422,7 +422,7 @@ namespace Harness.SourceMapRecorder {
                 const jsFileText = getTextOfLine(currentJsLine, jsLineMap, jsFile.code);
                 if (prevEmittedCol < jsFileText.length) {
                     // There is remaining text on this line that will be part of next source span so write marker that continues
-                    writeSourceMapMarker(undefined, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true);
+                    writeSourceMapMarker(/*currentSpan*/ undefined, spansOnSingleLine.length, /*endColumn*/ jsFileText.length, /*endContinues*/ true);
                 }
 
                 // Emit Source text

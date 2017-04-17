@@ -116,7 +116,7 @@ namespace ts.codefix {
                                 const nextToken = getTokenAtPosition(sourceFile, importClause.name.end);
                                 if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                                     // shift first non-whitespace position after comma to the start position of the node
-                                    return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/true) });
+                                    return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) });
                                 }
                                 else {
                                     return deleteNode(importClause.name);

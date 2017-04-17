@@ -90,7 +90,7 @@ namespace ts {
 
             const statements: Statement[] = [];
             const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
@@ -388,7 +388,7 @@ namespace ts {
             startLexicalEnvironment();
 
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, sourceElementVisitor);
 
             if (shouldEmitUnderscoreUnderscoreESModule()) {
                 append(statements, createUnderscoreUnderscoreESModule());
@@ -1162,7 +1162,7 @@ namespace ts {
                 statement = createStatement(
                     createExportExpression(
                         createIdentifier("__esModule"),
-                        createLiteral(true)
+                        createLiteral(/*value*/ true)
                     )
                 );
             }
@@ -1175,7 +1175,7 @@ namespace ts {
                             createIdentifier("exports"),
                             createLiteral("__esModule"),
                             createObjectLiteral([
-                                createPropertyAssignment("value", createLiteral(true))
+                                createPropertyAssignment("value", createLiteral(/*value*/ true))
                             ])
                         ]
                     )

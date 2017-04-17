@@ -41,6 +41,14 @@
 ////class d extends a.C { constructor() { [|super|](); }
 
 const ranges = test.ranges();
-const [r0, r1, r2] = ranges;
-verify.referenceGroups([r0, r2], [{ definition: "constructor C(n: number): C (+1 overload)", ranges }]);
-verify.referenceGroups(r1, [{ definition: "constructor C(): C (+1 overload)", ranges }]);
+const [a0, a1, a2, a3, a4, b0, c0, d0, d1] = ranges;
+verify.referenceGroups([a0, a2], defs("constructor C(n: number): C (+1 overload)"));
+verify.referenceGroups(a1, defs("constructor C(): C (+1 overload)"));
+
+function defs(definition: string) {
+    return [
+        { definition, ranges: [a0, a1, a2, a3, d0, d1, a4] },
+        { definition: "import C", ranges: [b0] },
+        { definition: "import C", ranges: [c0] }
+    ]
+}

@@ -590,7 +590,7 @@ namespace ts {
             currentIdentifiers = node.identifiers;
             isCurrentFileExternalModule = isExternalModule(node);
             enclosingDeclaration = node;
-            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, true /* remove comments */);
+            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, /*removeComents*/ true);
             emitLines(node.statements);
         }
 

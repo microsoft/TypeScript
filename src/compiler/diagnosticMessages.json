@@ -2099,6 +2099,14 @@
         "category": "Error",
         "code": 2707
     },
+    "Cannot use namespace '{0}' as a value.": {
+        "category": "Error",
+        "code": 2708
+    },
+    "Cannot use namespace '{0}' as a type.": {
+        "category": "Error",
+        "code": 2709
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3176,6 +3184,10 @@
     "List of language service plugins.": {
         "category": "Message",
         "code": 6181
+    },
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": "6182"
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

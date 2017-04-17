@@ -118,7 +118,7 @@ namespace ts.codefix {
                     stringTypeNode,
                 /*initializer*/ undefined);
                 const indexSignature = createIndexSignatureDeclaration(
-                /*decorators*/undefined,
+                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                     [indexingParameter],
                     typeNode);

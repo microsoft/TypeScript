@@ -50,7 +50,7 @@
             "check-else"
         ],
         "no-internal-module": true,
-        "no-trailing-whitespace": true,
+        "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-inferrable-types": true,
         "no-null-keyword": true,
         "boolean-trivia": true,
