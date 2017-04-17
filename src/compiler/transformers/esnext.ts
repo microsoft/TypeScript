@@ -891,7 +891,8 @@ namespace ts {
                 function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
                 function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
-                function step(r) { r.done ? settle(c[2], r) : r.value[0] === "yield" ? settle(c[2], { value: r.value[1], done: false }) : Promise.resolve(r.value[1]).then(r.value[0] === "delegate" ? delegate : fulfill, reject); }
+                function step(r) { r.done ? settle(c[2], r) : Promise.resolve(r.value[1]).then(r.value[0] === "yield" ? yield : r.value[0] === "delegate" ? delegate : fulfill, reject); }
+                function yield(value) { settle(c[2], { value: value, done: false }); }
                 function delegate(r) { step(r.done ? r : { value: ["yield", r.value], done: false }); }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
