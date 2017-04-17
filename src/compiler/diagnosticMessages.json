@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -866,6 +866,18 @@
     "A default export can only be used in an ECMAScript-style module.": {
         "category": "Error",
         "code": 1319
+    },
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1320
+    },
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1321
+    },
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1322
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
