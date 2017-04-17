@@ -1,5 +1,4 @@
 //// [typeofUsedBeforeBlockScoped.ts]
-// TODO: Change name of file to typeofUsedBeforeBlockScoped.ts
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 class C {
     static s = 2;

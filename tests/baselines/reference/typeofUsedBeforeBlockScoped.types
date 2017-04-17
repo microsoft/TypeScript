@@ -1,5 +1,4 @@
 === tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
-// TODO: Change name of file to typeofUsedBeforeBlockScoped.ts
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 >T : T
 >C : typeof C
