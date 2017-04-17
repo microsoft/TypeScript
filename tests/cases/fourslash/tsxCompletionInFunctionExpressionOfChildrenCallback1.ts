@@ -7,7 +7,9 @@
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
-////     interface ElementAttributesProperty { props; }
+////     interface ElementAttributesProperty {
+////        props: { children; }
+////     }
 //// }
 //// interface IUser {
 ////     Name: string;
@@ -27,5 +29,4 @@
 //// }
 
 goTo.marker();
-debugger;
 verify.completionListContains('Name');
