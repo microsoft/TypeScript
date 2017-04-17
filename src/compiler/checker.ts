@@ -13322,7 +13322,7 @@ namespace ts {
                 const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
                 if (jsxChildrenPropertyName) {
                     if (attributesTable.has(jsxChildrenPropertyName)) {
-                        error(attributes, Diagnostics.props_children_are_specified_twice_The_attribute_named_children_will_be_overwritten);
+                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
                     }
 
                     // If there are children in the body of JSX element, create dummy attribute "children" with anyType so that it will pass the attribute checking process

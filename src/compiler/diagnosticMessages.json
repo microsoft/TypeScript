@@ -2099,7 +2099,7 @@
         "category": "Error",
         "code": 2707
     },
-    "props.children are specified twice. The attribute named 'children' will be overwritten.": {
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
         "category": "Error",
         "code": 2708
     },
