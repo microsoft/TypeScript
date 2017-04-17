@@ -411,7 +411,7 @@ namespace ts {
 
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
-        let _jsxElementAttribPropInterfaceSymbol: Symbol;  // JSX.ElementAttributesProperty [symbol] 
+        let _jsxElementAttribPropInterfaceSymbol: Symbol;  // JSX.ElementAttributesProperty [symbol]
         let _jsxElementPropertiesName: string;
         let _jsxElementChildrenPropertyName: string;
 
@@ -13506,7 +13506,7 @@ namespace ts {
                     const propsType = getTypeOfSymbol(propertiesOfJsxElementAttribPropInterface[0]);
                     const propertiesOfProps = propsType && getPropertiesOfType(propsType);
                     if (propertiesOfProps && propertiesOfProps.length === 1) {
-                        _jsxElementChildrenPropertyName = propertiesOfProps[0].name; 
+                        _jsxElementChildrenPropertyName = propertiesOfProps[0].name;
                     }
                 }
             }
