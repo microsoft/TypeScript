@@ -930,20 +930,22 @@ namespace ts {
          */
         function shouldReportDiagnostic(diagnostic: Diagnostic) {
             const { file, start } = diagnostic;
-            const lineStarts = getLineStarts(file);
-            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
-            while (line > 0) {
-                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
-                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
-                if (!result) {
-                    // non-empty line
-                    return true;
+            if (file) {
+                const lineStarts = getLineStarts(file);
+                let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+                while (line > 0) {
+                    const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                    const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
+                    if (!result) {
+                        // non-empty line
+                        return true;
+                    }
+                    if (result[3]) {
+                        // @ts-ignore
+                        return false;
+                    }
+                    line--;
                 }
-                if (result[3]) {
-                    // @ts-ignore
-                    return false;
-                }
-                line--;
             }
             return true;
         }
