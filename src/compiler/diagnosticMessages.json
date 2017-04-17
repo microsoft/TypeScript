@@ -3185,6 +3185,10 @@
         "category": "Message",
         "code": 6181
     },
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": "6182"
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
