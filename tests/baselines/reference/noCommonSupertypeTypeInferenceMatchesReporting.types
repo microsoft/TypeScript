@@ -13,7 +13,7 @@ function g(gut: { n: 12 | undefined }) {
 >gut : { n: 12 | undefined; }
 >n : 12 | undefined
 
-    f(gut.n, 12); // error, no common supertype
+    f(gut.n, 12); // ok, T = number | undefined
 >f(gut.n, 12) : boolean
 >f : <T>(a: T, b: T) => boolean
 >gut.n : 12 | undefined
@@ -21,7 +21,7 @@ function g(gut: { n: 12 | undefined }) {
 >n : 12 | undefined
 >12 : 12
 
-    f(12, gut.n); // error, no common supertype
+    f(12, gut.n); // ok, T = number | undefined
 >f(12, gut.n) : boolean
 >f : <T>(a: T, b: T) => boolean
 >12 : 12
