@@ -1,8 +1,8 @@
 tests/cases/conformance/jsx/file.tsx(14,15): error TS2322: Type '{ a: 10; b: "hi"; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ a: 10; b: "hi"; }' is not assignable to type 'Prop'.
     Property 'children' is missing in type '{ a: 10; b: "hi"; }'.
-tests/cases/conformance/jsx/file.tsx(17,11): error TS2708: 'children' are specified twice. The attribute named 'children' will be overwritten.
-tests/cases/conformance/jsx/file.tsx(25,11): error TS2708: 'children' are specified twice. The attribute named 'children' will be overwritten.
+tests/cases/conformance/jsx/file.tsx(17,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+tests/cases/conformance/jsx/file.tsx(25,11): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 tests/cases/conformance/jsx/file.tsx(31,11): error TS2322: Type '{ a: 10; b: "hi"; children: (Element | ((name: string) => Element))[]; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ a: 10; b: "hi"; children: (Element | ((name: string) => Element))[]; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
@@ -52,7 +52,7 @@ tests/cases/conformance/jsx/file.tsx(49,11): error TS2322: Type '{ a: 10; b: "hi
     let k0 =
         <Comp a={10} b="hi" children="Random" >
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2708: 'children' are specified twice. The attribute named 'children' will be overwritten.
+!!! error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
             hi hi hi!
         </Comp>;
     
@@ -62,7 +62,7 @@ tests/cases/conformance/jsx/file.tsx(49,11): error TS2322: Type '{ a: 10; b: "hi
     let k1 =
         <Comp a={10} b="hi" {...o} >
               ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2708: 'children' are specified twice. The attribute named 'children' will be overwritten.
+!!! error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
             hi hi hi!
         </Comp>;
     

@@ -13477,7 +13477,7 @@ namespace ts {
         function getPropertiesFromJsxElementAttributesProperty() {
             if (!_jsxElementAttribPropInterfaceSymbol) {
                 // JSX
-                const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/undefined);
+                const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
                 // JSX.ElementAttributesProperty [symbol]
                 _jsxElementAttribPropInterfaceSymbol = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
             }
