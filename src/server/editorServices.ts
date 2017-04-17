@@ -787,12 +787,12 @@ namespace ts.server {
          * we first detect if there is already a configured project created for it: if so, we re-read
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
-        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath): OpenConfiguredProjectResult {
+        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             const searchPath = getDirectoryPath(fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
-            const configFileName = this.findConfigFile(asNormalizedPath(searchPath));
+            const configFileName = this.findConfigFile(asNormalizedPath(searchPath), projectRootPath);
             if (!configFileName) {
                 this.logger.info("No config files found.");
                 return {};
@@ -826,8 +826,8 @@ namespace ts.server {
         // current directory (the directory in which tsc was invoked).
         // The server must start searching from the directory containing
         // the newly opened file.
-        private findConfigFile(searchPath: NormalizedPath): NormalizedPath {
-            while (true) {
+        private findConfigFile(searchPath: NormalizedPath, projectRootPath?: NormalizedPath): NormalizedPath {
+            while (true && (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0)) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 if (this.host.fileExists(tsconfigFileName)) {
                     return tsconfigFileName;
@@ -1330,13 +1330,13 @@ namespace ts.server {
             return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind);
         }
 
-        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
             let configFileErrors: Diagnostic[];
 
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
-                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName, projectRootPath));
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                 }

@@ -1041,6 +1041,11 @@ namespace ts.server.protocol {
          *      "TS", "JS", "TSX", "JSX"
          */
         scriptKindName?: ScriptKindName;
+        /**
+         * Used to limit the searching for project config file. If given the searching will stop at this
+         * root path; otherwise it will go all the way up to the dist root path.
+         */
+        projectRootPath?: string;
     }
 
     export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
