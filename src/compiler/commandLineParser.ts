@@ -895,7 +895,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): string {
+    export function generateTSConfig(options: CompilerOptions, fileNames: string[], newLine: string): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const configurations: { compilerOptions: MapLike<CompilerOptionsValue>; files?: string[] } = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
@@ -1007,7 +1007,7 @@ namespace ts {
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
+            const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
             for (const category in categorizedOptions) {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
@@ -1018,7 +1018,7 @@ namespace ts {
                 for (const option of categorizedOptions[category]) {
                     let optionName;
                     if (hasProperty(configurations.compilerOptions, option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}`;
+                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
@@ -1053,7 +1053,7 @@ namespace ts {
             }
             result.push(`}`);
 
-            return result.join(sys.newLine);
+            return result.join(newLine);
         }
     }
 
@@ -1170,7 +1170,7 @@ namespace ts {
             const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
             const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
             // Merge configs (copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios)
-            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
+            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/ undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
             errors.push(...result.errors);
             const [include, exclude, files] = map(["include", "exclude", "files"], key => {
                 if (!json[key] && extendedResult.config[key]) {

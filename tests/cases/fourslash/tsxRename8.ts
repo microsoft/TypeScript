@@ -23,9 +23,4 @@
 //// let opt3 = <Opt [|wrong|] />;
 //// let opt4 = <Opt propx={100} propString="hi" />;
 
-let ranges = test.ranges();
-verify.assertHasRanges(ranges);
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+verify.rangesAreRenameLocations();

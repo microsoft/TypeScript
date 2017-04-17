@@ -2099,9 +2099,17 @@
         "category": "Error",
         "code": 2707
     },
-    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+    "Cannot use namespace '{0}' as a value.": {
         "category": "Error",
         "code": 2708
+    },
+    "Cannot use namespace '{0}' as a type.": {
+        "category": "Error",
+        "code": 2709
+    },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3180,6 +3188,10 @@
     "List of language service plugins.": {
         "category": "Message",
         "code": 6181
+    },
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": "6182"
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

@@ -214,7 +214,7 @@ namespace ts {
         }
 
         function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/false);
+            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ false);
             Debug.assert(bucket !== undefined);
 
             const entry = bucket.get(path);

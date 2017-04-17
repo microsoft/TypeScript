@@ -144,18 +144,16 @@ namespace ts {
 
                 const resolution = nodeModuleNameResolver("b", containingFile.name, {}, createModuleResolutionHost(hasDirectoryExists, containingFile, packageJson, moduleFile, indexFile));
 
-                checkResolvedModule(resolution.resolvedModule, createResolvedModule(indexPath, /*isExternalLibraryImport*/true));
+                checkResolvedModule(resolution.resolvedModule, createResolvedModule(indexPath, /*isExternalLibraryImport*/ true));
             }
         }
 
         it("module name as directory - handle invalid 'typings'", () => {
             testTypingsIgnored(["a", "b"]);
             testTypingsIgnored({ "a": "b" });
-            testTypingsIgnored(/*typings*/true);
-            /* tslint:disable no-null-keyword */
-            testTypingsIgnored(null);
-            /* tslint:enable no-null-keyword */
-            testTypingsIgnored(undefined);
+            testTypingsIgnored(/*typings*/ true);
+            testTypingsIgnored(/*typings*/ null); // tslint:disable-line no-null-keyword
+            testTypingsIgnored(/*typings*/ undefined);
         });
         it("module name as directory - load index.d.ts", () => {
             test(/*hasDirectoryExists*/ false);
@@ -532,7 +530,7 @@ import b = require("./moduleB");
                 check("m1", main, m1);
                 check("m2", main, m2);
                 check("m3", main, m3Typings);
-                check("m4", main, m4, /*isExternalLibraryImport*/true);
+                check("m4", main, m4, /*isExternalLibraryImport*/ true);
 
                 function check(name: string, caller: File, expected: File, isExternalLibraryImport = false) {
                     const result = resolveModuleName(name, caller.name, options, host);

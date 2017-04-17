@@ -388,7 +388,7 @@ namespace ts.formatting {
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                processTrivia(leadingTrivia, enclosingNode, enclosingNode, undefined);
+                processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined);
                 trimTrailingWhitespacesForRemainingRange();
             }
         }

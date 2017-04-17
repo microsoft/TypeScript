@@ -10,7 +10,6 @@
 /// <reference path='documentRegistry.ts' />
 /// <reference path='findAllReferences.ts' />
 /// <reference path='goToDefinition.ts' />
-/// <reference path='goToImplementation.ts' />
 /// <reference path='jsDoc.ts' />
 /// <reference path='jsTyping.ts' />
 /// <reference path='navigateTo.ts' />
@@ -502,8 +501,8 @@ namespace ts {
         public nameTable: Map<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        public imports: LiteralExpression[];
-        public moduleAugmentations: LiteralExpression[];
+        public imports: StringLiteral[];
+        public moduleAugmentations: StringLiteral[];
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
         public checkJsDirective: CheckJsDirective | undefined;
@@ -1410,18 +1409,18 @@ namespace ts {
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
 
-        /// Goto implementation
-        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
-            synchronizeHostData();
-            return GoToImplementation.getImplementationAtPosition(program.getTypeChecker(), cancellationToken,
-                program.getSourceFiles(), getTouchingPropertyName(getValidSourceFile(fileName), position));
-        }
-
         function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
 
+        /// Goto implementation
+        function getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] {
+            synchronizeHostData();
+            return FindAllReferences.getImplementationsAtPosition(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
+        }
+
+        /// References and Occurrences
         function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
             let results = getOccurrencesAtPositionCore(fileName, position);
 
@@ -1443,10 +1442,7 @@ namespace ts {
             return DocumentHighlights.getDocumentHighlights(program.getTypeChecker(), cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        /// References and Occurrences
         function getOccurrencesAtPositionCore(fileName: string, position: number): ReferenceEntry[] {
-            synchronizeHostData();
-
             return convertDocumentHighlights(getDocumentHighlights(fileName, position, [fileName]));
 
             function convertDocumentHighlights(documentHighlights: DocumentHighlights[]): ReferenceEntry[] {
@@ -1472,24 +1468,21 @@ namespace ts {
         }
 
         function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, findInStrings, findInComments, /*isForRename*/true);
-            return FindAllReferences.convertReferences(referencedSymbols);
+            return getReferences(fileName, position, { findInStrings, findInComments, isForRename: true });
         }
 
         function getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
-            return FindAllReferences.convertReferences(referencedSymbols);
+            return getReferences(fileName, position);
+        }
+
+        function getReferences(fileName: string, position: number, options?: FindAllReferences.Options) {
+            synchronizeHostData();
+            return FindAllReferences.findReferencedEntries(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, options);
         }
 
         function findReferences(fileName: string, position: number): ReferencedSymbol[] {
-            const referencedSymbols = findReferencedSymbols(fileName, position, /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/false);
-            // Only include referenced symbols that have a valid definition.
-            return filter(referencedSymbols, rs => !!rs.definition);
-        }
-
-        function findReferencedSymbols(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, isForRename: boolean): ReferencedSymbol[] {
             synchronizeHostData();
-            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position, findInStrings, findInComments, isForRename);
+            return FindAllReferences.findReferencedSymbols(program.getTypeChecker(), cancellationToken, program.getSourceFiles(), getValidSourceFile(fileName), position);
         }
 
         /// NavigateTo
@@ -2013,6 +2006,7 @@ namespace ts {
     }
 
     /* @internal */
+    /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
     export function getNameTable(sourceFile: SourceFile): Map<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);

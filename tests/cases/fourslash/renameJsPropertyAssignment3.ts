@@ -5,7 +5,6 @@
 ////var C = class  {
 ////}
 ////C.[|staticProperty|] = "string";
-////console.log(C./**/[|staticProperty|]);
+////console.log(C.[|staticProperty|]);
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations();

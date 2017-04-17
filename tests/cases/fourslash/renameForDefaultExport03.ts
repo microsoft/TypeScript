@@ -11,10 +11,11 @@
 ////var y = /*4*/[|f|]();
 ////
 /////**
-//// *  Commenting [|f|]
+//// *  Commenting [|{| "inComment": true |}f|]
 //// */
 ////namespace /*5*/[|f|] {
 ////    var local = 100;
 ////}
 
-goTo.eachMarker(() => verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ true));
+const ranges = test.ranges();
+verify.renameLocations(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, ranges });
