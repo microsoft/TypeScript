@@ -10329,12 +10329,12 @@ namespace ts {
          * the type parameter was fixed during inference or does not occur at top-level in the return type.
          */
         function getInferenceCandidates(context: InferenceContext, index: number) {
-            const infier = context.inferences[index];
-            const inferences = infier.primary || infier.secondary || emptyArray;
+            const typeInferences = context.inferences[index];
+            const inferences: Type[] = typeInferences.primary || typeInferences.secondary || emptyArray;
             const signature = context.signature;
-            const widenLiteralTypes = infier.topLevel &&
+            const widenLiteralTypes = typeInferences.topLevel &&
                 !hasPrimitiveConstraint(signature.typeParameters[index]) &&
-                (infier.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
+                (typeInferences.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
             return widenLiteralTypes ? sameMap(inferences, getWidenedLiteralType) : inferences;
         }
 
