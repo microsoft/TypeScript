@@ -760,11 +760,17 @@ namespace ts {
 
 
             // declaration is after usage, but it can still be legal if usage is deferred:
-            // 1. inside a function
-            // 2. inside an instance property initializer, a reference to a non-instance property
-            // 3. inside a static property initializer, a reference to a static method in the same class
+            // 1. inside an export specifier
+            // 2. inside a function
+            // 3. inside an instance property initializer, a reference to a non-instance property
+            // 4. inside a static property initializer, a reference to a static method in the same class
             // or if usage is in a type context:
             // 1. inside a type query (typeof in type position)
+            if (usage.parent.kind === SyntaxKind.ExportSpecifier) {
+                // export specifiers do not use the variable, they only make it available for use
+                return true;
+            }
+
             const container = getEnclosingBlockScopeContainer(declaration);
             return isInTypeQuery(usage) || isUsedInFunctionOrInstanceProperty(usage, declaration, container);
 
