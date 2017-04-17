@@ -5,14 +5,16 @@ var obj: Object;
 
 if (ArrayBuffer.isView(obj)) {
 >ArrayBuffer.isView(obj) : boolean
->ArrayBuffer.isView : (arg: any) => arg is ArrayBufferView
+>ArrayBuffer.isView : (arg: any) => arg is Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView
 >ArrayBuffer : ArrayBufferConstructor
->isView : (arg: any) => arg is ArrayBufferView
+>isView : (arg: any) => arg is Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView
 >obj : Object
 
     // isView should be a guard that narrows type to ArrayBufferView.
-    var ab: ArrayBufferView = obj;
->ab : ArrayBufferView
->ArrayBufferView : ArrayBufferView
->obj : ArrayBufferView
+    var ab: ArrayBuffer = obj.buffer;
+>ab : ArrayBuffer
+>ArrayBuffer : ArrayBuffer
+>obj.buffer : ArrayBuffer
+>obj : Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView
+>buffer : ArrayBuffer
 }

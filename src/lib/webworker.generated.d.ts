@@ -1817,6 +1817,7 @@ type RequestInfo = Request | string;
 type USVString = string;
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
+type ArrayBufferView = Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView;
 type FormDataEntryValue = string | File;
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "pending" | "done";

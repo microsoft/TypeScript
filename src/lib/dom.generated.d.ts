@@ -14962,6 +14962,7 @@ type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
 type ScrollRestoration = "auto" | "manual";
+type ArrayBufferView = Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView;
 type FormDataEntryValue = string | File;
 type AppendMode = "segments" | "sequence";
 type AudioContextState = "suspended" | "running" | "closed";
@@ -15034,3 +15035,4 @@ type Transport = "usb" | "nfc" | "ble";
 type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
 type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
 type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+>>>>>>> af64ef8b67ba18b0a9d582aa1187f2681f1d8a51

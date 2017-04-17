@@ -2,12 +2,12 @@
 var obj: Object;
 if (ArrayBuffer.isView(obj)) {
     // isView should be a guard that narrows type to ArrayBufferView.
-    var ab: ArrayBufferView = obj;
+    var ab: ArrayBuffer = obj.buffer;
 }
 
 //// [arrayBufferIsViewNarrowsType.js]
 var obj;
 if (ArrayBuffer.isView(obj)) {
     // isView should be a guard that narrows type to ArrayBufferView.
-    var ab = obj;
+    var ab = obj.buffer;
 }
