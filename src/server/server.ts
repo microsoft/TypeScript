@@ -401,7 +401,9 @@ namespace ts.server {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
-                canUseEvents});
+                canUseEvents,
+                globalPlugins: options.globalPlugins,
+                pluginProbeLocations: options.pluginProbeLocations});
 
             if (telemetryEnabled && typingsInstaller) {
                 typingsInstaller.setTelemetrySender(this);
