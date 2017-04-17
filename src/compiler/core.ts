@@ -225,6 +225,28 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or 'done' returns true
+     * At that point findAncestor returns undefined.
+     */
+    export function findAncestor<T>(node: Node, callback: (element: Node) => T | undefined, done?: (element: Node) => boolean): Node {
+        if (node) {
+            while (node) {
+                if (done && done(node)) {
+                    break;
+                }
+                if (callback(node)) {
+                    return node;
+                }
+                node = node.parent;
+            }
+        }
+        return undefined;
+    }
+
+
     export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
