@@ -1,0 +1,28 @@
+=== tests/cases/compiler/noCommonSupertypeTypeInferenceMatchesReporting.ts ===
+// Fixes #15116, which asserted on line 5 but not 6
+declare function f<T>(a: T, b: T): boolean;
+>f : Symbol(f, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 0, 0))
+>T : Symbol(T, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 19))
+>a : Symbol(a, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 22))
+>T : Symbol(T, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 19))
+>b : Symbol(b, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 27))
+>T : Symbol(T, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 19))
+
+function g(gut: { n: 12 | undefined }) {
+>g : Symbol(g, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 1, 43))
+>gut : Symbol(gut, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 11))
+>n : Symbol(n, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 17))
+
+    f(gut.n, 12); // error, no common supertype
+>f : Symbol(f, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 0, 0))
+>gut.n : Symbol(n, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 17))
+>gut : Symbol(gut, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 11))
+>n : Symbol(n, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 17))
+
+    f(12, gut.n); // error, no common supertype
+>f : Symbol(f, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 0, 0))
+>gut.n : Symbol(n, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 17))
+>gut : Symbol(gut, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 11))
+>n : Symbol(n, Decl(noCommonSupertypeTypeInferenceMatchesReporting.ts, 2, 17))
+}
+

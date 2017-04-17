@@ -9596,12 +9596,8 @@ namespace ts {
             if (!strictNullChecks) {
                 return getSupertypeOrUnion(types);
             }
-            const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            if (!primaryTypes.length) {
-                return getUnionType(types, /*subtypeReduction*/ true);
-            }
-            const supertype = getSupertypeOrUnion(primaryTypes);
-            return supertype && includeFalsyTypes(supertype, getFalsyFlagsOfTypes(types) & TypeFlags.Nullable);
+            const supertype = getSupertypeOrUnion(map(types, getNonNullableType));
+            return supertype && includeFalsyTypes(supertype, getFalsyFlagsOfTypes(types) & (TypeFlags.Nullable | TypeFlags.Void));
         }
 
         function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
