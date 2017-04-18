@@ -2403,7 +2403,7 @@ namespace ts {
         }
 
         function lookupSymbolForName(name: string) {
-            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || container.locals.get(name);
+            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
         }
 
         function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
