@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxViaImport.2.tsx] ////
 
 //// [component.d.ts]
-
 declare module JSX {
   interface ElementAttributesProperty { props; }
 }
@@ -35,6 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 /// <reference path="component.d.ts" />
 var BaseComponent_1 = require("BaseComponent");
 var TestComponent = (function (_super) {

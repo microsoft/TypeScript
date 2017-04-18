@@ -16,7 +16,6 @@ x + y + z;
 >z : number
 
 === /node_modules/@types/dopey/index.d.ts ===
-
 declare module "xyz" {
 >"xyz" : typeof "xyz"
 

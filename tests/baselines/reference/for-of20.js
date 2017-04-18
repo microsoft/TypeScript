@@ -1,8 +1,4 @@
 //// [for-of20.ts]
-for (let v of new FooIterator) {
-    v;
-}
-
 class Foo { }
 class FooIterator {
     next() {
@@ -16,10 +12,11 @@ class FooIterator {
     }
 }
 
-//// [for-of20.js]
 for (let v of new FooIterator) {
     v;
 }
+
+//// [for-of20.js]
 class Foo {
 }
 class FooIterator {
@@ -32,4 +29,7 @@ class FooIterator {
     [Symbol.iterator]() {
         return this;
     }
+}
+for (let v of new FooIterator) {
+    v;
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationEmitInferedTypeAlias3.ts] ////
 
 //// [0.ts]
-
 {
     type Data = string | boolean;
     let obj: Data = true;
@@ -14,13 +13,14 @@ export default x;
 
 //// [0.js]
 "use strict";
+exports.__esModule = true;
 {
     var obj = true;
 }
 //// [1.js]
 "use strict";
-var x = "hi" || 5;
 exports.__esModule = true;
+var x = "hi" || 5;
 exports["default"] = x;
 
 

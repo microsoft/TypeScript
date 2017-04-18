@@ -1,5 +1,4 @@
 //// [commentsClass.ts]
-
 /** This is class c2 without constuctor*/
 class c2 {
 } // trailing comment1

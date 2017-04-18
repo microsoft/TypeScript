@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeofModule.ts ===
-
 module m1 {
 >m1 : typeof m1
 

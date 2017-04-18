@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives9.ts] ////
 
 //// [index.d.ts]
-
-
 interface Lib { x }
 
 //// [main.ts]
@@ -35,6 +33,7 @@ export const bar = Cls.bar();
 
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 var Cls = (function () {
     function Cls() {
     }
@@ -42,12 +41,14 @@ var Cls = (function () {
 }());
 exports.Cls = Cls;
 //// [mod1.js]
-/// <reference types="lib" />
 "use strict";
+/// <reference types="lib" />
+exports.__esModule = true;
 var main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };
 //// [mod2.js]
 "use strict";
+exports.__esModule = true;
 var main_1 = require("./main");
 require("./mod1");
 exports.cls = main_1.Cls;

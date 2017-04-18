@@ -31,7 +31,6 @@ let c = a.getCls().y.toLowerCase();
 >toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
 
 === tests/cases/compiler/a.ts ===
-
 export class A {}
 >A : Symbol(A, Decl(a.ts, 0, 0), Decl(d.d.ts, 3, 16), Decl(e.ts, 6, 22))
 

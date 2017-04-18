@@ -1,0 +1,8 @@
+tests/cases/compiler/typeParameterListWithTrailingComma1.ts(1,10): error TS1009: Trailing comma not allowed.
+
+
+==== tests/cases/compiler/typeParameterListWithTrailingComma1.ts (1 errors) ====
+    class C<T,> {
+             ~
+!!! error TS1009: Trailing comma not allowed.
+    }

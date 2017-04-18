@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileAliasUseBeforeDeclaration2.ts ===
-
 declare module "test" {
 >"test" : typeof "test"
 

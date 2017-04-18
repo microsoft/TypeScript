@@ -1,5 +1,4 @@
 === tests/cases/compiler/main.ts ===
-
 declare module "M" {
 >"M" : typeof "M"
 
@@ -7,7 +6,6 @@ declare module "M" {
 >C : typeof C
 }
 === tests/cases/compiler/external.d.ts ===
-
 export default class C {}
 >C : C
 

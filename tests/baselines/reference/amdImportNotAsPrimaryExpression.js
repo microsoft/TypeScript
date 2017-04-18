@@ -34,6 +34,7 @@ var e: number = <foo.E1>0;
 //// [foo_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C1 = (function () {
         function C1() {
             this.m1 = 42;
@@ -52,6 +53,7 @@ define(["require", "exports"], function (require, exports) {
 //// [foo_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var i;
     var x = {};
     var y = false;

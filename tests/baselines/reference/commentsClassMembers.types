@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsClassMembers.ts ===
-
 /** This is comment for c1*/
 class c1 {
 >c1 : c1

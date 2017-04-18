@@ -1,5 +1,4 @@
 //// [es5ModuleInternalNamedImports.ts]
-
 export module M {
     // variable
     export var M_V = 0;
@@ -39,6 +38,7 @@ import M3 from "M3";
 //// [es5ModuleInternalNamedImports.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var M;
     (function (M) {
         // variable

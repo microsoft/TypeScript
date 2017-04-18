@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/inlineSources.ts] ////
 
 //// [a.ts]
-
 var a = 0;
 console.log(a);
 

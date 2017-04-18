@@ -1,5 +1,4 @@
 //// [a.ts]
-
 export { };
 
 declare global {
@@ -8,3 +7,4 @@ declare global {
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;

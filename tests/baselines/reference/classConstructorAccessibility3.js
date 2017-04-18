@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility3.ts]
-
 class Foo {
      constructor(public x: number) { }
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxFactoryNotIdentifierOrQualifiedName2.ts] ////
 
 //// [Element.ts]
-
 declare namespace JSX {
     interface Element {
         name: string;
@@ -52,6 +51,7 @@ class A {
 
 //// [Element.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Element;
 (function (Element) {
     function isElement(el) {
@@ -69,6 +69,7 @@ function toCamelCase(text) {
 }
 //// [test.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let c;
 class A {
     view() {

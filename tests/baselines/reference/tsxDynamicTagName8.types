@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/react.d.ts ===
-
 declare module 'react' {
 >'react' : typeof 'react'
 

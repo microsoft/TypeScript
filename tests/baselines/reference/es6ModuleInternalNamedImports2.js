@@ -1,5 +1,4 @@
 //// [es6ModuleInternalNamedImports2.ts]
-
 export module M {
     // variable
     export var M_V = 0;

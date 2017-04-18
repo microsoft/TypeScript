@@ -1,5 +1,6 @@
 define("subfolder/b", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var B = (function () {
         function B() {
         }
@@ -9,6 +10,7 @@ define("subfolder/b", ["require", "exports"], function (require, exports) {
 });
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var A = (function () {
         function A() {
         }
@@ -18,6 +20,7 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("subfolder/c", ["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var C = (function () {
         function C() {
         }

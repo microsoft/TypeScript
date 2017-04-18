@@ -35,6 +35,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {

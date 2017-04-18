@@ -4,7 +4,7 @@ interface Promise<T> {
 >T : T
 
     then<U>(success?: (value: T) => U): Promise<U>;
->then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
 >success : (value: T) => U
 >value : T
@@ -14,7 +14,7 @@ interface Promise<T> {
 >U : U
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : { <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: T) => U): Promise<U>; <U>(success?: (value: T) => Promise<U>): Promise<U>; }
 >U : U
 >success : (value: T) => Promise<U>
 >value : T

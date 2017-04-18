@@ -1,6 +1,4 @@
 //// [parserEnum1.ts]
-
-
     export enum SignatureFlags {
         None = 0,
         IsIndexer = 1,
@@ -10,6 +8,7 @@
 
 //// [parserEnum1.js]
 "use strict";
+exports.__esModule = true;
 var SignatureFlags;
 (function (SignatureFlags) {
     SignatureFlags[SignatureFlags["None"] = 0] = "None";

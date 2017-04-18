@@ -8,12 +8,12 @@
     "File '/a/b/node_modules/foo.ts' does not exist.",
     "File '/a/b/node_modules/foo.tsx' does not exist.",
     "File '/a/b/node_modules/foo.d.ts' exist - use it as a name resolution result.",
-    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'",
+    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
     "Loading module 'foo' from 'node_modules' folder, target file type 'TypeScript'.",
     "Resolution for module 'foo' was found in cache.",
-    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'",
+    "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========"
 ]

@@ -1,5 +1,4 @@
 //// [classAbstractExtends.ts]
-
 class A {
     foo() {}
 }

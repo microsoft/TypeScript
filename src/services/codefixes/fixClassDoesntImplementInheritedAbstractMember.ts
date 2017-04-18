@@ -19,29 +19,22 @@ namespace ts.codefix {
         const checker = context.program.getTypeChecker();
 
         if (isClassLike(token.parent)) {
-            const classDecl = token.parent as ClassLikeDeclaration;
-            const startPos = classDecl.members.pos;
+            const classDeclaration = token.parent as ClassLikeDeclaration;
 
-            const classType = checker.getTypeAtLocation(classDecl) as InterfaceType;
-            const instantiatedExtendsType = checker.getBaseTypes(classType)[0];
+            const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
+            const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
             // Note that this is ultimately derived from a map indexed by symbol names,
             // so duplicates cannot occur.
             const extendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType);
             const abstractAndNonPrivateExtendsSymbols = extendsSymbols.filter(symbolPointsToNonPrivateAndAbstractMember);
 
-            const insertion = getMissingMembersInsertion(classDecl, abstractAndNonPrivateExtendsSymbols, checker, context.newLineCharacter);
-
-            if (insertion.length) {
+            const newNodes = createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker);
+            const changes = newNodesToChanges(newNodes, getOpenBraceOfClassLike(classDeclaration, sourceFile), context);
+            if (changes && changes.length > 0) {
                 return [{
                     description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: [{
-                            span: { start: startPos, length: 0 },
-                            newText: insertion
-                        }]
-                    }]
+                    changes
                 }];
             }
         }

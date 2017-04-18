@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5ExportDefaultFunctionDeclaration4.ts ===
-
 declare module "bar" {
 >"bar" : typeof "bar"
 

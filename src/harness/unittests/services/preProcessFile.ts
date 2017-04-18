@@ -1,4 +1,4 @@
-﻿/// <reference path="..\..\harnessLanguageService.ts" />
+/// <reference path="..\..\harnessLanguageService.ts" />
 
 describe("PreProcessFile:", function () {
     function test(sourceText: string, readImportFile: boolean, detectJavaScriptImports: boolean, expectedPreProcess: ts.PreProcessedFileInfo): void {
@@ -34,7 +34,7 @@ describe("PreProcessFile:", function () {
     describe("Test preProcessFiles,", function () {
         it("Correctly return referenced files from triple slash", function () {
             test("///<reference path = \"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "///<reference path=\"refFile3.ts\" />" + "\n" + "///<reference path= \"..\\refFile4d.ts\" />",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 37 }, { fileName: "refFile2.ts", pos: 38, end: 73 },
@@ -48,7 +48,7 @@ describe("PreProcessFile:", function () {
 
         it("Do not return reference path because of invalid triple-slash syntax", function () {
             test("///<reference path\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\">" + "\n" + "///<referencepath=\"refFile3.ts\" />" + "\n" + "///<reference pat= \"refFile4d.ts\" />",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
@@ -61,7 +61,7 @@ describe("PreProcessFile:", function () {
 
         it("Correctly return imported files", function () {
             test("import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\"); import i3= require(\"r3.ts\"); import i4=require(\"r4.ts\"); import i5 = require  (\"r5.ts\");",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
@@ -88,7 +88,7 @@ describe("PreProcessFile:", function () {
 
         it("Do not return import path because of invalid import syntax", function () {
             test("import i1 require(\"r1.ts\"); import = require(\"r2.ts\") import i3= require(\"r3.ts\"); import i5",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: <ts.FileReference[]>[],
@@ -101,7 +101,7 @@ describe("PreProcessFile:", function () {
 
         it("Correctly return referenced files and import files", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path =\"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import i2 =require(\"r2.ts\");",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }, { fileName: "refFile2.ts", pos: 36, end: 71 }],
@@ -114,7 +114,7 @@ describe("PreProcessFile:", function () {
 
         it("Correctly return referenced files and import files even with some invalid syntax", function () {
             test("///<reference path=\"refFile1.ts\" />" + "\n" + "///<reference path \"refFile2.ts\"/>" + "\n" + "import i1 = require(\"r1.ts\"); import = require(\"r2.ts\"); import i2 = require(\"r3.ts\");",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [{ fileName: "refFile1.ts", pos: 0, end: 35 }],
@@ -133,7 +133,7 @@ describe("PreProcessFile:", function () {
                 "import {a as A} from \"m5\";" + "\n" +
                 "import {a as A, b, c as C} from \"m6\";" + "\n" +
                 "import def , {a, b, c as C} from \"m7\";" + "\n",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [],
@@ -157,7 +157,7 @@ describe("PreProcessFile:", function () {
                 "export {a} from \"m2\";" + "\n" +
                 "export {a as A} from \"m3\";" + "\n" +
                 "export {a as A, b, c as C} from \"m4\";" + "\n",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [],
@@ -194,7 +194,7 @@ describe("PreProcessFile:", function () {
 
         it("Correctly handles export import declarations", function () {
             test("export import a = require(\"m1\");",
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ false,
                 {
                     referencedFiles: [],
@@ -213,7 +213,7 @@ describe("PreProcessFile:", function () {
             foo(require('m3'));
             var z = { f: require('m4') }
             `,
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
                     referencedFiles: [],
@@ -233,7 +233,7 @@ describe("PreProcessFile:", function () {
             define(["mod1", "mod2"], (m1, m2) => {
             });
             `,
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
                     referencedFiles: [],
@@ -251,7 +251,7 @@ describe("PreProcessFile:", function () {
             define("mod", ["mod1", "mod2"], (m1, m2) => {
             });
             `,
-                /*readImportFile*/true,
+                /*readImportFile*/ true,
                 /*detectJavaScriptImports*/ true,
                 {
                     referencedFiles: [],

@@ -1,0 +1,14 @@
+=== tests/cases/compiler/emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts ===
+(x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x];
+>x : Symbol(x, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 0, 1))
+>"1" : Symbol("1", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 0, 9))
+>"2" : Symbol("2", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 0, 21))
+>key : Symbol(key, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 0, 41))
+>x : Symbol(x, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 0, 1))
+
+(x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
+>x : Symbol(x, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 1, 1))
+>"1" : Symbol("1", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 1, 9))
+>"2" : Symbol("2", Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 1, 21))
+>key : Symbol(key, Decl(emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES6.ts, 1, 41))
+

@@ -1,5 +1,4 @@
 //// [server.ts]
-
 class c {
 }
 interface i {
@@ -18,6 +17,7 @@ export { x };
 
 //// [server.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c = (function () {
     function c() {
     }

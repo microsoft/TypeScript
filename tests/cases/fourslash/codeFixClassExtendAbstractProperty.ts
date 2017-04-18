@@ -2,11 +2,14 @@
 
 //// abstract class A {
 ////    abstract x: number;
+////    abstract y: this;
+////    abstract z: A;
 //// }
 ////
-//// class C extends A {[|
-//// |]}
+//// class C extends A {[| |]}
 
 verify.rangeAfterCodeFix(`
-x: number;
+    x: number;
+    y: this;
+    z: A;
 `);

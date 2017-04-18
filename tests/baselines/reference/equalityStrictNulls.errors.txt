@@ -1,11 +1,10 @@
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(60,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(62,13): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(64,14): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(66,14): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(59,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(61,13): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(63,14): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts(65,14): error TS2532: Object is possibly 'undefined'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.ts (4 errors) ====
-    
     function f1(x: string) {
         if (x == undefined) {
         }

@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts {
     export function getOriginalNodeId(node: Node) {
         node = getOriginalNode(node);

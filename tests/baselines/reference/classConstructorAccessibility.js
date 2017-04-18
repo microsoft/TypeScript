@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility.ts]
-
 class C {
     public constructor(public x: number) { }
 }

@@ -1,10 +1,9 @@
 === tests/cases/compiler/aux.ts ===
-
 export class SomeClass {
 >SomeClass : Symbol(SomeClass, Decl(aux.ts, 0, 0))
 
     field: string;
->field : Symbol(SomeClass.field, Decl(aux.ts, 1, 24))
+>field : Symbol(SomeClass.field, Decl(aux.ts, 0, 24))
 }
 
 === tests/cases/compiler/aux1.ts ===

@@ -1,5 +1,7 @@
 {
+    "rulesDirectory": "built/local/tslint",
     "rules": {
+        "no-bom": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"
@@ -17,7 +19,7 @@
             "double",
             "avoid-escape"
         ],
-        "semicolon": [true, "ignore-bound-class-methods"],
+        "semicolon": [true, "always", "ignore-bound-class-methods"],
         "whitespace": [true,
             "check-branch",
             "check-decl",
@@ -26,19 +28,29 @@
             "check-separator",
             "check-type"
         ],
-        "typedef-whitespace": [true, {
-            "call-signature": "nospace",
-            "index-signature": "nospace",
-            "parameter": "nospace",
-            "property-declaration": "nospace",
-            "variable-declaration": "nospace"
-        }],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            },
+            {
+                "call-signature": "onespace",
+                "index-signature": "onespace",
+                "parameter": "onespace",
+                "property-declaration": "onespace",
+                "variable-declaration": "onespace"
+            }
+        ],
         "next-line": [true,
             "check-catch",
             "check-else"
         ],
         "no-internal-module": true,
-        "no-trailing-whitespace": true,
+        "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-inferrable-types": true,
         "no-null-keyword": true,
         "boolean-trivia": true,
@@ -47,6 +59,7 @@
         "no-increment-decrement": true,
         "object-literal-surrounding-space": true,
         "no-type-assertion-whitespace": true,
-        "no-in-operator": true
-  }
+        "no-in-operator": true,
+        "jsdoc-format": true
+    }
 }

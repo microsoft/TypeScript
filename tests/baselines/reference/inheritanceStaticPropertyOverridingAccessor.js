@@ -1,5 +1,4 @@
 //// [inheritanceStaticPropertyOverridingAccessor.ts]
-
 class a {
     static get x(): () => string {
         return null;;

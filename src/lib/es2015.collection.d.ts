@@ -17,12 +17,12 @@ declare var Map: MapConstructor;
 
 interface ReadonlyMap<K, V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
-    get(key: K): V|undefined;
+    get(key: K): V | undefined;
     has(key: K): boolean;
     readonly size: number;
 }
 
-interface WeakMap<K, V> {
+interface WeakMap<K extends object, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
@@ -30,9 +30,9 @@ interface WeakMap<K, V> {
 }
 
 interface WeakMapConstructor {
-    new (): WeakMap<any, any>;
-    new <K, V>(entries?: [K, V][]): WeakMap<K, V>;
-    readonly prototype: WeakMap<any, any>;
+    new (): WeakMap<object, any>;
+    new <K extends object, V>(entries?: [K, V][]): WeakMap<K, V>;
+    readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -58,15 +58,15 @@ interface ReadonlySet<T> {
     readonly size: number;
 }
 
-interface WeakSet<T> {
+interface WeakSet<T extends object> {
     add(value: T): this;
     delete(value: T): boolean;
     has(value: T): boolean;
 }
 
 interface WeakSetConstructor {
-    new (): WeakSet<any>;
-    new <T>(values?: T[]): WeakSet<T>;
-    readonly prototype: WeakSet<any>;
+    new (): WeakSet<object>;
+    new <T extends object>(values?: T[]): WeakSet<T>;
+    readonly prototype: WeakSet<object>;
 }
 declare var WeakSet: WeakSetConstructor;

@@ -3,6 +3,8 @@
 /// <reference path="core.ts" />
 
 namespace ts {
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
+
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
             const fileName = combinePaths(searchPath, configName);
@@ -85,9 +87,6 @@ namespace ts {
             return sys.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
         }
 
-        // returned by CScript sys environment
-        const unsupportedFileEncodingErrorCode = -2147024809;
-
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile {
             let text: string;
             try {
@@ -98,9 +97,7 @@ namespace ts {
             }
             catch (e) {
                 if (onError) {
-                    onError(e.number === unsupportedFileEncodingErrorCode
-                        ? createCompilerDiagnostic(Diagnostics.Unsupported_file_encoding).messageText
-                        : e.message);
+                    onError(e.message);
                 }
                 text = "";
             }
@@ -288,6 +285,11 @@ namespace ts {
         return resolutions;
     }
 
+    interface DiagnosticCache {
+        perFile?: FileMap<Diagnostic[]>;
+        allDiagnostics?: Diagnostic[];
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -295,6 +297,9 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+
+        const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
+        const cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
 
         let resolvedTypeReferenceDirectives = createMap<ResolvedTypeReferenceDirective>();
         let fileProcessingDiagnostics = createDiagnosticCollection();
@@ -753,15 +758,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
@@ -803,11 +808,13 @@ namespace ts {
 
             performance.mark("beforeEmit");
 
+            const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
-                emitOnlyDtsFiles);
+                emitOnlyDtsFiles,
+                transformers);
 
             performance.mark("afterEmit");
             performance.measure("Emit", "beforeEmit", "afterEmit");
@@ -896,20 +903,49 @@ namespace ts {
         }
 
         function getSemanticDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedSemanticDiagnosticsForFile, getSemanticDiagnosticsForFileNoCache);
+        }
+
+        function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
                 const bindDiagnostics = sourceFile.bindDiagnostics;
-                // For JavaScript files, we don't want to report semantic errors.
-                // Instead, we'll report errors for using TypeScript-only constructs from within a
-                // JavaScript file when we get syntactic diagnostics for the file.
-                const checkDiagnostics = isSourceFileJavaScript(sourceFile) ? [] : typeChecker.getDiagnostics(sourceFile, cancellationToken);
+                // For JavaScript files, we don't want to report semantic errors unless explicitly requested.
+                const includeCheckDiagnostics = !isSourceFileJavaScript(sourceFile) || isCheckJsEnabledForFile(sourceFile, options);
+                const checkDiagnostics = includeCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : [];
                 const fileProcessingDiagnosticsInFile = fileProcessingDiagnostics.getDiagnostics(sourceFile.fileName);
                 const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
 
-                return bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                const diagnostics = bindDiagnostics.concat(checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile);
+                return isSourceFileJavaScript(sourceFile)
+                    ? filter(diagnostics, shouldReportDiagnostic)
+                    : diagnostics;
             });
+        }
+
+        /**
+         * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
+         */
+        function shouldReportDiagnostic(diagnostic: Diagnostic) {
+            const { file, start } = diagnostic;
+            const lineStarts = getLineStarts(file);
+            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+            while (line > 0) {
+                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
+                if (!result) {
+                    // non-empty line
+                    return true;
+                }
+                if (result[3]) {
+                    // @ts-ignore
+                    return false;
+                }
+                line--;
+            }
+            return true;
         }
 
         function getJavaScriptSyntacticDiagnosticsForFile(sourceFile: SourceFile): Diagnostic[] {
@@ -1091,12 +1127,42 @@ namespace ts {
             });
         }
 
-        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
+        function getDeclarationDiagnosticsWorker(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken): Diagnostic[] {
+            return getAndCacheDiagnostics(sourceFile, cancellationToken, cachedDeclarationDiagnosticsForFile, getDeclarationDiagnosticsForFileNoCache);
+        }
+
+        function getDeclarationDiagnosticsForFileNoCache(sourceFile: SourceFile | undefined, cancellationToken: CancellationToken) {
             return runWithCancellationToken(() => {
                 const resolver = getDiagnosticsProducingTypeChecker().getEmitResolver(sourceFile, cancellationToken);
                 // Don't actually write any files since we're just getting diagnostics.
                 return ts.getDeclarationDiagnostics(getEmitHost(noop), resolver, sourceFile);
             });
+        }
+
+        function getAndCacheDiagnostics(
+            sourceFile: SourceFile | undefined,
+            cancellationToken: CancellationToken,
+            cache: DiagnosticCache,
+            getDiagnostics: (sourceFile: SourceFile, cancellationToken: CancellationToken) => Diagnostic[]) {
+
+            const cachedResult = sourceFile
+                ? cache.perFile && cache.perFile.get(sourceFile.path)
+                : cache.allDiagnostics;
+
+            if (cachedResult) {
+                return cachedResult;
+            }
+            const result = getDiagnostics(sourceFile, cancellationToken) || emptyArray;
+            if (sourceFile) {
+                if (!cache.perFile) {
+                    cache.perFile = createFileMap<Diagnostic[]>();
+                }
+                cache.perFile.set(sourceFile.path, result);
+            }
+            else {
+                cache.allDiagnostics = result;
+            }
+            return result;
         }
 
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1154,13 +1220,10 @@ namespace ts {
                 && (options.isolatedModules || isExternalModuleFile)
                 && !file.isDeclarationFile) {
                 // synthesize 'import "tslib"' declaration
-                const externalHelpersModuleReference = <StringLiteral>createSynthesizedNode(SyntaxKind.StringLiteral);
-                externalHelpersModuleReference.text = externalHelpersModuleNameText;
-                const importDecl = createSynthesizedNode(SyntaxKind.ImportDeclaration);
-
-                importDecl.parent = file;
+                const externalHelpersModuleReference = createLiteral(externalHelpersModuleNameText);
+                const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, /*importClause*/ undefined);
                 externalHelpersModuleReference.parent = importDecl;
-
+                importDecl.parent = file;
                 imports = [externalHelpersModuleReference];
             }
 
@@ -1231,7 +1294,7 @@ namespace ts {
             }
 
             function collectRequireCalls(node: Node): void {
-                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/true)) {
+                if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
                 else {
@@ -1635,7 +1698,7 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
-            if (options.noImplicitUseStrict && options.alwaysStrict) {
+            if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
@@ -1688,6 +1751,10 @@ namespace ts {
 
             if (!options.noEmit && options.allowJs && options.declaration) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration");
+            }
+
+            if (options.checkJs && !options.allowJs) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
             }
 
             if (options.emitDecoratorMetadata &&
@@ -1770,7 +1837,7 @@ namespace ts {
             for (const pathProp of pathsSyntax) {
                 if (isObjectLiteralExpression(pathProp.initializer) &&
                     createOptionDiagnosticInObjectLiteralSyntax(
-                        pathProp.initializer, onKey, key, /*key2*/undefined,
+                        pathProp.initializer, onKey, key, /*key2*/ undefined,
                         message, arg0)) {
                     needCompilerDiagnostic = false;
                 }

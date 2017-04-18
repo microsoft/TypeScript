@@ -27,6 +27,7 @@ function tryCatch() {
 //// [narrowExceptionVariableInCatchClause.js]
 function tryCatch() {
     try {
+        // do stuff...
     }
     catch (err) {
         if (isFooError(err)) {

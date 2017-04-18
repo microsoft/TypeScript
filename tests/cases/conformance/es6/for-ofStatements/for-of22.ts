@@ -1,9 +1,4 @@
 ﻿//@target: ES6
-v;
-for (var v of new FooIterator) {
-    
-}
-
 class Foo { }
 class FooIterator {
     next() {
@@ -15,4 +10,9 @@ class FooIterator {
     [Symbol.iterator]() {
         return this;
     }
+}
+
+v;
+for (var v of new FooIterator) {
+    
 }

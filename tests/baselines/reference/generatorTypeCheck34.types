@@ -7,7 +7,7 @@ function* g() {
 >0 : 0
 
     function* g2() {
->g2 : () => IterableIterator<any>
+>g2 : () => IterableIterator<"">
 
         return "";
 >"" : ""

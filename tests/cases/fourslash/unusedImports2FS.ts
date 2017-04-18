@@ -2,8 +2,8 @@
 
 // @noUnusedLocals: true
 // @Filename: file2.ts
-//// [|import {Calculator} from "./file1"
-//// import {test} from "./file1"|]
+//// [|import {test} from "./file1"
+//// import {Calculator} from "./file1"|]
 
 //// var x = new Calculator();
 //// x.handleChar();
@@ -16,4 +16,4 @@
 ////
 //// }
 
-verify.rangeAfterCodeFix(`import {Calculator} from "./file1"`);
+verify.rangeAfterCodeFix(`import {Calculator} from "./file1"`, /*includeWhiteSpace*/ true, /*errorCode*/ undefined);

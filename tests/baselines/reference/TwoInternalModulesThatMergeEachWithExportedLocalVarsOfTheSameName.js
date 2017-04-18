@@ -31,6 +31,7 @@ export module A {
 
 //// [part1.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
     var Utils;
@@ -44,6 +45,7 @@ var A;
 })(A = exports.A || (exports.A = {}));
 //// [part2.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
     // collision with 'Origin' var in other part of merged module

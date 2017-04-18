@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloads02.ts]
-
 function getFalsyPrimitive(x: "string"): string;
 function getFalsyPrimitive(x: "number"): number;
 function getFalsyPrimitive(x: "boolean"): boolean;

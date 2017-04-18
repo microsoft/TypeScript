@@ -1,5 +1,4 @@
 === tests/cases/compiler/constIndexedAccess.ts ===
-
 const enum numbers {
 >numbers : numbers
 

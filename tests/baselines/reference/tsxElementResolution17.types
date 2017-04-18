@@ -14,7 +14,6 @@ import s2 = require('elements2');
 >MyElement : typeof s1.MyElement
 
 === tests/cases/conformance/jsx/file.tsx ===
-
 declare module JSX {
 >JSX : any
 

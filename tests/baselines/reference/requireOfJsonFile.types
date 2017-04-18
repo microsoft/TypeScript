@@ -1,5 +1,4 @@
 === tests/cases/compiler/file1.ts ===
-
 import b1 = require('./b');
 >b1 : { "a": boolean; "b": string; }
 

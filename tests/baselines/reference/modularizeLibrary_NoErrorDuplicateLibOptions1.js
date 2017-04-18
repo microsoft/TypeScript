@@ -1,5 +1,4 @@
 //// [modularizeLibrary_NoErrorDuplicateLibOptions1.ts]
-
 // Using Es6 array
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

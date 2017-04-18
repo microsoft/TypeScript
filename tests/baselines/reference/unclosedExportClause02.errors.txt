@@ -13,7 +13,6 @@ tests/cases/compiler/t5.ts(2,5): error TS1005: ',' expected.
 
 
 ==== tests/cases/compiler/t1.ts (0 errors) ====
-    
     export var x = "x";
     
 ==== tests/cases/compiler/t2.ts (3 errors) ====

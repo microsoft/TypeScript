@@ -1,0 +1,15 @@
+tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts(6,23): error TS1194: Export declarations are not permitted in a namespace.
+
+
+==== tests/cases/compiler/exportDeclarationsInAmbientNamespaces2.ts (1 errors) ====
+    declare module "mod" {
+        export var x: number;
+    }
+    
+    declare namespace N {
+        export { x } from "mod"; // Error
+                          ~~~~~
+!!! error TS1194: Export declarations are not permitted in a namespace.
+    }
+    
+    

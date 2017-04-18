@@ -1,5 +1,4 @@
 === /a/node_modules/@types/node/index.d.ts ===
-
 interface Error {
 >Error : Error
 

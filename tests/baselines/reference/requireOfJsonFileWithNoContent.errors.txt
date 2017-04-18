@@ -1,10 +1,9 @@
-tests/cases/compiler/file1.ts(3,12): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/compiler/file1.ts(6,16): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/compiler/file1.ts(7,13): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/compiler/file1.ts(2,12): error TS2339: Property 'a' does not exist on type '{}'.
+tests/cases/compiler/file1.ts(5,16): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/compiler/file1.ts(6,13): error TS2339: Property 'b' does not exist on type '{}'.
 
 
 ==== tests/cases/compiler/file1.ts (3 errors) ====
-    
     import b1 = require('./b');
     let x = b1.a;
                ~

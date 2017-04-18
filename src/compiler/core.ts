@@ -1,9 +1,9 @@
-﻿/// <reference path="types.ts"/>
+/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.2.0";
+    export const version = "2.3.0";
 }
 
 /* @internal */
@@ -30,7 +30,7 @@ namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(null); // tslint:disable-line:no-null-keyword
+        const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -84,7 +84,7 @@ namespace ts {
                     this.index++;
                     return { value: this.selector(this.data, this.keys[index]), done: false };
                 }
-                return { value: undefined as never, done: true }
+                return { value: undefined as never, done: true };
             }
         }
 
@@ -140,7 +140,7 @@ namespace ts {
                     action(this.data[key], key);
                 }
             }
-        }
+        };
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
@@ -258,6 +258,16 @@ namespace ts {
             }
         }
         return undefined;
+    }
+
+    /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
+    export function findIndex<T>(array: T[], predicate: (element: T, index: number) => boolean): number {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -877,10 +887,20 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T>(iterator: Iterator<T>): T[] {
-        const result: T[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+        const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(value);
+            result.push(map ? map(value) : value);
+        }
+        return result;
+    }
+
+    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
+        const result: U[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(f(value));
         }
         return result;
     }
@@ -925,7 +945,7 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p of getOwnKeys(arg)) {
+            for (const p in arg) if (hasProperty(arg, p)) {
                 t[p] = arg[p];
             }
         }
@@ -1340,7 +1360,7 @@ namespace ts {
 
     /**
      * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
-    */
+     */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1724,7 +1744,19 @@ namespace ts {
     const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
     const singleAsteriskRegexFragmentOther = "[^/]*";
 
-    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
+        const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
+        if (!patterns || !patterns.length) {
+            return undefined;
+        }
+
+        const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    function getRegularExpressionsForWildcards(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -1738,33 +1770,8 @@ namespace ts {
          */
         const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
-        let pattern = "";
-        let hasWrittenSubpattern = false;
-        for (const spec of specs) {
-            if (!spec) {
-                continue;
-            }
-
-            const subPattern = getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter);
-            if (subPattern === undefined) {
-                continue;
-            }
-
-            if (hasWrittenSubpattern) {
-                pattern += "|";
-            }
-
-            pattern += "(" + subPattern + ")";
-            hasWrittenSubpattern = true;
-        }
-
-        if (!pattern) {
-            return undefined;
-        }
-
-        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
-        const terminator = usage === "exclude" ? "($|/)" : "$";
-        return `^(${pattern})${terminator}`;
+        return flatMap(specs, spec =>
+            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
     }
 
     /**
@@ -1859,6 +1866,9 @@ namespace ts {
     }
 
     export interface FileMatcherPatterns {
+        /** One pattern for each "include" spec. */
+        includeFilePatterns: string[];
+        /** One pattern matching one of any of the "include" specs. */
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
@@ -1871,6 +1881,7 @@ namespace ts {
         const absolutePath = combinePaths(currentDirectory, path);
 
         return {
+            includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), pattern => `^${pattern}$`),
             includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
             includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
@@ -1885,26 +1896,39 @@ namespace ts {
         const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
         const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
         const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
 
-        const result: string[] = [];
+        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
+        // If there are no "includes", then just put everything in results[0].
+        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
+
+        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
-        return result;
+
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string) {
-            const { files, directories } = getFileSystemEntries(path);
+            let { files, directories } = getFileSystemEntries(path);
+            files = files.slice().sort(comparer);
+            directories = directories.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
-                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
-                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    result.push(name);
+                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
+                    }
                 }
             }
 
@@ -2001,14 +2025,14 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
         const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        const extensions = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
-            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+            if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
             }
         }
@@ -2027,7 +2051,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
@@ -2046,7 +2070,6 @@ namespace ts {
     export const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
 
         Highest = TypeScriptFiles,
         Lowest = DeclarationAndJavaScriptFiles,
@@ -2055,7 +2078,7 @@ namespace ts {
     export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
             }
         }
 
@@ -2067,27 +2090,26 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
+        else if (extensionPriority < supportedExtensions.length) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
-        }
-    }
+            return supportedExtensions.length;
+        }    }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
+            return supportedExtensions.length;
         }
     }
 
@@ -2346,5 +2368,12 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
+        if (fileExtensionIs(path, ".json")) {
+            return Extension.Json;
+        }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

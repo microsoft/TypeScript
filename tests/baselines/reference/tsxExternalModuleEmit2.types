@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
-
 declare module 'mod' {
 >'mod' : typeof 'mod'
 

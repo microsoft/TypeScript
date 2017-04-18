@@ -2,7 +2,6 @@
 
 
 ==== /tsconfig.json (0 errors) ====
-    
     {
         "compileOnSave": true,
         "compilerOptions": {

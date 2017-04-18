@@ -1,5 +1,4 @@
 //// [derivedClassWithPrivateStaticShadowingProtectedStatic.ts]
-
 class Base {
     protected static x: string;
     protected static fn(): string {

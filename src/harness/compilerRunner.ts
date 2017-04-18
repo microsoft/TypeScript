@@ -51,7 +51,7 @@ class CompilerBaselineRunner extends RunnerBase {
         const path = ts.toPath(name, root, (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
         const pathStart = ts.toPath(Harness.IO.getCurrentDirectory(), "", (fileName) => Harness.Compiler.getCanonicalFileName(fileName));
         return pathStart ? path.replace(pathStart, "/") : path;
-    };
+    }
 
     public checkTestCodeOutput(fileName: string) {
         describe("compiler tests for " + fileName, () => {

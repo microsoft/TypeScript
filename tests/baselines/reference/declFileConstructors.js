@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructors.ts] ////
 
 //// [declFileConstructors_0.ts]
-
 export class SimpleConstructor {
     /** This comment should appear for foo*/
     constructor() {
@@ -99,6 +98,7 @@ class GlobalConstructorWithParameterInitializer {
 
 //// [declFileConstructors_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SimpleConstructor = (function () {
     /** This comment should appear for foo*/
     function SimpleConstructor() {

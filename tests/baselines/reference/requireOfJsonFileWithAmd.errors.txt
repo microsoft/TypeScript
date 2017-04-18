@@ -1,9 +1,8 @@
-tests/cases/compiler/file1.ts(2,21): error TS2307: Cannot find module './b'.
-tests/cases/compiler/file1.ts(4,21): error TS2307: Cannot find module './b.json'.
+tests/cases/compiler/file1.ts(1,21): error TS2307: Cannot find module './b'.
+tests/cases/compiler/file1.ts(3,21): error TS2307: Cannot find module './b.json'.
 
 
 ==== tests/cases/compiler/file1.ts (2 errors) ====
-    
     import b1 = require('./b');
                         ~~~~~
 !!! error TS2307: Cannot find module './b'.

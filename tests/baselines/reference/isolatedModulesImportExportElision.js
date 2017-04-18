@@ -1,5 +1,4 @@
 //// [file1.ts]
-
 import {c} from "module"
 import {c2} from "module"
 import * as ns from "module"
@@ -25,6 +24,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("module");
 var module_2 = require("module");
 var ns = require("module");

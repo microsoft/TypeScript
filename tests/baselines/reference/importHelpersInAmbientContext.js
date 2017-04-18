@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importHelpersInAmbientContext.ts] ////
 
 //// [a.d.ts]
-
 export { };
 
 // Extends
@@ -57,3 +56,4 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [b.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });

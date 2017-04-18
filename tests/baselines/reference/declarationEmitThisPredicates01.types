@@ -1,5 +1,4 @@
 === tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicates01.ts ===
-
 export class C {
 >C : C
 

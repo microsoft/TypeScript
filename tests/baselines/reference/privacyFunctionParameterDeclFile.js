@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyFunctionParameterDeclFile.ts] ////
 
 //// [privacyFunctionParameterDeclFile_externalModule.ts]
-
 class privateClass {
 }
 
@@ -688,6 +687,7 @@ module publicModuleInGlobal {
 
 //// [privacyFunctionParameterDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
