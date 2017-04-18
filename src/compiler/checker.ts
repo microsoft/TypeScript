@@ -12725,7 +12725,7 @@ namespace ts {
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object)) || (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType)) {
                     const propName = literal.text;
-                    return  filterType(type, t => !!getPropertyOfType(t, propName) === assumeTrue);
+                    return filterType(type, t => !!getPropertyOfType(t, propName) === assumeTrue);
                 }
                 return type;
             }
