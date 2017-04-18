@@ -228,7 +228,7 @@ namespace ts {
 
             // Add any prologue directives.
             const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(

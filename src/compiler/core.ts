@@ -887,10 +887,12 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T>(iterator: Iterator<T>): T[] {
-        const result: T[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+        const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(value);
+            result.push(map ? map(value) : value);
         }
         return result;
     }
@@ -943,7 +945,7 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p of getOwnKeys(arg)) {
+            for (const p in arg) if (hasProperty(arg, p)) {
                 t[p] = arg[p];
             }
         }

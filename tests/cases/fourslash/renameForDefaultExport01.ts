@@ -1,13 +1,14 @@
 /// <reference path='fourslash.ts'/>
 
-////export default class /*1*/[|DefaultExportedClass|] {
+////export default class [|DefaultExportedClass|] {
 ////}
 /////*
-//// *  Commenting [|DefaultExportedClass|]
+//// *  Commenting [|{| "inComment": true |}DefaultExportedClass|]
 //// */
 ////
-////var x: /*2*/[|DefaultExportedClass|];
+////var x: [|DefaultExportedClass|];
 ////
-////var y = new /*3*/[|DefaultExportedClass|];
+////var y = new [|DefaultExportedClass|];
 
-goTo.eachMarker(() => verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ true));
+const ranges = test.ranges();
+verify.renameLocations(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, ranges });

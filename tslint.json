@@ -61,6 +61,7 @@
         "no-type-assertion-whitespace": true,
         "no-in-operator": true,
         "no-switch-case-fall-through": true,
+        "triple-equals": true,
         "jsdoc-format": true
     }
 }

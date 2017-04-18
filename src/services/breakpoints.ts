@@ -265,7 +265,7 @@ namespace ts.BreakpointResolver {
                         // a or ...c  or d: x from
                         // [a, b, ...c] or { a, b } or { d: x } from destructuring pattern
                         if ((node.kind === SyntaxKind.Identifier ||
-                            node.kind == SyntaxKind.SpreadElement ||
+                            node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||
                             node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
                             isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {

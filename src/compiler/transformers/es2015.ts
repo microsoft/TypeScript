@@ -515,8 +515,9 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
+            let statementOffset = addStandardPrologue(statements, node.statements, /*ensureUseStrict*/ false);
             addCaptureThisForNodeIfNeeded(statements, node);
+            statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -924,13 +925,16 @@ namespace ts {
                 statementOffset = 0;
             }
             else if (constructor) {
-                // Otherwise, try to emit all potential prologue directives first.
-                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
+                statementOffset = addStandardPrologue(statements, constructor.body.statements, /*ensureUseStrict*/ false);
             }
 
             if (constructor) {
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                if (!hasSynthesizedSuper) {
+                    // If no super call has been synthesized, emit custom prologue directives.
+                    statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
+                }
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
             }
@@ -1821,8 +1825,8 @@ namespace ts {
             resumeLexicalEnvironment();
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
-                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+                // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
+                statementOffset = addStandardPrologue(statements, body.statements, /*ensureUseStrict*/ false);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);
@@ -1835,6 +1839,9 @@ namespace ts {
             }
 
             if (isBlock(body)) {
+                // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor);
+
                 statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
@@ -2875,7 +2882,12 @@ namespace ts {
                 !state.labeledNonLocalContinues;
 
             const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
-            const callResult = isAsyncBlockContainingAwait ? createYield(createToken(SyntaxKind.AsteriskToken), call) : call;
+            const callResult = isAsyncBlockContainingAwait
+                ? createYield(
+                    createToken(SyntaxKind.AsteriskToken),
+                    setEmitFlags(call, EmitFlags.Iterator)
+                )
+                : call;
             if (isSimpleLoop) {
                 statements.push(createStatement(callResult));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);

@@ -3137,7 +3137,7 @@ namespace ts {
         return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+    function isExportDefaultSymbol(symbol: Symbol): boolean {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
@@ -4205,12 +4205,13 @@ namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
             case ScriptTarget.ESNext:
+                return "lib.esnext.full.d.ts";
             case ScriptTarget.ES2017:
-                return "lib.es2017.d.ts";
+                return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:
-                return "lib.es2016.d.ts";
+                return "lib.es2016.full.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es6.d.ts";
+                return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
             default:
                 return "lib.d.ts";
         }
@@ -4430,7 +4431,7 @@ namespace ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength*/ newEndN - oldStartN);
     }
 
     export function getTypeParameterOwner(d: Declaration): Declaration {
@@ -4606,7 +4607,7 @@ namespace ts {
      */
     export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
     export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node == undefined || isParseTreeNode(node)) {
+        if (node === undefined || isParseTreeNode(node)) {
             return node;
         }
 

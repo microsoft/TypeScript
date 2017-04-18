@@ -30,7 +30,7 @@ namespace ts {
     }
 
     function reportEmittedFiles(files: string[]): void {
-        if (!files || files.length == 0) {
+        if (!files || files.length === 0) {
             return;
         }
 
@@ -282,7 +282,7 @@ namespace ts {
                     // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current directory; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
-                    directory == "" ? "." : directory,
+                    directory === "" ? "." : directory,
                     watchedDirectoryChanged, /*recursive*/ true);
             }
         }
@@ -334,7 +334,7 @@ namespace ts {
                         // When the configFileName is just "tsconfig.json", the watched directory should be
                         // the current directory; if there is a given "project" parameter, then the configFileName
                         // is an absolute file name.
-                        directory == "" ? "." : directory,
+                        directory === "" ? "." : directory,
                         watchedDirectoryChanged, /*recursive*/ true);
                 }
             }

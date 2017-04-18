@@ -31,6 +31,20 @@ namespace ts.projectSystem {
             }
         }
 
+        function createSession(host: server.ServerHost, typingsInstaller?: server.ITypingsInstaller): server.Session {
+            const opts: server.SessionOptions = {
+                host,
+                cancellationToken: nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: nullLogger,
+                canUseEvents: false
+            };
+            return new server.Session(opts);
+        }
+
         describe("for configured projects", () => {
             let moduleFile1: FileOrFolder;
             let file1Consumer1: FileOrFolder;
@@ -113,7 +127,7 @@ namespace ts.projectSystem {
             it("should contains only itself if a module file's shape didn't change, and all files referencing it if its shape changed", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -138,7 +152,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with the reference map changes", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
 
@@ -185,7 +199,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with changes made in non-open files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
 
@@ -203,7 +217,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with deleted files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
@@ -218,7 +232,7 @@ namespace ts.projectSystem {
             it("should be up-to-date with newly created files", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
@@ -255,7 +269,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1] }]);
@@ -272,7 +286,7 @@ namespace ts.projectSystem {
             it("should return all files if a global file changed shape", () => {
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, globalFile3, moduleFile2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([globalFile3], session);
                 const changeGlobalFile3ShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -298,7 +312,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
@@ -316,7 +330,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -345,7 +359,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([moduleFile1, file1Consumer1, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
                 openFilesForSession([moduleFile1], session);
 
                 const file1ChangeShapeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(CommandNames.Change, {
@@ -367,7 +381,7 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer1Consumer1, globalFile3, configFile, libFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([moduleFile1, file1Consumer1], session);
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer1Consumer1] }]);
@@ -400,7 +414,7 @@ namespace ts.projectSystem {
                 };
                 const host = createServerHost([file1, file2, configFile]);
                 const typingsInstaller = createTestTypingsInstaller(host);
-                const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+                const session = createSession(host, typingsInstaller);
 
                 openFilesForSession([file1, file2], session);
                 const file1AffectedListRequest = makeSessionRequest<server.protocol.FileRequestArgs>(CommandNames.CompileOnSaveAffectedFileList, { file: file1.path });
@@ -513,7 +527,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([file1, file2, configFile, libFile], { newLine: "\r\n" });
             const typingsInstaller = createTestTypingsInstaller(host);
-            const session = new server.Session(host, nullCancellationToken, /*useSingleInferredProject*/ false, typingsInstaller, Utils.byteLength, process.hrtime, nullLogger, /*canUseEvents*/ false);
+            const session = createSession(host, typingsInstaller);
 
             openFilesForSession([file1, file2], session);
             const compileFileRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path, projectFileName: configFile.path });

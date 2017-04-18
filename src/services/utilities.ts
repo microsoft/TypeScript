@@ -364,15 +364,6 @@ namespace ts {
         }
     }
 
-    export function getStringLiteralTypeForNode(node: StringLiteral | LiteralTypeNode, typeChecker: TypeChecker): LiteralType {
-        const searchNode = node.parent.kind === SyntaxKind.LiteralType ? <LiteralTypeNode>node.parent : node;
-        const type = typeChecker.getTypeAtLocation(searchNode);
-        if (type && type.flags & TypeFlags.StringLiteral) {
-            return <LiteralType>type;
-        }
-        return undefined;
-    }
-
     export function isThis(node: Node): boolean {
         switch (node.kind) {
             case SyntaxKind.ThisKeyword:
@@ -911,10 +902,10 @@ namespace ts {
             // Internally, we represent the end of the comment at the newline and closing '/', respectively.
             return predicate ?
                 forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
+                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
                     predicate(c)) :
                 forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
         }
 
         return false;
@@ -1132,6 +1123,21 @@ namespace ts {
                 return false;
         }
     }
+
+    /** True if the symbol is for an external module, as opposed to a namespace. */
+    export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
+        Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
+        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+    }
+
+    /** Returns `true` the first time it encounters a node and `false` afterwards. */
+    export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
+        const seen: Array<true> = [];
+        return node => {
+            const id = getNodeId(node);
+            return !seen[id] && (seen[id] = true);
+        };
+    }
 }
 
 // Display-part writer helpers
@@ -1300,21 +1306,14 @@ namespace ts {
     export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location)) {
-            return location.getText();
-        }
-        else if (isStringOrNumericLiteral(location) &&
-            location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return (<LiteralExpression>location).text;
+        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
+            return location.text;
         }
 
         // Try to get the local symbol if we're dealing with an 'export default'
         // since that symbol has the "true" name.
         const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-
-        const name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
-
-        return name;
+        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {

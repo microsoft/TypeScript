@@ -67,7 +67,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
             return;
         }
 
-        let ranges = ts.getTrailingCommentRanges(sourceFile.text, arg.pos) || ts.getLeadingCommentRanges(sourceFile.text, arg.pos);
+        const ranges = ts.getTrailingCommentRanges(sourceFile.text, arg.pos) || ts.getLeadingCommentRanges(sourceFile.text, arg.pos);
         if (ranges === undefined || ranges.length !== 1 || ranges[0].kind !== ts.SyntaxKind.MultiLineCommentTrivia) {
             ctx.addFailureAtNode(arg, "Tag boolean argument with parameter name");
             return;

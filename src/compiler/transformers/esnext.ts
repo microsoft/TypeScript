@@ -618,7 +618,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             statements.push(
@@ -663,12 +663,19 @@ namespace ts {
         function transformFunctionBody(node: ArrowFunction): ConciseBody;
         function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
             resumeLexicalEnvironment();
-            const leadingStatements = appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node);
+            let statementOffset = 0;
+            const statements: Statement[] = [];
             const body = visitNode(node.body, visitor, isConciseBody);
+            if (isBlock(body)) {
+                statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            }
+            addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
             const trailingStatements = endLexicalEnvironment();
-            if (some(leadingStatements) || some(trailingStatements)) {
+            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                return updateBlock(block, setTextRange(createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements)), block.statements));
+                addRange(statements, block.statements.slice(statementOffset));
+                addRange(statements, trailingStatements);
+                return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
         }

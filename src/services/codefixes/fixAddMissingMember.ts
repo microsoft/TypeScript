@@ -14,7 +14,7 @@ namespace ts.codefix {
         //      ^^^^^^^
         const token = getTokenAtPosition(sourceFile, start);
 
-        if (token.kind != SyntaxKind.Identifier) {
+        if (token.kind !== SyntaxKind.Identifier) {
             return undefined;
         }
 
