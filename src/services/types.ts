@@ -218,7 +218,7 @@ namespace ts {
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
         getCompletionsAtPosition(fileName: string, position: number): CompletionInfo;
-        getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails;
+        getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails;
         getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol;
 
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo;
@@ -599,6 +599,8 @@ namespace ts {
          * be used in that case
          */
         replacementSpan?: TextSpan;
+        hasAction?: true;
+        sourceFileName?: string;
     }
 
     export interface CompletionEntryDetails {
@@ -608,6 +610,7 @@ namespace ts {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         tags: JSDocTagInfo[];
+        codeActions?: CodeAction[];
     }
 
     export interface OutliningSpan {

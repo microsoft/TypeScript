@@ -1337,17 +1337,19 @@ namespace ts {
 
         function getCompletionsAtPosition(fileName: string, position: number): CompletionInfo {
             synchronizeHostData();
-            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position);
+            return Completions.getCompletionsAtPosition(host, program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, program.getSourceFiles());
         }
 
-        function getCompletionEntryDetails(fileName: string, position: number, entryName: string): CompletionEntryDetails {
+        function getCompletionEntryDetails(fileName: string, position: number, entryName: string, formattingOptions?: FormatCodeSettings): CompletionEntryDetails {
             synchronizeHostData();
-            return Completions.getCompletionEntryDetails(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            const ruleProvider = formattingOptions ? getRuleProvider(formattingOptions) : undefined;
+            return Completions.getCompletionEntryDetails(
+                program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles(), host, ruleProvider);
         }
 
         function getCompletionEntrySymbol(fileName: string, position: number, entryName: string): Symbol {
             synchronizeHostData();
-            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName);
+            return Completions.getCompletionEntrySymbol(program.getTypeChecker(), log, program.getCompilerOptions(), getValidSourceFile(fileName), position, entryName, program.getSourceFiles());
         }
 
         function getQuickInfoAtPosition(fileName: string, position: number): QuickInfo {

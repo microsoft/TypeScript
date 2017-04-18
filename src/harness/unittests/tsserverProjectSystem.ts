@@ -3476,6 +3476,43 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("import in completion list", () => {
+        it("should include exported members of all source files", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/file1.ts",
+                content: `
+                export function Test1() { }
+                export function Test2() { }
+                `
+            };
+            const file2: FileOrFolder = {
+                path: "/a/b/file2.ts",
+                content: `
+                import { Test2 } from "./file1";
+
+                t`
+            };
+            const configFile: FileOrFolder = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+
+            const host = createServerHost([file1, file2, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(file2.path);
+
+            const completions1 = service.configuredProjects[0].getLanguageService().getCompletionsAtPosition(file2.path, file2.path.length);
+            const test1Entry = find(completions1.entries, e => e.name === "Test1");
+            const test2Entry = find(completions1.entries, e => e.name === "Test2");
+
+            assert.isDefined(test1Entry, "should contain 'Test1'");
+            assert.isDefined(test2Entry, "should contain 'Test2'");
+
+            assert.isTrue(test1Entry.hasAction, "should set the 'hasAction' property to true for Test1");
+            assert.isUndefined(test2Entry.hasAction, "should not set the 'hasAction' property for Test2");
+        });
+    });
+
     describe("import helpers", () => {
         it("should not crash in tsserver", () => {
             const f1 = {
@@ -3777,6 +3814,70 @@ namespace ts.projectSystem {
                 assert.isTrue(highlightResponse.length === 2);
                 const firstOccurence = highlightResponse[0];
                 assert.isUndefined(firstOccurence.isInString, "Highlights should not be marked with isInString if on indexer");
+            }
+        });
+    });
+
+    describe("completion entry with code actions", () => {
+        it("should work for symbols from non-imported modules", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: `export const guitar = 10;`
+            };
+            const file1 = {
+                path: "/a/b/file2.ts",
+                content: ``
+            };
+            const globalFile = {
+                path: "/a/b/globalFile.ts",
+                content: `interface Jazz { }`
+            };
+            const ambientModuleFile = {
+                path: "/a/b/ambientModuleFile.ts",
+                content:
+                `declare module "windyAndWarm" {
+                    export const chetAtkins = "great";
+                }`
+            };
+            const defaultModuleFile = {
+                path: "/a/b/defaultModuleFile.ts",
+                content:
+                `export default function egyptianElla() { };`
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+
+            const host = createServerHost([moduleFile, file1, globalFile, ambientModuleFile, defaultModuleFile, configFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            projectService.openClientFile(file1.path);
+
+            checkEntryDetail("guitar", /*hasAction*/ true, `import { guitar } from "./moduleFile";\n\n`);
+            checkEntryDetail("Jazz", /*hasAction*/ false);
+            checkEntryDetail("chetAtkins", /*hasAction*/ true, `import { chetAtkins } from "windyAndWarm";\n\n`);
+            checkEntryDetail("egyptianElla", /*hasAction*/ true, `import egyptianElla from "./defaultModuleFile";\n\n`);
+
+            function checkEntryDetail(entryName: string, hasAction: boolean, insertString?: string) {
+                const request = makeSessionRequest<protocol.CompletionDetailsRequestArgs>(
+                    CommandNames.CompletionDetails,
+                    { entryNames: [entryName], file: file1.path, line: 1, offset: 0, projectFileName: configFile.path });
+                const response = session.executeCommand(request).response as protocol.CompletionEntryDetails[];
+                assert.isTrue(response.length === 1);
+
+                const entryDetails = response[0];
+                if (!hasAction) {
+                    assert.isUndefined(entryDetails.codeActions);
+                }
+                else {
+                    const action = entryDetails.codeActions[0];
+                    assert.isTrue(action.changes[0].fileName === file1.path);
+                    assert.deepEqual(action.changes[0], <protocol.FileCodeEdits>{
+                        fileName: file1.path,
+                        textChanges: [{ start: { line: 1, offset: 1 }, end: { line: 1, offset: 1 }, newText: insertString }]
+                    });
+                }
             }
         });
     });

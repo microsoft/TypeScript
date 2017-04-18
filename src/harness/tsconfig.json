@@ -82,7 +82,6 @@
         "../services/codefixes/importFixes.ts",
         "../services/codefixes/unusedIdentifierFixes.ts",
         "../services/codefixes/disableJsDiagnostics.ts",
-
         "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",

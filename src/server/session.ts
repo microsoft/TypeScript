@@ -1186,10 +1186,16 @@ namespace ts.server {
             if (simplifiedResult) {
                 return completions.entries.reduce((result: protocol.CompletionEntry[], entry: ts.CompletionEntry) => {
                     if (completions.isMemberCompletion || (entry.name.toLowerCase().indexOf(prefix.toLowerCase()) === 0)) {
-                        const { name, kind, kindModifiers, sortText, replacementSpan } = entry;
+                        const { name, kind, kindModifiers, sortText, replacementSpan, hasAction } = entry;
                         const convertedSpan: protocol.TextSpan =
                             replacementSpan ? this.decorateSpan(replacementSpan, scriptInfo) : undefined;
-                        result.push({ name, kind, kindModifiers, sortText, replacementSpan: convertedSpan });
+
+                        const newEntry: protocol.CompletionEntry = { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
+                        // avoid serialization when hasAction = false
+                        if (hasAction) {
+                            newEntry.hasAction = true;
+                        }
+                        result.push(newEntry);
                     }
                     return result;
                 }, []).sort((a, b) => ts.compareStrings(a.name, b.name));
@@ -1203,11 +1209,13 @@ namespace ts.server {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
+            const formattingOptions = project.projectService.getFormatCodeOptions(file);
 
             return args.entryNames.reduce((accum: protocol.CompletionEntryDetails[], entryName: string) => {
-                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName);
+                const details = project.getLanguageService().getCompletionEntryDetails(file, position, entryName, formattingOptions);
                 if (details) {
-                    accum.push(details);
+                    const mappedCodeActions = map(details.codeActions, action => this.mapCodeAction(action, scriptInfo));
+                    accum.push({ ...details, codeActions: mappedCodeActions });
                 }
                 return accum;
             }, []);
