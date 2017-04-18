@@ -3232,14 +3232,14 @@ namespace ts.projectSystem {
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile1.path }
             );
-            let error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
+            const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
             assert.isTrue(error1Result.length === 0);
 
              const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
                 CommandNames.SemanticDiagnosticsSync,
                 { file: dTsFile2.path }
             );
-            let error2Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile2GetErrRequest).response;
+            const error2Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile2GetErrRequest).response;
             assert.isTrue(error2Result.length === 0);
         });
 
