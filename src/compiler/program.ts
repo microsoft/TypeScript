@@ -527,11 +527,6 @@ namespace ts {
                 }
                 return oldSourceFileResult;
             }
-
-            // if options didn't change but there were changes in module names/triple slash/etc.,
-            // rty to get file with smae name form old program, if equal, then we can just copy resolutions verbatim.
-            // else the file was edited. Then we just redo the reoslutions for the whole file (could go further, but kiss for now).
-
             // at this point we know that either
             // - file has local declarations for ambient modules
             // OR
