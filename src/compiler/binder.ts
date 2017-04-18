@@ -1414,6 +1414,7 @@ namespace ts {
                     if (isObjectLiteralOrClassExpressionMethod(node)) {
                         return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
                     }
+                    // falls through
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1715,7 +1716,7 @@ namespace ts {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
-                // fall through.
+                    // falls through
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = createMap<Symbol>();
@@ -2009,6 +2010,7 @@ namespace ts {
                         bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         break;
                     }
+                    // falls through
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
@@ -2184,7 +2186,7 @@ namespace ts {
                     if (!isFunctionLike(node.parent)) {
                         return;
                     }
-                    // Fall through
+                    // falls through
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
             }

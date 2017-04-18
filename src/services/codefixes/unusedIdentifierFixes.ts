@@ -58,6 +58,8 @@ namespace ts.codefix {
                                         return deleteNodeInList(token.parent);
                                     }
                             }
+                            // TODO: #14885
+                            // falls through
 
                         case SyntaxKind.TypeParameter:
                             const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;

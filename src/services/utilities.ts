@@ -441,7 +441,7 @@ namespace ts {
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-            // fall through
+            // falls through
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ParenthesizedType:

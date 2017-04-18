@@ -1234,7 +1234,7 @@ namespace ts.FindAllReferences.Core {
                 if (isObjectLiteralMethod(searchSpaceNode)) {
                     break;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.Constructor:
@@ -1247,7 +1247,7 @@ namespace ts.FindAllReferences.Core {
                 if (isExternalModule(<SourceFile>searchSpaceNode)) {
                     return undefined;
                 }
-            // Fall through
+                // falls through
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 break;

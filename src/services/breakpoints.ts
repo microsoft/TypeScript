@@ -97,7 +97,7 @@ namespace ts.BreakpointResolver {
                         if (isFunctionBlock(node)) {
                             return spanInFunctionBlock(<Block>node);
                         }
-                    // Fall through
+                        // falls through
                     case SyntaxKind.ModuleBlock:
                         return spanInBlock(<Block>node);
 
@@ -186,6 +186,7 @@ namespace ts.BreakpointResolver {
                         if (getModuleInstanceState(node) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.EnumDeclaration:
@@ -473,6 +474,7 @@ namespace ts.BreakpointResolver {
                         if (getModuleInstanceState(block.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     // Set on parent if on same line otherwise on first statement
                     case SyntaxKind.WhileStatement:
@@ -582,6 +584,7 @@ namespace ts.BreakpointResolver {
                         if (getModuleInstanceState(node.parent.parent) !== ModuleInstanceState.Instantiated) {
                             return undefined;
                         }
+                        // falls through
 
                     case SyntaxKind.EnumDeclaration:
                     case SyntaxKind.ClassDeclaration:
@@ -593,7 +596,7 @@ namespace ts.BreakpointResolver {
                             // Span on close brace token
                             return textSpan(node);
                         }
-                        // fall through
+                        // falls through
 
                     case SyntaxKind.CatchClause:
                         return spanInNode(lastOrUndefined((<Block>node.parent).statements));

@@ -902,6 +902,7 @@ namespace ts {
                     case SyntaxKind.SourceFile:
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
                         isInExternalModule = true;
+                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                         const moduleExports = getSymbolOfNode(location).exports;
                         if (location.kind === SyntaxKind.SourceFile || isAmbientModule(location)) {
@@ -1938,6 +1939,7 @@ namespace ts {
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                             break;
                         }
+                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                         if (result = callback(getSymbolOfNode(location).exports)) {
                             return result;
@@ -3658,7 +3660,7 @@ namespace ts {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
-                    // Otherwise fall through
+                        // falls through
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.InterfaceDeclaration:
@@ -3689,7 +3691,8 @@ namespace ts {
                             // Private/protected properties/methods are not visible
                             return false;
                         }
-                    // Public properties/methods are visible if its parents are visible, so const it fall into next case statement
+                        // Public properties/methods are visible if its parents are visible, so:
+                        // falls through
 
                     case SyntaxKind.Constructor:
                     case SyntaxKind.ConstructSignature:
@@ -21050,7 +21053,7 @@ namespace ts {
                         }
                         break;
                     }
-                    // fallthrough
+                    // falls through
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.FunctionDeclaration:
@@ -21685,6 +21688,7 @@ namespace ts {
                             if (!isExternalOrCommonJsModule(<SourceFile>location)) {
                                 break;
                             }
+                            // falls through
                         case SyntaxKind.ModuleDeclaration:
                             copySymbols(getSymbolOfNode(location).exports, meaning & SymbolFlags.ModuleMember);
                             break;
@@ -21696,7 +21700,8 @@ namespace ts {
                             if (className) {
                                 copySymbol(location.symbol, meaning);
                             }
-                        // fall through; this fall-through is necessary because we would like to handle
+                        // falls through
+                        // this fall-through is necessary because we would like to handle
                         // type parameter inside class expression similar to how we handle it in classDeclaration and interface Declaration
                         case SyntaxKind.ClassDeclaration:
                         case SyntaxKind.InterfaceDeclaration:
@@ -21985,7 +21990,7 @@ namespace ts {
                             return sig.thisParameter;
                         }
                     }
-                    // fallthrough
+                    // falls through
 
                 case SyntaxKind.SuperKeyword:
                     const type = isPartOfExpression(node) ? getTypeOfExpression(<Expression>node) : getTypeFromTypeNode(<TypeNode>node);
@@ -22013,7 +22018,7 @@ namespace ts {
                     if (isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                // Fall through
+                    // falls through
 
                 case SyntaxKind.NumericLiteral:
                     // index access

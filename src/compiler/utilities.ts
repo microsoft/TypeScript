@@ -674,6 +674,7 @@ namespace ts {
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
+                // falls through
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
@@ -783,6 +784,7 @@ namespace ts {
                     if (operand) {
                         traverse(operand);
                     }
+                    return;
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
@@ -1000,7 +1002,7 @@ namespace ts {
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                // Fall through
+                    // falls through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
@@ -1059,6 +1061,7 @@ namespace ts {
                     if (!stopOnFunctions) {
                         continue;
                     }
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1258,7 +1261,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
@@ -1940,7 +1943,7 @@ namespace ts {
                 if (node.asteriskToken) {
                     flags |= FunctionFlags.Generator;
                 }
-                // fall through
+                // falls through
             case SyntaxKind.ArrowFunction:
                 if (hasModifier(node, ModifierFlags.Async)) {
                     flags |= FunctionFlags.Async;
