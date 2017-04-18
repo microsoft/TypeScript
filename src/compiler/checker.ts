@@ -12722,6 +12722,14 @@ namespace ts {
                 return type;
             }
 
+            function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
+                if ((type.flags & (TypeFlags.Union | TypeFlags.Object)) || (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType)) {
+                    const propName = literal.text;
+                    return  filterType(type, t => !!getPropertyOfType(t, propName) === assumeTrue);
+                }
+                return type;
+            }
+
             function narrowTypeByBinaryExpression(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 switch (expr.operatorToken.kind) {
                     case SyntaxKind.EqualsToken:
@@ -12757,6 +12765,12 @@ namespace ts {
                         break;
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
+                    case SyntaxKind.InKeyword:
+                        const target = getReferenceCandidate(expr.right);
+                        if (expr.left.kind === SyntaxKind.StringLiteral && isMatchingReference(reference, target)) {
+                            return narrowByInKeyword(type, <LiteralExpression>expr.left, assumeTrue);
+                        }
+                        break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
                 }
