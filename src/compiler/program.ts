@@ -517,9 +517,9 @@ namespace ts {
                 return resolveModuleNamesWorker(moduleNames, containingFile);
             }
 
-
             const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
             if (oldSourceFile === file) {
+                // `file` is unchanged from the old program, so we can reuse old module resolutions.
                 const oldSourceFileResult: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
                     const resolvedModule = oldSourceFile.resolvedModules.get(moduleName);
@@ -527,6 +527,7 @@ namespace ts {
                 }
                 return oldSourceFileResult;
             }
+
             // at this point we know that either
             // - file has local declarations for ambient modules
             // OR
