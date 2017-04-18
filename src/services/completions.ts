@@ -1311,7 +1311,7 @@ namespace ts.Completions {
     }
 
     function isEqualityOperatorKind(kind: SyntaxKind) {
-        return kind == SyntaxKind.EqualsEqualsToken ||
+        return kind === SyntaxKind.EqualsEqualsToken ||
             kind === SyntaxKind.ExclamationEqualsToken ||
             kind === SyntaxKind.EqualsEqualsEqualsToken ||
             kind === SyntaxKind.ExclamationEqualsEqualsToken;

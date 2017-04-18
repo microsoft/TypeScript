@@ -349,7 +349,7 @@ namespace ts {
             TypeofNEHostObject = 1 << 13, // typeof x !== "xxx"
             EQUndefined = 1 << 14,        // x === undefined
             EQNull = 1 << 15,             // x === null
-            EQUndefinedOrNull = 1 << 16,  // x == undefined / x == null
+            EQUndefinedOrNull = 1 << 16,  // x === undefined / x === null
             NEUndefined = 1 << 17,        // x !== undefined
             NENull = 1 << 18,             // x !== null
             NEUndefinedOrNull = 1 << 19,  // x != undefined / x != null
@@ -17616,7 +17616,7 @@ namespace ts {
         function checkObjectTypeForDuplicateDeclarations(node: TypeLiteralNode | InterfaceDeclaration) {
             const names = createMap<boolean>();
             for (const member of node.members) {
-                if (member.kind == SyntaxKind.PropertySignature) {
+                if (member.kind === SyntaxKind.PropertySignature) {
                     let memberName: string;
                     switch (member.name.kind) {
                         case SyntaxKind.StringLiteral:

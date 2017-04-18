@@ -380,7 +380,7 @@ namespace ts.server {
             }
 
             this.projectService.updateTypingsForProject(response);
-            if (response.kind == ActionSet && this.socket) {
+            if (response.kind === ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);
             }
         }
