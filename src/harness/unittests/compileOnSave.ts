@@ -317,6 +317,29 @@ namespace ts.projectSystem {
                 sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, []);
             });
 
+            it("should save when compileOnSave is enabled in base tsconfig.json", () => {
+                configFile = {
+                    path: "/a/b/tsconfig.json",
+                    content: `{
+                        "extends": "/a/tsconfig.json"
+                    }`
+                };
+
+                const configFile2: FileOrFolder = {
+                    path: "/a/tsconfig.json",
+                    content: `{
+                        "compileOnSave": true
+                    }`
+                };
+
+                const host = createServerHost([moduleFile1, file1Consumer1, file1Consumer2, configFile2, configFile, libFile]);
+                const typingsInstaller = createTestTypingsInstaller(host);
+                const session = createSession(host, typingsInstaller);
+
+                openFilesForSession([moduleFile1, file1Consumer1], session);
+                sendAffectedFileRequestAndCheckResult(session, moduleFile1FileListRequest, [{ projectFileName: configFile.path, files: [moduleFile1, file1Consumer1, file1Consumer2] }]);
+            });
+
             it("should always return the file itself if '--isolatedModules' is specified", () => {
                 configFile = {
                     path: "/a/b/tsconfig.json",
