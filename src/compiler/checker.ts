@@ -8708,7 +8708,7 @@ namespace ts {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
                     if ((relation === assignableRelation || relation === comparableRelation) &&
-                        (target === globalObjectType || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
+                        (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
