@@ -7,7 +7,7 @@ namespace ts.FindAllReferences {
         references: Entry[];
     }
 
-    type Definition =
+    export type Definition =
         | { type: "symbol"; symbol: Symbol; node: Node }
         | { type: "label"; node: Identifier }
         | { type: "keyword"; node: ts.Node }
@@ -20,7 +20,7 @@ namespace ts.FindAllReferences {
         node: Node;
         isInString?: true;
     }
-    interface SpanEntry {
+    export interface SpanEntry {
         type: "span";
         fileName: string;
         textSpan: TextSpan;
