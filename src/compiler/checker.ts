@@ -803,6 +803,9 @@ namespace ts {
 
             function isUsedInFunctionOrInstanceProperty(usage: Node, declaration: Node, container?: Node): boolean {
                 return !!findAncestor(usage, current => {
+                    if (current === container) {
+                        return "quit";
+                    }
                     if (isFunctionLike(current)) {
                         return true;
                     }
@@ -824,7 +827,7 @@ namespace ts {
                             }
                         }
                     }
-                }, n => n === container);
+                });
             }
         }
 
@@ -1246,7 +1249,7 @@ namespace ts {
          * Return false if 'stopAt' node is reached or isFunctionLike(current) === true.
          */
         function isSameScopeDescendentOf(initial: Node, parent: Node, stopAt: Node): boolean {
-            return parent && !!findAncestor(initial, n => n === parent, n => n === stopAt || isFunctionLike(n));
+            return parent && !!findAncestor(initial, n => n === stopAt || isFunctionLike(n) ? "quit" : n === parent);
         }
 
         function getAnyImportSyntax(node: Node): AnyImportSyntax {
@@ -7890,6 +7893,9 @@ namespace ts {
             // the type parameters introduced by enclosing declarations. We just pick the first
             // declaration since multiple declarations will all have the same parent anyway.
             return !!findAncestor(symbol.declarations[0], node => {
+                if (node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile) {
+                    return "quit";
+                }
                 switch (node.kind) {
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
@@ -7937,8 +7943,7 @@ namespace ts {
                         }
                         break;
                 }
-            },
-            node => node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.SourceFile);
+            });
         }
 
         function isTopLevelTypeAlias(symbol: Symbol) {
@@ -10384,8 +10389,7 @@ namespace ts {
             // The expression is restricted to a single identifier or a sequence of identifiers separated by periods
             return !!findAncestor(
                 node,
-                n => n.kind === SyntaxKind.TypeQuery,
-                n => n.kind !== SyntaxKind.TypeQuery && n.kind !== SyntaxKind.Identifier && n.kind !== SyntaxKind.QualifiedName);
+                n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
         }
 
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -11629,7 +11633,7 @@ namespace ts {
         }
 
         function hasParentWithAssignmentsMarked(node: Node) {
-            return !!findAncestor(node.parent, node => isFunctionLike(node) && getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked);
+            return !!findAncestor(node.parent, node => isFunctionLike(node) && !!(getNodeLinks(node).flags & NodeCheckFlags.AssignmentsMarked));
         }
 
         function markParameterAssignments(node: Node) {
@@ -11801,7 +11805,7 @@ namespace ts {
         }
 
         function isInsideFunction(node: Node, threshold: Node): boolean {
-            return !!findAncestor(node, isFunctionLike, n => n === threshold);
+            return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
         }
 
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
@@ -11875,7 +11879,7 @@ namespace ts {
 
             // at this point we know that node is the target of assignment
             // now check that modification happens inside the statement part of the ForStatement
-            return !!findAncestor(current, n => n === container.statement, n => n === container);
+            return !!findAncestor(current, n => n === container ? "quit" : n === container.statement);
         }
 
         function captureLexicalThis(node: Node, container: Node): void {
@@ -12057,7 +12061,7 @@ namespace ts {
         }
 
         function isInConstructorArgumentInitializer(node: Node, constructorDecl: Node): boolean {
-            return !!findAncestor(node, n => n.kind === SyntaxKind.Parameter, n => n === constructorDecl);
+            return !!findAncestor(node, n => n === constructorDecl ? "quit" : n.kind === SyntaxKind.Parameter);
         }
 
         function checkSuperExpression(node: Node): Type {
@@ -12083,7 +12087,7 @@ namespace ts {
                 // class B {
                 //     [super.foo()]() {}
                 // }
-                const current = findAncestor(node, n => n.kind === SyntaxKind.ComputedPropertyName, n => n === container);
+                const current = findAncestor(node, n => n === container ? "quit" : n.kind === SyntaxKind.ComputedPropertyName);
                 if (current && current.kind === SyntaxKind.ComputedPropertyName) {
                     error(node, Diagnostics.super_cannot_be_referenced_in_a_computed_property_name);
                 }
@@ -12687,7 +12691,7 @@ namespace ts {
         }
 
         function getContextualMapper(node: Node) {
-            node = findAncestor(node, n => n.contextualMapper);
+            node = findAncestor(node, n => !!n.contextualMapper);
             return node ? node.contextualMapper : identityMapper;
         }
 
@@ -19138,14 +19142,17 @@ namespace ts {
                             // - parameter is wrapped in function-like entity
                             if (findAncestor(
                                 n,
-                                current =>
-                                    isFunctionLike(current.parent) ||
-                                    // computed property names/initializers in instance property declaration of class like entities
-                                    // are executed in constructor and thus deferred
-                                    (current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                                     !(hasModifier(current.parent, ModifierFlags.Static)) &&
-                                     isClassLike(current.parent.parent)),
-                                n => n === node.initializer)) {
+                                current => {
+                                    if (current === node.initializer) {
+                                        return "quit";
+                                    }
+                                    return isFunctionLike(current.parent) ||
+                                        // computed property names/initializers in instance property declaration of class like entities
+                                        // are executed in constructor and thus deferred
+                                        (current.parent.kind === SyntaxKind.PropertyDeclaration &&
+                                         !(hasModifier(current.parent, ModifierFlags.Static)) &&
+                                         isClassLike(current.parent.parent));
+                                    })) {
                                 return;
                             }
                             // fall through to report error
@@ -19946,13 +19953,15 @@ namespace ts {
             if (!checkGrammarStatementInAmbientContext(node)) {
                 findAncestor(node.parent,
                              current => {
+                                 if (isFunctionLike(current)) {
+                                     return "quit";
+                                 }
                                  if (current.kind === SyntaxKind.LabeledStatement && (<LabeledStatement>current).label.text === node.label.text) {
                                      const sourceFile = getSourceFileOfNode(node);
                                      grammarErrorOnNode(node.label, Diagnostics.Duplicate_label_0, getTextOfNodeFromSourceText(sourceFile.text, node.label));
                                      return true;
                                  }
-                             },
-                             isFunctionLike);
+                             });
             }
 
             // ensure that label is unique
