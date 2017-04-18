@@ -1999,7 +1999,7 @@ namespace ts {
             fileName: string,
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorName: string): CodeAction[] {
+            refactorName: string): CodeAction[] | undefined {
 
             const context: RefactorContext = {
                 boundSourceFile: getValidSourceFile(fileName),

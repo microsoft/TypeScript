@@ -14,6 +14,11 @@ namespace ts {
         isApplicableForPositionOrRange(context: LightRefactorContext, positionOrRange: number | TextRange): boolean;
     }
 
+    /**
+     * The `GetApplicableRefactor` API call is supposed to be fast, therefore only syntactic checks should be conducted
+     * to see if a refactor is applicable. The `LightRefactorContent` limits the context information accesable to the
+     * refactor to enforce such design. Such context should not provide a bound source file with symbols.
+     */
     export interface LightRefactorContext {
         /**
          * The AST that was not bound, so the symbols associated with the nodes are not accessible.
@@ -55,9 +60,9 @@ namespace ts {
         export function getRefactorCodeActions(
             context: RefactorContext,
             positionOrRange: number | TextRange,
-            refactorName: string) {
+            refactorName: string): CodeAction[] | undefined {
 
-            const result: CodeAction[] = [];
+            let result: CodeAction[];
             const refactor = refactors.get(refactorName);
             if (!refactor) {
                 return undefined;
@@ -65,7 +70,7 @@ namespace ts {
 
             const codeActions = refactor.getCodeActions(context, positionOrRange);
             if (codeActions) {
-                addRange(result, codeActions);
+                addRange((result || (result = [])), codeActions);
             }
             return result;
         }

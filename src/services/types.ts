@@ -264,7 +264,7 @@ namespace ts {
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
 
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
-        getRefactorCodeActions(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string): CodeAction[];
+        getRefactorCodeActions(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string): CodeAction[] | undefined;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 

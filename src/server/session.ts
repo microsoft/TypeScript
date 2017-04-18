@@ -1447,7 +1447,7 @@ namespace ts.server {
         }
 
         private extractPositionAndRange(args: protocol.FileLocationOrRangeRequestArgs, scriptInfo: ScriptInfo): { position: number, textRange: TextRange } {
-            let position: number;
+            let position: number = undefined;
             let textRange: TextRange;
             if (this.isLocation(args)) {
                 position = getPosition(args);
@@ -1481,7 +1481,7 @@ namespace ts.server {
                 position || textRange,
                 args.refactorName
             );
-            return map(result, action => this.mapCodeAction(action, scriptInfo));
+            return result ? map(result, action => this.mapCodeAction(action, scriptInfo)) : undefined;
         }
 
         private getCodeFixes(args: protocol.CodeFixRequestArgs, simplifiedResult: boolean): protocol.CodeAction[] | CodeAction[] {
@@ -1507,12 +1507,24 @@ namespace ts.server {
         }
 
         private getStartAndEndPosition(args: protocol.FileRangeRequestArgs, scriptInfo: ScriptInfo) {
-            const startPosition = args.startPosition !== undefined
-                ? args.startPosition
-                : args.startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
-            const endPosition = args.endPosition !== undefined
-                ? args.endPosition
-                : args.startPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+            let startPosition: number = undefined, endPosition: number = undefined;
+            if (args.startPosition !== undefined ) {
+                startPosition = args.startPosition;
+            }
+            else {
+                startPosition = scriptInfo.lineOffsetToPosition(args.startLine, args.startOffset);
+                // save the result so we don't always recompute
+                args.startPosition = startPosition;
+            }
+
+            if (args.endPosition !== undefined) {
+                endPosition = args.endPosition;
+            }
+            else {
+                endPosition = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
+                args.endPosition = endPosition;
+            }
+
             return { startPosition, endPosition };
         }
 
