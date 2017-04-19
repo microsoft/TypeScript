@@ -1744,13 +1744,6 @@ interface Int8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2032,13 +2025,6 @@ interface Uint8Array {
       * Reverses the elements in an Array.
       */
     reverse(): Uint8Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -2327,13 +2313,6 @@ interface Uint8ClampedArray {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2615,13 +2594,6 @@ interface Int16Array {
       * Reverses the elements in an Array.
       */
     reverse(): Int16Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -2910,13 +2882,6 @@ interface Uint16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3198,13 +3163,6 @@ interface Int32Array {
       * Reverses the elements in an Array.
       */
     reverse(): Int32Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -3492,13 +3450,6 @@ interface Uint32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3780,13 +3731,6 @@ interface Float32Array {
       * Reverses the elements in an Array.
       */
     reverse(): Float32Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -4072,13 +4016,6 @@ interface Float64Array {
       * Reverses the elements in an Array.
       */
     reverse(): Float64Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
