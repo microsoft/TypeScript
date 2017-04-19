@@ -28,6 +28,7 @@
 /// <reference path='codeFixProvider.ts' />
 /// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
+/// <reference path='refactors\refactors.ts' />
 
 namespace ts {
     /** The version of the language service API */

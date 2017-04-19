@@ -1,6 +1,6 @@
 /* @internal */
 namespace ts {
-    interface Refactor {
+    export interface Refactor {
         /** An unique code associated with each refactor */
         name: string;
 
