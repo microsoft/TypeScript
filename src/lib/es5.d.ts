@@ -2316,7 +2316,7 @@ interface Uint8ClampedArray {
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8ClampedArray, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /**
       * Returns a section of an array.
