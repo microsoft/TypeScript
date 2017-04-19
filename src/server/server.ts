@@ -380,7 +380,7 @@ namespace ts.server {
             }
 
             this.projectService.updateTypingsForProject(response);
-            if (response.kind == ActionSet && this.socket) {
+            if (response.kind === ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);
             }
         }
@@ -401,7 +401,9 @@ namespace ts.server {
                 byteLength: Buffer.byteLength,
                 hrtime: process.hrtime,
                 logger,
-                canUseEvents});
+                canUseEvents,
+                globalPlugins: options.globalPlugins,
+                pluginProbeLocations: options.pluginProbeLocations});
 
             if (telemetryEnabled && typingsInstaller) {
                 typingsInstaller.setTelemetrySender(this);

@@ -557,7 +557,7 @@ namespace ts {
             // combine results of resolutions and predicted results
             let j = 0;
             for (let i = 0; i < result.length; i++) {
-                if (result[i] == predictedToResolveToAmbientModuleMarker) {
+                if (result[i] === predictedToResolveToAmbientModuleMarker) {
                     result[i] = undefined;
                 }
                 else {
@@ -930,20 +930,22 @@ namespace ts {
          */
         function shouldReportDiagnostic(diagnostic: Diagnostic) {
             const { file, start } = diagnostic;
-            const lineStarts = getLineStarts(file);
-            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
-            while (line > 0) {
-                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
-                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
-                if (!result) {
-                    // non-empty line
-                    return true;
+            if (file) {
+                const lineStarts = getLineStarts(file);
+                let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+                while (line > 0) {
+                    const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                    const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
+                    if (!result) {
+                        // non-empty line
+                        return true;
+                    }
+                    if (result[3]) {
+                        // @ts-ignore
+                        return false;
+                    }
+                    line--;
                 }
-                if (result[3]) {
-                    // @ts-ignore
-                    return false;
-                }
-                line--;
             }
             return true;
         }
@@ -967,8 +969,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-
-                        // Pass through
+                            // falls through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -1048,7 +1049,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                            // pass through
+                            // falls through
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
@@ -1096,7 +1097,8 @@ namespace ts {
                                 if (isConstValid) {
                                     continue;
                                 }
-                                // Fallthrough to report error
+                                // to report error,
+                                // falls through
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
@@ -1364,7 +1366,7 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth == 0) {
+                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth === 0) {
                     sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);

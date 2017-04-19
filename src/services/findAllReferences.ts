@@ -7,7 +7,7 @@ namespace ts.FindAllReferences {
         references: Entry[];
     }
 
-    type Definition =
+    export type Definition =
         | { type: "symbol"; symbol: Symbol; node: Node }
         | { type: "label"; node: Identifier }
         | { type: "keyword"; node: ts.Node }
@@ -20,7 +20,7 @@ namespace ts.FindAllReferences {
         node: Node;
         isInString?: true;
     }
-    interface SpanEntry {
+    export interface SpanEntry {
         type: "span";
         fileName: string;
         textSpan: TextSpan;
@@ -1234,7 +1234,7 @@ namespace ts.FindAllReferences.Core {
                 if (isObjectLiteralMethod(searchSpaceNode)) {
                     break;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.Constructor:
@@ -1247,7 +1247,7 @@ namespace ts.FindAllReferences.Core {
                 if (isExternalModule(<SourceFile>searchSpaceNode)) {
                     return undefined;
                 }
-            // Fall through
+                // falls through
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 break;

@@ -37,7 +37,7 @@ namespace ts {
          *
          * Or undefined value if there was no change.
          */
-        getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+        getChangeRange(oldSnapshot: ScriptSnapshotShim): string | undefined;
 
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
@@ -292,8 +292,7 @@ namespace ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
-            // TODO: should this be '==='?
-            if (encoded == null) {
+            if (encoded === null) {
                 return null;
             }
 
@@ -381,8 +380,7 @@ namespace ts {
 
         public getCompilationSettings(): CompilerOptions {
             const settingsJson = this.shimHost.getCompilationSettings();
-            // TODO: should this be '==='?
-            if (settingsJson == null || settingsJson == "") {
+            if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
             const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
@@ -416,7 +414,7 @@ namespace ts {
 
         public getLocalizedDiagnosticMessages(): any {
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
-            if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
+            if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
             }
 

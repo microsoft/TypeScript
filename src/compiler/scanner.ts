@@ -308,6 +308,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
@@ -454,6 +455,7 @@ namespace ts {
                       if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                           pos++;
                       }
+                      // falls through
                   case CharacterCodes.lineFeed:
                       pos++;
                       if (stopAfterLineBreak) {
@@ -625,6 +627,7 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -1072,7 +1075,7 @@ namespace ts {
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // fall through
+                    // falls through
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
@@ -1459,6 +1462,7 @@ namespace ts {
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
                         // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
+                        // falls through
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:

@@ -322,7 +322,7 @@ namespace ts {
                     nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
 
             case SyntaxKind.ParenthesizedType:
-                Debug.fail("not implemented.");
+                throw Debug.fail("not implemented.");
 
             case SyntaxKind.TypeOperator:
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
@@ -885,7 +885,7 @@ namespace ts {
             return initial;
         }
 
-        const reduceNodes: (nodes: NodeArray<Node>, f: (memo: T, node: Node | NodeArray<Node>) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
+        const reduceNodes: (nodes: NodeArray<Node>, f: ((memo: T, node: Node) => T) | ((memo: T, node: NodeArray<Node>) => T), initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
         const cbNodes = cbNodeArray || cbNode;
         const kind = node.kind;
 
@@ -1289,6 +1289,7 @@ namespace ts {
 
             case SyntaxKind.JsxAttributes:
                 result = reduceNodes((<JsxAttributes>node).properties, cbNodes, result);
+                break;
 
             case SyntaxKind.JsxClosingElement:
                 result = reduceNode((<JsxClosingElement>node).tagName, cbNode, result);
@@ -1310,7 +1311,7 @@ namespace ts {
             // Clauses
             case SyntaxKind.CaseClause:
                 result = reduceNode((<CaseClause>node).expression, cbNode, result);
-                // fall-through
+                // falls through
 
             case SyntaxKind.DefaultClause:
                 result = reduceNodes((<CaseClause | DefaultClause>node).statements, cbNodes, result);
@@ -1344,6 +1345,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
                 result = reduceNode((<EnumMember>node).name, cbNode, result);
                 result = reduceNode((<EnumMember>node).initializer, cbNode, result);
+                break;
 
             // Top-level nodes
             case SyntaxKind.SourceFile:

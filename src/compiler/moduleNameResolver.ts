@@ -378,7 +378,7 @@ namespace ts {
                     directoryPathMap.set(parent, result);
                     current = parent;
 
-                    if (current == commonPrefix) {
+                    if (current === commonPrefix) {
                         break;
                     }
                 }
@@ -954,8 +954,23 @@ namespace ts {
                 }
                 nodeModulesAtTypesExists = false;
             }
-            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, moduleName, nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
+            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
         }
+    }
+
+    /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
+    function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
+        if (startsWith(moduleName, "@")) {
+            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            if (replaceSlash !== moduleName) {
+                const mangled = replaceSlash.slice(1); // Take off the "@"
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+                }
+                return mangled;
+            }
+        }
+        return moduleName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

@@ -57,7 +57,7 @@ namespace ts {
         // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray
         // callback parameters, but that causes a closure allocation for each invocation with noticeable effects
         // on performance.
-        const visitNodes: (cb: (node: Node | Node[]) => T, nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
+        const visitNodes: (cb: ((node: Node) => T) | ((node: Node[]) => T), nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
         const cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
@@ -3573,6 +3573,7 @@ namespace ts {
                     if (isAwaitExpression()) {
                         return parseAwaitExpression();
                     }
+                    // falls through
                 default:
                     return parseIncrementExpression();
             }
@@ -3606,8 +3607,8 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
-                // We are in JSX context and the token is part of JSXElement.
-                // Fall through
+                    // We are in JSX context and the token is part of JSXElement.
+                    // falls through
                 default:
                     return true;
             }
@@ -6571,7 +6572,8 @@ namespace ts {
                                     indent += scanner.getTokenText().length;
                                     break;
                                 }
-                                // FALLTHROUGH otherwise to record the * as a comment
+                                // record the * as a comment
+                                // falls through
                             default:
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                                 pushComment(scanner.getTokenText());
@@ -6797,6 +6799,7 @@ namespace ts {
                                     break;
                                 case SyntaxKind.Identifier:
                                     canParseTag = false;
+                                    break;
                                 case SyntaxKind.EndOfFileToken:
                                     break;
                             }
