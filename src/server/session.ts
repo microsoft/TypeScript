@@ -979,8 +979,8 @@ namespace ts.server {
          * @param fileName is the name of the file to be opened
          * @param fileContent is a version of the file content that is known to be more up to date than the one on disk
          */
-        private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind) {
-            const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind);
+        private openClientFile(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: NormalizedPath) {
+            const { configFileName, configFileErrors } = this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
             if (this.eventHandler) {
                 this.eventHandler({
                     eventName: "configFileDiag",
@@ -1659,7 +1659,11 @@ namespace ts.server {
                 return this.requiredResponse(this.getRenameInfo(request.arguments));
             },
             [CommandNames.Open]: (request: protocol.OpenRequest) => {
-                this.openClientFile(toNormalizedPath(request.arguments.file), request.arguments.fileContent, convertScriptKindName(request.arguments.scriptKindName));
+                this.openClientFile(
+                    toNormalizedPath(request.arguments.file),
+                    request.arguments.fileContent,
+                    convertScriptKindName(request.arguments.scriptKindName),
+                    request.arguments.projectRootPath ? toNormalizedPath(request.arguments.projectRootPath) : undefined);
                 return this.notRequired();
             },
             [CommandNames.Quickinfo]: (request: protocol.QuickInfoRequest) => {

@@ -3493,6 +3493,30 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("searching for config file", () => {
+        it("should stop at projectRootPath if given", () => {
+            const f1 = {
+                path: "/a/file1.ts",
+                content: ""
+            };
+            const configFile = {
+                path: "/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
+
+            checkNumberOfConfiguredProjects(service, 0);
+            checkNumberOfInferredProjects(service, 1);
+
+            service.closeClientFile(f1.path);
+            service.openClientFile(f1.path);
+            checkNumberOfConfiguredProjects(service, 1);
+            checkNumberOfInferredProjects(service, 0);
+        });
+    });
+
     describe("cancellationToken", () => {
         it("is attached to request", () => {
             const f1 = {
