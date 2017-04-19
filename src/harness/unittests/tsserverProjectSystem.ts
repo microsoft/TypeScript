@@ -3631,7 +3631,7 @@ namespace ts.projectSystem {
                 host.runQueuedImmediateCallbacks();
                 assert.equal(host.getOutput().length, 2, "expect 2 messages");
                 const e3 = <protocol.Event>getMessage(0);
-                assert.equal(e3.event, "refactorDiag");
+                assert.equal(e3.event, "codeFixDiag");
                 verifyRequestCompleted(getErrId, 1);
 
                 cancellationToken.resetToken();

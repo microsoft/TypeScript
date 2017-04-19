@@ -481,16 +481,26 @@ namespace FourSlash {
         private getDiagnostics(fileName: string): ts.Diagnostic[] {
             const syntacticErrors = this.languageService.getSyntacticDiagnostics(fileName);
             const semanticErrors = this.languageService.getSemanticDiagnostics(fileName);
+            const codeFixDiagnostics = this.getCodeFixDiagnostics(fileName);
 
             const diagnostics: ts.Diagnostic[] = [];
             diagnostics.push.apply(diagnostics, syntacticErrors);
             diagnostics.push.apply(diagnostics, semanticErrors);
+            diagnostics.push.apply(diagnostics, codeFixDiagnostics);
 
             return diagnostics;
         }
 
         private getCodeFixDiagnostics(fileName: string): ts.Diagnostic[] {
-            return this.languageService.getCodeFixDiagnostics(fileName);
+            let result: ts.Diagnostic[];
+
+            try {
+                result = this.languageService.getCodeFixDiagnostics(fileName);
+            }
+            catch(e) {
+                result = [];
+            }
+            return result;
         }
 
         private getAllDiagnostics(): ts.Diagnostic[] {

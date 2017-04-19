@@ -3349,7 +3349,7 @@ namespace ts {
         Warning,
         Error,
         Message,
-        Refactor
+        CodeFix
     }
 
     export enum ModuleResolutionKind {

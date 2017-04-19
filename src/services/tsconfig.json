@@ -93,6 +93,7 @@
         "codefixes/helpers.ts",
         "codefixes/importFixes.ts",
         "codefixes/unusedIdentifierFixes.ts",
-        "codefixes/disableJsDiagnostics.ts"
+        "codefixes/disableJsDiagnostics.ts",
+        "codefixes/convertFunctionToEs6Class.ts"
     ]
 }

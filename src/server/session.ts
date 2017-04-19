@@ -506,7 +506,7 @@ namespace ts.server {
                         next.immediate(() => {
                             this.semanticCheck(checkSpec.fileName, checkSpec.project);
                             next.immediate(() => {
-                                this.refactorDiagnosticsCheck(checkSpec.fileName, checkSpec.project);
+                                this.codeFixDiagnosticsCheck(checkSpec.fileName, checkSpec.project);
                                 if (checkList.length > index) {
                                     next.delay(followMs, checkOne);
                                 }
@@ -1435,11 +1435,11 @@ namespace ts.server {
             return ts.getSupportedCodeFixes();
         }
 
-        private refactorDiagnosticsCheck(file: NormalizedPath, project: Project): void {
-            const refactorDiags = project.getLanguageService().getCodeFixDiagnostics(file);
-            const diagnostics = refactorDiags.map(d => formatDiag(file, project, d));
+        private codeFixDiagnosticsCheck(file: NormalizedPath, project: Project): void {
+            const codeFixDiags = project.getLanguageService().getCodeFixDiagnostics(file);
+            const diagnostics = codeFixDiags.map(d => formatDiag(file, project, d));
 
-            this.event<protocol.DiagnosticEventBody>({ file, diagnostics }, "refactorDiag");
+            this.event<protocol.DiagnosticEventBody>({ file, diagnostics }, "codeFixDiag");
         }
 
         private isLocation(locationOrSpan: protocol.FileLocationOrRangeRequestArgs): locationOrSpan is protocol.FileLocationRequestArgs {
