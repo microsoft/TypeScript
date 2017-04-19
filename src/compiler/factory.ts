@@ -480,8 +480,9 @@ namespace ts {
 
     // Signature elements
 
-    export function createPropertySignature(name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
+    export function createPropertySignature(modifiers: Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
         const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
+        propertySignature.modifiers = asNodeArray(modifiers);
         propertySignature.name = asName(name);
         propertySignature.questionToken = questionToken;
         propertySignature.type = type;
@@ -489,12 +490,13 @@ namespace ts {
         return propertySignature;
     }
 
-    export function updatePropertySignature(node: PropertySignature, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
-        return node.name !== name
+    export function updatePropertySignature(node: PropertySignature, modifiers: Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+        return node.modifiers !== modifiers
+            || node.name !== name
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createPropertySignature(name, questionToken, type, initializer), node)
+            ? updateNode(createPropertySignature(modifiers, name, questionToken, type, initializer), node)
             : node;
     }
 

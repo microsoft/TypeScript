@@ -355,6 +355,8 @@ namespace ts {
 
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
+                    // TODO: tokenVisitor or visitor for a nodearray of tokens?
+                    nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
                     visitNode((<PropertySignature>node).name, visitor, isPropertyName),
                     visitNode((<PropertySignature>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertySignature>node).type, visitor, isTypeNode),

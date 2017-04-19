@@ -2602,14 +2602,17 @@ namespace ts {
                             }
                         }
                         else {
-
                             // TODO(aozgaa): should we create a node with explicit or implict any?
                             const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
-                            typeElements.push(createPropertySignature(
+
+                            const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
+                            const propertySignature = createPropertySignature(
+                                modifiers,
                                 propertyName,
                                 optionalToken,
                                 propertyTypeNode,
-                               /*initializer*/undefined));
+                               /*initializer*/undefined);
+                            typeElements.push(propertySignature);
                         }
                     }
                     return typeElements.length ? typeElements : undefined;
