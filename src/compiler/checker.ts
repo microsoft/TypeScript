@@ -9620,7 +9620,6 @@ namespace ts {
                     }
                 }
 
-                Debug.assert(score < types.length, "types.length - 1 is the maximum score, given that getCommonSuperType returned false");
                 Debug.assert(!!downfallType, "If there is no common supertype, each type should have a downfallType");
 
                 if (score > bestSupertypeScore) {
@@ -9629,6 +9628,7 @@ namespace ts {
                     bestSupertypeScore = score;
                 }
 
+                Debug.assert(bestSupertypeScore < types.length, "types.length - 1 is the maximum score, given that getCommonSuperType returned false");
                 if (bestSupertypeScore === types.length - 1) {
                     break;
                 }
