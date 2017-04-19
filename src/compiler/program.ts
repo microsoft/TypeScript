@@ -6,6 +6,23 @@ namespace ts {
     const emptyArray: any[] = [];
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
+
+    const enum StructuralChangesFromOldProgram {
+        None = 0,
+        NoOldProgram = 1,
+        ModuleResolutionOptions = 2,
+        RootNames = 3,
+        TypesOptions = 4,
+        SourceFileRemoved = 5,
+        HasNoDefaultLib = 6,
+        TripleSlashReferences = 7,
+        Imports = 8,
+        ModuleAugmentations = 9,
+        TripleSlashTypesReferences = 10,
+
+        CannotReuseResolution = NoOldProgram | ModuleResolutionOptions | RootNames | TypesOptions | SourceFileRemoved
+    }
+
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
             const fileName = combinePaths(searchPath, configName);
@@ -298,6 +315,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+        let modifiedFilePaths: Path[] | undefined;
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
@@ -367,7 +385,11 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
-        if (!tryReuseStructureFromOldProgram()) {
+        const structuralChanges = tryReuseStructureFromOldProgram();
+        if (structuralChanges === StructuralChangesFromOldProgram.None) {
+            Debug.assert(oldProgram.structureIsReused === true);
+        }
+        else {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -476,16 +498,34 @@ namespace ts {
         }
 
         interface OldProgramState {
-            program: Program;
+            program: Program | undefined;
             file: SourceFile;
             modifiedFilePaths: Path[];
         }
 
-        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState?: OldProgramState) {
-            if (!oldProgramState && !file.ambientModuleNames.length) {
-                // if old program state is not supplied and file does not contain locally defined ambient modules
-                // then the best we can do is fallback to the default logic
+        function createOldProgramState(
+            program: Program | undefined,
+            file: SourceFile,
+            modifiedFilePaths: Path[]): OldProgramState {
+            return { program, file, modifiedFilePaths };
+        }
+
+        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState: OldProgramState) {
+            if (structuralChanges & StructuralChangesFromOldProgram.CannotReuseResolution && !file.ambientModuleNames.length) {
+                // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
+                // the best we can do is fallback to the default logic.
                 return resolveModuleNamesWorker(moduleNames, containingFile);
+            }
+
+            const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
+            if (oldSourceFile === file) {
+                // `file` is unchanged from the old program, so we can reuse old module resolutions.
+                const oldSourceFileResult: ResolvedModuleFull[] = [];
+                for (const moduleName of moduleNames) {
+                    const resolvedModule = oldSourceFile.resolvedModules.get(moduleName);
+                    oldSourceFileResult.push(resolvedModule);
+                }
+                return oldSourceFileResult;
             }
 
             // at this point we know that either
@@ -535,7 +575,7 @@ namespace ts {
                         // since they are known to be unknown
                         unknownModuleNames = moduleNames.slice(0, i);
                     }
-                    // mark prediced resolution in the result list
+                    // Mark predicted resolution in the result list.
                     result[i] = predictedToResolveToAmbientModuleMarker;
                 }
                 else if (unknownModuleNames) {
@@ -568,16 +608,13 @@ namespace ts {
             Debug.assert(j === resolutions.length);
             return result;
 
-            function checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState?: OldProgramState): boolean {
-                if (!oldProgramState) {
-                    return false;
-                }
+            function checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
                 const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
                 if (resolutionToFile) {
                     // module used to be resolved to file - ignore it
                     return false;
                 }
-                const ambientModule = oldProgram.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
+                const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
                 if (!(ambientModule && ambientModule.declarations)) {
                     return false;
                 }
@@ -599,16 +636,16 @@ namespace ts {
             }
         }
 
-        function tryReuseStructureFromOldProgram(): boolean {
+        function tryReuseStructureFromOldProgram(): StructuralChangesFromOldProgram {
             if (!oldProgram) {
-                return false;
+                return StructuralChangesFromOldProgram.NoOldProgram;
             }
 
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if (changesAffectModuleResolution(oldOptions, options)) {
-                return false;
+                return StructuralChangesFromOldProgram.ModuleResolutionOptions;
             }
 
             Debug.assert(!oldProgram.structureIsReused);
@@ -616,17 +653,18 @@ namespace ts {
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
-                return false;
+                return StructuralChangesFromOldProgram.RootNames;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
-                return false;
+                return StructuralChangesFromOldProgram.TypesOptions;
             }
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
             const filePaths: Path[] = [];
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
+            let structuralChanges = StructuralChangesFromOldProgram.None;
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
                 let newSourceFile = host.getSourceFileByPath
@@ -634,64 +672,70 @@ namespace ts {
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
 
                 if (!newSourceFile) {
-                    return false;
-                }
-
-                newSourceFile.path = oldSourceFile.path;
-                filePaths.push(newSourceFile.path);
-
-                if (oldSourceFile !== newSourceFile) {
-                    if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
-                        // value of no-default-lib has changed
-                        // this will affect if default library is injected into the list of files
-                        return false;
-                    }
-
-                    // check tripleslash references
-                    if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
-                        // tripleslash references has changed
-                        return false;
-                    }
-
-                    // check imports and module augmentations
-                    collectExternalModuleReferences(newSourceFile);
-                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
-                        // imports has changed
-                        return false;
-                    }
-                    if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
-                        // moduleAugmentations has changed
-                        return false;
-                    }
-
-                    if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
-                        // 'types' references has changed
-                        return false;
-                    }
-
-                    // tentatively approve the file
-                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                    structuralChanges |= StructuralChangesFromOldProgram.SourceFileRemoved;
                 }
                 else {
-                    // file has no changes - use it as is
-                    newSourceFile = oldSourceFile;
-                }
+                    newSourceFile.path = oldSourceFile.path;
+                    filePaths.push(newSourceFile.path);
 
-                // if file has passed all checks it should be safe to reuse it
-                newSourceFiles.push(newSourceFile);
+                    if (oldSourceFile !== newSourceFile) {
+                        if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
+                            // value of no-default-lib has changed
+                            // this will affect if default library is injected into the list of files
+                            structuralChanges |= StructuralChangesFromOldProgram.HasNoDefaultLib;
+                        }
+
+                        // check tripleslash references
+                        if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
+                            // tripleslash references has changed
+                            structuralChanges |= StructuralChangesFromOldProgram.TripleSlashReferences;
+                        }
+
+                        // check imports and module augmentations
+                        collectExternalModuleReferences(newSourceFile);
+                        if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                            // imports has changed
+                            structuralChanges |= StructuralChangesFromOldProgram.Imports;
+                        }
+                        if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                            // moduleAugmentations has changed
+                            structuralChanges |= StructuralChangesFromOldProgram.ModuleAugmentations;
+                        }
+
+                        if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
+                            // 'types' references has changed
+                            structuralChanges |= StructuralChangesFromOldProgram.TripleSlashTypesReferences;
+                        }
+
+                        // tentatively approve the file
+                        modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                    }
+                    else {
+                        // file has no changes - use it as is
+                        newSourceFile = oldSourceFile;
+                    }
+
+                    // if file has passed all checks it should be safe to reuse it
+                    newSourceFiles.push(newSourceFile);
+                }
             }
 
-            const modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
+            if (structuralChanges !== StructuralChangesFromOldProgram.None) {
+                return structuralChanges;
+            }
+
+            modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
-                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, { file: oldSourceFile, program: oldProgram, modifiedFilePaths });
+                    const oldProgramState = createOldProgramState(oldProgram, oldSourceFile, modifiedFilePaths);
+                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                     if (resolutionsChanged) {
-                        return false;
+                        return StructuralChangesFromOldProgram.Imports | StructuralChangesFromOldProgram.ModuleAugmentations;
                     }
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
@@ -700,7 +744,7 @@ namespace ts {
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                     if (resolutionsChanged) {
-                        return false;
+                        return StructuralChangesFromOldProgram.TripleSlashTypesReferences;
                     }
                 }
                 // pass the cache of module/types resolutions from the old source file
@@ -722,7 +766,7 @@ namespace ts {
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
             oldProgram.structureIsReused = true;
 
-            return true;
+            return StructuralChangesFromOldProgram.None;
         }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
@@ -1521,11 +1565,11 @@ namespace ts {
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = createMap<ResolvedModuleFull>();
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
                 const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file);
+                const oldProgramState = createOldProgramState(oldProgram, file, modifiedFilePaths);
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
