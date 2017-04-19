@@ -521,9 +521,10 @@ namespace ts {
             // emit name if
             // - node has a name
             // - node has static initializers
+            // - node has a member that is decorated
             //
             let name = node.name;
-            if (!name && staticProperties.length > 0) {
+            if (!name && (staticProperties.length > 0 || childIsDecorated(node))) {
                 name = getGeneratedNameForNode(node);
             }
 
