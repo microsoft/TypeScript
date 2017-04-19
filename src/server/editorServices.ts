@@ -827,7 +827,7 @@ namespace ts.server {
         // The server must start searching from the directory containing
         // the newly opened file.
         private findConfigFile(searchPath: NormalizedPath, projectRootPath?: NormalizedPath): NormalizedPath {
-            while (true && (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0)) {
+            while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 if (this.host.fileExists(tsconfigFileName)) {
                     return tsconfigFileName;
