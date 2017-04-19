@@ -954,7 +954,9 @@ namespace ts {
 
         function emitTypeLiteral(node: TypeLiteralNode) {
             write("{");
-            emitList(node, node.members, ListFormat.TypeLiteralMembers);
+            if (node.members.length > 0) {
+                emitList(node, node.members, ListFormat.SingleLineTypeLiteralMembers);
+            }
             write("}");
         }
 
@@ -2945,7 +2947,8 @@ namespace ts {
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings,
         HeritageClauses = SingleLine | SpaceBetweenSiblings,
-        TypeLiteralMembers = SpaceBetweenBraces | SpaceBetweenSiblings | Indented, // MultiLine | Indented,
+        SingleLineTypeLiteralMembers = SpaceBetweenBraces | SpaceBetweenSiblings | Indented, // MultiLine | Indented,
+        MultiLineTypeLiteralMembers = MultiLine | Indented,
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
