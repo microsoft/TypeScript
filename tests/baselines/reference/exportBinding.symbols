@@ -1,0 +1,14 @@
+=== tests/cases/conformance/es6/modules/exportBinding.ts ===
+export { x }
+>x : Symbol(x, Decl(exportBinding.ts, 0, 8))
+
+const x = 'x'
+>x : Symbol(x, Decl(exportBinding.ts, 1, 5))
+
+export { Y as Z }
+>Y : Symbol(Z, Decl(exportBinding.ts, 3, 8))
+>Z : Symbol(Z, Decl(exportBinding.ts, 3, 8))
+
+class Y {}
+>Y : Symbol(Y, Decl(exportBinding.ts, 3, 17))
+

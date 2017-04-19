@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImportsWithContextualKeywordNames01.ts] ////
 
 //// [t1.ts]
-
 let set = {
     set foo(x: number) {
     }

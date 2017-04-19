@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationEmitExportAssignment.ts] ////
 
 //// [utils.ts]
-
 export function foo() { }
 export function bar() { }
 export interface Buzz { }

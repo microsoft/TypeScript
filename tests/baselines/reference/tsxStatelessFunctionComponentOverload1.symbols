@@ -1,176 +1,175 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react')
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 declare function OneThing(k: {yxx: string}): JSX.Element;
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->k : Symbol(k, Decl(file.tsx, 3, 26))
->yxx : Symbol(yxx, Decl(file.tsx, 3, 30))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>k : Symbol(k, Decl(file.tsx, 2, 26))
+>yxx : Symbol(yxx, Decl(file.tsx, 2, 30))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->l : Symbol(l, Decl(file.tsx, 4, 26))
->yy : Symbol(yy, Decl(file.tsx, 4, 30))
->yy1 : Symbol(yy1, Decl(file.tsx, 4, 41))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>l : Symbol(l, Decl(file.tsx, 3, 26))
+>yy : Symbol(yy, Decl(file.tsx, 3, 30))
+>yy1 : Symbol(yy1, Decl(file.tsx, 3, 41))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Element;
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->l : Symbol(l, Decl(file.tsx, 5, 26))
->yy : Symbol(yy, Decl(file.tsx, 5, 30))
->yy1 : Symbol(yy1, Decl(file.tsx, 5, 41))
->yy2 : Symbol(yy2, Decl(file.tsx, 5, 54))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>l : Symbol(l, Decl(file.tsx, 4, 26))
+>yy : Symbol(yy, Decl(file.tsx, 4, 30))
+>yy1 : Symbol(yy1, Decl(file.tsx, 4, 41))
+>yy2 : Symbol(yy2, Decl(file.tsx, 4, 54))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element;
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->l1 : Symbol(l1, Decl(file.tsx, 6, 26))
->data : Symbol(data, Decl(file.tsx, 6, 31))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>l1 : Symbol(l1, Decl(file.tsx, 5, 26))
+>data : Symbol(data, Decl(file.tsx, 5, 31))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 // OK
 const c1 = <OneThing yxx='ok' />
->c1 : Symbol(c1, Decl(file.tsx, 9, 5))
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->yxx : Symbol(yxx, Decl(file.tsx, 9, 20))
+>c1 : Symbol(c1, Decl(file.tsx, 8, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>yxx : Symbol(yxx, Decl(file.tsx, 8, 20))
 
 const c2 = <OneThing yy={100}  yy1="hello"/>
->c2 : Symbol(c2, Decl(file.tsx, 10, 5))
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->yy : Symbol(yy, Decl(file.tsx, 10, 20))
->yy1 : Symbol(yy1, Decl(file.tsx, 10, 29))
+>c2 : Symbol(c2, Decl(file.tsx, 9, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>yy : Symbol(yy, Decl(file.tsx, 9, 20))
+>yy1 : Symbol(yy1, Decl(file.tsx, 9, 29))
 
 const c3 = <OneThing yxx="hello" ignore-prop />
->c3 : Symbol(c3, Decl(file.tsx, 11, 5))
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->yxx : Symbol(yxx, Decl(file.tsx, 11, 20))
->ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 11, 32))
+>c3 : Symbol(c3, Decl(file.tsx, 10, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>yxx : Symbol(yxx, Decl(file.tsx, 10, 20))
+>ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 10, 32))
 
 const c4 = <OneThing data="hello" data-prop />
->c4 : Symbol(c4, Decl(file.tsx, 12, 5))
->OneThing : Symbol(OneThing, Decl(file.tsx, 1, 31), Decl(file.tsx, 3, 57), Decl(file.tsx, 4, 69), Decl(file.tsx, 5, 83))
->data : Symbol(data, Decl(file.tsx, 12, 20))
->data-prop : Symbol(data-prop, Decl(file.tsx, 12, 33))
+>c4 : Symbol(c4, Decl(file.tsx, 11, 5))
+>OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 57), Decl(file.tsx, 3, 69), Decl(file.tsx, 4, 83))
+>data : Symbol(data, Decl(file.tsx, 11, 20))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 11, 33))
 
 declare function TestingOneThing({y1: string}): JSX.Element;
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
 >y1 : Symbol(y1)
->string : Symbol(string, Decl(file.tsx, 14, 34))
+>string : Symbol(string, Decl(file.tsx, 13, 34))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->j : Symbol(j, Decl(file.tsx, 15, 33))
->yy : Symbol(yy, Decl(file.tsx, 15, 58))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>j : Symbol(j, Decl(file.tsx, 14, 33))
+>yy : Symbol(yy, Decl(file.tsx, 14, 58))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->n : Symbol(n, Decl(file.tsx, 16, 33))
->yy : Symbol(yy, Decl(file.tsx, 16, 37))
->direction : Symbol(direction, Decl(file.tsx, 16, 48))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>n : Symbol(n, Decl(file.tsx, 15, 33))
+>yy : Symbol(yy, Decl(file.tsx, 15, 37))
+>direction : Symbol(direction, Decl(file.tsx, 15, 48))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->n : Symbol(n, Decl(file.tsx, 17, 33))
->yy : Symbol(yy, Decl(file.tsx, 17, 37))
->name : Symbol(name, Decl(file.tsx, 17, 48))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>n : Symbol(n, Decl(file.tsx, 16, 33))
+>yy : Symbol(yy, Decl(file.tsx, 16, 37))
+>name : Symbol(name, Decl(file.tsx, 16, 48))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 // OK
 const d1 = <TestingOneThing y1 extra-data />;
->d1 : Symbol(d1, Decl(file.tsx, 20, 5))
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->y1 : Symbol(y1, Decl(file.tsx, 20, 27))
->extra-data : Symbol(extra-data, Decl(file.tsx, 20, 30))
+>d1 : Symbol(d1, Decl(file.tsx, 19, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>y1 : Symbol(y1, Decl(file.tsx, 19, 27))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 19, 30))
 
 const d2 = <TestingOneThing extra-data="hello" />;
->d2 : Symbol(d2, Decl(file.tsx, 21, 5))
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->extra-data : Symbol(extra-data, Decl(file.tsx, 21, 27))
+>d2 : Symbol(d2, Decl(file.tsx, 20, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 20, 27))
 
 const d3 = <TestingOneThing extra-data="hello" yy="hihi" />;
->d3 : Symbol(d3, Decl(file.tsx, 22, 5))
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->extra-data : Symbol(extra-data, Decl(file.tsx, 22, 27))
->yy : Symbol(yy, Decl(file.tsx, 22, 46))
+>d3 : Symbol(d3, Decl(file.tsx, 21, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 21, 27))
+>yy : Symbol(yy, Decl(file.tsx, 21, 46))
 
 const d4 = <TestingOneThing extra-data="hello" yy={9} direction={10} />;
->d4 : Symbol(d4, Decl(file.tsx, 23, 5))
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->extra-data : Symbol(extra-data, Decl(file.tsx, 23, 27))
->yy : Symbol(yy, Decl(file.tsx, 23, 46))
->direction : Symbol(direction, Decl(file.tsx, 23, 53))
+>d4 : Symbol(d4, Decl(file.tsx, 22, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 22, 27))
+>yy : Symbol(yy, Decl(file.tsx, 22, 46))
+>direction : Symbol(direction, Decl(file.tsx, 22, 53))
 
 const d5 = <TestingOneThing extra-data="hello" yy="hello" name="Bob" />;
->d5 : Symbol(d5, Decl(file.tsx, 24, 5))
->TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 12, 46), Decl(file.tsx, 14, 60), Decl(file.tsx, 15, 86), Decl(file.tsx, 16, 83))
->extra-data : Symbol(extra-data, Decl(file.tsx, 24, 27))
->yy : Symbol(yy, Decl(file.tsx, 24, 46))
->name : Symbol(name, Decl(file.tsx, 24, 57))
+>d5 : Symbol(d5, Decl(file.tsx, 23, 5))
+>TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 11, 46), Decl(file.tsx, 13, 60), Decl(file.tsx, 14, 86), Decl(file.tsx, 15, 83))
+>extra-data : Symbol(extra-data, Decl(file.tsx, 23, 27))
+>yy : Symbol(yy, Decl(file.tsx, 23, 46))
+>name : Symbol(name, Decl(file.tsx, 23, 57))
 
 
 declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->a : Symbol(a, Decl(file.tsx, 27, 33))
->y1 : Symbol(y1, Decl(file.tsx, 27, 37))
->y2 : Symbol(y2, Decl(file.tsx, 27, 49))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>a : Symbol(a, Decl(file.tsx, 26, 33))
+>y1 : Symbol(y1, Decl(file.tsx, 26, 37))
+>y2 : Symbol(y2, Decl(file.tsx, 26, 49))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->a : Symbol(a, Decl(file.tsx, 28, 33))
->y1 : Symbol(y1, Decl(file.tsx, 28, 37))
->y2 : Symbol(y2, Decl(file.tsx, 28, 49))
->y3 : Symbol(y3, Decl(file.tsx, 28, 62))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>a : Symbol(a, Decl(file.tsx, 27, 33))
+>y1 : Symbol(y1, Decl(file.tsx, 27, 37))
+>y2 : Symbol(y2, Decl(file.tsx, 27, 49))
+>y3 : Symbol(y3, Decl(file.tsx, 27, 62))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
 
 // OK
 const e1 = <TestingOptional />
->e1 : Symbol(e1, Decl(file.tsx, 31, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
+>e1 : Symbol(e1, Decl(file.tsx, 30, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
 
 const e2 = <TestingOptional extra-prop/>
->e2 : Symbol(e2, Decl(file.tsx, 32, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->extra-prop : Symbol(extra-prop, Decl(file.tsx, 32, 27))
+>e2 : Symbol(e2, Decl(file.tsx, 31, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>extra-prop : Symbol(extra-prop, Decl(file.tsx, 31, 27))
 
 const e3 = <TestingOptional y1="hello"/>
->e3 : Symbol(e3, Decl(file.tsx, 33, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->y1 : Symbol(y1, Decl(file.tsx, 33, 27))
+>e3 : Symbol(e3, Decl(file.tsx, 32, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>y1 : Symbol(y1, Decl(file.tsx, 32, 27))
 
 const e4 = <TestingOptional y1="hello" y2={1000} />
->e4 : Symbol(e4, Decl(file.tsx, 34, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->y1 : Symbol(y1, Decl(file.tsx, 34, 27))
->y2 : Symbol(y2, Decl(file.tsx, 34, 38))
+>e4 : Symbol(e4, Decl(file.tsx, 33, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>y1 : Symbol(y1, Decl(file.tsx, 33, 27))
+>y2 : Symbol(y2, Decl(file.tsx, 33, 38))
 
 const e5 = <TestingOptional y1 y3/>
->e5 : Symbol(e5, Decl(file.tsx, 35, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->y1 : Symbol(y1, Decl(file.tsx, 35, 27))
->y3 : Symbol(y3, Decl(file.tsx, 35, 30))
+>e5 : Symbol(e5, Decl(file.tsx, 34, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>y1 : Symbol(y1, Decl(file.tsx, 34, 27))
+>y3 : Symbol(y3, Decl(file.tsx, 34, 30))
 
 const e6 = <TestingOptional y1 y3 y2={10} />
->e6 : Symbol(e6, Decl(file.tsx, 36, 5))
->TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 24, 72), Decl(file.tsx, 27, 77))
->y1 : Symbol(y1, Decl(file.tsx, 36, 27))
->y3 : Symbol(y3, Decl(file.tsx, 36, 30))
->y2 : Symbol(y2, Decl(file.tsx, 36, 33))
+>e6 : Symbol(e6, Decl(file.tsx, 35, 5))
+>TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 23, 72), Decl(file.tsx, 26, 77))
+>y1 : Symbol(y1, Decl(file.tsx, 35, 27))
+>y3 : Symbol(y3, Decl(file.tsx, 35, 30))
+>y2 : Symbol(y2, Decl(file.tsx, 35, 33))
 
 
 

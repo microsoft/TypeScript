@@ -1,5 +1,4 @@
 //// [declarationEmitUnknownImport.ts]
-
 import Foo = SomeNonExistingName
 export {Foo}
 

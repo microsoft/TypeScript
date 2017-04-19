@@ -1,5 +1,4 @@
 //// [commentsDottedModuleName.ts]
-
 /** this is multi declare module*/
 export module outerModule.InnerModule {
     /// class b comment

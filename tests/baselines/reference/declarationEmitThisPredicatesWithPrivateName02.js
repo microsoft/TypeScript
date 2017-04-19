@@ -1,5 +1,4 @@
 //// [declarationEmitThisPredicatesWithPrivateName02.ts]
-
 interface Foo {
     a: string;
     b: number;

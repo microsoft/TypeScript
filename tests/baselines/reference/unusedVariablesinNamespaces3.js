@@ -1,5 +1,4 @@
 //// [unusedVariablesinNamespaces3.ts]
-
 namespace Validation {
     const lettersRegexp = /^[A-Za-z]+$/;
     const numberRegexp = /^[0-9]+$/;

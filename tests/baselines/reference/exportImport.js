@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportImport.ts] ////
 
 //// [w1.ts]
-
 export = Widget1
 class Widget1 { name = 'one'; }
 

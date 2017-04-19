@@ -1,15 +1,14 @@
 === tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport_0.ts ===
-
 export var a = 10;
->a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 1, 10))
+>a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 0, 10))
 
 export var x = a;
->x : Symbol(x, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 2, 10))
->a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 1, 10))
+>x : Symbol(x, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 1, 10))
+>a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 0, 10))
 
 export var m = a;
->m : Symbol(m, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 3, 10))
->a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 1, 10))
+>m : Symbol(m, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 2, 10))
+>a : Symbol(a, Decl(es6ImportDefaultBindingFollowedWithNamedImport_0.ts, 0, 10))
 
 export default {};
 

@@ -1,5 +1,4 @@
 //// [declarationEmitIdentifierPredicatesWithPrivateName01.ts]
-
 interface I {
     a: number;
 }

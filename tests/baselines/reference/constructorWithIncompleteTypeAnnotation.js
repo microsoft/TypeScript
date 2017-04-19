@@ -1,5 +1,4 @@
 //// [constructorWithIncompleteTypeAnnotation.ts]
-
 declare module "fs" {
     export class File {
         constructor(filename: string);

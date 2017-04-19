@@ -37,27 +37,28 @@ declare var a;
 (<any>a()).x;
 >a : Symbol(a, Decl(castExpressionParentheses.ts, 0, 11))
 
-declare var A;
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
-
-// should keep the parentheses in emit
 (<any>1).foo;
 (<any>1.).foo;
 (<any>1.0).foo;
 (<any>12e+34).foo;
 (<any>0xff).foo;
+
+declare var A;
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
+
+// should keep the parentheses in emit
 (<any>(1.0)); 
 (<any>new A).foo; 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 (<any>typeof A).x; 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 (<any>-A).x; 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 new (<any>A());
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 (<Tany>()=> {})();
 >Tany : Symbol(Tany, Decl(castExpressionParentheses.ts, 39, 2))
@@ -66,14 +67,14 @@ new (<any>A());
 >foo : Symbol(foo, Decl(castExpressionParentheses.ts, 40, 6))
 
 (<any><number><any>-A).x; 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 // nested cast, should keep one pair of parenthese
 (<any><number>(<any>-A)).x; 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 // nested parenthesized expression, should keep one pair of parenthese
 (<any>(A)) 
->A : Symbol(A, Decl(castExpressionParentheses.ts, 26, 11))
+>A : Symbol(A, Decl(castExpressionParentheses.ts, 31, 11))
 
 

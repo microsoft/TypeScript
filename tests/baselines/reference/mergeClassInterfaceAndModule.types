@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/classDeclarations/mergeClassInterfaceAndModule.ts ===
-
 interface C1 {}
 >C1 : C1
 

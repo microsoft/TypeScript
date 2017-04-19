@@ -1,5 +1,4 @@
 === tests/cases/compiler/decoratorWithUnderscoreMethod.ts ===
-
 declare var console : { log(arg: string): void };
 >console : { log(arg: string): void; }
 >log : (arg: string) => void

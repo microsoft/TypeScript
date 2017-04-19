@@ -13,7 +13,6 @@ tests/cases/compiler/errorsOnImportedSymbol_1.ts(3,9): error TS2693: 'Sammy' onl
     
     
 ==== tests/cases/compiler/errorsOnImportedSymbol_0.ts (0 errors) ====
-    
     interface Sammy {
         new (): any;
         (): number;

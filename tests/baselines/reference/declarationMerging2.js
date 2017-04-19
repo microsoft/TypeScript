@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationMerging2.ts] ////
 
 //// [a.ts]
-
 export class A {
     protected _f: number;
     getF() { return this._f; }

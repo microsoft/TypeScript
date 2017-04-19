@@ -37,7 +37,7 @@ namespace ts {
          *
          * Or undefined value if there was no change.
          */
-        getChangeRange(oldSnapshot: ScriptSnapshotShim): string;
+        getChangeRange(oldSnapshot: ScriptSnapshotShim): string | undefined;
 
         /** Releases all resources held by this script snapshot */
         dispose?(): void;
@@ -49,7 +49,7 @@ namespace ts {
         error(s: string): void;
     }
 
-    /** Public interface of the host of a language service shim instance.*/
+    /** Public interface of the host of a language service shim instance. */
     export interface LanguageServiceShimHost extends Logger {
         getCompilationSettings(): string;
 
@@ -292,8 +292,7 @@ namespace ts {
         public getChangeRange(oldSnapshot: IScriptSnapshot): TextChangeRange {
             const oldSnapshotShim = <ScriptSnapshotShimAdapter>oldSnapshot;
             const encoded = this.scriptSnapshotShim.getChangeRange(oldSnapshotShim.scriptSnapshotShim);
-            // TODO: should this be '==='?
-            if (encoded == null) {
+            if (encoded === null) {
                 return null;
             }
 
@@ -381,8 +380,7 @@ namespace ts {
 
         public getCompilationSettings(): CompilerOptions {
             const settingsJson = this.shimHost.getCompilationSettings();
-            // TODO: should this be '==='?
-            if (settingsJson == null || settingsJson == "") {
+            if (settingsJson === null || settingsJson === "") {
                 throw Error("LanguageServiceShimHostAdapter.getCompilationSettings: empty compilationSettings");
             }
             const compilerOptions = <CompilerOptions>JSON.parse(settingsJson);
@@ -416,7 +414,7 @@ namespace ts {
 
         public getLocalizedDiagnosticMessages(): any {
             const diagnosticMessagesJson = this.shimHost.getLocalizedDiagnosticMessages();
-            if (diagnosticMessagesJson == null || diagnosticMessagesJson == "") {
+            if (diagnosticMessagesJson === null || diagnosticMessagesJson === "") {
                 return null;
             }
 
@@ -466,29 +464,6 @@ namespace ts {
 
         public fileExists(path: string): boolean {
             return this.shimHost.fileExists(path);
-        }
-    }
-
-    /** A cancellation that throttles calls to the host */
-    class ThrottledCancellationToken implements HostCancellationToken {
-        // Store when we last tried to cancel.  Checking cancellation can be expensive (as we have
-        // to marshall over to the host layer).  So we only bother actually checking once enough
-        // time has passed.
-        private lastCancellationCheckTime = 0;
-
-        constructor(private hostCancellationToken: HostCancellationToken) {
-        }
-
-        public isCancellationRequested(): boolean {
-            const time = timestamp();
-            const duration = Math.abs(time - this.lastCancellationCheckTime);
-            if (duration > 10) {
-                // Check no more than once every 10 ms.
-                this.lastCancellationCheckTime = time;
-                return this.hostCancellationToken.isCancellationRequested();
-            }
-
-            return false;
         }
     }
 
@@ -1249,7 +1224,7 @@ namespace ts {
 
     // Here we expose the TypeScript services as an external module
     // so that it may be consumed easily like a node module.
-    declare var module: any;
+    declare const module: any;
     if (typeof module !== "undefined" && module.exports) {
         module.exports = ts;
     }

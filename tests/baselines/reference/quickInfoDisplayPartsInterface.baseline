@@ -25,7 +25,8 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -66,7 +67,8 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   },
   {
@@ -95,7 +97,8 @@
           "kind": "interfaceName"
         }
       ],
-      "documentation": []
+      "documentation": [],
+      "tags": []
     }
   }
 ]

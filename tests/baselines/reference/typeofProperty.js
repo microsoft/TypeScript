@@ -1,5 +1,4 @@
 //// [typeofProperty.ts]
-
 interface I1 {
     a: number;
     b: typeof a; // Should yield error (a is not a value)

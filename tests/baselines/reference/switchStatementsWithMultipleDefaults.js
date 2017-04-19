@@ -1,5 +1,4 @@
 //// [switchStatementsWithMultipleDefaults.ts]
-
 var x = 10;
 
 switch (x) {

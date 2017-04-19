@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitInferedTypeAlias8.ts ===
-
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
 >T : T

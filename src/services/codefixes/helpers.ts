@@ -146,7 +146,7 @@ namespace ts.codefix {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,
          * this is one of them.
-        */
+         */
         let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
         let someSigHasRestParameter = false;
@@ -194,7 +194,7 @@ namespace ts.codefix {
             modifiers,
             name,
             optional,
-            /*typeParameters*/undefined,
+            /*typeParameters*/ undefined,
             parameters,
             /*returnType*/ undefined);
     }
@@ -217,9 +217,9 @@ namespace ts.codefix {
             [createThrow(
                 createNew(
                     createIdentifier("Error"),
-                    /*typeArguments*/undefined,
+                    /*typeArguments*/ undefined,
                     [createLiteral("Method not implemented.")]))],
-            /*multiline*/true);
+            /*multiline*/ true);
     }
 
     function createVisibilityModifier(flags: ModifierFlags) {

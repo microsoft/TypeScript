@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsNamespace01.ts]
-
 var namespace: number;
 var n: string;
 

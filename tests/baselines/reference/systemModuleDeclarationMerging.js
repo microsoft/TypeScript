@@ -1,5 +1,4 @@
 //// [systemModuleDeclarationMerging.ts]
-
 export function F() {}
 export module F { var x; }
 

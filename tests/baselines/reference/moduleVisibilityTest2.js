@@ -1,6 +1,4 @@
 //// [moduleVisibilityTest2.ts]
-
-
 module OuterMod {
 	export function someExportedOuterFunc() { return -1; }
 

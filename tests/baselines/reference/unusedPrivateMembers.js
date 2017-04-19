@@ -1,5 +1,4 @@
 //// [unusedPrivateMembers.ts]
-
 class Test1 {
     private initializeInternal() {
     }

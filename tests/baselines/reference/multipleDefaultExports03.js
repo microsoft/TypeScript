@@ -1,5 +1,4 @@
 //// [multipleDefaultExports03.ts]
-
 export default class C {
 }
 

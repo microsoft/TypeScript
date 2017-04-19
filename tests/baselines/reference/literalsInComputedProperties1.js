@@ -1,5 +1,4 @@
 //// [literalsInComputedProperties1.ts]
-
 let x = {
     1:1,
     [2]:1,

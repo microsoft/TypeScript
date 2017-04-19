@@ -17,7 +17,6 @@ a.test1(null, null, null);
 >null : null
 
 === tests/cases/compiler/declFileImportModuleWithExportAssignment_0.ts ===
-
 module m2 {
 >m2 : { (): connectExport; test1: connectModule; test2(): connectModule; }
 

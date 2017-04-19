@@ -1,5 +1,4 @@
 //// [generatedContextualTyping.ts]
-
 class Base { private p; }
 class Derived1 extends Base { private m; }
 class Derived2 extends Base { private n; }

@@ -5,7 +5,6 @@ tests/cases/compiler/es6ImportNamedImportMergeErrors_1.ts(10,16): error TS2300: 
 
 
 ==== tests/cases/compiler/es6ImportNamedImportMergeErrors_0.ts (0 errors) ====
-    
     export var a = 10;
     export var x = a;
     export var z = a;

@@ -1,5 +1,4 @@
 //// [jsxAttributeWithoutExpressionReact.tsx]
-
 declare var React: any;
 <View>
     <ListView refreshControl={

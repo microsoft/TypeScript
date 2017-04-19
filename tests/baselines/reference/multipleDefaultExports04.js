@@ -1,5 +1,4 @@
 //// [multipleDefaultExports04.ts]
-
 export default function f() {
 }
 

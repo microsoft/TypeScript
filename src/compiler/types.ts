@@ -819,7 +819,7 @@ namespace ts {
         body?: FunctionBody;
     }
 
-    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements.*/
+    /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
     export interface SemicolonClassElement extends ClassElement {
         kind: SyntaxKind.SemicolonClassElement;
         parent?: ClassDeclaration | ClassExpression;
@@ -1313,8 +1313,6 @@ namespace ts {
         text: string;
         isUnterminated?: boolean;
         hasExtendedUnicodeEscape?: boolean;
-        /* @internal */
-        isOctalLiteral?: boolean;
     }
 
     // The text property of a LiteralExpression stores the interpreted value of the literal in text form. For a StringLiteral,
@@ -1332,8 +1330,21 @@ namespace ts {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
+    /* @internal */
+    export const enum NumericLiteralFlags {
+        None = 0,
+        Scientific = 1 << 1,        // e.g. `10e2`
+        Octal = 1 << 2,             // e.g. `0777`
+        HexSpecifier = 1 << 3,      // e.g. `0x00000000`
+        BinarySpecifier = 1 << 4,   // e.g. `0b0110010000000000`
+        OctalSpecifier = 1 << 5,    // e.g. `0o777`
+        BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
+    }
+
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
+        /* @internal */
+        numericLiteralFlags?: NumericLiteralFlags;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -1386,11 +1397,11 @@ namespace ts {
     }
 
     /**
-      * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
-      * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
-      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
-      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
-     **/
+     * This interface is a base interface for ObjectLiteralExpression and JSXAttributes to extend from. JSXAttributes is similar to
+     * ObjectLiteralExpression in that it contains array of properties; however, JSXAttributes' properties can only be
+     * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
+     * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
+     */
     export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
@@ -1402,7 +1413,7 @@ namespace ts {
         multiLine?: boolean;
     }
 
-    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
+    export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
     export interface PropertyAccessExpression extends MemberExpression, Declaration {
@@ -1875,6 +1886,7 @@ namespace ts {
         kind: SyntaxKind.ImportDeclaration;
         parent?: SourceFile | ModuleBlock;
         importClause?: ImportClause;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
 
@@ -1908,6 +1920,7 @@ namespace ts {
         kind: SyntaxKind.ExportDeclaration;
         parent?: SourceFile | ModuleBlock;
         exportClause?: NamedExports;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
     }
 
@@ -1950,6 +1963,10 @@ namespace ts {
 
     export interface FileReference extends TextRange {
         fileName: string;
+    }
+
+    export interface CheckJsDirective extends TextRange {
+        enabled: boolean;
     }
 
     export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
@@ -2290,10 +2307,11 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: LiteralExpression[];
-        /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ imports: StringLiteral[];
+        /* @internal */ moduleAugmentations: StringLiteral[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
+        /* @internal */ checkJsDirective: CheckJsDirective | undefined;
     }
 
     export interface Bundle extends Node {
@@ -2314,9 +2332,9 @@ namespace ts {
         readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
 
         /**
-          * Gets a value indicating whether the specified path exists and is a file.
-          * @param path The path to test.
-          */
+         * Gets a value indicating whether the specified path exists and is a file.
+         * @param path The path to test.
+         */
         fileExists(path: string): boolean;
 
         readFile(path: string): string;
@@ -2506,10 +2524,14 @@ namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
+        /** Follow a *single* alias to get the immediately aliased symbol. */
+        /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
@@ -2666,8 +2688,7 @@ namespace ts {
         errorModuleName?: string; // If the symbol is not visible from module, module's name
     }
 
-    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator
-      * metadata */
+    /** Indicates how to serialize the name for a TypeReferenceNode when emitting decorator metadata */
     /* @internal */
     export enum TypeReferenceSerializationKind {
         Unknown,                            // The TypeReferenceNode could not be resolved. The type name
@@ -2828,6 +2849,7 @@ namespace ts {
 
     /* @internal */
     export interface SymbolLinks {
+        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
@@ -2839,7 +2861,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
-        mappedTypeOrigin?: Symbol;          // For a property on a mapped type, points back to the orignal 'T' from 'keyof T'.
+        syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
@@ -2867,6 +2889,7 @@ namespace ts {
     /* @internal */
     export interface TransientSymbol extends Symbol, SymbolLinks {
         checkFlags: CheckFlags;
+        isRestParameter?: boolean;
     }
 
     export type SymbolTable = Map<Symbol>;
@@ -2896,7 +2919,7 @@ namespace ts {
         ContextChecked                      = 0x00000400,  // Contextual types have been assigned
         AsyncMethodWithSuper                = 0x00000800,  // An async method that reads a value from a member of 'super'.
         AsyncMethodWithSuperBinding         = 0x00001000,  // An async method that assigns a value to a member of 'super'.
-        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body (for async functions)
+        CaptureArguments                    = 0x00002000,  // Lexical 'arguments' used in body
         EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
@@ -2920,6 +2943,7 @@ namespace ts {
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
         enumMemberValue?: number;         // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
+        containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
         jsxFlags?: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
@@ -3357,6 +3381,7 @@ namespace ts {
         alwaysStrict?: boolean;  // Always combine with strict property
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         /* @internal */ configFilePath?: string;
         declaration?: boolean;
         declarationDir?: string;
@@ -3922,6 +3947,7 @@ namespace ts {
         CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
         NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
         HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        Iterator = 1 << 22,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
     }
 
     export interface EmitHelper {
@@ -4184,7 +4210,6 @@ namespace ts {
     }
 
     export interface PrinterOptions {
-        target?: ScriptTarget;
         removeComments?: boolean;
         newLine?: NewLineKind;
         /*@internal*/ sourceMap?: boolean;

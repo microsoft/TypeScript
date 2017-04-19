@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloads03.ts]
-
 interface Base {
     x: string;
     y: number;

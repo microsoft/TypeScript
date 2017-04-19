@@ -1,5 +1,4 @@
 === tests/cases/compiler/spreadUnion2.ts ===
-
 declare const undefinedUnion: { a: number } | undefined;
 >undefinedUnion : { a: number; } | undefined
 >a : number

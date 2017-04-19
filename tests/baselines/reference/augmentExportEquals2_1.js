@@ -1,14 +1,12 @@
 //// [tests/cases/compiler/augmentExportEquals2_1.ts] ////
 
 //// [file1.d.ts]
-
 declare module "file1" {
     function foo(): void;
     export = foo;
 }
 
 //// [file2.ts]
-
 /// <reference path="file1.d.ts"/> 
 import x = require("file1"); 
 

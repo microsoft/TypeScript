@@ -1,5 +1,4 @@
 //// [bitwiseNotOperatorWithBooleanType.ts]
-
 // ~ operator on boolean type
 var BOOLEAN: boolean;
 

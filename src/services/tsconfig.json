@@ -46,8 +46,8 @@
         "documentHighlights.ts",
         "documentRegistry.ts",
         "findAllReferences.ts",
+        "importTracker.ts",
         "goToDefinition.ts",
-        "goToImplementation.ts",
         "jsDoc.ts",
         "jsTyping.ts",
         "navigateTo.ts",
@@ -91,6 +91,7 @@
         "codefixes/fixes.ts",
         "codefixes/helpers.ts",
         "codefixes/importFixes.ts",
-        "codefixes/unusedIdentifierFixes.ts"
+        "codefixes/unusedIdentifierFixes.ts",
+        "codefixes/disableJsDiagnostics.ts"
     ]
 }

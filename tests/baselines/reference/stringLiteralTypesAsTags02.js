@@ -1,5 +1,4 @@
 //// [stringLiteralTypesAsTags02.ts]
-
 type Kind = "A" | "B"
 
 interface Entity {

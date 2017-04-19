@@ -1,5 +1,4 @@
 //// [thisTypeInObjectLiterals2.ts]
-
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
 
@@ -244,9 +243,9 @@ vue.hello;
 
 
 //// [thisTypeInObjectLiterals2.js]
+"use strict";
 // In methods of an object literal with no contextual type, 'this' has the type
 // of the object literal.
-"use strict";
 var obj1 = {
     a: 1,
     f: function () {

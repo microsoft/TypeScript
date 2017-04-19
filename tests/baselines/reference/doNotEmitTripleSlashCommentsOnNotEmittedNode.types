@@ -5,7 +5,6 @@ interface F { }
 
 
 === tests/cases/compiler/file0.ts ===
-
 /// <reference path="file1.ts" />
 declare var OData: any;
 >OData : any

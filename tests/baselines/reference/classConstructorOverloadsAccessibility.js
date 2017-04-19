@@ -1,5 +1,4 @@
 //// [classConstructorOverloadsAccessibility.ts]
-
 class A {
 	public constructor(a: boolean) // error
 	protected constructor(a: number) // error

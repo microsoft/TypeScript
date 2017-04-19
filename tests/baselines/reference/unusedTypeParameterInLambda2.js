@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInLambda2.ts]
-
 class A {
     public f1() {
         return <T, X>() => {

@@ -681,14 +681,14 @@ var r9 = foo9(r9arg1); // any
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 
 var r9a = [r9arg1, r9arg2];
->r9a : (<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U)[]
->[r9arg1, r9arg2] : (<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U)[]
+>r9a : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
+>[r9arg1, r9arg2] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 >r9arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 
 var r9b = [r9arg2, r9arg1];
->r9b : (<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U)[]
->[r9arg2, r9arg1] : (<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U)[]
+>r9b : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
+>[r9arg2, r9arg1] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
 >r9arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >r9arg1 : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: string; bing: number; }) => U) => (r: T) => U
 

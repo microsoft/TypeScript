@@ -1,5 +1,4 @@
 //// [thisTypeInFunctions2.ts]
-
 interface IndexedWithThis {
     // this is a workaround for React
     init?: (this: this) => void;

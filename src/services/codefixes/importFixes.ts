@@ -42,12 +42,13 @@ namespace ts.codefix {
 
                 switch (this.compareModuleSpecifiers(existingAction.moduleSpecifier, newAction.moduleSpecifier)) {
                     case ModuleSpecifierComparison.Better:
-                        // the new one is not worth considering if it is a new improt.
+                        // the new one is not worth considering if it is a new import.
                         // However if it is instead a insertion into existing import, the user might want to use
                         // the module specifier even it is worse by our standards. So keep it.
                         if (newAction.kind === "NewImport") {
                             return;
                         }
+                        // falls through
                     case ModuleSpecifierComparison.Equal:
                         // the current one is safe. But it is still possible that the new one is worse
                         // than another existing one. For example, you may have new imports from "./foo/bar"
@@ -542,12 +543,12 @@ namespace ts.codefix {
                     }
 
                     function getRelativePathIfInDirectory(path: string, directoryPath: string) {
-                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                         return isRootedDiskPath(relativePath) || startsWith(relativePath, "..") ? undefined : relativePath;
                     }
 
                     function getRelativePath(path: string, directoryPath: string) {
-                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, false);
+                        const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
                         return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
                     }
                 }

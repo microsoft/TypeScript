@@ -16,7 +16,7 @@
 
 
 goTo.marker('1');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
 edit.insert("//");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

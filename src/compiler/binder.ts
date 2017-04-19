@@ -259,7 +259,7 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    switch (getSpecialPropertyAssignmentKind(node)) {
+                    switch (getSpecialPropertyAssignmentKind(node as BinaryExpression)) {
                         case SpecialPropertyAssignmentKind.ModuleExports:
                             // module.exports = ...
                             return "export=";
@@ -418,7 +418,7 @@ namespace ts {
                     return declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                 }
                 else {
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
             else {
@@ -447,13 +447,13 @@ namespace ts {
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |
                         (symbolFlags & SymbolFlags.Type ? SymbolFlags.ExportType : 0) |
                         (symbolFlags & SymbolFlags.Namespace ? SymbolFlags.ExportNamespace : 0);
-                    const local = declareSymbol(container.locals, undefined, node, exportKind, symbolExcludes);
+                    const local = declareSymbol(container.locals, /*parent*/ undefined, node, exportKind, symbolExcludes);
                     local.exportSymbol = declareSymbol(container.symbol.exports, container.symbol, node, symbolFlags, symbolExcludes);
                     node.localSymbol = local;
                     return local;
                 }
                 else {
-                    return declareSymbol(container.locals, undefined, node, symbolFlags, symbolExcludes);
+                    return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
                 }
             }
         }
@@ -703,6 +703,7 @@ namespace ts {
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier ||
                 expr.kind === SyntaxKind.ThisKeyword ||
+                expr.kind === SyntaxKind.SuperKeyword ||
                 expr.kind === SyntaxKind.PropertyAccessExpression && isNarrowableReference((<PropertyAccessExpression>expr).expression);
         }
 
@@ -1413,6 +1414,7 @@ namespace ts {
                     if (isObjectLiteralOrClassExpressionMethod(node)) {
                         return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsObjectLiteralOrClassExpressionMethod;
                     }
+                    // falls through
                 case SyntaxKind.Constructor:
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -1544,7 +1546,7 @@ namespace ts {
         function declareSourceFileMember(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
             return isExternalModule(file)
                 ? declareModuleMember(node, symbolFlags, symbolExcludes)
-                : declareSymbol(file.locals, undefined, node, symbolFlags, symbolExcludes);
+                : declareSymbol(file.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
@@ -1714,13 +1716,13 @@ namespace ts {
                         declareModuleMember(node, symbolFlags, symbolExcludes);
                         break;
                     }
-                // fall through.
+                    // falls through
                 default:
                     if (!blockScopeContainer.locals) {
                         blockScopeContainer.locals = createMap<Symbol>();
                         addToContainerChain(blockScopeContainer);
                     }
-                    declareSymbol(blockScopeContainer.locals, undefined, node, symbolFlags, symbolExcludes);
+                    declareSymbol(blockScopeContainer.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
             }
         }
 
@@ -1854,7 +1856,7 @@ namespace ts {
         }
 
         function checkStrictModeNumericLiteral(node: NumericLiteral) {
-            if (inStrictMode && node.isOctalLiteral) {
+            if (inStrictMode && node.numericLiteralFlags & NumericLiteralFlags.Octal) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Octal_literals_are_not_allowed_in_strict_mode));
             }
         }
@@ -1910,7 +1912,9 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) {
+                bindJSDocTypedefTagIfAny(node);
+            }
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -2006,6 +2010,7 @@ namespace ts {
                         bindBlockScopedDeclaration(<Declaration>parentNode, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                         break;
                     }
+                    // falls through
                 case SyntaxKind.ThisKeyword:
                     if (currentFlow && (isExpression(node) || parent.kind === SyntaxKind.ShorthandPropertyAssignment)) {
                         node.flowNode = currentFlow;
@@ -2017,30 +2022,28 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.BinaryExpression:
-                    if (isInJavaScriptFile(node)) {
-                        const specialKind = getSpecialPropertyAssignmentKind(node);
-                        switch (specialKind) {
-                            case SpecialPropertyAssignmentKind.ExportsProperty:
-                                bindExportsPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ModuleExports:
-                                bindModuleExportsAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.PrototypeProperty:
-                                bindPrototypePropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.ThisProperty:
-                                bindThisPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.Property:
-                                bindStaticPropertyAssignment(<BinaryExpression>node);
-                                break;
-                            case SpecialPropertyAssignmentKind.None:
-                                // Nothing to do
-                                break;
-                            default:
-                                Debug.fail("Unknown special property assignment kind");
-                        }
+                    const specialKind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                    switch (specialKind) {
+                        case SpecialPropertyAssignmentKind.ExportsProperty:
+                            bindExportsPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ModuleExports:
+                            bindModuleExportsAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.PrototypeProperty:
+                            bindPrototypePropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.ThisProperty:
+                            bindThisPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.Property:
+                            bindStaticPropertyAssignment(<BinaryExpression>node);
+                            break;
+                        case SpecialPropertyAssignmentKind.None:
+                            // Nothing to do
+                            break;
+                        default:
+                            Debug.fail("Unknown special property assignment kind");
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -2183,7 +2186,7 @@ namespace ts {
                     if (!isFunctionLike(node.parent)) {
                         return;
                     }
-                    // Fall through
+                    // falls through
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
             }
@@ -2297,7 +2300,7 @@ namespace ts {
 
         function isNameOfExportsOrModuleExportsAliasDeclaration(node: Node) {
             if (node.kind === SyntaxKind.Identifier) {
-                const symbol = container.locals.get((<Identifier>node).text);
+                const symbol = lookupSymbolForName((<Identifier>node).text);
                 if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
                     const declaration = symbol.valueDeclaration as VariableDeclaration;
                     if (declaration.initializer) {
@@ -2332,7 +2335,7 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BinaryExpression) {
             Debug.assert(isInJavaScriptFile(node));
-            const container = getThisContainer(node, /*includeArrowFunctions*/false);
+            const container = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (container.kind) {
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
@@ -2399,8 +2402,12 @@ namespace ts {
             }
         }
 
+        function lookupSymbolForName(name: string) {
+            return (container.symbol && container.symbol.exports && container.symbol.exports.get(name)) || (container.locals && container.locals.get(name));
+        }
+
         function bindPropertyAssignment(functionName: string, propertyAccessExpression: PropertyAccessExpression, isPrototypeProperty: boolean) {
-            let targetSymbol = container.locals.get(functionName);
+            let targetSymbol = lookupSymbolForName(functionName);
 
             if (targetSymbol && isDeclarationOfFunctionOrClassExpression(targetSymbol)) {
                 targetSymbol = (targetSymbol.valueDeclaration as VariableDeclaration).initializer.symbol;
@@ -2422,7 +2429,7 @@ namespace ts {
         function bindCallExpression(node: CallExpression) {
             // We're only inspecting call expressions to detect CommonJS modules, so we can skip
             // this check if we've already seen the module indicator
-            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteral*/false)) {
+            if (!file.commonJsModuleIndicator && isRequireCall(node, /*checkArgumentIsStringLiteral*/ false)) {
                 setCommonJsModuleIndicator(node);
             }
         }
@@ -3327,6 +3334,18 @@ namespace ts {
             case SyntaxKind.MetaProperty:
                 // These nodes are ES6 syntax.
                 transformFlags |= TransformFlags.AssertES2015;
+                break;
+
+            case SyntaxKind.StringLiteral:
+                if ((<StringLiteral>node).hasExtendedUnicodeEscape) {
+                    transformFlags |= TransformFlags.AssertES2015;
+                }
+                break;
+
+            case SyntaxKind.NumericLiteral:
+                if ((<NumericLiteral>node).numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                    transformFlags |= TransformFlags.AssertES2015;
+                }
                 break;
 
             case SyntaxKind.ForOfStatement:

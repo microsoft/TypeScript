@@ -1,5 +1,4 @@
 //// [systemModule16.ts]
-
 import * as x from "foo";
 import * as y from "bar";
 export * from "foo";

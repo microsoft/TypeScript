@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule_0.ts ===
-
 export interface i {
 >i : i
 }

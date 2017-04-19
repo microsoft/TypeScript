@@ -1,5 +1,4 @@
 //// [thisTypeInNativeThisAssignableMethods.ts]
-
 class A {
     options: string[];
 

@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -866,6 +866,18 @@
     "A default export can only be used in an ECMAScript-style module.": {
         "category": "Error",
         "code": 1319
+    },
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1320
+    },
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1321
+    },
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1322
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1827,6 +1839,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Generic type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2550
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2094,6 +2110,14 @@
     "Generic type '{0}' requires between {1} and {2} type arguments.": {
         "category": "Error",
         "code": 2707
+    },
+    "Cannot use namespace '{0}' as a value.": {
+        "category": "Error",
+        "code": 2708
+    },
+    "Cannot use namespace '{0}' as a type.": {
+        "category": "Error",
+        "code": 2709
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3173,6 +3197,10 @@
         "category": "Message",
         "code": 6181
     },
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": "6182"
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3480,6 +3508,24 @@
         "category": "Message",
         "code": 90017
     },
+    "Disable checking for this file.": {
+        "category": "Message",
+        "code": 90018
+    },
+    "Ignore this error message.": {
+        "category": "Message",
+        "code": 90019
+    },
+    "Initialize property '{0}' in the constructor.": {
+        "category": "Message",
+        "code": 90020
+    },
+    "Initialize static property '{0}'.": {
+        "category": "Message",
+        "code": 90021
+    },
+
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
@@ -3487,5 +3533,9 @@
     "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8018
+    },
+    "Report errors in .js files.": {
+        "category": "Message",
+        "code": 8019
     }
 }

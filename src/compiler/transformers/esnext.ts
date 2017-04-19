@@ -618,7 +618,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             statements.push(
@@ -663,12 +663,19 @@ namespace ts {
         function transformFunctionBody(node: ArrowFunction): ConciseBody;
         function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
             resumeLexicalEnvironment();
-            const leadingStatements = appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node);
+            let statementOffset = 0;
+            const statements: Statement[] = [];
             const body = visitNode(node.body, visitor, isConciseBody);
+            if (isBlock(body)) {
+                statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            }
+            addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
             const trailingStatements = endLexicalEnvironment();
-            if (some(leadingStatements) || some(trailingStatements)) {
+            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                return updateBlock(block, setTextRange(createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements)), block.statements));
+                addRange(statements, block.statements.slice(statementOffset));
+                addRange(statements, trailingStatements);
+                return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
         }
@@ -884,7 +891,8 @@ namespace ts {
                 function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
                 function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
                 function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
-                function step(r) { r.done ? settle(c[2], r) : r.value[0] === "yield" ? settle(c[2], { value: r.value[1], done: false }) : Promise.resolve(r.value[1]).then(r.value[0] === "delegate" ? delegate : fulfill, reject); }
+                function step(r) { r.done ? settle(c[2], r) : Promise.resolve(r.value[1]).then(r.value[0] === "yield" ? _yield : r.value[0] === "delegate" ? delegate : fulfill, reject); }
+                function _yield(value) { settle(c[2], { value: value, done: false }); }
                 function delegate(r) { step(r.done ? r : { value: ["yield", r.value], done: false }); }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
