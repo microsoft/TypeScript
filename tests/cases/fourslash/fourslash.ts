@@ -149,7 +149,7 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPosition(openingBrace?: string): void;
         codeFixAvailable(): void;
         applicableRefactorAvailableAtMarker(markerName: string): void;
-        refactorDiagnosticsAvailableAtMarker(markerName: string, diagnosticCode?: number): void;
+        codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
     }
     class verify extends verifyNegatable {

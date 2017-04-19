@@ -494,10 +494,11 @@ namespace FourSlash {
         private getCodeFixDiagnostics(fileName: string): ts.Diagnostic[] {
             let result: ts.Diagnostic[];
 
+            // In some language service implementation the `getCodeFixDiagnostics` is not implemented
             try {
                 result = this.languageService.getCodeFixDiagnostics(fileName);
             }
-            catch(e) {
+            catch (e) {
                 result = [];
             }
             return result;
@@ -2623,23 +2624,24 @@ namespace FourSlash {
             }
         }
 
-        public verifyCodeFixDiagnosticsAvailableAtMarker(negative: boolean, markerName: string, diagnosticCode?: number) {
-            const marker = this.getMarkerByName(markerName);
-            const markerPos = marker.position;
-            let foundDiagnostic = false;
-
+        public verifyCodeFixDiagnosticsAvailableAtMarkers(negative: boolean, markerNames: string[], diagnosticCode?: number) {
             const refactorDiagnostics = this.getCodeFixDiagnostics(this.activeFile.fileName);
-            for (const diag of refactorDiagnostics) {
-                if (diag.start <= markerPos && diag.start + diag.length >= markerPos) {
-                    foundDiagnostic = diagnosticCode === undefined || diagnosticCode === diag.code;
-                }
-            }
 
-            if (negative && foundDiagnostic) {
-                this.raiseError(`verifyRefactorDiagnosticsAvailableAtMarker failed - expected no refactor diagnostic at marker ${markerName} but found some.`);
-            }
-            if (!negative && !foundDiagnostic) {
-                this.raiseError(`verifyRefactorDiagnosticsAvailableAtMarker failed - expected a refactor diagnostic at marker ${markerName} but found none.`);
+            for (const markerName of markerNames) {
+                const marker = this.getMarkerByName(markerName);
+                let foundDiagnostic = false;
+                for (const diag of refactorDiagnostics) {
+                    if (diag.start <= marker.position && diag.start + diag.length >= marker.position) {
+                        foundDiagnostic = diagnosticCode === undefined || diagnosticCode === diag.code;
+                    }
+                }
+
+                if (negative && foundDiagnostic) {
+                    this.raiseError(`verifyCodeFixDiagnosticsAvailableAtMarkers failed - expected no codeFix diagnostic at marker ${markerName} but found some.`);
+                }
+                if (!negative && !foundDiagnostic) {
+                    this.raiseError(`verifyCodeFixDiagnosticsAvailableAtMarkers failed - expected a codeFix diagnostic at marker ${markerName} but found none.`);
+                }
             }
         }
 
@@ -3494,8 +3496,8 @@ namespace FourSlashInterface {
             this.state.verifyCodeFixAvailable(this.negative);
         }
 
-        public refactorDiagnosticsAvailableAtMarker(markerName: string, refactorCode?: number) {
-            this.state.verifyCodeFixDiagnosticsAvailableAtMarker(this.negative, markerName, refactorCode);
+        public codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], refactorCode?: number) {
+            this.state.verifyCodeFixDiagnosticsAvailableAtMarkers(this.negative, markerNames, refactorCode);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {

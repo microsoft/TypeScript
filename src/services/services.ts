@@ -1968,6 +1968,8 @@ namespace ts {
         }
 
         function getCodeFixDiagnostics(fileName: string): Diagnostic[] {
+            synchronizeHostData();
+
             const newLineCharacter = host.getNewLine();
             const boundSourceFile = getValidSourceFile(fileName);
             const program = getProgram();
