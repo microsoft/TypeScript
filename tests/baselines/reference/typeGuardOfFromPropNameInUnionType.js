@@ -3,8 +3,6 @@ class A { a: string; }
 class B { b: number; }
 class C { b: Object; }
 class D { a: Date; }
-class ClassWithProp { prop: A | B }
-class NestedClassWithProp { outer: ClassWithProp }
 
 function namedClasses(x: A | B) {
     if ("a" in x) {
@@ -29,6 +27,20 @@ function anonymousClasses(x: { a: string; } | { b: number; }) {
         let z: number = x.b;
     }
 }
+
+class AWithOptionalProp { a?: string; }
+class BWithOptionalProp { b?: string; }
+
+function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+    if ("a" in x) {
+        x.a = "1";
+    } else {
+        const y: string = x instanceof AWithOptionalProp
+            ? x.a
+            : x.b
+    }
+}
+
 function inParenthesizedExpression(x: A | B) {
     if ("a" in (x)) {
         let y: string = x.a;
@@ -37,8 +49,9 @@ function inParenthesizedExpression(x: A | B) {
     }
 }
 
+class ClassWithUnionProp { prop: A | B; }
 
-function inProperty(x: ClassWithProp) {
+function inProperty(x: ClassWithUnionProp) {
     if ("a" in x.prop) {
         let y: string = x.prop.a;
     } else {
@@ -46,6 +59,7 @@ function inProperty(x: ClassWithProp) {
     }
 }
 
+class NestedClassWithProp { outer: ClassWithUnionProp; }
 
 function innestedProperty(x: NestedClassWithProp) {
     if ("a" in x.outer.prop) {
@@ -58,7 +72,7 @@ function innestedProperty(x: NestedClassWithProp) {
 class InMemberOfClass {
     protected prop: A | B;
     inThis() {
-        if ('a' in this.prop) {
+        if ("a" in this.prop) {
             let y: string = this.prop.a;
         } else {
             let z: number = this.prop.b;
@@ -66,11 +80,11 @@ class InMemberOfClass {
     }
 }
 
-//added for completeness
+// added for completeness
 class SelfAssert {
     a: string;
     inThis() {
-        if ('a' in this) {
+        if ("a" in this) {
             let y: string = this.a;
         } else {
         }
@@ -98,16 +112,6 @@ var D = (function () {
     }
     return D;
 }());
-var ClassWithProp = (function () {
-    function ClassWithProp() {
-    }
-    return ClassWithProp;
-}());
-var NestedClassWithProp = (function () {
-    function NestedClassWithProp() {
-    }
-    return NestedClassWithProp;
-}());
 function namedClasses(x) {
     if ("a" in x) {
         x.a = "1";
@@ -132,6 +136,26 @@ function anonymousClasses(x) {
         var z = x.b;
     }
 }
+var AWithOptionalProp = (function () {
+    function AWithOptionalProp() {
+    }
+    return AWithOptionalProp;
+}());
+var BWithOptionalProp = (function () {
+    function BWithOptionalProp() {
+    }
+    return BWithOptionalProp;
+}());
+function positiveTestClassesWithOptionalProperties(x) {
+    if ("a" in x) {
+        x.a = "1";
+    }
+    else {
+        var y = x instanceof AWithOptionalProp
+            ? x.a
+            : x.b;
+    }
+}
 function inParenthesizedExpression(x) {
     if ("a" in (x)) {
         var y = x.a;
@@ -140,6 +164,11 @@ function inParenthesizedExpression(x) {
         var z = x.b;
     }
 }
+var ClassWithUnionProp = (function () {
+    function ClassWithUnionProp() {
+    }
+    return ClassWithUnionProp;
+}());
 function inProperty(x) {
     if ("a" in x.prop) {
         var y = x.prop.a;
@@ -148,6 +177,11 @@ function inProperty(x) {
         var z = x.prop.b;
     }
 }
+var NestedClassWithProp = (function () {
+    function NestedClassWithProp() {
+    }
+    return NestedClassWithProp;
+}());
 function innestedProperty(x) {
     if ("a" in x.outer.prop) {
         var y = x.outer.prop.a;
@@ -160,7 +194,7 @@ var InMemberOfClass = (function () {
     function InMemberOfClass() {
     }
     InMemberOfClass.prototype.inThis = function () {
-        if ('a' in this.prop) {
+        if ("a" in this.prop) {
             var y = this.prop.a;
         }
         else {
@@ -169,12 +203,12 @@ var InMemberOfClass = (function () {
     };
     return InMemberOfClass;
 }());
-//added for completeness
+// added for completeness
 var SelfAssert = (function () {
     function SelfAssert() {
     }
     SelfAssert.prototype.inThis = function () {
-        if ('a' in this) {
+        if ("a" in this) {
             var y = this.a;
         }
         else {

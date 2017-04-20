@@ -2,6 +2,8 @@ tests/cases/compiler/inKeywordTypeguard.ts(6,11): error TS2339: Property 'b' doe
 tests/cases/compiler/inKeywordTypeguard.ts(8,11): error TS2339: Property 'a' does not exist on type 'B'.
 tests/cases/compiler/inKeywordTypeguard.ts(14,11): error TS2339: Property 'b' does not exist on type 'A'.
 tests/cases/compiler/inKeywordTypeguard.ts(16,11): error TS2339: Property 'a' does not exist on type 'B'.
+tests/cases/compiler/inKeywordTypeguard.ts(27,11): error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
+  Property 'b' does not exist on type 'AWithOptionalProp'.
 tests/cases/compiler/inKeywordTypeguard.ts(42,11): error TS2339: Property 'b' does not exist on type 'AWithMethod'.
 tests/cases/compiler/inKeywordTypeguard.ts(49,11): error TS2339: Property 'a' does not exist on type 'never'.
 tests/cases/compiler/inKeywordTypeguard.ts(50,11): error TS2339: Property 'b' does not exist on type 'never'.
@@ -19,7 +21,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(84,39): error TS2339: Property 'a' do
 tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' does not exist on type 'never'.
 
 
-==== tests/cases/compiler/inKeywordTypeguard.ts (16 errors) ====
+==== tests/cases/compiler/inKeywordTypeguard.ts (17 errors) ====
     class A { a: string; }
     class B { b: string; }
     
@@ -47,23 +49,26 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
         }
     }
     
-    class AOpt { a?: string }
-    class BOpn { b?: string }
+    class AWithOptionalProp { a?: string; }
+    class BWithOptionalProp { b?: string; }
     
-    function positiveTestClassesWithOptionalProperties(x: AOpt | BOpn) {
+    function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
         if ("a" in x) {
             x.a = "1";
         } else {
             x.b = "1";
+              ~
+!!! error TS2339: Property 'b' does not exist on type 'AWithOptionalProp | BWithOptionalProp'.
+!!! error TS2339:   Property 'b' does not exist on type 'AWithOptionalProp'.
         }
     }
     
     class AWithMethod {
-        a(): string { return "" }
+        a(): string { return ""; }
     }
     
     class BWithMethod {
-        b(): string { return "" }
+        b(): string { return ""; }
     }
     
     function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
@@ -96,8 +101,8 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
         }
     }
     
-    class C { a: string }
-    class D { a: string }
+    class C { a: string; }
+    class D { a: string; }
     
     function negativeMultipleClassesTest(x: A | B | C | D) {
         if ("a" in x) {
@@ -112,9 +117,9 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
         }
     }
     
-    class ClassWithProp { prop: A | B }
+    class ClassWithUnionProp { prop: A | B }
     
-    function negativePropTest(x: ClassWithProp) {
+    function negativePropTest(x: ClassWithUnionProp) {
         if ("a" in x.prop) {
             let y: string = x.prop.b;
                                    ~
@@ -129,7 +134,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
     class NegativeClassTest {
         protected prop: A | B;
         inThis() {
-            if ('a' in this.prop) {
+            if ("a" in this.prop) {
                 let z: number = this.prop.b;
                                           ~
 !!! error TS2339: Property 'b' does not exist on type 'A'.
@@ -144,7 +149,7 @@ tests/cases/compiler/inKeywordTypeguard.ts(94,26): error TS2339: Property 'a' do
     class UnreachableCodeDetection {
         a: string;
         inThis() {
-            if ('a' in this) {
+            if ("a" in this) {
             } else {
                 let y = this.a;
                              ~

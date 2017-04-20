@@ -17,17 +17,6 @@ class D { a: Date; }
 >a : Date
 >Date : Date
 
-class ClassWithProp { prop: A | B }
->ClassWithProp : ClassWithProp
->prop : A | B
->A : A
->B : B
-
-class NestedClassWithProp { outer: ClassWithProp }
->NestedClassWithProp : NestedClassWithProp
->outer : ClassWithProp
->ClassWithProp : ClassWithProp
-
 function namedClasses(x: A | B) {
 >namedClasses : (x: A | B) => void
 >x : A | B
@@ -111,6 +100,53 @@ function anonymousClasses(x: { a: string; } | { b: number; }) {
 >b : number
     }
 }
+
+class AWithOptionalProp { a?: string; }
+>AWithOptionalProp : AWithOptionalProp
+>a : string
+
+class BWithOptionalProp { b?: string; }
+>BWithOptionalProp : BWithOptionalProp
+>b : string
+
+function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+>positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
+>x : AWithOptionalProp | BWithOptionalProp
+>AWithOptionalProp : AWithOptionalProp
+>BWithOptionalProp : BWithOptionalProp
+
+    if ("a" in x) {
+>"a" in x : boolean
+>"a" : "a"
+>x : AWithOptionalProp | BWithOptionalProp
+
+        x.a = "1";
+>x.a = "1" : "1"
+>x.a : string
+>x : AWithOptionalProp
+>a : string
+>"1" : "1"
+
+    } else {
+        const y: string = x instanceof AWithOptionalProp
+>y : string
+>x instanceof AWithOptionalProp            ? x.a            : x.b : string
+>x instanceof AWithOptionalProp : boolean
+>x : AWithOptionalProp | BWithOptionalProp
+>AWithOptionalProp : typeof AWithOptionalProp
+
+            ? x.a
+>x.a : string
+>x : AWithOptionalProp
+>a : string
+
+            : x.b
+>x.b : string
+>x : BWithOptionalProp
+>b : string
+    }
+}
+
 function inParenthesizedExpression(x: A | B) {
 >inParenthesizedExpression : (x: A | B) => void
 >x : A | B
@@ -138,24 +174,29 @@ function inParenthesizedExpression(x: A | B) {
     }
 }
 
+class ClassWithUnionProp { prop: A | B; }
+>ClassWithUnionProp : ClassWithUnionProp
+>prop : A | B
+>A : A
+>B : B
 
-function inProperty(x: ClassWithProp) {
->inProperty : (x: ClassWithProp) => void
->x : ClassWithProp
->ClassWithProp : ClassWithProp
+function inProperty(x: ClassWithUnionProp) {
+>inProperty : (x: ClassWithUnionProp) => void
+>x : ClassWithUnionProp
+>ClassWithUnionProp : ClassWithUnionProp
 
     if ("a" in x.prop) {
 >"a" in x.prop : boolean
 >"a" : "a"
 >x.prop : A | B
->x : ClassWithProp
+>x : ClassWithUnionProp
 >prop : A | B
 
         let y: string = x.prop.a;
 >y : string
 >x.prop.a : string
 >x.prop : A
->x : ClassWithProp
+>x : ClassWithUnionProp
 >prop : A
 >a : string
 
@@ -164,12 +205,16 @@ function inProperty(x: ClassWithProp) {
 >z : number
 >x.prop.b : number
 >x.prop : B
->x : ClassWithProp
+>x : ClassWithUnionProp
 >prop : B
 >b : number
     }
 }
 
+class NestedClassWithProp { outer: ClassWithUnionProp; }
+>NestedClassWithProp : NestedClassWithProp
+>outer : ClassWithUnionProp
+>ClassWithUnionProp : ClassWithUnionProp
 
 function innestedProperty(x: NestedClassWithProp) {
 >innestedProperty : (x: NestedClassWithProp) => void
@@ -180,18 +225,18 @@ function innestedProperty(x: NestedClassWithProp) {
 >"a" in x.outer.prop : boolean
 >"a" : "a"
 >x.outer.prop : A | B
->x.outer : ClassWithProp
+>x.outer : ClassWithUnionProp
 >x : NestedClassWithProp
->outer : ClassWithProp
+>outer : ClassWithUnionProp
 >prop : A | B
 
         let y: string = x.outer.prop.a;
 >y : string
 >x.outer.prop.a : string
 >x.outer.prop : A
->x.outer : ClassWithProp
+>x.outer : ClassWithUnionProp
 >x : NestedClassWithProp
->outer : ClassWithProp
+>outer : ClassWithUnionProp
 >prop : A
 >a : string
 
@@ -200,9 +245,9 @@ function innestedProperty(x: NestedClassWithProp) {
 >z : number
 >x.outer.prop.b : number
 >x.outer.prop : B
->x.outer : ClassWithProp
+>x.outer : ClassWithUnionProp
 >x : NestedClassWithProp
->outer : ClassWithProp
+>outer : ClassWithUnionProp
 >prop : B
 >b : number
     }
@@ -219,9 +264,9 @@ class InMemberOfClass {
     inThis() {
 >inThis : () => void
 
-        if ('a' in this.prop) {
->'a' in this.prop : boolean
->'a' : "a"
+        if ("a" in this.prop) {
+>"a" in this.prop : boolean
+>"a" : "a"
 >this.prop : A | B
 >this : this
 >prop : A | B
@@ -246,7 +291,7 @@ class InMemberOfClass {
     }
 }
 
-//added for completeness
+// added for completeness
 class SelfAssert {
 >SelfAssert : SelfAssert
 
@@ -256,9 +301,9 @@ class SelfAssert {
     inThis() {
 >inThis : () => void
 
-        if ('a' in this) {
->'a' in this : boolean
->'a' : "a"
+        if ("a" in this) {
+>"a" in this : boolean
+>"a" : "a"
 >this : this
 
             let y: string = this.a;

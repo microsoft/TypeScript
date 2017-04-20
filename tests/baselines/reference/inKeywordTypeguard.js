@@ -18,10 +18,10 @@ function positiveClassesTest(x: A | B) {
     }
 }
 
-class AOpt { a?: string }
-class BOpn { b?: string }
+class AWithOptionalProp { a?: string; }
+class BWithOptionalProp { b?: string; }
 
-function positiveTestClassesWithOptionalProperties(x: AOpt | BOpn) {
+function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
     if ("a" in x) {
         x.a = "1";
     } else {
@@ -30,11 +30,11 @@ function positiveTestClassesWithOptionalProperties(x: AOpt | BOpn) {
 }
 
 class AWithMethod {
-    a(): string { return "" }
+    a(): string { return ""; }
 }
 
 class BWithMethod {
-    b(): string { return "" }
+    b(): string { return ""; }
 }
 
 function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
@@ -55,8 +55,8 @@ function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWit
     }
 }
 
-class C { a: string }
-class D { a: string }
+class C { a: string; }
+class D { a: string; }
 
 function negativeMultipleClassesTest(x: A | B | C | D) {
     if ("a" in x) {
@@ -66,9 +66,9 @@ function negativeMultipleClassesTest(x: A | B | C | D) {
     }
 }
 
-class ClassWithProp { prop: A | B }
+class ClassWithUnionProp { prop: A | B }
 
-function negativePropTest(x: ClassWithProp) {
+function negativePropTest(x: ClassWithUnionProp) {
     if ("a" in x.prop) {
         let y: string = x.prop.b;
     } else {
@@ -79,7 +79,7 @@ function negativePropTest(x: ClassWithProp) {
 class NegativeClassTest {
     protected prop: A | B;
     inThis() {
-        if ('a' in this.prop) {
+        if ("a" in this.prop) {
             let z: number = this.prop.b;
         } else {
             let y: string = this.prop.a;
@@ -90,7 +90,7 @@ class NegativeClassTest {
 class UnreachableCodeDetection {
     a: string;
     inThis() {
-        if ('a' in this) {
+        if ("a" in this) {
         } else {
             let y = this.a;
         }
@@ -124,15 +124,15 @@ function positiveClassesTest(x) {
         x.a = "1";
     }
 }
-var AOpt = (function () {
-    function AOpt() {
+var AWithOptionalProp = (function () {
+    function AWithOptionalProp() {
     }
-    return AOpt;
+    return AWithOptionalProp;
 }());
-var BOpn = (function () {
-    function BOpn() {
+var BWithOptionalProp = (function () {
+    function BWithOptionalProp() {
     }
-    return BOpn;
+    return BWithOptionalProp;
 }());
 function positiveTestClassesWithOptionalProperties(x) {
     if ("a" in x) {
@@ -190,10 +190,10 @@ function negativeMultipleClassesTest(x) {
         x.a = "1";
     }
 }
-var ClassWithProp = (function () {
-    function ClassWithProp() {
+var ClassWithUnionProp = (function () {
+    function ClassWithUnionProp() {
     }
-    return ClassWithProp;
+    return ClassWithUnionProp;
 }());
 function negativePropTest(x) {
     if ("a" in x.prop) {
@@ -207,7 +207,7 @@ var NegativeClassTest = (function () {
     function NegativeClassTest() {
     }
     NegativeClassTest.prototype.inThis = function () {
-        if ('a' in this.prop) {
+        if ("a" in this.prop) {
             var z = this.prop.b;
         }
         else {
@@ -220,7 +220,7 @@ var UnreachableCodeDetection = (function () {
     function UnreachableCodeDetection() {
     }
     UnreachableCodeDetection.prototype.inThis = function () {
-        if ('a' in this) {
+        if ("a" in this) {
         }
         else {
             var y = this.a;

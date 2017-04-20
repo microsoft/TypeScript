@@ -12722,10 +12722,30 @@ namespace ts {
                 return type;
             }
 
+            function isTypePresencePossible(type: Type, propName: string, shouldHaveProperty: boolean) {
+                const prop = getPropertyOfType(type, propName);
+                if (!prop) {
+                    // if there is NO property:
+                    // - but we assume type SHOULD have it then presence of object of following type IS NOT possible
+                    // - and we assume type SHOULD NOT have it then presence of object of following type IS possible
+                    return !shouldHaveProperty;
+                } else if (prop.flags & SymbolFlags.Optional) {
+                    // if there is an optional property:
+                    // - and we assume type SHOULD have it then presence of object of following type IS possible
+                    // - but assume type SHOULD NOT have it then presence of object of following type IS still possible
+                    return true;
+                } else /* if (prop.flags & SymbolFlags.Required) */ {
+                    // if there is a required property:
+                    // - and we assume type SHOULD have it then presence of object of following type IS possible
+                    // - but we assume type SHOULD NOT have it then presence of object of following type IS NOT possible
+                    return shouldHaveProperty;
+                }
+            }
+
             function narrowByInKeyword(type: Type, literal: LiteralExpression, assumeTrue: boolean) {
                 if ((type.flags & (TypeFlags.Union | TypeFlags.Object)) || (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType)) {
                     const propName = literal.text;
-                    return filterType(type, t => !!getPropertyOfType(t, propName) === assumeTrue);
+                    return filterType(type, t => isTypePresencePossible(t, propName, /* shouldHaveProperty */ assumeTrue));
                 }
                 return type;
             }
