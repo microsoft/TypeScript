@@ -13478,8 +13478,12 @@ namespace ts {
         }
 
         /** 
+         * Look into JSX namespace and then look for container with matching name as nameOfAttribPropContainer.
+         * Get a single property from that container if existed. Report an error if there are more than one property.
          * 
-        */
+         * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
+         *          if other string is given or the container doesn't exist, return undefined.
+         **/
         function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: string): string {
             // JSX
             const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
@@ -14647,7 +14651,7 @@ namespace ts {
             //         We can figure that out by resolving attributes property and check number of properties in the resolved type
             // If the call has correct arity, we will then check if the argument type and parameter type is assignable
 
-            const callIsIncomplete = node.attributes.end === node.end;  // If we are missing the close "/>", the call is incoplete
+            const callIsIncomplete = node.attributes.end === node.end;  // If we are missing the close "/>", the call is incomplete
             if (callIsIncomplete) {
                 return true;
             }
