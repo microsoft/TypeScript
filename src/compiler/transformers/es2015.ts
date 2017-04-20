@@ -2714,9 +2714,8 @@ namespace ts {
                 loopBody = createBlock([loopBody], /*multiline*/ true);
             }
 
-            const isAsyncBlockContainingAwait =
-                hierarchyFacts & HierarchyFacts.AsyncFunctionBody
-                && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const isAsyncBlockContainingAwait = containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0;
 
             let loopBodyFlags: EmitFlags = 0;
             if (currentState.containsLexicalThis) {
@@ -2739,7 +2738,7 @@ namespace ts {
                                     setEmitFlags(
                                         createFunctionExpression(
                                             /*modifiers*/ undefined,
-                                            isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
+                                            containsYield ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             loopParameters,
@@ -2833,7 +2832,7 @@ namespace ts {
                 ));
             }
 
-            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, isAsyncBlockContainingAwait);
+            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, containsYield);
 
             let loop: Statement;
             if (convert) {
