@@ -1965,6 +1965,7 @@ declare namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
+        source?: string;
     }
     enum DiagnosticCategory {
         Warning = 0,
@@ -4103,7 +4104,9 @@ declare namespace ts.server.protocol {
         start: Location;
         end: Location;
         text: string;
+        category: string;
         code?: number;
+        source?: string;
     }
     interface DiagnosticEventBody {
         file: string;

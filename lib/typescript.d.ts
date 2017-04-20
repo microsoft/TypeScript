@@ -2063,6 +2063,7 @@ declare namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
+        source?: string;
     }
     enum DiagnosticCategory {
         Warning = 0,

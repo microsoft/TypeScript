@@ -1405,9 +1405,17 @@ declare namespace ts.server.protocol {
          */
         text: string;
         /**
+         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         */
+        category: string;
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
+        /**
+         * The name of the plugin reporting the message.
+         */
+        source?: string;
     }
     interface DiagnosticEventBody {
         /**
