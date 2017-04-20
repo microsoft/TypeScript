@@ -1828,6 +1828,11 @@ namespace ts.server.protocol {
          * The error code of the diagnostic message.
          */
         code?: number;
+
+        /**
+         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         */
+        category: string;
     }
 
     export interface DiagnosticEventBody {
