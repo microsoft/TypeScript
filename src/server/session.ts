@@ -78,7 +78,9 @@ namespace ts.server {
             start: scriptInfo.positionToLineOffset(diag.start),
             end: scriptInfo.positionToLineOffset(diag.start + diag.length),
             text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
-            code: diag.code
+            code: diag.code,
+            category: DiagnosticCategory[diag.category].toLowerCase(),
+            source: diag.source
         };
     }
 
@@ -86,7 +88,9 @@ namespace ts.server {
         return {
             start: undefined,
             end: undefined,
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n")
+            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
+            category: DiagnosticCategory[diag.category].toLowerCase(),
+            source: diag.source
         };
     }
 
@@ -601,6 +605,7 @@ namespace ts.server {
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
+                source: d.source,
                 startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start),
                 endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start + d.length)
             });
