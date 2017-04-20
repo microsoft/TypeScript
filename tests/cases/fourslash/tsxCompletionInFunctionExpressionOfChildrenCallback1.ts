@@ -7,9 +7,8 @@
 ////     interface Element { }
 ////     interface IntrinsicElements {
 ////     }
-////     interface ElementAttributesProperty {
-////        props: { children; }
-////     }
+////     interface ElementAttributesProperty { props; }
+////     interface ElementChildrenAttribute { children; }
 //// }
 //// interface IUser {
 ////     Name: string;

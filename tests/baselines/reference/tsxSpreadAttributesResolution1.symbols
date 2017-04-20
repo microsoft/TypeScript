@@ -12,8 +12,8 @@ class Poisoned extends React.Component<{}, {}> {
 >render : Symbol(Poisoned.render, Decl(file.tsx, 2, 48))
 
         return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2401, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2401, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
     }
 }
 
