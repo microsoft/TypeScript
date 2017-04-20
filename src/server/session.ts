@@ -25,11 +25,20 @@ namespace ts.server {
         return ((1e9 * seconds) + nanoseconds) / 1000000.0;
     }
 
-    function shouldSkipSemanticCheck(project: Project, file: NormalizedPath) {
-        // For inferred (e.g. miscellaneous context in VS) and external projects (e.g. VS .csproj project) with only JS files
-        // semantic errors in .d.ts files (e.g. ones added by automatic type acquisition) are not interesting.
-        // We want to avoid the cost of querying for these errors all together, even if 'skipLibCheck' is not set.
-        // We still want to check .js files (e.g. '// @ts-check' or '--checkJs' is set).
+    function isDeclarationFileInJSOnlyNonConfiguredProject(project: Project, file: NormalizedPath) {
+        // Checking for semantic diagnostics is an expensive process. We want to avoid it if we
+        // know for sure it is not needed.
+        // For instance, .d.ts files injected by ATA automatically do not produce any relevant
+        // errors to a JS- only project.
+        //
+        // Note that configured projects can set skipLibCheck (on by default in jsconfig.json) to
+        // disable checking for declaration files. We only need to verify for inferred projects (e.g.
+        // miscellaneous context in VS) and external projects(e.g.VS.csproj project) with only JS
+        // files.
+        //
+        // We still want to check .js files in a JS-only inferred or external project (e.g. if the
+        // file has '// @ts-check').
+
         if ((project.projectKind === ProjectKind.Inferred || project.projectKind === ProjectKind.External) &&
             project.isJsOnlyProject()) {
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
@@ -491,7 +500,7 @@ namespace ts.server {
         private semanticCheck(file: NormalizedPath, project: Project) {
             try {
                 let diags: Diagnostic[] = [];
-                if (!shouldSkipSemanticCheck(project, file)) {
+                if (!isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                     diags = project.getLanguageService().getSemanticDiagnostics(file);
                 }
 
@@ -599,7 +608,7 @@ namespace ts.server {
 
         private getDiagnosticsWorker(args: protocol.FileRequestArgs, isSemantic: boolean, selector: (project: Project, file: string) => Diagnostic[], includeLinePosition: boolean) {
             const { project, file } = this.getFileAndProject(args);
-            if (isSemantic && shouldSkipSemanticCheck(project, file)) {
+            if (isSemantic && isDeclarationFileInJSOnlyNonConfiguredProject(project, file)) {
                 return [];
             }
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
