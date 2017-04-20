@@ -70,3 +70,10 @@ interface NodeListOf<TNode extends Node> {
 
     [Symbol.iterator](): IterableIterator<TNode>;
 }
+
+interface URLSearchParams {
+    /**
+     * iterate over key/value pairs
+     */
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+}
