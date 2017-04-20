@@ -8,17 +8,17 @@ namespace ts {
 
 
     const enum StructuralChangesFromOldProgram {
-        None = 0,
-        NoOldProgram = 1,
-        ModuleResolutionOptions = 2,
-        RootNames = 3,
-        TypesOptions = 4,
-        SourceFileRemoved = 5,
-        HasNoDefaultLib = 6,
-        TripleSlashReferences = 7,
-        Imports = 8,
-        ModuleAugmentations = 9,
-        TripleSlashTypesReferences = 10,
+        None                        = 0,
+        NoOldProgram                = 1 << 1,
+        ModuleResolutionOptions     = 1 << 2,
+        RootNames                   = 1 << 3,
+        TypesOptions                = 1 << 4,
+        SourceFileRemoved           = 1 << 5,
+        HasNoDefaultLib             = 1 << 6,
+        TripleSlashReferences       = 1 << 7,
+        Imports                     = 1 << 8,
+        ModuleAugmentations         = 1 << 9,
+        TripleSlashTypesReferences  = 1 << 10,
 
         CannotReuseResolution = NoOldProgram | ModuleResolutionOptions | RootNames | TypesOptions | SourceFileRemoved
     }
@@ -520,6 +520,9 @@ namespace ts {
             const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
             if (oldSourceFile === file) {
                 // `file` is unchanged from the old program, so we can reuse old module resolutions.
+                if (isTraceEnabled(options, host)) {
+                    trace(host, Diagnostics.Reusing_module_resolutions_originating_in_0_since_this_file_was_not_modified, file.path);
+                }
                 const oldSourceFileResult: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
                     const resolvedModule = oldSourceFile.resolvedModules.get(moduleName);
@@ -709,10 +712,6 @@ namespace ts {
 
                         // tentatively approve the file
                         modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
-                    }
-                    else {
-                        // file has no changes - use it as is
-                        newSourceFile = oldSourceFile;
                     }
 
                     // if file has passed all checks it should be safe to reuse it

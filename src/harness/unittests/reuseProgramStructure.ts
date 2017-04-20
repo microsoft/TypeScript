@@ -140,9 +140,7 @@ namespace ts {
             useCaseSensitiveFileNames(): boolean {
                 return sys && sys.useCaseSensitiveFileNames;
             },
-            getNewLine(): string {
-                return sys ? sys.newLine : newLine;
-            },
+            getNewLine,
             fileExists: fileName => files.has(fileName),
             readFile: fileName => {
                 const file = files.get(fileName);
@@ -217,7 +215,7 @@ namespace ts {
 
     describe("Reuse program structure", () => {
         const target = ScriptTarget.Latest;
-        const files = [
+        const files: NamedSourceText[] = [
             { name: "a.ts", text: SourceText.New(
                 `
 /// <reference path='b.ts'/>
@@ -468,8 +466,73 @@ namespace ts {
                     "File '/fs.jsx' does not exist.",
                     "======== Module name 'fs' was not resolved. ========",
                 ], "should look for 'fs' again since node.d.ts was changed");
-
         });
+
+         it("can reuse module resolutions from non-modified files", () => {
+             const files = [
+                 { name: "a1.ts", text: SourceText.New("", "", "let x = 1;") },
+                 { name: "a2.ts", text: SourceText.New("", "", "let x = 1;") },
+                 { name: "b1.ts", text: SourceText.New("", "export class B { x: number; }", "") },
+                 { name: "b2.ts", text: SourceText.New("", "export class B { x: number; }", "") },
+                 { name: "node_modules/@types/typerefs1/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
+                 { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
+                 {
+                     name: "f1.ts",
+                     text: SourceText.New(
+                         `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                         `import { B } from './b1';${newLine}export let BB = B;`,
+                         "declare module './b1' { interface B { y: string; } }")
+                 },
+                 {
+                     name: "f2.ts",
+                     text: SourceText.New(
+                         `/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`,
+                         `import { B } from './b2';${newLine}import { BB } from './f1';`,
+                         "(new BB).x; (new BB).y;")
+                 },
+             ];
+
+             const options = { target: ScriptTarget.ES2015, traceResolution: true };
+             const program_1 = newProgram(files, files.map(f => f.name), options);
+             assert.deepEqual(program_1.host.getTrace(),
+                 [
+                     "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
+                     "Resolving with primary search path 'node_modules/@types'.",
+                     "File 'node_modules/@types/typerefs1/package.json' does not exist.",
+                     "File 'node_modules/@types/typerefs1/index.d.ts' exist - use it as a name resolution result.",
+                     "======== Type reference directive 'typerefs1' was successfully resolved to 'node_modules/@types/typerefs1/index.d.ts', primary: true. ========",
+                     "======== Resolving module './b1' from 'f1.ts'. ========",
+                     "Module resolution kind is not specified, using 'Classic'.",
+                     "File 'b1.ts' exist - use it as a name resolution result.",
+                     "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
+                     "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
+                     "Resolving with primary search path 'node_modules/@types'.",
+                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
+                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
+                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
+                     "======== Resolving module './b2' from 'f2.ts'. ========",
+                     "Module resolution kind is not specified, using 'Classic'.",
+                     "File 'b2.ts' exist - use it as a name resolution result.",
+                     "======== Module name './b2' was successfully resolved to 'b2.ts'. ========",
+                     "======== Resolving module './f1' from 'f2.ts'. ========",
+                     "Module resolution kind is not specified, using 'Classic'.",
+                     "File 'f1.ts' exist - use it as a name resolution result.",
+                     "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
+                 ],
+                 "First program should execute module reoslution normally.");
+
+             // Create project. Edit file-exists to track disk accesses. Edit f1.ts, update project.
+             // check that updating project "inherits" the fileexists implementation.
+             const indexOfF1 = 6;
+             function updateProgram_1(files: NamedSourceText[]): void {
+                files[indexOfF1].text = SourceText.New("","","");
+             }
+
+             const program_2 = updateProgram(program_1, program_1.getRootFileNames(), options, updateProgram_1);
+             assert.deepEqual(program_2.host.getTrace(), [
+                 "Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified."
+             ], "should reuse module resolutions in f2 since it is unchanged");
+         });
     });
 
     describe("host is optional", () => {
