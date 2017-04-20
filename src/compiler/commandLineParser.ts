@@ -1111,10 +1111,11 @@ namespace ts {
         const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
         const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
+        let baseCompileOnSave: boolean;
         if (json["extends"]) {
             let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
             if (typeof json["extends"] === "string") {
-                [include, exclude, files, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseOptions]);
+                [include, exclude, files, baseCompileOnSave, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseCompileOnSave, baseOptions]);
             }
             else {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
@@ -1135,7 +1136,10 @@ namespace ts {
         options.configFilePath = configFileName;
 
         const { fileNames, wildcardDirectories } = getFileNames(errors);
-        const compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
+        let compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
+        if (baseCompileOnSave && json[compileOnSaveCommandLineOption.name] === undefined) {
+            compileOnSave = baseCompileOnSave;
+        }
 
         return {
             options,
@@ -1147,7 +1151,7 @@ namespace ts {
             compileOnSave
         };
 
-        function tryExtendsName(extendedConfig: string): [string[], string[], string[], CompilerOptions] {
+        function tryExtendsName(extendedConfig: string): [string[], string[], string[], boolean, CompilerOptions] {
             // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
             if (!(isRootedDiskPath(extendedConfig) || startsWith(normalizeSlashes(extendedConfig), "./") || startsWith(normalizeSlashes(extendedConfig), "../"))) {
                 errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
@@ -1177,7 +1181,7 @@ namespace ts {
                     return map(extendedResult.config[key], updatePath);
                 }
             });
-            return [include, exclude, files, result.options];
+            return [include, exclude, files, result.compileOnSave, result.options];
         }
 
         function getFileNames(errors: Diagnostic[]): ExpandResult {
@@ -1245,7 +1249,7 @@ namespace ts {
         }
     }
 
-    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean {
+    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean | undefined {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return false;
         }
