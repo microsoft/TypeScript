@@ -4295,15 +4295,19 @@ declare namespace ts.server.protocol {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         declaration?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -4343,6 +4347,7 @@ declare namespace ts.server.protocol {
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strict?: boolean;
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
