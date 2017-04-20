@@ -1764,13 +1764,6 @@ interface Int8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2052,13 +2045,6 @@ interface Uint8Array {
       * Reverses the elements in an Array.
       */
     reverse(): Uint8Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -2347,17 +2333,10 @@ interface Uint8ClampedArray {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8ClampedArray, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /**
       * Returns a section of an array.
@@ -2635,13 +2614,6 @@ interface Int16Array {
       * Reverses the elements in an Array.
       */
     reverse(): Int16Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -2930,13 +2902,6 @@ interface Uint16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3218,13 +3183,6 @@ interface Int32Array {
       * Reverses the elements in an Array.
       */
     reverse(): Int32Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -3512,13 +3470,6 @@ interface Uint32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3800,13 +3751,6 @@ interface Float32Array {
       * Reverses the elements in an Array.
       */
     reverse(): Float32Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -4092,13 +4036,6 @@ interface Float64Array {
       * Reverses the elements in an Array.
       */
     reverse(): Float64Array;
-
-    /**
-      * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
 
     /**
       * Sets a value or an array of values.
@@ -4938,7 +4875,7 @@ interface ReadonlySet<T> {
     readonly size: number;
 }
 
-interface WeakSet<T extends object> {
+interface WeakSet<T> {
     add(value: T): this;
     delete(value: T): boolean;
     has(value: T): boolean;
@@ -5126,7 +5063,7 @@ interface SetConstructor {
     new <T>(iterable: Iterable<T>): Set<T>;
 }
 
-interface WeakSet<T extends object> { }
+interface WeakSet<T> { }
 
 interface WeakSetConstructor {
     new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
@@ -5893,7 +5830,7 @@ interface Set<T> {
     readonly [Symbol.toStringTag]: "Set";
 }
 
-interface WeakSet<T extends object> {
+interface WeakSet<T> {
     readonly [Symbol.toStringTag]: "WeakSet";
 }
 

@@ -138,7 +138,7 @@ interface Set<T> {
     readonly [Symbol.toStringTag]: "Set";
 }
 
-interface WeakSet<T extends object> {
+interface WeakSet<T> {
     readonly [Symbol.toStringTag]: "WeakSet";
 }
 

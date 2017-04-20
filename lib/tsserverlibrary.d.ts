@@ -2380,7 +2380,7 @@ declare namespace ts {
         error?: Diagnostic;
     };
     function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions?: CompilerOptions, configFileName?: string, resolutionStack?: Path[], extraFileExtensions?: JsFileExtensionInfo[]): ParsedCommandLine;
-    function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean;
+    function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean | undefined;
     function convertCompilerOptionsFromJson(jsonOptions: any, basePath: string, configFileName?: string): {
         options: CompilerOptions;
         errors: Diagnostic[];
@@ -3869,6 +3869,7 @@ declare namespace ts.server.protocol {
     interface OpenRequestArgs extends FileRequestArgs {
         fileContent?: string;
         scriptKindName?: ScriptKindName;
+        projectRootPath?: string;
     }
     type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
     interface OpenRequest extends Request {
@@ -4505,7 +4506,7 @@ declare namespace ts.server {
         private getDefaultProject(args);
         private getRenameLocations(args, simplifiedResult);
         private getReferences(args, simplifiedResult);
-        private openClientFile(fileName, fileContent?, scriptKind?);
+        private openClientFile(fileName, fileContent?, scriptKind?, projectRootPath?);
         private getPosition(args, scriptInfo);
         private getFileAndProject(args, errorOnMissingProject?);
         private getFileAndProjectWithoutRefreshingInferredProjects(args, errorOnMissingProject?);
@@ -5086,8 +5087,8 @@ declare namespace ts.server {
         private removeProject(project);
         private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles);
         private closeOpenFile(info);
-        private openOrUpdateConfiguredProjectForFile(fileName);
-        private findConfigFile(searchPath);
+        private openOrUpdateConfiguredProjectForFile(fileName, projectRootPath?);
+        private findConfigFile(searchPath, projectRootPath?);
         private printProjects();
         private findConfiguredProjectByProjectName(configFileName);
         private findExternalProjectByProjectName(projectFileName);
@@ -5111,8 +5112,8 @@ declare namespace ts.server {
         closeLog(): void;
         reloadProjects(): void;
         refreshInferredProjects(): void;
-        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): OpenConfiguredProjectResult;
-        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult;
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         closeClientFile(uncheckedFileName: string): void;
         private collectChanges(lastKnownProjectVersions, currentProjects, result);
         private closeConfiguredProject(configFile);
