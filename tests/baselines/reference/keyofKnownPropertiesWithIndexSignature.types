@@ -1,0 +1,57 @@
+=== tests/cases/conformance/types/keyof/keyofKnownPropertiesWithIndexSignature.ts ===
+
+interface Foo {
+>Foo : Foo
+
+    prop: number;
+>prop : number
+
+    [x: string]: number;
+>x : string
+}
+
+type t = keyof Foo; // string | "prop"
+>t : string | "prop"
+>Foo : Foo
+
+var x: Partial<Foo>;
+>x : Partial<Foo>
+>Partial : Partial<T>
+>Foo : Foo
+
+x.prop; // ok
+>x.prop : number
+>x : Partial<Foo>
+>prop : number
+
+x["other"].toFixed();
+>x["other"].toFixed() : string
+>x["other"].toFixed : (fractionDigits?: number) => string
+>x["other"] : number
+>x : Partial<Foo>
+>"other" : "other"
+>toFixed : (fractionDigits?: number) => string
+
+var y: Pick<Foo, keyof Foo>;
+>y : Pick<Foo, string | "prop">
+>Pick : Pick<T, K>
+>Foo : Foo
+>Foo : Foo
+
+y.prop; // ok
+>y.prop : number
+>y : Pick<Foo, string | "prop">
+>prop : number
+
+y["other"].toFixed();
+>y["other"].toFixed() : string
+>y["other"].toFixed : (fractionDigits?: number) => string
+>y["other"] : number
+>y : Pick<Foo, string | "prop">
+>"other" : "other"
+>toFixed : (fractionDigits?: number) => string
+
+
+
+
+
