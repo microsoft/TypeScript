@@ -38,8 +38,8 @@ class MyComponent extends React.Component<ComponentProps, {}> {
 <MyComponent AnyComponent={() => <button>test</button>}/>
 >MyComponent : Symbol(MyComponent, Decl(file.tsx, 4, 1))
 >AnyComponent : Symbol(AnyComponent, Decl(file.tsx, 14, 12))
->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2383, 43))
->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2383, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2385, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2385, 43))
 
 // Component Class as Props
 class MyButtonComponent extends React.Component<{},{}> {

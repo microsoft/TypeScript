@@ -367,7 +367,7 @@ namespace ts {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
-    export function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpaceLike(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
     }
 
@@ -512,7 +512,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                           pos++;
                           continue;
                       }
@@ -694,7 +694,7 @@ namespace ts {
                     }
                     break scan;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                         if (hasPendingCommentRange && isLineBreak(ch)) {
                             pendingHasTrailingNewLine = true;
                         }
@@ -1727,8 +1727,12 @@ namespace ts {
                 return token = SyntaxKind.OpenBraceToken;
             }
 
+            // First non-whitespace character on this line.
+            let firstNonWhitespace = 0;
+            // These initial values are special because the first line is:
+            // firstNonWhitespace = 0 to indicate that we want leading whitspace,
+
             while (pos < end) {
-                pos++;
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -1740,8 +1744,23 @@ namespace ts {
                     }
                     break;
                 }
+
+                // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
+                // i.e (- : whitespace)
+                //      <div>----
+                //      </div> becomes <div></div>
+                //
+                //      <div>----</div> becomes <div>----</div>
+                if (isLineBreak(char) && firstNonWhitespace === 0) {
+                    firstNonWhitespace = -1;
+                }
+                else if (!isWhiteSpaceLike(char)) {
+                    firstNonWhitespace = pos;
+                }
+                pos++;
             }
-            return token = SyntaxKind.JsxText;
+
+            return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
         // Scans a JSX identifier; these differ from normal identifiers in that

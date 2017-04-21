@@ -10,7 +10,7 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
-        get(key: string): T;
+        get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
@@ -65,6 +65,7 @@ namespace ts {
         NumericLiteral,
         StringLiteral,
         JsxText,
+        JsxTextAllWhiteSpaces,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -1572,6 +1573,7 @@ namespace ts {
 
     export interface JsxText extends Node {
         kind: SyntaxKind.JsxText;
+        containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
 

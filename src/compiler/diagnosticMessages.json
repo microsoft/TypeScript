@@ -2119,6 +2119,10 @@
         "category": "Error",
         "code": 2709
     },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -165,7 +165,7 @@ const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 >extra-prop : Symbol(extra-prop, Decl(file.tsx, 50, 38))
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 
-const b10 = <MainButton to='/some/path' children="hi" >GO</MainButton>;
+const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 >b10 : Symbol(b10, Decl(file.tsx, 51, 5))
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >to : Symbol(to, Decl(file.tsx, 51, 23))
