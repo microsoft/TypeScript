@@ -6,23 +6,6 @@ namespace ts {
     const emptyArray: any[] = [];
     const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
 
-
-    const enum StructuralChangesFromOldProgram {
-        None                        = 0,
-        NoOldProgram                = 1 << 1,
-        ModuleResolutionOptions     = 1 << 2,
-        RootNames                   = 1 << 3,
-        TypesOptions                = 1 << 4,
-        SourceFileRemoved           = 1 << 5,
-        HasNoDefaultLib             = 1 << 6,
-        TripleSlashReferences       = 1 << 7,
-        Imports                     = 1 << 8,
-        ModuleAugmentations         = 1 << 9,
-        TripleSlashTypesReferences  = 1 << 10,
-
-        CannotReuseResolution = NoOldProgram | ModuleResolutionOptions | RootNames | TypesOptions | SourceFileRemoved
-    }
-
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string {
         while (true) {
             const fileName = combinePaths(searchPath, configName);
@@ -385,11 +368,8 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
-        const structuralChanges = tryReuseStructureFromOldProgram();
-        if (structuralChanges === StructuralChangesFromOldProgram.None) {
-            Debug.assert(oldProgram.structureIsReused === StructureIsReused.Completely);
-        }
-        else {
+        const structuralIsReused = tryReuseStructureFromOldProgram();
+        if (structuralIsReused !== StructureIsReused.Completely) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -511,7 +491,7 @@ namespace ts {
         }
 
         function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState: OldProgramState) {
-            if (structuralChanges & StructuralChangesFromOldProgram.CannotReuseResolution && !file.ambientModuleNames.length) {
+            if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
                 // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
                 // the best we can do is fallback to the default logic.
                 return resolveModuleNamesWorker(moduleNames, containingFile);
@@ -639,17 +619,16 @@ namespace ts {
             }
         }
 
-        function tryReuseStructureFromOldProgram(): StructuralChangesFromOldProgram {
+        function tryReuseStructureFromOldProgram(): StructureIsReused {
             if (!oldProgram) {
-                return StructuralChangesFromOldProgram.NoOldProgram;
+                return StructureIsReused.Not;
             }
 
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if (changesAffectModuleResolution(oldOptions, options)) {
-                oldProgram.structureIsReused = StructureIsReused.Not;
-                return StructuralChangesFromOldProgram.ModuleResolutionOptions;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             Debug.assert(!(oldProgram.structureIsReused & (StructureIsReused.Completely | StructureIsReused.ModulesInUneditedFiles)));
@@ -658,19 +637,19 @@ namespace ts {
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
                 oldProgram.structureIsReused = StructureIsReused.Not;
-                return StructuralChangesFromOldProgram.RootNames;
+                return StructureIsReused.Not;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
                 oldProgram.structureIsReused = StructureIsReused.Not;
-                return StructuralChangesFromOldProgram.TypesOptions;
+                return StructureIsReused.Not;
             }
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
             const filePaths: Path[] = [];
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
-            let structuralChanges = StructuralChangesFromOldProgram.None;
+            oldProgram.structureIsReused = StructureIsReused.Completely;
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
                 const newSourceFile = host.getSourceFileByPath
@@ -678,53 +657,51 @@ namespace ts {
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
 
                 if (!newSourceFile) {
-                    structuralChanges |= StructuralChangesFromOldProgram.SourceFileRemoved;
+                    return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
-                else {
-                    newSourceFile.path = oldSourceFile.path;
-                    filePaths.push(newSourceFile.path);
 
-                    if (oldSourceFile !== newSourceFile) {
-                        if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
-                            // value of no-default-lib has changed
-                            // this will affect if default library is injected into the list of files
-                            structuralChanges |= StructuralChangesFromOldProgram.HasNoDefaultLib;
-                        }
+                newSourceFile.path = oldSourceFile.path;
+                filePaths.push(newSourceFile.path);
 
-                        // check tripleslash references
-                        if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
-                            // tripleslash references has changed
-                            structuralChanges |= StructuralChangesFromOldProgram.TripleSlashReferences;
-                        }
-
-                        // check imports and module augmentations
-                        collectExternalModuleReferences(newSourceFile);
-                        if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
-                            // imports has changed
-                            structuralChanges |= StructuralChangesFromOldProgram.Imports;
-                        }
-                        if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
-                            // moduleAugmentations has changed
-                            structuralChanges |= StructuralChangesFromOldProgram.ModuleAugmentations;
-                        }
-
-                        if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
-                            // 'types' references has changed
-                            structuralChanges |= StructuralChangesFromOldProgram.TripleSlashTypesReferences;
-                        }
-
-                        // tentatively approve the file
-                        modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
+                if (oldSourceFile !== newSourceFile) {
+                    if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
+                        // value of no-default-lib has changed
+                        // this will affect if default library is injected into the list of files
+                        oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
                     }
 
-                    // if file has passed all checks it should be safe to reuse it
-                    newSourceFiles.push(newSourceFile);
+                    // check tripleslash references
+                    if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
+                        // tripleslash references has changed
+                        oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
+                    }
+
+                    // check imports and module augmentations
+                    collectExternalModuleReferences(newSourceFile);
+                    if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
+                        // imports has changed
+                        oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
+                    }
+                    if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
+                        // moduleAugmentations has changed
+                        oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
+                    }
+
+                    if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
+                        // 'types' references has changed
+                        oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
+                    }
+
+                    // tentatively approve the file
+                    modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
                 }
+
+                // if file has passed all checks it should be safe to reuse it
+                newSourceFiles.push(newSourceFile);
             }
 
-            if (structuralChanges !== StructuralChangesFromOldProgram.None) {
-                oldProgram.structureIsReused = structuralChanges & StructuralChangesFromOldProgram.CannotReuseResolution ? StructureIsReused.Not : StructureIsReused.ModulesInUneditedFiles;
-                return structuralChanges;
+            if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
+                return oldProgram.structureIsReused;
             }
 
             modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
@@ -738,7 +715,7 @@ namespace ts {
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                     if (resolutionsChanged) {
-                        return StructuralChangesFromOldProgram.Imports | StructuralChangesFromOldProgram.ModuleAugmentations;
+                        return oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
                     }
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
@@ -747,7 +724,7 @@ namespace ts {
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                     if (resolutionsChanged) {
-                        return StructuralChangesFromOldProgram.TripleSlashTypesReferences;
+                        return oldProgram.structureIsReused = StructureIsReused.ModulesInUneditedFiles;
                     }
                 }
                 // pass the cache of module/types resolutions from the old source file
@@ -768,8 +745,7 @@ namespace ts {
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
 
-            oldProgram.structureIsReused = StructureIsReused.Completely;
-            return StructuralChangesFromOldProgram.None;
+            return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
