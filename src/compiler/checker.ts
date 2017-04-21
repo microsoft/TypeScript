@@ -13477,13 +13477,13 @@ namespace ts {
             return getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
-        /** 
+        /**
          * Look into JSX namespace and then look for container with matching name as nameOfAttribPropContainer.
          * Get a single property from that container if existed. Report an error if there are more than one property.
-         * 
+         *
          * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
          *          if other string is given or the container doesn't exist, return undefined.
-         **/
+         */
         function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: string): string {
             // JSX
             const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
