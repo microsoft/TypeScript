@@ -387,7 +387,7 @@ namespace ts {
 
         const structuralChanges = tryReuseStructureFromOldProgram();
         if (structuralChanges === StructuralChangesFromOldProgram.None) {
-            Debug.assert(oldProgram.structureIsReused === true);
+            Debug.assert(oldProgram.structureIsReused === StructureIsReused.Completely);
         }
         else {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
@@ -648,18 +648,21 @@ namespace ts {
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if (changesAffectModuleResolution(oldOptions, options)) {
+                oldProgram.structureIsReused = StructureIsReused.Not;
                 return StructuralChangesFromOldProgram.ModuleResolutionOptions;
             }
 
-            Debug.assert(!oldProgram.structureIsReused);
+            Debug.assert(!(oldProgram.structureIsReused & (StructureIsReused.Completely | StructureIsReused.ModulesInUneditedFiles)));
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
+                oldProgram.structureIsReused = StructureIsReused.Not;
                 return StructuralChangesFromOldProgram.RootNames;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
+                oldProgram.structureIsReused = StructureIsReused.Not;
                 return StructuralChangesFromOldProgram.TypesOptions;
             }
 
@@ -670,7 +673,7 @@ namespace ts {
             let structuralChanges = StructuralChangesFromOldProgram.None;
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                let newSourceFile = host.getSourceFileByPath
+                const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
 
@@ -720,6 +723,7 @@ namespace ts {
             }
 
             if (structuralChanges !== StructuralChangesFromOldProgram.None) {
+                oldProgram.structureIsReused = structuralChanges & StructuralChangesFromOldProgram.CannotReuseResolution ? StructureIsReused.Not : StructureIsReused.ModulesInUneditedFiles;
                 return structuralChanges;
             }
 
@@ -763,8 +767,8 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
-            oldProgram.structureIsReused = true;
 
+            oldProgram.structureIsReused = StructureIsReused.Completely;
             return StructuralChangesFromOldProgram.None;
         }
 

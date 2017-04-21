@@ -140,7 +140,9 @@ namespace ts {
             useCaseSensitiveFileNames(): boolean {
                 return sys && sys.useCaseSensitiveFileNames;
             },
-            getNewLine,
+            getNewLine(): string {
+                return sys ? sys.newLine : newLine;
+            },
             fileExists: fileName => files.has(fileName),
             readFile: fileName => {
                 const file = files.get(fileName);
@@ -216,12 +218,14 @@ namespace ts {
     describe("Reuse program structure", () => {
         const target = ScriptTarget.Latest;
         const files: NamedSourceText[] = [
-            { name: "a.ts", text: SourceText.New(
-                `
+            {
+                name: "a.ts", text: SourceText.New(
+                    `
 /// <reference path='b.ts'/>
 /// <reference path='non-existing-file.ts'/>
 /// <reference types="typerefs" />
-`, "", `var x = 1`) },
+`, "", `var x = 1`)
+            },
             { name: "b.ts", text: SourceText.New(`/// <reference path='c.ts'/>`, "", `var y = 2`) },
             { name: "c.ts", text: SourceText.New("", "", `var z = 1;`) },
             { name: "types/typerefs/index.d.ts", text: SourceText.New("", "", `declare let z: number;`) },
@@ -232,7 +236,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.isTrue(program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
             const program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             const program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -243,7 +247,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[0].text = files[0].text.updateProgram("var x = 100");
             });
-            assert.isTrue(program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
             const program1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             const program2Diagnostics = program_2.getSemanticDiagnostics(program_1.getSourceFile("a.ts"));
             assert.equal(program1Diagnostics.length, program2Diagnostics.length);
@@ -257,19 +261,19 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
         });
 
         it("fails if change affects type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
             updateProgram(program_1, ["a.ts"], { types: ["b"] }, noop);
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
         });
 
         it("succeeds if change doesn't affect type references", () => {
             const program_1 = newProgram(files, ["a.ts"], { types: ["a"] });
             updateProgram(program_1, ["a.ts"], { types: ["a"] }, noop);
-            assert.isTrue(program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
         });
 
         it("fails if change affects imports", () => {
@@ -277,7 +281,7 @@ namespace ts {
             updateProgram(program_1, ["a.ts"], { target }, files => {
                 files[2].text = files[2].text.updateImportsAndExports("import x from 'b'");
             });
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
         });
 
         it("fails if change affects type directives", () => {
@@ -289,25 +293,25 @@ namespace ts {
 /// <reference types="typerefs1" />`;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
         });
 
         it("fails if module kind changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.AMD }, noop);
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
         });
 
         it("fails if rootdir changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/b" });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, rootDir: "/a/c" }, noop);
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
         });
 
         it("fails if config path changes", () => {
             const program_1 = newProgram(files, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/b/tsconfig.json" });
             updateProgram(program_1, ["a.ts"], { target, module: ModuleKind.CommonJS, configFilePath: "/a/c/tsconfig.json" }, noop);
-            assert.isTrue(!program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
         });
 
         it("resolution cache follows imports", () => {
@@ -326,7 +330,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.isTrue(program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedModulesCache(program_1, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts") }));
@@ -336,7 +340,7 @@ namespace ts {
             const program_3 = updateProgram(program_2, ["a.ts"], options, files => {
                 files[0].text = files[0].text.updateImportsAndExports("");
             });
-            assert.isTrue(!program_2.structureIsReused);
+            assert.isTrue(program_2.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
             checkResolvedModulesCache(program_3, "a.ts", /*expectedContent*/ undefined);
 
             const program_4 = updateProgram(program_3, ["a.ts"], options, files => {
@@ -345,7 +349,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateImportsAndExports(newImports);
             });
-            assert.isTrue(!program_3.structureIsReused);
+            assert.isTrue(program_3.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
             checkResolvedModulesCache(program_4, "a.ts", createMapFromTemplate({ "b": createResolvedModule("b.ts"), "c": undefined }));
         });
 
@@ -363,7 +367,7 @@ namespace ts {
             const program_2 = updateProgram(program_1, ["/a.ts"], options, files => {
                 files[0].text = files[0].text.updateProgram("var x = 2");
             });
-            assert.isTrue(program_1.structureIsReused);
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
 
             // content of resolution cache should not change
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
@@ -374,7 +378,7 @@ namespace ts {
                 files[0].text = files[0].text.updateReferences("");
             });
 
-            assert.isTrue(!program_2.structureIsReused);
+            assert.isTrue(program_2.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
             checkResolvedTypeDirectivesCache(program_3, "/a.ts", /*expectedContent*/ undefined);
 
             updateProgram(program_3, ["/a.ts"], options, files => {
@@ -383,7 +387,7 @@ namespace ts {
                 `;
                 files[0].text = files[0].text.updateReferences(newReferences);
             });
-            assert.isTrue(!program_3.structureIsReused);
+            assert.isTrue(program_3.structureIsReused === StructureIsReused.ModulesInUneditedFiles);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
         });
 
@@ -468,71 +472,84 @@ namespace ts {
                 ], "should look for 'fs' again since node.d.ts was changed");
         });
 
-         it("can reuse module resolutions from non-modified files", () => {
-             const files = [
-                 { name: "a1.ts", text: SourceText.New("", "", "let x = 1;") },
-                 { name: "a2.ts", text: SourceText.New("", "", "let x = 1;") },
-                 { name: "b1.ts", text: SourceText.New("", "export class B { x: number; }", "") },
-                 { name: "b2.ts", text: SourceText.New("", "export class B { x: number; }", "") },
-                 { name: "node_modules/@types/typerefs1/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
-                 { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
-                 {
-                     name: "f1.ts",
-                     text: SourceText.New(
-                         `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
-                         `import { B } from './b1';${newLine}export let BB = B;`,
-                         "declare module './b1' { interface B { y: string; } }")
-                 },
-                 {
-                     name: "f2.ts",
-                     text: SourceText.New(
-                         `/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`,
-                         `import { B } from './b2';${newLine}import { BB } from './f1';`,
-                         "(new BB).x; (new BB).y;")
-                 },
-             ];
+        it("can reuse module resolutions from non-modified files", () => {
+            const files = [
+                { name: "a1.ts", text: SourceText.New("", "", "let x = 1;") },
+                { name: "a2.ts", text: SourceText.New("", "", "let x = 1;") },
+                { name: "b1.ts", text: SourceText.New("", "export class B { x: number; }", "") },
+                { name: "b2.ts", text: SourceText.New("", "export class B { x: number; }", "") },
+                { name: "node_modules/@types/typerefs1/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
+                { name: "node_modules/@types/typerefs2/index.d.ts", text: SourceText.New("", "", "declare let z: string;") },
+                {
+                    name: "f1.ts",
+                    text:
+                    SourceText.New(
+                        `/// <reference path="a1.ts"/>${newLine}/// <reference types="typerefs1"/>${newLine}/// <reference no-default-lib="true"/>`,
+                        `import { B } from './b1';${newLine}export let BB = B;`,
+                        "declare module './b1' { interface B { y: string; } }")
+                },
+                {
+                    name: "f2.ts",
+                    text: SourceText.New(
+                        `/// <reference path="a2.ts"/>${newLine}/// <reference types="typerefs2"/>`,
+                        `import { B } from './b2';${newLine}import { BB } from './f1';`,
+                        "(new BB).x; (new BB).y;")
+                },
+            ];
 
-             const options = { target: ScriptTarget.ES2015, traceResolution: true };
-             const program_1 = newProgram(files, files.map(f => f.name), options);
-             assert.deepEqual(program_1.host.getTrace(),
-                 [
-                     "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
-                     "Resolving with primary search path 'node_modules/@types'.",
-                     "File 'node_modules/@types/typerefs1/package.json' does not exist.",
-                     "File 'node_modules/@types/typerefs1/index.d.ts' exist - use it as a name resolution result.",
-                     "======== Type reference directive 'typerefs1' was successfully resolved to 'node_modules/@types/typerefs1/index.d.ts', primary: true. ========",
-                     "======== Resolving module './b1' from 'f1.ts'. ========",
-                     "Module resolution kind is not specified, using 'Classic'.",
-                     "File 'b1.ts' exist - use it as a name resolution result.",
-                     "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
-                     "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
-                     "Resolving with primary search path 'node_modules/@types'.",
-                     "File 'node_modules/@types/typerefs2/package.json' does not exist.",
-                     "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
-                     "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                     "======== Resolving module './b2' from 'f2.ts'. ========",
-                     "Module resolution kind is not specified, using 'Classic'.",
-                     "File 'b2.ts' exist - use it as a name resolution result.",
-                     "======== Module name './b2' was successfully resolved to 'b2.ts'. ========",
-                     "======== Resolving module './f1' from 'f2.ts'. ========",
-                     "Module resolution kind is not specified, using 'Classic'.",
-                     "File 'f1.ts' exist - use it as a name resolution result.",
-                     "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
-                 ],
-                 "First program should execute module reoslution normally.");
+            const options: CompilerOptions = { target: ScriptTarget.ES2015, traceResolution: true, moduleResolution: ModuleResolutionKind.Classic };
+            const program_1 = newProgram(files, files.map(f => f.name), options);
+            assert.deepEqual(program_1.host.getTrace(),
+                [
+                    "======== Resolving type reference directive 'typerefs1', containing file 'f1.ts', root directory 'node_modules/@types'. ========",
+                    "Resolving with primary search path 'node_modules/@types'.",
+                    "File 'node_modules/@types/typerefs1/package.json' does not exist.",
+                    "File 'node_modules/@types/typerefs1/index.d.ts' exist - use it as a name resolution result.",
+                    "======== Type reference directive 'typerefs1' was successfully resolved to 'node_modules/@types/typerefs1/index.d.ts', primary: true. ========",
+                    "======== Resolving module './b1' from 'f1.ts'. ========",
+                    "Explicitly specified module resolution kind: 'Classic'.",
+                    "File 'b1.ts' exist - use it as a name resolution result.",
+                    "======== Module name './b1' was successfully resolved to 'b1.ts'. ========",
+                    "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
+                    "Resolving with primary search path 'node_modules/@types'.",
+                    "File 'node_modules/@types/typerefs2/package.json' does not exist.",
+                    "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
+                    "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
+                    "======== Resolving module './b2' from 'f2.ts'. ========",
+                    "Explicitly specified module resolution kind: 'Classic'.",
+                    "File 'b2.ts' exist - use it as a name resolution result.",
+                    "======== Module name './b2' was successfully resolved to 'b2.ts'. ========",
+                    "======== Resolving module './f1' from 'f2.ts'. ========",
+                    "Explicitly specified module resolution kind: 'Classic'.",
+                    "File 'f1.ts' exist - use it as a name resolution result.",
+                    "======== Module name './f1' was successfully resolved to 'f1.ts'. ========"
+                ],
+                "First program should execute module reoslution normally.");
 
-             // Create project. Edit file-exists to track disk accesses. Edit f1.ts, update project.
-             // check that updating project "inherits" the fileexists implementation.
-             const indexOfF1 = 6;
-             function updateProgram_1(files: NamedSourceText[]): void {
-                files[indexOfF1].text = SourceText.New("","","");
-             }
+            const program_1Diagnostics = program_1.getSemanticDiagnostics(program_1.getSourceFile("f2.ts"));
+            assert(program_1Diagnostics.length === 0, `initial program should be well-formed`);
 
-             const program_2 = updateProgram(program_1, program_1.getRootFileNames(), options, updateProgram_1);
-             assert.deepEqual(program_2.host.getTrace(), [
-                 "Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified."
-             ], "should reuse module resolutions in f2 since it is unchanged");
-         });
+            const indexOfF1 = 6;
+            const program_2 = updateProgram(program_1, program_1.getRootFileNames(), options, f => {
+                let newSourceText = f[indexOfF1].text.updateProgram("");
+                newSourceText = newSourceText.updateImportsAndExports("");
+                newSourceText = newSourceText.updateReferences("");
+                f[indexOfF1] = { name: "f1.ts", text: newSourceText };
+            });
+
+
+            const program_2Diagnostics = program_2.getSemanticDiagnostics(program_2.getSourceFile("f2.ts"));
+            assert(program_2Diagnostics.length === 1, `f1 no longer augments BB, should get one error.`);
+
+            assert.deepEqual(program_2.host.getTrace(), [
+                "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
+                "Resolving with primary search path 'node_modules/@types'.",
+                "File 'node_modules/@types/typerefs2/package.json' does not exist.",
+                "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
+                "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
+                "Reusing module resolutions originating in 'f2.ts' since this file was not modified."
+            ], "should reuse module resolutions in f2 since it is unchanged");
+        });
     });
 
     describe("host is optional", () => {

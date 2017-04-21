@@ -2406,7 +2406,13 @@ namespace ts {
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
-        /* @internal */ structureIsReused?: boolean;
+        /* @internal */ structureIsReused?: StructureIsReused;
+    }
+
+    export const enum StructureIsReused {
+        Completely,
+        ModulesInUneditedFiles,
+        Not
     }
 
     export interface CustomTransformers {
