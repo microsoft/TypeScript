@@ -15383,6 +15383,22 @@ interface FormData {
     [Symbol.iterator](): IterableIterator<string | File>;
 }
 
+interface Headers {
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all key/value pairs contained in this object.
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
+     */
+    values(): IterableIterator<string>;
+}
+
 interface NodeList {
     /**
      * Returns an array of key, value pairs for every entry in the list
@@ -15431,4 +15447,23 @@ interface NodeListOf<TNode extends Node> {
     values(): IterableIterator<TNode>;
 
     [Symbol.iterator](): IterableIterator<TNode>;
+}
+
+interface URLSearchParams {
+    /**
+     * Returns an array of key, value pairs for every entry in the search params
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns a list of keys in the search params
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the search params
+     */
+    values(): IterableIterator<string>;
+    /**
+     * iterate over key/value pairs
+     */
+    [Symbol.iterator](): IterableIterator<[string, string]>;
 }
