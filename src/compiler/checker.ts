@@ -361,7 +361,7 @@ namespace ts {
             // The presence of a particular fact means that the given test is true for some (and possibly all) values
             // of that kind of type.
             BaseStringStrictFacts = TypeofEQString | TypeofNENumber | TypeofNEBoolean | TypeofNESymbol | TypeofNEObject | TypeofNEFunction | TypeofNEHostObject | NEUndefined | NENull | NEUndefinedOrNull,
-            BaseStringFacts = BaseStringStrictFacts  | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
+            BaseStringFacts = BaseStringStrictFacts | EQUndefined | EQNull | EQUndefinedOrNull | Falsy,
             StringStrictFacts = BaseStringStrictFacts | Truthy | Falsy,
             StringFacts = BaseStringFacts | Truthy,
             EmptyStringStrictFacts = BaseStringStrictFacts | Falsy,
@@ -423,14 +423,20 @@ namespace ts {
 
         let _jsxNamespace: string;
         let _jsxFactoryEntity: EntityName;
+        let _jsxElementPropertiesName: string;
+        let _hasComputedJsxElementPropertiesName = false;
+        let _jsxElementChildrenPropertyName: string;
+        let _hasComputedJsxElementChildrenPropertyName = false;
 
         /** Things we lazy load from the JSX namespace */
         const jsxTypes = createMap<Type>();
+
         const JsxNames = {
             JSX: "JSX",
             IntrinsicElements: "IntrinsicElements",
             ElementClass: "ElementClass",
             ElementAttributesPropertyNameContainer: "ElementAttributesProperty",
+            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute",
             Element: "Element",
             IntrinsicAttributes: "IntrinsicAttributes",
             IntrinsicClassAttributes: "IntrinsicClassAttributes"
@@ -468,7 +474,7 @@ namespace ts {
         return checker;
 
         function getJsxNamespace(): string {
-            if (_jsxNamespace === undefined) {
+            if (!_jsxNamespace) {
                 _jsxNamespace = "React";
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
@@ -1628,7 +1634,7 @@ namespace ts {
                 }
             }
 
-             // May be an untyped module. If so, ignore resolutionDiagnostic.
+            // May be an untyped module. If so, ignore resolutionDiagnostic.
             if (!isRelative && resolvedModule && !extensionIsTypeScript(resolvedModule.extension)) {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
@@ -3977,7 +3983,7 @@ namespace ts {
                 type;
         }
 
-        function getTypeForDeclarationFromJSDocComment(declaration: Node ) {
+        function getTypeForDeclarationFromJSDocComment(declaration: Node) {
             const jsdocType = getJSDocType(declaration);
             if (jsdocType) {
                 return getTypeFromTypeNode(jsdocType);
@@ -5644,7 +5650,7 @@ namespace ts {
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
             return type.flags & TypeFlags.TypeParameter ? getConstraintOfTypeParameter(<TypeParameter>type) :
                 type.flags & TypeFlags.IndexedAccess ? getConstraintOfIndexedAccess(<IndexedAccessType>type) :
-                getBaseConstraintOfType(type);
+                    getBaseConstraintOfType(type);
         }
 
         function getConstraintOfTypeParameter(typeParameter: TypeParameter): Type {
@@ -5717,7 +5723,7 @@ namespace ts {
                     }
                     return t.flags & TypeFlags.Union && baseTypes.length === types.length ? getUnionType(baseTypes) :
                         t.flags & TypeFlags.Intersection && baseTypes.length ? getIntersectionType(baseTypes) :
-                        undefined;
+                            undefined;
                 }
                 if (t.flags & TypeFlags.Index) {
                     return stringType;
@@ -5768,11 +5774,11 @@ namespace ts {
             const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
-                t.flags & TypeFlags.NumberLike ? globalNumberType :
-                t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
-                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
-                t;
+                    t.flags & TypeFlags.NumberLike ? globalNumberType :
+                        t.flags & TypeFlags.BooleanLike ? globalBooleanType :
+                            t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
+                                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
+                                    t;
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
@@ -7216,8 +7222,8 @@ namespace ts {
         function getIndexType(type: Type): Type {
             return maybeTypeOfKind(type, TypeFlags.TypeVariable) ? getIndexTypeForGenericType(<TypeVariable | UnionOrIntersectionType>type) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
-                type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
-                getLiteralTypeFromPropertyNames(type);
+                    type.flags & TypeFlags.Any || getIndexInfoOfType(type, IndexKind.String) ? stringType :
+                        getLiteralTypeFromPropertyNames(type);
         }
 
         function getIndexTypeOrString(type: Type): Type {
@@ -7413,7 +7419,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type): Type  {
+        function getSpreadType(left: Type, right: Type): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -7713,7 +7719,7 @@ namespace ts {
         function createTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
             const mapper: TypeMapper = sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
                 sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
-                makeArrayTypeMapper(sources, targets);
+                    makeArrayTypeMapper(sources, targets);
             mapper.mappedTypes = sources;
             return mapper;
         }
@@ -8537,7 +8543,7 @@ namespace ts {
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
                     (getGlobalESSymbolType(/*reportErrors*/ false) === source && esSymbolType === target)) {
-                        reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
+                    reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
                 }
             }
 
@@ -8718,7 +8724,7 @@ namespace ts {
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
                                 Debug.assert(!!errorNode);
-                                if (isJsxAttributes(errorNode)) {
+                                if (isJsxAttributes(errorNode) || isJsxOpeningLikeElement(errorNode)) {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
@@ -9661,25 +9667,25 @@ namespace ts {
         function isLiteralType(type: Type): boolean {
             return type.flags & TypeFlags.Boolean ? true :
                 type.flags & TypeFlags.Union ? type.flags & TypeFlags.Enum ? true : !forEach((<UnionType>type).types, t => !isUnitType(t)) :
-                isUnitType(type);
+                    isUnitType(type);
         }
 
         function getBaseTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.StringLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral ? numberType :
-                type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
-                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getBaseTypeOfLiteralType)) :
-                type;
+                    type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                        type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
+                            type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getBaseTypeOfLiteralType)) :
+                                type;
         }
 
         function getWidenedLiteralType(type: Type): Type {
             return type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
                 type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
-                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
-                type;
+                    type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                        type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
+                            type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
+                                type;
         }
 
         /**
@@ -9704,9 +9710,9 @@ namespace ts {
         function getFalsyFlags(type: Type): TypeFlags {
             return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
                 type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).text === "" ? TypeFlags.StringLiteral : 0 :
-                type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).text === "0" ? TypeFlags.NumberLiteral : 0 :
-                type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
-                type.flags & TypeFlags.PossiblyFalsy;
+                    type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).text === "0" ? TypeFlags.NumberLiteral : 0 :
+                        type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
+                            type.flags & TypeFlags.PossiblyFalsy;
         }
 
         function includeFalsyTypes(type: Type, flags: TypeFlags) {
@@ -10882,8 +10888,8 @@ namespace ts {
                 isTypeSubsetOf(numberType, typeWithPrimitives) && maybeTypeOfKind(typeWithLiterals, TypeFlags.NumberLiteral)) {
                 return mapType(typeWithPrimitives, t =>
                     t.flags & TypeFlags.String ? extractTypesOfKind(typeWithLiterals, TypeFlags.String | TypeFlags.StringLiteral) :
-                    t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
-                    t);
+                        t.flags & TypeFlags.Number ? extractTypesOfKind(typeWithLiterals, TypeFlags.Number | TypeFlags.NumberLiteral) :
+                            t);
             }
             return typeWithPrimitives;
         }
@@ -11459,7 +11465,7 @@ namespace ts {
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =
                     discriminantType.flags & TypeFlags.Never ? neverType :
-                    replacePrimitivesWithLiterals(filterType(type, t => isTypeComparableTo(discriminantType, t)), discriminantType);
+                        replacePrimitivesWithLiterals(filterType(type, t => isTypeComparableTo(discriminantType, t)), discriminantType);
                 if (!hasDefaultClause) {
                     return caseType;
                 }
@@ -11539,8 +11545,8 @@ namespace ts {
                 // two types.
                 return isTypeSubtypeOf(candidate, type) ? candidate :
                     isTypeAssignableTo(type, candidate) ? type :
-                    isTypeAssignableTo(candidate, type) ? candidate :
-                    getIntersectionType([type, candidate]);
+                        isTypeAssignableTo(candidate, type) ? candidate :
+                            getIntersectionType([type, candidate]);
             }
 
             function narrowTypeByTypePredicate(type: Type, callExpression: CallExpression, assumeTrue: boolean): Type {
@@ -11559,7 +11565,7 @@ namespace ts {
                 }
 
                 if (isIdentifierTypePredicate(predicate)) {
-                    const predicateArgument = callExpression.arguments[predicate.parameterIndex];
+                    const predicateArgument = callExpression.arguments[predicate.parameterIndex - (signature.thisParameter ? 1 : 0)];
                     if (predicateArgument) {
                         if (isMatchingReference(reference, predicateArgument)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
@@ -11801,11 +11807,11 @@ namespace ts {
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
             const assumeInitialized = isParameter || isOuterVariable ||
-                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node)) ||
+                type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 isInAmbientContext(declaration);
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                includeFalsyTypes(type, TypeFlags.Undefined);
+                    includeFalsyTypes(type, TypeFlags.Undefined);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -12288,7 +12294,7 @@ namespace ts {
                 func.kind === SyntaxKind.GetAccessor ||
                 func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
                 func.kind === SyntaxKind.FunctionExpression && func.parent.kind === SyntaxKind.PropertyAssignment ? <ObjectLiteralExpression>func.parent.parent :
-                undefined;
+                    undefined;
         }
 
         function getThisTypeArgument(type: Type): Type {
@@ -12619,6 +12625,36 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
+        function getContextualTypeForJsxExpression(node: JsxExpression): Type {
+            // JSX expression can appear in two position : JSX Element's children or JSX attribute
+            const jsxAttributes = isJsxAttributeLike(node.parent) ?
+                node.parent.parent :
+                node.parent.openingElement.attributes; // node.parent is JsxElement
+
+            // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
+            // which is a type of the parameter of the signature we are trying out.
+            // If there is no contextual type (e.g. we are trying to resolve stateful component), get attributes type from resolving element's tagName
+            const attributesType = getContextualType(jsxAttributes);
+
+            if (!attributesType || isTypeAny(attributesType)) {
+                return undefined;
+            }
+
+            if (isJsxAttribute(node.parent)) {
+                // JSX expression is in JSX attribute
+                return getTypeOfPropertyOfType(attributesType, (node.parent as JsxAttribute).name.text);
+            }
+            else if (node.parent.kind === SyntaxKind.JsxElement) {
+                // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
+                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                return jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfType(attributesType, jsxChildrenPropertyName) : anyType;
+            }
+            else {
+                // JSX expression is in JSX spread attribute
+                return attributesType;
+            }
+        }
+
         function getContextualTypeForJsxAttribute(attribute: JsxAttribute | JsxSpreadAttribute) {
             // When we trying to resolve JsxOpeningLikeElement as a stateless function element, we will already give its attributes a contextual type
             // which is a type of the parameter of the signature we are trying out.
@@ -12702,7 +12738,7 @@ namespace ts {
                 case SyntaxKind.ParenthesizedExpression:
                     return getContextualType(<ParenthesizedExpression>parent);
                 case SyntaxKind.JsxExpression:
-                    return getContextualType(<JsxExpression>parent);
+                    return getContextualTypeForJsxExpression(<JsxExpression>parent);
                 case SyntaxKind.JsxAttribute:
                 case SyntaxKind.JsxSpreadAttribute:
                     return getContextualTypeForJsxAttribute(<JsxAttribute | JsxSpreadAttribute>parent);
@@ -13157,21 +13193,6 @@ namespace ts {
                 checkExpression(node.closingElement.tagName);
             }
 
-            // Check children
-            for (const child of node.children) {
-                switch (child.kind) {
-                    case SyntaxKind.JsxExpression:
-                        checkJsxExpression(<JsxExpression>child);
-                        break;
-                    case SyntaxKind.JsxElement:
-                        checkJsxElement(<JsxElement>child);
-                        break;
-                    case SyntaxKind.JsxSelfClosingElement:
-                        checkJsxSelfClosingElement(<JsxSelfClosingElement>child);
-                        break;
-                }
-            }
-
             return getJsxGlobalElementType() || anyType;
         }
 
@@ -13264,6 +13285,42 @@ namespace ts {
                     }
                 });
             }
+
+            // Handle children attribute
+            const parent = openingLikeElement.parent.kind === SyntaxKind.JsxElement ? openingLikeElement.parent as JsxElement : undefined;
+            // We have to check that openingElement of the parent is the one we are visiting as this may not be true for selfClosingElement
+            if (parent && parent.openingElement === openingLikeElement && parent.children.length > 0) {
+                const childrenTypes: Type[] = [];
+                for (const child of (parent as JsxElement).children) {
+                    // In React, JSX text that contains only whitespaces will be ignored so we don't want to type-check that
+                    // because then type of children property will have constituent of string type.
+                    if (child.kind === SyntaxKind.JsxText) {
+                        if (!child.containsOnlyWhiteSpaces) {
+                            childrenTypes.push(stringType);
+                        }
+                    }
+                    else {
+                        childrenTypes.push(checkExpression(child, checkMode));
+                    }
+                }
+
+                // Error if there is a attribute named "children" and children element.
+                // This is because children element will overwrite the value from attributes
+                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+                if (jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                    if (attributesTable.has(jsxChildrenPropertyName)) {
+                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
+                    }
+
+                    // If there are children in the body of JSX element, create dummy attribute "children" with anyType so that it will pass the attribute checking process
+                    const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
+                    childrenPropSymbol.type = childrenTypes.length === 1 ?
+                        childrenTypes[0] :
+                        createArrayType(getUnionType(childrenTypes,  /*subtypeReduction*/ false));
+                    attributesTable.set(jsxChildrenPropertyName, childrenPropSymbol);
+                }
+            }
+
             return createJsxAttributesType(attributes.symbol, attributesTable);
 
             /**
@@ -13363,41 +13420,61 @@ namespace ts {
             return getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
+        /**
+         * Look into JSX namespace and then look for container with matching name as nameOfAttribPropContainer.
+         * Get a single property from that container if existed. Report an error if there are more than one property.
+         *
+         * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
+         *          if other string is given or the container doesn't exist, return undefined.
+         */
+        function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: string): string {
+            // JSX
+            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
+            // JSX.ElementAttributesProperty | JSX.ElementChildrenAttribute [symbol]
+            const jsxElementAttribPropInterfaceSym = jsxNamespace && getSymbol(jsxNamespace.exports, nameOfAttribPropContainer, SymbolFlags.Type);
+            // JSX.ElementAttributesProperty | JSX.ElementChildrenAttribute [type]
+            const jsxElementAttribPropInterfaceType = jsxElementAttribPropInterfaceSym && getDeclaredTypeOfSymbol(jsxElementAttribPropInterfaceSym);
+            // The properties of JSX.ElementAttributesProperty | JSX.ElementChildrenAttribute
+            const propertiesOfJsxElementAttribPropInterface = jsxElementAttribPropInterfaceType && getPropertiesOfType(jsxElementAttribPropInterfaceType);
+            if (propertiesOfJsxElementAttribPropInterface) {
+                // Element Attributes has zero properties, so the element attributes type will be the class instance type
+                if (propertiesOfJsxElementAttribPropInterface.length === 0) {
+                    return "";
+                }
+                // Element Attributes has one property, so the element attributes type will be the type of the corresponding
+                // property of the class instance type
+                else if (propertiesOfJsxElementAttribPropInterface.length === 1) {
+                    return propertiesOfJsxElementAttribPropInterface[0].name;
+                }
+                else if (propertiesOfJsxElementAttribPropInterface.length > 1) {
+                    // More than one property on ElementAttributesProperty is an error
+                    error(jsxElementAttribPropInterfaceSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, nameOfAttribPropContainer);
+                }
+            }
+            return undefined;
+        }
+
         /// e.g. "props" for React.d.ts,
         /// or 'undefined' if ElementAttributesProperty doesn't exist (which means all
         ///     non-intrinsic elements' attributes type is 'any'),
         /// or '' if it has 0 properties (which means every
         ///     non-intrinsic elements' attributes type is the element instance type)
         function getJsxElementPropertiesName() {
-            // JSX
-            const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
-            // JSX.ElementAttributesProperty [symbol]
-            const attribsPropTypeSym = jsxNamespace && getSymbol(jsxNamespace.exports, JsxNames.ElementAttributesPropertyNameContainer, SymbolFlags.Type);
-            // JSX.ElementAttributesProperty [type]
-            const attribPropType = attribsPropTypeSym && getDeclaredTypeOfSymbol(attribsPropTypeSym);
-            // The properties of JSX.ElementAttributesProperty
-            const attribProperties = attribPropType && getPropertiesOfType(attribPropType);
+            if (!_hasComputedJsxElementPropertiesName) {
+                _hasComputedJsxElementPropertiesName = true;
+                _jsxElementPropertiesName = getNameFromJsxElementAttributesContainer(JsxNames.ElementAttributesPropertyNameContainer);
+            }
 
-            if (attribProperties) {
-                // Element Attributes has zero properties, so the element attributes type will be the class instance type
-                if (attribProperties.length === 0) {
-                    return "";
-                }
-                // Element Attributes has one property, so the element attributes type will be the type of the corresponding
-                // property of the class instance type
-                else if (attribProperties.length === 1) {
-                    return attribProperties[0].name;
-                }
-                // More than one property on ElementAttributesProperty is an error
-                else {
-                    error(attribsPropTypeSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, JsxNames.ElementAttributesPropertyNameContainer);
-                    return undefined;
-                }
+            return _jsxElementPropertiesName;
+        }
+
+        function getJsxElementChildrenPropertyname(): string {
+            if (!_hasComputedJsxElementChildrenPropertyName) {
+                _hasComputedJsxElementChildrenPropertyName = true;
+                _jsxElementChildrenPropertyName = getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer);
             }
-            else {
-                // No interface exists, so the element attributes type will be an implicit any
-                return undefined;
-            }
+
+            return _jsxElementChildrenPropertyName;
         }
 
         /**
