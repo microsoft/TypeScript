@@ -3310,6 +3310,10 @@
         "category": "Error",
         "code": 7034
     },
+    "Try `npm install @types/{0}` if it exists or adding `declare module '{0}'` in a separate file.": {
+        "category": "Error",
+        "code": 7035
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

@@ -1641,10 +1641,14 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else if (noImplicitAny && moduleNotFoundError) {
-                    error(errorNode,
+                    let errorInfo = chainDiagnosticMessages(undefined,
+                        Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_adding_declare_module_0_in_a_separate_file,
+                        moduleReference);
+                    errorInfo = chainDiagnosticMessages(errorInfo,
                         Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                         moduleReference,
                         resolvedModule.resolvedFileName);
+                    diagnostics.add(createDiagnosticForNodeFromMessageChain(errorNode, errorInfo));
                 }
                 // Failed imports and untyped modules are both treated in an untyped manner; only difference is whether we give a diagnostic first.
                 return undefined;
