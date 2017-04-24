@@ -1641,7 +1641,7 @@ namespace ts {
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
                 }
                 else if (noImplicitAny && moduleNotFoundError) {
-                    let errorInfo = chainDiagnosticMessages(undefined,
+                    let errorInfo = chainDiagnosticMessages(/*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_0_if_it_exists_or_adding_declare_module_0_in_a_separate_file,
                         moduleReference);
                     errorInfo = chainDiagnosticMessages(errorInfo,
