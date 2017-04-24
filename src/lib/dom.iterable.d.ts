@@ -21,6 +21,22 @@ interface FormData {
     [Symbol.iterator](): IterableIterator<string | File>;
 }
 
+interface Headers {
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all key/value pairs contained in this object.
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
+     */
+    values(): IterableIterator<string>;
+}
+
 interface NodeList {
     /**
      * Returns an array of key, value pairs for every entry in the list
