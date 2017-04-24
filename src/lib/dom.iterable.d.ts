@@ -22,6 +22,7 @@ interface FormData {
 }
 
 interface Headers {
+    [Symbol.iterator](): IterableIterator<[String, String]>;
     /**
      * Returns an iterator allowing to go through all key/value pairs contained in this object.
      */
