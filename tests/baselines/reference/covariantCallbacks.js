@@ -57,20 +57,6 @@ function f13(a: AList3, b: BList3) {
     b = a;  // Error
 }
 
-interface AList4 {
-    forEach(cb: (item: A) => A): void;
-}
-
-interface BList4 {
-    forEach(cb: (item: B) => B): void;
-}
-
-function f14(a: AList4, b: BList4) {
-    a = b;
-    b = a;  // Error
-}
-
-
 //// [covariantCallbacks.js]
 // Test that callback parameters are related covariantly
 ;
@@ -91,10 +77,6 @@ function f12(a, b) {
     b = a; // Error
 }
 function f13(a, b) {
-    a = b;
-    b = a; // Error
-}
-function f14(a, b) {
     a = b;
     b = a; // Error
 }

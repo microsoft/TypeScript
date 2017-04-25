@@ -57,16 +57,3 @@ function f13(a: AList3, b: BList3) {
     a = b;
     b = a;  // Error
 }
-
-interface AList4 {
-    forEach(cb: (item: A) => A): void;
-}
-
-interface BList4 {
-    forEach(cb: (item: B) => B): void;
-}
-
-function f14(a: AList4, b: BList4) {
-    a = b;
-    b = a;  // Error
-}

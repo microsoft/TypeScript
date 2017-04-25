@@ -18,15 +18,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
   Types of property 'forEach' are incompatible.
     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
       Types of parameters 'cb' and 'cb' are incompatible.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts(69,5): error TS2322: Type 'AList4' is not assignable to type 'BList4'.
-  Types of property 'forEach' are incompatible.
-    Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
-      Types of parameters 'cb' and 'cb' are incompatible.
-        Types of parameters 'item' and 'item' are incompatible.
-          Type 'A' is not assignable to type 'B'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts (6 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts (5 errors) ====
     // Test that callback parameters are related covariantly
     
     interface P<T> {
@@ -109,24 +103,3 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
 !!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
     }
-    
-    interface AList4 {
-        forEach(cb: (item: A) => A): void;
-    }
-    
-    interface BList4 {
-        forEach(cb: (item: B) => B): void;
-    }
-    
-    function f14(a: AList4, b: BList4) {
-        a = b;
-        b = a;  // Error
-        ~
-!!! error TS2322: Type 'AList4' is not assignable to type 'BList4'.
-!!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
-!!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
-!!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:           Type 'A' is not assignable to type 'B'.
-    }
-    
