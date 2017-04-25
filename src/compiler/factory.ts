@@ -368,6 +368,18 @@ namespace ts {
             : node;
     }
 
+    export function createParenthesizedType(type: TypeNode) {
+        const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
+        node.type = type;
+        return node;
+    }
+
+    export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
     export function createTypeLiteralNode(members: TypeElement[]) {
         const typeLiteralNode = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
         typeLiteralNode.members = createNodeArray(members);
