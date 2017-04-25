@@ -72,7 +72,6 @@ function f14(a: AList4, b: BList4) {
 
 
 //// [covariantCallbacks.js]
-"use strict";
 // Test that callback parameters are related covariantly
 ;
 function f1(a, b) {
