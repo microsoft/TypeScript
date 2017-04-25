@@ -813,7 +813,7 @@ namespace ts {
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const localName = getLocalName(node);
+            const localName = getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
@@ -870,7 +870,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                getDeclarationName(node),
+                getInternalName(node),
                 /*typeParameters*/ undefined,
                 transformConstructorParameters(constructor, hasSynthesizedSuper),
                 /*type*/ undefined,
@@ -3725,7 +3725,7 @@ namespace ts {
         function substituteIdentifier(node: Identifier) {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return setTextRange(getGeneratedNameForNode(original), node);
@@ -3778,7 +3778,7 @@ namespace ts {
          * @param node An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration) {
                     return setTextRange(getGeneratedNameForNode(declaration.name), node);
@@ -3802,8 +3802,9 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const expression = getLocalName(node);
-            return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
+            return hasModifier(member, ModifierFlags.Static)
+                ? getLocalName(node)
+                : createPropertyAccess(getInternalName(node), "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
