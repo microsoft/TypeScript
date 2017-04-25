@@ -8233,8 +8233,8 @@ namespace ts {
             for (let i = 0; i < checkCount; i++) {
                 const sourceType = i < sourceMax ? getTypeOfParameter(sourceParams[i]) : getRestTypeOfSignature(source);
                 const targetType = i < targetMax ? getTypeOfParameter(targetParams[i]) : getRestTypeOfSignature(target);
-                const sourceSig = getSingleCallSignature(getNonNullableType(sourceType));
-                const targetSig = getSingleCallSignature(getNonNullableType(targetType));
+                const sourceSig = getSingleCallSignature(sourceType);
+                const targetSig = getSingleCallSignature(targetType);
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
                 // they naturally relate only contra-variantly). However, if the source and target parameters both have
@@ -8243,9 +8243,7 @@ namespace ts {
                 // similar to return values, callback parameters are output positions. This means that a Promise<T>,
                 // where T is used only in callback parameter positions, will be co-variant (as opposed to bi-variant)
                 // with respect to T.
-                const callbacks = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate &&
-                    (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
-                const related = callbacks ?
+                const related = sourceSig && targetSig && !sourceSig.typePredicate && !targetSig.typePredicate ?
                     compareSignaturesRelated(targetSig, sourceSig, /*checkAsCallback*/ true, /*ignoreReturnTypes*/ false, reportErrors, errorReporter, compareTypes) :
                     !checkAsCallback && compareTypes(sourceType, targetType, /*reportErrors*/ false) || compareTypes(targetType, sourceType, reportErrors);
                 if (!related) {
