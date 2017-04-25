@@ -885,7 +885,7 @@ namespace ts {
             return initial;
         }
 
-        const reduceNodes: (nodes: NodeArray<Node>, f: ((memo: T, node: Node) => T) | ((memo: T, node: NodeArray<Node>) => T), initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
+        const reduceNodes: (nodes: NodeArray<Node>, f: (memo: T, node: Node | NodeArray<Node>) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
         const cbNodes = cbNodeArray || cbNode;
         const kind = node.kind;
 
