@@ -3180,7 +3180,20 @@ namespace ts {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-            const updated = visitEachChild(node, visitor, context);
+            let updated: AccessorDeclaration;
+            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                const parameters = visitParameterList(node.parameters, visitor, context);
+                const body = transformFunctionBody(node);
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                }
+                else {
+                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
+                }
+            }
+            else {
+                updated = visitEachChild(node, visitor, context);
+            }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
