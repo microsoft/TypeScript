@@ -3780,12 +3780,38 @@ namespace ts {
         function substituteExpressionIdentifier(node: Identifier): Identifier {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
-                if (declaration) {
+                if (declaration && !(isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
                     return setTextRange(getGeneratedNameForNode(declaration.name), node);
                 }
             }
 
             return node;
+        }
+
+        function isPartOfClassBody(declaration: ClassLikeDeclaration, node: Identifier) {
+            let currentNode = getParseTreeNode(node);
+            if (!currentNode || currentNode === declaration || currentNode.end <= declaration.pos || currentNode.pos >= declaration.end) {
+                // if the node has no correlation to a parse tree node, its definitely not
+                // part of the body.
+                // if the node is outside of the document range of the declaration, its
+                // definitely not part of the body.
+                return false;
+            }
+            const blockScope = getEnclosingBlockScopeContainer(declaration);
+            while (currentNode) {
+                if (currentNode === blockScope || currentNode === declaration) {
+                    // if we are in the enclosing block scope of the declaration, we are definitely
+                    // not inside the class body.
+                    return false;
+                }
+                if (isClassElement(currentNode) && currentNode.parent === declaration) {
+                    // we are in the class body, but we treat static fields as outside of the class body
+                    return currentNode.kind !== SyntaxKind.PropertyDeclaration
+                        || (getModifierFlags(currentNode) & ModifierFlags.Static) === 0;
+                }
+                currentNode = currentNode.parent;
+            }
+            return false;
         }
 
         /**
@@ -3803,7 +3829,7 @@ namespace ts {
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
             return hasModifier(member, ModifierFlags.Static)
-                ? getLocalName(node)
+                ? getInternalName(node)
                 : createPropertyAccess(getInternalName(node), "prototype");
         }
 
