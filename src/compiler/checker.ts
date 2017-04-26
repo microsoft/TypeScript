@@ -15701,7 +15701,7 @@ namespace ts {
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
             const moduleSymbol = resolveExternalModuleName(node, specifier);
             if (moduleSymbol) {
-                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier);
+                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
                 if (esModuleSymbol) {
                     return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
                 }
@@ -17284,7 +17284,7 @@ namespace ts {
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
                     }
-                    // Fall through
+                    /* tslint:disable: no-switch-case-fall-through */
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:

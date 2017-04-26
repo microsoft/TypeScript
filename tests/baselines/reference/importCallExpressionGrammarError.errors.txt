@@ -1,8 +1,8 @@
-tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(5,8): error TS1322: Specifier of dynamic import cannot be spread element.
-tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(7,17): error TS1322: Specifier of dynamic import cannot be spread element.
-tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(8,12): error TS1321: Dynamic import must have one specifier as an argument.
+tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(5,8): error TS1325: Specifier of dynamic import cannot be spread element.
+tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(7,17): error TS1325: Specifier of dynamic import cannot be spread element.
+tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(8,12): error TS1324: Dynamic import must have one specifier as an argument.
 tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(9,19): error TS1135: Argument expression expected.
-tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(10,12): error TS1321: Dynamic import must have one specifier as an argument.
+tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts(10,12): error TS1324: Dynamic import must have one specifier as an argument.
 
 
 ==== tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts (5 errors) ====
@@ -12,17 +12,17 @@ tests/cases/conformance/es2018/dynamicImport/importCallExpressionGrammarError.ts
     var a = ["./0"];
     import(...["PathModule"]);
            ~~~~~~~~~~~~~~~~~
-!!! error TS1322: Specifier of dynamic import cannot be spread element.
+!!! error TS1325: Specifier of dynamic import cannot be spread element.
     
     var p1 = import(...a);
                     ~~~~
-!!! error TS1322: Specifier of dynamic import cannot be spread element.
+!!! error TS1325: Specifier of dynamic import cannot be spread element.
     const p2 = import();
                ~~~~~~~~
-!!! error TS1321: Dynamic import must have one specifier as an argument.
+!!! error TS1324: Dynamic import must have one specifier as an argument.
     const p3 = import(,);
                       
 !!! error TS1135: Argument expression expected.
     const p4 = import("pathToModule", "secondModule");
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS1321: Dynamic import must have one specifier as an argument.
+!!! error TS1324: Dynamic import must have one specifier as an argument.
