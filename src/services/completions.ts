@@ -272,7 +272,7 @@ namespace ts.Completions {
         }
         else if (type.flags & TypeFlags.StringLiteral) {
             result.push({
-                name: (<LiteralType>type).text,
+                name: (<StringLiteralType>type).value,
                 kindModifiers: ScriptElementKindModifier.none,
                 kind: ScriptElementKind.variableElement,
                 sortText: "0"

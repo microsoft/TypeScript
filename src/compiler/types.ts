@@ -3036,9 +3036,17 @@ namespace ts {
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
     export interface LiteralType extends Type {
-        text: string;               // Text of literal
+        value: string | number;     // Value of literal
         freshType?: LiteralType;    // Fresh version of type
         regularType?: LiteralType;  // Regular version of type
+    }
+
+    export interface StringLiteralType extends LiteralType {
+        value: string;
+    }
+
+    export interface NumberLiteralType extends LiteralType {
+        value: number;
     }
 
     // Enum types (TypeFlags.Enum)

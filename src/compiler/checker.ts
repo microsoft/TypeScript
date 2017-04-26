@@ -309,8 +309,8 @@ namespace ts {
         let flowLoopCount = 0;
         let visitedFlowCount = 0;
 
-        const emptyStringType = getLiteralTypeForText(TypeFlags.StringLiteral, "");
-        const zeroType = getLiteralTypeForText(TypeFlags.NumberLiteral, "0");
+        const emptyStringType = getLiteralType("");
+        const zeroType = getLiteralType(0);
 
         const resolutionTargets: TypeSystemEntity[] = [];
         const resolutionResults: boolean[] = [];
@@ -1869,7 +1869,7 @@ namespace ts {
         }
 
         function createTypeofType() {
-            return getUnionType(convertToArray(typeofEQFacts.keys(), s => getLiteralTypeForText(TypeFlags.StringLiteral, s)));
+            return getUnionType(convertToArray(typeofEQFacts.keys(), getLiteralType));
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore
@@ -2320,11 +2320,8 @@ namespace ts {
                     const name = symbolToName(type.symbol, /*expectsIdentifier*/ false);
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-                if (type.flags & (TypeFlags.StringLiteral)) {
-                    return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
-                }
-                if (type.flags & (TypeFlags.NumberLiteral)) {
-                    return createLiteralTypeNode((createNumericLiteral((<LiteralType>type).text)));
+                if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
+                    return createLiteralTypeNode(createLiteral((<LiteralType>type).value));
                 }
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
@@ -2891,7 +2888,7 @@ namespace ts {
         }
 
         function literalTypeToString(type: LiteralType) {
-            return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<LiteralType>type).text)}"` : (<LiteralType>type).text;
+            return type.flags & TypeFlags.StringLiteral ? `"${escapeString((<StringLiteralType>type).value)}"` : "" + (<NumberLiteralType>type).value;
         }
 
         function getNameOfSymbol(symbol: Symbol): string {
@@ -4933,11 +4930,11 @@ namespace ts {
             return true;
         }
 
-        function createEnumLiteralType(symbol: Symbol, baseType: EnumType, text: string) {
+        function createEnumLiteralType(symbol: Symbol, baseType: EnumType, value: number) {
             const type = <EnumLiteralType>createType(TypeFlags.EnumLiteral);
             type.symbol = symbol;
             type.baseType = <EnumType & UnionType>baseType;
-            type.text = text;
+            type.value = value;
             return type;
         }
 
@@ -4956,7 +4953,7 @@ namespace ts {
                                 const memberSymbol = getSymbolOfNode(member);
                                 const value = getEnumMemberValue(member);
                                 if (!memberTypes[value]) {
-                                    const memberType = memberTypes[value] = createEnumLiteralType(memberSymbol, enumType, "" + value);
+                                    const memberType = memberTypes[value] = createEnumLiteralType(memberSymbol, enumType, value);
                                     memberTypeList.push(memberType);
                                 }
                             }
@@ -5510,7 +5507,7 @@ namespace ts {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
-                    const propName = (<LiteralType>t).text;
+                    const propName = (<StringLiteralType>t).value;
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                     const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
@@ -7216,7 +7213,7 @@ namespace ts {
         function getLiteralTypeFromPropertyName(prop: Symbol) {
             return getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || startsWith(prop.name, "__@") ?
                 neverType :
-                getLiteralTypeForText(TypeFlags.StringLiteral, unescapeIdentifier(prop.name));
+                getLiteralType(unescapeIdentifier(prop.name));
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -7253,7 +7250,7 @@ namespace ts {
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
             const propName = indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.EnumLiteral) ?
-                (<LiteralType>indexType).text :
+                "" + (<LiteralType>indexType).value :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text) :
                     undefined;
@@ -7301,7 +7298,7 @@ namespace ts {
             if (accessNode) {
                 const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? (<ElementAccessExpression>accessNode).argumentExpression : (<IndexedAccessTypeNode>accessNode).indexType;
                 if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-                    error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, (<LiteralType>indexType).text, typeToString(objectType));
+                    error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (<LiteralType>indexType).value, typeToString(objectType));
                 }
                 else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
                     error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
@@ -7512,16 +7509,16 @@ namespace ts {
             return prop.flags & SymbolFlags.Method && find(prop.declarations, decl => isClassLike(decl.parent));
         }
 
-        function createLiteralType(flags: TypeFlags, text: string) {
+        function createLiteralType(flags: TypeFlags, value: string | number) {
             const type = <LiteralType>createType(flags);
-            type.text = text;
+            type.value = value;
             return type;
         }
 
         function getFreshTypeOfLiteralType(type: Type) {
             if (type.flags & TypeFlags.StringOrNumberLiteral && !(type.flags & TypeFlags.FreshLiteral)) {
                 if (!(<LiteralType>type).freshType) {
-                    const freshType = <LiteralType>createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).text);
+                    const freshType = <LiteralType>createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).value);
                     freshType.regularType = <LiteralType>type;
                     (<LiteralType>type).freshType = freshType;
                 }
@@ -7534,11 +7531,12 @@ namespace ts {
             return type.flags & TypeFlags.StringOrNumberLiteral && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType : type;
         }
 
-        function getLiteralTypeForText(flags: TypeFlags, text: string) {
-            const map = flags & TypeFlags.StringLiteral ? stringLiteralTypes : numericLiteralTypes;
+        function getLiteralType(value: string | number) {
+            const map = typeof value === "number" ? numericLiteralTypes : stringLiteralTypes;
+            const text = "" + value;
             let type = map.get(text);
             if (!type) {
-                map.set(text, type = createLiteralType(flags, text));
+                map.set(text, type = createLiteralType(typeof value === "number" ? TypeFlags.NumberLiteral : TypeFlags.StringLiteral, value));
             }
             return type;
         }
@@ -8434,7 +8432,7 @@ namespace ts {
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
                 if (source.flags & TypeFlags.EnumLiteral &&
                     target.flags & TypeFlags.EnumLiteral &&
-                    (<EnumLiteralType>source).text === (<EnumLiteralType>target).text &&
+                    (<EnumLiteralType>source).value === (<EnumLiteralType>target).value &&
                     isEnumTypeRelatedTo((<EnumLiteralType>source).baseType, (<EnumLiteralType>target).baseType, errorReporter)) {
                     return true;
                 }
@@ -9713,8 +9711,8 @@ namespace ts {
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
             return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
-                type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).text === "" ? TypeFlags.StringLiteral : 0 :
-                    type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).text === "0" ? TypeFlags.NumberLiteral : 0 :
+                type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).value === "" ? TypeFlags.StringLiteral : 0 :
+                    type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).value === 0 ? TypeFlags.NumberLiteral : 0 :
                         type.flags & TypeFlags.BooleanLiteral ? type === falseType ? TypeFlags.BooleanLiteral : 0 :
                             type.flags & TypeFlags.PossiblyFalsy;
         }
@@ -10595,14 +10593,14 @@ namespace ts {
             }
             if (flags & TypeFlags.StringLiteral) {
                 return strictNullChecks ?
-                    (<LiteralType>type).text === "" ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
-                    (<LiteralType>type).text === "" ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
+                    (<LiteralType>type).value === "" ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
+                    (<LiteralType>type).value === "" ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
             }
             if (flags & (TypeFlags.Number | TypeFlags.Enum)) {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
             if (flags & (TypeFlags.NumberLiteral | TypeFlags.EnumLiteral)) {
-                const isZero = (<LiteralType>type).text === "0";
+                const isZero = (<LiteralType>type).value === 0;
                 return strictNullChecks ?
                     isZero ? TypeFacts.ZeroStrictFacts : TypeFacts.NonZeroStrictFacts :
                     isZero ? TypeFacts.ZeroFacts : TypeFacts.NonZeroFacts;
@@ -13616,7 +13614,7 @@ namespace ts {
                 //      <CustomTag> Hello World </CustomTag>
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
-                    const stringLiteralTypeName = (<LiteralType>elementType).text;
+                    const stringLiteralTypeName = (<StringLiteralType>elementType).value;
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
                     if (intrinsicProp) {
                         return getTypeOfSymbol(intrinsicProp);
@@ -14861,7 +14859,7 @@ namespace ts {
                     case SyntaxKind.Identifier:
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
-                        return getLiteralTypeForText(TypeFlags.StringLiteral, (<Identifier | LiteralExpression>element.name).text);
+                        return getLiteralType((<Identifier | LiteralExpression>element.name).text);
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
@@ -16345,7 +16343,7 @@ namespace ts {
                 return silentNeverType;
             }
             if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral) {
-                return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text));
+                return getFreshTypeOfLiteralType(getLiteralType(-(<LiteralExpression>node.operand).text));
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -17021,9 +17019,9 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text));
+                    return getFreshTypeOfLiteralType(getLiteralType((<LiteralExpression>node).text));
                 case SyntaxKind.NumericLiteral:
-                    return getFreshTypeOfLiteralType(getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text));
+                    return getFreshTypeOfLiteralType(getLiteralType(+(<LiteralExpression>node).text));
                 case SyntaxKind.TrueKeyword:
                     return trueType;
                 case SyntaxKind.FalseKeyword:
