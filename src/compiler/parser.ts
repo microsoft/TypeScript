@@ -2416,7 +2416,7 @@ namespace ts {
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken) {
                 return parseSignatureMember(SyntaxKind.CallSignature);
             }
-            if (token() === SyntaxKind.NewKeyword && lookAhead(isStartOfConstructSignature)) {
+            if (token() === SyntaxKind.NewKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
                 return parseSignatureMember(SyntaxKind.ConstructSignature);
             }
             const fullStart = getNodePos();
@@ -2427,7 +2427,7 @@ namespace ts {
             return parsePropertyOrMethodSignature(fullStart, modifiers);
         }
 
-        function isStartOfConstructSignature() {
+        function nextTokenIsOpenParenOrLessThan() {
             nextToken();
             return token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.LessThanToken;
         }
@@ -5617,11 +5617,6 @@ namespace ts {
 
         function nextTokenIsOpenParen() {
             return nextToken() === SyntaxKind.OpenParenToken;
-        }
-
-        function nextTokenIsOpenParenOrLessThan() {
-            const next = nextToken();
-            return next === SyntaxKind.OpenParenToken || next === SyntaxKind.LessThanToken;
         }
 
         function nextTokenIsSlash() {

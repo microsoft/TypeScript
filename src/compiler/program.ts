@@ -1199,6 +1199,10 @@ namespace ts {
         }
 
         function collectExternalModuleReferences(file: SourceFile): void {
+            if (file.imports) {
+                return;
+            }
+
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
             const isDtsFile = isDeclarationFile(file);
