@@ -448,6 +448,14 @@ namespace ts {
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
 
+        // This flag will be set to true when the parse encounter dynamic import so that post-parsing process of module resolution
+        // will not walk the tree if the flag is not set. However, this flag is just a approximation because once it is set, the flag never get reset.
+        // (hence it is named "possiblyContainDynamicImport").
+        // During editing, if dynamic import is remove, incremental parsing will *NOT* update this flag. This will then causes walking of the tree during module resolution.
+        // However, the removal operation should not occur often and in the case of the removal, it is likely that users will add back the import anyway.
+        // The advantage of this approach is its simplicity. For the case of batch compilation, we garuntee that users won't have to pay the price of walking the tree if dynamic import isn't used.
+        possiblyContainDynamicImport = 1 << 19,
+
         BlockScoped = Let | Const,
 
         ReachabilityCheckFlags = HasImplicitReturn | HasExplicitReturn,
@@ -990,8 +998,10 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
+    /** Deprecated, please use UpdateExpression */
+    export type IncrementExpression = UpdateExpression;
     export interface UpdateExpression extends UnaryExpression {
-        _incrementExpressionBrand: any;
+        _updateExpressionBrand: any;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
@@ -1002,8 +1012,7 @@ namespace ts {
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.TildeToken
-        | SyntaxKind.ExclamationToken
-        ;
+        | SyntaxKind.ExclamationToken;
 
     export interface PrefixUnaryExpression extends UpdateExpression {
         kind: SyntaxKind.PrefixUnaryExpression;
@@ -2305,13 +2314,6 @@ namespace ts {
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
-        // This flag will be set to true when the parse encounter dynamic import so that post-parsing process of module resolution
-        // will not walk the tree if the flag is not set. However, this flag is just a approximation because once it is set, the flag never get reset.
-        // (hence it is named "possiblyContainDynamicImport").
-        // During editing, if dynamic import is remove, incremental parsing will *NOT* update this flag. This will then causes walking of the tree during module resolution.
-        // However, the removal operation should not occur often and in the case of the removal, it is likely that users will add back the import anyway.
-        // The advantage of this approach is its simplicity. For the case of batch compilation, we garuntee that users won't have to pay the price of walking the tree if dynamic import isn't used.
-        /* @internal */ possiblyContainDynamicImport: boolean;
     }
 
     export interface Bundle extends Node {
@@ -3866,7 +3868,10 @@ namespace ts {
 
         ContainsDynamicImport = 1 << 26,
 
-        HasComputedFlags = 1 << 27, // Transform flags have been computed.
+        // Please leave this as 1 << 29.
+        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
+        // It is a good reminder of how much room we have left
+        HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.

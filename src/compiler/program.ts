@@ -1223,7 +1223,7 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if (file.possiblyContainDynamicImport || isJavaScriptFile) {
+                if ((file.flags & NodeFlags.possiblyContainDynamicImport) || isJavaScriptFile) {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }

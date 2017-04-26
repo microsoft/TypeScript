@@ -3517,10 +3517,10 @@ namespace ts {
              *      5) --UnaryExpression[?Yield]
              */
             if (isUpdateExpression()) {
-                const UpdateExpression = parseUpdateExpression();
+                const updateExpression = parseUpdateExpression();
                 return token() === SyntaxKind.AsteriskAsteriskToken ?
-                    <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), UpdateExpression) :
-                    UpdateExpression;
+                    <BinaryExpression>parseBinaryExpressionRest(getBinaryOperatorPrecedence(), updateExpression) :
+                    updateExpression;
             }
 
             /**
@@ -3700,7 +3700,7 @@ namespace ts {
                 // For example:
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
-                sourceFile.possiblyContainDynamicImport = true;
+                sourceFile.flags |= NodeFlags.possiblyContainDynamicImport;
                 expression = parseTokenNode<PrimaryExpression>();
             }
             else {
