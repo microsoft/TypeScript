@@ -13,7 +13,7 @@ namespace ts.JsTyping {
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
         readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
-    };
+    }
 
     interface PackageJson {
         _requiredBy?: string[];
@@ -23,7 +23,7 @@ namespace ts.JsTyping {
         optionalDependencies?: MapLike<string>;
         peerDependencies?: MapLike<string>;
         typings?: string;
-    };
+    }
 
     // A map of loose file names to library names
     // that we are confident require typings
@@ -204,7 +204,6 @@ namespace ts.JsTyping {
         /**
          * Infer typing names from packages folder (ex: node_module, bower_components)
          * @param packagesFolderPath is the path to the packages folder
-
          */
         function getTypingNamesFromPackagesFolder(packagesFolderPath: string) {
             filesToWatch.push(packagesFolderPath);

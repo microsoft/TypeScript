@@ -242,31 +242,31 @@ namespace ts {
             case SyntaxKind.FunctionType:
                 return updateFunctionTypeNode(<FunctionTypeNode>node,
                     nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<FunctionTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<FunctionTypeNode>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<FunctionTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructorType:
                 return updateConstructorTypeNode(<ConstructorTypeNode>node,
                     nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<ConstructorTypeNode>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<ConstructorTypeNode>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.CallSignature:
                 return updateCallSignatureDeclaration(<CallSignatureDeclaration>node,
                     nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<CallSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<CallSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructSignature:
                 return updateConstructSignatureDeclaration(<ConstructSignatureDeclaration>node,
                     nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<ConstructSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<ConstructSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.MethodSignature:
                 return updateMethodSignature(<MethodSignature>node,
                     nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameter),
-                    visitParameterList((<MethodSignature>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<MethodSignature>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<MethodSignature>node).type, visitor, isTypeNode),
                     visitNode((<MethodSignature>node).name, visitor, isPropertyName),
                     visitNode((<MethodSignature>node).questionToken, tokenVisitor, isToken));
@@ -275,7 +275,7 @@ namespace ts {
                 return updateIndexSignatureDeclaration(<IndexSignatureDeclaration>node,
                     nodesVisitor((<IndexSignatureDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<IndexSignatureDeclaration>node).modifiers, visitor, isModifier),
-                    visitParameterList((<IndexSignatureDeclaration>node).parameters, visitor, context, nodesVisitor),
+                    nodesVisitor((<IndexSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<IndexSignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.Parameter:
@@ -322,7 +322,8 @@ namespace ts {
                     nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
 
             case SyntaxKind.ParenthesizedType:
-                Debug.fail("not implemented.");
+                return updateParenthesizedType(<ParenthesizedTypeNode>node,
+                    visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.TypeOperator:
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));
@@ -885,7 +886,7 @@ namespace ts {
             return initial;
         }
 
-        const reduceNodes: (nodes: NodeArray<Node>, f: (memo: T, node: Node | NodeArray<Node>) => T, initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
+        const reduceNodes: (nodes: NodeArray<Node>, f: ((memo: T, node: Node) => T) | ((memo: T, node: NodeArray<Node>) => T), initial: T) => T = cbNodeArray ? reduceNodeArray : reduceLeft;
         const cbNodes = cbNodeArray || cbNode;
         const kind = node.kind;
 
@@ -1289,6 +1290,7 @@ namespace ts {
 
             case SyntaxKind.JsxAttributes:
                 result = reduceNodes((<JsxAttributes>node).properties, cbNodes, result);
+                break;
 
             case SyntaxKind.JsxClosingElement:
                 result = reduceNode((<JsxClosingElement>node).tagName, cbNode, result);
@@ -1310,7 +1312,7 @@ namespace ts {
             // Clauses
             case SyntaxKind.CaseClause:
                 result = reduceNode((<CaseClause>node).expression, cbNode, result);
-                // fall-through
+                // falls through
 
             case SyntaxKind.DefaultClause:
                 result = reduceNodes((<CaseClause | DefaultClause>node).statements, cbNodes, result);
@@ -1344,6 +1346,7 @@ namespace ts {
             case SyntaxKind.EnumMember:
                 result = reduceNode((<EnumMember>node).name, cbNode, result);
                 result = reduceNode((<EnumMember>node).initializer, cbNode, result);
+                break;
 
             // Top-level nodes
             case SyntaxKind.SourceFile:

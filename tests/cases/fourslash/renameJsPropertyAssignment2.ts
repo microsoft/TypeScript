@@ -5,7 +5,6 @@
 ////class Minimatch {
 ////}
 ////Minimatch.[|staticProperty|] = "string";
-////console.log(Minimatch./**/[|staticProperty|]);
+////console.log(Minimatch.[|staticProperty|]);
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations();

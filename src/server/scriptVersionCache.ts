@@ -79,7 +79,7 @@ namespace ts.server {
             const lm = LineIndex.linesFromText(insertedText);
             const lines = lm.lines;
             if (lines.length > 1) {
-                if (lines[lines.length - 1] == "") {
+                if (lines[lines.length - 1] === "") {
                     lines.length--;
                 }
             }
@@ -570,7 +570,7 @@ namespace ts.server {
                 }
                 if (this.checkEdits) {
                     const updatedText = this.getText(0, this.root.charCount());
-                    Debug.assert(checkText == updatedText, "buffer edit mismatch");
+                    Debug.assert(checkText === updatedText, "buffer edit mismatch");
                 }
                 return walker.lineIndex;
             }

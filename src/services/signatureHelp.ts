@@ -56,7 +56,7 @@ namespace ts.SignatureHelp {
     //                break;
 
     //            case TypeScript.SyntaxKind.CommaToken:
-    //                if (stack == 0) {
+    //                if (stack === 0) {
     //                    argumentIndex++;
     //                }
 

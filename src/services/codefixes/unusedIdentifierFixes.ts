@@ -58,6 +58,8 @@ namespace ts.codefix {
                                         return deleteNodeInList(token.parent);
                                     }
                             }
+                            // TODO: #14885
+                            // falls through
 
                         case SyntaxKind.TypeParameter:
                             const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
@@ -116,7 +118,7 @@ namespace ts.codefix {
                                 const nextToken = getTokenAtPosition(sourceFile, importClause.name.end);
                                 if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                                     // shift first non-whitespace position after comma to the start position of the node
-                                    return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/true) });
+                                    return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) });
                                 }
                                 else {
                                     return deleteNode(importClause.name);
@@ -125,7 +127,7 @@ namespace ts.codefix {
 
                         case SyntaxKind.NamespaceImport:
                             const namespaceImport = <NamespaceImport>token.parent;
-                            if (namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name) {
+                            if (namespaceImport.name === token && !(<ImportClause>namespaceImport.parent).name) {
                                 const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
                                 return deleteNode(importDecl);
                             }

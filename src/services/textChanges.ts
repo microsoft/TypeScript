@@ -421,7 +421,7 @@ namespace ts.textChanges {
                 let changesInFile = changesPerFile.get(c.sourceFile.path);
                 if (!changesInFile) {
                     changesPerFile.set(c.sourceFile.path, changesInFile = []);
-                };
+                }
                 changesInFile.push(c);
             }
             // convert changes
@@ -465,7 +465,7 @@ namespace ts.textChanges {
                 change.options.indentation !== undefined
                     ? change.options.indentation
                     : change.useIndentationFromFile
-                        ? formatting.SmartIndenter.getIndentation(change.range.pos, sourceFile, formatOptions, posStartsLine || (change.options.prefix == this.newLineCharacter))
+                        ? formatting.SmartIndenter.getIndentation(change.range.pos, sourceFile, formatOptions, posStartsLine || (change.options.prefix === this.newLineCharacter))
                         : 0;
             const delta =
                 change.options.delta !== undefined
@@ -608,7 +608,7 @@ namespace ts.textChanges {
             if (force || !isTrivia(s)) {
                 this.lastNonTriviaPosition = this.writer.getTextPos();
                 let i = 0;
-                while (isWhiteSpace(s.charCodeAt(s.length - i - 1))) {
+                while (isWhiteSpaceLike(s.charCodeAt(s.length - i - 1))) {
                     i++;
                 }
                 // trim trailing whitespaces

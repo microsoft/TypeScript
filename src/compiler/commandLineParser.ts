@@ -861,9 +861,9 @@ namespace ts {
     }
 
     /**
-      * Read tsconfig.json file
-      * @param fileName The path to the config file
-      */
+     * Read tsconfig.json file
+     * @param fileName The path to the config file
+     */
     export function readConfigFile(fileName: string, readFile: (path: string) => string): { config?: any; error?: Diagnostic } {
         let text = "";
         try {
@@ -876,10 +876,10 @@ namespace ts {
     }
 
     /**
-      * Parse the text of the tsconfig.json file
-      * @param fileName The path to the config file
-      * @param jsonText The text of the config file
-      */
+     * Parse the text of the tsconfig.json file
+     * @param fileName The path to the config file
+     * @param jsonText The text of the config file
+     */
     export function parseConfigFileTextToJson(fileName: string, jsonText: string, stripComments = true): { config?: any; error?: Diagnostic } {
         try {
             const jsonTextToParse = stripComments ? removeComments(jsonText) : jsonText;
@@ -896,7 +896,7 @@ namespace ts {
      * @param fileNames array of filenames to be generated into tsconfig.json
      */
     /* @internal */
-    export function generateTSConfig(options: CompilerOptions, fileNames: string[]): string {
+    export function generateTSConfig(options: CompilerOptions, fileNames: string[], newLine: string): string {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const configurations: { compilerOptions: MapLike<CompilerOptionsValue>; files?: string[] } = {
             compilerOptions: serializeCompilerOptions(compilerOptions)
@@ -1008,7 +1008,7 @@ namespace ts {
             let seenKnownKeys = 0;
             const nameColumn: string[] = [];
             const descriptionColumn: string[] = [];
-            const knownKesyCount = getOwnKeys(configurations.compilerOptions).length;
+            const knownKeysCount = getOwnKeys(configurations.compilerOptions).length;
             for (const category in categorizedOptions) {
                 if (nameColumn.length !== 0) {
                     nameColumn.push("");
@@ -1019,7 +1019,7 @@ namespace ts {
                 for (const option of categorizedOptions[category]) {
                     let optionName;
                     if (hasProperty(configurations.compilerOptions, option.name)) {
-                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKesyCount ? "" : ","}`;
+                        optionName = `"${option.name}": ${JSON.stringify(configurations.compilerOptions[option.name])}${(seenKnownKeys += 1) === knownKeysCount ? "" : ","}`;
                     }
                     else {
                         optionName = `// "${option.name}": ${JSON.stringify(getDefaultValueForOption(option))},`;
@@ -1054,7 +1054,7 @@ namespace ts {
             }
             result.push(`}`);
 
-            return result.join(sys.newLine);
+            return result.join(newLine);
         }
     }
 
@@ -1084,12 +1084,12 @@ namespace ts {
     }
 
     /**
-      * Parse the contents of a config file (tsconfig.json).
-      * @param json The contents of the config file to parse
-      * @param host Instance of ParseConfigHost used to enumerate files in folder.
-      * @param basePath A root directory to resolve relative path entries in the config
-      *    file to. e.g. outDir
-      */
+     * Parse the contents of a config file (tsconfig.json).
+     * @param json The contents of the config file to parse
+     * @param host Instance of ParseConfigHost used to enumerate files in folder.
+     * @param basePath A root directory to resolve relative path entries in the config
+     *    file to. e.g. outDir
+     */
     export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: JsFileExtensionInfo[] = []): ParsedCommandLine {
         const errors: Diagnostic[] = [];
         basePath = normalizeSlashes(basePath);
@@ -1112,10 +1112,11 @@ namespace ts {
         const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
         const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
+        let baseCompileOnSave: boolean;
         if (json["extends"]) {
             let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
             if (typeof json["extends"] === "string") {
-                [include, exclude, files, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseOptions]);
+                [include, exclude, files, baseCompileOnSave, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseCompileOnSave, baseOptions]);
             }
             else {
                 errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
@@ -1136,7 +1137,10 @@ namespace ts {
         options.configFilePath = configFileName;
 
         const { fileNames, wildcardDirectories } = getFileNames(errors);
-        const compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
+        let compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
+        if (baseCompileOnSave && json[compileOnSaveCommandLineOption.name] === undefined) {
+            compileOnSave = baseCompileOnSave;
+        }
 
         return {
             options,
@@ -1148,7 +1152,7 @@ namespace ts {
             compileOnSave
         };
 
-        function tryExtendsName(extendedConfig: string): [string[], string[], string[], CompilerOptions] {
+        function tryExtendsName(extendedConfig: string): [string[], string[], string[], boolean, CompilerOptions] {
             // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
             if (!(isRootedDiskPath(extendedConfig) || startsWith(normalizeSlashes(extendedConfig), "./") || startsWith(normalizeSlashes(extendedConfig), "../"))) {
                 errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
@@ -1171,14 +1175,14 @@ namespace ts {
             const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
             const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
             // Merge configs (copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios)
-            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
+            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/ undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
             errors.push(...result.errors);
             const [include, exclude, files] = map(["include", "exclude", "files"], key => {
                 if (!json[key] && extendedResult.config[key]) {
                     return map(extendedResult.config[key], updatePath);
                 }
             });
-            return [include, exclude, files, result.options];
+            return [include, exclude, files, result.compileOnSave, result.options];
         }
 
         function getFileNames(errors: Diagnostic[]): ExpandResult {
@@ -1246,7 +1250,7 @@ namespace ts {
         }
     }
 
-    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean {
+    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean | undefined {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return false;
         }
@@ -1581,7 +1585,7 @@ namespace ts {
                         delete wildcardDirectories[key];
                     }
                 }
-            };
+            }
         }
 
         return wildcardDirectories;

@@ -1,6 +1,6 @@
 /**
-  * Declaration module describing the TypeScript Server protocol
-  */
+ * Declaration module describing the TypeScript Server protocol
+ */
 namespace ts.server.protocol {
     export namespace CommandTypes {
         export type Brace = "brace";
@@ -98,99 +98,99 @@ namespace ts.server.protocol {
     }
 
     /**
-      * A TypeScript Server message
-      */
+     * A TypeScript Server message
+     */
     export interface Message {
         /**
-          * Sequence number of the message
-          */
+         * Sequence number of the message
+         */
         seq: number;
 
         /**
-          * One of "request", "response", or "event"
-          */
+         * One of "request", "response", or "event"
+         */
         type: "request" | "response" | "event";
     }
 
     /**
-      * Client-initiated request message
-      */
+     * Client-initiated request message
+     */
     export interface Request extends Message {
         /**
-          * The command to execute
-          */
+         * The command to execute
+         */
         command: string;
 
         /**
-          * Object containing arguments for the command
-          */
+         * Object containing arguments for the command
+         */
         arguments?: any;
     }
 
     /**
-      * Request to reload the project structure for all the opened files
-      */
+     * Request to reload the project structure for all the opened files
+     */
     export interface ReloadProjectsRequest extends Message {
         command: CommandTypes.ReloadProjects;
     }
 
     /**
-      * Server-initiated event message
-      */
+     * Server-initiated event message
+     */
     export interface Event extends Message {
         /**
-          * Name of event
-          */
+         * Name of event
+         */
         event: string;
 
         /**
-          * Event-specific information
-          */
+         * Event-specific information
+         */
         body?: any;
     }
 
     /**
-      * Response by server to client request message.
-      */
+     * Response by server to client request message.
+     */
     export interface Response extends Message {
         /**
-          * Sequence number of the request message.
-          */
+         * Sequence number of the request message.
+         */
         request_seq: number;
 
         /**
-          * Outcome of the request.
-          */
+         * Outcome of the request.
+         */
         success: boolean;
 
         /**
-          * The command requested.
-          */
+         * The command requested.
+         */
         command: string;
 
         /**
-          * Contains error message if success === false.
-          */
+         * Contains error message if success === false.
+         */
         message?: string;
 
         /**
-          * Contains message body if success === true.
-          */
+         * Contains message body if success === true.
+         */
         body?: any;
     }
 
     /**
-      * Arguments for FileRequest messages.
-      */
+     * Arguments for FileRequest messages.
+     */
     export interface FileRequestArgs {
         /**
-          * The file for the request (absolute pathname required).
-          */
+         * The file for the request (absolute pathname required).
+         */
         file: string;
 
         /*
-         * Optional name of project that contains file
-         */
+        * Optional name of project that contains file
+        */
         projectFileName?: string;
     }
 
@@ -290,18 +290,18 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Arguments for ProjectInfoRequest request.
-      */
+     * Arguments for ProjectInfoRequest request.
+     */
     export interface ProjectInfoRequestArgs extends FileRequestArgs {
         /**
-          * Indicate if the file name list of the project is needed
-          */
+         * Indicate if the file name list of the project is needed
+         */
         needFileNameList: boolean;
     }
 
     /**
-      * A request to get the project information of the current file.
-      */
+     * A request to get the project information of the current file.
+     */
     export interface ProjectInfoRequest extends Request {
         command: CommandTypes.ProjectInfo;
         arguments: ProjectInfoRequestArgs;
@@ -325,21 +325,21 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Response message body for "projectInfo" request
-      */
+     * Response message body for "projectInfo" request
+     */
     export interface ProjectInfo {
         /**
-          * For configured project, this is the normalized path of the 'tsconfig.json' file
-          * For inferred project, this is undefined
-          */
+         * For configured project, this is the normalized path of the 'tsconfig.json' file
+         * For inferred project, this is undefined
+         */
         configFileName: string;
         /**
-          * The list of normalized file name in the project, including 'lib.d.ts'
-          */
+         * The list of normalized file name in the project, including 'lib.d.ts'
+         */
         fileNames?: string[];
         /**
-          * Indicates if the project has a active language service instance
-          */
+         * Indicates if the project has a active language service instance
+         */
         languageServiceDisabled?: boolean;
     }
 
@@ -359,32 +359,32 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Response message for "projectInfo" request
-      */
+     * Response message for "projectInfo" request
+     */
     export interface ProjectInfoResponse extends Response {
         body?: ProjectInfo;
     }
 
     /**
-      * Request whose sole parameter is a file name.
-      */
+     * Request whose sole parameter is a file name.
+     */
     export interface FileRequest extends Request {
         arguments: FileRequestArgs;
     }
 
     /**
-      * Instances of this interface specify a location in a source file:
-      * (file, line, character offset), where line and character offset are 1-based.
-      */
+     * Instances of this interface specify a location in a source file:
+     * (file, line, character offset), where line and character offset are 1-based.
+     */
     export interface FileLocationRequestArgs extends FileRequestArgs {
         /**
-          * The line number for the request (1-based).
-          */
+         * The line number for the request (1-based).
+         */
         line: number;
 
         /**
-          * The character offset (on the line) for the request (1-based).
-          */
+         * The character offset (on the line) for the request (1-based).
+         */
         offset: number;
 
         /**
@@ -395,25 +395,25 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Request for the available codefixes at a specific position.
-      */
+     * Request for the available codefixes at a specific position.
+     */
     export interface CodeFixRequest extends Request {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
 
     /**
-      * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-      */
+     * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+     */
     export interface CodeFixRequestArgs extends FileRequestArgs {
         /**
-          * The line number for the request (1-based).
-          */
+         * The line number for the request (1-based).
+         */
         startLine: number;
 
         /**
-          * The character offset (on the line) for the request (1-based).
-          */
+         * The character offset (on the line) for the request (1-based).
+         */
         startOffset: number;
 
         /**
@@ -423,13 +423,13 @@ namespace ts.server.protocol {
         startPosition?: number;
 
         /**
-          * The line number for the request (1-based).
-          */
+         * The line number for the request (1-based).
+         */
         endLine: number;
 
         /**
-          * The character offset (on the line) for the request (1-based).
-          */
+         * The character offset (on the line) for the request (1-based).
+         */
         endOffset: number;
 
         /**
@@ -439,8 +439,8 @@ namespace ts.server.protocol {
         endPosition?: number;
 
         /**
-          * Errorcodes we want to get the fixes for.
-          */
+         * Errorcodes we want to get the fixes for.
+         */
         errorCodes?: number[];
     }
 
@@ -452,8 +452,8 @@ namespace ts.server.protocol {
     }
 
     /**
-      * A request whose arguments specify a file location (file, line, col).
-      */
+     * A request whose arguments specify a file location (file, line, col).
+     */
     export interface FileLocationRequest extends FileRequest {
         arguments: FileLocationRequestArgs;
     }
@@ -498,9 +498,9 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Arguments in document highlight request; include: filesToSearch, file,
-      * line, offset.
-      */
+     * Arguments in document highlight request; include: filesToSearch, file,
+     * line, offset.
+     */
     export interface DocumentHighlightsRequestArgs extends FileLocationRequestArgs {
         /**
          * List of files to search for document highlights.
@@ -509,82 +509,82 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Go to definition request; value of command field is
-      * "definition". Return response giving the file locations that
-      * define the symbol found in file at location line, col.
-      */
+     * Go to definition request; value of command field is
+     * "definition". Return response giving the file locations that
+     * define the symbol found in file at location line, col.
+     */
     export interface DefinitionRequest extends FileLocationRequest {
         command: CommandTypes.Definition;
     }
 
     /**
-      * Go to type request; value of command field is
-      * "typeDefinition". Return response giving the file locations that
-      * define the type for the symbol found in file at location line, col.
-      */
+     * Go to type request; value of command field is
+     * "typeDefinition". Return response giving the file locations that
+     * define the type for the symbol found in file at location line, col.
+     */
     export interface TypeDefinitionRequest extends FileLocationRequest {
         command: CommandTypes.TypeDefinition;
     }
 
     /**
-      * Go to implementation request; value of command field is
-      * "implementation". Return response giving the file locations that
-      * implement the symbol found in file at location line, col.
-      */
+     * Go to implementation request; value of command field is
+     * "implementation". Return response giving the file locations that
+     * implement the symbol found in file at location line, col.
+     */
     export interface ImplementationRequest extends FileLocationRequest {
         command: CommandTypes.Implementation;
     }
 
     /**
-      * Location in source code expressed as (one-based) line and character offset.
-      */
+     * Location in source code expressed as (one-based) line and character offset.
+     */
     export interface Location {
         line: number;
         offset: number;
     }
 
     /**
-      * Object found in response messages defining a span of text in source code.
-      */
+     * Object found in response messages defining a span of text in source code.
+     */
     export interface TextSpan {
         /**
-          * First character of the definition.
-          */
+         * First character of the definition.
+         */
         start: Location;
 
         /**
-          * One character past last character of the definition.
-          */
+         * One character past last character of the definition.
+         */
         end: Location;
     }
 
     /**
-      * Object found in response messages defining a span of text in a specific source file.
-      */
+     * Object found in response messages defining a span of text in a specific source file.
+     */
     export interface FileSpan extends TextSpan {
         /**
-          * File containing text span.
-          */
+         * File containing text span.
+         */
         file: string;
     }
 
     /**
-      * Definition response message.  Gives text range for definition.
-      */
+     * Definition response message.  Gives text range for definition.
+     */
     export interface DefinitionResponse extends Response {
         body?: FileSpan[];
     }
 
     /**
-      * Definition response message.  Gives text range for definition.
-      */
+     * Definition response message.  Gives text range for definition.
+     */
     export interface TypeDefinitionResponse extends Response {
         body?: FileSpan[];
     }
 
     /**
-      * Implementation response message.  Gives text range for implementations.
-      */
+     * Implementation response message.  Gives text range for implementations.
+     */
     export interface ImplementationResponse extends Response {
         body?: FileSpan[];
     }
@@ -608,18 +608,18 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Get occurrences request; value of command field is
-      * "occurrences". Return response giving spans that are relevant
-      * in the file at a given line and column.
-      */
+     * Get occurrences request; value of command field is
+     * "occurrences". Return response giving spans that are relevant
+     * in the file at a given line and column.
+     */
     export interface OccurrencesRequest extends FileLocationRequest {
         command: CommandTypes.Occurrences;
     }
 
     export interface OccurrencesResponseItem extends FileSpan {
         /**
-          * True if the occurrence is a write location, false otherwise.
-          */
+         * True if the occurrence is a write location, false otherwise.
+         */
         isWriteAccess: boolean;
 
         /**
@@ -633,10 +633,10 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Get document highlights request; value of command field is
-      * "documentHighlights". Return response giving spans that are relevant
-      * in the file at a given line and column.
-      */
+     * Get document highlights request; value of command field is
+     * "documentHighlights". Return response giving spans that are relevant
+     * in the file at a given line and column.
+     */
     export interface DocumentHighlightsRequest extends FileLocationRequest {
         command: CommandTypes.DocumentHighlights;
         arguments: DocumentHighlightsRequestArgs;
@@ -655,13 +655,13 @@ namespace ts.server.protocol {
      */
     export interface DocumentHighlightsItem {
         /**
-          * File containing highlight spans.
-          */
+         * File containing highlight spans.
+         */
         file: string;
 
         /**
-          * Spans to highlight in file.
-          */
+         * Spans to highlight in file.
+         */
         highlightSpans: HighlightSpan[];
     }
 
@@ -673,25 +673,25 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Find references request; value of command field is
-      * "references". Return response giving the file locations that
-      * reference the symbol found in file at location line, col.
-      */
+     * Find references request; value of command field is
+     * "references". Return response giving the file locations that
+     * reference the symbol found in file at location line, col.
+     */
     export interface ReferencesRequest extends FileLocationRequest {
         command: CommandTypes.References;
     }
 
     export interface ReferencesResponseItem extends FileSpan {
         /** Text of line containing the reference.  Including this
-          *  with the response avoids latency of editor loading files
-          * to show text of reference line (the server already has
-          * loaded the referencing files).
-          */
+         *  with the response avoids latency of editor loading files
+         * to show text of reference line (the server already has
+         * loaded the referencing files).
+         */
         lineText: string;
 
         /**
-          * True if reference is a write location, false otherwise.
-          */
+         * True if reference is a write location, false otherwise.
+         */
         isWriteAccess: boolean;
 
         /**
@@ -701,33 +701,33 @@ namespace ts.server.protocol {
     }
 
     /**
-      * The body of a "references" response message.
-      */
+     * The body of a "references" response message.
+     */
     export interface ReferencesResponseBody {
         /**
-          * The file locations referencing the symbol.
-          */
+         * The file locations referencing the symbol.
+         */
         refs: ReferencesResponseItem[];
 
         /**
-          * The name of the symbol.
-          */
+         * The name of the symbol.
+         */
         symbolName: string;
 
         /**
-          * The start character offset of the symbol (on the line provided by the references request).
-          */
+         * The start character offset of the symbol (on the line provided by the references request).
+         */
         symbolStartOffset: number;
 
         /**
-          * The full display name of the symbol.
-          */
+         * The full display name of the symbol.
+         */
         symbolDisplayString: string;
     }
 
     /**
-      * Response to "references" request.
-      */
+     * Response to "references" request.
+     */
     export interface ReferencesResponse extends Response {
         body?: ReferencesResponseBody;
     }
@@ -747,48 +747,48 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Rename request; value of command field is "rename". Return
-      * response giving the file locations that reference the symbol
-      * found in file at location line, col. Also return full display
-      * name of the symbol so that client can print it unambiguously.
-      */
+     * Rename request; value of command field is "rename". Return
+     * response giving the file locations that reference the symbol
+     * found in file at location line, col. Also return full display
+     * name of the symbol so that client can print it unambiguously.
+     */
     export interface RenameRequest extends FileLocationRequest {
         command: CommandTypes.Rename;
         arguments: RenameRequestArgs;
     }
 
     /**
-      * Information about the item to be renamed.
-      */
+     * Information about the item to be renamed.
+     */
     export interface RenameInfo {
         /**
-          * True if item can be renamed.
-          */
+         * True if item can be renamed.
+         */
         canRename: boolean;
 
         /**
-          * Error message if item can not be renamed.
-          */
+         * Error message if item can not be renamed.
+         */
         localizedErrorMessage?: string;
 
         /**
-          * Display name of the item to be renamed.
-          */
+         * Display name of the item to be renamed.
+         */
         displayName: string;
 
         /**
-          * Full display name of item to be renamed.
-          */
+         * Full display name of item to be renamed.
+         */
         fullDisplayName: string;
 
         /**
-          * The items's kind (such as 'className' or 'parameterName' or plain 'text').
-          */
+         * The items's kind (such as 'className' or 'parameterName' or plain 'text').
+         */
         kind: string;
 
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers: string;
     }
 
@@ -815,8 +815,8 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Rename response message.
-      */
+     * Rename response message.
+     */
     export interface RenameResponse extends Response {
         body?: RenameResponseBody;
     }
@@ -985,19 +985,19 @@ namespace ts.server.protocol {
 
 
     /**
-      * Information found in a configure request.
-      */
+     * Information found in a configure request.
+     */
     export interface ConfigureRequestArguments {
 
         /**
-          * Information about the host, for example 'Emacs 24.4' or
-          * 'Sublime Text version 3075'
-          */
+         * Information about the host, for example 'Emacs 24.4' or
+         * 'Sublime Text version 3075'
+         */
         hostInfo?: string;
 
         /**
-          * If present, tab settings apply only to this file.
-          */
+         * If present, tab settings apply only to this file.
+         */
         file?: string;
 
         /**
@@ -1012,24 +1012,24 @@ namespace ts.server.protocol {
     }
 
     /**
-      *  Configure request; value of command field is "configure".  Specifies
-      *  host information, such as host type, tab size, and indent size.
-      */
+     *  Configure request; value of command field is "configure".  Specifies
+     *  host information, such as host type, tab size, and indent size.
+     */
     export interface ConfigureRequest extends Request {
         command: CommandTypes.Configure;
         arguments: ConfigureRequestArguments;
     }
 
     /**
-      * Response to "configure" request.  This is just an acknowledgement, so
-      * no body field is required.
-      */
+     * Response to "configure" request.  This is just an acknowledgement, so
+     * no body field is required.
+     */
     export interface ConfigureResponse extends Response {
     }
 
     /**
-      *  Information found in an "open" request.
-      */
+     *  Information found in an "open" request.
+     */
     export interface OpenRequestArgs extends FileRequestArgs {
         /**
          * Used when a version of the file content is known to be more up to date than the one on disk.
@@ -1041,18 +1041,23 @@ namespace ts.server.protocol {
          *      "TS", "JS", "TSX", "JSX"
          */
         scriptKindName?: ScriptKindName;
+        /**
+         * Used to limit the searching for project config file. If given the searching will stop at this
+         * root path; otherwise it will go all the way up to the dist root path.
+         */
+        projectRootPath?: string;
     }
 
     export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
 
     /**
-      * Open request; value of command field is "open". Notify the
-      * server that the client has file open.  The server will not
-      * monitor the filesystem for changes in this file and will assume
-      * that the client is updating the server (using the change and/or
-      * reload messages) when the file changes. Server does not currently
-      * send a response to an open request.
-      */
+     * Open request; value of command field is "open". Notify the
+     * server that the client has file open.  The server will not
+     * monitor the filesystem for changes in this file and will assume
+     * that the client is updating the server (using the change and/or
+     * reload messages) when the file changes. Server does not currently
+     * send a response to an open request.
+     */
     export interface OpenRequest extends Request {
         command: CommandTypes.Open;
         arguments: OpenRequestArgs;
@@ -1199,27 +1204,27 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
-      * no body field is required.
-      */
+     * Response to SetCompilerOptionsForInferredProjectsResponse request. This is just an acknowledgement, so
+     * no body field is required.
+     */
     export interface SetCompilerOptionsForInferredProjectsResponse extends Response {
     }
 
     /**
-      *  Exit request; value of command field is "exit".  Ask the server process
-      *  to exit.
-      */
+     *  Exit request; value of command field is "exit".  Ask the server process
+     *  to exit.
+     */
     export interface ExitRequest extends Request {
         command: CommandTypes.Exit;
     }
 
     /**
-      * Close request; value of command field is "close". Notify the
-      * server that the client has closed a previously open file.  If
-      * file is still referenced by open files, the server will resume
-      * monitoring the filesystem for changes to file.  Server does not
-      * currently send a response to a close request.
-      */
+     * Close request; value of command field is "close". Notify the
+     * server that the client has closed a previously open file.  If
+     * file is still referenced by open files, the server will resume
+     * monitoring the filesystem for changes to file.  Server does not
+     * currently send a response to a close request.
+     */
     export interface CloseRequest extends FileRequest {
         command: CommandTypes.Close;
     }
@@ -1277,47 +1282,47 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Quickinfo request; value of command field is
-      * "quickinfo". Return response giving a quick type and
-      * documentation string for the symbol found in file at location
-      * line, col.
-      */
+     * Quickinfo request; value of command field is
+     * "quickinfo". Return response giving a quick type and
+     * documentation string for the symbol found in file at location
+     * line, col.
+     */
     export interface QuickInfoRequest extends FileLocationRequest {
         command: CommandTypes.Quickinfo;
     }
 
     /**
-      * Body of QuickInfoResponse.
-      */
+     * Body of QuickInfoResponse.
+     */
     export interface QuickInfoResponseBody {
         /**
-          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+         */
         kind: string;
 
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers: string;
 
         /**
-          * Starting file location of symbol.
-          */
+         * Starting file location of symbol.
+         */
         start: Location;
 
         /**
-          * One past last character of symbol.
-          */
+         * One past last character of symbol.
+         */
         end: Location;
 
         /**
-          * Type and kind of symbol.
-          */
+         * Type and kind of symbol.
+         */
         displayString: string;
 
         /**
-          * Documentation associated with symbol.
-          */
+         * Documentation associated with symbol.
+         */
         documentation: string;
 
         /**
@@ -1327,24 +1332,24 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Quickinfo response message.
-      */
+     * Quickinfo response message.
+     */
     export interface QuickInfoResponse extends Response {
         body?: QuickInfoResponseBody;
     }
 
     /**
-      * Arguments for format messages.
-      */
+     * Arguments for format messages.
+     */
     export interface FormatRequestArgs extends FileLocationRequestArgs {
         /**
-          * Last line of range for which to format text in file.
-          */
+         * Last line of range for which to format text in file.
+         */
         endLine: number;
 
         /**
-          * Character offset on last line of range for which to format text in file.
-          */
+         * Character offset on last line of range for which to format text in file.
+         */
         endOffset: number;
 
         /**
@@ -1359,39 +1364,39 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Format request; value of command field is "format".  Return
-      * response giving zero or more edit instructions.  The edit
-      * instructions will be sorted in file order.  Applying the edit
-      * instructions in reverse to file will result in correctly
-      * reformatted text.
-      */
+     * Format request; value of command field is "format".  Return
+     * response giving zero or more edit instructions.  The edit
+     * instructions will be sorted in file order.  Applying the edit
+     * instructions in reverse to file will result in correctly
+     * reformatted text.
+     */
     export interface FormatRequest extends FileLocationRequest {
         command: CommandTypes.Format;
         arguments: FormatRequestArgs;
     }
 
     /**
-      * Object found in response messages defining an editing
-      * instruction for a span of text in source code.  The effect of
-      * this instruction is to replace the text starting at start and
-      * ending one character before end with newText. For an insertion,
-      * the text span is empty.  For a deletion, newText is empty.
-      */
+     * Object found in response messages defining an editing
+     * instruction for a span of text in source code.  The effect of
+     * this instruction is to replace the text starting at start and
+     * ending one character before end with newText. For an insertion,
+     * the text span is empty.  For a deletion, newText is empty.
+     */
     export interface CodeEdit {
         /**
-          * First character of the text span to edit.
-          */
+         * First character of the text span to edit.
+         */
         start: Location;
 
         /**
-          * One character past last character of the text span to edit.
-          */
+         * One character past last character of the text span to edit.
+         */
         end: Location;
 
         /**
-          * Replace the span defined above with this string (may be
-          * the empty string).
-          */
+         * Replace the span defined above with this string (may be
+         * the empty string).
+         */
         newText: string;
     }
 
@@ -1413,109 +1418,109 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Format and format on key response message.
-      */
+     * Format and format on key response message.
+     */
     export interface FormatResponse extends Response {
         body?: CodeEdit[];
     }
 
     /**
-      * Arguments for format on key messages.
-      */
+     * Arguments for format on key messages.
+     */
     export interface FormatOnKeyRequestArgs extends FileLocationRequestArgs {
         /**
-          * Key pressed (';', '\n', or '}').
-          */
+         * Key pressed (';', '\n', or '}').
+         */
         key: string;
 
         options?: FormatCodeSettings;
     }
 
     /**
-      * Format on key request; value of command field is
-      * "formatonkey". Given file location and key typed (as string),
-      * return response giving zero or more edit instructions.  The
-      * edit instructions will be sorted in file order.  Applying the
-      * edit instructions in reverse to file will result in correctly
-      * reformatted text.
-      */
+     * Format on key request; value of command field is
+     * "formatonkey". Given file location and key typed (as string),
+     * return response giving zero or more edit instructions.  The
+     * edit instructions will be sorted in file order.  Applying the
+     * edit instructions in reverse to file will result in correctly
+     * reformatted text.
+     */
     export interface FormatOnKeyRequest extends FileLocationRequest {
         command: CommandTypes.Formatonkey;
         arguments: FormatOnKeyRequestArgs;
     }
 
     /**
-      * Arguments for completions messages.
-      */
+     * Arguments for completions messages.
+     */
     export interface CompletionsRequestArgs extends FileLocationRequestArgs {
         /**
-          * Optional prefix to apply to possible completions.
-          */
+         * Optional prefix to apply to possible completions.
+         */
         prefix?: string;
     }
 
     /**
-      * Completions request; value of command field is "completions".
-      * Given a file location (file, line, col) and a prefix (which may
-      * be the empty string), return the possible completions that
-      * begin with prefix.
-      */
+     * Completions request; value of command field is "completions".
+     * Given a file location (file, line, col) and a prefix (which may
+     * be the empty string), return the possible completions that
+     * begin with prefix.
+     */
     export interface CompletionsRequest extends FileLocationRequest {
         command: CommandTypes.Completions;
         arguments: CompletionsRequestArgs;
     }
 
     /**
-      * Arguments for completion details request.
-      */
+     * Arguments for completion details request.
+     */
     export interface CompletionDetailsRequestArgs extends FileLocationRequestArgs {
         /**
-          * Names of one or more entries for which to obtain details.
-          */
+         * Names of one or more entries for which to obtain details.
+         */
         entryNames: string[];
     }
 
     /**
-      * Completion entry details request; value of command field is
-      * "completionEntryDetails".  Given a file location (file, line,
-      * col) and an array of completion entry names return more
-      * detailed information for each completion entry.
-      */
+     * Completion entry details request; value of command field is
+     * "completionEntryDetails".  Given a file location (file, line,
+     * col) and an array of completion entry names return more
+     * detailed information for each completion entry.
+     */
     export interface CompletionDetailsRequest extends FileLocationRequest {
         command: CommandTypes.CompletionDetails;
         arguments: CompletionDetailsRequestArgs;
     }
 
     /**
-      * Part of a symbol description.
-      */
+     * Part of a symbol description.
+     */
     export interface SymbolDisplayPart {
         /**
-          * Text of an item describing the symbol.
-          */
+         * Text of an item describing the symbol.
+         */
         text: string;
 
         /**
-          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
+         */
         kind: string;
     }
 
     /**
-      * An item found in a completion response.
-      */
+     * An item found in a completion response.
+     */
     export interface CompletionEntry {
         /**
-          * The symbol's name.
-          */
+         * The symbol's name.
+         */
         name: string;
         /**
-          * The symbol's kind (such as 'className' or 'parameterName').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName').
+         */
         kind: string;
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers: string;
         /**
          * A string that is used for comparing completion items so that they can be ordered.  This
@@ -1530,34 +1535,34 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Additional completion entry details, available on demand
-      */
+     * Additional completion entry details, available on demand
+     */
     export interface CompletionEntryDetails {
         /**
-          * The symbol's name.
-          */
+         * The symbol's name.
+         */
         name: string;
         /**
-          * The symbol's kind (such as 'className' or 'parameterName').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName').
+         */
         kind: string;
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers: string;
         /**
-          * Display parts of the symbol (similar to quick info).
-          */
+         * Display parts of the symbol (similar to quick info).
+         */
         displayParts: SymbolDisplayPart[];
 
         /**
-          * Documentation strings for the symbol.
-          */
+         * Documentation strings for the symbol.
+         */
         documentation: SymbolDisplayPart[];
 
         /**
-          * JSDoc tags for the symbol.
-          */
+         * JSDoc tags for the symbol.
+         */
         tags: JSDocTagInfo[];
     }
 
@@ -1580,13 +1585,13 @@ namespace ts.server.protocol {
         name: string;
 
         /**
-          * Documentation of the parameter.
-          */
+         * Documentation of the parameter.
+         */
         documentation: SymbolDisplayPart[];
 
         /**
-          * Display parts of the parameter.
-          */
+         * Display parts of the parameter.
+         */
         displayParts: SymbolDisplayPart[];
 
         /**
@@ -1674,10 +1679,10 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Signature help request; value of command field is "signatureHelp".
-      * Given a file location (file, line, col), return the signature
-      * help.
-      */
+     * Signature help request; value of command field is "signatureHelp".
+     * Given a file location (file, line, col), return the signature
+     * help.
+     */
     export interface SignatureHelpRequest extends FileLocationRequest {
         command: CommandTypes.SignatureHelp;
         arguments: SignatureHelpRequestArgs;
@@ -1691,8 +1696,8 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Synchronous request for semantic diagnostics of one file.
-      */
+     * Synchronous request for semantic diagnostics of one file.
+     */
     export interface SemanticDiagnosticsSyncRequest extends FileRequest {
         command: CommandTypes.SemanticDiagnosticsSync;
         arguments: SemanticDiagnosticsSyncRequestArgs;
@@ -1703,15 +1708,15 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Response object for synchronous sematic diagnostics request.
-      */
+     * Response object for synchronous sematic diagnostics request.
+     */
     export interface SemanticDiagnosticsSyncResponse extends Response {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
-      * Synchronous request for syntactic diagnostics of one file.
-      */
+     * Synchronous request for syntactic diagnostics of one file.
+     */
     export interface SyntacticDiagnosticsSyncRequest extends FileRequest {
         command: CommandTypes.SyntacticDiagnosticsSync;
         arguments: SyntacticDiagnosticsSyncRequestArgs;
@@ -1722,65 +1727,65 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Response object for synchronous syntactic diagnostics request.
-      */
+     * Response object for synchronous syntactic diagnostics request.
+     */
     export interface SyntacticDiagnosticsSyncResponse extends Response {
         body?: Diagnostic[] | DiagnosticWithLinePosition[];
     }
 
     /**
-    * Arguments for GeterrForProject request.
-    */
+     * Arguments for GeterrForProject request.
+     */
     export interface GeterrForProjectRequestArgs {
         /**
-          * the file requesting project error list
-          */
+         * the file requesting project error list
+         */
         file: string;
 
         /**
-          * Delay in milliseconds to wait before starting to compute
-          * errors for the files in the file list
-          */
+         * Delay in milliseconds to wait before starting to compute
+         * errors for the files in the file list
+         */
         delay: number;
     }
 
     /**
-      * GeterrForProjectRequest request; value of command field is
-      * "geterrForProject". It works similarly with 'Geterr', only
-      * it request for every file in this project.
-      */
+     * GeterrForProjectRequest request; value of command field is
+     * "geterrForProject". It works similarly with 'Geterr', only
+     * it request for every file in this project.
+     */
     export interface GeterrForProjectRequest extends Request {
         command: CommandTypes.GeterrForProject;
         arguments: GeterrForProjectRequestArgs;
     }
 
     /**
-      * Arguments for geterr messages.
-      */
+     * Arguments for geterr messages.
+     */
     export interface GeterrRequestArgs {
         /**
-          * List of file names for which to compute compiler errors.
-          * The files will be checked in list order.
-          */
+         * List of file names for which to compute compiler errors.
+         * The files will be checked in list order.
+         */
         files: string[];
 
         /**
-          * Delay in milliseconds to wait before starting to compute
-          * errors for the files in the file list
-          */
+         * Delay in milliseconds to wait before starting to compute
+         * errors for the files in the file list
+         */
         delay: number;
     }
 
     /**
-      * Geterr request; value of command field is "geterr". Wait for
-      * delay milliseconds and then, if during the wait no change or
-      * reload messages have arrived for the first file in the files
-      * list, get the syntactic errors for the file, field requests,
-      * and then get the semantic errors for the file.  Repeat with a
-      * smaller delay for each subsequent file on the files list.  Best
-      * practice for an editor is to send a file list containing each
-      * file that is currently visible, in most-recently-used order.
-      */
+     * Geterr request; value of command field is "geterr". Wait for
+     * delay milliseconds and then, if during the wait no change or
+     * reload messages have arrived for the first file in the files
+     * list, get the syntactic errors for the file, field requests,
+     * and then get the semantic errors for the file.  Repeat with a
+     * smaller delay for each subsequent file on the files list.  Best
+     * practice for an editor is to send a file list containing each
+     * file that is currently visible, in most-recently-used order.
+     */
     export interface GeterrRequest extends Request {
         command: CommandTypes.Geterr;
         arguments: GeterrRequestArgs;
@@ -1801,46 +1806,56 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Item of diagnostic information found in a DiagnosticEvent message.
-      */
+     * Item of diagnostic information found in a DiagnosticEvent message.
+     */
     export interface Diagnostic {
         /**
-          * Starting file location at which text applies.
-          */
+         * Starting file location at which text applies.
+         */
         start: Location;
 
         /**
-          * The last file location at which the text applies.
-          */
+         * The last file location at which the text applies.
+         */
         end: Location;
 
         /**
-          * Text of diagnostic message.
-          */
+         * Text of diagnostic message.
+         */
         text: string;
 
         /**
-          * The error code of the diagnostic message.
-          */
+         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         */
+        category: string;
+
+        /**
+         * The error code of the diagnostic message.
+         */
         code?: number;
+
+        /**
+         * The name of the plugin reporting the message.
+         */
+        source?: string;
     }
 
     export interface DiagnosticEventBody {
         /**
-          * The file for which diagnostic information is reported.
-          */
+         * The file for which diagnostic information is reported.
+         */
         file: string;
 
         /**
-          * An array of diagnostic information items.
-          */
+         * An array of diagnostic information items.
+         */
         diagnostics: Diagnostic[];
     }
 
     /**
-      * Event message for "syntaxDiag" and "semanticDiag" event types.
-      * These events provide syntactic and semantic errors for a file.
-      */
+     * Event message for "syntaxDiag" and "semanticDiag" event types.
+     * These events provide syntactic and semantic errors for a file.
+     */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
     }
@@ -1893,195 +1908,195 @@ namespace ts.server.protocol {
     }
 
     /**
-      * Arguments for reload request.
-      */
+     * Arguments for reload request.
+     */
     export interface ReloadRequestArgs extends FileRequestArgs {
         /**
-          * Name of temporary file from which to reload file
-          * contents. May be same as file.
-          */
+         * Name of temporary file from which to reload file
+         * contents. May be same as file.
+         */
         tmpfile: string;
     }
 
     /**
-      * Reload request message; value of command field is "reload".
-      * Reload contents of file with name given by the 'file' argument
-      * from temporary file with name given by the 'tmpfile' argument.
-      * The two names can be identical.
-      */
+     * Reload request message; value of command field is "reload".
+     * Reload contents of file with name given by the 'file' argument
+     * from temporary file with name given by the 'tmpfile' argument.
+     * The two names can be identical.
+     */
     export interface ReloadRequest extends FileRequest {
         command: CommandTypes.Reload;
         arguments: ReloadRequestArgs;
     }
 
     /**
-      * Response to "reload" request. This is just an acknowledgement, so
-      * no body field is required.
-      */
+     * Response to "reload" request. This is just an acknowledgement, so
+     * no body field is required.
+     */
     export interface ReloadResponse extends Response {
     }
 
     /**
-      * Arguments for saveto request.
-      */
+     * Arguments for saveto request.
+     */
     export interface SavetoRequestArgs extends FileRequestArgs {
         /**
-          * Name of temporary file into which to save server's view of
-          * file contents.
-          */
+         * Name of temporary file into which to save server's view of
+         * file contents.
+         */
         tmpfile: string;
     }
 
     /**
-      * Saveto request message; value of command field is "saveto".
-      * For debugging purposes, save to a temporaryfile (named by
-      * argument 'tmpfile') the contents of file named by argument
-      * 'file'.  The server does not currently send a response to a
-      * "saveto" request.
-      */
+     * Saveto request message; value of command field is "saveto".
+     * For debugging purposes, save to a temporaryfile (named by
+     * argument 'tmpfile') the contents of file named by argument
+     * 'file'.  The server does not currently send a response to a
+     * "saveto" request.
+     */
     export interface SavetoRequest extends FileRequest {
         command: CommandTypes.Saveto;
         arguments: SavetoRequestArgs;
     }
 
     /**
-      * Arguments for navto request message.
-      */
+     * Arguments for navto request message.
+     */
     export interface NavtoRequestArgs extends FileRequestArgs {
         /**
-          * Search term to navigate to from current location; term can
-          * be '.*' or an identifier prefix.
-          */
+         * Search term to navigate to from current location; term can
+         * be '.*' or an identifier prefix.
+         */
         searchValue: string;
         /**
-          *  Optional limit on the number of items to return.
-          */
+         *  Optional limit on the number of items to return.
+         */
         maxResultCount?: number;
         /**
-          * Optional flag to indicate we want results for just the current file
-          * or the entire project.
-          */
+         * Optional flag to indicate we want results for just the current file
+         * or the entire project.
+         */
         currentFileOnly?: boolean;
 
         projectFileName?: string;
     }
 
     /**
-      * Navto request message; value of command field is "navto".
-      * Return list of objects giving file locations and symbols that
-      * match the search term given in argument 'searchTerm'.  The
-      * context for the search is given by the named file.
-      */
+     * Navto request message; value of command field is "navto".
+     * Return list of objects giving file locations and symbols that
+     * match the search term given in argument 'searchTerm'.  The
+     * context for the search is given by the named file.
+     */
     export interface NavtoRequest extends FileRequest {
         command: CommandTypes.Navto;
         arguments: NavtoRequestArgs;
     }
 
     /**
-      * An item found in a navto response.
-      */
+     * An item found in a navto response.
+     */
     export interface NavtoItem {
         /**
-          * The symbol's name.
-          */
+         * The symbol's name.
+         */
         name: string;
 
         /**
-          * The symbol's kind (such as 'className' or 'parameterName').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName').
+         */
         kind: string;
 
         /**
-          * exact, substring, or prefix.
-          */
+         * exact, substring, or prefix.
+         */
         matchKind?: string;
 
         /**
-          * If this was a case sensitive or insensitive match.
-          */
+         * If this was a case sensitive or insensitive match.
+         */
         isCaseSensitive?: boolean;
 
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers?: string;
 
         /**
-          * The file in which the symbol is found.
-          */
+         * The file in which the symbol is found.
+         */
         file: string;
 
         /**
-          * The location within file at which the symbol is found.
-          */
+         * The location within file at which the symbol is found.
+         */
         start: Location;
 
         /**
-          * One past the last character of the symbol.
-          */
+         * One past the last character of the symbol.
+         */
         end: Location;
 
         /**
-          * Name of symbol's container symbol (if any); for example,
-          * the class name if symbol is a class member.
-          */
+         * Name of symbol's container symbol (if any); for example,
+         * the class name if symbol is a class member.
+         */
         containerName?: string;
 
         /**
-          * Kind of symbol's container symbol (if any).
-          */
+         * Kind of symbol's container symbol (if any).
+         */
         containerKind?: string;
     }
 
     /**
-      * Navto response message. Body is an array of navto items.  Each
-      * item gives a symbol that matched the search term.
-      */
+     * Navto response message. Body is an array of navto items.  Each
+     * item gives a symbol that matched the search term.
+     */
     export interface NavtoResponse extends Response {
         body?: NavtoItem[];
     }
 
     /**
-      * Arguments for change request message.
-      */
+     * Arguments for change request message.
+     */
     export interface ChangeRequestArgs extends FormatRequestArgs {
         /**
-          * Optional string to insert at location (file, line, offset).
-          */
+         * Optional string to insert at location (file, line, offset).
+         */
         insertString?: string;
     }
 
     /**
-      * Change request message; value of command field is "change".
-      * Update the server's view of the file named by argument 'file'.
-      * Server does not currently send a response to a change request.
-      */
+     * Change request message; value of command field is "change".
+     * Update the server's view of the file named by argument 'file'.
+     * Server does not currently send a response to a change request.
+     */
     export interface ChangeRequest extends FileLocationRequest {
         command: CommandTypes.Change;
         arguments: ChangeRequestArgs;
     }
 
     /**
-      * Response to "brace" request.
-      */
+     * Response to "brace" request.
+     */
     export interface BraceResponse extends Response {
         body?: TextSpan[];
     }
 
     /**
-      * Brace matching request; value of command field is "brace".
-      * Return response giving the file locations of matching braces
-      * found in file at location line, offset.
-      */
+     * Brace matching request; value of command field is "brace".
+     * Return response giving the file locations of matching braces
+     * found in file at location line, offset.
+     */
     export interface BraceRequest extends FileLocationRequest {
         command: CommandTypes.Brace;
     }
 
     /**
-      * NavBar items request; value of command field is "navbar".
-      * Return response giving the list of navigation bar entries
-      * extracted from the requested file.
-      */
+     * NavBar items request; value of command field is "navbar".
+     * Return response giving the list of navigation bar entries
+     * extracted from the requested file.
+     */
     export interface NavBarRequest extends FileRequest {
         command: CommandTypes.NavBar;
     }
@@ -2096,33 +2111,33 @@ namespace ts.server.protocol {
 
     export interface NavigationBarItem {
         /**
-          * The item's display text.
-          */
+         * The item's display text.
+         */
         text: string;
 
         /**
-          * The symbol's kind (such as 'className' or 'parameterName').
-          */
+         * The symbol's kind (such as 'className' or 'parameterName').
+         */
         kind: string;
 
         /**
-          * Optional modifiers for the kind (such as 'public').
-          */
+         * Optional modifiers for the kind (such as 'public').
+         */
         kindModifiers?: string;
 
         /**
-          * The definition locations of the item.
-          */
+         * The definition locations of the item.
+         */
         spans: TextSpan[];
 
         /**
-          * Optional children.
-          */
+         * Optional children.
+         */
         childItems?: NavigationBarItem[];
 
         /**
-          * Number of levels deep this item should appear.
-          */
+         * Number of levels deep this item should appear.
+         */
         indent: number;
     }
 
@@ -2262,15 +2277,19 @@ namespace ts.server.protocol {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         declaration?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2310,6 +2329,7 @@ namespace ts.server.protocol {
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strict?: boolean;
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

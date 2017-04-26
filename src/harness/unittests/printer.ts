@@ -52,6 +52,9 @@ namespace ts {
 
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
+
+            // github #14948
+            printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
         });
 
         describe("printBundle", () => {
@@ -77,6 +80,7 @@ namespace ts {
         describe("printNode", () => {
             const printsCorrectly = makePrintsCorrectly("printsNodeCorrectly");
             const sourceFile = createSourceFile("source.ts", "", ScriptTarget.ES2015);
+            // tslint:disable boolean-trivia
             const syntheticNode = createClassDeclaration(
                 undefined,
                 undefined,
@@ -94,6 +98,7 @@ namespace ts {
                     )
                 ])
             );
+            // tslint:enable boolean-trivia
             printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile));
         });
     });

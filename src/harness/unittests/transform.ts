@@ -39,5 +39,12 @@ namespace ts {
                 return file => file;
             }
         ]);
+
+        // https://github.com/Microsoft/TypeScript/issues/15192
+        transformsCorrectly("types", `let a: () => void`, [
+            context => file => visitNode(file, function visitor(node: Node): VisitResult<Node> {
+                return visitEachChild(node, visitor, context);
+            })
+        ]);
     });
 }

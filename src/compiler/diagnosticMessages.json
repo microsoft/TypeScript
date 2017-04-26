@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -867,21 +867,33 @@
         "category": "Error",
         "code": 1319
     },
-    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1320
     },
-    "Dynamic import must have one specifier as an argument.": {
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1321
     },
-    "Specifier of dynamic import cannot be spread element.": {
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1322
     },
-    "Dynamic import cannot have type arguments": {
+    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
         "category": "Error",
         "code": 1323
+    },
+    "Dynamic import must have one specifier as an argument.": {
+        "category": "Error",
+        "code": 1324
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1325
+    },
+    "Dynamic import cannot have type arguments": {
+        "category": "Error",
+        "code": 1326
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1844,6 +1856,10 @@
         "category": "Error",
         "code": 2549
     },
+    "Generic type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2550
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2108,13 +2124,25 @@
         "category": "Error",
         "code": 2707
     },
-    "A dynamic import call must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "Cannot use namespace '{0}' as a value.": {
         "category": "Error",
         "code": 2708
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+    "Cannot use namespace '{0}' as a type.": {
         "category": "Error",
         "code": 2709
+    },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
+    },
+    "A dynamic import call must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2711
+    },
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2712
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3194,6 +3222,10 @@
         "category": "Message",
         "code": 6181
     },
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": "6182"
+    },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
@@ -3299,9 +3331,13 @@
         "category": "Error",
         "code": 7034
     },
-    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
         "category": "Error",
         "code": 7035
+    },
+    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+        "category": "Error",
+        "code": 7036
     },
 
     "You cannot rename this element.": {

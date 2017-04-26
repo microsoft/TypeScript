@@ -14,7 +14,7 @@ namespace ts.codefix {
         //      ^^^^^^^
         const token = getTokenAtPosition(sourceFile, start);
 
-        if (token.kind != SyntaxKind.Identifier) {
+        if (token.kind !== SyntaxKind.Identifier) {
             return undefined;
         }
 
@@ -118,7 +118,7 @@ namespace ts.codefix {
                     stringTypeNode,
                 /*initializer*/ undefined);
                 const indexSignature = createIndexSignatureDeclaration(
-                /*decorators*/undefined,
+                /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                     [indexingParameter],
                     typeNode);
