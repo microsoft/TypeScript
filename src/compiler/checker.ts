@@ -15580,12 +15580,8 @@ namespace ts {
                 return createPromiseReturnType(node, anyType);
             }
 
-            if (modulekind === ModuleKind.ES2015) {
-                grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
-            }
-
             const specifier = node.arguments[0];
-            const specifierType = checkExpression(specifier);
+            const specifierType = checkNonNullExpression(specifier);
             if (!isTypeAssignableTo(specifierType, stringType)) {
                 error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
             }
@@ -24080,6 +24076,10 @@ namespace ts {
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
             if (isSpreadExpression(arguments[0])) {
                 return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+            }
+
+            if (modulekind === ModuleKind.ES2015) {
+                grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
         }
     }
