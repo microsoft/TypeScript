@@ -31,7 +31,8 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
 
-    const ruleProvider: formatting.RulesProvider = new formatting.RulesProvider();
+    /* @internal */
+    let ruleProvider: formatting.RulesProvider;
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
@@ -1043,9 +1044,9 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
+        ruleProvider = ruleProvider || new formatting.RulesProvider();
         let program: Program;
         let lastProjectVersion: string;
-
         let lastTypesRootVersion = 0;
 
         const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
