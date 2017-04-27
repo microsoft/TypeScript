@@ -5,11 +5,15 @@ namespace ts.formatting {
     export class RulesProvider {
         private globalRules: Rules;
         private options: ts.FormatCodeSettings;
-        private activeRules: Rule[];
+        private activeFormatOptionsRules: Rule[];
         private rulesMap: RulesMap;
 
         constructor() {
             this.globalRules = new Rules();
+
+            // Initialize the rulesMap with the high priority rules
+            this.rulesMap = RulesMap.create(this.globalRules.HighPriorityCommonRules.slice(0), this.globalRules.LowPriorityCommonRules.slice(0));
+            this.activeFormatOptionsRules = [];
         }
 
         public getRuleName(rule: Rule): string {
@@ -30,17 +34,16 @@ namespace ts.formatting {
 
         public ensureUpToDate(options: ts.FormatCodeSettings) {
             if (!this.options || !ts.compareDataObjects(this.options, options)) {
-                const activeRules = this.createActiveRules(options);
-                const rulesMap = RulesMap.create(activeRules);
+                const newFormatOptionsRules = this.createFormatOptionsRules(options);
 
-                this.activeRules = activeRules;
-                this.rulesMap = rulesMap;
+                this.rulesMap.Update(this.activeFormatOptionsRules, newFormatOptionsRules);
+                this.activeFormatOptionsRules = newFormatOptionsRules;
                 this.options = ts.clone(options);
             }
         }
 
-        private createActiveRules(options: ts.FormatCodeSettings): Rule[] {
-            let rules = this.globalRules.HighPriorityCommonRules.slice(0);
+        private createFormatOptionsRules(options: ts.FormatCodeSettings): Rule[] {
+            const rules = [];
 
             if (options.insertSpaceAfterConstructor) {
                 rules.push(this.globalRules.SpaceAfterConstructor);
@@ -161,8 +164,6 @@ namespace ts.formatting {
             else {
                 rules.push(this.globalRules.NoSpaceAfterTypeAssertion);
             }
-
-            rules = rules.concat(this.globalRules.LowPriorityCommonRules);
 
             return rules;
         }

@@ -31,6 +31,8 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
 
+    const ruleProvider: formatting.RulesProvider = new formatting.RulesProvider();
+
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
@@ -1037,10 +1039,9 @@ namespace ts {
     }
 
     export function createLanguageService(host: LanguageServiceHost,
-        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
+        documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()), formatOptions?: FormatCodeSettings): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        let ruleProvider: formatting.RulesProvider;
         let program: Program;
         let lastProjectVersion: string;
 
@@ -1053,6 +1054,11 @@ namespace ts {
         // Check if the localized messages json is set, otherwise query the host for it
         if (!localizedDiagnosticMessages && host.getLocalizedDiagnosticMessages) {
             localizedDiagnosticMessages = host.getLocalizedDiagnosticMessages();
+        }
+
+        // Update rules provider with code formatting options
+        if (formatOptions) {
+            ruleProvider.ensureUpToDate(formatOptions);
         }
 
         function log(message: string) {
@@ -1072,11 +1078,7 @@ namespace ts {
         }
 
         function getRuleProvider(options: FormatCodeSettings) {
-            // Ensure rules are initialized and up to date wrt to formatting options
-            if (!ruleProvider) {
-                ruleProvider = new formatting.RulesProvider();
-            }
-
+            // Ensure rules are up to date wrt to formatting options
             ruleProvider.ensureUpToDate(options);
             return ruleProvider;
         }
