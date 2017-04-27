@@ -31,6 +31,9 @@ namespace ts {
     /** The version of the language service API */
     export const servicesVersion = "0.5";
 
+    /* @internal */
+    let ruleProvider: formatting.RulesProvider;
+
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
         const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
@@ -1040,10 +1043,9 @@ namespace ts {
         documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory())): LanguageService {
 
         const syntaxTreeCache: SyntaxTreeCache = new SyntaxTreeCache(host);
-        let ruleProvider: formatting.RulesProvider;
+        ruleProvider = ruleProvider || new formatting.RulesProvider();
         let program: Program;
         let lastProjectVersion: string;
-
         let lastTypesRootVersion = 0;
 
         const useCaseSensitivefileNames = host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames();
@@ -1072,11 +1074,6 @@ namespace ts {
         }
 
         function getRuleProvider(options: FormatCodeSettings) {
-            // Ensure rules are initialized and up to date wrt to formatting options
-            if (!ruleProvider) {
-                ruleProvider = new formatting.RulesProvider();
-            }
-
             ruleProvider.ensureUpToDate(options);
             return ruleProvider;
         }
