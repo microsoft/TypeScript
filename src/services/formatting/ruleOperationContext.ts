@@ -4,27 +4,19 @@
 namespace ts.formatting {
 
     export class RuleOperationContext {
-        constructor(private optionName: string, private checkApplyRuleOperation: { (optionName: string, options: FormatCodeSettings): boolean }, private customContextChecks: { (context: FormattingContext): boolean; }[]) {
+        private customContextChecks: { (context: FormattingContext): boolean; }[];
+
+        constructor(...funcs: { (context: FormattingContext): boolean; }[]) {
+            this.customContextChecks = funcs;
         }
 
-        static Any: RuleOperationContext = new RuleOperationContext(undefined, undefined, []);
-
-        static Create1(...funcs: { (context: FormattingContext): boolean; }[]) {
-            return new RuleOperationContext(undefined, undefined, funcs);
-        }
-        static Create2(optionName: string, checkApplyRuleOperation: { (optionName: string, options: FormatCodeSettings): boolean }, ...funcs: { (context: FormattingContext): boolean; }[]) {
-            return new RuleOperationContext(optionName, checkApplyRuleOperation, funcs);
-        }
+        static Any: RuleOperationContext = new RuleOperationContext();
 
         public IsAny(): boolean {
             return this === RuleOperationContext.Any;
         }
 
         public InContext(context: FormattingContext): boolean {
-            if (this.checkApplyRuleOperation && !this.checkApplyRuleOperation(this.optionName, context.options)) {
-                return false;
-            }
-
             if (this.IsAny()) {
                 return true;
             }

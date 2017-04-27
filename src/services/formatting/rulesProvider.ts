@@ -9,7 +9,7 @@ namespace ts.formatting {
 
         constructor() {
             this.globalRules = new Rules();
-            const activeRules = this.createActiveRules();
+            const activeRules = this.globalRules.HighPriorityCommonRules.slice(0).concat(this.globalRules.UserConfigurableRules).concat(this.globalRules.LowPriorityCommonRules);
             this.rulesMap = RulesMap.create(activeRules);
         }
 
@@ -33,11 +33,6 @@ namespace ts.formatting {
             if (!this.options || !ts.compareDataObjects(this.options, options)) {
                 this.options = ts.clone(options);
             }
-        }
-
-        private createActiveRules(): Rule[] {
-            const rules = this.globalRules.HighPriorityCommonRules.slice(0);
-            return rules.concat(this.globalRules.UserConfigurableRules).concat(this.globalRules.LowPriorityCommonRules);
         }
     }
 }
