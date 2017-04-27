@@ -18,7 +18,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, requestJsDocTagName, requestJsDocTag } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords } = completionData;
 
         if (requestJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
@@ -52,7 +52,7 @@ namespace ts.Completions {
                         sortText: "0",
                     });
                 }
-                else {
+                else if (!hasFilteredClassMemberKeywords) {
                     return undefined;
                 }
             }
@@ -60,8 +60,11 @@ namespace ts.Completions {
             getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
         }
 
+        if (hasFilteredClassMemberKeywords) {
+            addRange(entries, classMemberKeywordCompletions);
+        }
         // Add keywords if this is not a member completion list
-        if (!isMemberCompletion && !requestJsDocTag && !requestJsDocTagName) {
+        else if (!isMemberCompletion && !requestJsDocTag && !requestJsDocTagName) {
             addRange(entries, keywordCompletions);
         }
 
@@ -406,7 +409,7 @@ namespace ts.Completions {
             }
 
             if (requestJsDocTagName || requestJsDocTag) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, requestJsDocTagName, requestJsDocTag };
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords: false };
             }
 
             if (!insideJsDocTagExpression) {
@@ -505,6 +508,7 @@ namespace ts.Completions {
         let isGlobalCompletion = false;
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
+        let hasFilteredClassMemberKeywords = false;
         let symbols: Symbol[] = [];
 
         if (isRightOfDot) {
@@ -542,7 +546,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), requestJsDocTagName, requestJsDocTag };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -599,6 +603,7 @@ namespace ts.Completions {
         function tryGetGlobalSymbols(): boolean {
             let objectLikeContainer: ObjectLiteralExpression | BindingPattern;
             let namedImportsOrExports: NamedImportsOrExports;
+            let classLikeContainer: ClassLikeDeclaration;
             let jsxContainer: JsxOpeningLikeElement;
 
             if (objectLikeContainer = tryGetObjectLikeCompletionContainer(contextToken)) {
@@ -609,6 +614,11 @@ namespace ts.Completions {
                 // cursor is in an import clause
                 // try to show exported member for imported module
                 return tryGetImportOrExportClauseCompletionSymbols(namedImportsOrExports);
+            }
+
+            if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
+                // cursor inside class declaration
+                return tryGetClassLikeCompletionSymbols(classLikeContainer);
             }
 
             if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
@@ -914,6 +924,31 @@ namespace ts.Completions {
         }
 
         /**
+         * Aggregates relevant symbols for completion in class declaration
+         * Relevant symbols are stored in the captured 'symbols' variable.
+         *
+         * @returns true if 'symbols' was successfully populated; false otherwise.
+         */
+        function tryGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration): boolean {
+            // We're looking up possible property names from parent type.
+            isMemberCompletion = true;
+            // Declaring new property/method/accessor
+            isNewIdentifierLocation = true;
+            // Has keywords for class elements
+            hasFilteredClassMemberKeywords = true;
+
+            const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
+            if (baseTypeNode) {
+                const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
+                // List of property symbols of base type that are not private
+                symbols = filter(typeChecker.getPropertiesOfType(baseType),
+                    baseProperty => !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
+            }
+
+            return true;
+        }
+
+        /**
          * Returns the immediate owning object literal or binding pattern of a context token,
          * on the condition that one exists and that the context implies completion should be given.
          */
@@ -950,6 +985,38 @@ namespace ts.Completions {
                 }
             }
 
+            return undefined;
+        }
+
+        /**
+         * Returns the immediate owning class declaration of a context token,
+         * on the condition that one exists and that the context implies completion should be given.
+         */
+        function tryGetClassLikeCompletionContainer(contextToken: Node): ClassLikeDeclaration {
+            if (contextToken) {
+                switch (contextToken.kind) {
+                    case SyntaxKind.OpenBraceToken:  // class c { |
+                        if (isClassLike(contextToken.parent)) {
+                            return contextToken.parent;
+                        }
+                        break;
+
+                    // class c {getValue(): number; | }
+                    case SyntaxKind.CommaToken:
+                    case SyntaxKind.SemicolonToken:
+                    // class c { method() { } | }
+                    case SyntaxKind.CloseBraceToken:
+                        if (isClassLike(location)) {
+                            return location;
+                        }
+                        break;
+                }
+            }
+
+            // class c { method() { } | method2() { } }
+            if (location && location.kind === SyntaxKind.SyntaxList && isClassLike(location.parent)) {
+                return location.parent;
+            }
             return undefined;
         }
 
@@ -1305,6 +1372,21 @@ namespace ts.Completions {
             sortText: "0"
         });
     }
+
+    const classMemberKeywordCompletions = filter(keywordCompletions, entry => {
+        switch (stringToToken(entry.name)) {
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.StaticKeyword:
+            case SyntaxKind.ConstructorKeyword:
+            case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.GetKeyword:
+            case SyntaxKind.SetKeyword:
+                return true;
+        }
+    });
 
     function isEqualityExpression(node: Node): node is BinaryExpression {
         return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);
