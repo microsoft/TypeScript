@@ -188,7 +188,7 @@ function f2() {
 }
 function f3(b) {
     if (true) {
-        var E;
+        var E = void 0;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
