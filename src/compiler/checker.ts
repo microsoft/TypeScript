@@ -3051,7 +3051,7 @@ namespace ts {
                         writePunctuation(writer, SyntaxKind.DotToken);
                         appendSymbolNameOnly(type.symbol, writer);
                     }
-                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.Enum | TypeFlags.TypeParameter)) {
+                    else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.EnumLike | TypeFlags.TypeParameter)) {
                         // The specified symbol flags need to be reinterpreted as type flags
                         buildSymbolDisplay(type.symbol, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                     }
