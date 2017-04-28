@@ -46,6 +46,7 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let needUMDDynamicImportHelper: boolean;
 
         return transformSourceFile;
 
@@ -66,9 +67,9 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-
             currentSourceFile = undefined;
             currentModuleInfo = undefined;
+            needUMDDynamicImportHelper = false;
             return aggregateTransformFlags(updated);
         }
 
@@ -107,6 +108,7 @@ namespace ts {
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
+            addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
 
@@ -411,6 +413,9 @@ namespace ts {
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(body, exportStarHelper);
             }
+            if (needUMDDynamicImportHelper) {
+                addEmitHelper(body, dynamicImportUMDHelper);
+            }
 
             return body;
         }
@@ -526,13 +531,16 @@ namespace ts {
             // })(function (require, exports, useSyncRequire) {
             //      "use strict";
             //      Object.defineProperty(exports, "__esModule", { value: true });
-            //      require.length === 1 ?
-            //          /*CommonJs Require*/ Promise.resolve().then(() => require('blah'));
-            //          /*Amd Require*/ new Promise(resolve => require(['blah'], resolve));
+            //      var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+            //      var __resolved = new Promise(function (resolve) { resolve(); });
+            //      .....
+            //      __syncRequire
+            //          ? __resolved.then(function () { return require(x); }) /*CommonJs Require*/
+            //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
-            const require = createIdentifier("require");
+            needUMDDynamicImportHelper = true;
             return createConditional(
-                /*condition*/ createBinary(createPropertyAccess(require, /*name*/ "length"), /*operator*/ createToken(SyntaxKind.EqualsEqualsEqualsToken), createNumericLiteral("1")),
+                /*condition*/ createIdentifier("__syncRequire"),
                 /*whenTrue*/ transformImportCallExpressionCommonJS(node),
                 /*whenFalse*/ transformImportCallExpressionAMD(node)
             );
@@ -543,43 +551,52 @@ namespace ts {
             // emit as
             // define(["require", "exports", "blah"], function (require, exports) {
             //     ...
-            //     new Promise(resolve => require(['blah'], resolve));
+            //     new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
-            const resolve = createIdentifier("resolve");
+            const resolve = createIdentifier("_a");
+            const reject = createIdentifier("_b");
             return createNew(
                 createIdentifier("Promise"),
                 /*typeArguments*/ undefined,
-                [createArrowFunction(
-                    /*modifiers*/undefined,
+                [createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
                     /*typeParameters*/ undefined,
-                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve)],
+                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                     createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)],
                     /*type*/ undefined,
-                    createToken(SyntaxKind.EqualsGreaterThanToken),
-                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, [createArrayLiteral(node.arguments), resolve]))
-                ]);
+                    createBlock([createStatement(
+                        createCall(
+                            createIdentifier("require"),
+                            /*typeArguments*/ undefined,
+                            [createArrayLiteral(node.arguments), resolve, reject]
+                        ))])
+            )]);
         }
 
     function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
             // import("./blah")
             // emit as
+            // var __resolved = new Promise(function (resolve) { resolve(); });
+            //  ....
+            // __resolved.then(function () { return require(x); }) /*CommonJs Require*/
+
             // Promise.resolve().then(() => require("./blah"));
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
+            context.requestEmitHelper(dynamicImportCreateResolvedHelper);
             return createCall(
-                createPropertyAccess(
-                    createCall(
-                        createPropertyAccess(createIdentifier("Promise"), "resolve"),
-                        /*typeArguments*/ undefined,
-                        /*argumentsArray*/[]
-                    ), "then"),
+                createPropertyAccess(createIdentifier("__resolved"), "then"),
                 /*typeArguments*/ undefined,
-                [createArrowFunction(
+                [createFunctionExpression(
                     /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
                     /*typeParameters*/ undefined,
                     /*parameters*/ undefined,
                     /*type*/ undefined,
-                    createToken(SyntaxKind.EqualsGreaterThanToken),
-                    createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments)
+                    createBlock([createReturn(createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments))])
                 )]);
         }
 
@@ -1585,5 +1602,21 @@ namespace ts {
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
             }`
+    };
+
+    // emit helper for dynamic import
+    const dynamicImportUMDHelper: EmitHelper = {
+        name: "typescript:dynamicimport-sync-require",
+        scoped: true,
+        text: `
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+            var __resolved = new Promise(function (resolve) { resolve(); });`
+    };
+
+    const dynamicImportCreateResolvedHelper: EmitHelper = {
+        name: "typescript:dynamicimport-create-resolved",
+        scoped: false,
+        priority: 1,
+        text: `var __resolved = new Promise(function (resolve) { resolve(); });`
     };
 }
