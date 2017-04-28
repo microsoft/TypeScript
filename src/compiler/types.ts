@@ -2961,7 +2961,7 @@ namespace ts {
         StringLiteral           = 1 << 5,
         NumberLiteral           = 1 << 6,
         BooleanLiteral          = 1 << 7,
-        EnumLiteral             = 1 << 8,
+        EnumLiteral             = 1 << 8,   // Enum literal or union of enum literals
         ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
         Void                    = 1 << 10,
         Undefined               = 1 << 11,
@@ -2987,7 +2987,7 @@ namespace ts {
 
         /* @internal */
         Nullable = Undefined | Null,
-        Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
@@ -2995,9 +2995,9 @@ namespace ts {
         /* @internal */
         Intrinsic = Any | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
-        Primitive = String | Number | Boolean | Enum | ESSymbol | Void | Undefined | Null | Literal,
+        Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal,
         StringLike = String | StringLiteral | Index,
-        NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
+        NumberLike = Number | NumberLiteral | Enum,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         UnionOrIntersection = Union | Intersection,
@@ -3051,12 +3051,6 @@ namespace ts {
 
     // Enum types (TypeFlags.Enum)
     export interface EnumType extends Type {
-        memberTypes: EnumLiteralType[];
-    }
-
-    // Enum types (TypeFlags.EnumLiteral)
-    export interface EnumLiteralType extends LiteralType {
-        baseType: EnumType & UnionType;  // Base enum type
     }
 
     export const enum ObjectFlags {
