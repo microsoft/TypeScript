@@ -368,7 +368,41 @@ namespace ts.server {
         protected logger: Logger;
         private canUseEvents: boolean;
 
-        constructor(opts: SessionOptions) {
+        // New ctor
+        constructor(opts: SessionOptions);
+        // Back-compat ctor, remove / deprecate
+        constructor(
+            /*0*/ host: ServerHost,
+            /*1*/ cancellationToken: ServerCancellationToken,
+            /*2*/ useSingleInferredProject: boolean,
+            /*3*/ typingsInstaller: ITypingsInstaller,
+            /*4*/ byteLength: (buf: string, encoding?: string) => number,
+            /*5*/ hrtime: (start?: number[]) => number[],
+            /*6*/ logger: server.Logger,
+            /*7*/ canUseEvents: boolean,
+            /*8*/ eventHandler?: ProjectServiceEventHandler,
+            /*9*/ throttleWaitMilliseconds?: number);
+        // Implementation
+        constructor(optsOrArg: SessionOptions | ServerHost) {
+            let opts: SessionOptions;
+            if (arguments.length === 1) {
+                opts = optsOrArg as SessionOptions;
+            }
+            else {
+                opts = {
+                    host: arguments[0],
+                    cancellationToken: arguments[1],
+                    useSingleInferredProject: arguments[2],
+                    typingsInstaller: arguments[3],
+                    byteLength: arguments[4],
+                    hrtime: arguments[5],
+                    logger: arguments[6],
+                    canUseEvents: arguments[7],
+                    eventHandler: arguments[8],
+                    throttleWaitMilliseconds: arguments[9]
+                };
+            }
+
             this.host = opts.host;
             this.cancellationToken = opts.cancellationToken;
             this.typingsInstaller = opts.typingsInstaller;
