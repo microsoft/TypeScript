@@ -2271,7 +2271,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.3.1";
+    const version = "2.3.2";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -4483,6 +4483,7 @@ declare namespace ts.server {
         protected logger: Logger;
         private canUseEvents;
         constructor(opts: SessionOptions);
+        constructor(host: ServerHost, cancellationToken: ServerCancellationToken, useSingleInferredProject: boolean, typingsInstaller: ITypingsInstaller, byteLength: (buf: string, encoding?: string) => number, hrtime: (start?: number[]) => number[], logger: server.Logger, canUseEvents: boolean, eventHandler?: ProjectServiceEventHandler, throttleWaitMilliseconds?: number);
         private sendRequestCompletedEvent(requestId);
         private defaultEventHandler(event);
         logError(err: Error, cmd: string): void;
