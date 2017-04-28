@@ -2409,6 +2409,7 @@ namespace ts {
         /* @internal */ structureIsReused?: StructureIsReused;
     }
 
+    /* @internal */
     export const enum StructureIsReused {
         Completely,
         ModulesInUneditedFiles,

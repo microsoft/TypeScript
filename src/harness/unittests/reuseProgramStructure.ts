@@ -547,7 +547,8 @@ namespace ts {
                 "File 'node_modules/@types/typerefs2/package.json' does not exist.",
                 "File 'node_modules/@types/typerefs2/index.d.ts' exist - use it as a name resolution result.",
                 "======== Type reference directive 'typerefs2' was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts', primary: true. ========",
-                "Reusing module resolutions originating in 'f2.ts' since this file was not modified."
+                "Reusing resolution of module './b2' to file 'f2.ts' from old program.",
+                "Reusing resolution of module './f1' to file 'f2.ts' from old program."
             ], "should reuse module resolutions in f2 since it is unchanged");
         });
     });
