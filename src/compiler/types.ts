@@ -2412,7 +2412,7 @@ namespace ts {
     /* @internal */
     export const enum StructureIsReused {
         Completely,
-        ModulesInUneditedFiles,
+        SafeModules,
         Not
     }
 
