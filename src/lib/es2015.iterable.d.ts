@@ -112,7 +112,7 @@ interface Map<K, V> {
 
 interface ReadonlyMap<K, V> {
     /** Returns an iterable of entries in the map. */
-    [Symbol.iterator](): IterableIterator<[K,V]>;
+    [Symbol.iterator](): IterableIterator<[K, V]>;
 
     /**
      * Returns an iterable of key, value pairs for every entry in the map.
