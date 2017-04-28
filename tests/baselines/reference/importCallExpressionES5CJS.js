@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionInCJS1.ts] ////
+//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionES5CJS.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -23,9 +23,9 @@ exports.foo = foo;
 var __resolved = new Promise(function (resolve) { resolve(); });
 __resolved.then(function () { return require("./0"); });
 var p1 = __resolved.then(function () { return require("./0"); });
-p1.then(zero => {
+p1.then(function (zero) {
     return zero.foo();
 });
 function foo() {
-    const p2 = __resolved.then(function () { return require("./0"); });
+    var p2 = __resolved.then(function () { return require("./0"); });
 }

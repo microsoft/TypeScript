@@ -11,9 +11,10 @@ const p3 = import(,);
 const p4 = import("pathToModule", "secondModule");
 
 //// [importCallExpressionGrammarError.js]
+var __resolved = new Promise(function (resolve) { resolve(); });
 var a = ["./0"];
-Promise.resolve().then(() => require(...["PathModule"]));
-var p1 = Promise.resolve().then(() => require(...a));
-const p2 = Promise.resolve().then(() => require());
-const p3 = Promise.resolve().then(() => require());
-const p4 = Promise.resolve().then(() => require("pathToModule", "secondModule"));
+__resolved.then(function () { return require(...["PathModule"]); });
+var p1 = __resolved.then(function () { return require(...a); });
+const p2 = __resolved.then(function () { return require(); });
+const p3 = __resolved.then(function () { return require(); });
+const p4 = __resolved.then(function () { return require("pathToModule", "secondModule"); });

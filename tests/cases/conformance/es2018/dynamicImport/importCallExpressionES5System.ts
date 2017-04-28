@@ -1,5 +1,6 @@
 ﻿// @module: system
-// @target: esnext
+// @target: es5
+// @lib: es6
 // @filename: 0.ts
 export function foo() { return "foo"; }
 

@@ -70,16 +70,18 @@ class C {
     }
 })(function (require, exports) {
     "use strict";
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+    var __resolved = new Promise(function (resolve) { resolve(); });
     class C {
         constructor() {
-            this.myModule = require.length === 1 ? Promise.resolve().then(() => require("./0")) : new Promise(resolve => require(["./0"], resolve));
+            this.myModule = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
         }
         method() {
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await (require.length === 1 ? Promise.resolve().then(() => require("./1")) : new Promise(resolve => require(["./1"], resolve)));
+                let one = await (__syncRequire ? __resolved.then(function () { return require("./1"); }) : new Promise(function (_a, _b) { require(["./1"], _a, _b); }));
                 console.log(one.backup());
             });
         }

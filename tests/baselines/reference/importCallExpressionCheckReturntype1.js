@@ -29,7 +29,8 @@ class C {
 exports.C = C;
 //// [1.js]
 "use strict";
+var __resolved = new Promise(function (resolve) { resolve(); });
 Object.defineProperty(exports, "__esModule", { value: true });
-let p1 = Promise.resolve().then(() => require("./defaultPath"));
-let p2 = Promise.resolve().then(() => require("./defaultPath"));
-let p3 = Promise.resolve().then(() => require("./defaultPath"));
+let p1 = __resolved.then(function () { return require("./defaultPath"); });
+let p2 = __resolved.then(function () { return require("./defaultPath"); });
+let p3 = __resolved.then(function () { return require("./defaultPath"); });

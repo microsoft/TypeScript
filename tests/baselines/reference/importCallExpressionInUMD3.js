@@ -41,8 +41,10 @@ foo();
     }
 })(function (require, exports) {
     "use strict";
+    var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+    var __resolved = new Promise(function (resolve) { resolve(); });
     async function foo() {
-        class C extends (await (require.length === 1 ? Promise.resolve().then(() => require("./0")) : new Promise(resolve => require(["./0"], resolve)))).B {
+        class C extends (await (__syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); }))).B {
         }
         var c = new C();
         c.print();

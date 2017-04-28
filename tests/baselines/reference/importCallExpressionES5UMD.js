@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionInUMD1.ts] ////
+//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionES5UMD.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -44,10 +44,10 @@ function foo() {
     var __resolved = new Promise(function (resolve) { resolve(); });
     __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
     var p1 = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
-    p1.then(zero => {
+    p1.then(function (zero) {
         return zero.foo();
     });
     function foo() {
-        const p2 = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
+        var p2 = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
     }
 });

@@ -40,16 +40,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
+var __resolved = new Promise(function (resolve) { resolve(); });
 class C {
     constructor() {
-        this.myModule = Promise.resolve().then(() => require("./0"));
+        this.myModule = __resolved.then(function () { return require("./0"); });
     }
     method() {
         this.myModule.then(Zero => {
             console.log(Zero.foo());
         }, async (err) => {
             console.log(err);
-            let one = await Promise.resolve().then(() => require("./1"));
+            let one = await __resolved.then(function () { return require("./1"); });
             console.log(one.backup());
         });
     }

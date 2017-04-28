@@ -41,21 +41,22 @@ class C {
 exports.C = C;
 //// [1.js]
 "use strict";
+var __resolved = new Promise(function (resolve) { resolve(); });
 Object.defineProperty(exports, "__esModule", { value: true });
-Promise.resolve().then(() => require(`${directory}\${moduleFile}`));
-Promise.resolve().then(() => require(getSpecifier()));
-var p1 = Promise.resolve().then(() => require(ValidSomeCondition() ? "./0" : "externalModule"));
-var p1 = Promise.resolve().then(() => require(getSpecifier()));
-var p11 = Promise.resolve().then(() => require(getSpecifier()));
-const p2 = Promise.resolve().then(() => require(whatToLoad ? getSpecifier() : "defaulPath"));
+__resolved.then(function () { return require(`${directory}\${moduleFile}`); });
+__resolved.then(function () { return require(getSpecifier()); });
+var p1 = __resolved.then(function () { return require(ValidSomeCondition() ? "./0" : "externalModule"); });
+var p1 = __resolved.then(function () { return require(getSpecifier()); });
+var p11 = __resolved.then(function () { return require(getSpecifier()); });
+const p2 = __resolved.then(function () { return require(whatToLoad ? getSpecifier() : "defaulPath"); });
 p1.then(zero => {
     return zero.foo(); // ok, zero is any
 });
 let j;
-var p3 = Promise.resolve().then(() => require(j = getSpecifier()));
+var p3 = __resolved.then(function () { return require(j = getSpecifier()); });
 function* loadModule(directories) {
     for (const directory of directories) {
         const path = `${directory}\moduleFile`;
-        Promise.resolve().then(() => require(yield path));
+        __resolved.then(function () { return require(yield path); });
     }
 }

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionInAMD1.ts] ////
+//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionES5AMD.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
@@ -26,10 +26,10 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     new Promise(function (_a, _b) { require(["./0"], _a, _b); });
     var p1 = new Promise(function (_a, _b) { require(["./0"], _a, _b); });
-    p1.then(zero => {
+    p1.then(function (zero) {
         return zero.foo();
     });
     function foo() {
-        const p2 = new Promise(function (_a, _b) { require(["./0"], _a, _b); });
+        var p2 = new Promise(function (_a, _b) { require(["./0"], _a, _b); });
     }
 });
