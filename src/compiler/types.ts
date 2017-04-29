@@ -2775,6 +2775,7 @@ namespace ts {
         ExportStar              = 1 << 25,  // Export * declaration
         Optional                = 1 << 26,  // Optional property
         Transient               = 1 << 27,  // Transient symbol (created during type check)
+        Dynamic                 = 1 << 28,  // Dynamically resolved symbol from computed property
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -2869,6 +2870,8 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        dynamicMembers?: SymbolTable;       // Dynamic members with literal names resolved during check
+        resolvedMembers?: SymbolTable;
     }
 
     /* @internal */

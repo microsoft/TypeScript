@@ -1,0 +1,420 @@
+=== tests/cases/compiler/module.ts ===
+export const c0 = "a";
+>c0 : "a"
+>"a" : "a"
+
+export const c1 = 1;
+>c1 : 1
+>1 : 1
+
+export interface T0 {
+>T0 : T0
+
+    [c0]: number;
+>c0 : "a"
+
+    [c1]: string;
+>c1 : 1
+}
+export declare class T1 implements T2 {
+>T1 : T1
+>T2 : T2
+
+    [c0]: number;
+>c0 : "a"
+
+    [c1]: string;
+>c1 : 1
+}
+export declare class T2 extends T1 {
+>T2 : T2
+>T1 : T1
+}
+export declare type T3 = {
+>T3 : T3
+
+    [c0]: number;
+>c0 : "a"
+
+    [c1]: string;
+>c1 : 1
+
+};
+
+=== tests/cases/compiler/main.ts ===
+import { c0, c1, T0, T1, T2, T3 } from "./module";
+>c0 : "a"
+>c1 : 1
+>T0 : any
+>T1 : typeof T1
+>T2 : typeof T2
+>T3 : any
+
+import * as M from "./module";
+>M : typeof M
+
+namespace N {
+>N : typeof N
+
+    export const c2 = "a";
+>c2 : "a"
+>"a" : "a"
+
+    export const c3 = 1;
+>c3 : 1
+>1 : 1
+
+    export interface T4 {
+>T4 : T4
+
+        [N.c2]: number;
+>N.c2 : "a"
+>N : typeof N
+>c2 : "a"
+
+        [N.c3]: string;
+>N.c3 : 1
+>N : typeof N
+>c3 : 1
+    }
+    export declare class T5 implements T4 {
+>T5 : T5
+>T4 : T4
+
+        [N.c2]: number;
+>N.c2 : "a"
+>N : typeof N
+>c2 : "a"
+
+        [N.c3]: string;
+>N.c3 : 1
+>N : typeof N
+>c3 : 1
+    }
+    export declare class T6 extends T5 {
+>T6 : T6
+>T5 : T5
+    }
+    export declare type T7 = {
+>T7 : { a: number; 1: string; }
+
+        [N.c2]: number;
+>N.c2 : "a"
+>N : typeof N
+>c2 : "a"
+
+        [N.c3]: string;
+>N.c3 : 1
+>N : typeof N
+>c3 : 1
+
+    };
+}
+
+const c4 = "a";
+>c4 : "a"
+>"a" : "a"
+
+const c5 = 1;
+>c5 : 1
+>1 : 1
+
+const c6 = "1";
+>c6 : "1"
+>"1" : "1"
+
+interface T8 {
+>T8 : T8
+
+    [c4]: number;
+>c4 : "a"
+
+    [c5]: string;
+>c5 : 1
+}
+declare class T9 implements T8 {
+>T9 : T9
+>T8 : T8
+
+    [c4]: number;
+>c4 : "a"
+
+    [c5]: string;
+>c5 : 1
+}
+declare class T10 extends T9 {
+>T10 : T10
+>T9 : T9
+}
+declare type T11 = {
+>T11 : { a: number; 1: string; }
+
+    [c4]: number;
+>c4 : "a"
+
+    [c5]: string;
+>c5 : 1
+
+};
+
+interface T12 {
+>T12 : T12
+
+    a: number;
+>a : number
+
+    1: string;
+}
+declare class T13 implements T2 {
+>T13 : T13
+>T2 : T2
+
+    a: number;
+>a : number
+
+    1: string;
+}
+declare class T14 extends T13 {
+>T14 : T14
+>T13 : T13
+}
+declare type T15 = {
+>T15 : { a: number; 1: string; }
+
+    a: number;
+>a : number
+
+    1: string;
+};
+
+interface T16 {
+>T16 : T16
+
+    [c5]: number;
+>c5 : 1
+
+    [c6]: string;
+>c6 : "1"
+}
+
+
+let t0: T0;
+>t0 : T0
+>T0 : T0
+
+let t1: T1;
+>t1 : T1
+>T1 : T1
+
+let t2: T2;
+>t2 : T2
+>T2 : T2
+
+let t3: T3;
+>t3 : T3
+>T3 : T3
+
+let t0_1: M.T0;
+>t0_1 : T0
+>M : any
+>T0 : T0
+
+let t1_1: M.T1;
+>t1_1 : T1
+>M : any
+>T1 : T1
+
+let t2_1: M.T2;
+>t2_1 : T2
+>M : any
+>T2 : T2
+
+let t3_1: M.T3;
+>t3_1 : T3
+>M : any
+>T3 : T3
+
+let t4: N.T4;
+>t4 : N.T4
+>N : any
+>T4 : N.T4
+
+let t5: N.T5;
+>t5 : N.T5
+>N : any
+>T5 : N.T5
+
+let t6: N.T6;
+>t6 : N.T6
+>N : any
+>T6 : N.T6
+
+let t7: N.T7;
+>t7 : { a: number; 1: string; }
+>N : any
+>T7 : { a: number; 1: string; }
+
+let t8: T8;
+>t8 : T8
+>T8 : T8
+
+let t9: T9;
+>t9 : T9
+>T9 : T9
+
+let t10: T10;
+>t10 : T10
+>T10 : T10
+
+let t11: T11;
+>t11 : { a: number; 1: string; }
+>T11 : { a: number; 1: string; }
+
+let t12: T12;
+>t12 : T12
+>T12 : T12
+
+let t13: T13;
+>t13 : T13
+>T13 : T13
+
+let t14: T14;
+>t14 : T14
+>T14 : T14
+
+let t15: T15;
+>t15 : { a: number; 1: string; }
+>T15 : { a: number; 1: string; }
+
+// assignability
+t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2 : T2
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1 : T1
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0 : T0
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3 : T3
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1 : T1
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0 : T0
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3 : T3
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2 : T2
+>t0 = t1, t0 = t2, t0 = t3, t1 = t0 : T0
+>t0 = t1, t0 = t2, t0 = t3 : T3
+>t0 = t1, t0 = t2 : T2
+>t0 = t1 : T1
+>t0 : T0
+>t1 : T1
+>t0 = t2 : T2
+>t0 : T0
+>t2 : T2
+>t0 = t3 : T3
+>t0 : T0
+>t3 : T3
+>t1 = t0 : T0
+>t1 : T1
+>t0 : T0
+>t1 = t2 : T2
+>t1 : T1
+>t2 : T2
+>t1 = t3 : T3
+>t1 : T1
+>t3 : T3
+>t2 = t0 : T0
+>t2 : T2
+>t0 : T0
+>t2 = t1 : T1
+>t2 : T2
+>t1 : T1
+>t2 = t3 : T3
+>t2 : T2
+>t3 : T3
+>t3 = t0 : T0
+>t3 : T3
+>t0 : T0
+>t3 = t1 : T1
+>t3 : T3
+>t1 : T1
+>t3 = t2 : T2
+>t3 : T3
+>t2 : T2
+
+t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6; 
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : { a: number; 1: string; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : { a: number; 1: string; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
+>t4 = t5, t4 = t6, t4 = t7 : { a: number; 1: string; }
+>t4 = t5, t4 = t6 : N.T6
+>t4 = t5 : N.T5
+>t4 : N.T4
+>t5 : N.T5
+>t4 = t6 : N.T6
+>t4 : N.T4
+>t6 : N.T6
+>t4 = t7 : { a: number; 1: string; }
+>t4 : N.T4
+>t7 : { a: number; 1: string; }
+>t5 = t4 : N.T4
+>t5 : N.T5
+>t4 : N.T4
+>t5 = t6 : N.T6
+>t5 : N.T5
+>t6 : N.T6
+>t5 = t7 : { a: number; 1: string; }
+>t5 : N.T5
+>t7 : { a: number; 1: string; }
+>t6 = t4 : N.T4
+>t6 : N.T6
+>t4 : N.T4
+>t6 = t5 : N.T5
+>t6 : N.T6
+>t5 : N.T5
+>t6 = t7 : { a: number; 1: string; }
+>t6 : N.T6
+>t7 : { a: number; 1: string; }
+>t7 = t4 : N.T4
+>t7 : { a: number; 1: string; }
+>t4 : N.T4
+>t7 = t5 : N.T5
+>t7 : { a: number; 1: string; }
+>t5 : N.T5
+>t7 = t6 : N.T6
+>t7 : { a: number; 1: string; }
+>t6 : N.T6
+
+t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0 : T0
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0 : T0
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0 : T0
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0 : T0
+>t0 = t12, t0 = t13, t0 = t14, t0 = t15 : { a: number; 1: string; }
+>t0 = t12, t0 = t13, t0 = t14 : T14
+>t0 = t12, t0 = t13 : T13
+>t0 = t12 : T12
+>t0 : T0
+>t12 : T12
+>t0 = t13 : T13
+>t0 : T0
+>t13 : T13
+>t0 = t14 : T14
+>t0 : T0
+>t14 : T14
+>t0 = t15 : { a: number; 1: string; }
+>t0 : T0
+>t15 : { a: number; 1: string; }
+>t12 = t0 : T0
+>t12 : T12
+>t0 : T0
+>t13 = t0 : T0
+>t13 : T13
+>t0 : T0
+>t14 = t0 : T0
+>t14 : T14
+>t0 : T0
+>t15 = t0 : T0
+>t15 : { a: number; 1: string; }
+>t0 : T0
+

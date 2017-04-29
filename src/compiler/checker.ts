@@ -959,7 +959,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                        if (result = getSymbol(getMembersOfSymbol(getSymbolOfNode(location)), name, meaning & SymbolFlags.Type)) {
                             if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
                                 // ignore type parameters not declared in this container
                                 result = undefined;
@@ -2895,6 +2895,9 @@ namespace ts {
         }
 
         function getNameOfSymbol(symbol: Symbol): string {
+            if (symbol.flags & SymbolFlags.Dynamic) {
+                return unescapeIdentifier(symbol.name);
+            }
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 if (declaration.name) {
@@ -5133,13 +5136,144 @@ namespace ts {
         function resolveDeclaredMembers(type: InterfaceType): InterfaceTypeWithDeclaredMembers {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
-                (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
+                (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(getMembersOfSymbol(symbol));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call"));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new"));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
             return <InterfaceTypeWithDeclaredMembers>type;
+        }
+
+        function getMembersOfSymbol(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.resolvedMembers) {
+                links.resolvedMembers = emptySymbols;
+                const dynamicMembers = getDynamicMembersOfSymbol(symbol);
+                if (!dynamicMembers || dynamicMembers.size === 0) {
+                    return links.resolvedMembers = symbol.members || emptySymbols;
+                }
+                if (!symbol.members || symbol.members.size === 0) {
+                    return links.resolvedMembers = dynamicMembers;
+                }
+                const resolvedMembers = createMap<Symbol>();
+                mergeSymbolTable(resolvedMembers, symbol.members);
+                mergeSymbolTable(resolvedMembers, dynamicMembers);
+                return links.resolvedMembers = resolvedMembers;
+            }
+            return links.resolvedMembers;
+        }
+
+        function getDynamicMembersOfSymbol(symbol: Symbol) {
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral)) {
+                const links = getSymbolLinks(symbol);
+                if (!links.dynamicMembers) {
+                    const members = createMap<Symbol>();
+                    for (const decl of symbol.declarations) {
+                        resolveDynamicMembersOfSymbol(decl, members);
+                    }
+                    links.dynamicMembers = members;
+                }
+                return links.dynamicMembers;
+            }
+        }
+
+        function resolveDynamicMembersOfSymbol(node: Declaration, symbolTable: SymbolTable) {
+            switch (node.kind) {
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.TypeLiteral:
+                    resolveDynamicMembersOfClassOrInterfaceOrTypeLiteralNode(<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node, symbolTable);
+                    break;
+                case SyntaxKind.ObjectLiteralExpression:
+                    resolveDynamicMembersOfObjectLiteralExpression(<ObjectLiteralExpression>node, symbolTable);
+                    break;
+            }
+        }
+
+        function resolveDynamicMembersOfClassOrInterfaceOrTypeLiteralNode(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, symbolTable: SymbolTable) {
+            for (const member of node.members) {
+                if (member.name && isComputedPropertyName(member.name) && isEntityNameExpression(member.name.expression)) {
+                    bindDynamicMember(symbolTable, node.symbol, member);
+                }
+            }
+        }
+
+        function resolveDynamicMembersOfObjectLiteralExpression(node: ObjectLiteralExpression, symbolTable: SymbolTable) {
+            for (const member of node.properties) {
+                if (member.name && isComputedPropertyName(member.name) && isEntityNameExpression(member.name.expression)) {
+                    bindDynamicMember(symbolTable, node.symbol, member);
+                }
+            }
+        }
+
+        function bindDynamicMember(symbolTable: SymbolTable, parent: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement) {
+            const links = getNodeLinks(member);
+            if (!links.resolvedSymbol) {
+                switch (member.kind) {
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.PropertySignature:
+                        return resolveDynamicMember(symbolTable, parent, member,
+                            SymbolFlags.Property | ((<PropertyDeclaration>member).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                            SymbolFlags.PropertyExcludes);
+                    case SyntaxKind.PropertyAssignment:
+                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.MethodSignature:
+                        return resolveDynamicMember(symbolTable, parent, member,
+                            SymbolFlags.Method | ((<MethodDeclaration>member).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                            isObjectLiteralMethod(member) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
+                    case SyntaxKind.GetAccessor:
+                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
+                    case SyntaxKind.SetAccessor:
+                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
+                }
+            }
+            return links.resolvedSymbol;
+        }
+
+        function resolveDynamicMember(symbolTable: SymbolTable, parent: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement, includes: SymbolFlags, excludes: SymbolFlags) {
+            Debug.assert(isComputedPropertyName(member.name));
+            const nameType = checkComputedPropertyName(<ComputedPropertyName>member.name);
+            if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                // TODO(rbuckton): ESSymbolLiteral
+                const memberName = escapeIdentifier((<LiteralType>nameType).text);
+                let symbol = symbolTable.get(memberName);
+                if (!symbol) {
+                    symbolTable.set(memberName, symbol = createSymbol(SymbolFlags.Dynamic, memberName));
+                }
+                const staticMember = parent.members && parent.members.get(memberName);
+                if (symbol.flags & excludes || staticMember) {
+                    const declarations = staticMember ? concatenate(staticMember.declarations, symbol.declarations) : symbol.declarations;
+                    forEach(declarations, declaration => {
+                        error(declaration.name || declaration, Diagnostics.Duplicate_identifier_0, memberName);
+                    });
+                    error(member.name || member, Diagnostics.Duplicate_identifier_0, memberName);
+                    symbol = createSymbol(SymbolFlags.Dynamic, memberName);
+                }
+                addDeclarationToSymbol(symbol, member, includes);
+                symbol.parent = parent;
+                return symbol;
+            }
+            return getNodeLinks(member).resolvedSymbol = member.symbol || unknownSymbol;
+        }
+
+        function addDeclarationToSymbol(symbol: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement, symbolFlags: SymbolFlags) {
+            symbol.flags |= symbolFlags;
+            getNodeLinks(member).resolvedSymbol = symbol;
+            if (!symbol.declarations) {
+                symbol.declarations = [member];
+            }
+            else {
+                symbol.declarations.push(member);
+            }
+            if (symbolFlags & SymbolFlags.Value) {
+                const valueDeclaration = symbol.valueDeclaration;
+                if (!valueDeclaration || valueDeclaration.kind !== member.kind) {
+                    symbol.valueDeclaration = member;
+                }
+            }
         }
 
         function getTypeWithThisArgument(type: Type, thisArgument?: Type): Type {
@@ -5165,7 +5299,7 @@ namespace ts {
             let numberIndexInfo: IndexInfo;
             if (rangeEquals(typeParameters, typeArguments, 0, typeParameters.length)) {
                 mapper = identityMapper;
-                members = source.symbol ? source.symbol.members : createSymbolTable(source.declaredProperties);
+                members = source.symbol ? getMembersOfSymbol(source.symbol) : createSymbolTable(source.declaredProperties);
                 callSignatures = source.declaredCallSignatures;
                 constructSignatures = source.declaredConstructSignatures;
                 stringIndexInfo = source.declaredStringIndexInfo;
@@ -5425,7 +5559,7 @@ namespace ts {
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
-                const members = symbol.members;
+                const members = getMembersOfSymbol(symbol);
                 const callSignatures = getSignaturesOfSymbol(members.get("__call"));
                 const constructSignatures = getSignaturesOfSymbol(members.get("__new"));
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
@@ -7396,7 +7530,7 @@ namespace ts {
             if (!links.resolvedType) {
                 // Deferred resolution of members is handled by resolveObjectTypeMembers
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
-                if (node.symbol.members.size === 0 && !aliasSymbol) {
+                if (getMembersOfSymbol(node.symbol).size === 0 && !aliasSymbol) {
                     links.resolvedType = emptyTypeLiteralType;
                 }
                 else {
@@ -15623,7 +15757,7 @@ namespace ts {
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                links.inferredClassType = createAnonymousType(symbol, getMembersOfSymbol(symbol), emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
         }
@@ -21741,7 +21875,7 @@ namespace ts {
                             // (type parameters of classDeclaration/classExpression and interface are in member property of the symbol.
                             // Note: that the memberFlags come from previous iteration.
                             if (!(memberFlags & ModifierFlags.Static)) {
-                                copySymbols(getSymbolOfNode(location).members, meaning & SymbolFlags.Type);
+                                copySymbols(getMembersOfSymbol(getSymbolOfNode(location)), meaning & SymbolFlags.Type);
                             }
                             break;
                         case SyntaxKind.FunctionExpression:
@@ -23739,7 +23873,10 @@ namespace ts {
 
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
             if (isDynamicName(node)) {
-                return grammarErrorOnNode(node, message);
+                if (!isEntityNameExpression((<ComputedPropertyName>node).expression) ||
+                    (checkExpressionCached((<ComputedPropertyName>node).expression).flags & TypeFlags.StringOrNumberLiteral) === 0) {
+                    return grammarErrorOnNode(node, message);
+                }
             }
         }
 

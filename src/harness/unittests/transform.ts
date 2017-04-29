@@ -68,6 +68,9 @@ namespace ts {
                 transformers: {
                     before: [replaceUndefinedWithVoid0],
                     after: [replaceIdentifiersNamedOldNameWithNewName]
+                },
+                compilerOptions: {
+                    newLine: ts.NewLineKind.CarriageReturnLineFeed
                 }
             }).outputText;
         });
