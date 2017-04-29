@@ -2528,7 +2528,7 @@ namespace ts {
         isUnknownSymbol(symbol: Symbol): boolean;
         /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
-        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
@@ -2731,7 +2731,7 @@ namespace ts {
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
-        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number;
         getReferencedValueDeclaration(reference: Identifier): Declaration;
         getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
         isOptionalParameter(node: ParameterDeclaration): boolean;
@@ -2869,6 +2869,13 @@ namespace ts {
         isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        enumKind?: EnumKind;                // Enum declaration classification
+    }
+
+    /* @internal */
+    export const enum EnumKind {
+        Numeric,                            // Numeric enum (each member has a TypeFlags.Enum type)
+        Literal                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
     }
 
     /* @internal */
@@ -2941,7 +2948,7 @@ namespace ts {
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
-        enumMemberValue?: number;         // Constant value of enum member
+        enumMemberValue?: string | number;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -3918,7 +3925,7 @@ namespace ts {
         commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
         sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
         tokenSourceMapRanges?: TextRange[];     // The text range to use when emitting source mappings for tokens
-        constantValue?: number;                 // The constant value of an expression
+        constantValue?: string | number;        // The constant value of an expression
         externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
         helpers?: EmitHelper[];                 // Emit helpers for the node
     }

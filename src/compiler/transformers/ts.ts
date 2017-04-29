@@ -2498,22 +2498,27 @@ namespace ts {
             // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
             // old emitter always generate 'expression' part of the name as-is.
             const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
+            const valueExpression = transformEnumMemberDeclarationValue(member);
+            const innerAssignment = createAssignment(
+                createElementAccess(
+                    currentNamespaceContainerName,
+                    name
+                ),
+                valueExpression
+            );
+            const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+                innerAssignment :
+                createAssignment(
+                    createElementAccess(
+                        currentNamespaceContainerName,
+                        innerAssignment
+                    ),
+                    name
+                );
             return setTextRange(
                 createStatement(
                     setTextRange(
-                        createAssignment(
-                            createElementAccess(
-                                currentNamespaceContainerName,
-                                createAssignment(
-                                    createElementAccess(
-                                        currentNamespaceContainerName,
-                                        name
-                                    ),
-                                    transformEnumMemberDeclarationValue(member)
-                                )
-                            ),
-                            name
-                        ),
+                        outerAssignment,
                         member
                     )
                 ),
@@ -3351,7 +3356,7 @@ namespace ts {
             return node;
         }
 
-        function tryGetConstEnumValue(node: Node): number {
+        function tryGetConstEnumValue(node: Node): string | number {
             if (compilerOptions.isolatedModules) {
                 return undefined;
             }

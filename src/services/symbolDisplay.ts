@@ -330,7 +330,10 @@ namespace ts.SymbolDisplay {
                     displayParts.push(spacePart());
                     displayParts.push(operatorPart(SyntaxKind.EqualsToken));
                     displayParts.push(spacePart());
-                    displayParts.push(displayPart(constantValue.toString(), SymbolDisplayPartKind.numericLiteral));
+                    const valuePart = typeof constantValue === "number" ?
+                        displayPart("" + constantValue, SymbolDisplayPartKind.numericLiteral) :
+                        displayPart(getQuotedEscapedLiteralText('"', constantValue, '"'), SymbolDisplayPartKind.stringLiteral);
+                    displayParts.push(valuePart);
                 }
             }
         }
