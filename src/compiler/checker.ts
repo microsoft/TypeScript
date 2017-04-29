@@ -3047,9 +3047,14 @@ namespace ts {
                         writeTypeReference(<TypeReference>type, nextFlags);
                     }
                     else if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
-                        buildSymbolDisplay(getParentOfSymbol(type.symbol), writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
-                        writePunctuation(writer, SyntaxKind.DotToken);
-                        appendSymbolNameOnly(type.symbol, writer);
+                        const parent = getParentOfSymbol(type.symbol);
+                        buildSymbolDisplay(parent, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
+                        // In a literal enum type with a single member E { A }, E and E.A denote the
+                        // same type. We always display this type simply as E.
+                        if (getDeclaredTypeOfSymbol(parent).flags & TypeFlags.Union) {
+                            writePunctuation(writer, SyntaxKind.DotToken);
+                            appendSymbolNameOnly(type.symbol, writer);
+                        }
                     }
                     else if (getObjectFlags(type) & ObjectFlags.ClassOrInterface || type.flags & (TypeFlags.EnumLike | TypeFlags.TypeParameter)) {
                         // The specified symbol flags need to be reinterpreted as type flags
@@ -4952,23 +4957,19 @@ namespace ts {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (<EnumDeclaration>declaration).members) {
                             const memberType = getLiteralType(getEnumMemberValue(member), enumCount, getSymbolOfNode(member));
+                            getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
                             if (!contains(memberTypeList, memberType)) {
                                 memberTypeList.push(memberType);
                             }
                         }
                     }
                 }
-                if (memberTypeList.length > 1) {
-                    for (const declaration of symbol.declarations) {
-                        if (declaration.kind === SyntaxKind.EnumDeclaration) {
-                            for (const member of (<EnumDeclaration>declaration).members) {
-                                getSymbolLinks(getSymbolOfNode(member)).declaredType = getLiteralType(getEnumMemberValue(member), enumCount, getSymbolOfNode(member));
-                            }
-                        }
-                    }
+                if (memberTypeList.length) {
                     const enumType = getUnionType(memberTypeList, /*subtypeReduction*/ false, symbol, /*aliasTypeArguments*/ undefined);
-                    enumType.flags |= TypeFlags.EnumLiteral;
-                    enumType.symbol = symbol;
+                    if (enumType.flags & TypeFlags.Union) {
+                        enumType.flags |= TypeFlags.EnumLiteral;
+                        enumType.symbol = symbol;
+                    }
                     return links.declaredType = enumType;
                 }
             }
