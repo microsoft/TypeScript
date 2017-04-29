@@ -452,19 +452,6 @@ namespace ts {
                     return emitTypePredicate(<TypePredicateNode>type);
             }
 
-            function writeEntityName(entityName: EntityName | Expression) {
-                if (entityName.kind === SyntaxKind.Identifier) {
-                    writeTextOfNode(currentText, entityName);
-                }
-                else {
-                    const left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
-                    const right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
-                    writeEntityName(left);
-                    write(".");
-                    writeTextOfNode(currentText, right);
-                }
-            }
-
             function emitEntityName(entityName: EntityNameOrEntityNameExpression) {
                 const visibilityResult = resolver.isEntityNameVisible(entityName,
                     // Aliases can be written asynchronously so use correct enclosing declaration
@@ -581,6 +568,19 @@ namespace ts {
                     decreaseIndent();
                 }
                 write("}");
+            }
+        }
+
+        function writeEntityName(entityName: EntityName | Expression) {
+            if (entityName.kind === SyntaxKind.Identifier) {
+                writeTextOfNode(currentText, entityName);
+            }
+            else {
+                const left = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).left : (<PropertyAccessExpression>entityName).expression;
+                const right = entityName.kind === SyntaxKind.QualifiedName ? (<QualifiedName>entityName).right : (<PropertyAccessExpression>entityName).name;
+                writeEntityName(left);
+                write(".");
+                writeTextOfNode(currentText, right);
             }
         }
 
@@ -1202,7 +1202,7 @@ namespace ts {
         }
 
         function emitPropertyDeclaration(node: Declaration) {
-            if (hasDynamicName(node)) {
+            if (hasDynamicName(node) && !resolver.isLiteralDynamicName(<ComputedPropertyName>node.name)) {
                 return;
             }
 
@@ -1221,10 +1221,17 @@ namespace ts {
                     emitBindingPattern(<BindingPattern>node.name);
                 }
                 else {
-                    // If this node is a computed name, it can only be a symbol, because we've already skipped
-                    // it if it's not a well known symbol. In that case, the text of the name will be exactly
-                    // what we want, namely the name expression enclosed in brackets.
-                    writeTextOfNode(currentText, node.name);
+                    if (isDynamicName(node.name)) {
+                        // If this node has a dynamic name, it can only be an identifier or property access because
+                        // we've already skipped it otherwise.
+                        emitDynamicName(<EntityNameExpression>(<ComputedPropertyName>node.name).expression);
+                    }
+                    else {
+                        // If this node is a computed name, it can only be a symbol, because we've already skipped
+                        // it if it's not a well known symbol. In that case, the text of the name will be exactly
+                        // what we want, namely the name expression enclosed in brackets.
+                        writeTextOfNode(currentText, node.name);
+                    }
                     // If optional property emit ? but in the case of parameterProperty declaration with "?" indicating optional parameter for the constructor
                     // we don't want to emit property declaration with "?"
                     if ((node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
@@ -1285,6 +1292,19 @@ namespace ts {
                     errorNode: node,
                     typeName: node.name
                 } : undefined;
+            }
+
+            function emitDynamicName(entityName: EntityNameExpression) {
+                writer.getSymbolAccessibilityDiagnostic = getVariableDeclarationTypeVisibilityError;
+                const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
+                if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
+                    resolver.writeTypeOfExpression(entityName, enclosingDeclaration, TypeFormatFlags.None, writer);
+                }
+                else {
+                    handleSymbolAccessibilityError(visibilityResult);
+                    recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+                    writeTextOfNode(currentText, node.name);
+                }
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {

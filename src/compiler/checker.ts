@@ -2184,7 +2184,9 @@ namespace ts {
         function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
-            if (entityName.parent.kind === SyntaxKind.TypeQuery || isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent)) {
+            if (entityName.parent.kind === SyntaxKind.TypeQuery || 
+                isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent) ||
+                entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
                 // Typeof value
                 meaning = SymbolFlags.Value | SymbolFlags.ExportValue;
             }
@@ -22822,6 +22824,16 @@ namespace ts {
             return undefined;
         }
 
+        function isLiteralDynamicName(name: ComputedPropertyName) {
+            name = getParseTreeNode(name, isComputedPropertyName);
+            if (name) {
+                // TODO(rbuckton): ESSymbolLiteral
+                const nameType = checkComputedPropertyName(name);
+                return (nameType.flags & TypeFlags.StringOrNumberLiteral) !== 0;
+            }
+            return false;
+        }
+
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isConst(node)) {
                 const type = getTypeOfSymbol(getSymbolOfNode(node));
@@ -22895,6 +22907,7 @@ namespace ts {
                 getTypeReferenceDirectivesForEntityName,
                 getTypeReferenceDirectivesForSymbol,
                 isLiteralConstDeclaration,
+                isLiteralDynamicName,
                 writeLiteralConstValue,
                 getJsxFactoryEntity: () => _jsxFactoryEntity
             };

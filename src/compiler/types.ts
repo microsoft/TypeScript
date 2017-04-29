@@ -2721,6 +2721,7 @@ namespace ts {
         isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
+        isLiteralDynamicName(node: ComputedPropertyName): boolean;
         collectLinkedAliases(node: Identifier): Node[];
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
