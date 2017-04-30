@@ -8432,7 +8432,13 @@ namespace ts {
             if (target.flags & TypeFlags.Never) return false;
             if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return true;
             if (source.flags & TypeFlags.StringLike && target.flags & TypeFlags.String) return true;
+            if (source.flags & TypeFlags.StringLiteral && source.flags & TypeFlags.EnumLiteral &&
+                target.flags & TypeFlags.StringLiteral && !(target.flags & TypeFlags.EnumLiteral) &&
+                (<LiteralType>source).value === (<LiteralType>target).value) return true;
             if (source.flags & TypeFlags.NumberLike && target.flags & TypeFlags.Number) return true;
+            if (source.flags & TypeFlags.NumberLiteral && source.flags & TypeFlags.EnumLiteral &&
+                target.flags & TypeFlags.NumberLiteral && !(target.flags & TypeFlags.EnumLiteral) &&
+                (<LiteralType>source).value === (<LiteralType>target).value) return true;
             if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)) return true;
             if (source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral) {
@@ -8446,7 +8452,11 @@ namespace ts {
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
-                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(source.flags & TypeFlags.EnumLiteral) && target.flags & TypeFlags.EnumLike) return true;
+                // Type number or any numeric literal type is assignable to any numeric enum type or any
+                // numeric enum literal type. This rule exists for backwards compatibility reasons because
+                // bit-flag enum types sometimes look like literal enum types with numeric literal values.
+                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(source.flags & TypeFlags.EnumLiteral) && (
+                    target.flags & TypeFlags.Enum || target.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral)) return true;
             }
             return false;
         }
