@@ -8429,34 +8429,36 @@ namespace ts {
         }
 
         function isSimpleTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>, errorReporter?: ErrorReporter) {
-            if (target.flags & TypeFlags.Never) return false;
-            if (target.flags & TypeFlags.Any || source.flags & TypeFlags.Never) return true;
-            if (source.flags & TypeFlags.StringLike && target.flags & TypeFlags.String) return true;
-            if (source.flags & TypeFlags.StringLiteral && source.flags & TypeFlags.EnumLiteral &&
-                target.flags & TypeFlags.StringLiteral && !(target.flags & TypeFlags.EnumLiteral) &&
+            const s = source.flags;
+            const t = target.flags;
+            if (t & TypeFlags.Never) return false;
+            if (t & TypeFlags.Any || s & TypeFlags.Never) return true;
+            if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
+            if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
+                t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
                 (<LiteralType>source).value === (<LiteralType>target).value) return true;
-            if (source.flags & TypeFlags.NumberLike && target.flags & TypeFlags.Number) return true;
-            if (source.flags & TypeFlags.NumberLiteral && source.flags & TypeFlags.EnumLiteral &&
-                target.flags & TypeFlags.NumberLiteral && !(target.flags & TypeFlags.EnumLiteral) &&
+            if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true;
+            if (s & TypeFlags.NumberLiteral && s & TypeFlags.EnumLiteral &&
+                t & TypeFlags.NumberLiteral && !(t & TypeFlags.EnumLiteral) &&
                 (<LiteralType>source).value === (<LiteralType>target).value) return true;
-            if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
-            if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)) return true;
-            if (source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.EnumLiteral) {
-                if (source.flags & TypeFlags.Union && target.flags & TypeFlags.Union && isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)) return true;
-                if (source.flags & TypeFlags.Literal && target.flags & TypeFlags.Literal &&
+            if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true;
+            if (s & TypeFlags.Enum && t & TypeFlags.Enum && isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)) return true;
+            if (s & TypeFlags.EnumLiteral && t & TypeFlags.EnumLiteral) {
+                if (s & TypeFlags.Union && t & TypeFlags.Union && isEnumTypeRelatedTo(source.symbol, target.symbol, errorReporter)) return true;
+                if (s & TypeFlags.Literal && t & TypeFlags.Literal &&
                     (<LiteralType>source).value === (<LiteralType>target).value &&
                     isEnumTypeRelatedTo(getParentOfSymbol(source.symbol), getParentOfSymbol(target.symbol), errorReporter)) return true;
             }
-            if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
-            if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
-            if (source.flags & TypeFlags.Object && target.flags & TypeFlags.NonPrimitive) return true;
+            if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
+            if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
+            if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
             if (relation === assignableRelation || relation === comparableRelation) {
-                if (source.flags & TypeFlags.Any) return true;
+                if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
                 // numeric enum literal type. This rule exists for backwards compatibility reasons because
                 // bit-flag enum types sometimes look like literal enum types with numeric literal values.
-                if (source.flags & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(source.flags & TypeFlags.EnumLiteral) && (
-                    target.flags & TypeFlags.Enum || target.flags & TypeFlags.NumberLiteral && target.flags & TypeFlags.EnumLiteral)) return true;
+                if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
+                    t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
             }
             return false;
         }
