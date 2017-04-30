@@ -2968,7 +2968,7 @@ namespace ts {
         StringLiteral           = 1 << 5,
         NumberLiteral           = 1 << 6,
         BooleanLiteral          = 1 << 7,
-        EnumLiteral             = 1 << 8,   // Enum literal or union of enum literals
+        EnumLiteral             = 1 << 8,   // Always combined with StringLiteral, NumberLiteral, or Union
         ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
         Void                    = 1 << 10,
         Undefined               = 1 << 11,
