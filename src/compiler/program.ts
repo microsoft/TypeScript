@@ -643,13 +643,11 @@ namespace ts {
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
-                oldProgram.structureIsReused = StructureIsReused.Not;
-                return StructureIsReused.Not;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
-                oldProgram.structureIsReused = StructureIsReused.Not;
-                return StructureIsReused.Not;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             // check if program source files has changed in the way that can affect structure of the program
