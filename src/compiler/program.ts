@@ -499,7 +499,7 @@ namespace ts {
                 // so it is defined iff we already called the current function on `file`.
                 // That call happened no later than the creation of the `file` object,
                 // which per above occured during the current program creation.
-                // Since we model program creation as an atomic operation w/r/t IO,
+                // Since we assume the filesystem does not change during program creation,
                 // it is safe to reuse resolutions from the earlier call.
                 const result: ResolvedModuleFull[] = [];
                 for (const moduleName of moduleNames) {
@@ -581,6 +581,8 @@ namespace ts {
             let j = 0;
             for (let i = 0; i < result.length; i++) {
                 if (result[i]) {
+                    // `result[i]` is either a `ResolvedModuleFull` or a marker.
+                    // If it is the former, we can leave it as is.
                     if (result[i] === predictedToResolveToAmbientModuleMarker) {
                         result[i] = undefined;
                     }
