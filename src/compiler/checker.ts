@@ -3051,7 +3051,7 @@ namespace ts {
                         buildSymbolDisplay(parent, writer, enclosingDeclaration, SymbolFlags.Type, SymbolFormatFlags.None, nextFlags);
                         // In a literal enum type with a single member E { A }, E and E.A denote the
                         // same type. We always display this type simply as E.
-                        if (getDeclaredTypeOfSymbol(parent).flags & TypeFlags.Union) {
+                        if (getDeclaredTypeOfSymbol(parent) !== type) {
                             writePunctuation(writer, SyntaxKind.DotToken);
                             appendSymbolNameOnly(type.symbol, writer);
                         }
@@ -4958,9 +4958,7 @@ namespace ts {
                         for (const member of (<EnumDeclaration>declaration).members) {
                             const memberType = getLiteralType(getEnumMemberValue(member), enumCount, getSymbolOfNode(member));
                             getSymbolLinks(getSymbolOfNode(member)).declaredType = memberType;
-                            if (!contains(memberTypeList, memberType)) {
-                                memberTypeList.push(memberType);
-                            }
+                            memberTypeList.push(memberType);
                         }
                     }
                 }
