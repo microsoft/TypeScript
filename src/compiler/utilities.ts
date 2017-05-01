@@ -349,7 +349,11 @@ namespace ts {
         Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
     }
 
-    export function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
+    export function getTextOfConstantValue(value: string | number) {
+        return typeof value === "string" ? getQuotedEscapedLiteralText('"', value, '"') : "" + value;
+    }
+
+    function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
         return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
     }
 
