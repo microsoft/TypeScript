@@ -1462,7 +1462,7 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
