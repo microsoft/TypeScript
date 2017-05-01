@@ -318,6 +318,8 @@ namespace ts {
         const resolutionResults: boolean[] = [];
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
+        let suggestionCount = 0;
+        const maximumSuggestionCount = 100;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
@@ -1091,9 +1093,10 @@ namespace ts {
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
                         let suggestion: string | undefined;
-                        if (suggestedNameNotFoundMessage) {
+                        if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
+                                suggestionCount++;
                                 error(errorLocation, suggestedNameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), suggestion);
                             }
                         }

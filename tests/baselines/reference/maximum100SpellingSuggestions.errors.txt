@@ -1,0 +1,378 @@
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(3,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(4,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(5,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(6,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(7,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(8,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(9,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(10,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(11,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,1): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,6): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,11): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,16): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,21): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,26): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,31): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,36): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,41): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(12,46): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,1): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,6): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,11): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,16): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,21): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,26): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,31): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,36): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,41): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(13,46): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,1): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,6): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,11): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,16): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,21): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,26): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,31): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,36): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,41): error TS2304: Cannot find name 'any'.
+tests/cases/compiler/maximum100SpellingSuggestions.ts(14,46): error TS2304: Cannot find name 'any'.
+
+
+==== tests/cases/compiler/maximum100SpellingSuggestions.ts (120 errors) ====
+    // 10 anys per line, 12 lines
+    // the last two lines should not have spelling suggestions
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+         ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+              ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                   ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                        ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                             ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                  ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                       ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                            ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+                                                 ~~~
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2304: Cannot find name 'any'.
+         ~~~
+!!! error TS2304: Cannot find name 'any'.
+              ~~~
+!!! error TS2304: Cannot find name 'any'.
+                   ~~~
+!!! error TS2304: Cannot find name 'any'.
+                        ~~~
+!!! error TS2304: Cannot find name 'any'.
+                             ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                  ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                       ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                            ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                                 ~~~
+!!! error TS2304: Cannot find name 'any'.
+    any; any; any; any; any; any; any; any; any; any;
+    ~~~
+!!! error TS2304: Cannot find name 'any'.
+         ~~~
+!!! error TS2304: Cannot find name 'any'.
+              ~~~
+!!! error TS2304: Cannot find name 'any'.
+                   ~~~
+!!! error TS2304: Cannot find name 'any'.
+                        ~~~
+!!! error TS2304: Cannot find name 'any'.
+                             ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                  ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                       ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                            ~~~
+!!! error TS2304: Cannot find name 'any'.
+                                                 ~~~
+!!! error TS2304: Cannot find name 'any'.
+    
