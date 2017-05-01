@@ -2389,7 +2389,7 @@ namespace ts {
                     const formattedUnionTypes = formatUnionTypes((<UnionType>type).types);
                     const unionTypeNodes = formattedUnionTypes && mapToTypeNodeArray(formattedUnionTypes);
                     if (unionTypeNodes && unionTypeNodes.length > 0) {
-                        return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, unionTypeNodes);
+                        return createUnionTypeNode(unionTypeNodes);
                     }
                     else {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowEmptyUnionOrIntersection)) {
@@ -2400,7 +2400,7 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Intersection) {
-                    return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
+                    return createIntersectionTypeNode(mapToTypeNodeArray((type as IntersectionType).types));
                 }
 
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
@@ -2660,7 +2660,7 @@ namespace ts {
                     indexerTypeNode,
                     /*initializer*/ undefined);
                 const typeNode = typeToTypeNodeHelper(indexInfo.type);
-                return createIndexSignatureDeclaration(
+                return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
                     [indexingParameter],
