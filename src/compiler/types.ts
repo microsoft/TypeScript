@@ -2411,9 +2411,9 @@ namespace ts {
 
     /* @internal */
     export const enum StructureIsReused {
-        Completely,
-        SafeModules,
-        Not
+        Not         = 0,
+        SafeModules = 1 << 0,
+        Completely  = 1 << 1,
     }
 
     export interface CustomTransformers {
