@@ -1,4 +1,5 @@
 //// [collisionArgumentsInterfaceMembers.ts]
+"use strict";
 // call
 interface i1 {
     (i: number, ...arguments); // no error - no code gen
@@ -29,3 +30,4 @@ interface i3 {
 }
 
 //// [collisionArgumentsInterfaceMembers.js]
+"use strict";
