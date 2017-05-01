@@ -1,7 +1,8 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code],
+        errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code,
+                     Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
         getCodeActions: getActionsForAddMissingMember
     });
 
