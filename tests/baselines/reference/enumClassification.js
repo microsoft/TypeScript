@@ -166,7 +166,7 @@ declare enum E02 {
     A = 123,
 }
 declare enum E03 {
-    A = hello,
+    A = "hello",
 }
 declare enum E04 {
     A = 0,
@@ -179,23 +179,23 @@ declare enum E05 {
     C = 11,
 }
 declare enum E06 {
-    A = one,
-    B = two,
-    C = three,
+    A = "one",
+    B = "two",
+    C = "three",
 }
 declare enum E07 {
     A = 0,
     B = 1,
-    C = hi,
+    C = "hi",
     D = 10,
     E = 11,
-    F = bye,
+    F = "bye",
 }
 declare enum E08 {
     A = 10,
-    B = hello,
+    B = "hello",
     C = 10,
-    D = hello,
+    D = "hello",
     E = 10,
 }
 declare enum E10 {
@@ -216,93 +216,3 @@ declare enum E20 {
     C,
     D,
 }
-
-
-//// [DtsFileErrors]
-
-
-tests/cases/conformance/enums/enumClassification.d.ts(8,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(21,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(22,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(23,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(28,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(31,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(35,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/enums/enumClassification.d.ts(37,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-
-
-==== tests/cases/conformance/enums/enumClassification.d.ts (8 errors) ====
-    declare enum E01 {
-        A = 0,
-    }
-    declare enum E02 {
-        A = 123,
-    }
-    declare enum E03 {
-        A = hello,
-            ~~~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-    }
-    declare enum E04 {
-        A = 0,
-        B = 1,
-        C = 2,
-    }
-    declare enum E05 {
-        A = 0,
-        B = 10,
-        C = 11,
-    }
-    declare enum E06 {
-        A = one,
-            ~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-        B = two,
-            ~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-        C = three,
-            ~~~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-    }
-    declare enum E07 {
-        A = 0,
-        B = 1,
-        C = hi,
-            ~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-        D = 10,
-        E = 11,
-        F = bye,
-            ~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-    }
-    declare enum E08 {
-        A = 10,
-        B = hello,
-            ~~~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-        C = 10,
-        D = hello,
-            ~~~~~
-!!! error TS1066: In ambient enum declarations member initializer must be constant expression.
-        E = 10,
-    }
-    declare enum E10 {
-    }
-    declare enum E11 {
-        A = 0,
-        B = 1,
-        C = 2,
-    }
-    declare enum E12 {
-        A = 1,
-        B = 2,
-        C = 4,
-    }
-    declare enum E20 {
-        A,
-        B,
-        C,
-        D,
-    }
-    
