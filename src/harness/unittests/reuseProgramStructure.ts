@@ -159,12 +159,14 @@ namespace ts {
         return program;
     }
 
-    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void) {
-        const texts: NamedSourceText[] = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
-        updater(texts);
-        const host = createTestCompilerHost(texts, options.target, oldProgram);
+    function updateProgram(oldProgram: ProgramWithSourceTexts, rootNames: string[], options: CompilerOptions, updater: (files: NamedSourceText[]) => void, newTexts?: NamedSourceText[]) {
+        if (!newTexts) {
+            newTexts = (<ProgramWithSourceTexts>oldProgram).sourceTexts.slice(0);
+        }
+        updater(newTexts);
+        const host = createTestCompilerHost(newTexts, options.target, oldProgram);
         const program = <ProgramWithSourceTexts>createProgram(rootNames, options, host, oldProgram);
-        program.sourceTexts = texts;
+        program.sourceTexts = newTexts;
         program.host = host;
         return program;
     }
@@ -389,6 +391,70 @@ namespace ts {
             });
             assert.isTrue(program_3.structureIsReused === StructureIsReused.SafeModules);
             checkResolvedTypeDirectivesCache(program_1, "/a.ts", createMapFromTemplate({ "typedefs": { resolvedFileName: "/types/typedefs/index.d.ts", primary: true } }));
+        });
+
+        it("fetches imports after npm install", () => {
+            const file1Ts = { name: "file1.ts", text: SourceText.New("", `import * as a from "a";`, "const myX: number = a.x;") };
+            const file2Ts = { name: "file2.ts", text: SourceText.New("", "", "") };
+            const indexDTS = { name: "node_modules/a/index.d.ts", text: SourceText.New("", "export declare let x: number;", "") };
+            const options: CompilerOptions = { target: ScriptTarget.ES2015, traceResolution: true, moduleResolution: ModuleResolutionKind.NodeJs };
+            const rootFiles = [file1Ts, file2Ts];
+            const filesAfterNpmInstall = [file1Ts, file2Ts, indexDTS];
+
+            const initialProgram = newProgram(rootFiles, rootFiles.map(f => f.name), options);
+            {
+                assert.deepEqual(initialProgram.host.getTrace(),
+                    [
+                        "======== Resolving module 'a' from 'file1.ts'. ========",
+                        "Explicitly specified module resolution kind: 'NodeJs'.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a.ts' does not exist.",
+                        "File 'node_modules/a.tsx' does not exist.",
+                        "File 'node_modules/a.d.ts' does not exist.",
+                        "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a/index.ts' does not exist.",
+                        "File 'node_modules/a/index.tsx' does not exist.",
+                        "File 'node_modules/a/index.d.ts' does not exist.",
+                        "File 'node_modules/@types/a.d.ts' does not exist.",
+                        "File 'node_modules/@types/a/package.json' does not exist.",
+                        "File 'node_modules/@types/a/index.d.ts' does not exist.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'JavaScript'.",
+                        "File 'node_modules/a.js' does not exist.",
+                        "File 'node_modules/a.jsx' does not exist.",
+                        "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a/index.js' does not exist.",
+                        "File 'node_modules/a/index.jsx' does not exist.",
+                        "======== Module name 'a' was not resolved. ========"
+                    ],
+                    "initialProgram: execute module resolution normally.");
+
+                const initialProgramDiagnostics = initialProgram.getSemanticDiagnostics(initialProgram.getSourceFile("file1.ts"));
+                assert(initialProgramDiagnostics.length === 1, `initialProgram: import should fail.`);
+            }
+
+            const afterNpmInstallProgram = updateProgram(initialProgram, rootFiles.map(f => f.name), options, f => {
+                f[1].text = f[1].text.updateReferences(`/// <reference no-default-lib="true"/>`);
+            }, filesAfterNpmInstall);
+            {
+                assert.deepEqual(afterNpmInstallProgram.host.getTrace(),
+                    [
+                        "======== Resolving module 'a' from 'file1.ts'. ========",
+                        "Explicitly specified module resolution kind: 'NodeJs'.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "File 'node_modules/a.ts' does not exist.",
+                        "File 'node_modules/a.tsx' does not exist.",
+                        "File 'node_modules/a.d.ts' does not exist.",
+                        "File 'node_modules/a/package.json' does not exist.",
+                        "File 'node_modules/a/index.ts' does not exist.",
+                        "File 'node_modules/a/index.tsx' does not exist.",
+                        "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
+                        "======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========"
+                    ],
+                    "afterNpmInstallProgram: execute module resolution normally.");
+
+                const afterNpmInstallProgramDiagnostics = afterNpmInstallProgram.getSemanticDiagnostics(afterNpmInstallProgram.getSourceFile("file1.ts"));
+                assert(afterNpmInstallProgramDiagnostics.length === 0, `afterNpmInstallProgram: program is well-formed with import.`);
+            }
         });
 
         it("can reuse ambient module declarations from non-modified files", () => {
@@ -624,7 +690,7 @@ namespace ts {
                     "Explicitly specified module resolution kind: 'Classic'.",
                     "File 'b1.ts' exist - use it as a name resolution result.",
                     "======== Module name './b1' was successfully resolved to 'b1.ts'. ========"
-                ], "program_5: exports do not affect program structure, so f2's reoslutions are silently reused.");
+                ], "program_5: exports do not affect program structure, so f2's resolutions are silently reused.");
             }
 
             const program_6 = updateProgram(program_5, program_5.getRootFileNames(), options, f => {
@@ -658,7 +724,7 @@ namespace ts {
 
             {
                 const program_7Diagnostics = program_7.getSemanticDiagnostics(program_7.getSourceFile("f2.ts"));
-                assert(program_7Diagnostics.length === expectedErrors, `removing import is noop with respect to program, so no change in diangostics.`);
+                assert(program_7Diagnostics.length === expectedErrors, `removing import is noop with respect to program, so no change in diagnostics.`);
 
                 assert.deepEqual(program_7.host.getTrace(), [
                     "======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========",
