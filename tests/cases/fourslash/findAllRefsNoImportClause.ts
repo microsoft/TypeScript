@@ -3,7 +3,7 @@
 // https://github.com/Microsoft/TypeScript/issues/15452
 
 // @Filename: /a.ts
-////export const [|x|] = 0;
+////export const [|{| "isWriteAccess": true, "isDefinition": true |}x|] = 0;
 
 // @Filename: /b.ts
 ////import "./a";
