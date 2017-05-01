@@ -122,9 +122,8 @@ namespace ts {
 
     /* @internal */
     export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
-        if (names.length !== newResolutions.length) {
-            return true;
-        }
+        Debug.assert(names.length === newResolutions.length);
+
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
             const oldResolution = oldResolutions && oldResolutions.get(names[i]);
