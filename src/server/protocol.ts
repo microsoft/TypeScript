@@ -1825,9 +1825,19 @@ namespace ts.server.protocol {
         text: string;
 
         /**
+         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         */
+        category: string;
+
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
+
+        /**
+         * The name of the plugin reporting the message.
+         */
+        source?: string;
     }
 
     export interface DiagnosticEventBody {
@@ -2267,15 +2277,19 @@ namespace ts.server.protocol {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         declaration?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2315,6 +2329,7 @@ namespace ts.server.protocol {
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strict?: boolean;
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

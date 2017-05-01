@@ -362,7 +362,7 @@ namespace ts.formatting {
         sourceFile: SourceFileLike): TextChange[] {
 
         // formatting context is used by rules provider
-        const formattingContext = new FormattingContext(sourceFile, requestKind);
+        const formattingContext = new FormattingContext(sourceFile, requestKind, options);
         let previousRangeHasError: boolean;
         let previousRange: TextRangeWithKind;
         let previousParent: Node;

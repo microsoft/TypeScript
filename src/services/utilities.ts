@@ -1036,6 +1036,10 @@ namespace ts {
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
         for (const e in dst) {
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
@@ -1380,7 +1384,7 @@ namespace ts {
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
-        while (isWhiteSpace(text.charCodeAt(position))) {
+        while (isWhiteSpaceLike(text.charCodeAt(position))) {
             position += 1;
         }
         return position;

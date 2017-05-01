@@ -2119,6 +2119,10 @@
         "category": "Error",
         "code": 2709
     },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3305,6 +3309,10 @@
     "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
         "category": "Error",
         "code": 7034
+    },
+    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+        "category": "Error",
+        "code": 7035
     },
     "You cannot rename this element.": {
         "category": "Error",

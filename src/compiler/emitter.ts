@@ -2457,7 +2457,7 @@ namespace ts {
             let indentation: number;
             for (const line of lines) {
                 for (let i = 0; i < line.length && (indentation === undefined || i < indentation); i++) {
-                    if (!isWhiteSpace(line.charCodeAt(i))) {
+                    if (!isWhiteSpaceLike(line.charCodeAt(i))) {
                         if (indentation === undefined || i < indentation) {
                             indentation = i;
                             break;
