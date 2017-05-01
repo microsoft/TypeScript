@@ -133,11 +133,13 @@ declare namespace FourSlashInterface {
     class verifyNegatable {
         private negative;
         not: verifyNegatable;
+        allowedClassElementKeywords: string[];
         constructor(negative?: boolean);
         completionListCount(expectedCount: number): void;
         completionListContains(symbol: string, text?: string, documentation?: string, kind?: string, spanIndex?: number): void;
         completionListItemsCountIsGreaterThan(count: number): void;
         completionListIsEmpty(): void;
+        completionListContainsClassElementKeywords(): void;
         completionListAllowsNewIdentifier(): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;

@@ -1,6 +1,9 @@
 ///<reference path="fourslash.ts" />
 
 ////abstract class B {
+////    private privateMethod() { }
+////    protected protectedMethod() { };
+////    static staticMethod() { }
 ////    abstract getValue(): number;
 ////    /*abstractClass*/
 ////}
@@ -69,25 +72,7 @@
 ////    static identi/*classThatStartedWritingIdentifierAfterStaticModifier*/
 ////}
 
-const allowedKeywords = [
-    "public",
-    "private",
-    "protected",
-    "static",
-    "abstract",
-    "readonly",
-    "get",
-    "set",
-    "constructor"
-];
-
-const allowedKeywordCount = allowedKeywords.length;
-function verifyAllowedKeyWords() {
-    for (const keyword of allowedKeywords) {
-        verify.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
-    }
-}
-
+const allowedKeywordCount = verify.allowedClassElementKeywords.length;
 const nonClassElementMarkers = [
     "InsideMethod"
 ];
@@ -104,7 +89,7 @@ const onlyClassElementKeywordLocations = [
 ];
 for (const marker of onlyClassElementKeywordLocations) {
     goTo.marker(marker);
-    verifyAllowedKeyWords();
+    verify.completionListContainsClassElementKeywords();
     verify.completionListCount(allowedKeywordCount);
 }
 
@@ -113,9 +98,8 @@ const classElementCompletionLocations = [
     "classThatIsEmptyAndExtendingAnotherClass",
     "classThatHasAlreadyImplementedAnotherClassMethod",
     "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
-    // TODO should we give completion for these keywords
-    //"classThatHasWrittenPublicKeyword",
-    //"classElementContainingStatic",
+    "classThatHasWrittenPublicKeyword",
+    "classElementContainingStatic",
     "classThatStartedWritingIdentifier",
     "propDeclarationWithoutSemicolon",
     "propDeclarationWithSemicolon",
@@ -126,17 +110,30 @@ const classElementCompletionLocations = [
     "methodImplementation",
     "accessorSignatureWithoutSemicolon",
     "accessorSignatureImplementation",
-    // TODO should we give completion for these keywords
-    //"classThatHasWrittenGetKeyword",
-    //"classThatHasWrittenSetKeyword",
-    //"classThatStartedWritingIdentifierOfGetAccessor",
-    //"classThatStartedWritingIdentifierOfSetAccessor",
-    //"classThatStartedWritingIdentifierAfterModifier",
-    //"classThatStartedWritingIdentifierAfterStaticModifier"
+    "classThatHasWrittenGetKeyword",
+    "classThatHasWrittenSetKeyword",
+    "classThatStartedWritingIdentifierOfGetAccessor",
+    "classThatStartedWritingIdentifierOfSetAccessor",
+    "classThatStartedWritingIdentifierAfterModifier",
+    "classThatStartedWritingIdentifierAfterStaticModifier"
+];
+
+const validMembersOfBase = [
+    ["getValue", "(method) B.getValue(): number"],
+    ["protectedMethod", "(method) B.protectedMethod(): void"]
+];
+const invalidMembersOfBase = [
+    ["privateMethod", "(method) B.privateMethod(): void"],
+    ["staticMethod", "(method) B.staticMethod(): void"]
 ];
 for (const marker of classElementCompletionLocations) {
     goTo.marker(marker);
-    verify.completionListContains("getValue", "(method) B.getValue(): number", /*documentation*/ undefined, "method");
-    verifyAllowedKeyWords();
-    verify.completionListCount(allowedKeywordCount + 1);
+    for (const [validMemberOfBaseSymbol, validMemberOfBaseText] of validMembersOfBase) {
+        verify.completionListContains(validMemberOfBaseSymbol, validMemberOfBaseText, /*documentation*/ undefined, "method");
+    }
+    for (const [invalidMemberOfBaseSymbol, invalidMemberOfBaseText] of invalidMembersOfBase) {
+        verify.not.completionListContains(invalidMemberOfBaseSymbol, invalidMemberOfBaseText, /*documentation*/ undefined, "method");
+    }
+    verify.completionListContainsClassElementKeywords();
+    verify.completionListCount(allowedKeywordCount + validMembersOfBase.length);
 }

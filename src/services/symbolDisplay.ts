@@ -200,27 +200,33 @@ namespace ts.SymbolDisplay {
                     (location.kind === SyntaxKind.ConstructorKeyword && location.parent.kind === SyntaxKind.Constructor)) { // At constructor keyword of constructor declaration
                     // get the signature from the declaration and write it
                     const functionDeclaration = <FunctionLikeDeclaration>location.parent;
-                    const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
-                    if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
-                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration);
-                    }
-                    else {
-                        signature = allSignatures[0];
-                    }
+                    // Use function declaration to write the signatures only if the symbol corresponding to this declaration
+                    const locationIsSymbolDeclaration = findDeclaration(symbol, declaration =>
+                        declaration === (location.kind === SyntaxKind.ConstructorKeyword ? functionDeclaration.parent : functionDeclaration));
 
-                    if (functionDeclaration.kind === SyntaxKind.Constructor) {
-                        // show (constructor) Type(...) signature
-                        symbolKind = ScriptElementKind.constructorImplementationElement;
-                        addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
-                    }
-                    else {
-                        // (function/method) symbol(..signature)
-                        addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
-                            !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
-                    }
+                    if (locationIsSymbolDeclaration) {
+                        const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
+                        if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
+                            signature = typeChecker.getSignatureFromDeclaration(functionDeclaration);
+                        }
+                        else {
+                            signature = allSignatures[0];
+                        }
 
-                    addSignatureDisplayParts(signature, allSignatures);
-                    hasAddedSymbolInfo = true;
+                        if (functionDeclaration.kind === SyntaxKind.Constructor) {
+                            // show (constructor) Type(...) signature
+                            symbolKind = ScriptElementKind.constructorImplementationElement;
+                            addPrefixForAnyFunctionOrVar(type.symbol, symbolKind);
+                        }
+                        else {
+                            // (function/method) symbol(..signature)
+                            addPrefixForAnyFunctionOrVar(functionDeclaration.kind === SyntaxKind.CallSignature &&
+                                !(type.symbol.flags & SymbolFlags.TypeLiteral || type.symbol.flags & SymbolFlags.ObjectLiteral) ? type.symbol : symbol, symbolKind);
+                        }
+
+                        addSignatureDisplayParts(signature, allSignatures);
+                        hasAddedSymbolInfo = true;
+                    }
                 }
             }
         }

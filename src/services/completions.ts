@@ -988,6 +988,10 @@ namespace ts.Completions {
             return undefined;
         }
 
+        function isFromClassElementDeclaration(node: Node) {
+            return isClassElement(node.parent) && isClassLike(node.parent.parent);
+        }
+
         /**
          * Returns the immediate owning class declaration of a context token,
          * on the condition that one exists and that the context implies completion should be given.
@@ -1010,6 +1014,13 @@ namespace ts.Completions {
                             return location;
                         }
                         break;
+
+                    default:
+                        if (isFromClassElementDeclaration(contextToken) &&
+                            (isClassMemberCompletionKeyword(contextToken.kind) ||
+                            isClassMemberCompletionKeywordText(contextToken.getText()))) {
+                            return contextToken.parent.parent as ClassLikeDeclaration;
+                        }
                 }
             }
 
@@ -1148,7 +1159,7 @@ namespace ts.Completions {
                         isFunction(containingNodeKind);
 
                 case SyntaxKind.StaticKeyword:
-                    return containingNodeKind === SyntaxKind.PropertyDeclaration;
+                    return containingNodeKind === SyntaxKind.PropertyDeclaration && !isClassLike(contextToken.parent.parent);
 
                 case SyntaxKind.DotDotDotToken:
                     return containingNodeKind === SyntaxKind.Parameter ||
@@ -1165,19 +1176,30 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.ExportSpecifier ||
                         containingNodeKind === SyntaxKind.NamespaceImport;
 
+                case SyntaxKind.GetKeyword:
+                case SyntaxKind.SetKeyword:
+                    if (isFromClassElementDeclaration(contextToken)) {
+                        return false;
+                    }
+                    // falls through
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:
                 case SyntaxKind.FunctionKeyword:
                 case SyntaxKind.VarKeyword:
-                case SyntaxKind.GetKeyword:
-                case SyntaxKind.SetKeyword:
                 case SyntaxKind.ImportKeyword:
                 case SyntaxKind.LetKeyword:
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.YieldKeyword:
                 case SyntaxKind.TypeKeyword:  // type htm|
                     return true;
+            }
+
+            // If the previous token is keyword correspoding to class member completion keyword
+            // there will be completion available here
+            if (isClassMemberCompletionKeywordText(contextToken.getText()) &&
+                isFromClassElementDeclaration(contextToken)) {
+                return false;
             }
 
             // Previous token may have been a keyword that was converted to an identifier.
@@ -1373,8 +1395,8 @@ namespace ts.Completions {
         });
     }
 
-    const classMemberKeywordCompletions = filter(keywordCompletions, entry => {
-        switch (stringToToken(entry.name)) {
+    function isClassMemberCompletionKeyword(kind: SyntaxKind) {
+        switch (kind) {
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.PrivateKeyword:
@@ -1386,7 +1408,14 @@ namespace ts.Completions {
             case SyntaxKind.SetKeyword:
                 return true;
         }
-    });
+    }
+
+    function isClassMemberCompletionKeywordText(text: string) {
+        return isClassMemberCompletionKeyword(stringToToken(text));
+    }
+
+    const classMemberKeywordCompletions = filter(keywordCompletions, entry =>
+        isClassMemberCompletionKeywordText(entry.name));
 
     function isEqualityExpression(node: Node): node is BinaryExpression {
         return isBinaryExpression(node) && isEqualityOperatorKind(node.operatorToken.kind);
