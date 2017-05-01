@@ -44,7 +44,6 @@ namespace N {
 
 const c4 = "a";
 const c5 = 1;
-const c6 = "1";
 
 interface T8 {
     [c4]: number;
@@ -75,12 +74,6 @@ declare type T15 = {
     a: number;
     1: string;
 };
-
-interface T16 {
-    [c5]: number;
-    [c6]: string;
-}
-
 
 let t0: T0;
 let t1: T1;

@@ -15,6 +15,12 @@ interface T2 {
     [c0]: string;
 }
 
+interface T3 {
+    [c0]: number;
+    [c1]: string;
+}
+
+
 let t1: T1;
 let t2: T2;
 t1 = t2;

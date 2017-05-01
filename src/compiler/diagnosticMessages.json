@@ -2123,6 +2123,10 @@
         "category": "Error",
         "code": 2710
     },
+    "Subsequent property declarations must have the same type.  Property '{0}' must be of type '{1}', but here has type '{2}'.": {
+        "category": "Error",
+        "code": 2711
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

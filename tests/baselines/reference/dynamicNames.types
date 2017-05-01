@@ -119,10 +119,6 @@ const c5 = 1;
 >c5 : 1
 >1 : 1
 
-const c6 = "1";
->c6 : "1"
->"1" : "1"
-
 interface T8 {
 >T8 : T8
 
@@ -186,17 +182,6 @@ declare type T15 = {
 
     1: string;
 };
-
-interface T16 {
->T16 : T16
-
-    [c5]: number;
->c5 : 1
-
-    [c6]: string;
->c6 : "1"
-}
-
 
 let t0: T0;
 >t0 : T0

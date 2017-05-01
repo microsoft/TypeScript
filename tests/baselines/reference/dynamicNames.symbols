@@ -113,11 +113,8 @@ const c4 = "a";
 const c5 = 1;
 >c5 : Symbol(c5, Decl(main.ts, 24, 5))
 
-const c6 = "1";
->c6 : Symbol(c6, Decl(main.ts, 25, 5))
-
 interface T8 {
->T8 : Symbol(T8, Decl(main.ts, 25, 15))
+>T8 : Symbol(T8, Decl(main.ts, 24, 13))
 
     [c4]: number;
 >c4 : Symbol(c4, Decl(main.ts, 23, 5))
@@ -126,8 +123,8 @@ interface T8 {
 >c5 : Symbol(c5, Decl(main.ts, 24, 5))
 }
 declare class T9 implements T8 {
->T9 : Symbol(T9, Decl(main.ts, 30, 1))
->T8 : Symbol(T8, Decl(main.ts, 25, 15))
+>T9 : Symbol(T9, Decl(main.ts, 29, 1))
+>T8 : Symbol(T8, Decl(main.ts, 24, 13))
 
     [c4]: number;
 >c4 : Symbol(c4, Decl(main.ts, 23, 5))
@@ -136,11 +133,11 @@ declare class T9 implements T8 {
 >c5 : Symbol(c5, Decl(main.ts, 24, 5))
 }
 declare class T10 extends T9 {
->T10 : Symbol(T10, Decl(main.ts, 34, 1))
->T9 : Symbol(T9, Decl(main.ts, 30, 1))
+>T10 : Symbol(T10, Decl(main.ts, 33, 1))
+>T9 : Symbol(T9, Decl(main.ts, 29, 1))
 }
 declare type T11 = {
->T11 : Symbol(T11, Decl(main.ts, 36, 1))
+>T11 : Symbol(T11, Decl(main.ts, 35, 1))
 
     [c4]: number;
 >c4 : Symbol(c4, Decl(main.ts, 23, 5))
@@ -151,202 +148,191 @@ declare type T11 = {
 };
 
 interface T12 {
->T12 : Symbol(T12, Decl(main.ts, 40, 2))
+>T12 : Symbol(T12, Decl(main.ts, 39, 2))
 
     a: number;
->a : Symbol(T12.a, Decl(main.ts, 42, 15))
+>a : Symbol(T12.a, Decl(main.ts, 41, 15))
 
     1: string;
 }
 declare class T13 implements T2 {
->T13 : Symbol(T13, Decl(main.ts, 45, 1))
+>T13 : Symbol(T13, Decl(main.ts, 44, 1))
 >T2 : Symbol(T2, Decl(main.ts, 0, 24))
 
     a: number;
->a : Symbol(T13.a, Decl(main.ts, 46, 33))
+>a : Symbol(T13.a, Decl(main.ts, 45, 33))
 
     1: string;
 }
 declare class T14 extends T13 {
->T14 : Symbol(T14, Decl(main.ts, 49, 1))
->T13 : Symbol(T13, Decl(main.ts, 45, 1))
+>T14 : Symbol(T14, Decl(main.ts, 48, 1))
+>T13 : Symbol(T13, Decl(main.ts, 44, 1))
 }
 declare type T15 = {
->T15 : Symbol(T15, Decl(main.ts, 51, 1))
+>T15 : Symbol(T15, Decl(main.ts, 50, 1))
 
     a: number;
->a : Symbol(a, Decl(main.ts, 52, 20))
+>a : Symbol(a, Decl(main.ts, 51, 20))
 
     1: string;
 };
 
-interface T16 {
->T16 : Symbol(T16, Decl(main.ts, 55, 2))
-
-    [c5]: number;
->c5 : Symbol(c5, Decl(main.ts, 24, 5))
-
-    [c6]: string;
->c6 : Symbol(c6, Decl(main.ts, 25, 5))
-}
-
-
 let t0: T0;
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
 >T0 : Symbol(T0, Decl(main.ts, 0, 16))
 
 let t1: T1;
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
 >T1 : Symbol(T1, Decl(main.ts, 0, 20))
 
 let t2: T2;
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
 >T2 : Symbol(T2, Decl(main.ts, 0, 24))
 
 let t3: T3;
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
 >T3 : Symbol(T3, Decl(main.ts, 0, 28))
 
 let t0_1: M.T0;
->t0_1 : Symbol(t0_1, Decl(main.ts, 67, 3))
+>t0_1 : Symbol(t0_1, Decl(main.ts, 60, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
 >T0 : Symbol(T0, Decl(module.ts, 1, 20))
 
 let t1_1: M.T1;
->t1_1 : Symbol(t1_1, Decl(main.ts, 68, 3))
+>t1_1 : Symbol(t1_1, Decl(main.ts, 61, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
 >T1 : Symbol(T1, Decl(module.ts, 5, 1))
 
 let t2_1: M.T2;
->t2_1 : Symbol(t2_1, Decl(main.ts, 69, 3))
+>t2_1 : Symbol(t2_1, Decl(main.ts, 62, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
 >T2 : Symbol(T2, Decl(module.ts, 9, 1))
 
 let t3_1: M.T3;
->t3_1 : Symbol(t3_1, Decl(main.ts, 70, 3))
+>t3_1 : Symbol(t3_1, Decl(main.ts, 63, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
 >T3 : Symbol(T3, Decl(module.ts, 11, 1))
 
 let t4: N.T4;
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >T4 : Symbol(N.T4, Decl(main.ts, 5, 24))
 
 let t5: N.T5;
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >T5 : Symbol(N.T5, Decl(main.ts, 10, 5))
 
 let t6: N.T6;
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >T6 : Symbol(N.T6, Decl(main.ts, 14, 5))
 
 let t7: N.T7;
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
 >N : Symbol(N, Decl(main.ts, 1, 30))
 >T7 : Symbol(N.T7, Decl(main.ts, 16, 5))
 
 let t8: T8;
->t8 : Symbol(t8, Decl(main.ts, 75, 3))
->T8 : Symbol(T8, Decl(main.ts, 25, 15))
+>t8 : Symbol(t8, Decl(main.ts, 68, 3))
+>T8 : Symbol(T8, Decl(main.ts, 24, 13))
 
 let t9: T9;
->t9 : Symbol(t9, Decl(main.ts, 76, 3))
->T9 : Symbol(T9, Decl(main.ts, 30, 1))
+>t9 : Symbol(t9, Decl(main.ts, 69, 3))
+>T9 : Symbol(T9, Decl(main.ts, 29, 1))
 
 let t10: T10;
->t10 : Symbol(t10, Decl(main.ts, 77, 3))
->T10 : Symbol(T10, Decl(main.ts, 34, 1))
+>t10 : Symbol(t10, Decl(main.ts, 70, 3))
+>T10 : Symbol(T10, Decl(main.ts, 33, 1))
 
 let t11: T11;
->t11 : Symbol(t11, Decl(main.ts, 78, 3))
->T11 : Symbol(T11, Decl(main.ts, 36, 1))
+>t11 : Symbol(t11, Decl(main.ts, 71, 3))
+>T11 : Symbol(T11, Decl(main.ts, 35, 1))
 
 let t12: T12;
->t12 : Symbol(t12, Decl(main.ts, 79, 3))
->T12 : Symbol(T12, Decl(main.ts, 40, 2))
+>t12 : Symbol(t12, Decl(main.ts, 72, 3))
+>T12 : Symbol(T12, Decl(main.ts, 39, 2))
 
 let t13: T13;
->t13 : Symbol(t13, Decl(main.ts, 80, 3))
->T13 : Symbol(T13, Decl(main.ts, 45, 1))
+>t13 : Symbol(t13, Decl(main.ts, 73, 3))
+>T13 : Symbol(T13, Decl(main.ts, 44, 1))
 
 let t14: T14;
->t14 : Symbol(t14, Decl(main.ts, 81, 3))
->T14 : Symbol(T14, Decl(main.ts, 49, 1))
+>t14 : Symbol(t14, Decl(main.ts, 74, 3))
+>T14 : Symbol(T14, Decl(main.ts, 48, 1))
 
 let t15: T15;
->t15 : Symbol(t15, Decl(main.ts, 82, 3))
->T15 : Symbol(T15, Decl(main.ts, 51, 1))
+>t15 : Symbol(t15, Decl(main.ts, 75, 3))
+>T15 : Symbol(T15, Decl(main.ts, 50, 1))
 
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t1 : Symbol(t1, Decl(main.ts, 64, 3))
->t3 : Symbol(t3, Decl(main.ts, 66, 3))
->t2 : Symbol(t2, Decl(main.ts, 65, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t1 : Symbol(t1, Decl(main.ts, 57, 3))
+>t3 : Symbol(t3, Decl(main.ts, 59, 3))
+>t2 : Symbol(t2, Decl(main.ts, 58, 3))
 
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6; 
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t4 : Symbol(t4, Decl(main.ts, 71, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t5 : Symbol(t5, Decl(main.ts, 72, 3))
->t7 : Symbol(t7, Decl(main.ts, 74, 3))
->t6 : Symbol(t6, Decl(main.ts, 73, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t4 : Symbol(t4, Decl(main.ts, 64, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t5 : Symbol(t5, Decl(main.ts, 65, 3))
+>t7 : Symbol(t7, Decl(main.ts, 67, 3))
+>t6 : Symbol(t6, Decl(main.ts, 66, 3))
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t12 : Symbol(t12, Decl(main.ts, 79, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t13 : Symbol(t13, Decl(main.ts, 80, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t14 : Symbol(t14, Decl(main.ts, 81, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t15 : Symbol(t15, Decl(main.ts, 82, 3))
->t12 : Symbol(t12, Decl(main.ts, 79, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t13 : Symbol(t13, Decl(main.ts, 80, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t14 : Symbol(t14, Decl(main.ts, 81, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
->t15 : Symbol(t15, Decl(main.ts, 82, 3))
->t0 : Symbol(t0, Decl(main.ts, 63, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t12 : Symbol(t12, Decl(main.ts, 72, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t13 : Symbol(t13, Decl(main.ts, 73, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t14 : Symbol(t14, Decl(main.ts, 74, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t15 : Symbol(t15, Decl(main.ts, 75, 3))
+>t12 : Symbol(t12, Decl(main.ts, 72, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t13 : Symbol(t13, Decl(main.ts, 73, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t14 : Symbol(t14, Decl(main.ts, 74, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
+>t15 : Symbol(t15, Decl(main.ts, 75, 3))
+>t0 : Symbol(t0, Decl(main.ts, 56, 3))
 
