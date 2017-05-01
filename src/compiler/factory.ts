@@ -1462,7 +1462,7 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: ts.TypeNode) {
+    export function createTypeAliasDeclaration(name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
@@ -1470,7 +1470,7 @@ namespace ts {
         return node;
     }
 
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: ts.TypeNode) {
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         return node.name !== name
             || node.typeParameters !== typeParameters
             || node.type !== type
