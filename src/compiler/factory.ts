@@ -1440,6 +1440,28 @@ namespace ts {
             : node;
     }
 
+    export function createInterfaceDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        const node = <InterfaceDeclaration>createSynthesizedNode(SyntaxKind.InterfaceDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.heritageClauses = asNodeArray(heritageClauses);
+        node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.heritageClauses !== heritageClauses
+            || node.members !== members
+            ? updateNode(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+            : node;
+    }
+
     export function createEnumDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, members: EnumMember[]) {
         const node = <EnumDeclaration>createSynthesizedNode(SyntaxKind.EnumDeclaration);
         node.decorators = asNodeArray(decorators);
