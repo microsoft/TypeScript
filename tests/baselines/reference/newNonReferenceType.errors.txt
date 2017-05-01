@@ -1,12 +1,12 @@
-tests/cases/compiler/newNonReferenceType.ts(1,13): error TS2304: Cannot find name 'any'.
-tests/cases/compiler/newNonReferenceType.ts(2,13): error TS2304: Cannot find name 'boolean'.
+tests/cases/compiler/newNonReferenceType.ts(1,13): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/newNonReferenceType.ts(2,13): error TS2552: Cannot find name 'boolean'. Did you mean 'Boolean'?
 
 
 ==== tests/cases/compiler/newNonReferenceType.ts (2 errors) ====
     var a = new any();
                 ~~~
-!!! error TS2304: Cannot find name 'any'.
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
     var b = new boolean(); // error
                 ~~~~~~~
-!!! error TS2304: Cannot find name 'boolean'.
+!!! error TS2552: Cannot find name 'boolean'. Did you mean 'Boolean'?
     

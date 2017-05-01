@@ -57,7 +57,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(265,91): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(266,34): error TS2304: Cannot find name 'IndentationInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(274,53): error TS2304: Cannot find name 'AuthorParseNodeKind'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(278,50): error TS2304: Cannot find name 'Span'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(279,28): error TS2304: Cannot find name 'ParseTree'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(279,28): error TS2552: Cannot find name 'ParseTree'. Did you mean 'parseInt'?
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(288,60): error TS2304: Cannot find name 'TokenSpan'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(288,77): error TS2304: Cannot find name 'ParseNode'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(288,89): error TS2304: Cannot find name 'IndentationInfo'.
@@ -527,7 +527,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
 !!! error TS2304: Cannot find name 'Span'.
                         node = ParseTree.FindCommonParentNode(semiColonStartSpan, semiColonStartSpan, node);
                                ~~~~~~~~~
-!!! error TS2304: Cannot find name 'ParseTree'.
+!!! error TS2552: Cannot find name 'ParseTree'. Did you mean 'parseInt'?
                         indentationInfo = node.GetEffectiveChildrenIndentation(this);
                         return indentationInfo;
                     }

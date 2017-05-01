@@ -1,18 +1,18 @@
-tests/cases/compiler/primitiveTypeAssignment.ts(1,9): error TS2304: Cannot find name 'any'.
-tests/cases/compiler/primitiveTypeAssignment.ts(3,9): error TS2304: Cannot find name 'number'.
-tests/cases/compiler/primitiveTypeAssignment.ts(5,9): error TS2304: Cannot find name 'boolean'.
+tests/cases/compiler/primitiveTypeAssignment.ts(1,9): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
+tests/cases/compiler/primitiveTypeAssignment.ts(3,9): error TS2552: Cannot find name 'number'. Did you mean 'Number'?
+tests/cases/compiler/primitiveTypeAssignment.ts(5,9): error TS2552: Cannot find name 'boolean'. Did you mean 'Boolean'?
 
 
 ==== tests/cases/compiler/primitiveTypeAssignment.ts (3 errors) ====
     var x = any;
             ~~~
-!!! error TS2304: Cannot find name 'any'.
+!!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
     
     var y = number;
             ~~~~~~
-!!! error TS2304: Cannot find name 'number'.
+!!! error TS2552: Cannot find name 'number'. Did you mean 'Number'?
     
     var z = boolean;
             ~~~~~~~
-!!! error TS2304: Cannot find name 'boolean'.
+!!! error TS2552: Cannot find name 'boolean'. Did you mean 'Boolean'?
     

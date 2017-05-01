@@ -1,4 +1,4 @@
-tests/cases/compiler/undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar' does not exist on type 'C'.
+tests/cases/compiler/undeclaredMethod.ts(10,3): error TS2551: Property 'saltbar' does not exist on type 'C'. Did you mean 'salt'?
 
 
 ==== tests/cases/compiler/undeclaredMethod.ts (1 errors) ====
@@ -13,6 +13,6 @@ tests/cases/compiler/undeclaredMethod.ts(10,3): error TS2339: Property 'saltbar'
     c.salt();	// cool
     c.saltbar();	// crash
       ~~~~~~~
-!!! error TS2339: Property 'saltbar' does not exist on type 'C'.
+!!! error TS2551: Property 'saltbar' does not exist on type 'C'. Did you mean 'salt'?
     
     

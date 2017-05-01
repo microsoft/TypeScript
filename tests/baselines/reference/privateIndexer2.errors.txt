@@ -1,5 +1,5 @@
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,15): error TS1005: ']' expected.
-tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,17): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,17): error TS2552: Cannot find name 'string'. Did you mean 'String'?
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,23): error TS1005: ',' expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,24): error TS1136: Property assignment expected.
 tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,32): error TS1005: ':' expected.
@@ -13,7 +13,7 @@ tests/cases/conformance/classes/indexMemberDeclarations/privateIndexer2.ts(4,32)
                   ~
 !!! error TS1005: ']' expected.
                     ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2552: Cannot find name 'string'. Did you mean 'String'?
                           ~
 !!! error TS1005: ',' expected.
                            ~

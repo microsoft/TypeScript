@@ -1,6 +1,6 @@
 tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(1,4): error TS1123: Variable declaration list cannot be empty.
 tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(2,1): error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
-tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(2,1): error TS2304: Cannot find name 'let'.
+tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(2,1): error TS2552: Cannot find name 'let'. Did you mean 'Set'?
 tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(3,6): error TS1123: Variable declaration list cannot be empty.
 
 
@@ -12,7 +12,7 @@ tests/cases/conformance/externalModules/exportNonInitializedVariablesES6.ts(3,6)
     ~~~
 !!! error TS1214: Identifier expected. 'let' is a reserved word in strict mode. Modules are automatically in strict mode.
     ~~~
-!!! error TS2304: Cannot find name 'let'.
+!!! error TS2552: Cannot find name 'let'. Did you mean 'Set'?
     const;
          
 !!! error TS1123: Variable declaration list cannot be empty.

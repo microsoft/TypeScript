@@ -47,7 +47,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,52): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error TS2304: Cannot find name 'WithSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
@@ -74,19 +74,19 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(284,38): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(286,55): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(292,43): error TS2304: Cannot find name 'SymbolFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(309,29): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,31): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,31): error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,49): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(310,84): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(311,36): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,38): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,38): error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,56): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(312,98): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(313,35): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,37): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,37): error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,55): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(314,96): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(315,42): error TS2304: Cannot find name 'StringHashTable'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,44): error TS2304: Cannot find name 'ScopedMembers'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,44): error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,62): error TS2304: Cannot find name 'DualStringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(316,110): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(321,26): error TS2304: Cannot find name 'SymbolScopeBuilder'.
@@ -397,7 +397,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'Type'.
             var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'WithSymbol'.
+!!! error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
             withType.members = members;
             withType.ambientMembers = ambientMembers;
             withType.symbol = withSymbol;
@@ -598,7 +598,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'StringHashTable'.
             var funcMembers = new ScopedMembers(new DualStringHashTable(funcTable, new StringHashTable()));
                                   ~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ScopedMembers'.
+!!! error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
                                                     ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                        ~~~~~~~~~~~~~~~
@@ -608,7 +608,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncMembers = new ScopedMembers(new DualStringHashTable(ambientFuncTable, new StringHashTable()));
                                          ~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ScopedMembers'.
+!!! error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
                                                            ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                      ~~~~~~~~~~~~~~~
@@ -618,7 +618,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'StringHashTable'.
             var funcStaticMembers = new ScopedMembers(new DualStringHashTable(funcStaticTable, new StringHashTable()));
                                         ~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ScopedMembers'.
+!!! error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
                                                           ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                    ~~~~~~~~~~~~~~~
@@ -628,7 +628,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'StringHashTable'.
             var ambientFuncStaticMembers = new ScopedMembers(new DualStringHashTable(ambientFuncStaticTable, new StringHashTable()));
                                                ~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'ScopedMembers'.
+!!! error TS2552: Cannot find name 'ScopedMembers'. Did you mean 'funcMembers'?
                                                                  ~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'DualStringHashTable'.
                                                                                                                  ~~~~~~~~~~~~~~~

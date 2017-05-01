@@ -64,9 +64,9 @@ tests/cases/conformance/fixSignatureCaching.ts(970,18): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(975,16): error TS2304: Cannot find name 'module'.
 tests/cases/conformance/fixSignatureCaching.ts(975,42): error TS2304: Cannot find name 'module'.
 tests/cases/conformance/fixSignatureCaching.ts(976,37): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/fixSignatureCaching.ts(977,23): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(977,48): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2304: Cannot find name 'define'.
+tests/cases/conformance/fixSignatureCaching.ts(977,23): error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
+tests/cases/conformance/fixSignatureCaching.ts(977,48): error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
+tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
 tests/cases/conformance/fixSignatureCaching.ts(979,23): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot find name 'window'.
 
@@ -1182,12 +1182,12 @@ tests/cases/conformance/fixSignatureCaching.ts(980,37): error TS2304: Cannot fin
 !!! error TS2304: Cannot find name 'module'.
         } else if (typeof define === 'function' && define.amd) {
                           ~~~~~~
-!!! error TS2304: Cannot find name 'define'.
+!!! error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
                                                    ~~~~~~
-!!! error TS2304: Cannot find name 'define'.
+!!! error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
             return define;
                    ~~~~~~
-!!! error TS2304: Cannot find name 'define'.
+!!! error TS2552: Cannot find name 'define'. Did you mean 'undefined'?
         } else if (typeof window !== 'undefined') {
                           ~~~~~~
 !!! error TS2304: Cannot find name 'window'.

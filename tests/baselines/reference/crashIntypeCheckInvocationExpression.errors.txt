@@ -1,5 +1,5 @@
 tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(6,28): error TS2304: Cannot find name 'task'.
-tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(8,18): error TS2304: Cannot find name 'path'.
+tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(8,18): error TS2552: Cannot find name 'path'. Did you mean 'Math'?
 tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(9,19): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(10,50): error TS2304: Cannot find name 'moduleType'.
 
@@ -16,7 +16,7 @@ tests/cases/compiler/crashIntypeCheckInvocationExpression.ts(10,50): error TS230
     
         var folder = path.join(),
                      ~~~~
-!!! error TS2304: Cannot find name 'path'.
+!!! error TS2552: Cannot find name 'path'. Did you mean 'Math'?
             fileset = nake.fileSetSync<number, number, any>(folder)
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
