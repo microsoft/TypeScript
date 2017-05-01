@@ -7257,7 +7257,7 @@ namespace ts {
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text) :
                     undefined;
-            if (propName) {
+            if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessExpression) {
