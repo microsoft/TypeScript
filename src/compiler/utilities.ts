@@ -4643,7 +4643,7 @@ namespace ts {
                 current[j] = Math.min(
                     previous[j] + 1,
                     current[j - 1] + 1,
-                    previous[j - 1] + (s1[i - 1] === s2[j - 1] ? 0 : 2))
+                    previous[j - 1] + (s1[i - 1] === s2[j - 1] ? 0 : 2));
             }
             // shift current back to previous, and then reuse previous' array
             const tmp = previous;
