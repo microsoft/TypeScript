@@ -1400,10 +1400,10 @@ namespace ts {
             return resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
         }
 
-        function getTargetOfExportSpecifier(node: ExportSpecifier, dontResolveAlias?: boolean): Symbol {
-            return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
-                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node, dontResolveAlias) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ false, dontResolveAlias);
+        function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
+            return node.parent.parent.moduleSpecifier ?
+                getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
+                resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol {
@@ -1421,7 +1421,7 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                     return getTargetOfImportSpecifier(<ImportSpecifier>node, dontRecursivelyResolve);
                 case SyntaxKind.ExportSpecifier:
-                    return getTargetOfExportSpecifier(<ExportSpecifier>node, dontRecursivelyResolve);
+                    return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
@@ -3721,10 +3721,7 @@ namespace ts {
                 exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                const exportSpecifier = <ExportSpecifier>node.parent;
-                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
-                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
-                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             const result: Node[] = [];
             if (exportSymbol) {
