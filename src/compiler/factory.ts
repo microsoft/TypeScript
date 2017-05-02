@@ -1462,6 +1462,22 @@ namespace ts {
             : node;
     }
 
+    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.type = type;
+        return node;
+    }
+
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.type !== type
+            ? updateNode(createTypeAliasDeclaration(name, typeParameters, type), node)
+            : node;
+    }
+
     export function createEnumDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, members: EnumMember[]) {
         const node = <EnumDeclaration>createSynthesizedNode(SyntaxKind.EnumDeclaration);
         node.decorators = asNodeArray(decorators);
