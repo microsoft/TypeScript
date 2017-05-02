@@ -36,12 +36,9 @@ function f4NoError(arguments: any) { // no error
     var arguments: any; // No error
 }
 
-namespace strict {
-    "use strict";
-    declare function f5(arguments: number, ...rest); // no codegen no error
-    declare function f5(arguments: string, ...rest); // no codegen no error
-    declare function f52(i: number, ...arguments); // no codegen no error
-    declare function f52(i: string, ...arguments); // no codegen no error
-    declare function f6(arguments: number); // no codegen no error
-    declare function f6(arguments: string); // no codegen no error
-}
+declare function f5(arguments: number, ...rest); // no codegen no error
+declare function f5(arguments: string, ...rest); // no codegen no error
+declare function f52(i: number, ...arguments); // no codegen no error
+declare function f52(i: string, ...arguments); // no codegen no error
+declare function f6(arguments: number); // no codegen no error
+declare function f6(arguments: string); // no codegen no error

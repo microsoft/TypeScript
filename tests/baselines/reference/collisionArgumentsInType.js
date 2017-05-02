@@ -1,5 +1,4 @@
 //// [collisionArgumentsInType.ts]
-"use strict";
 var v1: (i: number, ...arguments) => void; // no error - no code gen
 var v12: (arguments: number, ...restParameters) => void; // no error - no code gen
 var v2: {
@@ -16,7 +15,6 @@ var v21: {
 }
 
 //// [collisionArgumentsInType.js]
-"use strict";
 var v1; // no error - no code gen
 var v12; // no error - no code gen
 var v2;

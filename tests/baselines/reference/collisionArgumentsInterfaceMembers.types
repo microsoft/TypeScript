@@ -1,7 +1,4 @@
 === tests/cases/compiler/collisionArgumentsInterfaceMembers.ts ===
-"use strict";
->"use strict" : "use strict"
-
 // call
 interface i1 {
 >i1 : i1

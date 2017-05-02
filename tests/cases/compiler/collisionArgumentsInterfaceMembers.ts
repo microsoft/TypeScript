@@ -1,4 +1,3 @@
-"use strict";
 // call
 interface i1 {
     (i: number, ...arguments); // no error - no code gen

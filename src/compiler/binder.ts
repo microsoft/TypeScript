@@ -2503,27 +2503,8 @@ namespace ts {
             }
         }
 
-        function needParameterStrictModeCheck(node: Node) {
-            if (node.parent.kind === SyntaxKind.ConstructorType || node.parent.kind === SyntaxKind.FunctionType) {
-                return false;
-            }
-
-            if (node.parent.parent && (
-                node.parent.parent.kind === SyntaxKind.InterfaceDeclaration ||
-                node.parent.parent.kind === SyntaxKind.TypeLiteral
-            )) {
-                return false;
-            }
-
-            if (isDeclarationFile(file) || isInAmbientContext(node)) {
-                return false;
-            }
-
-            return true;
-        }
-
         function bindParameter(node: ParameterDeclaration) {
-            if (inStrictMode && needParameterStrictModeCheck(node)) {
+            if (inStrictMode && !isInAmbientContext(node)) {
                 // It is a SyntaxError if the identifier eval or arguments appears within a FormalParameterList of a
                 // strict mode FunctionLikeDeclaration or FunctionExpression(13.1)
                 checkStrictModeEvalOrArguments(node, node.name);
