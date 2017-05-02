@@ -3203,9 +3203,16 @@
     },
     "Scoped package detected, looking in '{0}'": {
         "category": "Message",
-        "code": "6182"
+        "code": 6182
     },
-
+    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+        "category": "Message",
+        "code": 6183
+    },
+    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+        "category": "Message",
+        "code": 6184
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
