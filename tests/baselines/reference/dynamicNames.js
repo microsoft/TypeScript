@@ -3,6 +3,7 @@
 //// [module.ts]
 export const c0 = "a";
 export const c1 = 1;
+const c2 = "a";
 export interface T0 {
     [c0]: number;
     [c1]: string;
@@ -14,7 +15,7 @@ export declare class T1 implements T2 {
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
-    [c0]: number;
+    [c2]: number;
     [c1]: string;
 };
 
@@ -98,7 +99,7 @@ let t15: T15;
 
 // assignability
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
-t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6; 
+t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 
 //// [module.js]
@@ -106,6 +107,7 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c0 = "a";
 exports.c1 = 1;
+const c2 = "a";
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -140,3 +142,23 @@ let t15;
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+
+
+//// [module.d.ts]
+export declare const c0 = "a";
+export declare const c1 = 1;
+export interface T0 {
+    [c0]: number;
+    [c1]: string;
+}
+export declare class T1 implements T2 {
+    [c0]: number;
+    [c1]: string;
+}
+export declare class T2 extends T1 {
+}
+export declare type T3 = {
+    "a": number;
+    [c1]: string;
+};
+//// [main.d.ts]

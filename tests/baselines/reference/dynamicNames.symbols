@@ -5,8 +5,11 @@ export const c0 = "a";
 export const c1 = 1;
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 
+const c2 = "a";
+>c2 : Symbol(c2, Decl(module.ts, 2, 5))
+
 export interface T0 {
->T0 : Symbol(T0, Decl(module.ts, 1, 20))
+>T0 : Symbol(T0, Decl(module.ts, 2, 15))
 
     [c0]: number;
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
@@ -15,8 +18,8 @@ export interface T0 {
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 }
 export declare class T1 implements T2 {
->T1 : Symbol(T1, Decl(module.ts, 5, 1))
->T2 : Symbol(T2, Decl(module.ts, 9, 1))
+>T1 : Symbol(T1, Decl(module.ts, 6, 1))
+>T2 : Symbol(T2, Decl(module.ts, 10, 1))
 
     [c0]: number;
 >c0 : Symbol(c0, Decl(module.ts, 0, 12))
@@ -25,14 +28,14 @@ export declare class T1 implements T2 {
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
 }
 export declare class T2 extends T1 {
->T2 : Symbol(T2, Decl(module.ts, 9, 1))
->T1 : Symbol(T1, Decl(module.ts, 5, 1))
+>T2 : Symbol(T2, Decl(module.ts, 10, 1))
+>T1 : Symbol(T1, Decl(module.ts, 6, 1))
 }
 export declare type T3 = {
->T3 : Symbol(T3, Decl(module.ts, 11, 1))
+>T3 : Symbol(T3, Decl(module.ts, 12, 1))
 
-    [c0]: number;
->c0 : Symbol(c0, Decl(module.ts, 0, 12))
+    [c2]: number;
+>c2 : Symbol(c2, Decl(module.ts, 2, 5))
 
     [c1]: string;
 >c1 : Symbol(c1, Decl(module.ts, 1, 12))
@@ -196,22 +199,22 @@ let t3: T3;
 let t0_1: M.T0;
 >t0_1 : Symbol(t0_1, Decl(main.ts, 60, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
->T0 : Symbol(T0, Decl(module.ts, 1, 20))
+>T0 : Symbol(T0, Decl(module.ts, 2, 15))
 
 let t1_1: M.T1;
 >t1_1 : Symbol(t1_1, Decl(main.ts, 61, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
->T1 : Symbol(T1, Decl(module.ts, 5, 1))
+>T1 : Symbol(T1, Decl(module.ts, 6, 1))
 
 let t2_1: M.T2;
 >t2_1 : Symbol(t2_1, Decl(main.ts, 62, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
->T2 : Symbol(T2, Decl(module.ts, 9, 1))
+>T2 : Symbol(T2, Decl(module.ts, 10, 1))
 
 let t3_1: M.T3;
 >t3_1 : Symbol(t3_1, Decl(main.ts, 63, 3))
 >M : Symbol(M, Decl(main.ts, 1, 6))
->T3 : Symbol(T3, Decl(module.ts, 11, 1))
+>T3 : Symbol(T3, Decl(module.ts, 12, 1))
 
 let t4: N.T4;
 >t4 : Symbol(t4, Decl(main.ts, 64, 3))
@@ -292,7 +295,7 @@ t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3,
 >t3 : Symbol(t3, Decl(main.ts, 59, 3))
 >t2 : Symbol(t2, Decl(main.ts, 58, 3))
 
-t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6; 
+t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 >t4 : Symbol(t4, Decl(main.ts, 64, 3))
 >t5 : Symbol(t5, Decl(main.ts, 65, 3))
 >t4 : Symbol(t4, Decl(main.ts, 64, 3))
