@@ -21189,6 +21189,11 @@ namespace ts {
                         Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                     error(node, message, symbolToString(symbol));
                 }
+
+                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
+                if (node.kind === SyntaxKind.ExportSpecifier && compilerOptions.isolatedModules && !(target.flags & SymbolFlags.Value)) {
+                    error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
+                }
             }
         }
 
