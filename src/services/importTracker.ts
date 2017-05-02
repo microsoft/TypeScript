@@ -212,6 +212,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (!decl.importClause) {
+                return;
+            }
+
             const { importClause } = decl;
 
             const { namedBindings } = importClause;

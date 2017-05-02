@@ -70,7 +70,7 @@ namespace ts {
                     after: [replaceIdentifiersNamedOldNameWithNewName]
                 },
                 compilerOptions: {
-                    newLine: ts.NewLineKind.CarriageReturnLineFeed
+                    newLine: NewLineKind.CarriageReturnLineFeed
                 }
             }).outputText;
         });

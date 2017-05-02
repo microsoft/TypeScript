@@ -7393,7 +7393,7 @@ namespace ts {
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text) :
                     undefined;
-            if (propName) {
+            if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessExpression) {
@@ -9364,25 +9364,39 @@ namespace ts {
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
 
-                outer: for (const t of targetSignatures) {
-                    // Only elaborate errors from the first failure
-                    let shouldElaborateErrors = reportErrors;
-                    for (const s of sourceSignatures) {
-                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                        if (related) {
-                            result &= related;
-                            errorInfo = saveErrorInfo;
-                            continue outer;
+                if (getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol) {
+                    // We instantiations of the same anonymous type (which typically will be the type of a method).
+                    // Simply do a pairwise comparison of the signatures in the two signature lists instead of the
+                    // much more expensive N * M comparison matrix we explore below.
+                    for (let i = 0; i < targetSignatures.length; i++) {
+                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], reportErrors);
+                        if (!related) {
+                            return Ternary.False;
                         }
-                        shouldElaborateErrors = false;
+                        result &= related;
                     }
+                }
+                else {
+                    outer: for (const t of targetSignatures) {
+                        // Only elaborate errors from the first failure
+                        let shouldElaborateErrors = reportErrors;
+                        for (const s of sourceSignatures) {
+                            const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                            if (related) {
+                                result &= related;
+                                errorInfo = saveErrorInfo;
+                                continue outer;
+                            }
+                            shouldElaborateErrors = false;
+                        }
 
-                    if (shouldElaborateErrors) {
-                        reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
-                            typeToString(source),
-                            signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                        if (shouldElaborateErrors) {
+                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                                typeToString(source),
+                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                        }
+                        return Ternary.False;
                     }
-                    return Ternary.False;
                 }
                 return result;
             }

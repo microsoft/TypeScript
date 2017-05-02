@@ -251,6 +251,15 @@ namespace ts {
         }
     }
 
+    export function zipToMap<T>(keys: string[], values: T[]): Map<T> {
+        Debug.assert(keys.length === values.length);
+        const map = createMap<T>();
+        for (let i = 0; i < keys.length; ++i) {
+            map.set(keys[i], values[i]);
+        }
+        return map;
+    }
+
     /**
      * Iterates through `array` by index and performs the callback on each element of array until the callback
      * returns a falsey value, then returns false.
