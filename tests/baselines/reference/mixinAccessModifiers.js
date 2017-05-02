@@ -263,3 +263,66 @@ var C6 = (function (_super) {
     };
     return C6;
 }(Mix(Public, Public2)));
+
+
+//// [mixinAccessModifiers.d.ts]
+declare type Constructable = new (...args: any[]) => object;
+declare class Private {
+    constructor(...args: any[]);
+    private p;
+}
+declare class Private2 {
+    constructor(...args: any[]);
+    private p;
+}
+declare class Protected {
+    constructor(...args: any[]);
+    protected p: string;
+    protected static s: string;
+}
+declare class Protected2 {
+    constructor(...args: any[]);
+    protected p: string;
+    protected static s: string;
+}
+declare class Public {
+    constructor(...args: any[]);
+    p: string;
+    static s: string;
+}
+declare class Public2 {
+    constructor(...args: any[]);
+    p: string;
+    static s: string;
+}
+declare function f1(x: Private & Private2): void;
+declare function f2(x: Private & Protected): void;
+declare function f3(x: Private & Public): void;
+declare function f4(x: Protected & Protected2): void;
+declare function f5(x: Protected & Public): void;
+declare function f6(x: Public & Public2): void;
+declare function Mix<T, U>(c1: T, c2: U): T & U;
+declare var _C1_intersection_base: typeof Private & typeof Private2;
+declare class C1 extends _C1_intersection_base {
+}
+declare var _C2_intersection_base: typeof Private & typeof Protected;
+declare class C2 extends _C2_intersection_base {
+}
+declare var _C3_intersection_base: typeof Private & typeof Public;
+declare class C3 extends _C3_intersection_base {
+}
+declare var _C4_intersection_base: typeof Protected & typeof Protected2;
+declare class C4 extends _C4_intersection_base {
+    f(c4: C4, c5: C5, c6: C6): void;
+    static g(): void;
+}
+declare var _C5_intersection_base: typeof Protected & typeof Public;
+declare class C5 extends _C5_intersection_base {
+    f(c4: C4, c5: C5, c6: C6): void;
+    static g(): void;
+}
+declare var _C6_intersection_base: typeof Public & typeof Public2;
+declare class C6 extends _C6_intersection_base {
+    f(c4: C4, c5: C5, c6: C6): void;
+    static g(): void;
+}
