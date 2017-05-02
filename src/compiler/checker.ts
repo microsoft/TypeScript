@@ -5186,24 +5186,16 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.TypeLiteral:
-                    resolveDynamicMembersOfClassOrInterfaceOrTypeLiteralNode(<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node, symbolTable);
+                    resolveDynamicMembersOfNode(node, (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members, symbolTable);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                    resolveDynamicMembersOfObjectLiteralExpression(<ObjectLiteralExpression>node, symbolTable);
+                resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
                     break;
             }
         }
 
-        function resolveDynamicMembersOfClassOrInterfaceOrTypeLiteralNode(node: ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode, symbolTable: SymbolTable) {
-            for (const member of node.members) {
-                if (member.name && isComputedPropertyName(member.name) && isEntityNameExpression(member.name.expression)) {
-                    bindDynamicMember(symbolTable, node.symbol, member);
-                }
-            }
-        }
-
-        function resolveDynamicMembersOfObjectLiteralExpression(node: ObjectLiteralExpression, symbolTable: SymbolTable) {
-            for (const member of node.properties) {
+        function resolveDynamicMembersOfNode(node: Declaration, members: NodeArray<ClassElement | TypeElement | ObjectLiteralElement>, symbolTable: SymbolTable) {
+            for (const member of members) {
                 if (member.name && isComputedPropertyName(member.name) && isEntityNameExpression(member.name.expression)) {
                     bindDynamicMember(symbolTable, node.symbol, member);
                 }
