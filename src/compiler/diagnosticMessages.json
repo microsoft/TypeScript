@@ -3203,7 +3203,7 @@
     },
     "Reusing resolution of module '{0}' to file '{1}' from old program.": {
         "category": "Message",
-        "code": 618
+        "code": 6183
     },
     "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
         "category": "Message",

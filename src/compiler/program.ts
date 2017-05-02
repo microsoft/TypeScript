@@ -531,7 +531,7 @@ namespace ts {
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
-                // TODO: if we want to reuse resolutions more aggressively, refine this to check for whether the
+                // If we want to reuse resolutions more aggressively, we can refine this to check for whether the
                 // text of the corresponding modulenames has changed.
                 if (file === oldSourceFile) {
                     const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
@@ -596,7 +596,7 @@ namespace ts {
 
             return result;
 
-            // TODO: if we change our policy of rechecking failed lookups on each program create,
+            // If we change our policy of rechecking failed lookups on each program create,
             // we should adjust the value returned here.
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
                 const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
