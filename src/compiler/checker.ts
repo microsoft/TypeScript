@@ -22645,7 +22645,7 @@ namespace ts {
             const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
             resolveBaseTypesOfClass(classType);
             const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
-            if (!baseType.symbol) {
+            if (!baseType.symbol && !(baseType.flags & TypeFlags.Intersection)) {
                 writer.reportIllegalExtends();
             }
             getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
