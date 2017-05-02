@@ -260,9 +260,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-    var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) }, p;
-    return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n, f) { return function (v) { return v = p && n === "throw" ? f(v) : p && v.done ? v : { value: p ? ["yield", v.value] : ["await", (o[n] || f).call(o, v)], done: false }, p = !p, v; }; }
+    var i, f;
+    return o = __asyncValues(o), i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n) { return o[n] && function (b) { return (f = !f) ? { value: ["await", new Promise(function(r) { r(o[n](b)); })], done: n === "return" } : b.done ? b : { value: ["yield", b.value], done: false }; }; }
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -297,12 +297,15 @@ var C4 = (function () {
     }
     C4.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
-            var x;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [5 /*yield**/, __values(__asyncDelegator([1]))];
-                    case 1:
-                        x = _a.sent();
+            var x, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = ["await"];
+                        return [5 /*yield**/, __values(__asyncDelegator([1]))];
+                    case 1: return [4 /*yield*/, _a.concat([_b.sent()])];
+                    case 2:
+                        x = _b.sent();
                         return [2 /*return*/];
                 }
             });
@@ -352,9 +355,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function settle(f, v) { c = void 0, f(v), next(); }
 };
 var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-    var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) }, p;
-    return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n, f) { return function (v) { return v = p && n === "throw" ? f(v) : p && v.done ? v : { value: p ? ["yield", v.value] : ["await", (o[n] || f).call(o, v)], done: false }, p = !p, v; }; }
+    var i, f;
+    return o = __asyncValues(o), i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n) { return o[n] && function (b) { return (f = !f) ? { value: ["await", new Promise(function(r) { r(o[n](b)); })], done: n === "return" } : b.done ? b : { value: ["yield", b.value], done: false }; }; }
 };
 var __asyncValues = (this && this.__asyncIterator) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -376,19 +379,22 @@ var C5 = (function () {
     }
     C5.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
-            var x;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [5 /*yield**/, __values(__asyncDelegator((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0: return [4 /*yield*/, ["yield", 1]];
-                                case 1:
-                                    _a.sent();
-                                    return [2 /*return*/];
-                            }
-                        }); }); })()))];
-                    case 1:
-                        x = _a.sent();
+            var x, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = ["await"];
+                        return [5 /*yield**/, __values(__asyncDelegator((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, ["yield", 1]];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            }); }); })()))];
+                    case 1: return [4 /*yield*/, _a.concat([_b.sent()])];
+                    case 2:
+                        x = _b.sent();
                         return [2 /*return*/];
                 }
             });

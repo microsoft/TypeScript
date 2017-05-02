@@ -126,16 +126,19 @@ namespace ts {
         function visitYieldExpression(node: YieldExpression) {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
                 const expression = visitNode(node.expression, visitor, isExpression);
-                return updateYield(
+                const delegator = node.asteriskToken && updateYield(
                     node,
                     node.asteriskToken,
-                    node.asteriskToken
-                        ? createAsyncDelegatorHelper(context, expression, expression)
-                        : createArrayLiteral(
-                            expression
-                            ? [createLiteral("yield"), expression]
-                            : [createLiteral("yield")]
-                        )
+                    createAsyncDelegatorHelper(context, expression, expression)
+                );
+                return updateYield(
+                    node,
+                    /*asteriskToken*/ undefined,
+                    createArrayLiteral(
+                        delegator ? [createLiteral("await"), delegator] :
+                        expression ? [createLiteral("yield"), expression] :
+                        [createLiteral("yield")]
+                    )
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -922,9 +925,9 @@ namespace ts {
         scoped: false,
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-                var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) }, p;
-                return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { return function (v) { return v = p && n === "throw" ? f(v) : p && v.done ? v : { value: p ? ["yield", v.value] : ["await", (o[n] || f).call(o, v)], done: false }, p = !p, v; }; }
+                var i, f;
+                return o = __asyncValues(o), i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.iterator] = function () { return this; }, i;
+                function verb(n) { return o[n] && function (b) { return (f = !f) ? { value: ["await", new Promise(function(r) { r(o[n](b)); })], done: n === "return" } : b.done ? b : { value: ["yield", b.value], done: false }; }; }
             };
         `
     };
