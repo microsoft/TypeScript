@@ -90,9 +90,9 @@ var __asyncValues = (this && this.__asyncIterator) || function (o) {
 };
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-    var i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, p;
-    return i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n) { return o[n] && function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : v; }; }
+    var i, p;
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : v; }; }
 };
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -129,9 +129,9 @@ var __asyncValues = (this && this.__asyncIterator) || function (o) {
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-    var i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, p;
-    return i[Symbol.iterator] = function () { return this; }, i;
-    function verb(n) { return o[n] && function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : v; }; }
+    var i, p;
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+    function verb(n) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : v; }; }
 };
 const f5 = function () {
     return __asyncGenerator(this, arguments, function* () {
