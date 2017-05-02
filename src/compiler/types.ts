@@ -2564,6 +2564,11 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        /** For a union, will include a property if it's defined in *any* of the member types.
+         * So for `{ a } | { b }`, this will include both `a` and `b`.
+         */
+        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
     }
 
     export enum NodeBuilderFlags {

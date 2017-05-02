@@ -813,19 +813,16 @@ namespace ts.Completions {
             // We're looking up possible property names from contextual/inferred/declared type.
             isMemberCompletion = true;
 
-            let typeForObject: Type;
+            let typeMembers: Symbol[];
             let existingMembers: Declaration[];
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 // We are completing on contextual types, but may also include properties
                 // other than those within the declared type.
                 isNewIdentifierLocation = true;
-
-                // If the object literal is being assigned to something of type 'null | { hello: string }',
-                // it clearly isn't trying to satisfy the 'null' type. So we grab the non-nullable type if possible.
-                typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
-                typeForObject = typeForObject && typeForObject.getNonNullableType();
-
+                const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                if (!typeForObject) return false;
+                typeMembers = typeChecker.getAllPossiblePropertiesOfType(typeForObject);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
             else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
@@ -849,7 +846,10 @@ namespace ts.Completions {
                         }
                     }
                     if (canGetType) {
-                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        if (!typeForObject) return false;
+                        // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
+                        typeMembers = typeChecker.getPropertiesOfType(typeForObject);
                         existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                     }
                 }
@@ -861,11 +861,6 @@ namespace ts.Completions {
                 Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
             }
 
-            if (!typeForObject) {
-                return false;
-            }
-
-            const typeMembers = typeChecker.getPropertiesOfType(typeForObject);
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, existingMembers);

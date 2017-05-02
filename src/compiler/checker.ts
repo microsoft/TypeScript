@@ -204,7 +204,8 @@ namespace ts {
                 // since we are only interested in declarations of the module itself
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
-            getApparentType
+            getApparentType,
+            getAllPossiblePropertiesOfType,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -5646,6 +5647,22 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
+        }
+
+        function getAllPossiblePropertiesOfType(type: Type): Symbol[] {
+            if (type.flags & TypeFlags.Union) {
+                const props = createMap<Symbol>();
+                for (const memberType of (type as UnionType).types) {
+                    for (const { name } of getPropertiesOfType(memberType)) {
+                        if (!props.has(name)) {
+                            props.set(name, createUnionOrIntersectionProperty(type as UnionType, name));
+                        }
+                    }
+                }
+                return arrayFrom(props.values());
+            } else {
+                return getPropertiesOfType(type);
+            }
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
