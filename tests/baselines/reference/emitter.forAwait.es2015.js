@@ -43,8 +43,8 @@ function f1() {
     return __awaiter(this, void 0, void 0, function* () {
         let y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield y_1.next(); !y_1_1.done; y_1_1 = yield y_1.next()) {
-                const x = y_1_1.value;
+            for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
+                const x = yield y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -75,8 +75,8 @@ function f2() {
     return __awaiter(this, void 0, void 0, function* () {
         let x, y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield y_1.next(); !y_1_1.done; y_1_1 = yield y_1.next()) {
-                x = y_1_1.value;
+            for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
+                x = yield y_1_1.value;
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
@@ -95,31 +95,30 @@ var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
-    return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
-    function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
-    function step(r) { r.done ? settle(c[2], r) : Promise.resolve(r.value[1]).then(r.value[0] === "yield" ? send : fulfill, reject); }
-    function send(value) { settle(c[2], { value: value, done: false }); }
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
-    function settle(f, v) { c = void 0, f(v), next(); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 function f3() {
     return __asyncGenerator(this, arguments, function* f3_1() {
         let y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield ["await", y_1.next()]; !y_1_1.done; y_1_1 = yield ["await", y_1.next()]) {
-                const x = y_1_1.value;
+            for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
+                const x = yield __await(y_1_1.value);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield ["await", _a.call(y_1)];
+                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield __await(_a.call(y_1));
             }
             finally { if (e_1) throw e_1.error; }
         }
@@ -132,31 +131,30 @@ var __asyncValues = (this && this.__asyncIterator) || function (o) {
     var m = o[Symbol.asyncIterator];
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-    var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
-    return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
-    function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
-    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
-    function step(r) { r.done ? settle(c[2], r) : Promise.resolve(r.value[1]).then(r.value[0] === "yield" ? send : fulfill, reject); }
-    function send(value) { settle(c[2], { value: value, done: false }); }
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
-    function settle(f, v) { c = void 0, f(v), next(); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 function f4() {
     return __asyncGenerator(this, arguments, function* f4_1() {
         let x, y;
         try {
-            for (var y_1 = __asyncValues(y), y_1_1 = yield ["await", y_1.next()]; !y_1_1.done; y_1_1 = yield ["await", y_1.next()]) {
-                x = y_1_1.value;
+            for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield __await(y_1.next()), !y_1_1.done;) {
+                x = yield __await(y_1_1.value);
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield ["await", _a.call(y_1)];
+                if (y_1_1 && !y_1_1.done && (_a = y_1.return)) yield __await(_a.call(y_1));
             }
             finally { if (e_1) throw e_1.error; }
         }
