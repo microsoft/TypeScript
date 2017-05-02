@@ -2184,7 +2184,7 @@ namespace ts {
         function isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult {
             // get symbol of the first identifier of the entityName
             let meaning: SymbolFlags;
-            if (entityName.parent.kind === SyntaxKind.TypeQuery || 
+            if (entityName.parent.kind === SyntaxKind.TypeQuery ||
                 isExpressionWithTypeArgumentsInClassExtendsClause(entityName.parent) ||
                 entityName.parent.kind === SyntaxKind.ComputedPropertyName) {
                 // Typeof value
