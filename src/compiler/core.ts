@@ -1730,13 +1730,18 @@ namespace ts {
 
     /* @internal */
     export function startsWith(str: string, prefix: string): boolean {
-        return str.lastIndexOf(prefix, 0) === 0;
+        return str.indexOf(prefix) === 0;
+    }
+
+    /* @internal */
+    export function removePrefix(str: string, prefix: string | undefined): string {
+        return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
     /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
-        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+        return expectedPos >= 0 && str.lastIndexOf(suffix, expectedPos) === expectedPos;
     }
 
     export function hasExtension(fileName: string): boolean {
@@ -1747,7 +1752,7 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+    export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
                 return true;
@@ -1947,7 +1952,7 @@ namespace ts {
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);

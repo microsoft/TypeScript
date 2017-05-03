@@ -501,14 +501,6 @@ namespace ts.codefix {
                             relativeFileName = getRelativePath(moduleFileName, sourceDirectory);
                         }
 
-                        if (startsWith(relativeFileName, "@types/")) {
-                            relativeFileName = relativeFileName.substr(/*"@types".length*/ 7);
-                            if (relativeFileName.indexOf("__") !== -1) {
-                                // Double underscores are used in DefinitelyTyped to delimit scoped packages.
-                                relativeFileName = "@" + relativeFileName.replace("__", "/");
-                            }
-                        }
-
                         relativeFileName = removeFileExtension(relativeFileName);
                         if (endsWith(relativeFileName, "/index")) {
                             relativeFileName = getDirectoryPath(relativeFileName);
@@ -529,6 +521,8 @@ namespace ts.codefix {
                             }
                             catch (e) { }
                         }
+
+                        relativeFileName = getPackageNameFromAtTypesDirectory(relativeFileName);
 
                         return relativeFileName;
                     }
