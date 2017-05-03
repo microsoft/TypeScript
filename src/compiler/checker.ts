@@ -5775,11 +5775,11 @@ namespace ts {
             const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
-                    t.flags & TypeFlags.NumberLike ? globalNumberType :
-                        t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                            t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
-                                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
-                                    t;
+                t.flags & TypeFlags.NumberLike ? globalNumberType :
+                t.flags & TypeFlags.BooleanLike ? globalBooleanType :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
+                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
+                t;
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
@@ -10439,11 +10439,13 @@ namespace ts {
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
-        // The result is undefined if the reference isn't a dotted name.
+        // The result is undefined if the reference isn't a dotted name. We prefix nodes
+        // occurring in an apparent type position with '@' because the control flow type
+        // of such nodes may be based on the apparent type instead of the declared type.
         function getFlowCacheKey(node: Node): string {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? "" + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -11708,6 +11710,28 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
+        function isApparentTypePosition(node: Node) {
+            // When a node is the left hand expression of a property access or call expression, the node occurs
+            // in an apparent type position. In such a position we fetch the apparent type of the node *before*
+            // performing control flow analysis such that, if the node is a type variable, we apply narrowings
+            // to the constraint type.
+            const parent = node.parent;
+            return parent.kind === SyntaxKind.PropertyAccessExpression ||
+                parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
+                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
+        }
+
+        function getDeclaredOrApparentType(symbol: Symbol, node: Node) {
+            const type = getTypeOfSymbol(symbol);
+            if (isApparentTypePosition(node) && maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
+                const apparentType = mapType(getWidenedType(type), getApparentType);
+                if (apparentType !== emptyObjectType) {
+                    return apparentType;
+                }
+            }
+            return type;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -11783,7 +11807,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getTypeOfSymbol(localOrExportSymbol);
+            const type = getDeclaredOrApparentType(localOrExportSymbol, node);
             const declaration = localOrExportSymbol.valueDeclaration;
             const assignmentKind = getAssignmentTargetKind(node);
 
@@ -14141,7 +14165,7 @@ namespace ts {
 
             checkPropertyAccessibility(node, left, apparentType, prop);
 
-            const propType = getTypeOfSymbol(prop);
+            const propType = getDeclaredOrApparentType(prop, node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
