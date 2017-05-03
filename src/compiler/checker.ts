@@ -2898,7 +2898,7 @@ namespace ts {
 
         function getNameOfSymbol(symbol: Symbol): string {
             if (symbol.flags & SymbolFlags.Dynamic) {
-                return unescapeIdentifier(symbol.name);
+                return `"${escapeString(unescapeIdentifier(symbol.name))}"`;
             }
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
@@ -2940,14 +2940,18 @@ namespace ts {
                 const needsElementAccess = !isIdentifierStart(firstChar, languageVersion);
 
                 if (needsElementAccess) {
-                    writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    if (firstChar !== CharacterCodes.openBracket) {
+                        writePunctuation(writer, SyntaxKind.OpenBracketToken);
+                    }
                     if (isSingleOrDoubleQuote(firstChar)) {
                         writer.writeStringLiteral(symbolName);
                     }
                     else {
                         writer.writeSymbol(symbolName, symbol);
                     }
-                    writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    if (firstChar !== CharacterCodes.openBracket) {
+                        writePunctuation(writer, SyntaxKind.CloseBracketToken);
+                    }
                 }
                 else {
                     writePunctuation(writer, SyntaxKind.DotToken);
@@ -5232,7 +5236,7 @@ namespace ts {
             const nameType = checkComputedPropertyName(<ComputedPropertyName>member.name);
             if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
                 // TODO(rbuckton): ESSymbolLiteral
-                const memberName = escapeIdentifier((<LiteralType>nameType).text);
+                const memberName = (<LiteralType>nameType).text;
                 let symbol = symbolTable.get(memberName);
                 if (!symbol) {
                     symbolTable.set(memberName, symbol = createSymbol(SymbolFlags.Dynamic, memberName));
