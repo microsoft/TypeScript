@@ -14310,7 +14310,8 @@ namespace ts {
         }
 
         function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression {
-            return node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression;
+            // TODO: Also include tagged templates (https://github.com/Microsoft/TypeScript/issues/11947)
+            return isCallOrNewExpression(node);
         }
 
         function resolveUntypedCall(node: CallLikeExpression): Signature {
