@@ -1400,10 +1400,10 @@ namespace ts {
             return resolveExternalModuleSymbol(node.parent.symbol, dontResolveAlias);
         }
 
-        function getTargetOfExportSpecifier(node: ExportSpecifier, dontResolveAlias?: boolean): Symbol {
-            return (<ExportDeclaration>node.parent.parent).moduleSpecifier ?
-                getExternalModuleMember(<ExportDeclaration>node.parent.parent, node, dontResolveAlias) :
-                resolveEntityName(node.propertyName || node.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, /*ignoreErrors*/ false, dontResolveAlias);
+        function getTargetOfExportSpecifier(node: ExportSpecifier, meaning: SymbolFlags, dontResolveAlias?: boolean) {
+            return node.parent.parent.moduleSpecifier ?
+                getExternalModuleMember(node.parent.parent, node, dontResolveAlias) :
+                resolveEntityName(node.propertyName || node.name, meaning, /*ignoreErrors*/ false, dontResolveAlias);
         }
 
         function getTargetOfExportAssignment(node: ExportAssignment, dontResolveAlias: boolean): Symbol {
@@ -1421,7 +1421,7 @@ namespace ts {
                 case SyntaxKind.ImportSpecifier:
                     return getTargetOfImportSpecifier(<ImportSpecifier>node, dontRecursivelyResolve);
                 case SyntaxKind.ExportSpecifier:
-                    return getTargetOfExportSpecifier(<ExportSpecifier>node, dontRecursivelyResolve);
+                    return getTargetOfExportSpecifier(<ExportSpecifier>node, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace, dontRecursivelyResolve);
                 case SyntaxKind.ExportAssignment:
                     return getTargetOfExportAssignment(<ExportAssignment>node, dontRecursivelyResolve);
                 case SyntaxKind.NamespaceExportDeclaration:
@@ -3721,10 +3721,7 @@ namespace ts {
                 exportSymbol = resolveName(node.parent, node.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, Diagnostics.Cannot_find_name_0, node);
             }
             else if (node.parent.kind === SyntaxKind.ExportSpecifier) {
-                const exportSpecifier = <ExportSpecifier>node.parent;
-                exportSymbol = (<ExportDeclaration>exportSpecifier.parent.parent).moduleSpecifier ?
-                    getExternalModuleMember(<ExportDeclaration>exportSpecifier.parent.parent, exportSpecifier) :
-                    resolveEntityName(exportSpecifier.propertyName || exportSpecifier.name, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
+                exportSymbol = getTargetOfExportSpecifier(<ExportSpecifier>node.parent, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias);
             }
             const result: Node[] = [];
             if (exportSymbol) {
@@ -9228,25 +9225,39 @@ namespace ts {
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
 
-                outer: for (const t of targetSignatures) {
-                    // Only elaborate errors from the first failure
-                    let shouldElaborateErrors = reportErrors;
-                    for (const s of sourceSignatures) {
-                        const related = signatureRelatedTo(s, t, shouldElaborateErrors);
-                        if (related) {
-                            result &= related;
-                            errorInfo = saveErrorInfo;
-                            continue outer;
+                if (getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol) {
+                    // We instantiations of the same anonymous type (which typically will be the type of a method).
+                    // Simply do a pairwise comparison of the signatures in the two signature lists instead of the
+                    // much more expensive N * M comparison matrix we explore below.
+                    for (let i = 0; i < targetSignatures.length; i++) {
+                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], reportErrors);
+                        if (!related) {
+                            return Ternary.False;
                         }
-                        shouldElaborateErrors = false;
+                        result &= related;
                     }
+                }
+                else {
+                    outer: for (const t of targetSignatures) {
+                        // Only elaborate errors from the first failure
+                        let shouldElaborateErrors = reportErrors;
+                        for (const s of sourceSignatures) {
+                            const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                            if (related) {
+                                result &= related;
+                                errorInfo = saveErrorInfo;
+                                continue outer;
+                            }
+                            shouldElaborateErrors = false;
+                        }
 
-                    if (shouldElaborateErrors) {
-                        reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
-                            typeToString(source),
-                            signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                        if (shouldElaborateErrors) {
+                            reportError(Diagnostics.Type_0_provides_no_match_for_the_signature_1,
+                                typeToString(source),
+                                signatureToString(t, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, kind));
+                        }
+                        return Ternary.False;
                     }
-                    return Ternary.False;
                 }
                 return result;
             }
