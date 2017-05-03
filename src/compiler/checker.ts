@@ -14227,14 +14227,14 @@ namespace ts {
                     if (candidateName.length < 3 ||
                         name.length < 3 ||
                         candidateName === "eval" ||
-                        candidateName === "Intl" ||
+                        candidateName === "intl" ||
                         candidateName === "undefined" ||
-                        candidateName === "Map" ||
-                        candidateName === "NaN" ||
-                        candidateName === "Set") {
+                        candidateName === "map" ||
+                        candidateName === "nan" ||
+                        candidateName === "set") {
                         continue;
                     }
-                    const distance = levenshtein(candidateName, name);
+                    const distance = levenshtein(name, candidateName);
                     if (distance > worstDistance) {
                         continue;
                     }
