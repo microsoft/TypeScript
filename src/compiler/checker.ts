@@ -13248,6 +13248,8 @@ namespace ts {
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
             let attributesArray: Symbol[] = [];
+            let hasSpreadAnyType = false;
+
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
@@ -13276,31 +13278,33 @@ namespace ts {
                     const exprType = checkExpression(attributeDecl.expression);
                     if (!isValidSpreadType(exprType)) {
                         error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                        return anyType;
+                        hasSpreadAnyType = true;
                     }
                     if (isTypeAny(exprType)) {
-                        return anyType;
+                        hasSpreadAnyType = true;
                     }
                     spread = getSpreadType(spread, exprType);
                 }
             }
 
-            if (spread !== emptyObjectType) {
-                if (attributesArray.length > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
-                    attributesArray = [];
-                    attributesTable = createMap<Symbol>();
-                }
-                attributesArray = getPropertiesOfType(spread);
-            }
-
-            attributesTable = createMap<Symbol>();
-            if (attributesArray) {
-                forEach(attributesArray, (attr) => {
-                    if (!filter || filter(attr)) {
-                        attributesTable.set(attr.name, attr);
+            if (!hasSpreadAnyType) {
+                if (spread !== emptyObjectType) {
+                    if (attributesArray.length > 0) {
+                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
+                        attributesArray = [];
+                        attributesTable = createMap<Symbol>();
                     }
-                });
+                    attributesArray = getPropertiesOfType(spread);
+                }
+
+                attributesTable = createMap<Symbol>();
+                if (attributesArray) {
+                    forEach(attributesArray, (attr) => {
+                        if (!filter || filter(attr)) {
+                            attributesTable.set(attr.name, attr);
+                        }
+                    });
+                }
             }
 
             // Handle children attribute
@@ -13324,7 +13328,7 @@ namespace ts {
                 // Error if there is a attribute named "children" and children element.
                 // This is because children element will overwrite the value from attributes
                 const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                if (jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
                     if (attributesTable.has(jsxChildrenPropertyName)) {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
                     }
@@ -13338,7 +13342,7 @@ namespace ts {
                 }
             }
 
-            return createJsxAttributesType(attributes.symbol, attributesTable);
+            return hasSpreadAnyType ? anyType : createJsxAttributesType(attributes.symbol, attributesTable);
 
             /**
              * Create anonymous type from given attributes symbol table.
