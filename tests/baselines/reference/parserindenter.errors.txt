@@ -112,8 +112,8 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(634,21): 
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(665,34): error TS2304: Cannot find name 'IndentationEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(686,45): error TS2304: Cannot find name 'TextEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(688,34): error TS2304: Cannot find name 'IndentationEditInfo'.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(695,35): error TS2552: Cannot find name 'IndentationEditInfo'. Did you mean 'indentationInfo'?
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(698,39): error TS2552: Cannot find name 'IndentationEditInfo'. Did you mean 'indentationInfo'?
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(695,35): error TS2304: Cannot find name 'IndentationEditInfo'.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(698,39): error TS2304: Cannot find name 'IndentationEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(706,42): error TS2304: Cannot find name 'TextEditInfo'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(709,50): error TS2304: Cannot find name 'TokenSpan'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(709,67): error TS2304: Cannot find name 'ParseNode'.
@@ -1053,12 +1053,12 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     
                     indentationInfo = IndentationEditInfo.create2(indent.Position, indent.ReplaceWith, lineStartPosition, lineIndentLength);
                                       ~~~~~~~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'IndentationEditInfo'. Did you mean 'indentationInfo'?
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
                 }
                 else {
                     indentationInfo = new IndentationEditInfo(indent);
                                           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'IndentationEditInfo'. Did you mean 'indentationInfo'?
+!!! error TS2304: Cannot find name 'IndentationEditInfo'.
                 }
     
                 this.indentationBag.AddIndent(indentationInfo);

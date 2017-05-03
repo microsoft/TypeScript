@@ -319,7 +319,7 @@ namespace ts {
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
         let suggestionCount = 0;
-        const maximumSuggestionCount = 100;
+        const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
