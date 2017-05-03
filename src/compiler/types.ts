@@ -641,10 +641,12 @@ namespace ts {
     }
 
     export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
+        name?: undefined;
         kind: SyntaxKind.CallSignature;
     }
 
     export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
+        name?: undefined;
         kind: SyntaxKind.ConstructSignature;
     }
 
@@ -815,6 +817,7 @@ namespace ts {
     }
 
     export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+        name?: undefined;
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
@@ -847,6 +850,7 @@ namespace ts {
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
     export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
+        name?: undefined;
         kind: SyntaxKind.IndexSignature;
         parent?: ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeLiteralNode;
     }
