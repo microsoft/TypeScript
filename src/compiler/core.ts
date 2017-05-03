@@ -1729,12 +1729,12 @@ namespace ts {
     }
 
     /* @internal */
-    export function startsWith(str: string, prefix: string | undefined): boolean {
+    export function startsWith(str: string, prefix: string): boolean {
         return str.lastIndexOf(prefix, 0) === 0;
     }
 
     /* @internal */
-    export function removePrefix(str: string, prefix: string | undefined): string {
+    export function removePrefix(str: string, prefix: string): string {
         return startsWith(str, prefix) ? str.substr(prefix.length) : str;
     }
 
