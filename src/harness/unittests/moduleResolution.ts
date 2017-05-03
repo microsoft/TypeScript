@@ -1042,7 +1042,7 @@ import b = require("./moduleB");
             assert.equal(diagnostics1.length, 1, "expected one diagnostic");
 
             createProgram(names, {}, compilerHost, program1);
-            assert.isTrue(program1.structureIsReused);
+            assert.isTrue(program1.structureIsReused === StructureIsReused.Completely);
             const diagnostics2 = program1.getFileProcessingDiagnostics().getDiagnostics();
             assert.equal(diagnostics2.length, 1, "expected one diagnostic");
             assert.equal(diagnostics1[0].messageText, diagnostics2[0].messageText, "expected one diagnostic");
