@@ -1236,7 +1236,7 @@ namespace ts {
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
-                if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "void" || name === "never") {
+                if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
                     return true;
                 }
@@ -14224,14 +14224,24 @@ namespace ts {
                     if (candidateName === name) {
                         return candidate;
                     }
-                    if (candidateName.length < 3 || name.length < 3) {
+                    if (candidateName.length < 3 ||
+                        name.length < 3 ||
+                        candidateName === "eval" ||
+                        candidateName === "Intl" ||
+                        candidateName === "undefined" ||
+                        candidateName === "Map" ||
+                        candidateName === "NaN" ||
+                        candidateName === "Set") {
                         continue;
                     }
                     const distance = levenshtein(candidateName, name);
+                    if (distance > worstDistance) {
+                        continue;
+                    }
                     if (distance < 3) {
                         return candidate;
                     }
-                    else if (distance < bestDistance && distance < worstDistance) {
+                    else if (distance < bestDistance) {
                         bestDistance = distance;
                         bestCandidate = candidate;
                     }
