@@ -1741,7 +1741,7 @@ namespace ts {
     /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
-        return expectedPos >= 0 && str.lastIndexOf(suffix, expectedPos) === expectedPos;
+        return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
     export function hasExtension(fileName: string): boolean {
