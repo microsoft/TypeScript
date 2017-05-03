@@ -13438,7 +13438,18 @@ namespace ts {
                 }
             }
 
-            return getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+            const instantiatedSignatures = [];
+            for (const signature of signatures) {
+                if (signature.typeParameters) {
+                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0);
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments));
+                }
+                else {
+                    instantiatedSignatures.push(signature);
+                }
+            }
+
+            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
         /**
