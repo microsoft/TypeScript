@@ -5,7 +5,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,16): error TS2304: Cannot find name 'context'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,23): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,25): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,30): error TS2552: Cannot find name 'value'. Did you mean 'eval'?
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,30): error TS2304: Cannot find name 'value'.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,35): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,37): error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGeneric2.ts(4,41): error TS1005: ';' expected.
@@ -35,7 +35,7 @@ tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserUnterminatedGener
                             ~~~
 !!! error TS2552: Cannot find name 'any'. Did you mean 'NaN'?
                                  ~~~~~
-!!! error TS2552: Cannot find name 'value'. Did you mean 'eval'?
+!!! error TS2304: Cannot find name 'value'.
                                       ~
 !!! error TS1005: ',' expected.
                                         ~~~

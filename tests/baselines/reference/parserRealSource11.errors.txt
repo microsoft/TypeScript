@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(13,22): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(14,24): error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(14,24): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(17,38): error TS2304: Cannot find name 'CompilerDiagnostics'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(24,39): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(36,36): error TS2304: Cannot find name 'TypeFlow'.
@@ -30,7 +30,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(103,22): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(108,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(119,31): error TS2304: Cannot find name 'PrintContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(130,17): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(130,37): error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(130,37): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(137,17): error TS2304: Cannot find name 'nodeTypeTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(138,24): error TS2304: Cannot find name 'nodeTypeTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(141,30): error TS2304: Cannot find name 'NodeType'.
@@ -258,7 +258,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1024,47): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1032,36): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1033,29): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1034,28): error TS2304: Cannot find name 'BasicBlock'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1036,31): error TS2552: Cannot find name 'ControlFlowContext'. Did you mean 'controlFlowPrefix'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1036,31): error TS2304: Cannot find name 'ControlFlowContext'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1038,69): error TS2304: Cannot find name 'IAstWalker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1043,26): error TS2304: Cannot find name 'getAstWalkerFactory'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1050,36): error TS2304: Cannot find name 'TypeFlow'.
@@ -343,7 +343,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1286,36): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1290,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1290,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1295,32): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1297,27): error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1297,27): error TS2304: Cannot find name 'ASTFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1306,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1314,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(1317,30): error TS2304: Cannot find name 'Emitter'.
@@ -474,8 +474,8 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2107,50): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2108,54): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2112,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2119,42): error TS2304: Cannot find name 'ControlFlowContext'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2120,36): error TS2552: Cannot find name 'BasicBlock'. Did you mean 'finBlock'?
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2122,32): error TS2552: Cannot find name 'BasicBlock'. Did you mean 'finBlock'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2120,36): error TS2304: Cannot find name 'BasicBlock'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2122,32): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2145,19): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2150,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2150,48): error TS2304: Cannot find name 'TokenID'.
@@ -500,9 +500,9 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2231,48): error
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2237,48): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2240,47): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2245,42): error TS2304: Cannot find name 'ControlFlowContext'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2248,36): error TS2552: Cannot find name 'BasicBlock'. Did you mean 'bodBlock'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2248,36): error TS2304: Cannot find name 'BasicBlock'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2259,36): error TS2304: Cannot find name 'TypeFlow'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2263,33): error TS2552: Cannot find name 'ValueLocation'. Did you mean 'LocationInfo'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2263,33): error TS2304: Cannot find name 'ValueLocation'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2264,30): error TS2304: Cannot find name 'VariableSymbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2269,38): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2300,19): error TS2304: Cannot find name 'NodeType'.
@@ -537,7 +537,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'Type'.
             public flags = ASTFlags.Writeable;
                            ~~~~~~~~
-!!! error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+!!! error TS2304: Cannot find name 'ASTFlags'.
     
             // REVIEW: for diagnostic purposes
             public passCreated: number = CompilerDiagnostics.analysisPass;
@@ -713,7 +713,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                     ~~~~~~~
 !!! error TS2304: Cannot find name 'hasFlag'.
                                         ~~~~~~~~
-!!! error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+!!! error TS2304: Cannot find name 'ASTFlags'.
                     lab += " (Error)";
                 }
                 context.writeLine(lab);
@@ -2075,7 +2075,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
     
                 var context = new ControlFlowContext(entry, exit);
                                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'ControlFlowContext'. Did you mean 'controlFlowPrefix'?
+!!! error TS2304: Cannot find name 'ControlFlowContext'.
     
                 var controlFlowPrefix = (ast: AST, parent: AST, walker: IAstWalker) => {
                                                                         ~~~~~~~~~~
@@ -2506,7 +2506,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                 super(nodeType);
                 this.flags |= ASTFlags.IsStatement;
                               ~~~~~~~~
-!!! error TS2552: Cannot find name 'ASTFlags'. Did you mean 'ASTList'?
+!!! error TS2304: Cannot find name 'ASTFlags'.
             }
     
             public isLoop() { return false; }
@@ -3591,11 +3591,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'ControlFlowContext'.
                 var afterFinally = new BasicBlock();
                                        ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BasicBlock'. Did you mean 'finBlock'?
+!!! error TS2304: Cannot find name 'BasicBlock'.
                 context.walk(this.tryNode, this);
                 var finBlock = new BasicBlock();
                                    ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BasicBlock'. Did you mean 'finBlock'?
+!!! error TS2304: Cannot find name 'BasicBlock'.
                 if (context.current) {
                     context.current.addSuccessor(finBlock);
                 }
@@ -3771,7 +3771,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                     context.addContent(this.param);
                     var bodBlock = new BasicBlock();
                                        ~~~~~~~~~~
-!!! error TS2552: Cannot find name 'BasicBlock'. Did you mean 'bodBlock'?
+!!! error TS2304: Cannot find name 'BasicBlock'.
                     context.current.addSuccessor(bodBlock);
                     context.current = bodBlock;
                 }
@@ -3790,7 +3790,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                 this.param = <VarDecl>typeFlow.typeCheck(this.param);
                 var exceptVar = new ValueLocation();
                                     ~~~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'ValueLocation'. Did you mean 'LocationInfo'?
+!!! error TS2304: Cannot find name 'ValueLocation'.
                 var varSym = new VariableSymbol((<VarDecl>this.param).id.text,
                                  ~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'VariableSymbol'.

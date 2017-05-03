@@ -53,11 +53,11 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(186,75): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(189,25): error TS2304: Cannot find name 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(189,46): error TS2304: Cannot find name 'ModuleDeclaration'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(191,25): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(191,54): error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(191,54): error TS2304: Cannot find name 'ModuleFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(192,22): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(192,51): error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(192,51): error TS2304: Cannot find name 'ModuleFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(194,26): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(194,55): error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(194,55): error TS2304: Cannot find name 'ModuleFlags'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(195,25): error TS2304: Cannot find name 'Identifier'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(197,25): error TS2304: Cannot find name 'isQuoted'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(200,25): error TS2304: Cannot find name 'TypeSymbol'.
@@ -606,18 +606,18 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource7.ts(828,13): error T
                             ~~~~~~~
 !!! error TS2304: Cannot find name 'hasFlag'.
                                                          ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+!!! error TS2304: Cannot find name 'ModuleFlags'.
             var isEnum = hasFlag(moduleDecl.modFlags, ModuleFlags.IsEnum);
                          ~~~~~~~
 !!! error TS2304: Cannot find name 'hasFlag'.
                                                       ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+!!! error TS2304: Cannot find name 'ModuleFlags'.
             var isGlobal = context.scopeChain.container == context.checker.gloMod;
             var isExported = hasFlag(moduleDecl.modFlags, ModuleFlags.Exported);
                              ~~~~~~~
 !!! error TS2304: Cannot find name 'hasFlag'.
                                                           ~~~~~~~~~~~
-!!! error TS2552: Cannot find name 'ModuleFlags'. Did you mean 'moduleDecl'?
+!!! error TS2304: Cannot find name 'ModuleFlags'.
             var modName = (<Identifier>moduleDecl.name).text;
                             ~~~~~~~~~~
 !!! error TS2304: Cannot find name 'Identifier'.
