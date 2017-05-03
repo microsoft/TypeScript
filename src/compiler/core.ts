@@ -1729,8 +1729,8 @@ namespace ts {
     }
 
     /* @internal */
-    export function startsWith(str: string, prefix: string): boolean {
-        return str.indexOf(prefix) === 0;
+    export function startsWith(str: string, prefix: string | undefined): boolean {
+        return str.lastIndexOf(prefix, 0) === 0;
     }
 
     /* @internal */
