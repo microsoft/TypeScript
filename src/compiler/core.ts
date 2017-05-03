@@ -1752,6 +1752,7 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
+    /* @internal */
     export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
