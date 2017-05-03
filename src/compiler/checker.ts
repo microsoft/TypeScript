@@ -14205,7 +14205,7 @@ namespace ts {
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
             const worstDistance = name.length * 0.4;
-            const maximumLengthDifference = Math.min(4, name.length * 0.34);
+            const maximumLengthDifference = Math.min(3, name.length * 0.34);
             let bestDistance = Number.MAX_VALUE;
             let bestCandidate = undefined;
             if (name.length > 30) {
