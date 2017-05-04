@@ -11717,17 +11717,18 @@ namespace ts {
                 parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
         }
 
+        function typeHasNullableConstraint(type: Type) {
+            return type.flags & TypeFlags.TypeVariable && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
+        }
+
         function getDeclaredOrApparentType(symbol: Symbol, node: Node) {
             // When a node is the left hand expression of a property access, element access, or call expression,
             // and the type of the node includes type variables with constraints that are nullable, we fetch the
             // apparent type of the node *before* performing control flow analysis such that narrowings apply to
             // the constraint type.
             const type = getTypeOfSymbol(symbol);
-            if (isApparentTypePosition(node) && maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
-                const apparentType = mapType(getWidenedType(type), getApparentType);
-                if (maybeTypeOfKind(apparentType, TypeFlags.Nullable)) {
-                    return apparentType;
-                }
+            if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getApparentType);
             }
             return type;
         }
