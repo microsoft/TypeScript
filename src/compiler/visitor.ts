@@ -322,7 +322,8 @@ namespace ts {
                     nodesVisitor((<UnionOrIntersectionTypeNode>node).types, visitor, isTypeNode));
 
             case SyntaxKind.ParenthesizedType:
-                throw Debug.fail("not implemented.");
+                return updateParenthesizedTypeNode(<ParenthesizedTypeNode>node,
+                    visitNode((<ParenthesizedTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.TypeOperator:
                 return updateTypeOperatorNode(<TypeOperatorNode>node, visitNode((<TypeOperatorNode>node).type, visitor, isTypeNode));

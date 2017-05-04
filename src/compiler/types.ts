@@ -2559,14 +2559,36 @@ namespace ts {
 
     export enum NodeBuilderFlags {
         None                                    = 0,
-        allowThisInObjectLiteral                = 1 << 0,
-        allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
-        allowTypeParameterInQualifiedName       = 1 << 2,
-        allowAnonymousIdentifier                = 1 << 3,
-        allowEmptyUnionOrIntersection = 1 << 4,
-        allowEmptyTuple = 1 << 5,
-        suppressAnyReturnType = 1 << 6,
-        ignoreErrors = allowThisInObjectLiteral | allowQualifedNameInPlaceOfIdentifier | allowTypeParameterInQualifiedName | allowAnonymousIdentifier | allowEmptyUnionOrIntersection | allowEmptyTuple
+        // Options
+        NoTruncation                            = 1 << 0,   // Don't truncate result
+        // TODO: part of emit.
+        WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
+        // TODO: part of emit.
+        UseTypeOfFunction                       = 1 << 2,   // Write typeof instead of function type literal
+        // TODO: part of emit.
+        WriteArrowStyleSignature                = 1 << 3,   // Write arrow style signature
+        // TODO: turn it into a failing type reference?
+        WriteOwnNameForAnyLike                  = 1 << 4,   // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        // TODO
+        WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
+        // TODO
+        UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        // TODO
+        UseTypeAliasValue                       = 1 << 7,   // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
+        SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
+        // TODO
+        AddUndefined                            = 1 << 9,   // Add undefined to types of initialized, non-optional parameters
+
+        // Error handling
+        allowThisInObjectLiteral                = 1 << 10,
+        allowQualifedNameInPlaceOfIdentifier    = 1 << 11,
+        allowTypeParameterInQualifiedName       = 1 << 12,
+        allowAnonymousIdentifier                = 1 << 13,
+        allowEmptyUnionOrIntersection           = 1 << 14,
+        allowEmptyTuple                         = 1 << 15,
+
+        ignoreErrors = allowThisInObjectLiteral | allowQualifedNameInPlaceOfIdentifier | allowTypeParameterInQualifiedName | allowAnonymousIdentifier | allowEmptyUnionOrIntersection | allowEmptyTuple,
+
     }
 
     export interface SymbolDisplayBuilder {
