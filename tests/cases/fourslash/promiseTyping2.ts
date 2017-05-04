@@ -14,24 +14,12 @@
 ////     return x/*7*/x;
 //// });
 
-
-goTo.marker("1");
-verify.quickInfoIs('var p1: IPromise<number>');
-
-goTo.marker("2");
-verify.quickInfoIs('(parameter) xx: number');
-
-goTo.marker("3");
-verify.quickInfoIs('var p2: IPromise<string>');
-
-goTo.marker("4");
-verify.quickInfoIs('(parameter) xx: number');
-
-goTo.marker("5");
-verify.quickInfoIs('var p3: IPromise<string>');
-
-goTo.marker("6");
-verify.quickInfoIs('(parameter) xx: string');
-
-goTo.marker("7");
-verify.quickInfoIs('(parameter) xx: string');
+verify.quickInfos({
+    1: "var p1: IPromise<number>",
+    2: "(parameter) xx: number",
+    3: "var p2: IPromise<string>",
+    4: "(parameter) xx: number",
+    5: "var p3: IPromise<string>",
+    6: "(parameter) xx: string",
+    7: "(parameter) xx: string"
+});

@@ -11,6 +11,7 @@ export class DbSet<T> {
 //// [genericReturnTypeFromGetter1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var DbSet = (function () {
         function DbSet() {
         }

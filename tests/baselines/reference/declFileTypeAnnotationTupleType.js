@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationTupleType.ts]
-
 class c {
 }
 module m {

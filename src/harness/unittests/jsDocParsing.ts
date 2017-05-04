@@ -7,7 +7,7 @@ namespace ts {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {
                     const typeAndDiagnostics = ts.parseJSDocTypeExpressionForTests(content);
-                    assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0);
+                    assert.isTrue(typeAndDiagnostics && typeAndDiagnostics.diagnostics.length === 0, "no errors issued");
 
                     Harness.Baseline.runBaseline("JSDocParsing/TypeExpressions.parsesCorrectly." + name + ".json",
                         () => Utils.sourceFileToJSON(typeAndDiagnostics.jsDocTypeExpression.type));
@@ -36,6 +36,9 @@ namespace ts {
                 parsesCorrectly("recordType6", "{{foo, bar: number}}");
                 parsesCorrectly("recordType7", "{{foo: number, bar: number}}");
                 parsesCorrectly("recordType8", "{{function}}");
+                parsesCorrectly("trailingCommaInRecordType", "{{a,}}");
+                parsesCorrectly("callSignatureInRecordType", "{{(): number}}");
+                parsesCorrectly("methodInRecordType", "{{foo(): number}}");
                 parsesCorrectly("unionType", "{(number|string)}");
                 parsesCorrectly("topLevelNoParenUnionType", "{number|string}");
                 parsesCorrectly("functionType1", "{function()}");
@@ -63,7 +66,6 @@ namespace ts {
 
             describe("parsesIncorrectly", () => {
                 parsesIncorrectly("emptyType", "{}");
-                parsesIncorrectly("trailingCommaInRecordType", "{{a,}}");
                 parsesIncorrectly("unionTypeWithTrailingBar", "{(a|)}");
                 parsesIncorrectly("unionTypeWithoutTypes", "{()}");
                 parsesIncorrectly("nullableTypeWithoutType", "{!}");
@@ -80,8 +82,6 @@ namespace ts {
                 parsesIncorrectly("tsConstructoType", "{new () => string}");
                 parsesIncorrectly("typeOfType", "{typeof M}");
                 parsesIncorrectly("namedParameter", "{function(a: number)}");
-                parsesIncorrectly("callSignatureInRecordType", "{{(): number}}");
-                parsesIncorrectly("methodInRecordType", "{{foo(): number}}");
                 parsesIncorrectly("tupleTypeWithComma", "{[,]}");
                 parsesIncorrectly("tupleTypeWithTrailingComma", "{[number,]}");
                 parsesIncorrectly("tupleTypeWithLeadingComma", "{[,number]}");
@@ -100,8 +100,8 @@ namespace ts {
                     }
 
                     Harness.Baseline.runBaseline("JSDocParsing/DocComments.parsesCorrectly." + name + ".json",
-                        () => JSON.stringify(comment.jsDocComment,
-                            (k, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
+                        () => JSON.stringify(comment.jsDoc,
+                            (_, v) => v && v.pos !== undefined ? JSON.parse(Utils.sourceFileToJSON(v)) : v, 4));
                 });
             }
 
@@ -115,7 +115,6 @@ namespace ts {
             describe("parsesIncorrectly", () => {
                 parsesIncorrectly("emptyComment", "/***/");
                 parsesIncorrectly("threeAsterisks", "/*** */");
-                parsesIncorrectly("asteriskAfterPreamble", "/** * @type {number} */");
                 parsesIncorrectly("multipleTypes",
                         `/**
   * @type {number}
@@ -167,6 +166,7 @@ namespace ts {
   * @type {number}
   */`);
 
+                parsesCorrectly("asteriskAfterPreamble", "/** * @type {number} */");
 
                 parsesCorrectly("typeTag",
 `/**
@@ -286,6 +286,25 @@ namespace ts {
   * @property {number} age
   * @property {string} name
   */`);
+            });
+        });
+        describe("getFirstToken", () => {
+            it("gets jsdoc", () => {
+                const root = ts.createSourceFile("foo.ts", "/** comment */var a = true;", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(root);
+                assert.equal(root.kind, ts.SyntaxKind.SourceFile);
+                const first = root.getFirstToken();
+                assert.isDefined(first);
+                assert.equal(first.kind, ts.SyntaxKind.VarKeyword);
+            });
+        });
+        describe("getLastToken", () => {
+            it("gets jsdoc", () => {
+                const root = ts.createSourceFile("foo.ts", "var a = true;/** comment */", ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+                assert.isDefined(root);
+                const last = root.getLastToken();
+                assert.isDefined(last);
+                assert.equal(last.kind, ts.SyntaxKind.EndOfFileToken);
             });
         });
     });

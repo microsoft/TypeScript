@@ -1,0 +1,25 @@
+=== tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(optionalProperties01.ts, 0, 0))
+
+  required1: string;
+>required1 : Symbol(Foo.required1, Decl(optionalProperties01.ts, 0, 15))
+
+  required2: string;
+>required2 : Symbol(Foo.required2, Decl(optionalProperties01.ts, 1, 20))
+
+  optional?: string;
+>optional : Symbol(Foo.optional, Decl(optionalProperties01.ts, 2, 20))
+}
+
+const foo1 = { required1: "hello" } as Foo;
+>foo1 : Symbol(foo1, Decl(optionalProperties01.ts, 6, 5))
+>required1 : Symbol(required1, Decl(optionalProperties01.ts, 6, 14))
+>Foo : Symbol(Foo, Decl(optionalProperties01.ts, 0, 0))
+
+const foo2 = { required1: "hello", optional: "bar" } as Foo;
+>foo2 : Symbol(foo2, Decl(optionalProperties01.ts, 7, 5))
+>required1 : Symbol(required1, Decl(optionalProperties01.ts, 7, 14))
+>optional : Symbol(optional, Decl(optionalProperties01.ts, 7, 34))
+>Foo : Symbol(Foo, Decl(optionalProperties01.ts, 0, 0))
+

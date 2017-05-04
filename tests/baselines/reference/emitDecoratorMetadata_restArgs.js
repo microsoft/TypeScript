@@ -1,5 +1,4 @@
 //// [emitDecoratorMetadata_restArgs.ts]
-
 declare const MyClassDecorator: ClassDecorator;
 declare const MyMethodDecorator: MethodDecorator;
 
@@ -32,13 +31,13 @@ var A = (function () {
     function A() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     A.prototype.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     };
     return A;
@@ -57,13 +56,13 @@ var B = (function () {
     function B() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     B.prototype.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     };
     return B;

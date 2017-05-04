@@ -1,5 +1,4 @@
 //// [sourceMap-InterfacePrecedingVariableDeclaration1.ts]
-
 interface I {}
 var x = 0;
 

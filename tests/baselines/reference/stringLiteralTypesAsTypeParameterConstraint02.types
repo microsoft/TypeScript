@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesAsTypeParameterConstraint02.ts ===
-
 function foo<T extends "foo">(f: (x: T) => T) {
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
 >T : T
@@ -26,7 +25,7 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 >"foo" : "foo"
 
 let fResult = f("foo");
->fResult : string
+>fResult : "foo"
 >f("foo") : "foo"
 >f : (x: "foo") => "foo"
 >"foo" : "foo"

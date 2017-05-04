@@ -1,0 +1,37 @@
+tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts(13,17): error TS2345: Argument of type 'A<T> | B<T>' is not assignable to parameter of type 'A<T>'.
+  Type 'B<T>' is not assignable to type 'A<T>'.
+    Property 'a' is missing in type 'B<T>'.
+
+
+==== tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts (1 errors) ====
+    class A<T> {
+        constructor(private a: string) { }
+    }
+    
+    class B<T> {
+    }
+    
+    function acceptA<T>(a: A<T>) { }
+    function acceptB<T>(b: B<T>) { }
+    
+    function test<T>(x: A<T> | B<T>) {
+        if (x instanceof B) {
+            acceptA(x);
+                    ~
+!!! error TS2345: Argument of type 'A<T> | B<T>' is not assignable to parameter of type 'A<T>'.
+!!! error TS2345:   Type 'B<T>' is not assignable to type 'A<T>'.
+!!! error TS2345:     Property 'a' is missing in type 'B<T>'.
+        }
+    
+        if (x instanceof A) {
+            acceptA(x);
+        }
+    
+        if (x instanceof B) {
+            acceptB(x);
+        }
+    
+        if (x instanceof B) {
+            acceptB(x);
+        }
+    }

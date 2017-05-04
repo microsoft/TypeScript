@@ -25,11 +25,11 @@
 
 
 goTo.marker();
-verify.not.memberListContains("publicProperty");
-verify.memberListContains("publicInstanceMethod");
+verify.not.completionListContains("publicProperty");
+verify.completionListContains("publicInstanceMethod");
 // No statics
-verify.not.memberListContains("publicStaticProperty");
-verify.not.memberListContains("publicStaticMethod");
+verify.not.completionListContains("publicStaticProperty");
+verify.not.completionListContains("publicStaticMethod");
 // No privates
-verify.not.memberListContains("privateProperty");
-verify.not.memberListContains("privateInstanceMethod");
+verify.not.completionListContains("privateProperty");
+verify.not.completionListContains("privateInstanceMethod");

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/keepImportsInDts1.ts] ////
 
 //// [test.d.ts]
-
 export {}; 
 //// [main.ts]
 import "test"
@@ -9,6 +8,7 @@ import "test"
 //// [main.js]
 define(["require", "exports", "test"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 
 

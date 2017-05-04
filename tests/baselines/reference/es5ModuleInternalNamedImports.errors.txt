@@ -1,3 +1,4 @@
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
@@ -5,15 +6,13 @@ tests/cases/compiler/es5ModuleInternalNamedImports.ts(26,5): error TS1194: Expor
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(31,25): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(32,20): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(33,32): error TS1147: Import declarations in a namespace cannot reference a module.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(35,16): error TS2307: Cannot find module 'M3'.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(31,20): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cannot find module 'M3'.
 
 
 ==== tests/cases/compiler/es5ModuleInternalNamedImports.ts (12 errors) ====
-    
     export module M {
         // variable
         export var M_V = 0;

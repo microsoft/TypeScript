@@ -1,6 +1,4 @@
 //// [shorthandPropertyAssignmentsInDestructuring.ts]
-
-
 (function() {
 	var s0;
 	for ({ s0 = 5 } of [{ s0: 1 }]) {
@@ -176,63 +174,63 @@ function foo({a = 4, b = { x: 5 }}) {
 });
 (function () {
     var y;
-    (_a = { y: 1 }, _b = _a.y, y = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = { y: 1 }.y, y = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y;
-    (_a = { y: 1 }, _b = _a.y, y = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = { y: 1 }.y, y = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y0;
-    (_a = { y0: 1 }, _b = _a.y0, y0 = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = { y0: 1 }.y0, y0 = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y0;
-    (_a = { y0: 1 }, _b = _a.y0, y0 = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = { y0: 1 }.y0, y0 = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y1;
-    (_a = {}, _b = _a.y1, y1 = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y1;
-    (_a = {}, _b = _a.y1, y1 = _b === void 0 ? 5 : _b, _a);
-    var _a, _b;
+    (_a = {}.y1, y1 = _a === void 0 ? 5 : _a);
+    var _a;
 });
 (function () {
     var y2, y3;
-    (_a = {}, _b = _a.y2, y2 = _b === void 0 ? 5 : _b, _c = _a.y3, y3 = _c === void 0 ? { x: 1 } : _c, _a);
+    (_a = {}, _b = _a.y2, y2 = _b === void 0 ? 5 : _b, _c = _a.y3, y3 = _c === void 0 ? { x: 1 } : _c);
     var _a, _b, _c;
 });
 (function () {
     var y2, y3;
-    (_a = {}, _b = _a.y2, y2 = _b === void 0 ? 5 : _b, _c = _a.y3, y3 = _c === void 0 ? { x: 1 } : _c, _a);
+    (_a = {}, _b = _a.y2, y2 = _b === void 0 ? 5 : _b, _c = _a.y3, y3 = _c === void 0 ? { x: 1 } : _c);
     var _a, _b, _c;
 });
 (function () {
     var y4, y5;
-    (_a = {}, _b = _a.y4, y4 = _b === void 0 ? 5 : _b, _c = _a.y5, y5 = _c === void 0 ? { x: 1 } : _c, _a);
+    (_a = {}, _b = _a.y4, y4 = _b === void 0 ? 5 : _b, _c = _a.y5, y5 = _c === void 0 ? { x: 1 } : _c);
     var _a, _b, _c;
 });
 (function () {
     var y4, y5;
-    (_a = {}, _b = _a.y4, y4 = _b === void 0 ? 5 : _b, _c = _a.y5, y5 = _c === void 0 ? { x: 1 } : _c, _a);
+    (_a = {}, _b = _a.y4, y4 = _b === void 0 ? 5 : _b, _c = _a.y5, y5 = _c === void 0 ? { x: 1 } : _c);
     var _a, _b, _c;
 });
 (function () {
     var z;
-    (_a = { z: { x: 1 } }, _b = _a.z, z = _b === void 0 ? { x: 5 } : _b, _a);
-    var _a, _b;
+    (_a = { z: { x: 1 } }.z, z = _a === void 0 ? { x: 5 } : _a);
+    var _a;
 });
 (function () {
     var z;
-    (_a = { z: { x: 1 } }, _b = _a.z, z = _b === void 0 ? { x: 5 } : _b, _a);
-    var _a, _b;
+    (_a = { z: { x: 1 } }.z, z = _a === void 0 ? { x: 5 } : _a);
+    var _a;
 });
 (function () {
     var a = { s: s };

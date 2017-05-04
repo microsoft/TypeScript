@@ -41,7 +41,9 @@ tests/cases/**/*.js.map
 scripts/debug.bat
 scripts/run.bat
 scripts/word2md.js
+scripts/buildProtocol.js
 scripts/ior.js
+scripts/buildProtocol.js
 scripts/*.js.map
 scripts/typings/
 coverage/
@@ -55,3 +57,4 @@ internal/
 !tests/cases/projects/NodeModulesSearch/**/*
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
+yarn.lock

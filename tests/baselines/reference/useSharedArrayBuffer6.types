@@ -1,5 +1,4 @@
 === tests/cases/conformance/es2017/useSharedArrayBuffer6.ts ===
-
 var foge = new SharedArrayBuffer(1024);
 >foge : SharedArrayBuffer
 >new SharedArrayBuffer(1024) : SharedArrayBuffer
@@ -15,7 +14,7 @@ var species = foge[Symbol.species];
 >species : symbol
 
 var stringTag = foge[Symbol.toStringTag];
->stringTag : string
+>stringTag : "SharedArrayBuffer"
 >foge[Symbol.toStringTag] : "SharedArrayBuffer"
 >foge : SharedArrayBuffer
 >Symbol.toStringTag : symbol

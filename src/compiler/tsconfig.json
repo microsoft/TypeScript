@@ -1,14 +1,9 @@
 {
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "noImplicitThis": true,
         "removeComments": true,
-        "preserveConstEnums": true,
-        "pretty": true,
         "outFile": "../../built/local/tsc.js",
-        "sourceMap": true,
-        "declaration": true,
-        "stripInternal": true
+        "declaration": true
     },
     "files": [
         "core.ts",
@@ -24,13 +19,17 @@
         "visitor.ts",
         "transformers/ts.ts",
         "transformers/jsx.ts",
-        "transformers/es7.ts",
-        "transformers/es6.ts",
+        "transformers/esnext.ts",
+        "transformers/es2017.ts",
+        "transformers/es2016.ts",
+        "transformers/es2015.ts",
+        "transformers/es5.ts",
         "transformers/generators.ts",
+        "transformers/es5.ts",
         "transformers/destructuring.ts",
         "transformers/module/module.ts",
         "transformers/module/system.ts",
-        "transformers/module/es6.ts",
+        "transformers/module/es2015.ts",
         "transformer.ts",
         "comments.ts",
         "sourcemap.ts",

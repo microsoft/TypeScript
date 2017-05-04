@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target6.ts]
-
 export function f1(d = 0) {
 }
 
@@ -11,15 +10,15 @@ export default function f3(d = 0) {
 
 
 //// [es6modulekindWithES5Target6.js]
-function f1(d) {
+export function f1(d) {
     if (d === void 0) { d = 0; }
 }
-function f2() {
+export function f2() {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
 }
-function f3(d) {
+export default function f3(d) {
     if (d === void 0) { d = 0; }
 }

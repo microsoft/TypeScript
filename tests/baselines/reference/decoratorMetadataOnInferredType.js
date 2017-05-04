@@ -1,5 +1,4 @@
 //// [decoratorMetadataOnInferredType.ts]
-
 declare var console: {
     log(msg: string): void;
 };
@@ -19,6 +18,7 @@ export class B {
 
 //// [decoratorMetadataOnInferredType.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
         console.log('new A');
@@ -33,8 +33,8 @@ var B = (function () {
     }
     return B;
 }());
-exports.B = B;
 __decorate([
     decorator,
     __metadata("design:type", Object)
 ], B.prototype, "x", void 0);
+exports.B = B;

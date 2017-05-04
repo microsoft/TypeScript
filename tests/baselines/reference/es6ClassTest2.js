@@ -159,11 +159,16 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 
 
 //// [es6ClassTest2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var BasicMonster = (function () {
     function BasicMonster(name, health) {
         this.name = name;
@@ -236,7 +241,7 @@ var SplatMonster = (function () {
     function SplatMonster() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     SplatMonster.prototype.roar = function (name) {
@@ -267,7 +272,7 @@ var SuperParent = (function () {
 var SuperChild = (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        _super.call(this, 1);
+        return _super.call(this, 1) || this;
     }
     SuperChild.prototype.b = function () {
         _super.prototype.b.call(this, 'str');
@@ -314,7 +319,7 @@ var BaseClassWithConstructor = (function () {
 var ChildClassWithoutConstructor = (function (_super) {
     __extends(ChildClassWithoutConstructor, _super);
     function ChildClassWithoutConstructor() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ChildClassWithoutConstructor;
 }(BaseClassWithConstructor));

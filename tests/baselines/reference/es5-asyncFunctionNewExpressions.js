@@ -112,14 +112,14 @@ function newExpression1() {
 }
 function newExpression2() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     _a = x.bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_a.apply(x, [_c.sent(), z]))();
+                    new (_a.apply(x, [void 0, _b.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -132,7 +132,7 @@ function newExpression3() {
             switch (_c.label) {
                 case 0:
                     _a = x.bind;
-                    _b = [y];
+                    _b = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_a.apply(x, _b.concat([_c.sent()])))();
@@ -168,16 +168,16 @@ function newExpression5() {
 }
 function newExpression6() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var _a, _b, _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
                     _e = (_d = [void 0]).concat;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_g.sent()), [z]])])))();
+                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_f.sent()), [z]])])))();
                     return [2 /*return*/];
             }
         });
@@ -185,9 +185,9 @@ function newExpression6() {
 }
 function newExpression7() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f, _g;
-        return __generator(this, function (_h) {
-            switch (_h.label) {
+        var _a, _b, _c, _d, _e, _f;
+        return __generator(this, function (_g) {
+            switch (_g.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
@@ -195,7 +195,7 @@ function newExpression7() {
                     _f = [y];
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, _f.concat([[_h.sent()]]))])))();
+                    new (_b.apply(_a, _c.concat([_e.apply(_d, _f.concat([[_g.sent()]]))])))();
                     return [2 /*return*/];
             }
         });
@@ -220,16 +220,16 @@ function newExpression8() {
 }
 function newExpression9() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var _a, _b, _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     _b = (_a = x.bind).apply;
                     _c = [x];
                     _e = (_d = [void 0, y]).concat;
                     return [4 /*yield*/, z];
                 case 1:
-                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_g.sent())])])))();
+                    new (_b.apply(_a, _c.concat([_e.apply(_d, [(_f.sent())])])))();
                     return [2 /*return*/];
             }
         });
@@ -273,14 +273,14 @@ function newExpression12() {
 }
 function newExpression13() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _b = (_a = x.a).bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, [_d.sent(), z]))();
+                    new (_b.apply(_a, [void 0, _c.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -293,7 +293,7 @@ function newExpression14() {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x.a).bind;
-                    _c = [y];
+                    _c = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_b.apply(_a, _c.concat([_d.sent()])))();
@@ -355,14 +355,14 @@ function newExpression18() {
 }
 function newExpression19() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     _b = (_a = x[a]).bind;
                     return [4 /*yield*/, y];
                 case 1:
-                    new (_b.apply(_a, [_d.sent(), z]))();
+                    new (_b.apply(_a, [void 0, _c.sent(), z]))();
                     return [2 /*return*/];
             }
         });
@@ -375,7 +375,7 @@ function newExpression20() {
             switch (_d.label) {
                 case 0:
                     _b = (_a = x[a]).bind;
-                    _c = [y];
+                    _c = [void 0, y];
                     return [4 /*yield*/, z];
                 case 1:
                     new (_b.apply(_a, _c.concat([_d.sent()])))();

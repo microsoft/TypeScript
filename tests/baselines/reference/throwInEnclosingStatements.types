@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/throwStatements/throwInEnclosingStatements.ts ===
-
 function fn(x) {
 >fn : (x: any) => void
 >x : any
@@ -25,7 +24,7 @@ switch (y) {
 >'a' : "a"
 
         throw y;
->y : string
+>y : "a"
 
     default:
         throw y;

@@ -1,5 +1,4 @@
 //// [typeGuardFunctionErrors.ts]
-
 class A {
     propA: number;
 }
@@ -146,11 +145,16 @@ if (hasMissingParameter()) {
 }
 
 //// [typeGuardFunctionErrors.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A = (function () {
     function A() {
     }
@@ -164,14 +168,13 @@ var B = (function () {
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }(A));
 function hasANonBooleanReturnStatement(x) {
     return '';
 }
-function hasTypeGuardTypeInsideTypeGuardType(x) { }
 is;
 A;
 {
@@ -232,7 +235,6 @@ function b2(a, A) {
     if (a === void 0) { a = is; }
 }
 ;
-function b3() { }
 is;
 A;
 {
@@ -266,7 +268,7 @@ C;
 function b4() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
     return true;
 }

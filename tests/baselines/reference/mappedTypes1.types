@@ -1,0 +1,170 @@
+=== tests/cases/conformance/types/mapped/mappedTypes1.ts ===
+type Item = { a: string, b: number, c: boolean };
+>Item : Item
+>a : string
+>b : number
+>c : boolean
+
+type T00 = { [P in "x" | "y"]: number };
+>T00 : T00
+>P : P
+
+type T01 = { [P in "x" | "y"]: P };
+>T01 : T01
+>P : P
+>P : P
+
+type T02 = { [P in "a" | "b"]: Item[P]; }
+>T02 : T02
+>P : P
+>Item : Item
+>P : P
+
+type T03 = { [P in keyof Item]: Date };
+>T03 : T03
+>P : P
+>Item : Item
+>Date : Date
+
+type T10 = { [P in keyof Item]: Item[P] };
+>T10 : T10
+>P : P
+>Item : Item
+>Item : Item
+>P : P
+
+type T11 = { [P in keyof Item]?: Item[P] };
+>T11 : T11
+>P : P
+>Item : Item
+>Item : Item
+>P : P
+
+type T12 = { readonly [P in keyof Item]: Item[P] };
+>T12 : T12
+>P : P
+>Item : Item
+>Item : Item
+>P : P
+
+type T13 = { readonly [P in keyof Item]?: Item[P] };
+>T13 : T13
+>P : P
+>Item : Item
+>Item : Item
+>P : P
+
+type T20 = { [P in keyof Item]: Item[P] | null };
+>T20 : T20
+>P : P
+>Item : Item
+>Item : Item
+>P : P
+>null : null
+
+type T21 = { [P in keyof Item]: Array<Item[P]> };
+>T21 : T21
+>P : P
+>Item : Item
+>Array : T[]
+>Item : Item
+>P : P
+
+type T30 = { [P in keyof any]: void };
+>T30 : T30
+>P : P
+
+type T31 = { [P in keyof string]: void };
+>T31 : T31
+>P : P
+
+type T32 = { [P in keyof number]: void };
+>T32 : T32
+>P : P
+
+type T33 = { [P in keyof boolean]: void };
+>T33 : T33
+>P : P
+
+type T34 = { [P in keyof undefined]: void };
+>T34 : T34
+>P : P
+
+type T35 = { [P in keyof null]: void };
+>T35 : T35
+>P : P
+>null : null
+
+type T36 = { [P in keyof void]: void };
+>T36 : T36
+>P : P
+
+type T37 = { [P in keyof symbol]: void };
+>T37 : T37
+>P : P
+
+type T38 = { [P in keyof never]: void };
+>T38 : T38
+>P : P
+
+type T40 = { [P in string]: void };
+>T40 : T40
+>P : P
+
+type T43 = { [P in "a" | "b"]: void };
+>T43 : T43
+>P : P
+
+type T44 = { [P in "a" | "b" | "0" | "1"]: void };
+>T44 : T44
+>P : P
+
+type T47 = { [P in string | "a" | "b" | "0" | "1"]: void };
+>T47 : T47
+>P : P
+
+declare function f1<T1>(): { [P in keyof T1]: void };
+>f1 : <T1>() => { [P in keyof T1]: void; }
+>T1 : T1
+>P : P
+>T1 : T1
+
+declare function f2<T1 extends string>(): { [P in keyof T1]: void };
+>f2 : <T1 extends string>() => { [P in keyof T1]: void; }
+>T1 : T1
+>P : P
+>T1 : T1
+
+declare function f3<T1 extends number>(): { [P in keyof T1]: void };
+>f3 : <T1 extends number>() => { [P in keyof T1]: void; }
+>T1 : T1
+>P : P
+>T1 : T1
+
+declare function f4<T1 extends Number>(): { [P in keyof T1]: void };
+>f4 : <T1 extends Number>() => { [P in keyof T1]: void; }
+>T1 : T1
+>Number : Number
+>P : P
+>T1 : T1
+
+let x1 = f1();
+>x1 : {}
+>f1() : {}
+>f1 : <T1>() => { [P in keyof T1]: void; }
+
+let x2 = f2();
+>x2 : string
+>f2() : string
+>f2 : <T1 extends string>() => { [P in keyof T1]: void; }
+
+let x3 = f3();
+>x3 : number
+>f3() : number
+>f3 : <T1 extends number>() => { [P in keyof T1]: void; }
+
+let x4 = f4();
+>x4 : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
+>f4() : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
+>f4 : <T1 extends Number>() => { [P in keyof T1]: void; }
+

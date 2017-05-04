@@ -202,11 +202,11 @@ function f4(a: 1, b: 0 | 1 | 2) {
 
     a++;
 >a++ : number
->a : 1
+>a : number
 
     b++;
 >b++ : number
->b : 0 | 1 | 2
+>b : number
 }
 
 declare function g(x: 0): string;
@@ -370,7 +370,7 @@ function f14(x: 0 | 1 | 2, y: string) {
 >y : string
 
     var b = x || y;
->b : string | number
+>b : string | 1 | 2
 >x || y : string | 1 | 2
 >x : 0 | 1 | 2
 >y : string
@@ -383,25 +383,25 @@ function f15(x: 0 | false, y: 1 | "one") {
 >y : 1 | "one"
 
     var a = x && y;
->a : number | boolean
+>a : boolean | 0
 >x && y : false | 0
 >x : false | 0
 >y : 1 | "one"
 
     var b = y && x;
->b : number | boolean
+>b : boolean | 0
 >y && x : false | 0
 >y : 1 | "one"
 >x : false | 0
 
     var c = x || y;
->c : string | number
+>c : 1 | "one"
 >x || y : 1 | "one"
 >x : false | 0
 >y : 1 | "one"
 
     var d = y || x;
->d : string | number | boolean
+>d : boolean | 0 | 1 | "one"
 >y || x : false | 0 | 1 | "one"
 >y : 1 | "one"
 >x : false | 0

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationNoNewNames.ts] ////
 
 //// [map.ts]
-
 import { Observable } from "./observable"
 
 (<any>Observable.prototype).map = function() { }
@@ -30,12 +29,15 @@ let y = x.map(x => x + 1);
 
 //// [observable.js]
 "use strict";
+exports.__esModule = true;
 //// [map.js]
 "use strict";
+exports.__esModule = true;
 var observable_1 = require("./observable");
 observable_1.Observable.prototype.map = function () { };
 //// [main.js]
 "use strict";
+exports.__esModule = true;
 require("./map");
 var x;
 var y = x.map(function (x) { return x + 1; });

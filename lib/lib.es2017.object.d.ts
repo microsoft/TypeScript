@@ -13,18 +13,33 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 interface ObjectConstructor {
     /**
-      * Returns an array of values of the enumerable properties of an object
-      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-      */
+     * Returns an array of values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
     values<T>(o: { [s: string]: T }): T[];
-    values(o: any): any[];
+
     /**
-      * Returns an array of key/values of the enumerable properties of an object
-      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
-      */
+     * Returns an array of values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
+    values(o: any): any[];
+
+    /**
+     * Returns an array of key/values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
     entries<T>(o: { [s: string]: T }): [string, T][];
+
+    /**
+     * Returns an array of key/values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
     entries(o: any): [string, any][];
 }

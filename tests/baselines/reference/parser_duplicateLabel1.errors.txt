@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel1.ts(1,1): error TS7028: Unused label.
-tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel1.ts(2,1): error TS1114: Duplicate label 'target'
+tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel1.ts(2,1): error TS1114: Duplicate label 'target'.
 tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel1.ts(2,1): error TS7028: Unused label.
 
 
@@ -9,7 +9,7 @@ tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_d
 !!! error TS7028: Unused label.
     target:
     ~~~~~~
-!!! error TS1114: Duplicate label 'target'
+!!! error TS1114: Duplicate label 'target'.
     ~~~~~~
 !!! error TS7028: Unused label.
     while (true) {

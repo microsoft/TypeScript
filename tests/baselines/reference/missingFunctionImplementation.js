@@ -1,5 +1,4 @@
 //// [missingFunctionImplementation.ts]
-
 export class C1 {
   m(): void;
 }
@@ -82,6 +81,7 @@ namespace N12 {
 
 //// [missingFunctionImplementation.js]
 "use strict";
+exports.__esModule = true;
 var C1 = (function () {
     function C1() {
     }
@@ -131,7 +131,6 @@ var C8 = (function () {
     }
     return C8;
 }());
-var C8;
 (function (C8) {
     function m(a, b) { }
     C8.m = m;
@@ -143,14 +142,12 @@ var C9 = (function () {
     C9.m = function (a) { };
     return C9;
 }());
-var C9;
 (function (C9) {
 })(C9 || (C9 = {}));
 // merged namespaces
 var N10;
 (function (N10) {
 })(N10 || (N10 = {}));
-var N10;
 (function (N10) {
     function m(a) { }
     N10.m = m;
@@ -161,7 +158,6 @@ var N12;
     function m(a) { }
     N12.m = m;
 })(N12 || (N12 = {}));
-var N12;
 (function (N12) {
     function m(a) { }
     N12.m = m;

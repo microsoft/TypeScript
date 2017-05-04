@@ -18,7 +18,6 @@ let y: number = x.n;
 >n : number
 
 === tests/cases/conformance/externalModules/foo.d.ts ===
-
 export var x: number;
 >x : number
 

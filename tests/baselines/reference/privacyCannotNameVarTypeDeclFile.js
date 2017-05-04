@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/privacyCannotNameVarTypeDeclFile.ts] ////
 
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts]
-
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;
@@ -103,6 +101,7 @@ var privateVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4()
 //// [privacyCannotNameVarTypeDeclFile_GlobalWidgets.js]
 //// [privacyCannotNameVarTypeDeclFile_Widgets.js]
 "use strict";
+exports.__esModule = true;
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -130,6 +129,7 @@ var SpecializedWidget;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyCannotNameVarTypeDeclFile_exporter.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='privacyCannotNameVarTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameVarTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -151,6 +151,7 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameVarTypeDeclFile_consumer.js]
 "use strict";
+exports.__esModule = true;
 var exporter = require("./privacyCannotNameVarTypeDeclFile_exporter");
 var publicClassWithWithPrivatePropertyTypes = (function () {
     function publicClassWithWithPrivatePropertyTypes() {
@@ -161,11 +162,11 @@ var publicClassWithWithPrivatePropertyTypes = (function () {
     }
     return publicClassWithWithPrivatePropertyTypes;
 }());
-exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
 publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget1(); // Error
 publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty = exporter.createExportedWidget1();
 publicClassWithWithPrivatePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget3(); // Error
 publicClassWithWithPrivatePropertyTypes.myPrivateStaticProperty1 = exporter.createExportedWidget3();
+exports.publicClassWithWithPrivatePropertyTypes = publicClassWithWithPrivatePropertyTypes;
 var privateClassWithWithPrivatePropertyTypes = (function () {
     function privateClassWithWithPrivatePropertyTypes() {
         this.myPublicProperty = exporter.createExportedWidget1();
@@ -190,9 +191,9 @@ var publicClassWithPrivateModulePropertyTypes = (function () {
     }
     return publicClassWithPrivateModulePropertyTypes;
 }());
-exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty = exporter.createExportedWidget2(); // Error
 publicClassWithPrivateModulePropertyTypes.myPublicStaticProperty1 = exporter.createExportedWidget4(); // Error
+exports.publicClassWithPrivateModulePropertyTypes = publicClassWithPrivateModulePropertyTypes;
 exports.publicVarWithPrivateModulePropertyTypes = exporter.createExportedWidget2(); // Error
 exports.publicVarWithPrivateModulePropertyTypes1 = exporter.createExportedWidget4(); // Error
 var privateClassWithPrivateModulePropertyTypes = (function () {

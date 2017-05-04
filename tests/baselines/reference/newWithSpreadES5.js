@@ -1,5 +1,4 @@
 //// [newWithSpreadES5.ts]
-
 function f(x: number, y: number, ...z: string[]) {
 }
 
@@ -106,7 +105,7 @@ function f(x, y) {
 function f2() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
 var B = (function () {

@@ -31,11 +31,16 @@ module TypeScript {
 
 
 //// [genericRecursiveImplicitConstructorErrors3.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var TypeScript;
 (function (TypeScript) {
     var MemberName = (function () {
@@ -47,7 +52,6 @@ var TypeScript;
     }());
     TypeScript.MemberName = MemberName;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var PullSymbol = (function () {
         function PullSymbol() {
@@ -59,8 +63,9 @@ var TypeScript;
     var PullTypeSymbol = (function (_super) {
         __extends(PullTypeSymbol, _super);
         function PullTypeSymbol() {
-            _super.apply(this, arguments);
-            this._elementType = null;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this._elementType = null;
+            return _this;
         }
         PullTypeSymbol.prototype.toString = function (scopeSymbol, useConstraintInName) {
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();

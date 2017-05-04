@@ -1,4 +1,4 @@
-﻿/// <reference path="..\..\harnessLanguageService.ts" />
+/// <reference path="..\..\harnessLanguageService.ts" />
 
 interface ClassificationEntry {
     value: any;
@@ -13,8 +13,7 @@ describe("Colorization", function () {
 
     function getEntryAtPosition(result: ts.ClassificationResult, position: number) {
         let entryPosition = 0;
-        for (let i = 0, n = result.entries.length; i < n; i++) {
-            const entry = result.entries[i];
+        for (const entry of result.entries) {
             if (entryPosition === position) {
                 return entry;
             }
@@ -43,9 +42,7 @@ describe("Colorization", function () {
     function testLexicalClassification(text: string, initialEndOfLineState: ts.EndOfLineState, ...expectedEntries: ClassificationEntry[]): void {
         const result = classifier.getClassificationsForLine(text, initialEndOfLineState, /*syntacticClassifierAbsent*/ false);
 
-        for (let i = 0, n = expectedEntries.length; i < n; i++) {
-            const expectedEntry = expectedEntries[i];
-
+        for (const expectedEntry of expectedEntries) {
             if (expectedEntry.classification === undefined) {
                 assert.equal(result.finalLexState, expectedEntry.value, "final endOfLineState does not match expected.");
             }
@@ -352,9 +349,9 @@ describe("Colorization", function () {
             // Adjusts 'pos' by accounting for the length of each portion of the string,
             // but only return the last given string
             function track(...vals: string[]): string {
-                for (let i = 0, n = vals.length; i < n; i++) {
+                for (const val of vals) {
                     pos += lastLength;
-                    lastLength = vals[i].length;
+                    lastLength = val.length;
                 }
                 return ts.lastOrUndefined(vals);
             }

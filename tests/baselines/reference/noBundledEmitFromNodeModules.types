@@ -1,0 +1,8 @@
+=== /a.ts ===
+import { C } from "projB";
+>C : typeof C
+
+=== /node_modules/projB/index.ts ===
+export class C {}
+>C : C
+

@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/privacyFunctionCannotNameReturnTypeDeclFile.ts] ////
 
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts]
-
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;
@@ -166,6 +164,7 @@ function privateFunctionWithPrivateModuleReturnTypes1() {
 //// [privacyFunctionReturnTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionReturnTypeDeclFile_Widgets.js]
 "use strict";
+exports.__esModule = true;
 var Widget1 = (function () {
     function Widget1() {
         this.name = 'one';
@@ -193,6 +192,7 @@ var SpecializedWidget;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionReturnTypeDeclFile_exporter.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -214,6 +214,7 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.js]
 "use strict";
+exports.__esModule = true;
 var exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
 var publicClassWithWithPrivateParmeterTypes = (function () {
     function publicClassWithWithPrivateParmeterTypes() {

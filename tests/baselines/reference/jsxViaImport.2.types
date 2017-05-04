@@ -1,0 +1,44 @@
+=== tests/cases/compiler/consumer.tsx ===
+/// <reference path="component.d.ts" />
+import BaseComponent from 'BaseComponent';
+>BaseComponent : typeof BaseComponent
+
+class TestComponent extends React.Component<any, {}> {
+>TestComponent : TestComponent
+>React.Component : React.Component<any, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => any
+
+        return <BaseComponent />;
+><BaseComponent /> : any
+>BaseComponent : typeof BaseComponent
+    }
+}
+
+=== tests/cases/compiler/component.d.ts ===
+declare module JSX {
+>JSX : any
+
+  interface ElementAttributesProperty { props; }
+>ElementAttributesProperty : ElementAttributesProperty
+>props : any
+}
+declare module React {
+>React : typeof React
+
+  class Component<T, U> { }
+>Component : Component<T, U>
+>T : T
+>U : U
+}
+declare module "BaseComponent" {
+    export default class extends React.Component<any, {}> {
+>React.Component : React.Component<any, {}>
+>React : typeof React
+>Component : typeof React.Component
+    }
+}
+

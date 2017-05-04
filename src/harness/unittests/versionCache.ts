@@ -278,7 +278,7 @@ and grew 1cm per day`;
                 const insertString = testContent.substring(rsa[i], rsa[i] + las[i]);
                 svc.edit(ersa[i], elas[i], insertString);
                 checkText = editFlat(ersa[i], elas[i], insertString, checkText);
-                if (0 == (i % 4)) {
+                if (0 === (i % 4)) {
                     const snap = svc.getSnapshot();
                     const snapText = snap.getText(0, checkText.length);
                     assert.equal(checkText, snapText);
@@ -307,7 +307,7 @@ and grew 1cm per day`;
 
         it("Start pos from line", () => {
             for (let i = 0; i < iterationCount; i++) {
-                for (let j = 0, llen = lines.length; j < llen; j++) {
+                for (let j = 0; j < lines.length; j++) {
                     const lineInfo = lineIndex.lineNumberToInfo(j + 1);
                     const lineIndexOffset = lineInfo.offset;
                     const lineMapOffset = lineMap[j];

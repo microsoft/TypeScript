@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileWithInternalModuleNameConflictsInExtendsClause1.ts ===
-
 module X.A.C {
 >X : typeof X
 >A : typeof A

@@ -35,14 +35,13 @@ namespace ts.formatting {
         }
 
         private GetRuleBucketIndex(row: number, column: number): number {
+            Debug.assert(row <= SyntaxKind.LastKeyword && column <= SyntaxKind.LastKeyword, "Must compute formatting context from tokens");
             const rulesBucketIndex = (row * this.mapRowLength) + column;
-            // Debug.Assert(rulesBucketIndex < this.map.Length, "Trying to access an index outside the array.");
             return rulesBucketIndex;
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            const specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
-                               rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
+            const specificRule = rule.Descriptor.LeftTokenRange.isSpecific() && rule.Descriptor.RightTokenRange.isSpecific();
 
             rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
                 rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {

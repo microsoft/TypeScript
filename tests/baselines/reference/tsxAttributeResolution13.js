@@ -1,5 +1,4 @@
 //// [test.tsx]
-
 function Test() { }
 <Test></Test>
 

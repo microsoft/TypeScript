@@ -27,7 +27,6 @@ var M;
     M.f();
     var r = f.hello;
 })(M || (M = {}));
-var M;
 (function (M) {
     var f;
     (function (f) {

@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf02.ts ===
-
 type S = "a" | "b";
 >S : S
 

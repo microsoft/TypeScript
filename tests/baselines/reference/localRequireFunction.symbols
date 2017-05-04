@@ -1,0 +1,17 @@
+=== tests/cases/compiler/app.js ===
+function require(a) {
+>require : Symbol(require, Decl(app.js, 0, 0))
+>a : Symbol(a, Decl(app.js, 0, 17))
+
+    return a;
+>a : Symbol(a, Decl(app.js, 0, 17))
+}
+
+const fs = require("fs");
+>fs : Symbol(fs, Decl(app.js, 4, 5))
+>require : Symbol(require, Decl(app.js, 0, 0))
+
+const text = fs.readFileSync("/a/b/c");
+>text : Symbol(text, Decl(app.js, 5, 5))
+>fs : Symbol(fs, Decl(app.js, 4, 5))
+

@@ -8,5 +8,4 @@
 ////    if (true) continue label;
 ////}
 
-goTo.marker();
-verify.referencesAre([]);
+verify.noReferences("");

@@ -1,5 +1,4 @@
 === tests/cases/compiler/letDeclarations.ts ===
-
 let l1;
 >l1 : any
 

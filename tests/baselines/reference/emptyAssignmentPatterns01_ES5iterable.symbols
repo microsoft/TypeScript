@@ -1,0 +1,10 @@
+=== tests/cases/conformance/es6/destructuring/emptyAssignmentPatterns01_ES5iterable.ts ===
+var a: any;
+>a : Symbol(a, Decl(emptyAssignmentPatterns01_ES5iterable.ts, 0, 3))
+
+({} = a);
+>a : Symbol(a, Decl(emptyAssignmentPatterns01_ES5iterable.ts, 0, 3))
+
+([] = a);
+>a : Symbol(a, Decl(emptyAssignmentPatterns01_ES5iterable.ts, 0, 3))
+

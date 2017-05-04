@@ -1,5 +1,4 @@
 //// [stringLiteralTypesAsTypeParameterConstraint02.ts]
-
 function foo<T extends "foo">(f: (x: T) => T) {
     return f;
 }
@@ -18,4 +17,4 @@ var fResult = f("foo");
 //// [stringLiteralTypesAsTypeParameterConstraint02.d.ts]
 declare function foo<T extends "foo">(f: (x: T) => T): (x: T) => T;
 declare let f: (x: "foo") => "foo";
-declare let fResult: string;
+declare let fResult: "foo";

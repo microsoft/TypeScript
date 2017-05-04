@@ -2,8 +2,8 @@ language: node_js
 
 node_js:
   - 'stable'
+  - '6'
   - '4'
-  - '0.10'
 
 sudo: false
 
@@ -12,24 +12,18 @@ env:
 
 matrix:
   fast_finish: true
-  include:
-  - os: osx
-    node_js: stable
-    osx_image: xcode7.3
-    env: workerCount=2
-  allow_failures:
-  - os: osx
 
 branches:
   only:
   - master
-  - release.2.0
+  - release-2.1
+  - release-2.2
+  - release-2.3
 
 install:
   - npm uninstall typescript
   - npm uninstall tslint
   - npm install
-  - npm update
 
 cache:
   directories:

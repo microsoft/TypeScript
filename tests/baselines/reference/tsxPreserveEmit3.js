@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxPreserveEmit3.tsx] ////
 
 //// [file.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -21,4 +20,5 @@ import {React} from "./test";
 //// [react-consumer.jsx]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });

@@ -1,11 +1,11 @@
 tests/cases/compiler/es5-asyncFunctionWithStatements.ts(4,5): error TS1300: 'with' statements are not allowed in an async function block.
-tests/cases/compiler/es5-asyncFunctionWithStatements.ts(4,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/es5-asyncFunctionWithStatements.ts(4,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 tests/cases/compiler/es5-asyncFunctionWithStatements.ts(10,5): error TS1300: 'with' statements are not allowed in an async function block.
-tests/cases/compiler/es5-asyncFunctionWithStatements.ts(10,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/es5-asyncFunctionWithStatements.ts(10,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 tests/cases/compiler/es5-asyncFunctionWithStatements.ts(16,5): error TS1300: 'with' statements are not allowed in an async function block.
-tests/cases/compiler/es5-asyncFunctionWithStatements.ts(16,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/es5-asyncFunctionWithStatements.ts(16,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,5): error TS1300: 'with' statements are not allowed in an async function block.
-tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,11): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
 ==== tests/cases/compiler/es5-asyncFunctionWithStatements.ts (8 errors) ====
@@ -15,8 +15,8 @@ tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,11): error TS2410: Al
         with (x) {
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
-              ~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+        ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             y;
         }
     }
@@ -25,8 +25,8 @@ tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,11): error TS2410: Al
         with (await x) {
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
-              ~~~~~~~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+        ~~~~~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             y;
         }
     }
@@ -35,8 +35,8 @@ tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,11): error TS2410: Al
         with (x) {
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
-              ~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+        ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             a;
             await y;
             b;
@@ -47,8 +47,8 @@ tests/cases/compiler/es5-asyncFunctionWithStatements.ts(24,11): error TS2410: Al
         with (x) {
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
-              ~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+        ~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             with (z) {
                 a;
                 await y;

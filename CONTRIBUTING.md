@@ -183,5 +183,3 @@ jake baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
-
-**Note** that `baseline-accept` should only be run after a full test run! Accepting baselines after running a subset of tests will delete baseline files for the tests that didn't run.

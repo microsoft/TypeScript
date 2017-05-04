@@ -17,7 +17,7 @@
 ////    r4 = x; // 3
 ////}
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 verify.eval("r1", undefined);
 verify.eval("r2", 2);
 verify.eval("r3", 2);

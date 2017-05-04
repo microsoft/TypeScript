@@ -1,5 +1,4 @@
 //// [systemModuleDeclarationMerging.ts]
-
 export function F() {}
 export module F { var x; }
 
@@ -14,14 +13,14 @@ System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     function F() { }
-    var F, C, C, E, E;
     exports_1("F", F);
+    var C, E;
     return {
         setters: [],
         execute: function () {
             (function (F) {
                 var x;
-            })(F = F || (F = {}));
+            })(F || (F = {}));
             exports_1("F", F);
             C = (function () {
                 function C() {
@@ -31,14 +30,14 @@ System.register([], function (exports_1, context_1) {
             exports_1("C", C);
             (function (C) {
                 var x;
-            })(C = C || (C = {}));
+            })(C || (C = {}));
             exports_1("C", C);
             (function (E) {
             })(E || (E = {}));
             exports_1("E", E);
             (function (E) {
                 var x;
-            })(E = E || (E = {}));
+            })(E || (E = {}));
             exports_1("E", E);
         }
     };

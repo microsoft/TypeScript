@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility2.ts]
-
 class BaseA {
     public constructor(public x: number) { }
     createInstance() { new BaseA(1); }
@@ -47,11 +46,16 @@ var dc = new DerivedC(1);
 
 
 //// [classConstructorAccessibility2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var BaseA = (function () {
     function BaseA(x) {
         this.x = x;
@@ -77,8 +81,9 @@ var BaseC = (function () {
 var DerivedA = (function (_super) {
     __extends(DerivedA, _super);
     function DerivedA(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedA.prototype.createInstance = function () { new DerivedA(5); };
     DerivedA.prototype.createBaseInstance = function () { new BaseA(6); };
@@ -88,8 +93,9 @@ var DerivedA = (function (_super) {
 var DerivedB = (function (_super) {
     __extends(DerivedB, _super);
     function DerivedB(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedB.prototype.createInstance = function () { new DerivedB(7); };
     DerivedB.prototype.createBaseInstance = function () { new BaseB(8); }; // ok
@@ -99,8 +105,9 @@ var DerivedB = (function (_super) {
 var DerivedC = (function (_super) {
     __extends(DerivedC, _super);
     function DerivedC(x) {
-        _super.call(this, x);
-        this.x = x;
+        var _this = _super.call(this, x) || this;
+        _this.x = x;
+        return _this;
     }
     DerivedC.prototype.createInstance = function () { new DerivedC(9); };
     DerivedC.prototype.createBaseInstance = function () { new BaseC(10); }; // error

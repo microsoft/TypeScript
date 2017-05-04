@@ -92,13 +92,13 @@ var f4 = function (x, y) {
 var f5 = function () {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i - 0] = arguments[_i];
+        rest[_i] = arguments[_i];
     }
 };
 var f6 = function () {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i - 0] = arguments[_i];
+        rest[_i] = arguments[_i];
     }
 };
 var f7 = function (x, y, z) {
@@ -138,9 +138,9 @@ var m;
         }
         return City;
     }());
+    var Enum;
     (function (Enum) {
         Enum[Enum["claw"] = (function () { return 10; })()] = "claw";
-    })(m.Enum || (m.Enum = {}));
-    var Enum = m.Enum;
+    })(Enum = m.Enum || (m.Enum = {}));
     m.v = function (x) { return new City(Enum.claw); };
 })(m || (m = {}));

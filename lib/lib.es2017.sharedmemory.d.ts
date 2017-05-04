@@ -13,14 +13,18 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /// <reference path="lib.es2015.symbol.d.ts" />
 /// <reference path="lib.es2015.symbol.wellknown.d.ts" />
 
 interface SharedArrayBuffer {
     /**
-      * Read-only. The length of the ArrayBuffer (in bytes).
-      */
+     * Read-only. The length of the ArrayBuffer (in bytes).
+     */
     readonly byteLength: number;
 
     /*
@@ -28,9 +32,9 @@ interface SharedArrayBuffer {
      */
     length: number;
     /**
-      * Returns a section of an SharedArrayBuffer.
-      */ 
-    slice(begin:number, end?:number): SharedArrayBuffer;
+     * Returns a section of an SharedArrayBuffer.
+     */
+    slice(begin: number, end?: number): SharedArrayBuffer;
     readonly [Symbol.species]: SharedArrayBuffer;
     readonly [Symbol.toStringTag]: "SharedArrayBuffer";
 }

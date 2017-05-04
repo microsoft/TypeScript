@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals6.ts] ////
 
 //// [file1.ts]
-
 class foo {}
 namespace foo {
     export class A {}
@@ -36,7 +35,6 @@ define(["require", "exports"], function (require, exports) {
         }
         return foo;
     }());
-    var foo;
     (function (foo) {
         var A = (function () {
             function A() {
@@ -53,11 +51,13 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports", "./file1"], function (require, exports, x) {
     "use strict";
+    exports.__esModule = true;
     x.B.b = 1;
 });
 //// [file3.js]
 define(["require", "exports", "./file1", "./file2"], function (require, exports, x) {
     "use strict";
+    exports.__esModule = true;
     var a;
     var b = a.a;
     var c = x.B.b;

@@ -1,53 +1,95 @@
-import * as Lint from "tslint/lib/lint";
+import * as Lint from "tslint/lib";
 import * as ts from "typescript";
 
 export class Rule extends Lint.Rules.AbstractRule {
-    public static FAILURE_STRING_FACTORY = (name: string, currently: string) => `Tag boolean argument as '${name}' (currently '${currently}')`;
-
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        const program = ts.createProgram([sourceFile.fileName], Lint.createCompilerOptions());
-        const checker = program.getTypeChecker();
-        return this.applyWithWalker(new BooleanTriviaWalker(checker, program.getSourceFile(sourceFile.fileName), this.getOptions()));
+        return this.applyWithFunction(sourceFile, ctx => walk(ctx));
     }
 }
 
-class BooleanTriviaWalker extends Lint.RuleWalker {
-    constructor(private checker: ts.TypeChecker, file: ts.SourceFile, opts: Lint.IOptions) {
-        super(file, opts);
+function walk(ctx: Lint.WalkContext<void>): void {
+    const { sourceFile } = ctx;
+    ts.forEachChild(sourceFile, function recur(node: ts.Node): void {
+        if (node.kind === ts.SyntaxKind.CallExpression) {
+            checkCall(node as ts.CallExpression);
+        }
+        ts.forEachChild(node, recur);
+    });
+
+    function checkCall(node: ts.CallExpression): void {
+        if (!shouldIgnoreCalledExpression(node.expression)) {
+            for (const arg of node.arguments) {
+                checkArg(arg);
+            }
+        }
     }
 
-    visitCallExpression(node: ts.CallExpression) {
-        super.visitCallExpression(node);
-        if (node.arguments && node.arguments.some(arg => arg.kind === ts.SyntaxKind.TrueKeyword || arg.kind === ts.SyntaxKind.FalseKeyword)) {
-            const targetCallSignature = this.checker.getResolvedSignature(node);
-            if (!!targetCallSignature) {
-                const targetParameters = targetCallSignature.getParameters();
-                const source = this.getSourceFile();
-                for (let index = 0; index < targetParameters.length; index++) {
-                    const param = targetParameters[index];
-                    const arg = node.arguments[index];
-                    if (!(arg && param)) {
-                        continue;
-                    }
-
-                    const argType = this.checker.getContextualType(arg);
-                    if (argType && (argType.getFlags() & ts.TypeFlags.Boolean)) {
-                        if (arg.kind !== ts.SyntaxKind.TrueKeyword && arg.kind !== ts.SyntaxKind.FalseKeyword) {
-                            continue;
-                        }
-                        let triviaContent: string;
-                        const ranges = ts.getLeadingCommentRanges(arg.getFullText(), 0);
-                        if (ranges && ranges.length === 1 && ranges[0].kind === ts.SyntaxKind.MultiLineCommentTrivia) {
-                            triviaContent = arg.getFullText().slice(ranges[0].pos + 2, ranges[0].end - 2); // +/-2 to remove /**/
-                        }
-
-                        const paramName = param.getName();
-                        if (triviaContent !== paramName && triviaContent !== paramName + ":") {
-                            this.addFailure(this.createFailure(arg.getStart(source), arg.getWidth(source), Rule.FAILURE_STRING_FACTORY(param.getName(), triviaContent)));
-                        }
-                    }
-                }
+    /** Skip certain function/method names whose parameter names are not informative. */
+    function shouldIgnoreCalledExpression(expression: ts.Expression): boolean {
+        if (expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
+            const methodName = (expression as ts.PropertyAccessExpression).name.text;
+            if (methodName.indexOf("set") === 0) {
+                return true;
             }
+            switch (methodName) {
+                case "apply":
+                case "assert":
+                case "call":
+                case "equal":
+                case "fail":
+                case "isTrue":
+                case "output":
+                case "stringify":
+                    return true;
+            }
+        }
+        else if (expression.kind === ts.SyntaxKind.Identifier) {
+            const functionName = (expression as ts.Identifier).text;
+            if (functionName.indexOf("set") === 0) {
+                return true;
+            }
+            switch (functionName) {
+                case "assert":
+                case "contains":
+                case "createAnonymousType":
+                case "createImportSpecifier":
+                case "createProperty":
+                case "createSignature":
+                case "resolveName":
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    function checkArg(arg: ts.Expression): void {
+        if (!isTrivia(arg)) {
+            return;
+        }
+
+        const ranges = ts.getTrailingCommentRanges(sourceFile.text, arg.pos) || ts.getLeadingCommentRanges(sourceFile.text, arg.pos);
+        if (ranges === undefined || ranges.length !== 1 || ranges[0].kind !== ts.SyntaxKind.MultiLineCommentTrivia) {
+            ctx.addFailureAtNode(arg, "Tag boolean argument with parameter name");
+            return;
+        }
+
+        const range = ranges[0];
+        const argStart = arg.getStart(sourceFile);
+        if (range.end + 1 !== argStart && sourceFile.text.slice(range.end, argStart).indexOf("\n") === -1) {
+            ctx.addFailureAtNode(arg, "There should be 1 space between an argument and its comment.");
+        }
+    }
+
+    function isTrivia(arg: ts.Expression): boolean {
+        switch (arg.kind) {
+            case ts.SyntaxKind.TrueKeyword:
+            case ts.SyntaxKind.FalseKeyword:
+            case ts.SyntaxKind.NullKeyword:
+                return true;
+            case ts.SyntaxKind.Identifier:
+                return (arg as ts.Identifier).originalKeywordKind === ts.SyntaxKind.UndefinedKeyword;
+            default:
+                return false;
         }
     }
 }

@@ -1,13 +1,12 @@
-tests/cases/compiler/downlevelLetConst16.ts(152,15): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/compiler/downlevelLetConst16.ts(165,17): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/compiler/downlevelLetConst16.ts(196,14): error TS2461: Type 'undefined' is not an array type.
-tests/cases/compiler/downlevelLetConst16.ts(203,15): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
-tests/cases/compiler/downlevelLetConst16.ts(217,16): error TS2461: Type 'undefined' is not an array type.
-tests/cases/compiler/downlevelLetConst16.ts(224,17): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+tests/cases/compiler/downlevelLetConst16.ts(151,15): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/downlevelLetConst16.ts(164,17): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/compiler/downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
+tests/cases/compiler/downlevelLetConst16.ts(202,15): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+tests/cases/compiler/downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array type.
+tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
 
 
 ==== tests/cases/compiler/downlevelLetConst16.ts (6 errors) ====
-    
     'use strict'
     
     declare function use(a: any);

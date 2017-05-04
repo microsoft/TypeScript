@@ -13,7 +13,12 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /// <reference path="lib.es2016.d.ts" />
 /// <reference path="lib.es2017.object.d.ts" />
 /// <reference path="lib.es2017.sharedmemory.d.ts" />
+/// <reference path="lib.es2017.string.d.ts" />

@@ -1,5 +1,4 @@
 //// [initializePropertiesWithRenamedLet.ts]
-
 var x0;
 if (true) {
     let x0;
@@ -28,7 +27,6 @@ if (true) {
     var x_1 = { x: 0 }.x;
     var y_1 = { y: 0 }.y;
     var z_1;
-    (_a = { z: 0 }, z_1 = _a.z, _a);
-    (_b = { z: 0 }, z_1 = _b.z, _b);
+    (z_1 = { z: 0 }.z);
+    (z_1 = { z: 0 }.z);
 }
-var _a, _b;

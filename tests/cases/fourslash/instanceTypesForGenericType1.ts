@@ -7,8 +7,7 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('(property) G<T>.self: G<T>');
-
-goTo.marker('2');
-verify.quickInfoIs('this: this');
+verify.quickInfos({
+    1: "(property) G<T>.self: G<T>",
+    2: "this: this"
+});

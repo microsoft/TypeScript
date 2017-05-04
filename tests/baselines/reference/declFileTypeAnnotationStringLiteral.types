@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeAnnotationStringLiteral.ts ===
-
 function foo(a: "hello"): number;
 >foo : { (a: "hello"): number; (a: "name"): string; (a: string): string | number; }
 >a : "hello"
@@ -23,7 +22,7 @@ function foo(a: string): string | number {
 
         return a.length;
 >a.length : number
->a : string
+>a : "hello"
 >length : number
     }
 

@@ -1,5 +1,5 @@
 //// [anyPlusAny1.ts]
-var x;
+var x: any;
 x.name = "hello";
 var z = x + x;
 

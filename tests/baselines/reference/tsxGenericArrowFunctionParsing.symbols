@@ -7,10 +7,10 @@ declare module JSX {
 >isElement : Symbol(Element.isElement, Decl(file.tsx, 1, 20))
 }
 
-var T, T1, T2;
+var T: any, T1: any, T2: any;
 >T : Symbol(T, Decl(file.tsx, 4, 3))
->T1 : Symbol(T1, Decl(file.tsx, 4, 6))
->T2 : Symbol(T2, Decl(file.tsx, 4, 10))
+>T1 : Symbol(T1, Decl(file.tsx, 4, 11))
+>T2 : Symbol(T2, Decl(file.tsx, 4, 20))
 
 // This is an element
 var x1 = <T>() => {}</T>;
@@ -44,7 +44,7 @@ x3();
 var x4 = <T extends={true}>() => {}</T>;
 >x4 : Symbol(x4, Decl(file.tsx, 19, 3))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
->extends : Symbol(unknown)
+>extends : Symbol(extends, Decl(file.tsx, 19, 11))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x4.isElement;
@@ -56,7 +56,7 @@ x4.isElement;
 var x5 = <T extends>() => {}</T>;
 >x5 : Symbol(x5, Decl(file.tsx, 23, 3))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
->extends : Symbol(unknown)
+>extends : Symbol(extends, Decl(file.tsx, 23, 11))
 >T : Symbol(T, Decl(file.tsx, 4, 3))
 
 x5.isElement;

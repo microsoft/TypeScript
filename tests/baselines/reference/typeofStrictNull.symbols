@@ -1,0 +1,8 @@
+=== tests/cases/compiler/typeofStrictNull.ts ===
+let a: number;
+>a : Symbol(a, Decl(typeofStrictNull.ts, 0, 3))
+
+let b: typeof a;
+>b : Symbol(b, Decl(typeofStrictNull.ts, 1, 3))
+>a : Symbol(a, Decl(typeofStrictNull.ts, 0, 3))
+

@@ -22,5 +22,4 @@ edit.insert("null,");
 verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
 edit.insert("10);");
 
-goTo.marker("2");
-verify.quickInfoIs("constructor B(a: Foo<I>, b: number): B", undefined);
+verify.quickInfoAt("2", "constructor B(a: Foo<I>, b: number): B");

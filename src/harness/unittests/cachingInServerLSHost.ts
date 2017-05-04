@@ -8,82 +8,74 @@ namespace ts {
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
         const existingDirectories = createMap<boolean>();
-        for (const name in fileMap) {
+        forEachKey(fileMap, name => {
             let dir = getDirectoryPath(name);
             let previous: string;
             do {
-                existingDirectories[dir] = true;
+                existingDirectories.set(dir, true);
                 previous = dir;
                 dir = getDirectoryPath(dir);
             } while (dir !== previous);
-        }
+        });
         return {
             args: <string[]>[],
             newLine: "\r\n",
             useCaseSensitiveFileNames: false,
-            write: (s: string) => {
+            write: noop,
+            readFile: path => {
+                const file = fileMap.get(path);
+                return file && file.content;
             },
-            readFile: (path: string, encoding?: string): string => {
-                return path in fileMap ? fileMap[path].content : undefined;
-            },
-            writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => {
-                throw new Error("NYI");
-            },
-            resolvePath: (path: string): string => {
-                throw new Error("NYI");
-            },
-            fileExists: (path: string): boolean => {
-                return path in fileMap;
-            },
-            directoryExists: (path: string): boolean => {
-                return existingDirectories[path] || false;
-            },
-            createDirectory: (path: string) => {
-            },
-            getExecutingFilePath: (): string => {
-                return "";
-            },
-            getCurrentDirectory: (): string => {
-                return "";
-            },
-            getDirectories: (path: string) => [],
-            getEnvironmentVariable: (name: string) => "",
-            readDirectory: (path: string, extension?: string[], exclude?: string[], include?: string[]): string[] => {
-                throw new Error("NYI");
-            },
-            exit: (exitCode?: number) => {
-            },
-            watchFile: (path, callback) => {
-                return {
-                    close: () => { }
-                };
-            },
-            watchDirectory: (path, callback, recursive?) => {
-                return {
-                    close: () => { }
-                };
-            },
+            writeFile: notImplemented,
+            resolvePath: notImplemented,
+            fileExists: path => fileMap.has(path),
+            directoryExists: path => existingDirectories.get(path) || false,
+            createDirectory: noop,
+            getExecutingFilePath: () => "",
+            getCurrentDirectory: () => "",
+            getDirectories: () => [],
+            getEnvironmentVariable: () => "",
+            readDirectory: notImplemented,
+            exit: noop,
+            watchFile: () => ({
+                close: noop
+            }),
+            watchDirectory: () => ({
+                close: noop
+            }),
             setTimeout,
-            clearTimeout
+            clearTimeout,
+            setImmediate: typeof setImmediate !== "undefined" ? setImmediate : action => setTimeout(action, 0),
+            clearImmediate: typeof clearImmediate !== "undefined" ? clearImmediate : clearTimeout,
+            createHash: s => s
         };
     }
 
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
         const logger: server.Logger = {
-            close() { },
-            isVerbose: () => false,
+            close: noop,
+            hasLevel: () => false,
             loggingEnabled: () => false,
-            perftrc: (s: string) => { },
-            info: (s: string) => { },
-            startGroup: () => { },
-            endGroup: () => { },
-            msg: (s: string, type?: string) => { }
+            perftrc: noop,
+            info: noop,
+            startGroup: noop,
+            endGroup: noop,
+            msg: noop,
+            getLogFileName: (): string => undefined
         };
 
-        const projectService = new server.ProjectService(serverHost, logger);
-        const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
-        const project = projectService.createInferredProject(rootScriptInfo);
-        project.setProjectOptions({ files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } });
+        const svcOpts: server.ProjectServiceOptions = {
+            host: serverHost,
+            logger,
+            cancellationToken: { isCancellationRequested: () => false },
+            useSingleInferredProject: false,
+            typingsInstaller: undefined
+        };
+        const projectService = new server.ProjectService(svcOpts);
+        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
+
+        const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
+        project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {
             project,
             rootScriptInfo
@@ -102,29 +94,24 @@ namespace ts {
                 content: `foo()`
             };
 
-            const serverHost = createDefaultServerHost(createMap({ [root.name]: root, [imported.name]: imported }));
+            const serverHost = createDefaultServerHost(createMapFromTemplate({ [root.name]: root, [imported.name]: imported }));
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
-            let diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+            let diags = project.getLanguageService().getSemanticDiagnostics(imported.name);
             assert.equal(diags.length, 1);
 
-            let content = rootScriptInfo.getText();
 
             const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
-                serverHost.fileExists = (fileName): boolean => {
-                    assert.isTrue(false, "fileExists should not be called");
-                    return false;
-                };
+                serverHost.fileExists = notImplemented;
 
                 const newContent = `import {x} from "f1"
                 var x: string = 1;`;
-                rootScriptInfo.editContent(0, content.length, newContent);
-                content = newContent;
+                rootScriptInfo.editContent(0, root.content.length, newContent);
                 // trigger synchronization to make sure that import will be fetched from the cache
-                diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                diags = project.getLanguageService().getSemanticDiagnostics(imported.name);
                 // ensure file has correct number of errors after edit
                 assert.equal(diags.length, 1);
             }
@@ -139,12 +126,11 @@ namespace ts {
                     return originalFileExists.call(serverHost, fileName);
                 };
                 const newContent = `import {x} from "f2"`;
-                rootScriptInfo.editContent(0, content.length, newContent);
-                content = newContent;
+                rootScriptInfo.editContent(0, root.content.length, newContent);
 
                 try {
                     // trigger synchronization to make sure that LSHost will try to find 'f2' module on disk
-                    project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                    project.getLanguageService().getSemanticDiagnostics(imported.name);
                     assert.isTrue(false, `should not find file '${imported.name}'`);
                 }
                 catch (e) {
@@ -165,20 +151,18 @@ namespace ts {
                 };
 
                 const newContent = `import {x} from "f1"`;
-                rootScriptInfo.editContent(0, content.length, newContent);
-                content = newContent;
-                project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                rootScriptInfo.editContent(0, root.content.length, newContent);
+                project.getLanguageService().getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
 
                 // setting compiler options discards module resolution cache
                 fileExistsCalled = false;
 
-                const opts = ts.clone(project.projectOptions);
-                opts.compilerOptions = ts.clone(opts.compilerOptions);
-                opts.compilerOptions.target = ts.ScriptTarget.ES5;
-                project.setProjectOptions(opts);
+                const compilerOptions = ts.clone(project.getCompilerOptions());
+                compilerOptions.target = ts.ScriptTarget.ES5;
+                project.setCompilerOptions(compilerOptions);
 
-                project.compilerService.languageService.getSemanticDiagnostics(imported.name);
+                project.getLanguageService().getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
             }
         });
@@ -194,7 +178,7 @@ namespace ts {
                 content: `export var y = 1`
             };
 
-            const fileMap = createMap({ [root.name]: root });
+            const fileMap = createMapFromTemplate({ [root.name]: root });
             const serverHost = createDefaultServerHost(fileMap);
             const originalFileExists = serverHost.fileExists;
 
@@ -211,20 +195,19 @@ namespace ts {
             };
 
             const { project, rootScriptInfo } = createProject(root.name, serverHost);
-            const content = rootScriptInfo.getText();
-            let diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
+
+            let diags = project.getLanguageService().getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
             assert.isTrue(diags.length === 1, "one diagnostic expected");
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
 
-            // assert that import will success once file appear on disk
-            fileMap[imported.name] = imported;
+            fileMap.set(imported.name, imported);
             fileExistsCalledForBar = false;
-            rootScriptInfo.editContent(0, content.length, `import {y} from "bar"`);
+            rootScriptInfo.editContent(0, root.content.length, `import {y} from "bar"`);
 
-            diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-            assert.isTrue(diags.length === 0);
+            diags = project.getLanguageService().getSemanticDiagnostics(root.name);
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert.isTrue(diags.length === 0, "The import should succeed once the imported file appears on disk.");
         });
     });
 }

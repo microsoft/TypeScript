@@ -1,5 +1,4 @@
 //// [unusedPrivateMethodInClass3.ts]
-
 class greeter {
     private function1() {
         var y = 10;

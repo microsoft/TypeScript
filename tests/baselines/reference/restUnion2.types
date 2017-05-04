@@ -1,0 +1,54 @@
+=== tests/cases/compiler/restUnion2.ts ===
+declare const undefinedUnion: { n: number } | undefined;
+>undefinedUnion : { n: number; } | undefined
+>n : number
+
+var rest2: { n: number };
+>rest2 : { n: number; }
+>n : number
+
+var {...rest2 } = undefinedUnion;
+>rest2 : { n: number; }
+>undefinedUnion : { n: number; } | undefined
+
+
+declare const nullUnion: { n: number } | null;
+>nullUnion : { n: number; } | null
+>n : number
+>null : null
+
+var rest3: { n: number };
+>rest3 : { n: number; }
+>n : number
+
+var {...rest3 } = nullUnion;
+>rest3 : { n: number; }
+>nullUnion : { n: number; } | null
+
+
+declare const nullAndUndefinedUnion: null | undefined;
+>nullAndUndefinedUnion : null | undefined
+>null : null
+
+var rest4: { };
+>rest4 : {}
+
+var {...rest4 } = nullAndUndefinedUnion;
+>rest4 : {}
+>nullAndUndefinedUnion : null | undefined
+
+declare const unionWithIntersection: ({ n: number } & { s: string }) & undefined | null;
+>unionWithIntersection : ({ n: number; } & { s: string; } & undefined) | null
+>n : number
+>s : string
+>null : null
+
+var rest5: { n: number, s: string };
+>rest5 : { n: number; s: string; }
+>n : number
+>s : string
+
+var {...rest5 } = unionWithIntersection;
+>rest5 : { n: number; s: string; }
+>unionWithIntersection : ({ n: number; } & { s: string; } & undefined) | null
+

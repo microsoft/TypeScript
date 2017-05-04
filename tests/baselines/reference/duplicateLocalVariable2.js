@@ -38,6 +38,7 @@ export var tests: TestRunner = (function () {
 //// [duplicateLocalVariable2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var TestCase = (function () {
         function TestCase(name, test, errorMessageRegEx) {
             this.name = name;

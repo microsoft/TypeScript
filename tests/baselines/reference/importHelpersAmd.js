@@ -19,6 +19,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 //// [a.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }
@@ -29,10 +30,11 @@ define(["require", "exports"], function (require, exports) {
 //// [b.js]
 define(["require", "exports", "tslib", "./a"], function (require, exports, tslib_1, a_1) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var B = (function (_super) {
         tslib_1.__extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(a_1.A));

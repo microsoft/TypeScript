@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile.ts] ////
 
 //// [privacyInterfaceExtendsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }
@@ -96,4 +95,5 @@ interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInter
 
 //// [privacyInterfaceExtendsClauseDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 //// [privacyInterfaceExtendsClauseDeclFile_GlobalFile.js]

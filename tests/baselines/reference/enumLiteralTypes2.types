@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/enumLiteralTypes2.ts ===
-
 const enum Choice { Unknown, Yes, No };
 >Choice : Choice
 >Unknown : Choice.Unknown
@@ -210,7 +209,7 @@ function f4(a: Choice.Yes, b: UnknownYesNo) {
 
     a++;
 >a++ : number
->a : Choice.Yes
+>a : Choice
 
     b++;
 >b++ : number

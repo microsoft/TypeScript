@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/tsxDefaultImports.ts] ////
 
 //// [a.ts]
-
 enum SomeEnum {
   one,
 }
@@ -16,6 +15,7 @@ let a = Def.E.one;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var SomeEnum;
 (function (SomeEnum) {
     SomeEnum[SomeEnum["one"] = 0] = "one";
@@ -25,10 +25,10 @@ var SomeClass = (function () {
     }
     return SomeClass;
 }());
-exports.__esModule = true;
-exports["default"] = SomeClass;
 SomeClass.E = SomeEnum;
+exports["default"] = SomeClass;
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 var a_1 = require("./a");
 var a = a_1["default"].E.one;

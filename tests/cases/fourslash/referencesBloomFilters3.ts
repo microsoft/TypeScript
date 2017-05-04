@@ -4,9 +4,9 @@
 
 
 // @Filename: declaration.ts
-////enum Test { "[|42|]" = 1 };
+////enum Test { "[|{| "isDefinition": true |}42|]" = 1 };
 
 // @Filename: expression.ts
 ////(Test[[|42|]]);
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup('(enum member) Test["42"] = 1');

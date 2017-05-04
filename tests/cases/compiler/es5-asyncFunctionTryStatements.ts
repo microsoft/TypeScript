@@ -1,10 +1,10 @@
 // @lib: es5,es2015.promise
 // @noEmitHelpers: true
 // @target: ES5
-declare var x, y, z, a, b, c;
+declare var x: any, y: any, z: any, a: any, b: any, c: any;
 
 async function tryCatch0() {
-    var x, y;
+    var x: any, y: any;
     try {
         x;
     }
@@ -14,7 +14,7 @@ async function tryCatch0() {
 }
 
 async function tryCatch1() {
-    var x, y;
+    var x: any, y: any;
     try {
         await x;
     }
@@ -24,7 +24,7 @@ async function tryCatch1() {
 }
 
 async function tryCatch2() {
-    var x, y;
+    var x: any, y: any;
     try {
         x;
     }
@@ -34,7 +34,7 @@ async function tryCatch2() {
 }
 
 async function tryCatch3(): Promise<Function> {
-    var x, y;
+    var x: any, y: any;
     try {
         await x;
     }
@@ -43,7 +43,7 @@ async function tryCatch3(): Promise<Function> {
     }
 }
 async function tryFinally0() {
-    var x, y;
+    var x: any, y: any;
     try {
         x;
     }
@@ -53,7 +53,7 @@ async function tryFinally0() {
 }
 
 async function tryFinally1() {
-    var x, y;
+    var x: any, y: any;
     try {
         await x;
     }
@@ -63,7 +63,7 @@ async function tryFinally1() {
 }
 
 async function tryFinally2() {
-    var x, y;
+    var x: any, y: any;
     try {
         x;
     }
@@ -73,7 +73,7 @@ async function tryFinally2() {
 }
 
 async function tryCatchFinally0() {
-    var x, y, z;
+    var x: any, y: any, z: any;
     try {
         x;
     }
@@ -86,7 +86,7 @@ async function tryCatchFinally0() {
 }
 
 async function tryCatchFinally1() {
-    var x, y, z;
+    var x: any, y: any, z: any;
     try {
         await x;
     }
@@ -99,7 +99,7 @@ async function tryCatchFinally1() {
 }
 
 async function tryCatchFinally2() {
-    var x, y, z;
+    var x: any, y: any, z: any;
     try {
         x;
     }
@@ -112,7 +112,7 @@ async function tryCatchFinally2() {
 }
 
 async function tryCatchFinally3() {
-    var x, y, z;
+    var x: any, y: any, z: any;
     try {
         x;
     }

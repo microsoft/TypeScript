@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/literalTypes1.ts ===
-
 let zero: 0 = 0;
 >zero : 0
 >0 : 0
@@ -129,7 +128,7 @@ function f4(x: 0 | 1 | true | string) {
 >"def" : "def"
 
             x;
->x : string
+>x : "abc" | "def"
 
             break;
         case null:
@@ -163,7 +162,7 @@ function f5(x: string | number | boolean) {
 >"abc" : "abc"
 
             x;
->x : string
+>x : "abc"
 
             break;
         case 0:
@@ -173,7 +172,7 @@ function f5(x: string | number | boolean) {
 >1 : 1
 
             x;
->x : number
+>x : 0 | 1
 
             break;
         case true:
@@ -190,7 +189,7 @@ function f5(x: string | number | boolean) {
 >123 : 123
 
             x;
->x : string | number
+>x : "hello" | 123
 
             break;
         default:

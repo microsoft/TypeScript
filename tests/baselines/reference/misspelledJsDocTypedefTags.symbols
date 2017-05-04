@@ -1,0 +1,7 @@
+=== tests/cases/compiler/a.js ===
+/** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
+No type information for this code.Animation.AnimationModel.ScreenshotCapture.Request;
+No type information for this code.
+No type information for this code./** @typedef {{ endTime: number, screenshots: !B.<string>}} */
+No type information for this code.Animation.AnimationModel.ScreenshotCapture.Request;
+No type information for this code.

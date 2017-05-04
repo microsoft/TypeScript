@@ -1,0 +1,17 @@
+tests/cases/compiler/exportAssignmentOfGenericType1_0.ts(1,10): error TS2449: Class 'T' used before its declaration.
+
+
+==== tests/cases/compiler/exportAssignmentOfGenericType1_1.ts (0 errors) ====
+    ///<reference path='exportAssignmentOfGenericType1_0.ts'/>
+    import q = require("exportAssignmentOfGenericType1_0");
+    
+    class M extends q<string> { }
+    var m: M;
+    var r: string = m.foo;
+    
+==== tests/cases/compiler/exportAssignmentOfGenericType1_0.ts (1 errors) ====
+    export = T;
+             ~
+!!! error TS2449: Class 'T' used before its declaration.
+    class T<X> { foo: X; }
+    

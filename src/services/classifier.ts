@@ -71,7 +71,7 @@ namespace ts {
             const dense = classifications.spans;
             let lastEnd = 0;
 
-            for (let i = 0, n = dense.length; i < n; i += 3) {
+            for (let i = 0; i < dense.length; i += 3) {
                 const start = dense[i];
                 const length = dense[i + 1];
                 const type = <ClassificationType>dense[i + 2];
@@ -160,7 +160,7 @@ namespace ts {
                 case EndOfLineState.InTemplateMiddleOrTail:
                     text = "}\n" + text;
                     offset = 2;
-                // fallthrough
+                    // falls through
                 case EndOfLineState.InTemplateSubstitutionPosition:
                     templateStack.push(SyntaxKind.TemplateHead);
                     break;
@@ -557,7 +557,7 @@ namespace ts {
                     // Only bother calling into the typechecker if this is an identifier that
                     // could possibly resolve to a type name.  This makes classification run
                     // in a third of the time it would normally take.
-                    if (classifiableNames[identifier.text]) {
+                    if (classifiableNames.get(identifier.text)) {
                         const symbol = typeChecker.getSymbolAtLocation(node);
                         if (symbol) {
                             const type = classifySymbol(symbol, getMeaningFromLocation(node));
@@ -605,7 +605,7 @@ namespace ts {
         Debug.assert(classifications.spans.length % 3 === 0);
         const dense = classifications.spans;
         const result: ClassifiedSpan[] = [];
-        for (let i = 0, n = dense.length; i < n; i += 3) {
+        for (let i = 0; i < dense.length; i += 3) {
             result.push({
                 textSpan: createTextSpan(dense[i], dense[i + 1]),
                 classificationType: getClassificationTypeName(dense[i + 2])
@@ -698,9 +698,9 @@ namespace ts {
                 // See if this is a doc comment.  If so, we'll classify certain portions of it
                 // specially.
                 const docCommentAndDiagnostics = parseIsolatedJSDocComment(sourceFile.text, start, width);
-                if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDocComment) {
-                    docCommentAndDiagnostics.jsDocComment.parent = token;
-                    classifyJSDocComment(docCommentAndDiagnostics.jsDocComment);
+                if (docCommentAndDiagnostics && docCommentAndDiagnostics.jsDoc) {
+                    docCommentAndDiagnostics.jsDoc.parent = token;
+                    classifyJSDocComment(docCommentAndDiagnostics.jsDoc);
                     return;
                 }
             }
@@ -713,37 +713,39 @@ namespace ts {
             pushClassification(start, width, ClassificationType.comment);
         }
 
-        function classifyJSDocComment(docComment: JSDocComment) {
+        function classifyJSDocComment(docComment: JSDoc) {
             let pos = docComment.pos;
 
-            for (const tag of docComment.tags) {
-                // As we walk through each tag, classify the portion of text from the end of
-                // the last tag (or the start of the entire doc comment) as 'comment'.
-                if (tag.pos !== pos) {
-                    pushCommentRange(pos, tag.pos - pos);
+            if (docComment.tags) {
+                for (const tag of docComment.tags) {
+                    // As we walk through each tag, classify the portion of text from the end of
+                    // the last tag (or the start of the entire doc comment) as 'comment'.
+                    if (tag.pos !== pos) {
+                        pushCommentRange(pos, tag.pos - pos);
+                    }
+
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+
+                    pos = tag.tagName.end;
+
+                    switch (tag.kind) {
+                        case SyntaxKind.JSDocParameterTag:
+                            processJSDocParameterTag(<JSDocParameterTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTemplateTag:
+                            processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            break;
+                        case SyntaxKind.JSDocTypeTag:
+                            processElement((<JSDocTypeTag>tag).typeExpression);
+                            break;
+                        case SyntaxKind.JSDocReturnTag:
+                            processElement((<JSDocReturnTag>tag).typeExpression);
+                            break;
+                    }
+
+                    pos = tag.end;
                 }
-
-                pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
-                pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
-
-                pos = tag.tagName.end;
-
-                switch (tag.kind) {
-                    case SyntaxKind.JSDocParameterTag:
-                        processJSDocParameterTag(<JSDocParameterTag>tag);
-                        break;
-                    case SyntaxKind.JSDocTemplateTag:
-                        processJSDocTemplateTag(<JSDocTemplateTag>tag);
-                        break;
-                    case SyntaxKind.JSDocTypeTag:
-                        processElement((<JSDocTypeTag>tag).typeExpression);
-                        break;
-                    case SyntaxKind.JSDocReturnTag:
-                        processElement((<JSDocReturnTag>tag).typeExpression);
-                        break;
-                }
-
-                pos = tag.end;
             }
 
             if (pos !== docComment.end) {
@@ -952,8 +954,7 @@ namespace ts {
                             return;
                         case SyntaxKind.Parameter:
                             if ((<ParameterDeclaration>token.parent).name === token) {
-                                const isThis = token.kind === SyntaxKind.Identifier && (<Identifier>token).originalKeywordKind === SyntaxKind.ThisKeyword;
-                                return isThis ? ClassificationType.keyword : ClassificationType.parameterName;
+                                return isThisIdentifier(token) ? ClassificationType.keyword : ClassificationType.parameterName;
                             }
                             return;
                     }
@@ -971,9 +972,7 @@ namespace ts {
             if (decodedTextSpanIntersectsWith(spanStart, spanLength, element.pos, element.getFullWidth())) {
                 checkForClassificationCancellation(cancellationToken, element.kind);
 
-                const children = element.getChildren(sourceFile);
-                for (let i = 0, n = children.length; i < n; i++) {
-                    const child = children[i];
+                for (const child of element.getChildren(sourceFile)) {
                     if (!tryClassifyNode(child)) {
                         // Recurse into our child nodes.
                         processElement(child);

@@ -2,94 +2,95 @@
 /// <reference path="..\virtualFileSystem.ts" />
 
 namespace ts {
-    const testContents = {
-        "/dev/tsconfig.json": `{
-  "extends": "./configs/base",
-  "files": [
-    "main.ts",
-    "supplemental.ts"
-  ]
-}`,
-        "/dev/tsconfig.nostrictnull.json": `{
-  "extends": "./tsconfig",
-  "compilerOptions": {
-    "strictNullChecks": false
-  }
-}`,
-        "/dev/configs/base.json": `{
-  "compilerOptions": {
-    "allowJs": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true
-  }
-}`,
-        "/dev/configs/tests.json": `{
-  "compilerOptions": {
-    "preserveConstEnums": true,
-    "removeComments": false,
-    "sourceMap": true
-  },
-  "exclude": [
-    "../tests/baselines",
-    "../tests/scenarios"
-  ],
-  "include": [
-    "../tests/**/*.ts"
-  ]
-}`,
-        "/dev/circular.json": `{
-    "extends": "./circular2",
-    "compilerOptions": {
-        "module": "amd"
-    }
-}`,
-        "/dev/circular2.json": `{
-    "extends": "./circular",
-    "compilerOptions": {
-        "module": "commonjs"
-    }
-}`,
-        "/dev/missing.json": `{
-    "extends": "./missing2",
-    "compilerOptions": {
-        "types": []
-    }
-}`,
-        "/dev/failure.json": `{
-    "extends": "./failure2.json",
-    "compilerOptions": {
-        "typeRoots": []
-    }
-}`,
-        "/dev/failure2.json": `{
-    "excludes": ["*.js"]
-}`,
-        "/dev/configs/first.json": `{
-    "extends": "./base",
-    "compilerOptions": {
-        "module": "commonjs"
-    },
-    "files": ["../main.ts"]
-}`,
-        "/dev/configs/second.json": `{
-    "extends": "./base",
-    "compilerOptions": {
-        "module": "amd"
-    },
-    "include": ["../supplemental.*"]
-}`,
-        "/dev/extends.json": `{ "extends": 42 }`,
-        "/dev/extends2.json": `{ "extends": "configs/base" }`,
+    const testContentsJson = createMapFromTemplate({
+        "/dev/tsconfig.json": {
+            extends: "./configs/base",
+            files: [
+                "main.ts",
+                "supplemental.ts"
+            ]
+        },
+        "/dev/tsconfig.nostrictnull.json": {
+            extends: "./tsconfig",
+            compilerOptions: {
+                strictNullChecks: false
+            }
+        },
+        "/dev/configs/base.json": {
+            compilerOptions: {
+                allowJs: true,
+                noImplicitAny: true,
+                strictNullChecks: true
+            }
+        },
+        "/dev/configs/tests.json": {
+            compilerOptions: {
+                "preserveConstEnums": true,
+                "removeComments": false,
+                "sourceMap": true
+            },
+            exclude: [
+                "../tests/baselines",
+                "../tests/scenarios"
+            ],
+            include: [
+                "../tests/**/*.ts"
+            ]
+        },
+        "/dev/circular.json": {
+            extends: "./circular2",
+            compilerOptions: {
+                module: "amd"
+            }
+        },
+        "/dev/circular2.json": {
+            extends: "./circular",
+            compilerOptions: {
+                module: "commonjs"
+            }
+        },
+        "/dev/missing.json": {
+            extends: "./missing2",
+            compilerOptions: {
+                "types": []
+            }
+        },
+        "/dev/failure.json": {
+            extends: "./failure2.json",
+            compilerOptions: {
+                typeRoots: []
+            }
+        },
+        "/dev/failure2.json": {
+            excludes: ["*.js"]
+        },
+        "/dev/configs/first.json": {
+            extends: "./base",
+            compilerOptions: {
+                module: "commonjs"
+            },
+            files: ["../main.ts"]
+        },
+        "/dev/configs/second.json": {
+            extends: "./base",
+            compilerOptions: {
+                module: "amd"
+            },
+            include: ["../supplemental.*"]
+        },
+        "/dev/extends.json": { extends: 42 },
+        "/dev/extends2.json": { extends: "configs/base" },
         "/dev/main.ts": "",
         "/dev/supplemental.ts": "",
         "/dev/tests/unit/spec.ts": "",
         "/dev/tests/utils.ts": "",
         "/dev/tests/scenarios/first.json": "",
         "/dev/tests/baselines/first/output.ts": ""
-    };
+    });
+    const testContents = mapEntries(testContentsJson, (k, v) => [k, typeof v === "string" ? v : JSON.stringify(v)]);
 
     const caseInsensitiveBasePath = "c:/dev/";
-    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapObject(testContents, (key, content) => [`c:${key}`, content]));
+    const caseInsensitiveHost = new Utils.MockParseConfigHost(caseInsensitiveBasePath, /*useCaseSensitiveFileNames*/ false, mapEntries(testContents, (key, content) => [`c:${key}`, content]));
 
     const caseSensitiveBasePath = "/dev/";
     const caseSensitiveHost = new Utils.MockParseConfigHost(caseSensitiveBasePath, /*useCaseSensitiveFileNames*/ true, testContents);
@@ -179,7 +180,7 @@ namespace ts {
                 testFailure("can error when 'extends' is neither relative nor rooted.", "extends2.json", [{
                     code: 18001,
                     category: DiagnosticCategory.Error,
-                    messageText: `The path in an 'extends' options must be relative or rooted.`
+                    messageText: `A path in an 'extends' option must be relative or rooted, but 'configs/base' is not.`
                 }]);
             });
         });

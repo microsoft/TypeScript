@@ -1,15 +1,15 @@
-{
+﻿{
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "noImplicitAny": true,
-        "pretty": true,
         "removeComments": false,
-        "preserveConstEnums": true,
         "outFile": "../../built/local/run.js",
-        "sourceMap": true,
         "declaration": false,
-        "stripInternal": true,
         "types": [
             "node", "mocha", "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
         ]
     },
     "files": [
@@ -26,13 +26,17 @@
         "../compiler/visitor.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
-        "../compiler/transformers/es7.ts",
-        "../compiler/transformers/es6.ts",
+        "../compiler/transformers/esnext.ts",
+        "../compiler/transformers/es2017.ts",
+        "../compiler/transformers/es2016.ts",
+        "../compiler/transformers/es2015.ts",
+        "../compiler/transformers/es5.ts",
         "../compiler/transformers/generators.ts",
+        "../compiler/transformers/es5.ts",
         "../compiler/transformers/destructuring.ts",
         "../compiler/transformers/module/module.ts",
         "../compiler/transformers/module/system.ts",
-        "../compiler/transformers/module/es6.ts",
+        "../compiler/transformers/module/es2015.ts",
         "../compiler/transformer.ts",
         "../compiler/comments.ts",
         "../compiler/sourcemap.ts",
@@ -40,7 +44,6 @@
         "../compiler/emitter.ts",
         "../compiler/program.ts",
         "../compiler/commandLineParser.ts",
-        "../compiler/tsc.ts",
         "../compiler/diagnosticInformationMap.generated.ts",
         "../services/breakpoints.ts",
         "../services/navigateTo.ts",
@@ -68,6 +71,18 @@
         "../services/formatting/rulesProvider.ts",
         "../services/formatting/smartIndenter.ts",
         "../services/formatting/tokenRange.ts",
+        "../services/codeFixProvider.ts",
+        "../services/codefixes/fixes.ts",
+        "../services/codefixes/fixExtendsInterfaceBecomesImplements.ts",
+        "../services/codefixes/fixClassIncorrectlyImplementsInterface.ts",
+        "../services/codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
+        "../services/codefixes/fixClassSuperMustPrecedeThisAccess.ts",
+        "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "../services/codefixes/helpers.ts",
+        "../services/codefixes/importFixes.ts",
+        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/disableJsDiagnostics.ts",
+
         "harness.ts",
         "sourceMapRecorder.ts",
         "harnessLanguageService.ts",
@@ -81,7 +96,7 @@
         "rwcRunner.ts",
         "test262Runner.ts",
         "runner.ts",
-        "../server/protocol.d.ts",
+        "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
@@ -102,9 +117,16 @@
         "./unittests/commandLineParsing.ts",
         "./unittests/configurationExtension.ts",
         "./unittests/convertCompilerOptionsFromJson.ts",
-        "./unittests/convertTypingOptionsFromJson.ts",
+        "./unittests/convertTypeAcquisitionFromJson.ts",
         "./unittests/tsserverProjectSystem.ts",
         "./unittests/matchFiles.ts",
-        "./unittests/initializeTSConfig.ts"
+        "./unittests/initializeTSConfig.ts",
+        "./unittests/compileOnSave.ts",
+        "./unittests/typingsInstaller.ts",
+        "./unittests/projectErrors.ts",
+        "./unittests/printer.ts",
+        "./unittests/transform.ts",
+        "./unittests/customTransforms.ts",
+        "./unittests/textChanges.ts"
     ]
 }

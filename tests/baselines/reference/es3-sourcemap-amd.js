@@ -1,5 +1,4 @@
 //// [es3-sourcemap-amd.ts]
-
 class A
 {
     constructor ()

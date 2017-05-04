@@ -2096,11 +2096,16 @@ module Harness {
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 ///<reference path='..\compiler\io.ts'/>
 ///<reference path='..\compiler\typescript.ts'/>
 ///<reference path='..\services\typescriptServices.ts' />
@@ -2380,9 +2385,10 @@ var Harness;
     var TestCase = (function (_super) {
         __extends(TestCase, _super);
         function TestCase(description, block) {
-            _super.call(this, description, block);
-            this.description = description;
-            this.block = block;
+            var _this = _super.call(this, description, block) || this;
+            _this.description = description;
+            _this.block = block;
+            return _this;
         }
         TestCase.prototype.addChild = function (child) {
             throw new Error("Testcases may not be nested inside other testcases");
@@ -2414,9 +2420,10 @@ var Harness;
     var Scenario = (function (_super) {
         __extends(Scenario, _super);
         function Scenario(description, block) {
-            _super.call(this, description, block);
-            this.description = description;
-            this.block = block;
+            var _this = _super.call(this, description, block) || this;
+            _this.description = description;
+            _this.block = block;
+            return _this;
         }
         /** Run the block, and if the block doesn't raise an error, run the children. */
         Scenario.prototype.run = function (done) {
@@ -2469,7 +2476,7 @@ var Harness;
     var Run = (function (_super) {
         __extends(Run, _super);
         function Run() {
-            _super.call(this, 'Test Run', null);
+            return _super.call(this, 'Test Run', null) || this;
         }
         Run.prototype.run = function () {
             emitLog('start');

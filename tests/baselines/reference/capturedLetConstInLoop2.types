@@ -1,6 +1,4 @@
 === tests/cases/compiler/capturedLetConstInLoop2.ts ===
-
-
 // ========let
 function foo0(x) {
 >foo0 : (x: any) => void
@@ -68,10 +66,10 @@ function foo1(x) {
 
     for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -168,10 +166,10 @@ function foo4(x) {
 
     for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
@@ -183,7 +181,7 @@ function foo4(x) {
 
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         (function() { return x + a });
 >(function() { return x + a }) : () => number
@@ -207,12 +205,12 @@ function foo5(x) {
 
     for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >y : number
->1 : number
+>1 : 1
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -328,16 +326,16 @@ function foo8(x) {
 
     for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
         let x = 1;
 >x : number
->1 : number
+>1 : 1
 
         let a = arguments.length;
 >a : number
@@ -430,11 +428,11 @@ function foo1_c(x) {
 >x : any
 
     for (const x = 0; x < 1;) {
->x : number
->0 : number
+>x : 0
+>0 : 0
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -446,14 +444,14 @@ function foo1_c(x) {
 >(function() { return x + a }) : () => number
 >function() { return x + a } : () => number
 >x + a : number
->x : number
+>x : 0
 >a : number
 
         (() => x + a);
 >(() => x + a) : () => number
 >() => x + a : () => number
 >x + a : number
->x : number
+>x : 0
 >a : number
     }
 }
@@ -495,8 +493,8 @@ function foo3_c(x) {
 
     do {
         const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -508,14 +506,14 @@ function foo3_c(x) {
 >(function() { return x + a }) : () => number
 >function() { return x + a } : () => number
 >x + a : number
->x : number
+>x : 1
 >a : number
 
         (() => x + a);
 >(() => x + a) : () => number
 >() => x + a : () => number
 >x + a : number
->x : number
+>x : 1
 >a : number
 
     } while (1 === 1)
@@ -529,11 +527,11 @@ function foo4_c(x) {
 >x : any
 
     for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -542,21 +540,21 @@ function foo4_c(x) {
 >length : number
 
         const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
         (function() { return x + a });
 >(function() { return x + a }) : () => number
 >function() { return x + a } : () => number
 >x + a : number
->x : number
+>x : 1
 >a : number
 
         (() => x + a);
 >(() => x + a) : () => number
 >() => x + a : () => number
 >x + a : number
->x : number
+>x : 1
 >a : number
     }
 }
@@ -566,13 +564,13 @@ function foo5_c(x) {
 >x : any
 
     for (const x = 0, y = 1; x < 1;) {
->x : number
->0 : number
->y : number
->1 : number
+>x : 0
+>0 : 0
+>y : 1
+>1 : 1
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -585,8 +583,8 @@ function foo5_c(x) {
 >function() { return x + y + a } : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 >a : number
 
         (() => x + y + a);
@@ -594,8 +592,8 @@ function foo5_c(x) {
 >() => x + y + a : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 >a : number
     }
 }
@@ -611,10 +609,10 @@ function foo6_c(x) {
 >1 : 1
 
         const x = 1, y =1 ;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -627,8 +625,8 @@ function foo6_c(x) {
 >function() { return x + y + a } : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >a : number
 
         (() => x + y + a);
@@ -636,8 +634,8 @@ function foo6_c(x) {
 >() => x + y + a : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >a : number
     }
 }
@@ -648,10 +646,10 @@ function foo7_c(x) {
 
     do {
         const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -664,8 +662,8 @@ function foo7_c(x) {
 >function() { return x + y + a } : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >a : number
 
         (() => x + y + a);
@@ -673,8 +671,8 @@ function foo7_c(x) {
 >() => x + y + a : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 >a : number
 
     } while (1 === 1)
@@ -689,15 +687,15 @@ function foo8_c(x) {
 >x : any
 
     for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
         const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
         const a = arguments.length;
 >a : number
@@ -710,8 +708,8 @@ function foo8_c(x) {
 >function() { return x + y + a } : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 >a : number
 
         (() => x + y + a);
@@ -719,8 +717,8 @@ function foo8_c(x) {
 >() => x + y + a : () => number
 >x + y + a : number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 >a : number
     }
 }

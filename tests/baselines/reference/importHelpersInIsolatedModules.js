@@ -35,6 +35,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {
@@ -45,7 +46,7 @@ exports.A = A;
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -64,11 +65,9 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);
 //// [script.js]
-"use strict";
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {
@@ -78,7 +77,7 @@ var A = (function () {
 var B = (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
@@ -96,6 +95,5 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:returntype", void 0)
 ], C.prototype, "method", null);
 C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
+    dec
 ], C);

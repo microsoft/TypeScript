@@ -1,5 +1,4 @@
 //// [systemModule14.ts]
-
 function foo() {
     return a;
 }
@@ -17,6 +16,8 @@ System.register(["foo"], function (exports_1, context_1) {
     function foo() {
         return foo_1.a;
     }
+    exports_1("foo", foo);
+    exports_1("b", foo);
     var foo_1, x;
     return {
         setters: [
@@ -25,9 +26,7 @@ System.register(["foo"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            exports_1("foo", foo);
             x = 1;
-            exports_1("b", foo);
         }
     };
 });

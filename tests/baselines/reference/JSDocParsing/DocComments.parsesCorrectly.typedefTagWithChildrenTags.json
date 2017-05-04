@@ -6,7 +6,7 @@
         "0": {
             "kind": "JSDocTypedefTag",
             "pos": 8,
-            "end": 97,
+            "end": 98,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -18,6 +18,12 @@
                 "end": 16,
                 "text": "typedef"
             },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "text": "People"
+            },
             "name": {
                 "kind": "Identifier",
                 "pos": 17,
@@ -26,15 +32,15 @@
             },
             "jsDocTypeLiteral": {
                 "kind": "JSDocTypeLiteral",
-                "pos": 23,
-                "end": 97,
+                "pos": 26,
+                "end": 98,
                 "jsDocTypeTag": {
                     "kind": "JSDocTypeTag",
-                    "pos": 27,
+                    "pos": 28,
                     "end": 42,
                     "atToken": {
                         "kind": "AtToken",
-                        "pos": 27,
+                        "pos": 28,
                         "end": 29
                     },
                     "tagName": {
@@ -63,11 +69,11 @@
                 "jsDocPropertyTags": [
                     {
                         "kind": "JSDocPropertyTag",
-                        "pos": 46,
-                        "end": 69,
+                        "pos": 47,
+                        "end": 72,
                         "atToken": {
                             "kind": "AtToken",
-                            "pos": 46,
+                            "pos": 47,
                             "end": 48
                         },
                         "tagName": {
@@ -95,11 +101,11 @@
                     },
                     {
                         "kind": "JSDocPropertyTag",
-                        "pos": 73,
-                        "end": 97,
+                        "pos": 74,
+                        "end": 98,
                         "atToken": {
                             "kind": "AtToken",
-                            "pos": 73,
+                            "pos": 74,
                             "end": 75
                         },
                         "tagName": {
@@ -126,10 +132,11 @@
                         }
                     }
                 ]
-            }
+            },
+            "comment": ""
         },
         "length": 1,
         "pos": 8,
-        "end": 97
+        "end": 98
     }
 }

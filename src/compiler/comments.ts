@@ -5,17 +5,17 @@ namespace ts {
     export interface CommentWriter {
         reset(): void;
         setSourceFile(sourceFile: SourceFile): void;
-        emitNodeWithComments(node: Node, emitCallback: (node: Node) => void): void;
+        setWriter(writer: EmitTextWriter): void;
+        emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
         emitBodyWithDetachedComments(node: Node, detachedRange: TextRange, emitCallback: (node: Node) => void): void;
         emitTrailingCommentsOfPosition(pos: number): void;
+        emitLeadingCommentsOfPosition(pos: number): void;
     }
 
-    export function createCommentWriter(host: EmitHost, writer: EmitTextWriter, sourceMap: SourceMapWriter): CommentWriter {
-        const compilerOptions = host.getCompilerOptions();
-        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
-        const newLine = host.getNewLine();
-        const { emitPos } = sourceMap;
-
+    export function createCommentWriter(printerOptions: PrinterOptions, emitPos: ((pos: number) => void) | undefined): CommentWriter {
+        const extendedDiagnostics = printerOptions.extendedDiagnostics;
+        const newLine = getNewLineCharacter(printerOptions);
+        let writer: EmitTextWriter;
         let containerPos = -1;
         let containerEnd = -1;
         let declarationListContainerEnd = -1;
@@ -24,33 +24,33 @@ namespace ts {
         let currentLineMap: number[];
         let detachedCommentsInfo: { nodePos: number, detachedCommentEndPos: number}[];
         let hasWrittenComment = false;
-        let disabled: boolean = compilerOptions.removeComments;
+        let disabled: boolean = printerOptions.removeComments;
 
         return {
             reset,
+            setWriter,
             setSourceFile,
             emitNodeWithComments,
             emitBodyWithDetachedComments,
             emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
         };
 
-        function emitNodeWithComments(node: Node, emitCallback: (node: Node) => void) {
+        function emitNodeWithComments(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
             if (disabled) {
-                emitCallback(node);
+                emitCallback(hint, node);
                 return;
             }
 
             if (node) {
-                const { pos, end } = node.commentRange || node;
-                const emitFlags = node.emitFlags;
+                hasWrittenComment = false;
+
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags;
+                const { pos, end } = emitNode && emitNode.commentRange || node;
                 if ((pos < 0 && end < 0) || (pos === end)) {
                     // Both pos and end are synthesized, so just emit the node without comments.
-                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
-                        disableCommentsAndEmit(node, emitCallback);
-                    }
-                    else {
-                        emitCallback(node);
-                    }
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
                 }
                 else {
                     if (extendedDiagnostics) {
@@ -58,8 +58,8 @@ namespace ts {
                     }
 
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
-                    const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-                    const skipTrailingComments = end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
+                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 
                     // Emit leading comments if the position is not synthesized and the node
                     // has not opted out from emitting leading comments.
@@ -90,15 +90,10 @@ namespace ts {
                         performance.measure("commentTime", "preEmitNodeWithComment");
                     }
 
-                    if (emitFlags & NodeEmitFlags.NoNestedComments) {
-                        disableCommentsAndEmit(node, emitCallback);
-                    }
-                    else {
-                        emitCallback(node);
-                    }
+                    emitNodeWithSynthesizedComments(hint, node, emitNode, emitFlags, emitCallback);
 
                     if (extendedDiagnostics) {
-                        performance.mark("beginEmitNodeWithComment");
+                        performance.mark("postEmitNodeWithComment");
                     }
 
                     // Restore previous container state.
@@ -113,9 +108,85 @@ namespace ts {
                     }
 
                     if (extendedDiagnostics) {
-                        performance.measure("commentTime", "beginEmitNodeWithComment");
+                        performance.measure("commentTime", "postEmitNodeWithComment");
                     }
                 }
+            }
+        }
+
+        function emitNodeWithSynthesizedComments(hint: EmitHint, node: Node, emitNode: EmitNode, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            const leadingComments = emitNode && emitNode.leadingComments;
+            if (some(leadingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("preEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(leadingComments, emitLeadingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "preEmitNodeWithSynthesizedComments");
+                }
+            }
+
+            emitNodeWithNestedComments(hint, node, emitFlags, emitCallback);
+
+            const trailingComments = emitNode && emitNode.trailingComments;
+            if (some(trailingComments)) {
+                if (extendedDiagnostics) {
+                    performance.mark("postEmitNodeWithSynthesizedComments");
+                }
+
+                forEach(trailingComments, emitTrailingSynthesizedComment);
+
+                if (extendedDiagnostics) {
+                    performance.measure("commentTime", "postEmitNodeWithSynthesizedComments");
+                }
+            }
+        }
+
+        function emitLeadingSynthesizedComment(comment: SynthesizedComment) {
+            if (comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine || comment.kind === SyntaxKind.SingleLineCommentTrivia) {
+                writer.writeLine();
+            }
+            else {
+                writer.write(" ");
+            }
+        }
+
+        function emitTrailingSynthesizedComment(comment: SynthesizedComment) {
+            if (!writer.isAtStartOfLine()) {
+                writer.write(" ");
+            }
+            writeSynthesizedComment(comment);
+            if (comment.hasTrailingNewLine) {
+                writer.writeLine();
+            }
+        }
+
+        function writeSynthesizedComment(comment: SynthesizedComment) {
+            const text = formatSynthesizedComment(comment);
+            const lineMap = comment.kind === SyntaxKind.MultiLineCommentTrivia ? computeLineStarts(text) : undefined;
+            writeCommentRange(text, lineMap, writer, 0, text.length, newLine);
+        }
+
+        function formatSynthesizedComment(comment: SynthesizedComment) {
+            return comment.kind === SyntaxKind.MultiLineCommentTrivia
+                ? `/*${comment.text}*/`
+                : `//${comment.text}`;
+        }
+
+        function emitNodeWithNestedComments(hint: EmitHint, node: Node, emitFlags: EmitFlags, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (emitFlags & EmitFlags.NoNestedComments) {
+                disabled = true;
+                emitCallback(hint, node);
+                disabled = false;
+            }
+            else {
+                emitCallback(hint, node);
             }
         }
 
@@ -125,9 +196,9 @@ namespace ts {
             }
 
             const { pos, end } = detachedRange;
-            const emitFlags = node.emitFlags;
-            const skipLeadingComments = pos < 0 || (emitFlags & NodeEmitFlags.NoLeadingComments) !== 0;
-            const skipTrailingComments = disabled || end < 0 || (emitFlags & NodeEmitFlags.NoTrailingComments) !== 0;
+            const emitFlags = getEmitFlags(node);
+            const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
+            const skipTrailingComments = disabled || end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
 
             if (!skipLeadingComments) {
                 emitDetachedCommentsAndUpdateCommentsInfo(detachedRange);
@@ -137,8 +208,10 @@ namespace ts {
                 performance.measure("commentTime", "preEmitBodyWithDetachedComments");
             }
 
-            if (emitFlags & NodeEmitFlags.NoNestedComments) {
-                disableCommentsAndEmit(node, emitCallback);
+            if (emitFlags & EmitFlags.NoNestedComments && !disabled) {
+                disabled = true;
+                emitCallback(node);
+                disabled = false;
             }
             else {
                 emitCallback(node);
@@ -150,6 +223,9 @@ namespace ts {
 
             if (!skipTrailingComments) {
                 emitLeadingComments(detachedRange.end, /*isEmittedNode*/ true);
+                if (hasWrittenComment && !writer.isAtStartOfLine()) {
+                    writer.writeLine();
+                }
             }
 
             if (extendedDiagnostics) {
@@ -182,16 +258,16 @@ namespace ts {
             }
         }
 
-        function emitLeadingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
+        function emitLeadingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean, rangePos: number) {
             if (!hasWrittenComment) {
                 emitNewLineBeforeLeadingCommentOfPosition(currentLineMap, writer, rangePos, commentPos);
                 hasWrittenComment = true;
             }
 
             // Leading comments are emitted at /*leading comment1 */space/*leading comment*/space
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -201,19 +277,27 @@ namespace ts {
             }
         }
 
+        function emitLeadingCommentsOfPosition(pos: number) {
+            if (disabled || pos === -1) {
+                return;
+            }
+
+            emitLeadingComments(pos, /*isEmittedNode*/ true);
+        }
+
         function emitTrailingComments(pos: number) {
             forEachTrailingCommentToEmit(pos, emitTrailingComment);
         }
 
-        function emitTrailingComment(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+        function emitTrailingComment(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
             // trailing comments are emitted at space/*trailing comment1 */space/*trailing comment2*/
             if (!writer.isAtStartOfLine()) {
                 writer.write(" ");
             }
 
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -236,12 +320,12 @@ namespace ts {
             }
         }
 
-        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, kind: SyntaxKind, hasTrailingNewLine: boolean) {
+        function emitTrailingCommentOfPosition(commentPos: number, commentEnd: number, _kind: SyntaxKind, hasTrailingNewLine: boolean) {
             // trailing comments of a position are emitted at /*trailing comment1 */space/*trailing comment*/space
 
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(currentText, currentLineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
 
             if (hasTrailingNewLine) {
                 writer.writeLine();
@@ -277,22 +361,15 @@ namespace ts {
             detachedCommentsInfo = undefined;
         }
 
+        function setWriter(output: EmitTextWriter): void {
+            writer = output;
+        }
+
         function setSourceFile(sourceFile: SourceFile) {
             currentSourceFile = sourceFile;
             currentText = currentSourceFile.text;
             currentLineMap = getLineStarts(currentSourceFile);
             detachedCommentsInfo = undefined;
-        }
-
-        function disableCommentsAndEmit(node: Node, emitCallback: (node: Node) => void): void {
-            if (disabled) {
-                emitCallback(node);
-            }
-            else {
-                disabled = true;
-                emitCallback(node);
-                disabled = false;
-            }
         }
 
         function hasDetachedComments(pos: number) {
@@ -325,16 +402,16 @@ namespace ts {
         }
 
         function writeComment(text: string, lineMap: number[], writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) {
-            emitPos(commentPos);
+            if (emitPos) emitPos(commentPos);
             writeCommentRange(text, lineMap, writer, commentPos, commentEnd, newLine);
-            emitPos(commentEnd);
+            if (emitPos) emitPos(commentEnd);
         }
 
         /**
          * Determine if the given comment is a triple-slash
          *
          * @return true if the comment is a triple-slash comment else false
-         **/
+         */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
             // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
             // so that we don't end up computing comment string and doing match for all // comments

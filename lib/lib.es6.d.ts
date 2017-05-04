@@ -13,7 +13,11 @@ See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
 
+
+
 /// <reference no-default-lib="true"/>
+
+
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -153,23 +157,17 @@ interface ObjectConstructor {
     getOwnPropertyNames(o: any): string[];
 
     /**
-      * Creates an object that has null prototype.
-      * @param o Object to use as a prototype. May be null
+      * Creates an object that has the specified prototype or that has null prototype.
+      * @param o Object to use as a prototype. May be null.
       */
-    create(o: null): any;
-
-    /**
-      * Creates an object that has the specified prototype, and that optionally contains specified properties.
-      * @param o Object to use as a prototype. May be null
-      */
-    create<T>(o: T): T;
+    create(o: object | null): any;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: any, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -177,14 +175,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -196,7 +194,19 @@ interface ObjectConstructor {
       * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
       * @param o Object on which to lock the attributes.
       */
-    freeze<T>(o: T): T;
+    freeze<T>(a: T[]): ReadonlyArray<T>;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze<T extends Function>(f: T): T;
+
+    /**
+      * Prevents the modification of existing property attributes and values, and prevents the addition of new properties.
+      * @param o Object on which to lock the attributes.
+      */
+    freeze<T>(o: T): Readonly<T>;
 
     /**
       * Prevents the addition of new properties to an object.
@@ -259,6 +269,9 @@ interface Function {
       * @param argArray A list of arguments to be passed to the new function.
       */
     bind(this: Function, thisArg: any, ...argArray: any[]): any;
+
+    /** Returns a string representation of a function. */
+    toString(): string;
 
     prototype: any;
     readonly length: number;
@@ -332,53 +345,27 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): RegExpMatchArray | null;
-
-    /**
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags.
-      */
-    match(regexp: RegExp): RegExpMatchArray | null;
+    match(regexp: string | RegExp): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(searchValue: string, replaceValue: string): string;
+    replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A string that represents the regular expression.
+      * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
-    replace(searchValue: RegExp, replaceValue: string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replacer A function that returns the replacement text.
-      */
-    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
       * @param regexp The regular expression pattern and applicable flags.
       */
-    search(regexp: string): number;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags.
-      */
-    search(regexp: RegExp): number;
+    search(regexp: string | RegExp): number;
 
     /**
       * Returns a section of a string.
@@ -393,14 +380,7 @@ interface String {
       * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(separator: string, limit?: number): string[];
-
-    /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
-    split(separator: RegExp, limit?: number): string[];
+    split(separator: string | RegExp, limit?: number): string[];
 
     /**
       * Returns the substring at the specified location within a String object.
@@ -529,8 +509,8 @@ interface NumberConstructor {
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
 declare const Number: NumberConstructor;
 
-interface TemplateStringsArray extends Array<string> {
-    readonly raw: string[];
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: ReadonlyArray<string>;
 }
 
 interface Math {
@@ -868,9 +848,9 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp): RegExp;
+    new (pattern: RegExp | string): RegExp;
     new (pattern: string, flags?: string): RegExp;
-    (pattern: RegExp): RegExp;
+    (pattern: RegExp | string): RegExp;
     (pattern: string, flags?: string): RegExp;
     readonly prototype: RegExp;
 
@@ -1022,7 +1002,12 @@ interface ReadonlyArray<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
-    concat(...items: T[]): T[];
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
+    concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
       * @param separator A string used to separate one element of an array from the next in the resulting String. If omitted, the array elements are separated with a comma.
@@ -1052,31 +1037,49 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: Z): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: Z): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => void): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => void, thisArg: Z): void;
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => U): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => U, thisArg: undefined): U[];
+    map<Z, U>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => U, thisArg: Z): U[];
+    /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => value is S): S[];
+    filter<S extends T>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg: undefined): S[];
+    filter<Z, S extends T>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg: Z): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => any, thisArg: undefined): T[];
+    filter<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => any, thisArg: Z): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1128,6 +1131,11 @@ interface Array<T> {
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
       */
+    concat(...items: T[][]): T[];
+    /**
+      * Combines two or more arrays.
+      * @param items Additional items to add to the end of array1.
+      */
     concat(...items: (T | T[])[]): T[];
     /**
       * Adds all the elements of an array separated by the specified separator string.
@@ -1156,8 +1164,9 @@ interface Array<T> {
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
       * @param start The zero-based location in the array from which to start removing elements.
+      * @param deleteCount The number of elements to remove.
       */
-    splice(start: number): T[];
+    splice(start: number, deleteCount?: number): T[];
     /**
       * Removes elements from an array and, if necessary, inserts new elements in their place, returning the deleted elements.
       * @param start The zero-based location in the array from which to start removing elements.
@@ -1187,31 +1196,73 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => boolean, thisArg: Z): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => boolean, thisArg: Z): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: T[]) => void): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: T[]) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => void, thisArg: Z): void;
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U, U];
+    map<U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U];
+    map<Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U];
+    map<U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U];
+    map<Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U];
+    map<U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U];
+    map<Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U];
+    map<U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U];
+    map<Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U];
+    /**
+      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
+      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
+      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+      */
+    map<U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): U[];
+    map<Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: T[]) => any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: T[]) => any, thisArg: undefined): T[];
+    filter<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => any, thisArg: Z): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1271,19 +1322,71 @@ declare type PromiseConstructorLike = new <T>(executor: (resolve: (value?: T | P
 
 interface PromiseLike<T> {
     /**
-    * Attaches callbacks for the resolution and/or rejection of the Promise.
-    * @param onfulfilled The callback to execute when the Promise is resolved.
-    * @param onrejected The callback to execute when the Promise is rejected.
-    * @returns A Promise for the completion of which ever callback is executed.
-    */
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => TResult | PromiseLike<TResult>): PromiseLike<TResult>;
-    then<TResult>(onfulfilled?: (value: T) => TResult | PromiseLike<TResult>, onrejected?: (reason: any) => void): PromiseLike<TResult>;
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
+}
+
+/**
+ * Represents the completion of an asynchronous operation
+ */
+interface Promise<T> {
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>;
+
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<T | TResult>;
 }
 
 interface ArrayLike<T> {
     readonly length: number;
     readonly [n: number]: T;
 }
+
+/**
+ * Make all properties in T optional
+ */
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+};
+
+/**
+ * Make all properties in T readonly
+ */
+type Readonly<T> = {
+    readonly [P in keyof T]: T[P];
+};
+
+/**
+ * From T pick a set of properties K
+ */
+type Pick<T, K extends keyof T> = {
+    [P in K]: T[P];
+};
+
+/**
+ * Construct a type with a set of properties K of type T
+ */
+type Record<K extends string, T> = {
+    [P in K]: T;
+};
+
+/**
+ * Marker for contextual 'this' type
+ */
+interface ThisType<T> { }
 
 /**
   * Represents a raw buffer of binary data, which is used to store data for the
@@ -1300,7 +1403,7 @@ interface ArrayBuffer {
     /**
       * Returns a section of an ArrayBuffer.
       */
-    slice(begin:number, end?:number): ArrayBuffer;
+    slice(begin: number, end?: number): ArrayBuffer;
 }
 
 interface ArrayBufferConstructor {
@@ -1504,7 +1607,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1523,7 +1628,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int8Array) => any): Int8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int8Array) => any, thisArg: undefined): Int8Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => any, thisArg: Z): Int8Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1534,10 +1641,12 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1545,7 +1654,9 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1554,7 +1665,9 @@ interface Int8Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int8Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int8Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1592,7 +1705,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number): Int8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number, thisArg: undefined): Int8Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => number, thisArg: Z): Int8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1649,13 +1764,6 @@ interface Int8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -1676,7 +1784,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -1728,7 +1838,11 @@ interface Int8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int8Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int8Array;
+
+    from(arrayLike: ArrayLike<number>): Int8Array;
 
 }
 declare const Int8Array: Int8ArrayConstructor;
@@ -1777,7 +1891,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1796,7 +1912,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => any): Uint8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => any, thisArg: undefined): Uint8Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => any, thisArg: Z): Uint8Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1807,10 +1925,12 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -1818,7 +1938,9 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1827,7 +1949,9 @@ interface Uint8Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint8Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1865,7 +1989,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number): Uint8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number, thisArg: undefined): Uint8Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => number, thisArg: Z): Uint8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1922,13 +2048,6 @@ interface Uint8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -1949,7 +2068,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2002,7 +2123,11 @@ interface Uint8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8Array;
+
+    from(arrayLike: ArrayLike<number>): Uint8Array;
 
 }
 declare const Uint8Array: Uint8ArrayConstructor;
@@ -2051,7 +2176,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2070,7 +2197,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => any): Uint8ClampedArray;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => any, thisArg: undefined): Uint8ClampedArray;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => any, thisArg: Z): Uint8ClampedArray;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2081,10 +2210,12 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2092,7 +2223,9 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2101,7 +2234,9 @@ interface Uint8ClampedArray {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2139,7 +2274,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number): Uint8ClampedArray;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number, thisArg: undefined): Uint8ClampedArray;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => number, thisArg: Z): Uint8ClampedArray;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2196,17 +2333,10 @@ interface Uint8ClampedArray {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8ClampedArray, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /**
       * Returns a section of an array.
@@ -2223,7 +2353,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2276,7 +2408,11 @@ interface Uint8ClampedArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint8ClampedArray;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8ClampedArray;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8ClampedArray;
+
+    from(arrayLike: ArrayLike<number>): Uint8ClampedArray;
 }
 declare const Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
@@ -2324,7 +2460,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2343,7 +2481,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any): Int16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any, thisArg: undefined): Int16Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => any, thisArg: Z): Int16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2354,10 +2494,12 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2365,7 +2507,9 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2374,7 +2518,9 @@ interface Int16Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int16Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int16Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2412,7 +2558,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number): Int16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number, thisArg: undefined): Int16Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => number, thisArg: Z): Int16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2469,13 +2617,6 @@ interface Int16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2496,7 +2637,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2549,7 +2692,11 @@ interface Int16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int16Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int16Array;
+
+    from(arrayLike: ArrayLike<number>): Int16Array;
 
 }
 declare const Int16Array: Int16ArrayConstructor;
@@ -2598,7 +2745,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2617,7 +2766,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => any): Uint16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => any, thisArg: undefined): Uint16Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => any, thisArg: Z): Uint16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2628,10 +2779,12 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2639,7 +2792,9 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2648,7 +2803,9 @@ interface Uint16Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint16Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2686,7 +2843,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number): Uint16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number, thisArg: undefined): Uint16Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => number, thisArg: Z): Uint16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2743,13 +2902,6 @@ interface Uint16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2770,7 +2922,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2823,7 +2977,11 @@ interface Uint16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint16Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint16Array;
+
+    from(arrayLike: ArrayLike<number>): Uint16Array;
 
 }
 declare const Uint16Array: Uint16ArrayConstructor;
@@ -2871,7 +3029,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2890,7 +3050,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int32Array) => any): Int32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int32Array) => any, thisArg: undefined): Int32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => any, thisArg: Z): Int32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2901,10 +3063,12 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -2912,7 +3076,9 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2921,7 +3087,9 @@ interface Int32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2959,7 +3127,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int32Array) => number, thisArg?: any): Int32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int32Array) => number): Int32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int32Array) => number, thisArg: undefined): Int32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => number, thisArg: Z): Int32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3016,13 +3186,6 @@ interface Int32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3043,7 +3206,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3096,7 +3261,11 @@ interface Int32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int32Array;
+
+    from(arrayLike: ArrayLike<number>): Int32Array;
 }
 declare const Int32Array: Int32ArrayConstructor;
 
@@ -3144,7 +3313,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3163,7 +3334,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => any): Uint32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => any, thisArg: undefined): Uint32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => any, thisArg: Z): Uint32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3174,10 +3347,12 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3185,7 +3360,9 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3194,7 +3371,9 @@ interface Uint32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3232,7 +3411,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number): Uint32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number, thisArg: undefined): Uint32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => number, thisArg: Z): Uint32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3289,13 +3470,6 @@ interface Uint32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3316,7 +3490,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3369,7 +3545,11 @@ interface Uint32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint32Array;
+
+    from(arrayLike: ArrayLike<number>): Uint32Array;
 }
 declare const Uint32Array: Uint32ArrayConstructor;
 
@@ -3417,7 +3597,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3436,7 +3618,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float32Array) => any): Float32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float32Array) => any, thisArg: undefined): Float32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => any, thisArg: Z): Float32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3447,10 +3631,12 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3458,7 +3644,9 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3467,7 +3655,9 @@ interface Float32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Float32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3505,7 +3695,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number): Float32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number, thisArg: undefined): Float32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => number, thisArg: Z): Float32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3562,13 +3754,6 @@ interface Float32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3589,7 +3774,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3642,7 +3829,11 @@ interface Float32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Float32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float32Array;
+
+    from(arrayLike: ArrayLike<number>): Float32Array;
 
 }
 declare const Float32Array: Float32ArrayConstructor;
@@ -3691,7 +3882,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3710,7 +3903,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float64Array) => any): Float64Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float64Array) => any, thisArg: undefined): Float64Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => any, thisArg: Z): Float64Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3721,10 +3916,12 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
+      * Returns the index of the first element in the array where predicate is true, and -1
       * otherwise.
       * @param predicate find calls predicate once for each element of the array, in ascending
       * order, until it finds one where predicate returns true. If such an element is found,
@@ -3732,7 +3929,9 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3741,7 +3940,9 @@ interface Float64Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Float64Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float64Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float64Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3779,7 +3980,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number): Float64Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number, thisArg: undefined): Float64Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => number, thisArg: Z): Float64Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3836,13 +4039,6 @@ interface Float64Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3863,7 +4059,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3916,7 +4114,11 @@ interface Float64ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Float64Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float64Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float64Array;
+
+    from(arrayLike: ArrayLike<number>): Float64Array;
 }
 declare const Float64Array: Float64ArrayConstructor;
 
@@ -3924,7 +4126,7 @@ declare const Float64Array: Float64ArrayConstructor;
 /// ECMAScript Internationalization API
 /////////////////////////////
 
-declare module Intl {
+declare namespace Intl {
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;
@@ -3949,13 +4151,10 @@ declare module Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new (locales?: string[], options?: CollatorOptions): Collator;
-        new (locale?: string, options?: CollatorOptions): Collator;
-        (locales?: string[], options?: CollatorOptions): Collator;
-        (locale?: string, options?: CollatorOptions): Collator;
-        supportedLocalesOf(locales: string[], options?: CollatorOptions): string[];
-        supportedLocalesOf(locale: string, options?: CollatorOptions): string[];
-    }
+        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        (locales?: string | string[], options?: CollatorOptions): Collator;
+        supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
+    };
 
     interface NumberFormatOptions {
         localeMatcher?: string;
@@ -3989,13 +4188,10 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        new (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        (locales?: string[], options?: NumberFormatOptions): NumberFormat;
-        (locale?: string, options?: NumberFormatOptions): NumberFormat;
-        supportedLocalesOf(locales: string[], options?: NumberFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: NumberFormatOptions): string[];
-    }
+        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
+    };
 
     interface DateTimeFormatOptions {
         localeMatcher?: string;
@@ -4035,461 +4231,462 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        new (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        (locales?: string[], options?: DateTimeFormatOptions): DateTimeFormat;
-        (locale?: string, options?: DateTimeFormatOptions): DateTimeFormat;
-        supportedLocalesOf(locales: string[], options?: DateTimeFormatOptions): string[];
-        supportedLocalesOf(locale: string, options?: DateTimeFormatOptions): string[];
-    }
+        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
+    };
 }
 
 interface String {
     /**
-      * Determines whether two strings are equivalent in the current locale.
+      * Determines whether two strings are equivalent in the current or specified locale.
       * @param that String to compare to target string
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
       * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
       */
-    localeCompare(that: string, locales: string[], options?: Intl.CollatorOptions): number;
-
-    /**
-      * Determines whether two strings are equivalent in the current locale.
-      * @param that String to compare to target string
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used. This parameter must conform to BCP 47 standards; see the Intl.Collator object for details.
-      * @param options An object that contains one or more properties that specify comparison options. see the Intl.Collator object for details.
-      */
-    localeCompare(that: string, locale: string, options?: Intl.CollatorOptions): number;
+    localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number;
 }
 
 interface Number {
     /**
       * Converts a number to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.NumberFormatOptions): string;
-
-    /**
-      * Converts a number to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.NumberFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
 interface Date {
     /**
       * Converts a date and time to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
     /**
       * Converts a date to a string by using the current or specified locale.
-      * @param locales An array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleDateString(locales?: string[], options?: Intl.DateTimeFormatOptions): string;
+    toLocaleDateString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
       * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
+      * @param locales A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
       * @param options An object that contains one or more properties that specify comparison options.
       */
-    toLocaleTimeString(locale?: string[], options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date and time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a date to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleDateString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
-
-    /**
-      * Converts a time to a string by using the current or specified locale.
-      * @param locale Locale tag. If you omit this parameter, the default locale of the JavaScript runtime is used.
-      * @param options An object that contains one or more properties that specify comparison options.
-      */
-    toLocaleTimeString(locale?: string, options?: Intl.DateTimeFormatOptions): string;
+    toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
+
+
 declare type PropertyKey = string | number | symbol;
 
 interface Array<T> {
     /**
-      * Returns the value of the first element in the array where predicate is true, and undefined
-      * otherwise.
-      * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, find
-      * immediately returns that element value. Otherwise, find returns undefined.
-      * @param thisArg If provided, it will be used as the this value for each invocation of
-      * predicate. If it is not provided, undefined is used instead.
-      */
-    find(predicate: (value: T, index: number, obj: Array<T>) => boolean, thisArg?: any): T | undefined;
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): T | undefined;
+    find(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): T | undefined;
+    find<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): T | undefined;
 
     /**
-      * Returns the index of the first element in the array where predicate is true, and undefined
-      * otherwise.
-      * @param predicate find calls predicate once for each element of the array, in ascending
-      * order, until it finds one where predicate returns true. If such an element is found, 
-      * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
-      * @param thisArg If provided, it will be used as the this value for each invocation of
-      * predicate. If it is not provided, undefined is used instead.
-      */
-    findIndex(predicate: (value: T) => boolean, thisArg?: any): number;
+     * Returns the index of the first element in the array where predicate is true, and -1
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found,
+     * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
+    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
 
     /**
-      * Returns the this object after filling the section identified by start and end with value
-      * @param value value to fill array section with
-      * @param start index to start filling the array at. If start is negative, it is treated as
-      * length+start where length is the length of the array.
-      * @param end index to stop filling the array at. If end is negative, it is treated as
-      * length+end.
-      */
+     * Returns the this object after filling the section identified by start and end with value
+     * @param value value to fill array section with
+     * @param start index to start filling the array at. If start is negative, it is treated as
+     * length+start where length is the length of the array.
+     * @param end index to stop filling the array at. If end is negative, it is treated as
+     * length+end.
+     */
     fill(value: T, start?: number, end?: number): this;
 
     /**
-      * Returns the this object after copying a section of the array identified by start and end
-      * to the same array starting at position target
-      * @param target If target is negative, it is treated as length+target where length is the
-      * length of the array.
-      * @param start If start is negative, it is treated as length+start. If end is negative, it
-      * is treated as length+end.
-      * @param end If not specified, length of the this object is used as its default value.
-      */
+     * Returns the this object after copying a section of the array identified by start and end
+     * to the same array starting at position target
+     * @param target If target is negative, it is treated as length+target where length is the
+     * length of the array.
+     * @param start If start is negative, it is treated as length+start. If end is negative, it
+     * is treated as length+end.
+     * @param end If not specified, length of the this object is used as its default value.
+     */
     copyWithin(target: number, start: number, end?: number): this;
 }
 
 interface ArrayConstructor {
     /**
-      * Creates an array from an array-like object.
-      * @param arrayLike An array-like object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
+     * Creates an array from an array-like object.
+     * @param arrayLike An array-like object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U): Array<U>;
+    from<T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): Array<U>;
+    from<Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
 
 
     /**
-      * Creates an array from an array-like object.
-      * @param arrayLike An array-like object to convert to an array.
-      */
+     * Creates an array from an array-like object.
+     * @param arrayLike An array-like object to convert to an array.
+     */
     from<T>(arrayLike: ArrayLike<T>): Array<T>;
 
     /**
-      * Returns a new array from a set of elements.
-      * @param items A set of elements to include in the new array object.
-      */
+     * Returns a new array from a set of elements.
+     * @param items A set of elements to include in the new array object.
+     */
     of<T>(...items: T[]): Array<T>;
+}
+
+interface DateConstructor {
+    new (value: Date): Date;
 }
 
 interface Function {
     /**
-      * Returns the name of the function. Function names are read-only and can not be changed.
-      */
+     * Returns the name of the function. Function names are read-only and can not be changed.
+     */
     readonly name: string;
 }
 
 interface Math {
     /**
-      * Returns the number of leading zero bits in the 32-bit binary representation of a number.
-      * @param x A numeric expression.
-      */
+     * Returns the number of leading zero bits in the 32-bit binary representation of a number.
+     * @param x A numeric expression.
+     */
     clz32(x: number): number;
 
     /**
-      * Returns the result of 32-bit multiplication of two numbers.
-      * @param x First number
-      * @param y Second number
-      */
+     * Returns the result of 32-bit multiplication of two numbers.
+     * @param x First number
+     * @param y Second number
+     */
     imul(x: number, y: number): number;
 
     /**
-      * Returns the sign of the x, indicating whether x is positive, negative or zero.
-      * @param x The numeric expression to test
-      */
+     * Returns the sign of the x, indicating whether x is positive, negative or zero.
+     * @param x The numeric expression to test
+     */
     sign(x: number): number;
 
     /**
-      * Returns the base 10 logarithm of a number.
-      * @param x A numeric expression.
-      */
+     * Returns the base 10 logarithm of a number.
+     * @param x A numeric expression.
+     */
     log10(x: number): number;
 
     /**
-      * Returns the base 2 logarithm of a number.
-      * @param x A numeric expression.
-      */
+     * Returns the base 2 logarithm of a number.
+     * @param x A numeric expression.
+     */
     log2(x: number): number;
 
     /**
-      * Returns the natural logarithm of 1 + x.
-      * @param x A numeric expression.
-      */
+     * Returns the natural logarithm of 1 + x.
+     * @param x A numeric expression.
+     */
     log1p(x: number): number;
 
     /**
-      * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of
-      * the natural logarithms).
-      * @param x A numeric expression.
-      */
+     * Returns the result of (e^x - 1) of x (e raised to the power of x, where e is the base of
+     * the natural logarithms).
+     * @param x A numeric expression.
+     */
     expm1(x: number): number;
 
     /**
-      * Returns the hyperbolic cosine of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the hyperbolic cosine of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     cosh(x: number): number;
 
     /**
-      * Returns the hyperbolic sine of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the hyperbolic sine of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     sinh(x: number): number;
 
     /**
-      * Returns the hyperbolic tangent of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the hyperbolic tangent of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     tanh(x: number): number;
 
     /**
-      * Returns the inverse hyperbolic cosine of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the inverse hyperbolic cosine of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     acosh(x: number): number;
 
     /**
-      * Returns the inverse hyperbolic sine of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the inverse hyperbolic sine of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     asinh(x: number): number;
 
     /**
-      * Returns the inverse hyperbolic tangent of a number.
-      * @param x A numeric expression that contains an angle measured in radians.
-      */
+     * Returns the inverse hyperbolic tangent of a number.
+     * @param x A numeric expression that contains an angle measured in radians.
+     */
     atanh(x: number): number;
 
     /**
-      * Returns the square root of the sum of squares of its arguments.
-      * @param values Values to compute the square root for.
-      *     If no arguments are passed, the result is +0.
-      *     If there is only one argument, the result is the absolute value.
-      *     If any argument is +Infinity or -Infinity, the result is +Infinity.
-      *     If any argument is NaN, the result is NaN.
-      *     If all arguments are either +0 or −0, the result is +0.
-      */
+     * Returns the square root of the sum of squares of its arguments.
+     * @param values Values to compute the square root for.
+     *     If no arguments are passed, the result is +0.
+     *     If there is only one argument, the result is the absolute value.
+     *     If any argument is +Infinity or -Infinity, the result is +Infinity.
+     *     If any argument is NaN, the result is NaN.
+     *     If all arguments are either +0 or −0, the result is +0.
+     */
     hypot(...values: number[] ): number;
 
     /**
-      * Returns the integral part of the a numeric expression, x, removing any fractional digits.
-      * If x is already an integer, the result is x.
-      * @param x A numeric expression.
-      */
+     * Returns the integral part of the a numeric expression, x, removing any fractional digits.
+     * If x is already an integer, the result is x.
+     * @param x A numeric expression.
+     */
     trunc(x: number): number;
 
     /**
-      * Returns the nearest single precision float representation of a number.
-      * @param x A numeric expression.
-      */
+     * Returns the nearest single precision float representation of a number.
+     * @param x A numeric expression.
+     */
     fround(x: number): number;
 
     /**
-      * Returns an implementation-dependent approximation to the cube root of number.
-      * @param x A numeric expression.
-      */
+     * Returns an implementation-dependent approximation to the cube root of number.
+     * @param x A numeric expression.
+     */
     cbrt(x: number): number;
 }
 
 interface NumberConstructor {
     /**
-      * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
-      * that is representable as a Number value, which is approximately:
-      * 2.2204460492503130808472633361816 x 10‍−‍16.
-      */
+     * The value of Number.EPSILON is the difference between 1 and the smallest value greater than 1
+     * that is representable as a Number value, which is approximately:
+     * 2.2204460492503130808472633361816 x 10‍−‍16.
+     */
     readonly EPSILON: number;
 
     /**
-      * Returns true if passed value is finite.
-      * Unlike the global isFininte, Number.isFinite doesn't forcibly convert the parameter to a
-      * number. Only finite values of the type number, result in true.
-      * @param number A numeric value.
-      */
+     * Returns true if passed value is finite.
+     * Unlike the global isFinite, Number.isFinite doesn't forcibly convert the parameter to a
+     * number. Only finite values of the type number, result in true.
+     * @param number A numeric value.
+     */
     isFinite(number: number): boolean;
 
     /**
-      * Returns true if the value passed is an integer, false otherwise.
-      * @param number A numeric value.
-      */
+     * Returns true if the value passed is an integer, false otherwise.
+     * @param number A numeric value.
+     */
     isInteger(number: number): boolean;
 
     /**
-      * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
-      * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
-      * to a number. Only values of the type number, that are also NaN, result in true.
-      * @param number A numeric value.
-      */
+     * Returns a Boolean value that indicates whether a value is the reserved value NaN (not a
+     * number). Unlike the global isNaN(), Number.isNaN() doesn't forcefully convert the parameter
+     * to a number. Only values of the type number, that are also NaN, result in true.
+     * @param number A numeric value.
+     */
     isNaN(number: number): boolean;
 
     /**
-      * Returns true if the value passed is a safe integer.
-      * @param number A numeric value.
-      */
+     * Returns true if the value passed is a safe integer.
+     * @param number A numeric value.
+     */
     isSafeInteger(number: number): boolean;
 
     /**
-      * The value of the largest integer n such that n and n + 1 are both exactly representable as
-      * a Number value.
-      * The value of Number.MIN_SAFE_INTEGER is 9007199254740991 2^53 − 1.
-      */
+     * The value of the largest integer n such that n and n + 1 are both exactly representable as
+     * a Number value.
+     * The value of Number.MAX_SAFE_INTEGER is 9007199254740991 2^53 − 1.
+     */
     readonly MAX_SAFE_INTEGER: number;
 
     /**
-      * The value of the smallest integer n such that n and n − 1 are both exactly representable as
-      * a Number value.
-      * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
-      */
+     * The value of the smallest integer n such that n and n − 1 are both exactly representable as
+     * a Number value.
+     * The value of Number.MIN_SAFE_INTEGER is −9007199254740991 (−(2^53 − 1)).
+     */
     readonly MIN_SAFE_INTEGER: number;
 
     /**
-      * Converts a string to a floating-point number.
-      * @param string A string that contains a floating-point number.
-      */
+     * Converts a string to a floating-point number.
+     * @param string A string that contains a floating-point number.
+     */
     parseFloat(string: string): number;
 
     /**
-      * Converts A string to an integer.
-      * @param s A string to convert into a number.
-      * @param radix A value between 2 and 36 that specifies the base of the number in numString.
-      * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
-      * All other strings are considered decimal.
-      */
+     * Converts A string to an integer.
+     * @param s A string to convert into a number.
+     * @param radix A value between 2 and 36 that specifies the base of the number in numString.
+     * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
+     * All other strings are considered decimal.
+     */
     parseInt(string: string, radix?: number): number;
 }
 
 interface Object {
     /**
-      * Determines whether an object has a property with the specified name.
-      * @param v A property name.
-      */
-    hasOwnProperty(v: PropertyKey): boolean
+     * Determines whether an object has a property with the specified name.
+     * @param v A property name.
+     */
+    hasOwnProperty(v: PropertyKey): boolean;
 
     /**
-      * Determines whether a specified property is enumerable.
-      * @param v A property name.
-      */
+     * Determines whether a specified property is enumerable.
+     * @param v A property name.
+     */
     propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a
-      * target object. Returns the target object.
-      * @param target The target object to copy to.
-      * @param source The source object from which to copy properties.
-      */
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
+     * @param source The source object from which to copy properties.
+     */
     assign<T, U>(target: T, source: U): T & U;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a
-      * target object. Returns the target object.
-      * @param target The target object to copy to.
-      * @param source1 The first source object from which to copy properties.
-      * @param source2 The second source object from which to copy properties.
-      */
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
+     * @param source1 The first source object from which to copy properties.
+     * @param source2 The second source object from which to copy properties.
+     */
     assign<T, U, V>(target: T, source1: U, source2: V): T & U & V;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a
-      * target object. Returns the target object.
-      * @param target The target object to copy to.
-      * @param source1 The first source object from which to copy properties.
-      * @param source2 The second source object from which to copy properties.
-      * @param source3 The third source object from which to copy properties.
-      */
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
+     * @param source1 The first source object from which to copy properties.
+     * @param source2 The second source object from which to copy properties.
+     * @param source3 The third source object from which to copy properties.
+     */
     assign<T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W;
 
     /**
-      * Copy the values of all of the enumerable own properties from one or more source objects to a
-      * target object. Returns the target object.
-      * @param target The target object to copy to.
-      * @param sources One or more source objects from which to copy properties
-      */
-    assign(target: any, ...sources: any[]): any;
+     * Copy the values of all of the enumerable own properties from one or more source objects to a
+     * target object. Returns the target object.
+     * @param target The target object to copy to.
+     * @param sources One or more source objects from which to copy properties
+     */
+    assign(target: object, ...sources: any[]): any;
 
     /**
-      * Returns an array of all symbol properties found directly on object o.
-      * @param o Object to retrieve the symbols from.
-      */
+     * Returns an array of all symbol properties found directly on object o.
+     * @param o Object to retrieve the symbols from.
+     */
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
-      * Returns true if the values are the same value, false otherwise.
-      * @param value1 The first value.
-      * @param value2 The second value.
-      */
+     * Returns true if the values are the same value, false otherwise.
+     * @param value1 The first value.
+     * @param value2 The second value.
+     */
     is(value1: any, value2: any): boolean;
 
     /**
-      * Sets the prototype of a specified object o to  object proto or null. Returns the object o.
-      * @param o The object to change its prototype.
-      * @param proto The value of the new prototype or null.
-      */
-    setPrototypeOf(o: any, proto: any): any;
+     * Sets the prototype of a specified object o to  object proto or null. Returns the object o.
+     * @param o The object to change its prototype.
+     * @param proto The value of the new prototype or null.
+     */
+    setPrototypeOf(o: any, proto: object | null): any;
 
     /**
-      * Gets the own property descriptor of the specified object.
-      * An own property descriptor is one that is defined directly on the object and is not
-      * inherited from the object's prototype.
-      * @param o Object that contains the property.
-      * @param p Name of the property.
-    */
+     * Gets the own property descriptor of the specified object.
+     * An own property descriptor is one that is defined directly on the object and is not
+     * inherited from the object's prototype.
+     * @param o Object that contains the property.
+     * @param p Name of the property.
+     */
     getOwnPropertyDescriptor(o: any, propertyKey: PropertyKey): PropertyDescriptor;
 
     /**
-      * Adds a property to an object, or modifies attributes of an existing property.
-      * @param o Object on which to add or modify the property. This can be a native JavaScript
-      * object (that is, a user-defined object or a built in object) or a DOM object.
-      * @param p The property name.
-      * @param attributes Descriptor for the property. It can be for a data property or an accessor
-      *  property.
-      */
+     * Adds a property to an object, or modifies attributes of an existing property.
+     * @param o Object on which to add or modify the property. This can be a native JavaScript
+     * object (that is, a user-defined object or a built in object) or a DOM object.
+     * @param p The property name.
+     * @param attributes Descriptor for the property. It can be for a data property or an accessor
+     *  property.
+     */
     defineProperty(o: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): any;
+}
+
+interface ReadonlyArray<T> {
+    /**
+     * Returns the value of the first element in the array where predicate is true, and undefined
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found, find
+     * immediately returns that element value. Otherwise, find returns undefined.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean): T | undefined;
+    find(predicate: (this: void, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: undefined): T | undefined;
+    find<Z>(predicate: (this: Z, value: T, index: number, obj: ReadonlyArray<T>) => boolean, thisArg: Z): T | undefined;
+
+    /**
+     * Returns the index of the first element in the array where predicate is true, and -1
+     * otherwise.
+     * @param predicate find calls predicate once for each element of the array, in ascending
+     * order, until it finds one where predicate returns true. If such an element is found,
+     * findIndex immediately returns that element index. Otherwise, findIndex returns -1.
+     * @param thisArg If provided, it will be used as the this value for each invocation of
+     * predicate. If it is not provided, undefined is used instead.
+     */
+    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean): number;
+    findIndex(predicate: (this: void, value: T, index: number, obj: Array<T>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: T, index: number, obj: Array<T>) => boolean, thisArg: Z): number;
 }
 
 interface RegExp {
     /**
-      * Returns a string indicating the flags of the regular expression in question. This field is read-only.
-      * The characters in this string are sequenced and concatenated in the following order:
-      *
-      *    - "g" for global
-      *    - "i" for ignoreCase
-      *    - "m" for multiline
-      *    - "u" for unicode
-      *    - "y" for sticky
-      *
-      * If no flags are set, the value is the empty string.
-      */
+     * Returns a string indicating the flags of the regular expression in question. This field is read-only.
+     * The characters in this string are sequenced and concatenated in the following order:
+     *
+     *    - "g" for global
+     *    - "i" for ignoreCase
+     *    - "m" for multiline
+     *    - "u" for unicode
+     *    - "y" for sticky
+     *
+     * If no flags are set, the value is the empty string.
+     */
     readonly flags: string;
 
     /**
-      * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular
-      * expression. Default is false. Read-only.
-      */
+     * Returns a Boolean value indicating the state of the sticky flag (y) used with a regular
+     * expression. Default is false. Read-only.
+     */
     readonly sticky: boolean;
 
     /**
-      * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular
-      * expression. Default is false. Read-only.
-      */
+     * Returns a Boolean value indicating the state of the Unicode flag (u) used with a regular
+     * expression. Default is false. Read-only.
+     */
     readonly unicode: boolean;
 }
 
@@ -4500,64 +4697,64 @@ interface RegExpConstructor {
 
 interface String {
     /**
-      * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
-      * value of the UTF-16 encoded code point starting at the string element at position pos in
-      * the String resulting from converting this object to a String.
-      * If there is no element at that position, the result is undefined.
-      * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
-      */
+     * Returns a nonnegative integer Number less than 1114112 (0x110000) that is the code point
+     * value of the UTF-16 encoded code point starting at the string element at position pos in
+     * the String resulting from converting this object to a String.
+     * If there is no element at that position, the result is undefined.
+     * If a valid UTF-16 surrogate pair does not begin at pos, the result is the code unit at pos.
+     */
     codePointAt(pos: number): number | undefined;
 
     /**
-      * Returns true if searchString appears as a substring of the result of converting this
-      * object to a String, at one or more positions that are
-      * greater than or equal to position; otherwise, returns false.
-      * @param searchString search string
-      * @param position If position is undefined, 0 is assumed, so as to search all of the String.
-      */
+     * Returns true if searchString appears as a substring of the result of converting this
+     * object to a String, at one or more positions that are
+     * greater than or equal to position; otherwise, returns false.
+     * @param searchString search string
+     * @param position If position is undefined, 0 is assumed, so as to search all of the String.
+     */
     includes(searchString: string, position?: number): boolean;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the
-      * same as the corresponding elements of this object (converted to a String) starting at
-      * endPosition – length(this). Otherwise returns false.
-      */
+     * Returns true if the sequence of elements of searchString converted to a String is the
+     * same as the corresponding elements of this object (converted to a String) starting at
+     * endPosition – length(this). Otherwise returns false.
+     */
     endsWith(searchString: string, endPosition?: number): boolean;
 
     /**
-      * Returns the String value result of normalizing the string into the normalization form
-      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-      * is "NFC"
-      */
+     * Returns the String value result of normalizing the string into the normalization form
+     * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+     * is "NFC"
+     */
     normalize(form: "NFC" | "NFD" | "NFKC" | "NFKD"): string;
 
     /**
-      * Returns the String value result of normalizing the string into the normalization form
-      * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
-      * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
-      * is "NFC"
-      */
+     * Returns the String value result of normalizing the string into the normalization form
+     * named by form as specified in Unicode Standard Annex #15, Unicode Normalization Forms.
+     * @param form Applicable values: "NFC", "NFD", "NFKC", or "NFKD", If not specified default
+     * is "NFC"
+     */
     normalize(form?: string): string;
 
     /**
-      * Returns a String value that is made from count copies appended together. If count is 0,
-      * T is the empty String is returned.
-      * @param count number of copies to append
-      */
+     * Returns a String value that is made from count copies appended together. If count is 0,
+     * T is the empty String is returned.
+     * @param count number of copies to append
+     */
     repeat(count: number): string;
 
     /**
-      * Returns true if the sequence of elements of searchString converted to a String is the
-      * same as the corresponding elements of this object (converted to a String) starting at
-      * position. Otherwise returns false.
-      */
+     * Returns true if the sequence of elements of searchString converted to a String is the
+     * same as the corresponding elements of this object (converted to a String) starting at
+     * position. Otherwise returns false.
+     */
     startsWith(searchString: string, position?: number): boolean;
 
     /**
-      * Returns an <a> HTML anchor element and sets the name attribute to the text value
-      * @param name
-      */
+     * Returns an <a> HTML anchor element and sets the name attribute to the text value
+     * @param name
+     */
     anchor(name: string): string;
 
     /** Returns a <big> HTML element */
@@ -4570,10 +4767,10 @@ interface String {
     bold(): string;
 
     /** Returns a <tt> HTML element */
-    fixed(): string
+    fixed(): string;
 
     /** Returns a <font> HTML element and sets the color attribute value */
-    fontcolor(color: string): string
+    fontcolor(color: string): string;
 
     /** Returns a <font> HTML element and sets the size attribute value */
     fontsize(size: number): string;
@@ -4602,27 +4799,29 @@ interface String {
 
 interface StringConstructor {
     /**
-      * Return the String value whose elements are, in order, the elements in the List elements.
-      * If length is 0, the empty string is returned.
-      */
+     * Return the String value whose elements are, in order, the elements in the List elements.
+     * If length is 0, the empty string is returned.
+     */
     fromCodePoint(...codePoints: number[]): string;
 
     /**
-      * String.raw is intended for use as a tag function of a Tagged Template String. When called
-      * as such the first argument will be a well formed template call site object and the rest
-      * parameter will contain the substitution values.
-      * @param template A well-formed template string call site representation.
-      * @param substitutions A set of substitution values.
-      */
+     * String.raw is intended for use as a tag function of a Tagged Template String. When called
+     * as such the first argument will be a well formed template call site object and the rest
+     * parameter will contain the substitution values.
+     * @param template A well-formed template string call site representation.
+     * @param substitutions A set of substitution values.
+     */
     raw(template: TemplateStringsArray, ...substitutions: any[]): string;
 }
+
+
 interface Map<K, V> {
     clear(): void;
     delete(key: K): boolean;
-    forEach(callbackfn: (value: V, index: K, map: Map<K, V>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: V, key: K, map: Map<K, V>) => void, thisArg?: any): void;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
     readonly size: number;
 }
 
@@ -4633,18 +4832,24 @@ interface MapConstructor {
 }
 declare var Map: MapConstructor;
 
-interface WeakMap<K, V> {
-    clear(): void;
+interface ReadonlyMap<K, V> {
+    forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
+    get(key: K): V | undefined;
+    has(key: K): boolean;
+    readonly size: number;
+}
+
+interface WeakMap<K extends object, V> {
     delete(key: K): boolean;
     get(key: K): V | undefined;
     has(key: K): boolean;
-    set(key: K, value?: V): this;
+    set(key: K, value: V): this;
 }
 
 interface WeakMapConstructor {
-    new (): WeakMap<any, any>;
-    new <K, V>(entries?: [K, V][]): WeakMap<K, V>;
-    readonly prototype: WeakMap<any, any>;
+    new (): WeakMap<object, any>;
+    new <K extends object, V>(entries?: [K, V][]): WeakMap<K, V>;
+    readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -4652,7 +4857,7 @@ interface Set<T> {
     add(value: T): this;
     clear(): void;
     delete(value: T): boolean;
-    forEach(callbackfn: (value: T, index: T, set: Set<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: T, value2: T, set: Set<T>) => void, thisArg?: any): void;
     has(value: T): boolean;
     readonly size: number;
 }
@@ -4664,38 +4869,87 @@ interface SetConstructor {
 }
 declare var Set: SetConstructor;
 
+interface ReadonlySet<T> {
+    forEach(callbackfn: (value: T, value2: T, set: ReadonlySet<T>) => void, thisArg?: any): void;
+    has(value: T): boolean;
+    readonly size: number;
+}
+
 interface WeakSet<T> {
     add(value: T): this;
-    clear(): void;
     delete(value: T): boolean;
     has(value: T): boolean;
 }
 
 interface WeakSetConstructor {
-    new (): WeakSet<any>;
-    new <T>(values?: T[]): WeakSet<T>;
-    readonly prototype: WeakSet<any>;
+    new (): WeakSet<object>;
+    new <T extends object>(values?: T[]): WeakSet<T>;
+    readonly prototype: WeakSet<object>;
 }
 declare var WeakSet: WeakSetConstructor;
-interface GeneratorFunction extends Function { }
+
+
+interface Generator extends Iterator<any> { }
+
+interface GeneratorFunction {
+    /**
+     * Creates a new Generator object.
+     * @param args A list of arguments the function accepts.
+     */
+    new (...args: any[]): Generator;
+    /**
+     * Creates a new Generator object.
+     * @param args A list of arguments the function accepts.
+     */
+    (...args: any[]): Generator;
+    /**
+     * The length of the arguments.
+     */
+    readonly length: number;
+    /**
+     * Returns the name of the function.
+     */
+    readonly name: string;
+    /**
+     * A reference to the prototype.
+     */
+    readonly prototype: Generator;
+}
 
 interface GeneratorFunctionConstructor {
     /**
-      * Creates a new Generator function.
-      * @param args A list of arguments the function accepts.
-      */
+     * Creates a new Generator function.
+     * @param args A list of arguments the function accepts.
+     */
     new (...args: string[]): GeneratorFunction;
+    /**
+     * Creates a new Generator function.
+     * @param args A list of arguments the function accepts.
+     */
     (...args: string[]): GeneratorFunction;
+    /**
+     * The length of the arguments.
+     */
+    readonly length: number;
+    /**
+     * Returns the name of the function.
+     */
+    readonly name: string;
+    /**
+     * A reference to the prototype.
+     */
     readonly prototype: GeneratorFunction;
 }
 declare var GeneratorFunction: GeneratorFunctionConstructor;
+
+
 /// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
-    /** 
-      * A method that returns the default iterator for an object. Called by the semantics of the 
-      * for-of statement.
-      */
+    /**
+     * A method that returns the default iterator for an object. Called by the semantics of the
+     * for-of statement.
+     */
     readonly iterator: symbol;
 }
 
@@ -4722,36 +4976,58 @@ interface Array<T> {
     /** Iterator */
     [Symbol.iterator](): IterableIterator<T>;
 
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, T]>;
 
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
 
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<T>;
 }
 
 interface ArrayConstructor {
     /**
-      * Creates an array from an iterable object.
-      * @param iterable An iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from<T, U>(iterable: Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): Array<U>;
-    
+     * Creates an array from an iterable object.
+     * @param iterable An iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from<T, U>(iterable: Iterable<T>, mapfn: (this: void, v: T, k: number) => U): Array<U>;
+    from<T, U>(iterable: Iterable<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): Array<U>;
+    from<Z, T, U>(iterable: Iterable<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): Array<U>;
+
     /**
-      * Creates an array from an iterable object.
-      * @param iterable An iterable object to convert to an array.
-      */
+     * Creates an array from an iterable object.
+     * @param iterable An iterable object to convert to an array.
+     */
     from<T>(iterable: Iterable<T>): Array<T>;
+}
+
+interface ReadonlyArray<T> {
+    /** Iterator */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
+    entries(): IterableIterator<[number, T]>;
+
+    /**
+     * Returns an list of keys in the array
+     */
+    keys(): IterableIterator<number>;
+
+    /**
+     * Returns an list of values in the array
+     */
+    values(): IterableIterator<T>;
 }
 
 interface IArguments {
@@ -4760,7 +5036,7 @@ interface IArguments {
 }
 
 interface Map<K, V> {
-    [Symbol.iterator](): IterableIterator<[K,V]>;
+    [Symbol.iterator](): IterableIterator<[K, V]>;
     entries(): IterableIterator<[K, V]>;
     keys(): IterableIterator<K>;
     values(): IterableIterator<V>;
@@ -4770,10 +5046,10 @@ interface MapConstructor {
     new <K, V>(iterable: Iterable<[K, V]>): Map<K, V>;
 }
 
-interface WeakMap<K, V> { }
+interface WeakMap<K extends object, V> { }
 
 interface WeakMapConstructor {
-    new <K, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
+    new <K extends object, V>(iterable: Iterable<[K, V]>): WeakMap<K, V>;
 }
 
 interface Set<T> {
@@ -4790,22 +5066,22 @@ interface SetConstructor {
 interface WeakSet<T> { }
 
 interface WeakSetConstructor {
-    new <T>(iterable: Iterable<T>): WeakSet<T>;
+    new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
 }
 
 interface Promise<T> { }
 
 interface PromiseConstructor {
     /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises 
+     * Creates a Promise that is resolved with an array of results when all of the provided Promises
      * resolve, or rejected when any Promise is rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
      */
     all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
-    
+
     /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved 
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
      * or rejected.
      * @param values An array of Promises.
      * @returns A new Promise.
@@ -4814,7 +5090,7 @@ interface PromiseConstructor {
 }
 
 declare namespace Reflect {
-    function enumerate(target: any): IterableIterator<any>;
+    function enumerate(target: object): IterableIterator<any>;
 }
 
 interface String {
@@ -4823,22 +5099,22 @@ interface String {
 }
 
 /**
-  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
-  * number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
+ * number of bytes could not be allocated an exception is raised.
+ */
 interface Int8Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -4846,31 +5122,35 @@ interface Int8ArrayConstructor {
     new (elements: Iterable<number>): Int8Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int8Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int8Array;
+
+    from(arrayLike: Iterable<number>): Int8Array;
 }
 
 /**
-  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint8Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -4878,33 +5158,37 @@ interface Uint8ArrayConstructor {
     new (elements: Iterable<number>): Uint8Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint8Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8Array;
+
+    from(arrayLike: Iterable<number>): Uint8Array;
 }
 
 /**
-  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
-  * If the requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
+ * If the requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint8ClampedArray {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
 
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
 
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -4913,33 +5197,37 @@ interface Uint8ClampedArrayConstructor {
 
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint8ClampedArray;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8ClampedArray;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8ClampedArray;
+
+    from(arrayLike: Iterable<number>): Uint8ClampedArray;
 }
 
 /**
-  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Int16Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
 
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
 
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -4947,31 +5235,35 @@ interface Int16ArrayConstructor {
     new (elements: Iterable<number>): Int16Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int16Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int16Array;
+
+    from(arrayLike: Iterable<number>): Int16Array;
 }
 
 /**
-  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint16Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -4979,31 +5271,35 @@ interface Uint16ArrayConstructor {
     new (elements: Iterable<number>): Uint16Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint16Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint16Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint16Array;
+
+    from(arrayLike: Iterable<number>): Uint16Array;
 }
 
 /**
-  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Int32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -5011,31 +5307,35 @@ interface Int32ArrayConstructor {
     new (elements: Iterable<number>): Int32Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Int32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int32Array;
+
+    from(arrayLike: Iterable<number>): Int32Array;
 }
 
 /**
-  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -5043,31 +5343,35 @@ interface Uint32ArrayConstructor {
     new (elements: Iterable<number>): Uint32Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Uint32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint32Array;
+
+    from(arrayLike: Iterable<number>): Uint32Array;
 }
 
 /**
-  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
-  * of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
+ * of bytes could not be allocated an exception is raised.
+ */
 interface Float32Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -5075,31 +5379,35 @@ interface Float32ArrayConstructor {
     new (elements: Iterable<number>): Float32Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
+     */
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Float32Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float32Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float32Array;
+
+    from(arrayLike: Iterable<number>): Float32Array;
 }
 
 /**
-  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested 
-  * number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
+ * number of bytes could not be allocated an exception is raised.
+ */
 interface Float64Array {
     [Symbol.iterator](): IterableIterator<number>;
-    /** 
-      * Returns an array of key, value pairs for every entry in the array
-      */
+    /**
+     * Returns an array of key, value pairs for every entry in the array
+     */
     entries(): IterableIterator<[number, number]>;
-    /** 
-      * Returns an list of keys in the array
-      */
+    /**
+     * Returns an list of keys in the array
+     */
     keys(): IterableIterator<number>;
-    /** 
-      * Returns an list of values in the array
-      */
+    /**
+     * Returns an list of values in the array
+     */
     values(): IterableIterator<number>;
 }
 
@@ -5107,64 +5415,23 @@ interface Float64ArrayConstructor {
     new (elements: Iterable<number>): Float64Array;
 
     /**
-      * Creates an array from an array-like or iterable object.
-      * @param arrayLike An array-like or iterable object to convert to an array.
-      * @param mapfn A mapping function to call on every element of the array.
-      * @param thisArg Value of 'this' used to invoke the mapfn.
-      */
-    from(arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
-}/**
- * Represents the completion of an asynchronous operation
- */
-interface Promise<T> {
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
+     * Creates an array from an array-like or iterable object.
+     * @param arrayLike An array-like or iterable object to convert to an array.
+     * @param mapfn A mapping function to call on every element of the array.
+     * @param thisArg Value of 'this' used to invoke the mapfn.
      */
-    then<TResult1, TResult2>(onfulfilled: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number): Float64Array;
+    from(arrayLike: Iterable<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float64Array;
+    from<Z>(arrayLike: Iterable<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float64Array;
 
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult>(onfulfilled: (value: T) => TResult | PromiseLike<TResult>): Promise<TResult>;
-
-    /**
-     * Creates a new Promise with the same internal state of this Promise.
-     * @returns A Promise.
-     */
-    then(): Promise<T>;
-
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult>(onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<T | TResult>;
-
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch(onrejected: (reason: any) => T | PromiseLike<T>): Promise<T>;
+    from(arrayLike: Iterable<number>): Float64Array;
 }
+
 
 interface PromiseConstructor {
     /**
-      * A reference to the prototype.
-      */
+     * A reference to the prototype.
+     */
     readonly prototype: Promise<any>;
 
     /**
@@ -5256,6 +5523,86 @@ interface PromiseConstructor {
     all<T>(values: (T | PromiseLike<T>)[]): Promise<T[]>;
 
     /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7 | T8>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<T1 | T2 | T3 | T4 | T5 | T6 | T7>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<T1 | T2 | T3 | T4 | T5 | T6>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<T1 | T2 | T3 | T4 | T5>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<T1 | T2 | T3 | T4>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<T1 | T2 | T3>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<T1 | T2>;
+
+    /**
+     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
+     * or rejected.
+     * @param values An array of Promises.
+     * @returns A new Promise.
+     */
+    race<T>(values: (T | PromiseLike<T>)[]): Promise<T>;
+
+    /**
      * Creates a new rejected promise for the provided reason.
      * @param reason The reason the promise was rejected.
      * @returns A new rejected Promise.
@@ -5270,10 +5617,10 @@ interface PromiseConstructor {
     reject<T>(reason: any): Promise<T>;
 
     /**
-      * Creates a new resolved promise for the provided value.
-      * @param value A promise.
-      * @returns A promise whose internal state matches the provided promise.
-      */
+     * Creates a new resolved promise for the provided value.
+     * @param value A promise.
+     * @returns A promise whose internal state matches the provided promise.
+     */
     resolve<T>(value: T | PromiseLike<T>): Promise<T>;
 
     /**
@@ -5283,8 +5630,10 @@ interface PromiseConstructor {
     resolve(): Promise<void>;
 }
 
-declare var Promise: PromiseConstructor;interface ProxyHandler<T> {
-    getPrototypeOf? (target: T): any;
+declare var Promise: PromiseConstructor;
+
+interface ProxyHandler<T extends object> {
+    getPrototypeOf? (target: T): object | null;
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
@@ -5297,124 +5646,131 @@ declare var Promise: PromiseConstructor;interface ProxyHandler<T> {
     enumerate? (target: T): PropertyKey[];
     ownKeys? (target: T): PropertyKey[];
     apply? (target: T, thisArg: any, argArray?: any): any;
-    construct? (target: T, thisArg: any, argArray?: any): any;
+    construct? (target: T, argArray: any, newTarget?: any): object;
 }
 
 interface ProxyConstructor {
-    revocable<T>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
-    new <T>(target: T, handler: ProxyHandler<T>): T
+    revocable<T extends object>(target: T, handler: ProxyHandler<T>): { proxy: T; revoke: () => void; };
+    new <T extends object>(target: T, handler: ProxyHandler<T>): T;
 }
-declare var Proxy: ProxyConstructor;declare namespace Reflect {
+declare var Proxy: ProxyConstructor;
+
+
+declare namespace Reflect {
     function apply(target: Function, thisArgument: any, argumentsList: ArrayLike<any>): any;
     function construct(target: Function, argumentsList: ArrayLike<any>, newTarget?: any): any;
-    function defineProperty(target: any, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
-    function deleteProperty(target: any, propertyKey: PropertyKey): boolean;
-    function get(target: any, propertyKey: PropertyKey, receiver?: any): any;
-    function getOwnPropertyDescriptor(target: any, propertyKey: PropertyKey): PropertyDescriptor;
-    function getPrototypeOf(target: any): any;
-    function has(target: any, propertyKey: string): boolean;
-    function has(target: any, propertyKey: symbol): boolean;
-    function isExtensible(target: any): boolean;
-    function ownKeys(target: any): Array<PropertyKey>;
-    function preventExtensions(target: any): boolean;
-    function set(target: any, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
-    function setPrototypeOf(target: any, proto: any): boolean;
-}interface Symbol {
+    function defineProperty(target: object, propertyKey: PropertyKey, attributes: PropertyDescriptor): boolean;
+    function deleteProperty(target: object, propertyKey: PropertyKey): boolean;
+    function get(target: object, propertyKey: PropertyKey, receiver?: any): any;
+    function getOwnPropertyDescriptor(target: object, propertyKey: PropertyKey): PropertyDescriptor;
+    function getPrototypeOf(target: object): object;
+    function has(target: object, propertyKey: PropertyKey): boolean;
+    function isExtensible(target: object): boolean;
+    function ownKeys(target: object): Array<PropertyKey>;
+    function preventExtensions(target: object): boolean;
+    function set(target: object, propertyKey: PropertyKey, value: any, receiver?: any): boolean;
+    function setPrototypeOf(target: object, proto: any): boolean;
+}
+
+
+interface Symbol {
     /** Returns a string representation of an object. */
     toString(): string;
 
     /** Returns the primitive value of the specified object. */
-    valueOf(): Object;
+    valueOf(): symbol;
 }
 
 interface SymbolConstructor {
-    /** 
-      * A reference to the prototype. 
-      */
+    /**
+     * A reference to the prototype.
+     */
     readonly prototype: Symbol;
 
     /**
-      * Returns a new unique Symbol value.
-      * @param  description Description of the new Symbol object.
-      */
-    (description?: string|number): symbol;
+     * Returns a new unique Symbol value.
+     * @param  description Description of the new Symbol object.
+     */
+    (description?: string | number): symbol;
 
     /**
-      * Returns a Symbol object from the global symbol registry matching the given key if found. 
-      * Otherwise, returns a new symbol with this key.
-      * @param key key to search for.
-      */
+     * Returns a Symbol object from the global symbol registry matching the given key if found.
+     * Otherwise, returns a new symbol with this key.
+     * @param key key to search for.
+     */
     for(key: string): symbol;
 
     /**
-      * Returns a key from the global symbol registry matching the given Symbol if found. 
-      * Otherwise, returns a undefined.
-      * @param sym Symbol to find the key for.
-      */
+     * Returns a key from the global symbol registry matching the given Symbol if found.
+     * Otherwise, returns a undefined.
+     * @param sym Symbol to find the key for.
+     */
     keyFor(sym: symbol): string | undefined;
 }
 
-declare var Symbol: SymbolConstructor;/// <reference path="lib.es2015.symbol.d.ts" />
+declare var Symbol: SymbolConstructor;
+
+/// <reference path="lib.es2015.symbol.d.ts" />
 
 interface SymbolConstructor {
-    /** 
-      * A method that determines if a constructor object recognizes an object as one of the 
-      * constructor’s instances. Called by the semantics of the instanceof operator. 
-      */
+    /**
+     * A method that determines if a constructor object recognizes an object as one of the
+     * constructor’s instances. Called by the semantics of the instanceof operator.
+     */
     readonly hasInstance: symbol;
 
-    /** 
-      * A Boolean value that if true indicates that an object should flatten to its array elements
-      * by Array.prototype.concat.
-      */
+    /**
+     * A Boolean value that if true indicates that an object should flatten to its array elements
+     * by Array.prototype.concat.
+     */
     readonly isConcatSpreadable: symbol;
 
     /**
-      * A regular expression method that matches the regular expression against a string. Called 
-      * by the String.prototype.match method. 
-      */
+     * A regular expression method that matches the regular expression against a string. Called
+     * by the String.prototype.match method.
+     */
     readonly match: symbol;
 
-    /** 
-      * A regular expression method that replaces matched substrings of a string. Called by the 
-      * String.prototype.replace method.
-      */
+    /**
+     * A regular expression method that replaces matched substrings of a string. Called by the
+     * String.prototype.replace method.
+     */
     readonly replace: symbol;
 
     /**
-      * A regular expression method that returns the index within a string that matches the 
-      * regular expression. Called by the String.prototype.search method.
-      */
+     * A regular expression method that returns the index within a string that matches the
+     * regular expression. Called by the String.prototype.search method.
+     */
     readonly search: symbol;
 
-    /** 
-      * A function valued property that is the constructor function that is used to create 
-      * derived objects.
-      */
+    /**
+     * A function valued property that is the constructor function that is used to create
+     * derived objects.
+     */
     readonly species: symbol;
 
     /**
-      * A regular expression method that splits a string at the indices that match the regular 
-      * expression. Called by the String.prototype.split method.
-      */
+     * A regular expression method that splits a string at the indices that match the regular
+     * expression. Called by the String.prototype.split method.
+     */
     readonly split: symbol;
 
-    /** 
-      * A method that converts an object to a corresponding primitive value.
-      * Called by the ToPrimitive abstract operation.
-      */
+    /**
+     * A method that converts an object to a corresponding primitive value.
+     * Called by the ToPrimitive abstract operation.
+     */
     readonly toPrimitive: symbol;
 
-    /** 
-      * A String value that is used in the creation of the default string description of an object.
-      * Called by the built-in method Object.prototype.toString.
-      */
+    /**
+     * A String value that is used in the creation of the default string description of an object.
+     * Called by the built-in method Object.prototype.toString.
+     */
     readonly toStringTag: symbol;
 
     /**
-      * An Object whose own property names are property names that are excluded from the 'with'
-      * environment bindings of the associated objects.
-      */
+     * An Object whose own property names are property names that are excluded from the 'with'
+     * environment bindings of the associated objects.
+     */
     readonly unscopables: symbol;
 }
 
@@ -5466,7 +5822,7 @@ interface Map<K, V> {
     readonly [Symbol.toStringTag]: "Map";
 }
 
-interface WeakMap<K, V>{
+interface WeakMap<K extends object, V>{
     readonly [Symbol.toStringTag]: "WeakMap";
 }
 
@@ -5493,7 +5849,7 @@ interface Function {
     [Symbol.hasInstance](value: any): boolean;
 }
 
-interface GeneratorFunction extends Function {
+interface GeneratorFunction {
     readonly [Symbol.toStringTag]: "GeneratorFunction";
 }
 
@@ -5510,50 +5866,50 @@ interface PromiseConstructor {
 }
 
 interface RegExp {
-        /**
-      * Matches a string with this regular expression, and returns an array containing the results of
-      * that search.
-      * @param string A string to search within.
-      */
+    /**
+     * Matches a string with this regular expression, and returns an array containing the results of
+     * that search.
+     * @param string A string to search within.
+     */
     [Symbol.match](string: string): RegExpMatchArray | null;
 
     /**
-      * Replaces text in a string, using this regular expression.
-      * @param string A String object or string literal whose contents matching against
-      *               this regular expression will be replaced
-      * @param replaceValue A String object or string literal containing the text to replace for every 
-      *                     successful match of this regular expression.
-      */
+     * Replaces text in a string, using this regular expression.
+     * @param string A String object or string literal whose contents matching against
+     *               this regular expression will be replaced
+     * @param replaceValue A String object or string literal containing the text to replace for every
+     *                     successful match of this regular expression.
+     */
     [Symbol.replace](string: string, replaceValue: string): string;
 
     /**
-      * Replaces text in a string, using this regular expression.
-      * @param string A String object or string literal whose contents matching against
-      *               this regular expression will be replaced
-      * @param replacer A function that returns the replacement text.
-      */
+     * Replaces text in a string, using this regular expression.
+     * @param string A String object or string literal whose contents matching against
+     *               this regular expression will be replaced
+     * @param replacer A function that returns the replacement text.
+     */
     [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
-      * Finds the position beginning first substring match in a regular expression search
-      * using this regular expression.
-      *
-      * @param string The string to search within.
-      */
+     * Finds the position beginning first substring match in a regular expression search
+     * using this regular expression.
+     *
+     * @param string The string to search within.
+     */
     [Symbol.search](string: string): number;
 
     /**
-      * Returns an array of substrings that were delimited by strings in the original input that
-      * match against this regular expression.
-      *
-      * If the regular expression contains capturing parentheses, then each time this
-      * regular expression matches, the results (including any undefined results) of the
-      * capturing parentheses are spliced.
-      *
-      * @param string string value to split
-      * @param limit if not undefined, the output array is truncated so that it contains no more
-      * than 'limit' elements.
-      */
+     * Returns an array of substrings that were delimited by strings in the original input that
+     * match against this regular expression.
+     *
+     * If the regular expression contains capturing parentheses, then each time this
+     * regular expression matches, the results (including any undefined results) of the
+     * capturing parentheses are spliced.
+     *
+     * @param string string value to split
+     * @param limit if not undefined, the output array is truncated so that it contains no more
+     * than 'limit' elements.
+     */
     [Symbol.split](string: string, limit?: number): string[];
 }
 
@@ -5563,45 +5919,45 @@ interface RegExpConstructor {
 
 interface String {
     /**
-      * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
-      * @param matcher An object that supports being matched against.
-      */
+     * Matches a string an object that supports being matched against, and returns an array containing the results of that search.
+     * @param matcher An object that supports being matched against.
+     */
     match(matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null;
 
     /**
-      * Replaces text in a string, using an object that supports replacement within a string.
-      * @param searchValue A object can search for and replace matches within a string.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
+     * Replaces text in a string, using an object that supports replacement within a string.
+     * @param searchValue A object can search for and replace matches within a string.
+     * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
+     */
     replace(searchValue: { [Symbol.replace](string: string, replaceValue: string): string; }, replaceValue: string): string;
 
     /**
-      * Replaces text in a string, using an object that supports replacement within a string.
-      * @param searchValue A object can search for and replace matches within a string.
-      * @param replacer A function that returns the replacement text.
-      */
+     * Replaces text in a string, using an object that supports replacement within a string.
+     * @param searchValue A object can search for and replace matches within a string.
+     * @param replacer A function that returns the replacement text.
+     */
     replace(searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string; }, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
-      * Finds the first substring match in a regular expression search.
-      * @param searcher An object which supports searching within a string.
-      */
+     * Finds the first substring match in a regular expression search.
+     * @param searcher An object which supports searching within a string.
+     */
     search(searcher: { [Symbol.search](string: string): number; }): number;
 
     /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param splitter An object that can split a string.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
+     * Split a string into substrings using the specified separator and return them as an array.
+     * @param splitter An object that can split a string.
+     * @param limit A value used to limit the number of elements returned in the array.
+     */
     split(splitter: { [Symbol.split](string: string, limit?: number): string[]; }, limit?: number): string[];
 }
 
 /**
-  * Represents a raw buffer of binary data, which is used to store data for the 
-  * different typed arrays. ArrayBuffers cannot be read from or written to directly, 
-  * but can be passed to a typed array or DataView Object to interpret the raw 
-  * buffer as needed. 
-  */
+ * Represents a raw buffer of binary data, which is used to store data for the
+ * different typed arrays. ArrayBuffers cannot be read from or written to directly,
+ * but can be passed to a typed array or DataView Object to interpret the raw
+ * buffer as needed.
+ */
 interface ArrayBuffer {
     readonly [Symbol.toStringTag]: "ArrayBuffer";
 }
@@ -5611,92 +5967,127 @@ interface DataView {
 }
 
 /**
-  * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested 
-  * number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
+ * number of bytes could not be allocated an exception is raised.
+ */
 interface Int8Array {
     readonly [Symbol.toStringTag]: "Int8Array";
 }
 
 /**
-  * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint8Array {
     readonly [Symbol.toStringTag]: "UInt8Array";
 }
 
 /**
-  * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0. 
-  * If the requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
+ * If the requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint8ClampedArray {
     readonly [Symbol.toStringTag]: "Uint8ClampedArray";
 }
 
 /**
-  * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Int16Array {
     readonly [Symbol.toStringTag]: "Int16Array";
 }
 
 /**
-  * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint16Array {
     readonly [Symbol.toStringTag]: "Uint16Array";
 }
 
 /**
-  * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Int32Array {
     readonly [Symbol.toStringTag]: "Int32Array";
 }
 
 /**
-  * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the 
-  * requested number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
+ * requested number of bytes could not be allocated an exception is raised.
+ */
 interface Uint32Array {
     readonly [Symbol.toStringTag]: "Uint32Array";
 }
 
 /**
-  * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
-  * of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
+ * of bytes could not be allocated an exception is raised.
+ */
 interface Float32Array {
     readonly [Symbol.toStringTag]: "Float32Array";
 }
 
 /**
-  * A typed array of 64-bit float values. The contents are initialized to 0. If the requested 
-  * number of bytes could not be allocated an exception is raised.
-  */
+ * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
+ * number of bytes could not be allocated an exception is raised.
+ */
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
 }
+
+
+
 /////////////////////////////
 /// IE DOM APIs
 /////////////////////////////
+
+interface Account {
+    rpDisplayName?: string;
+    displayName?: string;
+    id?: string;
+    name?: string;
+    imageURL?: string;
+}
 
 interface Algorithm {
     name: string;
 }
 
-interface AriaRequestEventInit extends EventInit {
-    attributeName?: string;
-    attributeValue?: string;
+interface AnimationEventInit extends EventInit {
+    animationName?: string;
+    elapsedTime?: number;
 }
 
-interface CommandEventInit extends EventInit {
-    commandName?: string;
-    detail?: string;
+interface AssertionOptions {
+    timeoutSeconds?: number;
+    rpId?: USVString;
+    allowList?: ScopedCredentialDescriptor[];
+    extensions?: WebAuthnExtensions;
+}
+
+interface CacheQueryOptions {
+    ignoreSearch?: boolean;
+    ignoreMethod?: boolean;
+    ignoreVary?: boolean;
+    cacheName?: string;
+}
+
+interface ClientData {
+    challenge?: string;
+    origin?: string;
+    rpId?: string;
+    hashAlg?: string | Algorithm;
+    tokenBinding?: string;
+    extensions?: WebAuthnExtensions;
+}
+
+interface CloseEventInit extends EventInit {
+    wasClean?: boolean;
+    code?: number;
+    reason?: string;
 }
 
 interface CompositionEventInit extends UIEventInit {
@@ -5728,12 +6119,19 @@ interface ConstrainLongRange extends LongRange {
 }
 
 interface ConstrainVideoFacingModeParameters {
-    exact?: string | string[];
-    ideal?: string | string[];
+    exact?: VideoFacingModeEnum | VideoFacingModeEnum[];
+    ideal?: VideoFacingModeEnum | VideoFacingModeEnum[];
 }
 
 interface CustomEventInit extends EventInit {
     detail?: any;
+}
+
+interface DOMRectInit {
+    x?: any;
+    y?: any;
+    width?: any;
+    height?: any;
 }
 
 interface DeviceAccelerationDict {
@@ -5744,6 +6142,20 @@ interface DeviceAccelerationDict {
 
 interface DeviceLightEventInit extends EventInit {
     value?: number;
+}
+
+interface DeviceMotionEventInit extends EventInit {
+    acceleration?: DeviceAccelerationDict;
+    accelerationIncludingGravity?: DeviceAccelerationDict;
+    rotationRate?: DeviceRotationRateDict;
+    interval?: number;
+}
+
+interface DeviceOrientationEventInit extends EventInit {
+    alpha?: number;
+    beta?: number;
+    gamma?: number;
+    absolute?: boolean;
 }
 
 interface DeviceRotationRateDict {
@@ -5757,7 +6169,16 @@ interface DoubleRange {
     min?: number;
 }
 
+interface ErrorEventInit extends EventInit {
+    message?: string;
+    filename?: string;
+    lineno?: number;
+    colno?: number;
+    error?: any;
+}
+
 interface EventInit {
+    scoped?: boolean;
     bubbles?: boolean;
     cancelable?: boolean;
 }
@@ -5788,6 +6209,29 @@ interface FocusEventInit extends UIEventInit {
     relatedTarget?: EventTarget;
 }
 
+interface FocusNavigationEventInit extends EventInit {
+    navigationReason?: string;
+    originLeft?: number;
+    originTop?: number;
+    originWidth?: number;
+    originHeight?: number;
+}
+
+interface FocusNavigationOrigin {
+    originLeft?: number;
+    originTop?: number;
+    originWidth?: number;
+    originHeight?: number;
+}
+
+interface GamepadEventInit extends EventInit {
+    gamepad?: Gamepad;
+}
+
+interface GetNotificationOptions {
+    tag?: string;
+}
+
 interface HashChangeEventInit extends EventInit {
     newURL?: string;
     oldURL?: string;
@@ -5803,11 +6247,26 @@ interface IDBObjectStoreParameters {
     keyPath?: IDBKeyPath;
 }
 
+interface IntersectionObserverEntryInit {
+    time?: number;
+    rootBounds?: DOMRectInit;
+    boundingClientRect?: DOMRectInit;
+    intersectionRect?: DOMRectInit;
+    target?: Element;
+}
+
+interface IntersectionObserverInit {
+    root?: Element;
+    rootMargin?: string;
+    threshold?: number | number[];
+}
+
 interface KeyAlgorithm {
     name?: string;
 }
 
 interface KeyboardEventInit extends EventModifierInit {
+    code?: string;
     key?: string;
     location?: number;
     repeat?: boolean;
@@ -5890,7 +6349,7 @@ interface MSAudioSendSignal {
 }
 
 interface MSConnectivity {
-    iceType?: string;
+    iceType?: MSIceType;
     iceWarningFlags?: MSIceWarningFlags;
     relayAddress?: MSRelayAddress;
 }
@@ -5900,11 +6359,11 @@ interface MSCredentialFilter {
 }
 
 interface MSCredentialParameters {
-    type?: string;
+    type?: MSCredentialType;
 }
 
 interface MSCredentialSpec {
-    type?: string;
+    type?: MSCredentialType;
     id?: string;
 }
 
@@ -5915,7 +6374,7 @@ interface MSDelay {
 
 interface MSDescription extends RTCStats {
     connectivity?: MSConnectivity;
-    transport?: string;
+    transport?: RTCIceProtocol;
     networkconnectivity?: MSNetworkConnectivityInfo;
     localAddr?: MSIPAddressInfo;
     remoteAddr?: MSIPAddressInfo;
@@ -6004,6 +6463,11 @@ interface MSPayloadBase extends RTCStats {
     payloadDescription?: string;
 }
 
+interface MSPortRange {
+    min?: number;
+    max?: number;
+}
+
 interface MSRelayAddress {
     relayAddress?: string;
     port?: number;
@@ -6034,11 +6498,11 @@ interface MSTransportDiagnosticsStats extends RTCStats {
     numConsentRespReceived?: number;
     interfaces?: MSNetworkInterfaceType;
     baseInterface?: MSNetworkInterfaceType;
-    protocol?: string;
+    protocol?: RTCIceProtocol;
     localInterface?: MSNetworkInterfaceType;
-    localAddrType?: string;
-    remoteAddrType?: string;
-    iceRole?: string;
+    localAddrType?: MSIceAddrType;
+    remoteAddrType?: MSIceAddrType;
+    iceRole?: RTCIceRole;
     rtpRtcpMux?: boolean;
     allocationTimeInMs?: number;
     msRtcEngineVersion?: string;
@@ -6054,7 +6518,7 @@ interface MSUtilization {
 }
 
 interface MSVideoPayload extends MSPayloadBase {
-    resoluton?: string;
+    resolution?: string;
     videoBitRateAvg?: number;
     videoBitRateMax?: number;
     videoFrameRateAvg?: number;
@@ -6111,7 +6575,7 @@ interface MediaEncryptedEventInit extends EventInit {
 }
 
 interface MediaKeyMessageEventInit extends EventInit {
-    messageType?: string;
+    messageType?: MediaKeyMessageType;
     message?: ArrayBuffer;
 }
 
@@ -6119,8 +6583,8 @@ interface MediaKeySystemConfiguration {
     initDataTypes?: string[];
     audioCapabilities?: MediaKeySystemMediaCapability[];
     videoCapabilities?: MediaKeySystemMediaCapability[];
-    distinctiveIdentifier?: string;
-    persistentState?: string;
+    distinctiveIdentifier?: MediaKeysRequirement;
+    persistentState?: MediaKeysRequirement;
 }
 
 interface MediaKeySystemMediaCapability {
@@ -6135,6 +6599,10 @@ interface MediaStreamConstraints {
 
 interface MediaStreamErrorEventInit extends EventInit {
     error?: MediaStreamError;
+}
+
+interface MediaStreamEventInit extends EventInit {
+    stream?: MediaStream;
 }
 
 interface MediaStreamTrackEventInit extends EventInit {
@@ -6201,6 +6669,15 @@ interface MediaTrackSupportedConstraints {
     groupId?: boolean;
 }
 
+interface MessageEventInit extends EventInit {
+    lastEventId?: string;
+    channel?: string;
+    data?: any;
+    origin?: string;
+    source?: Window;
+    ports?: MessagePort[];
+}
+
 interface MouseEventInit extends EventModifierInit {
     screenX?: number;
     screenY?: number;
@@ -6230,8 +6707,66 @@ interface MutationObserverInit {
     attributeFilter?: string[];
 }
 
+interface NotificationOptions {
+    dir?: NotificationDirection;
+    lang?: string;
+    body?: string;
+    tag?: string;
+    icon?: string;
+}
+
 interface ObjectURLOptions {
     oneTimeOnly?: boolean;
+}
+
+interface PaymentCurrencyAmount {
+    currency?: string;
+    value?: string;
+    currencySystem?: string;
+}
+
+interface PaymentDetails {
+    total?: PaymentItem;
+    displayItems?: PaymentItem[];
+    shippingOptions?: PaymentShippingOption[];
+    modifiers?: PaymentDetailsModifier[];
+    error?: string;
+}
+
+interface PaymentDetailsModifier {
+    supportedMethods?: string[];
+    total?: PaymentItem;
+    additionalDisplayItems?: PaymentItem[];
+    data?: any;
+}
+
+interface PaymentItem {
+    label?: string;
+    amount?: PaymentCurrencyAmount;
+    pending?: boolean;
+}
+
+interface PaymentMethodData {
+    supportedMethods?: string[];
+    data?: any;
+}
+
+interface PaymentOptions {
+    requestPayerName?: boolean;
+    requestPayerEmail?: boolean;
+    requestPayerPhone?: boolean;
+    requestShipping?: boolean;
+    shippingType?: string;
+}
+
+interface PaymentRequestUpdateEventInit extends EventInit {
+}
+
+interface PaymentShippingOption {
+    id?: string;
+    label?: string;
+    amount?: PaymentCurrencyAmount;
+    selected?: boolean;
 }
 
 interface PeriodicWaveConstraints {
@@ -6249,10 +6784,32 @@ interface PointerEventInit extends MouseEventInit {
     isPrimary?: boolean;
 }
 
+interface PopStateEventInit extends EventInit {
+    state?: any;
+}
+
 interface PositionOptions {
     enableHighAccuracy?: boolean;
     timeout?: number;
     maximumAge?: number;
+}
+
+interface ProgressEventInit extends EventInit {
+    lengthComputable?: boolean;
+    loaded?: number;
+    total?: number;
+}
+
+interface PushSubscriptionOptionsInit {
+    userVisibleOnly?: boolean;
+    applicationServerKey?: any;
+}
+
+interface RTCConfiguration {
+    iceServers?: RTCIceServer[];
+    iceTransportPolicy?: RTCIceTransportPolicy;
+    bundlePolicy?: RTCBundlePolicy;
+    peerIdentity?: string;
 }
 
 interface RTCDTMFToneChangeEventInit extends EventInit {
@@ -6265,27 +6822,15 @@ interface RTCDtlsFingerprint {
 }
 
 interface RTCDtlsParameters {
-    role?: string;
+    role?: RTCDtlsRole;
     fingerprints?: RTCDtlsFingerprint[];
-}
-
-interface RTCIceCandidate {
-    foundation?: string;
-    priority?: number;
-    ip?: string;
-    protocol?: string;
-    port?: number;
-    type?: string;
-    tcpType?: string;
-    relatedAddress?: string;
-    relatedPort?: number;
 }
 
 interface RTCIceCandidateAttributes extends RTCStats {
     ipAddress?: string;
     portNumber?: number;
     transport?: string;
-    candidateType?: string;
+    candidateType?: RTCStatsIceCandidateType;
     priority?: number;
     addressSourceUrl?: string;
 }
@@ -6293,16 +6838,35 @@ interface RTCIceCandidateAttributes extends RTCStats {
 interface RTCIceCandidateComplete {
 }
 
+interface RTCIceCandidateDictionary {
+    foundation?: string;
+    priority?: number;
+    ip?: string;
+    protocol?: RTCIceProtocol;
+    port?: number;
+    type?: RTCIceCandidateType;
+    tcpType?: RTCIceTcpCandidateType;
+    relatedAddress?: string;
+    relatedPort?: number;
+    msMTurnSessionId?: string;
+}
+
+interface RTCIceCandidateInit {
+    candidate?: string;
+    sdpMid?: string;
+    sdpMLineIndex?: number;
+}
+
 interface RTCIceCandidatePair {
-    local?: RTCIceCandidate;
-    remote?: RTCIceCandidate;
+    local?: RTCIceCandidateDictionary;
+    remote?: RTCIceCandidateDictionary;
 }
 
 interface RTCIceCandidatePairStats extends RTCStats {
     transportId?: string;
     localCandidateId?: string;
     remoteCandidateId?: string;
-    state?: string;
+    state?: RTCStatsIceCandidatePairState;
     priority?: number;
     nominated?: boolean;
     writable?: boolean;
@@ -6315,13 +6879,15 @@ interface RTCIceCandidatePairStats extends RTCStats {
 }
 
 interface RTCIceGatherOptions {
-    gatherPolicy?: string;
+    gatherPolicy?: RTCIceGatherPolicy;
     iceservers?: RTCIceServer[];
+    portRange?: MSPortRange;
 }
 
 interface RTCIceParameters {
     usernameFragment?: string;
     password?: string;
+    iceLite?: boolean;
 }
 
 interface RTCIceServer {
@@ -6355,11 +6921,22 @@ interface RTCMediaStreamTrackStats extends RTCStats {
     echoReturnLossEnhancement?: number;
 }
 
+interface RTCOfferOptions {
+    offerToReceiveVideo?: number;
+    offerToReceiveAudio?: number;
+    voiceActivityDetection?: boolean;
+    iceRestart?: boolean;
+}
+
 interface RTCOutboundRTPStreamStats extends RTCRTPStreamStats {
     packetsSent?: number;
     bytesSent?: number;
     targetBitrate?: number;
     roundTripTime?: number;
+}
+
+interface RTCPeerConnectionIceEventInit extends EventInit {
+    candidate?: RTCIceCandidate;
 }
 
 interface RTCRTPStreamStats extends RTCStats {
@@ -6399,6 +6976,7 @@ interface RTCRtpCodecCapability {
     clockRate?: number;
     preferredPayloadType?: number;
     maxptime?: number;
+    ptime?: number;
     numChannels?: number;
     rtcpFeedback?: RTCRtcpFeedback[];
     parameters?: any;
@@ -6413,6 +6991,7 @@ interface RTCRtpCodecParameters {
     payloadType?: any;
     clockRate?: number;
     maxptime?: number;
+    ptime?: number;
     numChannels?: number;
     rtcpFeedback?: RTCRtcpFeedback[];
     parameters?: any;
@@ -6432,9 +7011,9 @@ interface RTCRtpEncodingParameters {
     priority?: number;
     maxBitrate?: number;
     minQuality?: number;
-    framerateBias?: number;
     resolutionScale?: number;
     framerateScale?: number;
+    maxFramerate?: number;
     active?: boolean;
     encodingId?: string;
     dependencyEncodingIds?: string[];
@@ -6465,6 +7044,7 @@ interface RTCRtpParameters {
     headerExtensions?: RTCRtpHeaderExtensionParameters[];
     encodings?: RTCRtpEncodingParameters[];
     rtcp?: RTCRtcpParameters;
+    degradationPreference?: RTCDegradationPreference;
 }
 
 interface RTCRtpRtxParameters {
@@ -6475,6 +7055,11 @@ interface RTCRtpUnhandled {
     ssrc?: number;
     payloadType?: number;
     muxId?: string;
+}
+
+interface RTCSessionDescriptionInit {
+    type?: RTCSdpType;
+    sdp?: string;
 }
 
 interface RTCSrtpKeyParam {
@@ -6499,9 +7084,9 @@ interface RTCSsrcRange {
 
 interface RTCStats {
     timestamp?: number;
-    type?: string;
+    type?: RTCStatsType;
     id?: string;
-    msType?: string;
+    msType?: MSStatsType;
 }
 
 interface RTCStatsReport {
@@ -6517,6 +7102,64 @@ interface RTCTransportStats extends RTCStats {
     remoteCertificateId?: string;
 }
 
+interface RegistrationOptions {
+    scope?: string;
+}
+
+interface RequestInit {
+    method?: string;
+    headers?: any;
+    body?: any;
+    referrer?: string;
+    referrerPolicy?: ReferrerPolicy;
+    mode?: RequestMode;
+    credentials?: RequestCredentials;
+    cache?: RequestCache;
+    redirect?: RequestRedirect;
+    integrity?: string;
+    keepalive?: boolean;
+    window?: any;
+}
+
+interface ResponseInit {
+    status?: number;
+    statusText?: string;
+    headers?: any;
+}
+
+interface ScopedCredentialDescriptor {
+    type?: ScopedCredentialType;
+    id?: any;
+    transports?: Transport[];
+}
+
+interface ScopedCredentialOptions {
+    timeoutSeconds?: number;
+    rpId?: USVString;
+    excludeList?: ScopedCredentialDescriptor[];
+    extensions?: WebAuthnExtensions;
+}
+
+interface ScopedCredentialParameters {
+    type?: ScopedCredentialType;
+    algorithm?: string | Algorithm;
+}
+
+interface ServiceWorkerMessageEventInit extends EventInit {
+    data?: any;
+    origin?: string;
+    lastEventId?: string;
+    source?: ServiceWorker | MessagePort;
+    ports?: MessagePort[];
+}
+
+interface SpeechSynthesisEventInit extends EventInit {
+    utterance?: SpeechSynthesisUtterance;
+    charIndex?: number;
+    elapsedTime?: number;
+    name?: string;
+}
+
 interface StoreExceptionsInformation extends ExceptionInformation {
     siteName?: string;
     explanationString?: string;
@@ -6527,9 +7170,21 @@ interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformat
     arrayOfDomainStrings?: string[];
 }
 
+interface TrackEventInit extends EventInit {
+    track?: VideoTrack | AudioTrack | TextTrack;
+}
+
+interface TransitionEventInit extends EventInit {
+    propertyName?: string;
+    elapsedTime?: number;
+}
+
 interface UIEventInit extends EventInit {
     view?: Window;
     detail?: number;
+}
+
+interface WebAuthnExtensions {
 }
 
 interface WebGLContextAttributes {
@@ -6554,6 +7209,18 @@ interface WheelEventInit extends MouseEventInit {
 }
 
 interface EventListener {
+    (evt: Event): void;
+}
+
+interface WebKitEntriesCallback {
+    (evt: Event): void;
+}
+
+interface WebKitErrorCallback {
+    (evt: Event): void;
+}
+
+interface WebKitFileCallback {
     (evt: Event): void;
 }
 
@@ -6595,18 +7262,29 @@ interface AnimationEvent extends Event {
 
 declare var AnimationEvent: {
     prototype: AnimationEvent;
-    new(): AnimationEvent;
+    new(typeArg: string, eventInitDict?: AnimationEventInit): AnimationEvent;
+}
+
+interface ApplicationCacheEventMap {
+    "cached": Event;
+    "checking": Event;
+    "downloading": Event;
+    "error": Event;
+    "noupdate": Event;
+    "obsolete": Event;
+    "progress": ProgressEvent;
+    "updateready": Event;
 }
 
 interface ApplicationCache extends EventTarget {
-    oncached: (this: this, ev: Event) => any;
-    onchecking: (this: this, ev: Event) => any;
-    ondownloading: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onnoupdate: (this: this, ev: Event) => any;
-    onobsolete: (this: this, ev: Event) => any;
-    onprogress: (this: this, ev: ProgressEvent) => any;
-    onupdateready: (this: this, ev: Event) => any;
+    oncached: (this: ApplicationCache, ev: Event) => any;
+    onchecking: (this: ApplicationCache, ev: Event) => any;
+    ondownloading: (this: ApplicationCache, ev: Event) => any;
+    onerror: (this: ApplicationCache, ev: Event) => any;
+    onnoupdate: (this: ApplicationCache, ev: Event) => any;
+    onobsolete: (this: ApplicationCache, ev: Event) => any;
+    onprogress: (this: ApplicationCache, ev: ProgressEvent) => any;
+    onupdateready: (this: ApplicationCache, ev: Event) => any;
     readonly status: number;
     abort(): void;
     swapCache(): void;
@@ -6617,14 +7295,7 @@ interface ApplicationCache extends EventTarget {
     readonly OBSOLETE: number;
     readonly UNCACHED: number;
     readonly UPDATEREADY: number;
-    addEventListener(type: "cached", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "checking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "downloading", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "noupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "obsolete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "updateready", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof ApplicationCacheEventMap>(type: K, listener: (this: ApplicationCache, ev: ApplicationCacheEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -6637,16 +7308,6 @@ declare var ApplicationCache: {
     readonly OBSOLETE: number;
     readonly UNCACHED: number;
     readonly UPDATEREADY: number;
-}
-
-interface AriaRequestEvent extends Event {
-    readonly attributeName: string;
-    attributeValue: string | null;
-}
-
-declare var AriaRequestEvent: {
-    prototype: AriaRequestEvent;
-    new(type: string, eventInitDict?: AriaRequestEventInit): AriaRequestEvent;
 }
 
 interface Attr extends Node {
@@ -6677,17 +7338,21 @@ declare var AudioBuffer: {
     new(): AudioBuffer;
 }
 
+interface AudioBufferSourceNodeEventMap {
+    "ended": MediaStreamErrorEvent;
+}
+
 interface AudioBufferSourceNode extends AudioNode {
     buffer: AudioBuffer | null;
     readonly detune: AudioParam;
     loop: boolean;
     loopEnd: number;
     loopStart: number;
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
+    onended: (this: AudioBufferSourceNode, ev: MediaStreamErrorEvent) => any;
     readonly playbackRate: AudioParam;
     start(when?: number, offset?: number, duration?: number): void;
     stop(when?: number): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof AudioBufferSourceNodeEventMap>(type: K, listener: (this: AudioBufferSourceNode, ev: AudioBufferSourceNodeEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -6696,12 +7361,18 @@ declare var AudioBufferSourceNode: {
     new(): AudioBufferSourceNode;
 }
 
-interface AudioContext extends EventTarget {
+interface AudioContextEventMap {
+    "statechange": Event;
+}
+
+interface AudioContextBase extends EventTarget {
     readonly currentTime: number;
     readonly destination: AudioDestinationNode;
     readonly listener: AudioListener;
+    onstatechange: (this: AudioContext, ev: Event) => any;
     readonly sampleRate: number;
-    state: string;
+    readonly state: AudioContextState;
+    close(): Promise<void>;
     createAnalyser(): AnalyserNode;
     createBiquadFilter(): BiquadFilterNode;
     createBuffer(numberOfChannels: number, length: number, sampleRate: number): AudioBuffer;
@@ -6712,6 +7383,7 @@ interface AudioContext extends EventTarget {
     createDelay(maxDelayTime?: number): DelayNode;
     createDynamicsCompressor(): DynamicsCompressorNode;
     createGain(): GainNode;
+    createIIRFilter(feedforward: number[], feedback: number[]): IIRFilterNode;
     createMediaElementSource(mediaElement: HTMLMediaElement): MediaElementAudioSourceNode;
     createMediaStreamSource(mediaStream: MediaStream): MediaStreamAudioSourceNode;
     createOscillator(): OscillatorNode;
@@ -6720,7 +7392,14 @@ interface AudioContext extends EventTarget {
     createScriptProcessor(bufferSize?: number, numberOfInputChannels?: number, numberOfOutputChannels?: number): ScriptProcessorNode;
     createStereoPanner(): StereoPannerNode;
     createWaveShaper(): WaveShaperNode;
-    decodeAudioData(audioData: ArrayBuffer, successCallback?: DecodeSuccessCallback, errorCallback?: DecodeErrorCallback): PromiseLike<AudioBuffer>;
+    decodeAudioData(audioData: ArrayBuffer, successCallback?: DecodeSuccessCallback, errorCallback?: DecodeErrorCallback): Promise<AudioBuffer>;
+    resume(): Promise<void>;
+    addEventListener<K extends keyof AudioContextEventMap>(type: K, listener: (this: AudioContext, ev: AudioContextEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface AudioContext extends AudioContextBase {
+    suspend(): Promise<void>;
 }
 
 declare var AudioContext: {
@@ -6752,12 +7431,13 @@ declare var AudioListener: {
 
 interface AudioNode extends EventTarget {
     channelCount: number;
-    channelCountMode: string;
-    channelInterpretation: string;
+    channelCountMode: ChannelCountMode;
+    channelInterpretation: ChannelInterpretation;
     readonly context: AudioContext;
     readonly numberOfInputs: number;
     readonly numberOfOutputs: number;
-    connect(destination: AudioNode, output?: number, input?: number): void;
+    connect(destination: AudioNode, output?: number, input?: number): AudioNode;
+    connect(destination: AudioParam, output?: number): void;
     disconnect(output?: number): void;
     disconnect(destination: AudioNode, output?: number, input?: number): void;
     disconnect(destination: AudioParam, output?: number): void;
@@ -6771,12 +7451,12 @@ declare var AudioNode: {
 interface AudioParam {
     readonly defaultValue: number;
     value: number;
-    cancelScheduledValues(startTime: number): void;
-    exponentialRampToValueAtTime(value: number, endTime: number): void;
-    linearRampToValueAtTime(value: number, endTime: number): void;
-    setTargetAtTime(target: number, startTime: number, timeConstant: number): void;
-    setValueAtTime(value: number, startTime: number): void;
-    setValueCurveAtTime(values: Float32Array, startTime: number, duration: number): void;
+    cancelScheduledValues(startTime: number): AudioParam;
+    exponentialRampToValueAtTime(value: number, endTime: number): AudioParam;
+    linearRampToValueAtTime(value: number, endTime: number): AudioParam;
+    setTargetAtTime(target: number, startTime: number, timeConstant: number): AudioParam;
+    setValueAtTime(value: number, startTime: number): AudioParam;
+    setValueCurveAtTime(values: Float32Array, startTime: number, duration: number): AudioParam;
 }
 
 declare var AudioParam: {
@@ -6809,16 +7489,20 @@ declare var AudioTrack: {
     new(): AudioTrack;
 }
 
+interface AudioTrackListEventMap {
+    "addtrack": TrackEvent;
+    "change": Event;
+    "removetrack": TrackEvent;
+}
+
 interface AudioTrackList extends EventTarget {
     readonly length: number;
-    onaddtrack: (this: this, ev: TrackEvent) => any;
-    onchange: (this: this, ev: Event) => any;
-    onremovetrack: (this: this, ev: TrackEvent) => any;
+    onaddtrack: (this: AudioTrackList, ev: TrackEvent) => any;
+    onchange: (this: AudioTrackList, ev: Event) => any;
+    onremovetrack: (this: AudioTrackList, ev: TrackEvent) => any;
     getTrackById(id: string): AudioTrack | null;
     item(index: number): AudioTrack;
-    addEventListener(type: "addtrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "removetrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof AudioTrackListEventMap>(type: K, listener: (this: AudioTrackList, ev: AudioTrackListEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [index: number]: AudioTrack;
 }
@@ -6851,7 +7535,7 @@ interface BiquadFilterNode extends AudioNode {
     readonly detune: AudioParam;
     readonly frequency: AudioParam;
     readonly gain: AudioParam;
-    type: string;
+    type: BiquadFilterType;
     getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
 }
 
@@ -7149,10 +7833,16 @@ interface CSSStyleDeclaration {
     imeMode: string | null;
     justifyContent: string | null;
     kerning: string | null;
+    layoutGrid: string | null;
+    layoutGridChar: string | null;
+    layoutGridLine: string | null;
+    layoutGridMode: string | null;
+    layoutGridType: string | null;
     left: string | null;
     readonly length: number;
     letterSpacing: string | null;
     lightingColor: string | null;
+    lineBreak: string | null;
     lineHeight: string | null;
     listStyle: string | null;
     listStyleImage: string | null;
@@ -7224,6 +7914,7 @@ interface CSSStyleDeclaration {
     orphans: string | null;
     outline: string | null;
     outlineColor: string | null;
+    outlineOffset: string | null;
     outlineStyle: string | null;
     outlineWidth: string | null;
     overflow: string | null;
@@ -7244,9 +7935,11 @@ interface CSSStyleDeclaration {
     position: string | null;
     quotes: string | null;
     right: string | null;
+    rotate: string | null;
     rubyAlign: string | null;
     rubyOverhang: string | null;
     rubyPosition: string | null;
+    scale: string | null;
     stopColor: string | null;
     stopOpacity: string | null;
     stroke: string | null;
@@ -7280,6 +7973,7 @@ interface CSSStyleDeclaration {
     transitionDuration: string | null;
     transitionProperty: string | null;
     transitionTimingFunction: string | null;
+    translate: string | null;
     unicodeBidi: string | null;
     verticalAlign: string | null;
     visibility: string | null;
@@ -7340,6 +8034,9 @@ interface CSSStyleDeclaration {
     webkitTapHighlightColor: string | null;
     webkitTextFillColor: string | null;
     webkitTextSizeAdjust: any;
+    webkitTextStroke: string | null;
+    webkitTextStrokeColor: string | null;
+    webkitTextStrokeWidth: string | null;
     webkitTransform: string | null;
     webkitTransformOrigin: string | null;
     webkitTransformStyle: string | null;
@@ -7360,6 +8057,8 @@ interface CSSStyleDeclaration {
     writingMode: string | null;
     zIndex: string | null;
     zoom: string | null;
+    resize: string | null;
+    userSelect: string | null;
     getPropertyPriority(propertyName: string): string;
     getPropertyValue(propertyName: string): string;
     item(index: number): string;
@@ -7387,7 +8086,6 @@ declare var CSSStyleRule: {
 interface CSSStyleSheet extends StyleSheet {
     readonly cssRules: CSSRuleList;
     cssText: string;
-    readonly href: string;
     readonly id: string;
     readonly imports: StyleSheetList;
     readonly isAlternate: boolean;
@@ -7419,6 +8117,34 @@ declare var CSSSupportsRule: {
     new(): CSSSupportsRule;
 }
 
+interface Cache {
+    add(request: RequestInfo): Promise<void>;
+    addAll(requests: RequestInfo[]): Promise<void>;
+    delete(request: RequestInfo, options?: CacheQueryOptions): Promise<boolean>;
+    keys(request?: RequestInfo, options?: CacheQueryOptions): any;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<Response>;
+    matchAll(request?: RequestInfo, options?: CacheQueryOptions): any;
+    put(request: RequestInfo, response: Response): Promise<void>;
+}
+
+declare var Cache: {
+    prototype: Cache;
+    new(): Cache;
+}
+
+interface CacheStorage {
+    delete(cacheName: string): Promise<boolean>;
+    has(cacheName: string): Promise<boolean>;
+    keys(): any;
+    match(request: RequestInfo, options?: CacheQueryOptions): Promise<any>;
+    open(cacheName: string): Promise<Cache>;
+}
+
+declare var CacheStorage: {
+    prototype: CacheStorage;
+    new(): CacheStorage;
+}
+
 interface CanvasGradient {
     addColorStop(offset: number, color: string): void;
 }
@@ -7429,6 +8155,7 @@ declare var CanvasGradient: {
 }
 
 interface CanvasPattern {
+    setTransform(matrix: SVGMatrix): void;
 }
 
 declare var CanvasPattern: {
@@ -7442,13 +8169,13 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     font: string;
     globalAlpha: number;
     globalCompositeOperation: string;
+    imageSmoothingEnabled: boolean;
     lineCap: string;
     lineDashOffset: number;
     lineJoin: string;
     lineWidth: number;
     miterLimit: number;
-    msFillRule: string;
-    msImageSmoothingEnabled: boolean;
+    msFillRule: CanvasFillRule;
     shadowBlur: number;
     shadowColor: string;
     shadowOffsetX: number;
@@ -7461,18 +8188,21 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     oImageSmoothingEnabled: boolean;
     beginPath(): void;
     clearRect(x: number, y: number, w: number, h: number): void;
-    clip(fillRule?: string): void;
+    clip(fillRule?: CanvasFillRule): void;
     createImageData(imageDataOrSw: number | ImageData, sh?: number): ImageData;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createPattern(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, repetition: string): CanvasPattern;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
-    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
-    fill(fillRule?: string): void;
+    drawFocusIfNeeded(element: Element): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, dstX: number, dstY: number): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, dstX: number, dstY: number, dstW: number, dstH: number): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void;
+    fill(fillRule?: CanvasFillRule): void;
     fillRect(x: number, y: number, w: number, h: number): void;
     fillText(text: string, x: number, y: number, maxWidth?: number): void;
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
-    isPointInPath(x: number, y: number, fillRule?: string): boolean;
+    isPointInPath(x: number, y: number, fillRule?: CanvasFillRule): boolean;
     measureText(text: string): TextMetrics;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void;
     restore(): void;
@@ -7481,7 +8211,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     scale(x: number, y: number): void;
     setLineDash(segments: number[]): void;
     setTransform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
-    stroke(): void;
+    stroke(path?: Path2D): void;
     strokeRect(x: number, y: number, w: number, h: number): void;
     strokeText(text: string, x: number, y: number, maxWidth?: number): void;
     transform(m11: number, m12: number, m21: number, m22: number, dx: number, dy: number): void;
@@ -7517,7 +8247,6 @@ interface CharacterData extends Node, ChildNode {
     insertData(offset: number, arg: string): void;
     replaceData(offset: number, count: number, arg: string): void;
     substringData(offset: number, count: number): string;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var CharacterData: {
@@ -7568,17 +8297,7 @@ interface CloseEvent extends Event {
 
 declare var CloseEvent: {
     prototype: CloseEvent;
-    new(): CloseEvent;
-}
-
-interface CommandEvent extends Event {
-    readonly commandName: string;
-    readonly detail: string | null;
-}
-
-declare var CommandEvent: {
-    prototype: CommandEvent;
-    new(type: string, eventInitDict?: CommandEventInit): CommandEvent;
+    new(typeArg: string, eventInitDict?: CloseEventInit): CloseEvent;
 }
 
 interface Comment extends CharacterData {
@@ -7605,7 +8324,7 @@ interface Console {
     assert(test?: boolean, message?: string, ...optionalParams: any[]): void;
     clear(): void;
     count(countTitle?: string): void;
-    debug(message?: string, ...optionalParams: any[]): void;
+    debug(message?: any, ...optionalParams: any[]): void;
     dir(value?: any, ...optionalParams: any[]): void;
     dirxml(value: any): void;
     error(message?: any, ...optionalParams: any[]): void;
@@ -7774,8 +8493,8 @@ declare var DOMException: {
 }
 
 interface DOMImplementation {
-    createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType): Document;
-    createDocumentType(qualifiedName: string, publicId: string | null, systemId: string | null): DocumentType;
+    createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType | null): Document;
+    createDocumentType(qualifiedName: string, publicId: string, systemId: string): DocumentType;
     createHTMLDocument(title: string): Document;
     hasFeature(feature: string | null, version: string | null): boolean;
 }
@@ -7816,7 +8535,7 @@ declare var DOMStringList: {
 }
 
 interface DOMStringMap {
-    [name: string]: string;
+    [name: string]: string | undefined;
 }
 
 declare var DOMStringMap: {
@@ -7842,6 +8561,8 @@ declare var DOMTokenList: {
 
 interface DataCue extends TextTrackCue {
     data: ArrayBuffer;
+    addEventListener<K extends keyof TextTrackCueEventMap>(type: K, listener: (this: DataCue, ev: TextTrackCueEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var DataCue: {
@@ -7854,10 +8575,11 @@ interface DataTransfer {
     effectAllowed: string;
     readonly files: FileList;
     readonly items: DataTransferItemList;
-    readonly types: DOMStringList;
+    readonly types: string[];
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
+    setDragImage(image: Element, x: number, y: number): void;
 }
 
 declare var DataTransfer: {
@@ -7870,6 +8592,7 @@ interface DataTransferItem {
     readonly type: string;
     getAsFile(): File | null;
     getAsString(_callback: FunctionStringCallback | null): void;
+    webkitGetAsEntry(): any;
 }
 
 declare var DataTransferItem: {
@@ -7893,7 +8616,7 @@ declare var DataTransferItemList: {
 
 interface DeferredPermissionRequest {
     readonly id: number;
-    readonly type: string;
+    readonly type: MSWebViewPermissionType;
     readonly uri: string;
     allow(): void;
     deny(): void;
@@ -7930,7 +8653,7 @@ interface DeviceLightEvent extends Event {
 
 declare var DeviceLightEvent: {
     prototype: DeviceLightEvent;
-    new(type: string, eventInitDict?: DeviceLightEventInit): DeviceLightEvent;
+    new(typeArg: string, eventInitDict?: DeviceLightEventInit): DeviceLightEvent;
 }
 
 interface DeviceMotionEvent extends Event {
@@ -7943,7 +8666,7 @@ interface DeviceMotionEvent extends Event {
 
 declare var DeviceMotionEvent: {
     prototype: DeviceMotionEvent;
-    new(): DeviceMotionEvent;
+    new(typeArg: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
 }
 
 interface DeviceOrientationEvent extends Event {
@@ -7956,7 +8679,7 @@ interface DeviceOrientationEvent extends Event {
 
 declare var DeviceOrientationEvent: {
     prototype: DeviceOrientationEvent;
-    new(): DeviceOrientationEvent;
+    new(typeArg: string, eventInitDict?: DeviceOrientationEventInit): DeviceOrientationEvent;
 }
 
 interface DeviceRotationRate {
@@ -7970,7 +8693,98 @@ declare var DeviceRotationRate: {
     new(): DeviceRotationRate;
 }
 
-interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent {
+interface DocumentEventMap extends GlobalEventHandlersEventMap {
+    "abort": UIEvent;
+    "activate": UIEvent;
+    "beforeactivate": UIEvent;
+    "beforedeactivate": UIEvent;
+    "blur": FocusEvent;
+    "canplay": Event;
+    "canplaythrough": Event;
+    "change": Event;
+    "click": MouseEvent;
+    "contextmenu": PointerEvent;
+    "dblclick": MouseEvent;
+    "deactivate": UIEvent;
+    "drag": DragEvent;
+    "dragend": DragEvent;
+    "dragenter": DragEvent;
+    "dragleave": DragEvent;
+    "dragover": DragEvent;
+    "dragstart": DragEvent;
+    "drop": DragEvent;
+    "durationchange": Event;
+    "emptied": Event;
+    "ended": MediaStreamErrorEvent;
+    "error": ErrorEvent;
+    "focus": FocusEvent;
+    "fullscreenchange": Event;
+    "fullscreenerror": Event;
+    "input": Event;
+    "invalid": Event;
+    "keydown": KeyboardEvent;
+    "keypress": KeyboardEvent;
+    "keyup": KeyboardEvent;
+    "load": Event;
+    "loadeddata": Event;
+    "loadedmetadata": Event;
+    "loadstart": Event;
+    "mousedown": MouseEvent;
+    "mousemove": MouseEvent;
+    "mouseout": MouseEvent;
+    "mouseover": MouseEvent;
+    "mouseup": MouseEvent;
+    "mousewheel": WheelEvent;
+    "MSContentZoom": UIEvent;
+    "MSGestureChange": MSGestureEvent;
+    "MSGestureDoubleTap": MSGestureEvent;
+    "MSGestureEnd": MSGestureEvent;
+    "MSGestureHold": MSGestureEvent;
+    "MSGestureStart": MSGestureEvent;
+    "MSGestureTap": MSGestureEvent;
+    "MSInertiaStart": MSGestureEvent;
+    "MSManipulationStateChanged": MSManipulationEvent;
+    "MSPointerCancel": MSPointerEvent;
+    "MSPointerDown": MSPointerEvent;
+    "MSPointerEnter": MSPointerEvent;
+    "MSPointerLeave": MSPointerEvent;
+    "MSPointerMove": MSPointerEvent;
+    "MSPointerOut": MSPointerEvent;
+    "MSPointerOver": MSPointerEvent;
+    "MSPointerUp": MSPointerEvent;
+    "mssitemodejumplistitemremoved": MSSiteModeEvent;
+    "msthumbnailclick": MSSiteModeEvent;
+    "pause": Event;
+    "play": Event;
+    "playing": Event;
+    "pointerlockchange": Event;
+    "pointerlockerror": Event;
+    "progress": ProgressEvent;
+    "ratechange": Event;
+    "readystatechange": Event;
+    "reset": Event;
+    "scroll": UIEvent;
+    "seeked": Event;
+    "seeking": Event;
+    "select": UIEvent;
+    "selectionchange": Event;
+    "selectstart": Event;
+    "stalled": Event;
+    "stop": Event;
+    "submit": Event;
+    "suspend": Event;
+    "timeupdate": Event;
+    "touchcancel": TouchEvent;
+    "touchend": TouchEvent;
+    "touchmove": TouchEvent;
+    "touchstart": TouchEvent;
+    "volumechange": Event;
+    "waiting": Event;
+    "webkitfullscreenchange": Event;
+    "webkitfullscreenerror": Event;
+}
+
+interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEvent, ParentNode, DocumentOrShadowRoot {
     /**
       * Sets or gets the URL for the current document. 
       */
@@ -8018,10 +8832,6 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
     readonly compatMode: string;
     cookie: string;
     readonly currentScript: HTMLScriptElement | SVGScriptElement;
-    /**
-      * Gets the default character set from the current regional language settings.
-      */
-    readonly defaultCharset: string;
     readonly defaultView: Window;
     /**
       * Sets or gets a value that indicates whether the document can be edited.
@@ -8093,294 +8903,294 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Fires when the user aborts the download.
       * @param ev The event.
       */
-    onabort: (this: this, ev: UIEvent) => any;
+    onabort: (this: Document, ev: UIEvent) => any;
     /**
       * Fires when the object is set as the active element.
       * @param ev The event.
       */
-    onactivate: (this: this, ev: UIEvent) => any;
+    onactivate: (this: Document, ev: UIEvent) => any;
     /**
       * Fires immediately before the object is set as the active element.
       * @param ev The event.
       */
-    onbeforeactivate: (this: this, ev: UIEvent) => any;
+    onbeforeactivate: (this: Document, ev: UIEvent) => any;
     /**
       * Fires immediately before the activeElement is changed from the current object to another object in the parent document.
       * @param ev The event.
       */
-    onbeforedeactivate: (this: this, ev: UIEvent) => any;
+    onbeforedeactivate: (this: Document, ev: UIEvent) => any;
     /** 
       * Fires when the object loses the input focus. 
       * @param ev The focus event.
       */
-    onblur: (this: this, ev: FocusEvent) => any;
+    onblur: (this: Document, ev: FocusEvent) => any;
     /**
       * Occurs when playback is possible, but would require further buffering. 
       * @param ev The event.
       */
-    oncanplay: (this: this, ev: Event) => any;
-    oncanplaythrough: (this: this, ev: Event) => any;
+    oncanplay: (this: Document, ev: Event) => any;
+    oncanplaythrough: (this: Document, ev: Event) => any;
     /**
       * Fires when the contents of the object or selection have changed. 
       * @param ev The event.
       */
-    onchange: (this: this, ev: Event) => any;
+    onchange: (this: Document, ev: Event) => any;
     /**
       * Fires when the user clicks the left mouse button on the object
       * @param ev The mouse event.
       */
-    onclick: (this: this, ev: MouseEvent) => any;
+    onclick: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the user clicks the right mouse button in the client area, opening the context menu. 
       * @param ev The mouse event.
       */
-    oncontextmenu: (this: this, ev: PointerEvent) => any;
+    oncontextmenu: (this: Document, ev: PointerEvent) => any;
     /**
       * Fires when the user double-clicks the object.
       * @param ev The mouse event.
       */
-    ondblclick: (this: this, ev: MouseEvent) => any;
+    ondblclick: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the activeElement is changed from the current object to another object in the parent document.
       * @param ev The UI Event
       */
-    ondeactivate: (this: this, ev: UIEvent) => any;
+    ondeactivate: (this: Document, ev: UIEvent) => any;
     /**
       * Fires on the source object continuously during a drag operation.
       * @param ev The event.
       */
-    ondrag: (this: this, ev: DragEvent) => any;
+    ondrag: (this: Document, ev: DragEvent) => any;
     /**
       * Fires on the source object when the user releases the mouse at the close of a drag operation.
       * @param ev The event.
       */
-    ondragend: (this: this, ev: DragEvent) => any;
+    ondragend: (this: Document, ev: DragEvent) => any;
     /** 
       * Fires on the target element when the user drags the object to a valid drop target.
       * @param ev The drag event.
       */
-    ondragenter: (this: this, ev: DragEvent) => any;
+    ondragenter: (this: Document, ev: DragEvent) => any;
     /** 
       * Fires on the target object when the user moves the mouse out of a valid drop target during a drag operation.
       * @param ev The drag event.
       */
-    ondragleave: (this: this, ev: DragEvent) => any;
+    ondragleave: (this: Document, ev: DragEvent) => any;
     /**
       * Fires on the target element continuously while the user drags the object over a valid drop target.
       * @param ev The event.
       */
-    ondragover: (this: this, ev: DragEvent) => any;
+    ondragover: (this: Document, ev: DragEvent) => any;
     /**
       * Fires on the source object when the user starts to drag a text selection or selected object. 
       * @param ev The event.
       */
-    ondragstart: (this: this, ev: DragEvent) => any;
-    ondrop: (this: this, ev: DragEvent) => any;
+    ondragstart: (this: Document, ev: DragEvent) => any;
+    ondrop: (this: Document, ev: DragEvent) => any;
     /**
       * Occurs when the duration attribute is updated. 
       * @param ev The event.
       */
-    ondurationchange: (this: this, ev: Event) => any;
+    ondurationchange: (this: Document, ev: Event) => any;
     /**
       * Occurs when the media element is reset to its initial state. 
       * @param ev The event.
       */
-    onemptied: (this: this, ev: Event) => any;
+    onemptied: (this: Document, ev: Event) => any;
     /**
       * Occurs when the end of playback is reached. 
       * @param ev The event
       */
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
+    onended: (this: Document, ev: MediaStreamErrorEvent) => any;
     /**
       * Fires when an error occurs during object loading.
       * @param ev The event.
       */
-    onerror: (this: this, ev: ErrorEvent) => any;
+    onerror: (this: Document, ev: ErrorEvent) => any;
     /**
       * Fires when the object receives focus. 
       * @param ev The event.
       */
-    onfocus: (this: this, ev: FocusEvent) => any;
-    onfullscreenchange: (this: this, ev: Event) => any;
-    onfullscreenerror: (this: this, ev: Event) => any;
-    oninput: (this: this, ev: Event) => any;
-    oninvalid: (this: this, ev: Event) => any;
+    onfocus: (this: Document, ev: FocusEvent) => any;
+    onfullscreenchange: (this: Document, ev: Event) => any;
+    onfullscreenerror: (this: Document, ev: Event) => any;
+    oninput: (this: Document, ev: Event) => any;
+    oninvalid: (this: Document, ev: Event) => any;
     /**
       * Fires when the user presses a key.
       * @param ev The keyboard event
       */
-    onkeydown: (this: this, ev: KeyboardEvent) => any;
+    onkeydown: (this: Document, ev: KeyboardEvent) => any;
     /**
       * Fires when the user presses an alphanumeric key.
       * @param ev The event.
       */
-    onkeypress: (this: this, ev: KeyboardEvent) => any;
+    onkeypress: (this: Document, ev: KeyboardEvent) => any;
     /**
       * Fires when the user releases a key.
       * @param ev The keyboard event
       */
-    onkeyup: (this: this, ev: KeyboardEvent) => any;
+    onkeyup: (this: Document, ev: KeyboardEvent) => any;
     /**
       * Fires immediately after the browser loads the object. 
       * @param ev The event.
       */
-    onload: (this: this, ev: Event) => any;
+    onload: (this: Document, ev: Event) => any;
     /**
       * Occurs when media data is loaded at the current playback position. 
       * @param ev The event.
       */
-    onloadeddata: (this: this, ev: Event) => any;
+    onloadeddata: (this: Document, ev: Event) => any;
     /**
       * Occurs when the duration and dimensions of the media have been determined.
       * @param ev The event.
       */
-    onloadedmetadata: (this: this, ev: Event) => any;
+    onloadedmetadata: (this: Document, ev: Event) => any;
     /**
       * Occurs when Internet Explorer begins looking for media data. 
       * @param ev The event.
       */
-    onloadstart: (this: this, ev: Event) => any;
+    onloadstart: (this: Document, ev: Event) => any;
     /**
       * Fires when the user clicks the object with either mouse button. 
       * @param ev The mouse event.
       */
-    onmousedown: (this: this, ev: MouseEvent) => any;
+    onmousedown: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the user moves the mouse over the object. 
       * @param ev The mouse event.
       */
-    onmousemove: (this: this, ev: MouseEvent) => any;
+    onmousemove: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the user moves the mouse pointer outside the boundaries of the object. 
       * @param ev The mouse event.
       */
-    onmouseout: (this: this, ev: MouseEvent) => any;
+    onmouseout: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the user moves the mouse pointer into the object.
       * @param ev The mouse event.
       */
-    onmouseover: (this: this, ev: MouseEvent) => any;
+    onmouseover: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the user releases a mouse button while the mouse is over the object. 
       * @param ev The mouse event.
       */
-    onmouseup: (this: this, ev: MouseEvent) => any;
+    onmouseup: (this: Document, ev: MouseEvent) => any;
     /**
       * Fires when the wheel button is rotated. 
       * @param ev The mouse event
       */
-    onmousewheel: (this: this, ev: WheelEvent) => any;
-    onmscontentzoom: (this: this, ev: UIEvent) => any;
-    onmsgesturechange: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturedoubletap: (this: this, ev: MSGestureEvent) => any;
-    onmsgestureend: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturehold: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturestart: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturetap: (this: this, ev: MSGestureEvent) => any;
-    onmsinertiastart: (this: this, ev: MSGestureEvent) => any;
-    onmsmanipulationstatechanged: (this: this, ev: MSManipulationEvent) => any;
-    onmspointercancel: (this: this, ev: MSPointerEvent) => any;
-    onmspointerdown: (this: this, ev: MSPointerEvent) => any;
-    onmspointerenter: (this: this, ev: MSPointerEvent) => any;
-    onmspointerleave: (this: this, ev: MSPointerEvent) => any;
-    onmspointermove: (this: this, ev: MSPointerEvent) => any;
-    onmspointerout: (this: this, ev: MSPointerEvent) => any;
-    onmspointerover: (this: this, ev: MSPointerEvent) => any;
-    onmspointerup: (this: this, ev: MSPointerEvent) => any;
+    onmousewheel: (this: Document, ev: WheelEvent) => any;
+    onmscontentzoom: (this: Document, ev: UIEvent) => any;
+    onmsgesturechange: (this: Document, ev: MSGestureEvent) => any;
+    onmsgesturedoubletap: (this: Document, ev: MSGestureEvent) => any;
+    onmsgestureend: (this: Document, ev: MSGestureEvent) => any;
+    onmsgesturehold: (this: Document, ev: MSGestureEvent) => any;
+    onmsgesturestart: (this: Document, ev: MSGestureEvent) => any;
+    onmsgesturetap: (this: Document, ev: MSGestureEvent) => any;
+    onmsinertiastart: (this: Document, ev: MSGestureEvent) => any;
+    onmsmanipulationstatechanged: (this: Document, ev: MSManipulationEvent) => any;
+    onmspointercancel: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerdown: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerenter: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerleave: (this: Document, ev: MSPointerEvent) => any;
+    onmspointermove: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerout: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerover: (this: Document, ev: MSPointerEvent) => any;
+    onmspointerup: (this: Document, ev: MSPointerEvent) => any;
     /**
       * Occurs when an item is removed from a Jump List of a webpage running in Site Mode. 
       * @param ev The event.
       */
-    onmssitemodejumplistitemremoved: (this: this, ev: MSSiteModeEvent) => any;
+    onmssitemodejumplistitemremoved: (this: Document, ev: MSSiteModeEvent) => any;
     /**
       * Occurs when a user clicks a button in a Thumbnail Toolbar of a webpage running in Site Mode.
       * @param ev The event.
       */
-    onmsthumbnailclick: (this: this, ev: MSSiteModeEvent) => any;
+    onmsthumbnailclick: (this: Document, ev: MSSiteModeEvent) => any;
     /**
       * Occurs when playback is paused.
       * @param ev The event.
       */
-    onpause: (this: this, ev: Event) => any;
+    onpause: (this: Document, ev: Event) => any;
     /**
       * Occurs when the play method is requested. 
       * @param ev The event.
       */
-    onplay: (this: this, ev: Event) => any;
+    onplay: (this: Document, ev: Event) => any;
     /**
       * Occurs when the audio or video has started playing. 
       * @param ev The event.
       */
-    onplaying: (this: this, ev: Event) => any;
-    onpointerlockchange: (this: this, ev: Event) => any;
-    onpointerlockerror: (this: this, ev: Event) => any;
+    onplaying: (this: Document, ev: Event) => any;
+    onpointerlockchange: (this: Document, ev: Event) => any;
+    onpointerlockerror: (this: Document, ev: Event) => any;
     /**
       * Occurs to indicate progress while downloading media data. 
       * @param ev The event.
       */
-    onprogress: (this: this, ev: ProgressEvent) => any;
+    onprogress: (this: Document, ev: ProgressEvent) => any;
     /**
       * Occurs when the playback rate is increased or decreased. 
       * @param ev The event.
       */
-    onratechange: (this: this, ev: Event) => any;
+    onratechange: (this: Document, ev: Event) => any;
     /**
       * Fires when the state of the object has changed.
       * @param ev The event
       */
-    onreadystatechange: (this: this, ev: ProgressEvent) => any;
+    onreadystatechange: (this: Document, ev: Event) => any;
     /**
       * Fires when the user resets a form. 
       * @param ev The event.
       */
-    onreset: (this: this, ev: Event) => any;
+    onreset: (this: Document, ev: Event) => any;
     /**
       * Fires when the user repositions the scroll box in the scroll bar on the object. 
       * @param ev The event.
       */
-    onscroll: (this: this, ev: UIEvent) => any;
+    onscroll: (this: Document, ev: UIEvent) => any;
     /**
       * Occurs when the seek operation ends. 
       * @param ev The event.
       */
-    onseeked: (this: this, ev: Event) => any;
+    onseeked: (this: Document, ev: Event) => any;
     /**
       * Occurs when the current playback position is moved. 
       * @param ev The event.
       */
-    onseeking: (this: this, ev: Event) => any;
+    onseeking: (this: Document, ev: Event) => any;
     /**
       * Fires when the current selection changes.
       * @param ev The event.
       */
-    onselect: (this: this, ev: UIEvent) => any;
+    onselect: (this: Document, ev: UIEvent) => any;
     /**
       * Fires when the selection state of a document changes.
       * @param ev The event.
       */
-    onselectionchange: (this: this, ev: Event) => any;
-    onselectstart: (this: this, ev: Event) => any;
+    onselectionchange: (this: Document, ev: Event) => any;
+    onselectstart: (this: Document, ev: Event) => any;
     /**
       * Occurs when the download has stopped. 
       * @param ev The event.
       */
-    onstalled: (this: this, ev: Event) => any;
+    onstalled: (this: Document, ev: Event) => any;
     /**
       * Fires when the user clicks the Stop button or leaves the Web page.
       * @param ev The event.
       */
-    onstop: (this: this, ev: Event) => any;
-    onsubmit: (this: this, ev: Event) => any;
+    onstop: (this: Document, ev: Event) => any;
+    onsubmit: (this: Document, ev: Event) => any;
     /**
       * Occurs if the load operation has been intentionally halted. 
       * @param ev The event.
       */
-    onsuspend: (this: this, ev: Event) => any;
+    onsuspend: (this: Document, ev: Event) => any;
     /**
       * Occurs to indicate the current playback position.
       * @param ev The event.
       */
-    ontimeupdate: (this: this, ev: Event) => any;
+    ontimeupdate: (this: Document, ev: Event) => any;
     ontouchcancel: (ev: TouchEvent) => any;
     ontouchend: (ev: TouchEvent) => any;
     ontouchmove: (ev: TouchEvent) => any;
@@ -8389,14 +9199,14 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Occurs when the volume is changed, or playback is muted or unmuted.
       * @param ev The event.
       */
-    onvolumechange: (this: this, ev: Event) => any;
+    onvolumechange: (this: Document, ev: Event) => any;
     /**
       * Occurs when playback stops because the next frame of a video resource is not available. 
       * @param ev The event.
       */
-    onwaiting: (this: this, ev: Event) => any;
-    onwebkitfullscreenchange: (this: this, ev: Event) => any;
-    onwebkitfullscreenerror: (this: this, ev: Event) => any;
+    onwaiting: (this: Document, ev: Event) => any;
+    onwebkitfullscreenchange: (this: Document, ev: Event) => any;
+    onwebkitfullscreenerror: (this: Document, ev: Event) => any;
     plugins: HTMLCollectionOf<HTMLEmbedElement>;
     readonly pointerLockElement: Element;
     /**
@@ -8424,7 +9234,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Contains the title of the document.
       */
     title: string;
-    readonly visibilityState: string;
+    readonly visibilityState: VisibilityState;
     /** 
       * Sets or gets the color of the links that the user has visited.
       */
@@ -8439,7 +9249,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Gets or sets the version attribute specified in the declaration of an XML document.
       */
     xmlVersion: string | null;
-    adoptNode(source: Node): Node;
+    adoptNode<T extends Node>(source: T): T;
     captureEvents(): void;
     caretRangeFromPoint(x: number, y: number): Range;
     clear(): void;
@@ -8467,86 +9277,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Creates an instance of the element for the specified tag.
       * @param tagName The name of an element.
       */
-    createElement(tagName: "a"): HTMLAnchorElement;
-    createElement(tagName: "applet"): HTMLAppletElement;
-    createElement(tagName: "area"): HTMLAreaElement;
-    createElement(tagName: "audio"): HTMLAudioElement;
-    createElement(tagName: "base"): HTMLBaseElement;
-    createElement(tagName: "basefont"): HTMLBaseFontElement;
-    createElement(tagName: "blockquote"): HTMLQuoteElement;
-    createElement(tagName: "body"): HTMLBodyElement;
-    createElement(tagName: "br"): HTMLBRElement;
-    createElement(tagName: "button"): HTMLButtonElement;
-    createElement(tagName: "canvas"): HTMLCanvasElement;
-    createElement(tagName: "caption"): HTMLTableCaptionElement;
-    createElement(tagName: "col"): HTMLTableColElement;
-    createElement(tagName: "colgroup"): HTMLTableColElement;
-    createElement(tagName: "datalist"): HTMLDataListElement;
-    createElement(tagName: "del"): HTMLModElement;
-    createElement(tagName: "dir"): HTMLDirectoryElement;
-    createElement(tagName: "div"): HTMLDivElement;
-    createElement(tagName: "dl"): HTMLDListElement;
-    createElement(tagName: "embed"): HTMLEmbedElement;
-    createElement(tagName: "fieldset"): HTMLFieldSetElement;
-    createElement(tagName: "font"): HTMLFontElement;
-    createElement(tagName: "form"): HTMLFormElement;
-    createElement(tagName: "frame"): HTMLFrameElement;
-    createElement(tagName: "frameset"): HTMLFrameSetElement;
-    createElement(tagName: "h1"): HTMLHeadingElement;
-    createElement(tagName: "h2"): HTMLHeadingElement;
-    createElement(tagName: "h3"): HTMLHeadingElement;
-    createElement(tagName: "h4"): HTMLHeadingElement;
-    createElement(tagName: "h5"): HTMLHeadingElement;
-    createElement(tagName: "h6"): HTMLHeadingElement;
-    createElement(tagName: "head"): HTMLHeadElement;
-    createElement(tagName: "hr"): HTMLHRElement;
-    createElement(tagName: "html"): HTMLHtmlElement;
-    createElement(tagName: "iframe"): HTMLIFrameElement;
-    createElement(tagName: "img"): HTMLImageElement;
-    createElement(tagName: "input"): HTMLInputElement;
-    createElement(tagName: "ins"): HTMLModElement;
-    createElement(tagName: "isindex"): HTMLUnknownElement;
-    createElement(tagName: "label"): HTMLLabelElement;
-    createElement(tagName: "legend"): HTMLLegendElement;
-    createElement(tagName: "li"): HTMLLIElement;
-    createElement(tagName: "link"): HTMLLinkElement;
-    createElement(tagName: "listing"): HTMLPreElement;
-    createElement(tagName: "map"): HTMLMapElement;
-    createElement(tagName: "marquee"): HTMLMarqueeElement;
-    createElement(tagName: "menu"): HTMLMenuElement;
-    createElement(tagName: "meta"): HTMLMetaElement;
-    createElement(tagName: "meter"): HTMLMeterElement;
-    createElement(tagName: "nextid"): HTMLUnknownElement;
-    createElement(tagName: "object"): HTMLObjectElement;
-    createElement(tagName: "ol"): HTMLOListElement;
-    createElement(tagName: "optgroup"): HTMLOptGroupElement;
-    createElement(tagName: "option"): HTMLOptionElement;
-    createElement(tagName: "p"): HTMLParagraphElement;
-    createElement(tagName: "param"): HTMLParamElement;
-    createElement(tagName: "picture"): HTMLPictureElement;
-    createElement(tagName: "pre"): HTMLPreElement;
-    createElement(tagName: "progress"): HTMLProgressElement;
-    createElement(tagName: "q"): HTMLQuoteElement;
-    createElement(tagName: "script"): HTMLScriptElement;
-    createElement(tagName: "select"): HTMLSelectElement;
-    createElement(tagName: "source"): HTMLSourceElement;
-    createElement(tagName: "span"): HTMLSpanElement;
-    createElement(tagName: "style"): HTMLStyleElement;
-    createElement(tagName: "table"): HTMLTableElement;
-    createElement(tagName: "tbody"): HTMLTableSectionElement;
-    createElement(tagName: "td"): HTMLTableDataCellElement;
-    createElement(tagName: "template"): HTMLTemplateElement;
-    createElement(tagName: "textarea"): HTMLTextAreaElement;
-    createElement(tagName: "tfoot"): HTMLTableSectionElement;
-    createElement(tagName: "th"): HTMLTableHeaderCellElement;
-    createElement(tagName: "thead"): HTMLTableSectionElement;
-    createElement(tagName: "title"): HTMLTitleElement;
-    createElement(tagName: "tr"): HTMLTableRowElement;
-    createElement(tagName: "track"): HTMLTrackElement;
-    createElement(tagName: "ul"): HTMLUListElement;
-    createElement(tagName: "video"): HTMLVideoElement;
-    createElement(tagName: "x-ms-webview"): MSHTMLWebViewElement;
-    createElement(tagName: "xmp"): HTMLPreElement;
+    createElement<K extends keyof HTMLElementTagNameMap>(tagName: K): HTMLElementTagNameMap[K];
     createElement(tagName: string): HTMLElement;
     createElementNS(namespaceURI: "http://www.w3.org/1999/xhtml", qualifiedName: string): HTMLElement
     createElementNS(namespaceURI: "http://www.w3.org/2000/svg", qualifiedName: "a"): SVGAElement
@@ -8648,7 +9379,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param y The y-offset
       */
     elementFromPoint(x: number, y: number): Element;
-    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver, type: number, result: XPathResult): XPathResult;
+    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | null, type: number, result: XPathResult | null): XPathResult;
     /**
       * Executes a command on the current document, current selection, or the given range.
       * @param commandId String that specifies the command to execute. This command can be any of the command identifiers that can be executed in script.
@@ -8682,182 +9413,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Retrieves a collection of objects based on the specified element name.
       * @param name Specifies the name of an element.
       */
-    getElementsByTagName(tagname: "a"): NodeListOf<HTMLAnchorElement>;
-    getElementsByTagName(tagname: "abbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "acronym"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "address"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "applet"): NodeListOf<HTMLAppletElement>;
-    getElementsByTagName(tagname: "area"): NodeListOf<HTMLAreaElement>;
-    getElementsByTagName(tagname: "article"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "aside"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "audio"): NodeListOf<HTMLAudioElement>;
-    getElementsByTagName(tagname: "b"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "base"): NodeListOf<HTMLBaseElement>;
-    getElementsByTagName(tagname: "basefont"): NodeListOf<HTMLBaseFontElement>;
-    getElementsByTagName(tagname: "bdo"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "big"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "blockquote"): NodeListOf<HTMLQuoteElement>;
-    getElementsByTagName(tagname: "body"): NodeListOf<HTMLBodyElement>;
-    getElementsByTagName(tagname: "br"): NodeListOf<HTMLBRElement>;
-    getElementsByTagName(tagname: "button"): NodeListOf<HTMLButtonElement>;
-    getElementsByTagName(tagname: "canvas"): NodeListOf<HTMLCanvasElement>;
-    getElementsByTagName(tagname: "caption"): NodeListOf<HTMLTableCaptionElement>;
-    getElementsByTagName(tagname: "center"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "circle"): NodeListOf<SVGCircleElement>;
-    getElementsByTagName(tagname: "cite"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "clippath"): NodeListOf<SVGClipPathElement>;
-    getElementsByTagName(tagname: "code"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "col"): NodeListOf<HTMLTableColElement>;
-    getElementsByTagName(tagname: "colgroup"): NodeListOf<HTMLTableColElement>;
-    getElementsByTagName(tagname: "datalist"): NodeListOf<HTMLDataListElement>;
-    getElementsByTagName(tagname: "dd"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "defs"): NodeListOf<SVGDefsElement>;
-    getElementsByTagName(tagname: "del"): NodeListOf<HTMLModElement>;
-    getElementsByTagName(tagname: "desc"): NodeListOf<SVGDescElement>;
-    getElementsByTagName(tagname: "dfn"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "dir"): NodeListOf<HTMLDirectoryElement>;
-    getElementsByTagName(tagname: "div"): NodeListOf<HTMLDivElement>;
-    getElementsByTagName(tagname: "dl"): NodeListOf<HTMLDListElement>;
-    getElementsByTagName(tagname: "dt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "ellipse"): NodeListOf<SVGEllipseElement>;
-    getElementsByTagName(tagname: "em"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "embed"): NodeListOf<HTMLEmbedElement>;
-    getElementsByTagName(tagname: "feblend"): NodeListOf<SVGFEBlendElement>;
-    getElementsByTagName(tagname: "fecolormatrix"): NodeListOf<SVGFEColorMatrixElement>;
-    getElementsByTagName(tagname: "fecomponenttransfer"): NodeListOf<SVGFEComponentTransferElement>;
-    getElementsByTagName(tagname: "fecomposite"): NodeListOf<SVGFECompositeElement>;
-    getElementsByTagName(tagname: "feconvolvematrix"): NodeListOf<SVGFEConvolveMatrixElement>;
-    getElementsByTagName(tagname: "fediffuselighting"): NodeListOf<SVGFEDiffuseLightingElement>;
-    getElementsByTagName(tagname: "fedisplacementmap"): NodeListOf<SVGFEDisplacementMapElement>;
-    getElementsByTagName(tagname: "fedistantlight"): NodeListOf<SVGFEDistantLightElement>;
-    getElementsByTagName(tagname: "feflood"): NodeListOf<SVGFEFloodElement>;
-    getElementsByTagName(tagname: "fefunca"): NodeListOf<SVGFEFuncAElement>;
-    getElementsByTagName(tagname: "fefuncb"): NodeListOf<SVGFEFuncBElement>;
-    getElementsByTagName(tagname: "fefuncg"): NodeListOf<SVGFEFuncGElement>;
-    getElementsByTagName(tagname: "fefuncr"): NodeListOf<SVGFEFuncRElement>;
-    getElementsByTagName(tagname: "fegaussianblur"): NodeListOf<SVGFEGaussianBlurElement>;
-    getElementsByTagName(tagname: "feimage"): NodeListOf<SVGFEImageElement>;
-    getElementsByTagName(tagname: "femerge"): NodeListOf<SVGFEMergeElement>;
-    getElementsByTagName(tagname: "femergenode"): NodeListOf<SVGFEMergeNodeElement>;
-    getElementsByTagName(tagname: "femorphology"): NodeListOf<SVGFEMorphologyElement>;
-    getElementsByTagName(tagname: "feoffset"): NodeListOf<SVGFEOffsetElement>;
-    getElementsByTagName(tagname: "fepointlight"): NodeListOf<SVGFEPointLightElement>;
-    getElementsByTagName(tagname: "fespecularlighting"): NodeListOf<SVGFESpecularLightingElement>;
-    getElementsByTagName(tagname: "fespotlight"): NodeListOf<SVGFESpotLightElement>;
-    getElementsByTagName(tagname: "fetile"): NodeListOf<SVGFETileElement>;
-    getElementsByTagName(tagname: "feturbulence"): NodeListOf<SVGFETurbulenceElement>;
-    getElementsByTagName(tagname: "fieldset"): NodeListOf<HTMLFieldSetElement>;
-    getElementsByTagName(tagname: "figcaption"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "figure"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "filter"): NodeListOf<SVGFilterElement>;
-    getElementsByTagName(tagname: "font"): NodeListOf<HTMLFontElement>;
-    getElementsByTagName(tagname: "footer"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "foreignobject"): NodeListOf<SVGForeignObjectElement>;
-    getElementsByTagName(tagname: "form"): NodeListOf<HTMLFormElement>;
-    getElementsByTagName(tagname: "frame"): NodeListOf<HTMLFrameElement>;
-    getElementsByTagName(tagname: "frameset"): NodeListOf<HTMLFrameSetElement>;
-    getElementsByTagName(tagname: "g"): NodeListOf<SVGGElement>;
-    getElementsByTagName(tagname: "h1"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "h2"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "h3"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "h4"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "h5"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "h6"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(tagname: "head"): NodeListOf<HTMLHeadElement>;
-    getElementsByTagName(tagname: "header"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "hgroup"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "hr"): NodeListOf<HTMLHRElement>;
-    getElementsByTagName(tagname: "html"): NodeListOf<HTMLHtmlElement>;
-    getElementsByTagName(tagname: "i"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "iframe"): NodeListOf<HTMLIFrameElement>;
-    getElementsByTagName(tagname: "image"): NodeListOf<SVGImageElement>;
-    getElementsByTagName(tagname: "img"): NodeListOf<HTMLImageElement>;
-    getElementsByTagName(tagname: "input"): NodeListOf<HTMLInputElement>;
-    getElementsByTagName(tagname: "ins"): NodeListOf<HTMLModElement>;
-    getElementsByTagName(tagname: "isindex"): NodeListOf<HTMLUnknownElement>;
-    getElementsByTagName(tagname: "kbd"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "keygen"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "label"): NodeListOf<HTMLLabelElement>;
-    getElementsByTagName(tagname: "legend"): NodeListOf<HTMLLegendElement>;
-    getElementsByTagName(tagname: "li"): NodeListOf<HTMLLIElement>;
-    getElementsByTagName(tagname: "line"): NodeListOf<SVGLineElement>;
-    getElementsByTagName(tagname: "lineargradient"): NodeListOf<SVGLinearGradientElement>;
-    getElementsByTagName(tagname: "link"): NodeListOf<HTMLLinkElement>;
-    getElementsByTagName(tagname: "listing"): NodeListOf<HTMLPreElement>;
-    getElementsByTagName(tagname: "map"): NodeListOf<HTMLMapElement>;
-    getElementsByTagName(tagname: "mark"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "marker"): NodeListOf<SVGMarkerElement>;
-    getElementsByTagName(tagname: "marquee"): NodeListOf<HTMLMarqueeElement>;
-    getElementsByTagName(tagname: "mask"): NodeListOf<SVGMaskElement>;
-    getElementsByTagName(tagname: "menu"): NodeListOf<HTMLMenuElement>;
-    getElementsByTagName(tagname: "meta"): NodeListOf<HTMLMetaElement>;
-    getElementsByTagName(tagname: "metadata"): NodeListOf<SVGMetadataElement>;
-    getElementsByTagName(tagname: "meter"): NodeListOf<HTMLMeterElement>;
-    getElementsByTagName(tagname: "nav"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "nextid"): NodeListOf<HTMLUnknownElement>;
-    getElementsByTagName(tagname: "nobr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "noframes"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "noscript"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "object"): NodeListOf<HTMLObjectElement>;
-    getElementsByTagName(tagname: "ol"): NodeListOf<HTMLOListElement>;
-    getElementsByTagName(tagname: "optgroup"): NodeListOf<HTMLOptGroupElement>;
-    getElementsByTagName(tagname: "option"): NodeListOf<HTMLOptionElement>;
-    getElementsByTagName(tagname: "p"): NodeListOf<HTMLParagraphElement>;
-    getElementsByTagName(tagname: "param"): NodeListOf<HTMLParamElement>;
-    getElementsByTagName(tagname: "path"): NodeListOf<SVGPathElement>;
-    getElementsByTagName(tagname: "pattern"): NodeListOf<SVGPatternElement>;
-    getElementsByTagName(tagname: "picture"): NodeListOf<HTMLPictureElement>;
-    getElementsByTagName(tagname: "plaintext"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "polygon"): NodeListOf<SVGPolygonElement>;
-    getElementsByTagName(tagname: "polyline"): NodeListOf<SVGPolylineElement>;
-    getElementsByTagName(tagname: "pre"): NodeListOf<HTMLPreElement>;
-    getElementsByTagName(tagname: "progress"): NodeListOf<HTMLProgressElement>;
-    getElementsByTagName(tagname: "q"): NodeListOf<HTMLQuoteElement>;
-    getElementsByTagName(tagname: "radialgradient"): NodeListOf<SVGRadialGradientElement>;
-    getElementsByTagName(tagname: "rect"): NodeListOf<SVGRectElement>;
-    getElementsByTagName(tagname: "rt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "ruby"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "s"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "samp"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "script"): NodeListOf<HTMLScriptElement>;
-    getElementsByTagName(tagname: "section"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "select"): NodeListOf<HTMLSelectElement>;
-    getElementsByTagName(tagname: "small"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "source"): NodeListOf<HTMLSourceElement>;
-    getElementsByTagName(tagname: "span"): NodeListOf<HTMLSpanElement>;
-    getElementsByTagName(tagname: "stop"): NodeListOf<SVGStopElement>;
-    getElementsByTagName(tagname: "strike"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "strong"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "style"): NodeListOf<HTMLStyleElement>;
-    getElementsByTagName(tagname: "sub"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "sup"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "svg"): NodeListOf<SVGSVGElement>;
-    getElementsByTagName(tagname: "switch"): NodeListOf<SVGSwitchElement>;
-    getElementsByTagName(tagname: "symbol"): NodeListOf<SVGSymbolElement>;
-    getElementsByTagName(tagname: "table"): NodeListOf<HTMLTableElement>;
-    getElementsByTagName(tagname: "tbody"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(tagname: "td"): NodeListOf<HTMLTableDataCellElement>;
-    getElementsByTagName(tagname: "template"): NodeListOf<HTMLTemplateElement>;
-    getElementsByTagName(tagname: "text"): NodeListOf<SVGTextElement>;
-    getElementsByTagName(tagname: "textpath"): NodeListOf<SVGTextPathElement>;
-    getElementsByTagName(tagname: "textarea"): NodeListOf<HTMLTextAreaElement>;
-    getElementsByTagName(tagname: "tfoot"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(tagname: "th"): NodeListOf<HTMLTableHeaderCellElement>;
-    getElementsByTagName(tagname: "thead"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(tagname: "title"): NodeListOf<HTMLTitleElement>;
-    getElementsByTagName(tagname: "tr"): NodeListOf<HTMLTableRowElement>;
-    getElementsByTagName(tagname: "track"): NodeListOf<HTMLTrackElement>;
-    getElementsByTagName(tagname: "tspan"): NodeListOf<SVGTSpanElement>;
-    getElementsByTagName(tagname: "tt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "u"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "ul"): NodeListOf<HTMLUListElement>;
-    getElementsByTagName(tagname: "use"): NodeListOf<SVGUseElement>;
-    getElementsByTagName(tagname: "var"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "video"): NodeListOf<HTMLVideoElement>;
-    getElementsByTagName(tagname: "view"): NodeListOf<SVGViewElement>;
-    getElementsByTagName(tagname: "wbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(tagname: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
-    getElementsByTagName(tagname: "xmp"): NodeListOf<HTMLPreElement>;
+    getElementsByTagName<K extends keyof ElementListTagNameMap>(tagname: K): ElementListTagNameMap[K];
     getElementsByTagName(tagname: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
@@ -8870,7 +9426,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Gets a value indicating whether the object currently has focus.
       */
     hasFocus(): boolean;
-    importNode(importedNode: Node, deep: boolean): Node;
+    importNode<T extends Node>(importedNode: T, deep: boolean): T;
     msElementsFromPoint(x: number, y: number): NodeListOf<Element>;
     msElementsFromRect(left: number, top: number, width: number, height: number): NodeListOf<Element>;
     /**
@@ -8928,103 +9484,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * @param content The text and HTML tags to write.
       */
     writeln(...content: string[]): void;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "fullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "fullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mssitemodejumplistitemremoved", listener: (this: this, ev: MSSiteModeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "msthumbnailclick", listener: (this: this, ev: MSSiteModeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerlockchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerlockerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectionchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stop", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9033,8 +9493,8 @@ declare var Document: {
     new(): Document;
 }
 
-interface DocumentFragment extends Node, NodeSelector {
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+interface DocumentFragment extends Node, NodeSelector, ParentNode {
+    getElementById(elementId: string): HTMLElement | null;
 }
 
 declare var DocumentFragment: {
@@ -9047,9 +9507,8 @@ interface DocumentType extends Node, ChildNode {
     readonly internalSubset: string | null;
     readonly name: string;
     readonly notations: NamedNodeMap;
-    readonly publicId: string | null;
-    readonly systemId: string | null;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    readonly publicId: string;
+    readonly systemId: string;
 }
 
 declare var DocumentType: {
@@ -9072,7 +9531,7 @@ interface DynamicsCompressorNode extends AudioNode {
     readonly attack: AudioParam;
     readonly knee: AudioParam;
     readonly ratio: AudioParam;
-    readonly reduction: AudioParam;
+    readonly reduction: number;
     readonly release: AudioParam;
     readonly threshold: AudioParam;
 }
@@ -9102,7 +9561,37 @@ declare var EXT_texture_filter_anisotropic: {
     readonly TEXTURE_MAX_ANISOTROPY_EXT: number;
 }
 
-interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode {
+interface ElementEventMap extends GlobalEventHandlersEventMap {
+    "ariarequest": Event;
+    "command": Event;
+    "gotpointercapture": PointerEvent;
+    "lostpointercapture": PointerEvent;
+    "MSGestureChange": MSGestureEvent;
+    "MSGestureDoubleTap": MSGestureEvent;
+    "MSGestureEnd": MSGestureEvent;
+    "MSGestureHold": MSGestureEvent;
+    "MSGestureStart": MSGestureEvent;
+    "MSGestureTap": MSGestureEvent;
+    "MSGotPointerCapture": MSPointerEvent;
+    "MSInertiaStart": MSGestureEvent;
+    "MSLostPointerCapture": MSPointerEvent;
+    "MSPointerCancel": MSPointerEvent;
+    "MSPointerDown": MSPointerEvent;
+    "MSPointerEnter": MSPointerEvent;
+    "MSPointerLeave": MSPointerEvent;
+    "MSPointerMove": MSPointerEvent;
+    "MSPointerOut": MSPointerEvent;
+    "MSPointerOver": MSPointerEvent;
+    "MSPointerUp": MSPointerEvent;
+    "touchcancel": TouchEvent;
+    "touchend": TouchEvent;
+    "touchmove": TouchEvent;
+    "touchstart": TouchEvent;
+    "webkitfullscreenchange": Event;
+    "webkitfullscreenerror": Event;
+}
+
+interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelector, ChildNode, ParentNode {
     readonly classList: DOMTokenList;
     className: string;
     readonly clientHeight: number;
@@ -9110,224 +9599,53 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     readonly clientTop: number;
     readonly clientWidth: number;
     id: string;
+    innerHTML: string;
     msContentZoomFactor: number;
     readonly msRegionOverflow: string;
-    onariarequest: (this: this, ev: AriaRequestEvent) => any;
-    oncommand: (this: this, ev: CommandEvent) => any;
-    ongotpointercapture: (this: this, ev: PointerEvent) => any;
-    onlostpointercapture: (this: this, ev: PointerEvent) => any;
-    onmsgesturechange: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturedoubletap: (this: this, ev: MSGestureEvent) => any;
-    onmsgestureend: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturehold: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturestart: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturetap: (this: this, ev: MSGestureEvent) => any;
-    onmsgotpointercapture: (this: this, ev: MSPointerEvent) => any;
-    onmsinertiastart: (this: this, ev: MSGestureEvent) => any;
-    onmslostpointercapture: (this: this, ev: MSPointerEvent) => any;
-    onmspointercancel: (this: this, ev: MSPointerEvent) => any;
-    onmspointerdown: (this: this, ev: MSPointerEvent) => any;
-    onmspointerenter: (this: this, ev: MSPointerEvent) => any;
-    onmspointerleave: (this: this, ev: MSPointerEvent) => any;
-    onmspointermove: (this: this, ev: MSPointerEvent) => any;
-    onmspointerout: (this: this, ev: MSPointerEvent) => any;
-    onmspointerover: (this: this, ev: MSPointerEvent) => any;
-    onmspointerup: (this: this, ev: MSPointerEvent) => any;
+    onariarequest: (this: Element, ev: Event) => any;
+    oncommand: (this: Element, ev: Event) => any;
+    ongotpointercapture: (this: Element, ev: PointerEvent) => any;
+    onlostpointercapture: (this: Element, ev: PointerEvent) => any;
+    onmsgesturechange: (this: Element, ev: MSGestureEvent) => any;
+    onmsgesturedoubletap: (this: Element, ev: MSGestureEvent) => any;
+    onmsgestureend: (this: Element, ev: MSGestureEvent) => any;
+    onmsgesturehold: (this: Element, ev: MSGestureEvent) => any;
+    onmsgesturestart: (this: Element, ev: MSGestureEvent) => any;
+    onmsgesturetap: (this: Element, ev: MSGestureEvent) => any;
+    onmsgotpointercapture: (this: Element, ev: MSPointerEvent) => any;
+    onmsinertiastart: (this: Element, ev: MSGestureEvent) => any;
+    onmslostpointercapture: (this: Element, ev: MSPointerEvent) => any;
+    onmspointercancel: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerdown: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerenter: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerleave: (this: Element, ev: MSPointerEvent) => any;
+    onmspointermove: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerout: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerover: (this: Element, ev: MSPointerEvent) => any;
+    onmspointerup: (this: Element, ev: MSPointerEvent) => any;
     ontouchcancel: (ev: TouchEvent) => any;
     ontouchend: (ev: TouchEvent) => any;
     ontouchmove: (ev: TouchEvent) => any;
     ontouchstart: (ev: TouchEvent) => any;
-    onwebkitfullscreenchange: (this: this, ev: Event) => any;
-    onwebkitfullscreenerror: (this: this, ev: Event) => any;
+    onwebkitfullscreenchange: (this: Element, ev: Event) => any;
+    onwebkitfullscreenerror: (this: Element, ev: Event) => any;
+    outerHTML: string;
     readonly prefix: string | null;
     readonly scrollHeight: number;
     scrollLeft: number;
     scrollTop: number;
     readonly scrollWidth: number;
     readonly tagName: string;
-    innerHTML: string;
+    readonly assignedSlot: HTMLSlotElement | null;
+    slot: string;
+    readonly shadowRoot: ShadowRoot | null;
     getAttribute(name: string): string | null;
     getAttributeNS(namespaceURI: string, localName: string): string;
     getAttributeNode(name: string): Attr;
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr;
     getBoundingClientRect(): ClientRect;
     getClientRects(): ClientRectList;
-    getElementsByTagName(name: "a"): NodeListOf<HTMLAnchorElement>;
-    getElementsByTagName(name: "abbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "acronym"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "address"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "applet"): NodeListOf<HTMLAppletElement>;
-    getElementsByTagName(name: "area"): NodeListOf<HTMLAreaElement>;
-    getElementsByTagName(name: "article"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "aside"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "audio"): NodeListOf<HTMLAudioElement>;
-    getElementsByTagName(name: "b"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "base"): NodeListOf<HTMLBaseElement>;
-    getElementsByTagName(name: "basefont"): NodeListOf<HTMLBaseFontElement>;
-    getElementsByTagName(name: "bdo"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "big"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "blockquote"): NodeListOf<HTMLQuoteElement>;
-    getElementsByTagName(name: "body"): NodeListOf<HTMLBodyElement>;
-    getElementsByTagName(name: "br"): NodeListOf<HTMLBRElement>;
-    getElementsByTagName(name: "button"): NodeListOf<HTMLButtonElement>;
-    getElementsByTagName(name: "canvas"): NodeListOf<HTMLCanvasElement>;
-    getElementsByTagName(name: "caption"): NodeListOf<HTMLTableCaptionElement>;
-    getElementsByTagName(name: "center"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "circle"): NodeListOf<SVGCircleElement>;
-    getElementsByTagName(name: "cite"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "clippath"): NodeListOf<SVGClipPathElement>;
-    getElementsByTagName(name: "code"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "col"): NodeListOf<HTMLTableColElement>;
-    getElementsByTagName(name: "colgroup"): NodeListOf<HTMLTableColElement>;
-    getElementsByTagName(name: "datalist"): NodeListOf<HTMLDataListElement>;
-    getElementsByTagName(name: "dd"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "defs"): NodeListOf<SVGDefsElement>;
-    getElementsByTagName(name: "del"): NodeListOf<HTMLModElement>;
-    getElementsByTagName(name: "desc"): NodeListOf<SVGDescElement>;
-    getElementsByTagName(name: "dfn"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "dir"): NodeListOf<HTMLDirectoryElement>;
-    getElementsByTagName(name: "div"): NodeListOf<HTMLDivElement>;
-    getElementsByTagName(name: "dl"): NodeListOf<HTMLDListElement>;
-    getElementsByTagName(name: "dt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "ellipse"): NodeListOf<SVGEllipseElement>;
-    getElementsByTagName(name: "em"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "embed"): NodeListOf<HTMLEmbedElement>;
-    getElementsByTagName(name: "feblend"): NodeListOf<SVGFEBlendElement>;
-    getElementsByTagName(name: "fecolormatrix"): NodeListOf<SVGFEColorMatrixElement>;
-    getElementsByTagName(name: "fecomponenttransfer"): NodeListOf<SVGFEComponentTransferElement>;
-    getElementsByTagName(name: "fecomposite"): NodeListOf<SVGFECompositeElement>;
-    getElementsByTagName(name: "feconvolvematrix"): NodeListOf<SVGFEConvolveMatrixElement>;
-    getElementsByTagName(name: "fediffuselighting"): NodeListOf<SVGFEDiffuseLightingElement>;
-    getElementsByTagName(name: "fedisplacementmap"): NodeListOf<SVGFEDisplacementMapElement>;
-    getElementsByTagName(name: "fedistantlight"): NodeListOf<SVGFEDistantLightElement>;
-    getElementsByTagName(name: "feflood"): NodeListOf<SVGFEFloodElement>;
-    getElementsByTagName(name: "fefunca"): NodeListOf<SVGFEFuncAElement>;
-    getElementsByTagName(name: "fefuncb"): NodeListOf<SVGFEFuncBElement>;
-    getElementsByTagName(name: "fefuncg"): NodeListOf<SVGFEFuncGElement>;
-    getElementsByTagName(name: "fefuncr"): NodeListOf<SVGFEFuncRElement>;
-    getElementsByTagName(name: "fegaussianblur"): NodeListOf<SVGFEGaussianBlurElement>;
-    getElementsByTagName(name: "feimage"): NodeListOf<SVGFEImageElement>;
-    getElementsByTagName(name: "femerge"): NodeListOf<SVGFEMergeElement>;
-    getElementsByTagName(name: "femergenode"): NodeListOf<SVGFEMergeNodeElement>;
-    getElementsByTagName(name: "femorphology"): NodeListOf<SVGFEMorphologyElement>;
-    getElementsByTagName(name: "feoffset"): NodeListOf<SVGFEOffsetElement>;
-    getElementsByTagName(name: "fepointlight"): NodeListOf<SVGFEPointLightElement>;
-    getElementsByTagName(name: "fespecularlighting"): NodeListOf<SVGFESpecularLightingElement>;
-    getElementsByTagName(name: "fespotlight"): NodeListOf<SVGFESpotLightElement>;
-    getElementsByTagName(name: "fetile"): NodeListOf<SVGFETileElement>;
-    getElementsByTagName(name: "feturbulence"): NodeListOf<SVGFETurbulenceElement>;
-    getElementsByTagName(name: "fieldset"): NodeListOf<HTMLFieldSetElement>;
-    getElementsByTagName(name: "figcaption"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "figure"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "filter"): NodeListOf<SVGFilterElement>;
-    getElementsByTagName(name: "font"): NodeListOf<HTMLFontElement>;
-    getElementsByTagName(name: "footer"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "foreignobject"): NodeListOf<SVGForeignObjectElement>;
-    getElementsByTagName(name: "form"): NodeListOf<HTMLFormElement>;
-    getElementsByTagName(name: "frame"): NodeListOf<HTMLFrameElement>;
-    getElementsByTagName(name: "frameset"): NodeListOf<HTMLFrameSetElement>;
-    getElementsByTagName(name: "g"): NodeListOf<SVGGElement>;
-    getElementsByTagName(name: "h1"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "h2"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "h3"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "h4"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "h5"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "h6"): NodeListOf<HTMLHeadingElement>;
-    getElementsByTagName(name: "head"): NodeListOf<HTMLHeadElement>;
-    getElementsByTagName(name: "header"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "hgroup"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "hr"): NodeListOf<HTMLHRElement>;
-    getElementsByTagName(name: "html"): NodeListOf<HTMLHtmlElement>;
-    getElementsByTagName(name: "i"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "iframe"): NodeListOf<HTMLIFrameElement>;
-    getElementsByTagName(name: "image"): NodeListOf<SVGImageElement>;
-    getElementsByTagName(name: "img"): NodeListOf<HTMLImageElement>;
-    getElementsByTagName(name: "input"): NodeListOf<HTMLInputElement>;
-    getElementsByTagName(name: "ins"): NodeListOf<HTMLModElement>;
-    getElementsByTagName(name: "isindex"): NodeListOf<HTMLUnknownElement>;
-    getElementsByTagName(name: "kbd"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "keygen"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "label"): NodeListOf<HTMLLabelElement>;
-    getElementsByTagName(name: "legend"): NodeListOf<HTMLLegendElement>;
-    getElementsByTagName(name: "li"): NodeListOf<HTMLLIElement>;
-    getElementsByTagName(name: "line"): NodeListOf<SVGLineElement>;
-    getElementsByTagName(name: "lineargradient"): NodeListOf<SVGLinearGradientElement>;
-    getElementsByTagName(name: "link"): NodeListOf<HTMLLinkElement>;
-    getElementsByTagName(name: "listing"): NodeListOf<HTMLPreElement>;
-    getElementsByTagName(name: "map"): NodeListOf<HTMLMapElement>;
-    getElementsByTagName(name: "mark"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "marker"): NodeListOf<SVGMarkerElement>;
-    getElementsByTagName(name: "marquee"): NodeListOf<HTMLMarqueeElement>;
-    getElementsByTagName(name: "mask"): NodeListOf<SVGMaskElement>;
-    getElementsByTagName(name: "menu"): NodeListOf<HTMLMenuElement>;
-    getElementsByTagName(name: "meta"): NodeListOf<HTMLMetaElement>;
-    getElementsByTagName(name: "metadata"): NodeListOf<SVGMetadataElement>;
-    getElementsByTagName(name: "meter"): NodeListOf<HTMLMeterElement>;
-    getElementsByTagName(name: "nav"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "nextid"): NodeListOf<HTMLUnknownElement>;
-    getElementsByTagName(name: "nobr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "noframes"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "noscript"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "object"): NodeListOf<HTMLObjectElement>;
-    getElementsByTagName(name: "ol"): NodeListOf<HTMLOListElement>;
-    getElementsByTagName(name: "optgroup"): NodeListOf<HTMLOptGroupElement>;
-    getElementsByTagName(name: "option"): NodeListOf<HTMLOptionElement>;
-    getElementsByTagName(name: "p"): NodeListOf<HTMLParagraphElement>;
-    getElementsByTagName(name: "param"): NodeListOf<HTMLParamElement>;
-    getElementsByTagName(name: "path"): NodeListOf<SVGPathElement>;
-    getElementsByTagName(name: "pattern"): NodeListOf<SVGPatternElement>;
-    getElementsByTagName(name: "picture"): NodeListOf<HTMLPictureElement>;
-    getElementsByTagName(name: "plaintext"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "polygon"): NodeListOf<SVGPolygonElement>;
-    getElementsByTagName(name: "polyline"): NodeListOf<SVGPolylineElement>;
-    getElementsByTagName(name: "pre"): NodeListOf<HTMLPreElement>;
-    getElementsByTagName(name: "progress"): NodeListOf<HTMLProgressElement>;
-    getElementsByTagName(name: "q"): NodeListOf<HTMLQuoteElement>;
-    getElementsByTagName(name: "radialgradient"): NodeListOf<SVGRadialGradientElement>;
-    getElementsByTagName(name: "rect"): NodeListOf<SVGRectElement>;
-    getElementsByTagName(name: "rt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "ruby"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "s"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "samp"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "script"): NodeListOf<HTMLScriptElement>;
-    getElementsByTagName(name: "section"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "select"): NodeListOf<HTMLSelectElement>;
-    getElementsByTagName(name: "small"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "source"): NodeListOf<HTMLSourceElement>;
-    getElementsByTagName(name: "span"): NodeListOf<HTMLSpanElement>;
-    getElementsByTagName(name: "stop"): NodeListOf<SVGStopElement>;
-    getElementsByTagName(name: "strike"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "strong"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "style"): NodeListOf<HTMLStyleElement>;
-    getElementsByTagName(name: "sub"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "sup"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "svg"): NodeListOf<SVGSVGElement>;
-    getElementsByTagName(name: "switch"): NodeListOf<SVGSwitchElement>;
-    getElementsByTagName(name: "symbol"): NodeListOf<SVGSymbolElement>;
-    getElementsByTagName(name: "table"): NodeListOf<HTMLTableElement>;
-    getElementsByTagName(name: "tbody"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(name: "td"): NodeListOf<HTMLTableDataCellElement>;
-    getElementsByTagName(name: "template"): NodeListOf<HTMLTemplateElement>;
-    getElementsByTagName(name: "text"): NodeListOf<SVGTextElement>;
-    getElementsByTagName(name: "textpath"): NodeListOf<SVGTextPathElement>;
-    getElementsByTagName(name: "textarea"): NodeListOf<HTMLTextAreaElement>;
-    getElementsByTagName(name: "tfoot"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(name: "th"): NodeListOf<HTMLTableHeaderCellElement>;
-    getElementsByTagName(name: "thead"): NodeListOf<HTMLTableSectionElement>;
-    getElementsByTagName(name: "title"): NodeListOf<HTMLTitleElement>;
-    getElementsByTagName(name: "tr"): NodeListOf<HTMLTableRowElement>;
-    getElementsByTagName(name: "track"): NodeListOf<HTMLTrackElement>;
-    getElementsByTagName(name: "tspan"): NodeListOf<SVGTSpanElement>;
-    getElementsByTagName(name: "tt"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "u"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "ul"): NodeListOf<HTMLUListElement>;
-    getElementsByTagName(name: "use"): NodeListOf<SVGUseElement>;
-    getElementsByTagName(name: "var"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "video"): NodeListOf<HTMLVideoElement>;
-    getElementsByTagName(name: "view"): NodeListOf<SVGViewElement>;
-    getElementsByTagName(name: "wbr"): NodeListOf<HTMLElement>;
-    getElementsByTagName(name: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
-    getElementsByTagName(name: "xmp"): NodeListOf<HTMLPreElement>;
+    getElementsByTagName<K extends keyof ElementListTagNameMap>(name: K): ElementListTagNameMap[K];
     getElementsByTagName(name: string): NodeListOf<Element>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/1999/xhtml", localName: string): HTMLCollectionOf<HTMLElement>;
     getElementsByTagNameNS(namespaceURI: "http://www.w3.org/2000/svg", localName: string): HTMLCollectionOf<SVGElement>;
@@ -9341,7 +9659,7 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     msSetPointerCapture(pointerId: number): void;
     msZoomTo(args: MsZoomToOptions): void;
     releasePointerCapture(pointerId: number): void;
-    removeAttribute(name?: string): void;
+    removeAttribute(qualifiedName: string): void;
     removeAttributeNS(namespaceURI: string, localName: string): void;
     removeAttributeNode(oldAttr: Attr): Attr;
     requestFullscreen(): void;
@@ -9357,42 +9675,18 @@ interface Element extends Node, GlobalEventHandlers, ElementTraversal, NodeSelec
     getElementsByClassName(classNames: string): NodeListOf<Element>;
     matches(selector: string): boolean;
     closest(selector: string): Element | null;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    scrollIntoView(arg?: boolean | ScrollIntoViewOptions): void;
+    scroll(options?: ScrollToOptions): void;
+    scroll(x: number, y: number): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollTo(x: number, y: number): void;
+    scrollBy(options?: ScrollToOptions): void;
+    scrollBy(x: number, y: number): void;
+    insertAdjacentElement(position: string, insertedElement: Element): Element | null;
+    insertAdjacentHTML(where: string, html: string): void;
+    insertAdjacentText(where: string, text: string): void;
+    attachShadow(shadowRootInitDict: ShadowRootInit): ShadowRoot;
+    addEventListener<K extends keyof ElementEventMap>(type: K, listener: (this: Element, ev: ElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9412,7 +9706,7 @@ interface ErrorEvent extends Event {
 
 declare var ErrorEvent: {
     prototype: ErrorEvent;
-    new(): ErrorEvent;
+    new(type: string, errorEventInitDict?: ErrorEventInit): ErrorEvent;
 }
 
 interface Event {
@@ -9428,10 +9722,12 @@ interface Event {
     readonly target: EventTarget;
     readonly timeStamp: number;
     readonly type: string;
+    readonly scoped: boolean;
     initEvent(eventTypeArg: string, canBubbleArg: boolean, cancelableArg: boolean): void;
     preventDefault(): void;
     stopImmediatePropagation(): void;
     stopPropagation(): void;
+    deepPath(): EventTarget[];
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
@@ -9439,21 +9735,36 @@ interface Event {
 
 declare var Event: {
     prototype: Event;
-    new(type: string, eventInitDict?: EventInit): Event;
+    new(typeArg: string, eventInitDict?: EventInit): Event;
     readonly AT_TARGET: number;
     readonly BUBBLING_PHASE: number;
     readonly CAPTURING_PHASE: number;
 }
 
 interface EventTarget {
-    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventTarget: {
     prototype: EventTarget;
     new(): EventTarget;
+}
+
+interface ExtensionScriptApis {
+    extensionIdToShortId(extensionId: string): number;
+    fireExtensionApiTelemetry(functionName: string, isSucceeded: boolean, isSupported: boolean): void;
+    genericFunction(routerAddress: any, parameters?: string, callbackId?: number): void;
+    genericSynchronousFunction(functionId: number, parameters?: string): string;
+    getExtensionId(): string;
+    registerGenericFunctionCallbackHandler(callbackHandler: any): void;
+    registerGenericPersistentCallbackHandler(callbackHandler: any): void;
+}
+
+declare var ExtensionScriptApis: {
+    prototype: ExtensionScriptApis;
+    new(): ExtensionScriptApis;
 }
 
 interface External {
@@ -9492,6 +9803,7 @@ interface FileReader extends EventTarget, MSBaseReader {
     readAsBinaryString(blob: Blob): void;
     readAsDataURL(blob: Blob): void;
     readAsText(blob: Blob, encoding?: string): void;
+    addEventListener<K extends keyof MSBaseReaderEventMap>(type: K, listener: (this: FileReader, ev: MSBaseReaderEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -9510,8 +9822,27 @@ declare var FocusEvent: {
     new(typeArg: string, eventInitDict?: FocusEventInit): FocusEvent;
 }
 
+interface FocusNavigationEvent extends Event {
+    readonly navigationReason: NavigationReason;
+    readonly originHeight: number;
+    readonly originLeft: number;
+    readonly originTop: number;
+    readonly originWidth: number;
+    requestFocus(): void;
+}
+
+declare var FocusNavigationEvent: {
+    prototype: FocusNavigationEvent;
+    new(type: string, eventInitDict?: FocusNavigationEventInit): FocusNavigationEvent;
+}
+
 interface FormData {
-    append(name: any, value: any, blobName?: string): void;
+    append(name: string, value: string | Blob, fileName?: string): void;
+    delete(name: string): void;
+    get(name: string): FormDataEntryValue | null;
+    getAll(name: string): FormDataEntryValue[];
+    has(name: string): boolean;
+    set(name: string, value: string | Blob, fileName?: string): void;
 }
 
 declare var FormData: {
@@ -9559,7 +9890,7 @@ interface GamepadEvent extends Event {
 
 declare var GamepadEvent: {
     prototype: GamepadEvent;
-    new(): GamepadEvent;
+    new(typeArg: string, eventInitDict?: GamepadEventInit): GamepadEvent;
 }
 
 interface Geolocation {
@@ -9573,8 +9904,11 @@ declare var Geolocation: {
     new(): Geolocation;
 }
 
-interface HTMLAllCollection extends HTMLCollection {
-    namedItem(name: string): Element;
+interface HTMLAllCollection {
+    readonly length: number;
+    item(nameOrIndex?: string): HTMLCollection | Element | null;
+    namedItem(name: string): HTMLCollection | Element | null;
+    [index: number]: Element;
 }
 
 declare var HTMLAllCollection: {
@@ -9662,6 +9996,8 @@ interface HTMLAnchorElement extends HTMLElement {
       * Returns a string representation of an object.
       */
     toString(): string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAnchorElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLAnchorElement: {
@@ -9734,6 +10070,8 @@ interface HTMLAppletElement extends HTMLElement {
     useMap: string;
     vspace: number;
     width: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAppletElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLAppletElement: {
@@ -9800,6 +10138,8 @@ interface HTMLAreaElement extends HTMLElement {
       * Returns a string representation of an object.
       */
     toString(): string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLAreaElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLAreaElement: {
@@ -9807,15 +10147,7 @@ declare var HTMLAreaElement: {
     new(): HTMLAreaElement;
 }
 
-interface HTMLAreasCollection extends HTMLCollection {
-    /**
-      * Adds an element to the areas, controlRange, or options collection.
-      */
-    add(element: HTMLElement, before?: HTMLElement | number): void;
-    /**
-      * Removes an element from the collection.
-      */
-    remove(index?: number): void;
+interface HTMLAreasCollection extends HTMLCollectionBase {
 }
 
 declare var HTMLAreasCollection: {
@@ -9824,6 +10156,8 @@ declare var HTMLAreasCollection: {
 }
 
 interface HTMLAudioElement extends HTMLMediaElement {
+    addEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLAudioElement, ev: HTMLMediaElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLAudioElement: {
@@ -9836,6 +10170,8 @@ interface HTMLBRElement extends HTMLElement {
       * Sets or retrieves the side on which floating objects are not to be positioned when any IHTMLBlockElement is inserted into the document.
       */
     clear: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBRElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLBRElement: {
@@ -9852,6 +10188,8 @@ interface HTMLBaseElement extends HTMLElement {
       * Sets or retrieves the window or frame at which to target content.
       */
     target: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBaseElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLBaseElement: {
@@ -9868,12 +10206,35 @@ interface HTMLBaseFontElement extends HTMLElement, DOML2DeprecatedColorProperty 
       * Sets or retrieves the font size of the object.
       */
     size: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLBaseFontElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLBaseFontElement: {
     prototype: HTMLBaseFontElement;
     new(): HTMLBaseFontElement;
+}
+
+interface HTMLBodyElementEventMap extends HTMLElementEventMap {
+    "afterprint": Event;
+    "beforeprint": Event;
+    "beforeunload": BeforeUnloadEvent;
+    "blur": FocusEvent;
+    "error": ErrorEvent;
+    "focus": FocusEvent;
+    "hashchange": HashChangeEvent;
+    "load": Event;
+    "message": MessageEvent;
+    "offline": Event;
+    "online": Event;
+    "orientationchange": Event;
+    "pagehide": PageTransitionEvent;
+    "pageshow": PageTransitionEvent;
+    "popstate": PopStateEvent;
+    "resize": UIEvent;
+    "scroll": UIEvent;
+    "storage": StorageEvent;
+    "unload": Event;
 }
 
 interface HTMLBodyElement extends HTMLElement {
@@ -9883,147 +10244,28 @@ interface HTMLBodyElement extends HTMLElement {
     bgProperties: string;
     link: any;
     noWrap: boolean;
-    onafterprint: (this: this, ev: Event) => any;
-    onbeforeprint: (this: this, ev: Event) => any;
-    onbeforeunload: (this: this, ev: BeforeUnloadEvent) => any;
-    onblur: (this: this, ev: FocusEvent) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onfocus: (this: this, ev: FocusEvent) => any;
-    onhashchange: (this: this, ev: HashChangeEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onmessage: (this: this, ev: MessageEvent) => any;
-    onoffline: (this: this, ev: Event) => any;
-    ononline: (this: this, ev: Event) => any;
-    onorientationchange: (this: this, ev: Event) => any;
-    onpagehide: (this: this, ev: PageTransitionEvent) => any;
-    onpageshow: (this: this, ev: PageTransitionEvent) => any;
-    onpopstate: (this: this, ev: PopStateEvent) => any;
-    onresize: (this: this, ev: UIEvent) => any;
-    onstorage: (this: this, ev: StorageEvent) => any;
-    onunload: (this: this, ev: Event) => any;
+    onafterprint: (this: HTMLBodyElement, ev: Event) => any;
+    onbeforeprint: (this: HTMLBodyElement, ev: Event) => any;
+    onbeforeunload: (this: HTMLBodyElement, ev: BeforeUnloadEvent) => any;
+    onblur: (this: HTMLBodyElement, ev: FocusEvent) => any;
+    onerror: (this: HTMLBodyElement, ev: ErrorEvent) => any;
+    onfocus: (this: HTMLBodyElement, ev: FocusEvent) => any;
+    onhashchange: (this: HTMLBodyElement, ev: HashChangeEvent) => any;
+    onload: (this: HTMLBodyElement, ev: Event) => any;
+    onmessage: (this: HTMLBodyElement, ev: MessageEvent) => any;
+    onoffline: (this: HTMLBodyElement, ev: Event) => any;
+    ononline: (this: HTMLBodyElement, ev: Event) => any;
+    onorientationchange: (this: HTMLBodyElement, ev: Event) => any;
+    onpagehide: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
+    onpageshow: (this: HTMLBodyElement, ev: PageTransitionEvent) => any;
+    onpopstate: (this: HTMLBodyElement, ev: PopStateEvent) => any;
+    onresize: (this: HTMLBodyElement, ev: UIEvent) => any;
+    onscroll: (this: HTMLBodyElement, ev: UIEvent) => any;
+    onstorage: (this: HTMLBodyElement, ev: StorageEvent) => any;
+    onunload: (this: HTMLBodyElement, ev: Event) => any;
     text: any;
     vLink: any;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "afterprint", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeprint", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeunload", listener: (this: this, ev: BeforeUnloadEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "hashchange", listener: (this: this, ev: HashChangeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "offline", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "online", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "orientationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pagehide", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pageshow", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "popstate", listener: (this: this, ev: PopStateEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "resize", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "storage", listener: (this: this, ev: StorageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "unload", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLBodyElementEventMap>(type: K, listener: (this: HTMLBodyElement, ev: HTMLBodyElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10096,6 +10338,8 @@ interface HTMLButtonElement extends HTMLElement {
       * @param error Sets a custom error message that is displayed when a form is submitted.
       */
     setCustomValidity(error: string): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLButtonElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLButtonElement: {
@@ -10128,7 +10372,9 @@ interface HTMLCanvasElement extends HTMLElement {
       * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
       */
     toDataURL(type?: string, ...args: any[]): string;
-    toBlob(callback: (result: Blob | null) => void, ... arguments: any[]): void;
+    toBlob(callback: (result: Blob | null) => void, type?: string, ...arguments: any[]): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLCanvasElement: {
@@ -10136,7 +10382,7 @@ declare var HTMLCanvasElement: {
     new(): HTMLCanvasElement;
 }
 
-interface HTMLCollection {
+interface HTMLCollectionBase {
     /**
       * Sets or retrieves the number of objects in a collection.
       */
@@ -10145,11 +10391,14 @@ interface HTMLCollection {
       * Retrieves an object from various collections.
       */
     item(index: number): Element;
+    [index: number]: Element;
+}
+
+interface HTMLCollection extends HTMLCollectionBase {
     /**
       * Retrieves a select object or an object from an options collection.
       */
-    namedItem(name: string): Element;
-    [index: number]: Element;
+    namedItem(name: string): Element | null;
 }
 
 declare var HTMLCollection: {
@@ -10159,6 +10408,8 @@ declare var HTMLCollection: {
 
 interface HTMLDListElement extends HTMLElement {
     compact: boolean;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDListElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLDListElement: {
@@ -10166,8 +10417,21 @@ declare var HTMLDListElement: {
     new(): HTMLDListElement;
 }
 
+interface HTMLDataElement extends HTMLElement {
+    value: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDataElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var HTMLDataElement: {
+    prototype: HTMLDataElement;
+    new(): HTMLDataElement;
+}
+
 interface HTMLDataListElement extends HTMLElement {
     options: HTMLCollectionOf<HTMLOptionElement>;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDataListElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLDataListElement: {
@@ -10177,6 +10441,8 @@ declare var HTMLDataListElement: {
 
 interface HTMLDirectoryElement extends HTMLElement {
     compact: boolean;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDirectoryElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLDirectoryElement: {
@@ -10193,6 +10459,8 @@ interface HTMLDivElement extends HTMLElement {
       * Sets or retrieves whether the browser automatically performs wordwrap.
       */
     noWrap: boolean;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLDivElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLDivElement: {
@@ -10201,11 +10469,83 @@ declare var HTMLDivElement: {
 }
 
 interface HTMLDocument extends Document {
+    addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: HTMLDocument, ev: DocumentEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLDocument: {
     prototype: HTMLDocument;
     new(): HTMLDocument;
+}
+
+interface HTMLElementEventMap extends ElementEventMap {
+    "abort": UIEvent;
+    "activate": UIEvent;
+    "beforeactivate": UIEvent;
+    "beforecopy": ClipboardEvent;
+    "beforecut": ClipboardEvent;
+    "beforedeactivate": UIEvent;
+    "beforepaste": ClipboardEvent;
+    "blur": FocusEvent;
+    "canplay": Event;
+    "canplaythrough": Event;
+    "change": Event;
+    "click": MouseEvent;
+    "contextmenu": PointerEvent;
+    "copy": ClipboardEvent;
+    "cuechange": Event;
+    "cut": ClipboardEvent;
+    "dblclick": MouseEvent;
+    "deactivate": UIEvent;
+    "drag": DragEvent;
+    "dragend": DragEvent;
+    "dragenter": DragEvent;
+    "dragleave": DragEvent;
+    "dragover": DragEvent;
+    "dragstart": DragEvent;
+    "drop": DragEvent;
+    "durationchange": Event;
+    "emptied": Event;
+    "ended": MediaStreamErrorEvent;
+    "error": ErrorEvent;
+    "focus": FocusEvent;
+    "input": Event;
+    "invalid": Event;
+    "keydown": KeyboardEvent;
+    "keypress": KeyboardEvent;
+    "keyup": KeyboardEvent;
+    "load": Event;
+    "loadeddata": Event;
+    "loadedmetadata": Event;
+    "loadstart": Event;
+    "mousedown": MouseEvent;
+    "mouseenter": MouseEvent;
+    "mouseleave": MouseEvent;
+    "mousemove": MouseEvent;
+    "mouseout": MouseEvent;
+    "mouseover": MouseEvent;
+    "mouseup": MouseEvent;
+    "mousewheel": WheelEvent;
+    "MSContentZoom": UIEvent;
+    "MSManipulationStateChanged": MSManipulationEvent;
+    "paste": ClipboardEvent;
+    "pause": Event;
+    "play": Event;
+    "playing": Event;
+    "progress": ProgressEvent;
+    "ratechange": Event;
+    "reset": Event;
+    "scroll": UIEvent;
+    "seeked": Event;
+    "seeking": Event;
+    "select": UIEvent;
+    "selectstart": Event;
+    "stalled": Event;
+    "submit": Event;
+    "suspend": Event;
+    "timeupdate": Event;
+    "volumechange": Event;
+    "waiting": Event;
 }
 
 interface HTMLElement extends Element {
@@ -10217,7 +10557,6 @@ interface HTMLElement extends Element {
     draggable: boolean;
     hidden: boolean;
     hideFocus: boolean;
-    innerHTML: string;
     innerText: string;
     readonly isContentEditable: boolean;
     lang: string;
@@ -10226,74 +10565,73 @@ interface HTMLElement extends Element {
     readonly offsetParent: Element;
     readonly offsetTop: number;
     readonly offsetWidth: number;
-    onabort: (this: this, ev: UIEvent) => any;
-    onactivate: (this: this, ev: UIEvent) => any;
-    onbeforeactivate: (this: this, ev: UIEvent) => any;
-    onbeforecopy: (this: this, ev: ClipboardEvent) => any;
-    onbeforecut: (this: this, ev: ClipboardEvent) => any;
-    onbeforedeactivate: (this: this, ev: UIEvent) => any;
-    onbeforepaste: (this: this, ev: ClipboardEvent) => any;
-    onblur: (this: this, ev: FocusEvent) => any;
-    oncanplay: (this: this, ev: Event) => any;
-    oncanplaythrough: (this: this, ev: Event) => any;
-    onchange: (this: this, ev: Event) => any;
-    onclick: (this: this, ev: MouseEvent) => any;
-    oncontextmenu: (this: this, ev: PointerEvent) => any;
-    oncopy: (this: this, ev: ClipboardEvent) => any;
-    oncuechange: (this: this, ev: Event) => any;
-    oncut: (this: this, ev: ClipboardEvent) => any;
-    ondblclick: (this: this, ev: MouseEvent) => any;
-    ondeactivate: (this: this, ev: UIEvent) => any;
-    ondrag: (this: this, ev: DragEvent) => any;
-    ondragend: (this: this, ev: DragEvent) => any;
-    ondragenter: (this: this, ev: DragEvent) => any;
-    ondragleave: (this: this, ev: DragEvent) => any;
-    ondragover: (this: this, ev: DragEvent) => any;
-    ondragstart: (this: this, ev: DragEvent) => any;
-    ondrop: (this: this, ev: DragEvent) => any;
-    ondurationchange: (this: this, ev: Event) => any;
-    onemptied: (this: this, ev: Event) => any;
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onfocus: (this: this, ev: FocusEvent) => any;
-    oninput: (this: this, ev: Event) => any;
-    oninvalid: (this: this, ev: Event) => any;
-    onkeydown: (this: this, ev: KeyboardEvent) => any;
-    onkeypress: (this: this, ev: KeyboardEvent) => any;
-    onkeyup: (this: this, ev: KeyboardEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onloadeddata: (this: this, ev: Event) => any;
-    onloadedmetadata: (this: this, ev: Event) => any;
-    onloadstart: (this: this, ev: Event) => any;
-    onmousedown: (this: this, ev: MouseEvent) => any;
-    onmouseenter: (this: this, ev: MouseEvent) => any;
-    onmouseleave: (this: this, ev: MouseEvent) => any;
-    onmousemove: (this: this, ev: MouseEvent) => any;
-    onmouseout: (this: this, ev: MouseEvent) => any;
-    onmouseover: (this: this, ev: MouseEvent) => any;
-    onmouseup: (this: this, ev: MouseEvent) => any;
-    onmousewheel: (this: this, ev: WheelEvent) => any;
-    onmscontentzoom: (this: this, ev: UIEvent) => any;
-    onmsmanipulationstatechanged: (this: this, ev: MSManipulationEvent) => any;
-    onpaste: (this: this, ev: ClipboardEvent) => any;
-    onpause: (this: this, ev: Event) => any;
-    onplay: (this: this, ev: Event) => any;
-    onplaying: (this: this, ev: Event) => any;
-    onprogress: (this: this, ev: ProgressEvent) => any;
-    onratechange: (this: this, ev: Event) => any;
-    onreset: (this: this, ev: Event) => any;
-    onscroll: (this: this, ev: UIEvent) => any;
-    onseeked: (this: this, ev: Event) => any;
-    onseeking: (this: this, ev: Event) => any;
-    onselect: (this: this, ev: UIEvent) => any;
-    onselectstart: (this: this, ev: Event) => any;
-    onstalled: (this: this, ev: Event) => any;
-    onsubmit: (this: this, ev: Event) => any;
-    onsuspend: (this: this, ev: Event) => any;
-    ontimeupdate: (this: this, ev: Event) => any;
-    onvolumechange: (this: this, ev: Event) => any;
-    onwaiting: (this: this, ev: Event) => any;
-    outerHTML: string;
+    onabort: (this: HTMLElement, ev: UIEvent) => any;
+    onactivate: (this: HTMLElement, ev: UIEvent) => any;
+    onbeforeactivate: (this: HTMLElement, ev: UIEvent) => any;
+    onbeforecopy: (this: HTMLElement, ev: ClipboardEvent) => any;
+    onbeforecut: (this: HTMLElement, ev: ClipboardEvent) => any;
+    onbeforedeactivate: (this: HTMLElement, ev: UIEvent) => any;
+    onbeforepaste: (this: HTMLElement, ev: ClipboardEvent) => any;
+    onblur: (this: HTMLElement, ev: FocusEvent) => any;
+    oncanplay: (this: HTMLElement, ev: Event) => any;
+    oncanplaythrough: (this: HTMLElement, ev: Event) => any;
+    onchange: (this: HTMLElement, ev: Event) => any;
+    onclick: (this: HTMLElement, ev: MouseEvent) => any;
+    oncontextmenu: (this: HTMLElement, ev: PointerEvent) => any;
+    oncopy: (this: HTMLElement, ev: ClipboardEvent) => any;
+    oncuechange: (this: HTMLElement, ev: Event) => any;
+    oncut: (this: HTMLElement, ev: ClipboardEvent) => any;
+    ondblclick: (this: HTMLElement, ev: MouseEvent) => any;
+    ondeactivate: (this: HTMLElement, ev: UIEvent) => any;
+    ondrag: (this: HTMLElement, ev: DragEvent) => any;
+    ondragend: (this: HTMLElement, ev: DragEvent) => any;
+    ondragenter: (this: HTMLElement, ev: DragEvent) => any;
+    ondragleave: (this: HTMLElement, ev: DragEvent) => any;
+    ondragover: (this: HTMLElement, ev: DragEvent) => any;
+    ondragstart: (this: HTMLElement, ev: DragEvent) => any;
+    ondrop: (this: HTMLElement, ev: DragEvent) => any;
+    ondurationchange: (this: HTMLElement, ev: Event) => any;
+    onemptied: (this: HTMLElement, ev: Event) => any;
+    onended: (this: HTMLElement, ev: MediaStreamErrorEvent) => any;
+    onerror: (this: HTMLElement, ev: ErrorEvent) => any;
+    onfocus: (this: HTMLElement, ev: FocusEvent) => any;
+    oninput: (this: HTMLElement, ev: Event) => any;
+    oninvalid: (this: HTMLElement, ev: Event) => any;
+    onkeydown: (this: HTMLElement, ev: KeyboardEvent) => any;
+    onkeypress: (this: HTMLElement, ev: KeyboardEvent) => any;
+    onkeyup: (this: HTMLElement, ev: KeyboardEvent) => any;
+    onload: (this: HTMLElement, ev: Event) => any;
+    onloadeddata: (this: HTMLElement, ev: Event) => any;
+    onloadedmetadata: (this: HTMLElement, ev: Event) => any;
+    onloadstart: (this: HTMLElement, ev: Event) => any;
+    onmousedown: (this: HTMLElement, ev: MouseEvent) => any;
+    onmouseenter: (this: HTMLElement, ev: MouseEvent) => any;
+    onmouseleave: (this: HTMLElement, ev: MouseEvent) => any;
+    onmousemove: (this: HTMLElement, ev: MouseEvent) => any;
+    onmouseout: (this: HTMLElement, ev: MouseEvent) => any;
+    onmouseover: (this: HTMLElement, ev: MouseEvent) => any;
+    onmouseup: (this: HTMLElement, ev: MouseEvent) => any;
+    onmousewheel: (this: HTMLElement, ev: WheelEvent) => any;
+    onmscontentzoom: (this: HTMLElement, ev: UIEvent) => any;
+    onmsmanipulationstatechanged: (this: HTMLElement, ev: MSManipulationEvent) => any;
+    onpaste: (this: HTMLElement, ev: ClipboardEvent) => any;
+    onpause: (this: HTMLElement, ev: Event) => any;
+    onplay: (this: HTMLElement, ev: Event) => any;
+    onplaying: (this: HTMLElement, ev: Event) => any;
+    onprogress: (this: HTMLElement, ev: ProgressEvent) => any;
+    onratechange: (this: HTMLElement, ev: Event) => any;
+    onreset: (this: HTMLElement, ev: Event) => any;
+    onscroll: (this: HTMLElement, ev: UIEvent) => any;
+    onseeked: (this: HTMLElement, ev: Event) => any;
+    onseeking: (this: HTMLElement, ev: Event) => any;
+    onselect: (this: HTMLElement, ev: UIEvent) => any;
+    onselectstart: (this: HTMLElement, ev: Event) => any;
+    onstalled: (this: HTMLElement, ev: Event) => any;
+    onsubmit: (this: HTMLElement, ev: Event) => any;
+    onsuspend: (this: HTMLElement, ev: Event) => any;
+    ontimeupdate: (this: HTMLElement, ev: Event) => any;
+    onvolumechange: (this: HTMLElement, ev: Event) => any;
+    onwaiting: (this: HTMLElement, ev: Event) => any;
     outerText: string;
     spellcheck: boolean;
     readonly style: CSSStyleDeclaration;
@@ -10303,115 +10641,8 @@ interface HTMLElement extends Element {
     click(): void;
     dragDrop(): boolean;
     focus(): void;
-    insertAdjacentElement(position: string, insertedElement: Element): Element;
-    insertAdjacentHTML(where: string, html: string): void;
-    insertAdjacentText(where: string, text: string): void;
     msGetInputContext(): MSInputMethodContext;
-    scrollIntoView(top?: boolean): void;
-    setActive(): void;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10467,6 +10698,7 @@ interface HTMLEmbedElement extends HTMLElement, GetSVGDocument {
       * Sets or retrieves the width of the object.
       */
     width: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLEmbedElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10485,6 +10717,7 @@ interface HTMLFieldSetElement extends HTMLElement {
       * Retrieves a reference to the form that the object is embedded in.
       */
     readonly form: HTMLFormElement;
+    name: string;
     /**
       * Returns the error message that would be displayed if the user submits the form, or an empty string if no error message. It also triggers the standard error message, such as "this is a required field". The result is that the user sees validation messages without actually submitting.
       */
@@ -10506,6 +10739,8 @@ interface HTMLFieldSetElement extends HTMLElement {
       * @param error Sets a custom error message that is displayed when a form is submitted.
       */
     setCustomValidity(error: string): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFieldSetElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLFieldSetElement: {
@@ -10518,12 +10753,22 @@ interface HTMLFontElement extends HTMLElement, DOML2DeprecatedColorProperty, DOM
       * Sets or retrieves the current typeface family.
       */
     face: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFontElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLFontElement: {
     prototype: HTMLFontElement;
     new(): HTMLFontElement;
+}
+
+interface HTMLFormControlsCollection extends HTMLCollectionBase {
+    namedItem(name: string): HTMLCollection | Element | null;
+}
+
+declare var HTMLFormControlsCollection: {
+    prototype: HTMLFormControlsCollection;
+    new(): HTMLFormControlsCollection;
 }
 
 interface HTMLFormElement extends HTMLElement {
@@ -10542,7 +10787,7 @@ interface HTMLFormElement extends HTMLElement {
     /**
       * Retrieves a collection, in source order, of all controls in a given form.
       */
-    readonly elements: HTMLCollection;
+    readonly elements: HTMLFormControlsCollection;
     /**
       * Sets or retrieves the MIME encoding for the form.
       */
@@ -10593,12 +10838,18 @@ interface HTMLFormElement extends HTMLElement {
       * Fires when a FORM is about to be submitted.
       */
     submit(): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLFormElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [name: string]: any;
 }
 
 declare var HTMLFormElement: {
     prototype: HTMLFormElement;
     new(): HTMLFormElement;
+}
+
+interface HTMLFrameElementEventMap extends HTMLElementEventMap {
+    "load": Event;
 }
 
 interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
@@ -10653,7 +10904,7 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
     /**
       * Raised when the object has been completely received from the server.
       */
-    onload: (this: this, ev: Event) => any;
+    onload: (this: HTMLFrameElement, ev: Event) => any;
     /**
       * Sets or retrieves whether the frame can be scrolled.
       */
@@ -10666,116 +10917,35 @@ interface HTMLFrameElement extends HTMLElement, GetSVGDocument {
       * Sets or retrieves the width of the object.
       */
     width: string | number;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLFrameElementEventMap>(type: K, listener: (this: HTMLFrameElement, ev: HTMLFrameElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLFrameElement: {
     prototype: HTMLFrameElement;
     new(): HTMLFrameElement;
+}
+
+interface HTMLFrameSetElementEventMap extends HTMLElementEventMap {
+    "afterprint": Event;
+    "beforeprint": Event;
+    "beforeunload": BeforeUnloadEvent;
+    "blur": FocusEvent;
+    "error": ErrorEvent;
+    "focus": FocusEvent;
+    "hashchange": HashChangeEvent;
+    "load": Event;
+    "message": MessageEvent;
+    "offline": Event;
+    "online": Event;
+    "orientationchange": Event;
+    "pagehide": PageTransitionEvent;
+    "pageshow": PageTransitionEvent;
+    "popstate": PopStateEvent;
+    "resize": UIEvent;
+    "scroll": UIEvent;
+    "storage": StorageEvent;
+    "unload": Event;
 }
 
 interface HTMLFrameSetElement extends HTMLElement {
@@ -10797,152 +10967,36 @@ interface HTMLFrameSetElement extends HTMLElement {
       */
     frameSpacing: any;
     name: string;
-    onafterprint: (this: this, ev: Event) => any;
-    onbeforeprint: (this: this, ev: Event) => any;
-    onbeforeunload: (this: this, ev: BeforeUnloadEvent) => any;
+    onafterprint: (this: HTMLFrameSetElement, ev: Event) => any;
+    onbeforeprint: (this: HTMLFrameSetElement, ev: Event) => any;
+    onbeforeunload: (this: HTMLFrameSetElement, ev: BeforeUnloadEvent) => any;
     /**
       * Fires when the object loses the input focus.
       */
-    onblur: (this: this, ev: FocusEvent) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
+    onblur: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
+    onerror: (this: HTMLFrameSetElement, ev: ErrorEvent) => any;
     /**
       * Fires when the object receives focus.
       */
-    onfocus: (this: this, ev: FocusEvent) => any;
-    onhashchange: (this: this, ev: HashChangeEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onmessage: (this: this, ev: MessageEvent) => any;
-    onoffline: (this: this, ev: Event) => any;
-    ononline: (this: this, ev: Event) => any;
-    onorientationchange: (this: this, ev: Event) => any;
-    onpagehide: (this: this, ev: PageTransitionEvent) => any;
-    onpageshow: (this: this, ev: PageTransitionEvent) => any;
-    onresize: (this: this, ev: UIEvent) => any;
-    onstorage: (this: this, ev: StorageEvent) => any;
-    onunload: (this: this, ev: Event) => any;
+    onfocus: (this: HTMLFrameSetElement, ev: FocusEvent) => any;
+    onhashchange: (this: HTMLFrameSetElement, ev: HashChangeEvent) => any;
+    onload: (this: HTMLFrameSetElement, ev: Event) => any;
+    onmessage: (this: HTMLFrameSetElement, ev: MessageEvent) => any;
+    onoffline: (this: HTMLFrameSetElement, ev: Event) => any;
+    ononline: (this: HTMLFrameSetElement, ev: Event) => any;
+    onorientationchange: (this: HTMLFrameSetElement, ev: Event) => any;
+    onpagehide: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
+    onpageshow: (this: HTMLFrameSetElement, ev: PageTransitionEvent) => any;
+    onpopstate: (this: HTMLFrameSetElement, ev: PopStateEvent) => any;
+    onresize: (this: HTMLFrameSetElement, ev: UIEvent) => any;
+    onscroll: (this: HTMLFrameSetElement, ev: UIEvent) => any;
+    onstorage: (this: HTMLFrameSetElement, ev: StorageEvent) => any;
+    onunload: (this: HTMLFrameSetElement, ev: Event) => any;
     /**
       * Sets or retrieves the frame heights of the object.
       */
     rows: string;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeprint", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeunload", listener: (this: this, ev: BeforeUnloadEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "hashchange", listener: (this: this, ev: HashChangeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "offline", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "online", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "orientationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pagehide", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pageshow", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "resize", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "storage", listener: (this: this, ev: StorageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "unload", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLFrameSetElementEventMap>(type: K, listener: (this: HTMLFrameSetElement, ev: HTMLFrameSetElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10964,6 +11018,7 @@ interface HTMLHRElement extends HTMLElement, DOML2DeprecatedColorProperty, DOML2
       * Sets or retrieves the width of the object.
       */
     width: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHRElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -10974,6 +11029,8 @@ declare var HTMLHRElement: {
 
 interface HTMLHeadElement extends HTMLElement {
     profile: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHeadElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLHeadElement: {
@@ -10986,6 +11043,8 @@ interface HTMLHeadingElement extends HTMLElement {
       * Sets or retrieves a value that indicates the table alignment.
       */
     align: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHeadingElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLHeadingElement: {
@@ -10998,11 +11057,17 @@ interface HTMLHtmlElement extends HTMLElement {
       * Sets or retrieves the DTD version that governs the current document.
       */
     version: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLHtmlElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLHtmlElement: {
     prototype: HTMLHtmlElement;
     new(): HTMLHtmlElement;
+}
+
+interface HTMLIFrameElementEventMap extends HTMLElementEventMap {
+    "load": Event;
 }
 
 interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
@@ -11011,6 +11076,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
       */
     align: string;
     allowFullscreen: boolean;
+    allowPaymentRequest: boolean;
     /**
       * Specifies the properties of a border drawn around an object.
       */
@@ -11062,7 +11128,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
     /**
       * Raised when the object has been completely received from the server.
       */
-    onload: (this: this, ev: Event) => any;
+    onload: (this: HTMLIFrameElement, ev: Event) => any;
     readonly sandbox: DOMSettableTokenList;
     /**
       * Sets or retrieves whether the frame can be scrolled.
@@ -11080,110 +11146,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
       * Sets or retrieves the width of the object.
       */
     width: string;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLIFrameElementEventMap>(type: K, listener: (this: HTMLIFrameElement, ev: HTMLIFrameElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -11209,7 +11172,7 @@ interface HTMLImageElement extends HTMLElement {
       * Retrieves whether the object is fully loaded.
       */
     readonly complete: boolean;
-    crossOrigin: string;
+    crossOrigin: string | null;
     readonly currentSrc: string;
     /**
       * Sets or retrieves the height of the object.
@@ -11274,12 +11237,13 @@ interface HTMLImageElement extends HTMLElement {
     readonly x: number;
     readonly y: number;
     msGetAsCastingSource(): any;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLImageElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLImageElement: {
     prototype: HTMLImageElement;
     new(): HTMLImageElement;
-    create(): HTMLImageElement;
 }
 
 interface HTMLInputElement extends HTMLElement {
@@ -11485,6 +11449,8 @@ interface HTMLInputElement extends HTMLElement {
       * @param n Value to increment the value by.
       */
     stepUp(n?: number): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLInputElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLInputElement: {
@@ -11498,6 +11464,8 @@ interface HTMLLIElement extends HTMLElement {
       * Sets or retrieves the value of a list item.
       */
     value: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLIElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLLIElement: {
@@ -11514,6 +11482,8 @@ interface HTMLLabelElement extends HTMLElement {
       * Sets or retrieves the object to which the given label object is assigned.
       */
     htmlFor: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLabelElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLLabelElement: {
@@ -11530,6 +11500,8 @@ interface HTMLLegendElement extends HTMLElement {
       * Retrieves a reference to the form that the object is embedded in.
       */
     readonly form: HTMLFormElement;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLegendElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLLegendElement: {
@@ -11572,6 +11544,8 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
       */
     type: string;
     import?: Document;
+    integrity: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLLinkElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -11589,11 +11563,19 @@ interface HTMLMapElement extends HTMLElement {
       * Sets or retrieves the name of the object.
       */
     name: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMapElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLMapElement: {
     prototype: HTMLMapElement;
     new(): HTMLMapElement;
+}
+
+interface HTMLMarqueeElementEventMap extends HTMLElementEventMap {
+    "bounce": Event;
+    "finish": Event;
+    "start": Event;
 }
 
 interface HTMLMarqueeElement extends HTMLElement {
@@ -11603,9 +11585,9 @@ interface HTMLMarqueeElement extends HTMLElement {
     height: string;
     hspace: number;
     loop: number;
-    onbounce: (this: this, ev: Event) => any;
-    onfinish: (this: this, ev: Event) => any;
-    onstart: (this: this, ev: Event) => any;
+    onbounce: (this: HTMLMarqueeElement, ev: Event) => any;
+    onfinish: (this: HTMLMarqueeElement, ev: Event) => any;
+    onstart: (this: HTMLMarqueeElement, ev: Event) => any;
     scrollAmount: number;
     scrollDelay: number;
     trueSpeed: boolean;
@@ -11613,118 +11595,18 @@ interface HTMLMarqueeElement extends HTMLElement {
     width: string;
     start(): void;
     stop(): void;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "bounce", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "finish", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "start", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLMarqueeElementEventMap>(type: K, listener: (this: HTMLMarqueeElement, ev: HTMLMarqueeElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLMarqueeElement: {
     prototype: HTMLMarqueeElement;
     new(): HTMLMarqueeElement;
+}
+
+interface HTMLMediaElementEventMap extends HTMLElementEventMap {
+    "encrypted": MediaEncryptedEvent;
+    "msneedkey": MSMediaKeyNeededEvent;
 }
 
 interface HTMLMediaElement extends HTMLElement {
@@ -11744,7 +11626,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Gets or sets a flag that indicates whether the client provides a set of controls for the media (in case the developer does not include controls for the player).
       */
     controls: boolean;
-    crossOrigin: string;
+    crossOrigin: string | null;
     /**
       * Gets the address or URL of the current media resource that is selected by IHTMLMediaElement.
       */
@@ -11816,8 +11698,8 @@ interface HTMLMediaElement extends HTMLElement {
       * Gets the current network activity for the element.
       */
     readonly networkState: number;
-    onencrypted: (this: this, ev: MediaEncryptedEvent) => any;
-    onmsneedkey: (this: this, ev: MSMediaKeyNeededEvent) => any;
+    onencrypted: (this: HTMLMediaElement, ev: MediaEncryptedEvent) => any;
+    onmsneedkey: (this: HTMLMediaElement, ev: MSMediaKeyNeededEvent) => any;
     /**
       * Gets a flag that specifies whether playback is paused.
       */
@@ -11860,7 +11742,7 @@ interface HTMLMediaElement extends HTMLElement {
       */
     canPlayType(type: string): string;
     /**
-      * Fires immediately after the client loads the object.
+      * Resets the audio or video object and loads a new media resource.
       */
     load(): void;
     /**
@@ -11885,7 +11767,7 @@ interface HTMLMediaElement extends HTMLElement {
       * Loads and starts playback of a media resource.
       */
     play(): void;
-    setMediaKeys(mediaKeys: MediaKeys | null): PromiseLike<void>;
+    setMediaKeys(mediaKeys: MediaKeys | null): Promise<void>;
     readonly HAVE_CURRENT_DATA: number;
     readonly HAVE_ENOUGH_DATA: number;
     readonly HAVE_FUTURE_DATA: number;
@@ -11895,111 +11777,7 @@ interface HTMLMediaElement extends HTMLElement {
     readonly NETWORK_IDLE: number;
     readonly NETWORK_LOADING: number;
     readonly NETWORK_NO_SOURCE: number;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "encrypted", listener: (this: this, ev: MediaEncryptedEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "msneedkey", listener: (this: this, ev: MSMediaKeyNeededEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLMediaElementEventMap>(type: K, listener: (this: HTMLMediaElement, ev: HTMLMediaElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12020,6 +11798,8 @@ declare var HTMLMediaElement: {
 interface HTMLMenuElement extends HTMLElement {
     compact: boolean;
     type: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMenuElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLMenuElement: {
@@ -12052,6 +11832,8 @@ interface HTMLMetaElement extends HTMLElement {
       * Sets or retrieves the URL property that will be loaded after the specified time has elapsed. 
       */
     url: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMetaElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLMetaElement: {
@@ -12066,6 +11848,8 @@ interface HTMLMeterElement extends HTMLElement {
     min: number;
     optimum: number;
     value: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLMeterElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLMeterElement: {
@@ -12082,6 +11866,8 @@ interface HTMLModElement extends HTMLElement {
       * Sets or retrieves the date and time of a modification to the object.
       */
     dateTime: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLModElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLModElement: {
@@ -12096,6 +11882,8 @@ interface HTMLOListElement extends HTMLElement {
       */
     start: number;
     type: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOListElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLOListElement: {
@@ -12172,10 +11960,6 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
       * Sets or retrieves the name of the object.
       */
     name: string;
-    /**
-      * Retrieves the contained object.
-      */
-    readonly object: any;
     readonly readyState: number;
     /**
       * Sets or retrieves a message to be displayed while an object is loading.
@@ -12215,6 +11999,7 @@ interface HTMLObjectElement extends HTMLElement, GetSVGDocument {
       * @param error Sets a custom error message that is displayed when a form is submitted.
       */
     setCustomValidity(error: string): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLObjectElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12253,6 +12038,8 @@ interface HTMLOptGroupElement extends HTMLElement {
       * Sets or retrieves the value which is returned to the server when the form control is submitted.
       */
     value: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOptGroupElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLOptGroupElement: {
@@ -12290,12 +12077,13 @@ interface HTMLOptionElement extends HTMLElement {
       * Sets or retrieves the value which is returned to the server when the form control is submitted.
       */
     value: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOptionElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLOptionElement: {
     prototype: HTMLOptionElement;
     new(): HTMLOptionElement;
-    create(): HTMLOptionElement;
 }
 
 interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
@@ -12310,12 +12098,36 @@ declare var HTMLOptionsCollection: {
     new(): HTMLOptionsCollection;
 }
 
+interface HTMLOutputElement extends HTMLElement {
+    defaultValue: string;
+    readonly form: HTMLFormElement;
+    readonly htmlFor: DOMSettableTokenList;
+    name: string;
+    readonly type: string;
+    readonly validationMessage: string;
+    readonly validity: ValidityState;
+    value: string;
+    readonly willValidate: boolean;
+    checkValidity(): boolean;
+    reportValidity(): boolean;
+    setCustomValidity(error: string): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLOutputElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var HTMLOutputElement: {
+    prototype: HTMLOutputElement;
+    new(): HTMLOutputElement;
+}
+
 interface HTMLParagraphElement extends HTMLElement {
     /**
       * Sets or retrieves how the object is aligned with adjacent text. 
       */
     align: string;
     clear: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParagraphElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLParagraphElement: {
@@ -12340,6 +12152,8 @@ interface HTMLParamElement extends HTMLElement {
       * Sets or retrieves the data type of the value attribute.
       */
     valueType: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLParamElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLParamElement: {
@@ -12348,6 +12162,8 @@ declare var HTMLParamElement: {
 }
 
 interface HTMLPictureElement extends HTMLElement {
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLPictureElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLPictureElement: {
@@ -12360,6 +12176,8 @@ interface HTMLPreElement extends HTMLElement {
       * Sets or gets a value that you can use to implement your own width functionality for the object.
       */
     width: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLPreElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLPreElement: {
@@ -12384,6 +12202,8 @@ interface HTMLProgressElement extends HTMLElement {
       * Sets or gets the current value of a progress element. The value must be a non-negative number between 0 and the max value.
       */
     value: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLProgressElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLProgressElement: {
@@ -12396,6 +12216,8 @@ interface HTMLQuoteElement extends HTMLElement {
       * Sets or retrieves reference information about the object.
       */
     cite: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLQuoteElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLQuoteElement: {
@@ -12409,6 +12231,7 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the character set used to encode the object.
       */
     charset: string;
+    crossOrigin: string | null;
     /**
       * Sets or retrieves the status of the script.
       */
@@ -12433,6 +12256,9 @@ interface HTMLScriptElement extends HTMLElement {
       * Sets or retrieves the MIME type for the associated scripting engine.
       */
     type: string;
+    integrity: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLScriptElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLScriptElement: {
@@ -12527,6 +12353,8 @@ interface HTMLSelectElement extends HTMLElement {
       * @param error Sets a custom error message that is displayed when a form is submitted.
       */
     setCustomValidity(error: string): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSelectElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [name: string]: any;
 }
 
@@ -12551,6 +12379,8 @@ interface HTMLSourceElement extends HTMLElement {
      * Gets or sets the MIME type of a media resource.
      */
     type: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSourceElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLSourceElement: {
@@ -12559,6 +12389,8 @@ declare var HTMLSourceElement: {
 }
 
 interface HTMLSpanElement extends HTMLElement {
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLSpanElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLSpanElement: {
@@ -12576,6 +12408,7 @@ interface HTMLStyleElement extends HTMLElement, LinkStyle {
       * Retrieves the CSS language in which the style sheet is written.
       */
     type: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLStyleElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12593,6 +12426,8 @@ interface HTMLTableCaptionElement extends HTMLElement {
       * Sets or retrieves whether the caption appears at the top or bottom of the table.
       */
     vAlign: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCaptionElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTableCaptionElement: {
@@ -12646,6 +12481,7 @@ interface HTMLTableCellElement extends HTMLElement, HTMLTableAlignment {
       * Sets or retrieves the width of the object.
       */
     width: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCellElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12667,6 +12503,7 @@ interface HTMLTableColElement extends HTMLElement, HTMLTableAlignment {
       * Sets or retrieves the width of the object.
       */
     width: any;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableColElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12676,6 +12513,8 @@ declare var HTMLTableColElement: {
 }
 
 interface HTMLTableDataCellElement extends HTMLTableCellElement {
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableDataCellElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTableDataCellElement: {
@@ -12787,6 +12626,8 @@ interface HTMLTableElement extends HTMLElement {
       * @param index Number that specifies where to insert the row in the rows collection. The default value is -1, which appends the new row to the end of the rows collection.
       */
     insertRow(index?: number): HTMLTableRowElement;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTableElement: {
@@ -12799,6 +12640,8 @@ interface HTMLTableHeaderCellElement extends HTMLTableCellElement {
       * Sets or retrieves the group of cells in a table to which the object's information applies.
       */
     scope: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableHeaderCellElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTableHeaderCellElement: {
@@ -12838,6 +12681,7 @@ interface HTMLTableRowElement extends HTMLElement, HTMLTableAlignment {
       * @param index Number that specifies where to insert the cell in the tr. The default value is -1, which appends the new cell to the end of the cells collection.
       */
     insertCell(index?: number): HTMLTableDataCellElement;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableRowElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12865,6 +12709,7 @@ interface HTMLTableSectionElement extends HTMLElement, HTMLTableAlignment {
       * @param index Number that specifies where to insert the row in the rows collection. The default value is -1, which appends the new row to the end of the rows collection.
       */
     insertRow(index?: number): HTMLTableRowElement;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableSectionElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -12875,6 +12720,8 @@ declare var HTMLTableSectionElement: {
 
 interface HTMLTemplateElement extends HTMLElement {
     readonly content: DocumentFragment;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTemplateElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTemplateElement: {
@@ -12980,6 +12827,8 @@ interface HTMLTextAreaElement extends HTMLElement {
       * @param end The offset into the text field for the end of the selection.
       */
     setSelectionRange(start: number, end: number): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTextAreaElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTextAreaElement: {
@@ -12987,11 +12836,24 @@ declare var HTMLTextAreaElement: {
     new(): HTMLTextAreaElement;
 }
 
+interface HTMLTimeElement extends HTMLElement {
+    dateTime: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTimeElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var HTMLTimeElement: {
+    prototype: HTMLTimeElement;
+    new(): HTMLTimeElement;
+}
+
 interface HTMLTitleElement extends HTMLElement {
     /**
       * Retrieves or sets the text of the object as a string. 
       */
     text: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTitleElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTitleElement: {
@@ -13011,6 +12873,8 @@ interface HTMLTrackElement extends HTMLElement {
     readonly LOADED: number;
     readonly LOADING: number;
     readonly NONE: number;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTrackElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLTrackElement: {
@@ -13025,6 +12889,8 @@ declare var HTMLTrackElement: {
 interface HTMLUListElement extends HTMLElement {
     compact: boolean;
     type: string;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLUListElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLUListElement: {
@@ -13033,11 +12899,19 @@ declare var HTMLUListElement: {
 }
 
 interface HTMLUnknownElement extends HTMLElement {
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLUnknownElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var HTMLUnknownElement: {
     prototype: HTMLUnknownElement;
     new(): HTMLUnknownElement;
+}
+
+interface HTMLVideoElementEventMap extends HTMLMediaElementEventMap {
+    "MSVideoFormatChanged": Event;
+    "MSVideoFrameStepCompleted": Event;
+    "MSVideoOptimalLayoutChanged": Event;
 }
 
 interface HTMLVideoElement extends HTMLMediaElement {
@@ -13051,9 +12925,9 @@ interface HTMLVideoElement extends HTMLMediaElement {
     msStereo3DPackingMode: string;
     msStereo3DRenderMode: string;
     msZoom: boolean;
-    onMSVideoFormatChanged: (this: this, ev: Event) => any;
-    onMSVideoFrameStepCompleted: (this: this, ev: Event) => any;
-    onMSVideoOptimalLayoutChanged: (this: this, ev: Event) => any;
+    onMSVideoFormatChanged: (this: HTMLVideoElement, ev: Event) => any;
+    onMSVideoFrameStepCompleted: (this: HTMLVideoElement, ev: Event) => any;
+    onMSVideoOptimalLayoutChanged: (this: HTMLVideoElement, ev: Event) => any;
     /**
       * Gets or sets a URL of an image to display, for example, like a movie poster. This can be a still frame from the video, or another image if no video data is available.
       */
@@ -13080,114 +12954,7 @@ interface HTMLVideoElement extends HTMLMediaElement {
     webkitEnterFullscreen(): void;
     webkitExitFullScreen(): void;
     webkitExitFullscreen(): void;
-    addEventListener(type: "MSContentZoom", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSManipulationStateChanged", listener: (this: this, ev: MSManipulationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoFormatChanged", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoFrameStepCompleted", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSVideoOptimalLayoutChanged", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "activate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecopy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforecut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforedeactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforepaste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "copy", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "cut", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deactivate", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "encrypted", listener: (this: this, ev: MediaEncryptedEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "msneedkey", listener: (this: this, ev: MSMediaKeyNeededEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "paste", listener: (this: this, ev: ClipboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "selectstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof HTMLVideoElementEventMap>(type: K, listener: (this: HTMLVideoElement, ev: HTMLVideoElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13203,17 +12970,32 @@ interface HashChangeEvent extends Event {
 
 declare var HashChangeEvent: {
     prototype: HashChangeEvent;
-    new(type: string, eventInitDict?: HashChangeEventInit): HashChangeEvent;
+    new(typeArg: string, eventInitDict?: HashChangeEventInit): HashChangeEvent;
+}
+
+interface Headers {
+    append(name: string, value: string): void;
+    delete(name: string): void;
+    forEach(callback: ForEachCallback): void;
+    get(name: string): string | null;
+    has(name: string): boolean;
+    set(name: string, value: string): void;
+}
+
+declare var Headers: {
+    prototype: Headers;
+    new(init?: any): Headers;
 }
 
 interface History {
     readonly length: number;
     readonly state: any;
-    back(distance?: any): void;
-    forward(distance?: any): void;
-    go(delta?: any): void;
-    pushState(statedata: any, title?: string, url?: string): void;
-    replaceState(statedata: any, title?: string, url?: string): void;
+    scrollRestoration: ScrollRestoration;
+    back(): void;
+    forward(): void;
+    go(delta?: number): void;
+    pushState(data: any, title: string, url?: string | null): void;
+    replaceState(data: any, title: string, url?: string | null): void;
 }
 
 declare var History: {
@@ -13222,7 +13004,7 @@ declare var History: {
 }
 
 interface IDBCursor {
-    readonly direction: string;
+    readonly direction: IDBCursorDirection;
     key: IDBKeyRange | IDBValidKey;
     readonly primaryKey: any;
     source: IDBObjectStore | IDBIndex;
@@ -13254,11 +13036,16 @@ declare var IDBCursorWithValue: {
     new(): IDBCursorWithValue;
 }
 
+interface IDBDatabaseEventMap {
+    "abort": Event;
+    "error": Event;
+}
+
 interface IDBDatabase extends EventTarget {
     readonly name: string;
     readonly objectStoreNames: DOMStringList;
-    onabort: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
+    onabort: (this: IDBDatabase, ev: Event) => any;
+    onerror: (this: IDBDatabase, ev: Event) => any;
     version: number;
     onversionchange: (ev: IDBVersionChangeEvent) => any;
     close(): void;
@@ -13266,8 +13053,7 @@ interface IDBDatabase extends EventTarget {
     deleteObjectStore(name: string): void;
     transaction(storeNames: string | string[], mode?: string): IDBTransaction;
     addEventListener(type: "versionchange", listener: (ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof IDBDatabaseEventMap>(type: K, listener: (this: IDBDatabase, ev: IDBDatabaseEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13344,13 +13130,15 @@ declare var IDBObjectStore: {
     new(): IDBObjectStore;
 }
 
+interface IDBOpenDBRequestEventMap extends IDBRequestEventMap {
+    "blocked": Event;
+    "upgradeneeded": IDBVersionChangeEvent;
+}
+
 interface IDBOpenDBRequest extends IDBRequest {
-    onblocked: (this: this, ev: Event) => any;
-    onupgradeneeded: (this: this, ev: IDBVersionChangeEvent) => any;
-    addEventListener(type: "blocked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "success", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "upgradeneeded", listener: (this: this, ev: IDBVersionChangeEvent) => any, useCapture?: boolean): void;
+    onblocked: (this: IDBOpenDBRequest, ev: Event) => any;
+    onupgradeneeded: (this: IDBOpenDBRequest, ev: IDBVersionChangeEvent) => any;
+    addEventListener<K extends keyof IDBOpenDBRequestEventMap>(type: K, listener: (this: IDBOpenDBRequest, ev: IDBOpenDBRequestEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13359,16 +13147,20 @@ declare var IDBOpenDBRequest: {
     new(): IDBOpenDBRequest;
 }
 
+interface IDBRequestEventMap {
+    "error": Event;
+    "success": Event;
+}
+
 interface IDBRequest extends EventTarget {
     readonly error: DOMError;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onsuccess: (this: this, ev: Event) => any;
-    readonly readyState: string;
+    onerror: (this: IDBRequest, ev: Event) => any;
+    onsuccess: (this: IDBRequest, ev: Event) => any;
+    readonly readyState: IDBRequestReadyState;
     readonly result: any;
     source: IDBObjectStore | IDBIndex | IDBCursor;
     readonly transaction: IDBTransaction;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "success", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof IDBRequestEventMap>(type: K, listener: (this: IDBRequest, ev: IDBRequestEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13377,21 +13169,25 @@ declare var IDBRequest: {
     new(): IDBRequest;
 }
 
+interface IDBTransactionEventMap {
+    "abort": Event;
+    "complete": Event;
+    "error": Event;
+}
+
 interface IDBTransaction extends EventTarget {
     readonly db: IDBDatabase;
     readonly error: DOMError;
-    readonly mode: string;
-    onabort: (this: this, ev: Event) => any;
-    oncomplete: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
+    readonly mode: IDBTransactionMode;
+    onabort: (this: IDBTransaction, ev: Event) => any;
+    oncomplete: (this: IDBTransaction, ev: Event) => any;
+    onerror: (this: IDBTransaction, ev: Event) => any;
     abort(): void;
     objectStore(name: string): IDBObjectStore;
     readonly READ_ONLY: string;
     readonly READ_WRITE: string;
     readonly VERSION_CHANGE: string;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof IDBTransactionEventMap>(type: K, listener: (this: IDBTransaction, ev: IDBTransactionEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13413,6 +13209,15 @@ declare var IDBVersionChangeEvent: {
     new(): IDBVersionChangeEvent;
 }
 
+interface IIRFilterNode extends AudioNode {
+    getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
+}
+
+declare var IIRFilterNode: {
+    prototype: IIRFilterNode;
+    new(): IIRFilterNode;
+}
+
 interface ImageData {
     data: Uint8ClampedArray;
     readonly height: number;
@@ -13423,6 +13228,35 @@ declare var ImageData: {
     prototype: ImageData;
     new(width: number, height: number): ImageData;
     new(array: Uint8ClampedArray, width: number, height: number): ImageData;
+}
+
+interface IntersectionObserver {
+    readonly root: Element | null;
+    readonly rootMargin: string;
+    readonly thresholds: number[];
+    disconnect(): void;
+    observe(target: Element): void;
+    takeRecords(): IntersectionObserverEntry[];
+    unobserve(target: Element): void;
+}
+
+declare var IntersectionObserver: {
+    prototype: IntersectionObserver;
+    new(callback: IntersectionObserverCallback, options?: IntersectionObserverInit): IntersectionObserver;
+}
+
+interface IntersectionObserverEntry {
+    readonly boundingClientRect: ClientRect;
+    readonly intersectionRatio: number;
+    readonly intersectionRect: ClientRect;
+    readonly rootBounds: ClientRect;
+    readonly target: Element;
+    readonly time: number;
+}
+
+declare var IntersectionObserverEntry: {
+    prototype: IntersectionObserverEntry;
+    new(intersectionObserverEntryInit: IntersectionObserverEntryInit): IntersectionObserverEntry;
 }
 
 interface KeyboardEvent extends UIEvent {
@@ -13438,6 +13272,7 @@ interface KeyboardEvent extends UIEvent {
     readonly repeat: boolean;
     readonly shiftKey: boolean;
     readonly which: number;
+    readonly code: string;
     getModifierState(keyArg: string): boolean;
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
     readonly DOM_KEY_LOCATION_JOYSTICK: number;
@@ -13461,7 +13296,7 @@ declare var KeyboardEvent: {
 
 interface ListeningStateChangedEvent extends Event {
     readonly label: string;
-    readonly state: string;
+    readonly state: ListeningState;
 }
 
 declare var ListeningStateChangedEvent: {
@@ -13510,7 +13345,7 @@ interface MSApp {
     execAsyncAtPriority(asynchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): void;
     execAtPriority(synchronousCallback: MSExecAtPriorityFunctionCallback, priority: string, ...args: any[]): any;
     getCurrentPriority(): string;
-    getHtmlPrintDocumentSourceAsync(htmlDoc: any): PromiseLike<any>;
+    getHtmlPrintDocumentSourceAsync(htmlDoc: any): Promise<any>;
     getViewId(view: any): any;
     isTaskScheduledAtPriorityOrHigher(priority: string): boolean;
     pageHandlesAllApplicationActivations(enabled: boolean): void;
@@ -13523,18 +13358,22 @@ interface MSApp {
 }
 declare var MSApp: MSApp;
 
+interface MSAppAsyncOperationEventMap {
+    "complete": Event;
+    "error": Event;
+}
+
 interface MSAppAsyncOperation extends EventTarget {
     readonly error: DOMError;
-    oncomplete: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
+    oncomplete: (this: MSAppAsyncOperation, ev: Event) => any;
+    onerror: (this: MSAppAsyncOperation, ev: Event) => any;
     readonly readyState: number;
     readonly result: any;
     start(): void;
     readonly COMPLETED: number;
     readonly ERROR: number;
     readonly STARTED: number;
-    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MSAppAsyncOperationEventMap>(type: K, listener: (this: MSAppAsyncOperation, ev: MSAppAsyncOperationEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13548,7 +13387,7 @@ declare var MSAppAsyncOperation: {
 
 interface MSAssertion {
     readonly id: string;
-    readonly type: string;
+    readonly type: MSCredentialType;
 }
 
 declare var MSAssertion: {
@@ -13567,8 +13406,8 @@ declare var MSBlobBuilder: {
 }
 
 interface MSCredentials {
-    getAssertion(challenge: string, filter?: MSCredentialFilter, params?: MSSignatureParameters): PromiseLike<MSAssertion>;
-    makeCredential(accountInfo: MSAccountInfo, params: MSCredentialParameters[], challenge?: string): PromiseLike<MSAssertion>;
+    getAssertion(challenge: string, filter?: MSCredentialFilter, params?: MSSignatureParameters): Promise<MSAssertion>;
+    makeCredential(accountInfo: MSAccountInfo, params: MSCredentialParameters[], challenge?: string): Promise<MSAssertion>;
 }
 
 declare var MSCredentials: {
@@ -13580,7 +13419,7 @@ interface MSFIDOCredentialAssertion extends MSAssertion {
     readonly algorithm: string | Algorithm;
     readonly attestation: any;
     readonly publicKey: string;
-    readonly transportHints: string[];
+    readonly transportHints: MSTransportType[];
 }
 
 declare var MSFIDOCredentialAssertion: {
@@ -13684,11 +13523,14 @@ interface MSHTMLWebViewElement extends HTMLElement {
     goForward(): void;
     invokeScriptAsync(scriptName: string, ...args: any[]): MSWebViewAsyncOperation;
     navigate(uri: string): void;
+    navigateFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
     navigateToLocalStreamUri(source: string, streamResolver: any): void;
     navigateToString(contents: string): void;
     navigateWithHttpRequestMessage(requestMessage: any): void;
     refresh(): void;
     stop(): void;
+    addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: MSHTMLWebViewElement, ev: HTMLElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var MSHTMLWebViewElement: {
@@ -13696,20 +13538,24 @@ declare var MSHTMLWebViewElement: {
     new(): MSHTMLWebViewElement;
 }
 
+interface MSInputMethodContextEventMap {
+    "MSCandidateWindowHide": Event;
+    "MSCandidateWindowShow": Event;
+    "MSCandidateWindowUpdate": Event;
+}
+
 interface MSInputMethodContext extends EventTarget {
     readonly compositionEndOffset: number;
     readonly compositionStartOffset: number;
-    oncandidatewindowhide: (this: this, ev: Event) => any;
-    oncandidatewindowshow: (this: this, ev: Event) => any;
-    oncandidatewindowupdate: (this: this, ev: Event) => any;
+    oncandidatewindowhide: (this: MSInputMethodContext, ev: Event) => any;
+    oncandidatewindowshow: (this: MSInputMethodContext, ev: Event) => any;
+    oncandidatewindowupdate: (this: MSInputMethodContext, ev: Event) => any;
     readonly target: HTMLElement;
     getCandidateWindowClientRect(): ClientRect;
     getCompositionAlternatives(): string[];
     hasComposition(): boolean;
     isCandidateWindowVisible(): boolean;
-    addEventListener(type: "MSCandidateWindowHide", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSCandidateWindowShow", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSCandidateWindowUpdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MSInputMethodContextEventMap>(type: K, listener: (this: MSInputMethodContext, ev: MSInputMethodContextEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13875,6 +13721,7 @@ interface MSStreamReader extends EventTarget, MSBaseReader {
     readAsBlob(stream: MSStream, size?: number): void;
     readAsDataURL(stream: MSStream, size?: number): void;
     readAsText(stream: MSStream, encoding?: string, size?: number): void;
+    addEventListener<K extends keyof MSBaseReaderEventMap>(type: K, listener: (this: MSStreamReader, ev: MSBaseReaderEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13883,10 +13730,15 @@ declare var MSStreamReader: {
     new(): MSStreamReader;
 }
 
+interface MSWebViewAsyncOperationEventMap {
+    "complete": Event;
+    "error": Event;
+}
+
 interface MSWebViewAsyncOperation extends EventTarget {
     readonly error: DOMError;
-    oncomplete: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
+    oncomplete: (this: MSWebViewAsyncOperation, ev: Event) => any;
+    onerror: (this: MSWebViewAsyncOperation, ev: Event) => any;
     readonly readyState: number;
     readonly result: any;
     readonly target: MSHTMLWebViewElement;
@@ -13898,8 +13750,7 @@ interface MSWebViewAsyncOperation extends EventTarget {
     readonly TYPE_CAPTURE_PREVIEW_TO_RANDOM_ACCESS_STREAM: number;
     readonly TYPE_CREATE_DATA_PACKAGE_FROM_SELECTION: number;
     readonly TYPE_INVOKE_SCRIPT: number;
-    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MSWebViewAsyncOperationEventMap>(type: K, listener: (this: MSWebViewAsyncOperation, ev: MSWebViewAsyncOperationEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13927,7 +13778,7 @@ declare var MSWebViewSettings: {
 interface MediaDeviceInfo {
     readonly deviceId: string;
     readonly groupId: string;
-    readonly kind: string;
+    readonly kind: MediaDeviceKind;
     readonly label: string;
 }
 
@@ -13936,12 +13787,16 @@ declare var MediaDeviceInfo: {
     new(): MediaDeviceInfo;
 }
 
+interface MediaDevicesEventMap {
+    "devicechange": Event;
+}
+
 interface MediaDevices extends EventTarget {
-    ondevicechange: (this: this, ev: Event) => any;
+    ondevicechange: (this: MediaDevices, ev: Event) => any;
     enumerateDevices(): any;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
-    getUserMedia(constraints: MediaStreamConstraints): PromiseLike<MediaStream>;
-    addEventListener(type: "devicechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
+    addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -13990,7 +13845,7 @@ declare var MediaError: {
 
 interface MediaKeyMessageEvent extends Event {
     readonly message: ArrayBuffer;
-    readonly messageType: string;
+    readonly messageType: MediaKeyMessageType;
 }
 
 declare var MediaKeyMessageEvent: {
@@ -13999,15 +13854,15 @@ declare var MediaKeyMessageEvent: {
 }
 
 interface MediaKeySession extends EventTarget {
-    readonly closed: PromiseLike<void>;
+    readonly closed: Promise<void>;
     readonly expiration: number;
     readonly keyStatuses: MediaKeyStatusMap;
     readonly sessionId: string;
-    close(): PromiseLike<void>;
-    generateRequest(initDataType: string, initData: any): PromiseLike<void>;
-    load(sessionId: string): PromiseLike<boolean>;
-    remove(): PromiseLike<void>;
-    update(response: any): PromiseLike<void>;
+    close(): Promise<void>;
+    generateRequest(initDataType: string, initData: any): Promise<void>;
+    load(sessionId: string): Promise<boolean>;
+    remove(): Promise<void>;
+    update(response: any): Promise<void>;
 }
 
 declare var MediaKeySession: {
@@ -14018,7 +13873,7 @@ declare var MediaKeySession: {
 interface MediaKeyStatusMap {
     readonly size: number;
     forEach(callback: ForEachCallback): void;
-    get(keyId: any): string;
+    get(keyId: any): MediaKeyStatus;
     has(keyId: any): boolean;
 }
 
@@ -14029,7 +13884,7 @@ declare var MediaKeyStatusMap: {
 
 interface MediaKeySystemAccess {
     readonly keySystem: string;
-    createMediaKeys(): PromiseLike<MediaKeys>;
+    createMediaKeys(): Promise<MediaKeys>;
     getConfiguration(): MediaKeySystemConfiguration;
 }
 
@@ -14039,8 +13894,8 @@ declare var MediaKeySystemAccess: {
 }
 
 interface MediaKeys {
-    createSession(sessionType?: string): MediaKeySession;
-    setServerCertificate(serverCertificate: any): PromiseLike<void>;
+    createSession(sessionType?: MediaKeySessionType): MediaKeySession;
+    setServerCertificate(serverCertificate: any): Promise<void>;
 }
 
 declare var MediaKeys: {
@@ -14091,13 +13946,20 @@ declare var MediaSource: {
     isTypeSupported(type: string): boolean;
 }
 
+interface MediaStreamEventMap {
+    "active": Event;
+    "addtrack": MediaStreamTrackEvent;
+    "inactive": Event;
+    "removetrack": MediaStreamTrackEvent;
+}
+
 interface MediaStream extends EventTarget {
     readonly active: boolean;
     readonly id: string;
-    onactive: (this: this, ev: Event) => any;
-    onaddtrack: (this: this, ev: TrackEvent) => any;
-    oninactive: (this: this, ev: Event) => any;
-    onremovetrack: (this: this, ev: TrackEvent) => any;
+    onactive: (this: MediaStream, ev: Event) => any;
+    onaddtrack: (this: MediaStream, ev: MediaStreamTrackEvent) => any;
+    oninactive: (this: MediaStream, ev: Event) => any;
+    onremovetrack: (this: MediaStream, ev: MediaStreamTrackEvent) => any;
     addTrack(track: MediaStreamTrack): void;
     clone(): MediaStream;
     getAudioTracks(): MediaStreamTrack[];
@@ -14106,10 +13968,7 @@ interface MediaStream extends EventTarget {
     getVideoTracks(): MediaStreamTrack[];
     removeTrack(track: MediaStreamTrack): void;
     stop(): void;
-    addEventListener(type: "active", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "addtrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "inactive", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "removetrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MediaStreamEventMap>(type: K, listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14143,7 +14002,23 @@ interface MediaStreamErrorEvent extends Event {
 
 declare var MediaStreamErrorEvent: {
     prototype: MediaStreamErrorEvent;
-    new(type: string, eventInitDict?: MediaStreamErrorEventInit): MediaStreamErrorEvent;
+    new(typeArg: string, eventInitDict?: MediaStreamErrorEventInit): MediaStreamErrorEvent;
+}
+
+interface MediaStreamEvent extends Event {
+    readonly stream: MediaStream | null;
+}
+
+declare var MediaStreamEvent: {
+    prototype: MediaStreamEvent;
+    new(type: string, eventInitDict: MediaStreamEventInit): MediaStreamEvent;
+}
+
+interface MediaStreamTrackEventMap {
+    "ended": MediaStreamErrorEvent;
+    "mute": Event;
+    "overconstrained": MediaStreamErrorEvent;
+    "unmute": Event;
 }
 
 interface MediaStreamTrack extends EventTarget {
@@ -14152,23 +14027,20 @@ interface MediaStreamTrack extends EventTarget {
     readonly kind: string;
     readonly label: string;
     readonly muted: boolean;
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
-    onmute: (this: this, ev: Event) => any;
-    onoverconstrained: (this: this, ev: MediaStreamErrorEvent) => any;
-    onunmute: (this: this, ev: Event) => any;
+    onended: (this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any;
+    onmute: (this: MediaStreamTrack, ev: Event) => any;
+    onoverconstrained: (this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any;
+    onunmute: (this: MediaStreamTrack, ev: Event) => any;
     readonly readonly: boolean;
-    readonly readyState: string;
+    readonly readyState: MediaStreamTrackState;
     readonly remote: boolean;
-    applyConstraints(constraints: MediaTrackConstraints): PromiseLike<void>;
+    applyConstraints(constraints: MediaTrackConstraints): Promise<void>;
     clone(): MediaStreamTrack;
     getCapabilities(): MediaTrackCapabilities;
     getConstraints(): MediaTrackConstraints;
     getSettings(): MediaTrackSettings;
     stop(): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mute", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "overconstrained", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "unmute", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MediaStreamTrackEventMap>(type: K, listener: (this: MediaStreamTrack, ev: MediaStreamTrackEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14183,7 +14055,7 @@ interface MediaStreamTrackEvent extends Event {
 
 declare var MediaStreamTrackEvent: {
     prototype: MediaStreamTrackEvent;
-    new(type: string, eventInitDict?: MediaStreamTrackEventInit): MediaStreamTrackEvent;
+    new(typeArg: string, eventInitDict?: MediaStreamTrackEventInit): MediaStreamTrackEvent;
 }
 
 interface MessageChannel {
@@ -14209,12 +14081,16 @@ declare var MessageEvent: {
     new(type: string, eventInitDict?: MessageEventInit): MessageEvent;
 }
 
+interface MessagePortEventMap {
+    "message": MessageEvent;
+}
+
 interface MessagePort extends EventTarget {
-    onmessage: (this: this, ev: MessageEvent) => any;
+    onmessage: (this: MessagePort, ev: MessageEvent) => any;
     close(): void;
-    postMessage(message?: any, ports?: any): void;
+    postMessage(message?: any, transfer?: any[]): void;
     start(): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MessagePortEventMap>(type: K, listener: (this: MessagePort, ev: MessagePortEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14273,7 +14149,7 @@ interface MouseEvent extends UIEvent {
     readonly x: number;
     readonly y: number;
     getModifierState(keyArg: string): boolean;
-    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget): void;
+    initMouseEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, buttonArg: number, relatedTargetArg: EventTarget | null): void;
 }
 
 declare var MouseEvent: {
@@ -14374,9 +14250,10 @@ declare var NavigationEventWithReferrer: {
     new(): NavigationEventWithReferrer;
 }
 
-interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, NavigatorGeolocation, MSNavigatorDoNotTrack, MSFileSaver, NavigatorUserMedia {
-    readonly appCodeName: string;
+interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, NavigatorGeolocation, MSNavigatorDoNotTrack, MSFileSaver, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorUserMedia {
+    readonly authentication: WebAuthentication;
     readonly cookieEnabled: boolean;
+    gamepadInputEmulation: GamepadInputEmulationType;
     readonly language: string;
     readonly maxTouchPoints: number;
     readonly mimeTypes: MimeTypeArray;
@@ -14385,13 +14262,14 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly msPointerEnabled: boolean;
     readonly plugins: PluginArray;
     readonly pointerEnabled: boolean;
+    readonly serviceWorker: ServiceWorkerContainer;
     readonly webdriver: boolean;
+    readonly hardwareConcurrency: number;
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
-    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): PromiseLike<MediaKeySystemAccess>;
+    requestMediaKeySystemAccess(keySystem: string, supportedConfigurations: MediaKeySystemConfiguration[]): Promise<MediaKeySystemAccess>;
     vibrate(pattern: number | number[]): boolean;
-    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var Navigator: {
@@ -14403,34 +14281,34 @@ interface Node extends EventTarget {
     readonly attributes: NamedNodeMap;
     readonly baseURI: string | null;
     readonly childNodes: NodeList;
-    readonly firstChild: Node;
-    readonly lastChild: Node;
+    readonly firstChild: Node | null;
+    readonly lastChild: Node | null;
     readonly localName: string | null;
     readonly namespaceURI: string | null;
-    readonly nextSibling: Node;
+    readonly nextSibling: Node | null;
     readonly nodeName: string;
     readonly nodeType: number;
     nodeValue: string | null;
     readonly ownerDocument: Document;
-    readonly parentElement: HTMLElement;
-    readonly parentNode: Node;
-    readonly previousSibling: Node;
+    readonly parentElement: HTMLElement | null;
+    readonly parentNode: Node | null;
+    readonly previousSibling: Node | null;
     textContent: string | null;
-    appendChild(newChild: Node): Node;
+    appendChild<T extends Node>(newChild: T): T;
     cloneNode(deep?: boolean): Node;
     compareDocumentPosition(other: Node): number;
     contains(child: Node): boolean;
     hasAttributes(): boolean;
     hasChildNodes(): boolean;
-    insertBefore(newChild: Node, refChild: Node | null): Node;
+    insertBefore<T extends Node>(newChild: T, refChild: Node | null): T;
     isDefaultNamespace(namespaceURI: string | null): boolean;
     isEqualNode(arg: Node): boolean;
     isSameNode(other: Node): boolean;
     lookupNamespaceURI(prefix: string | null): string | null;
     lookupPrefix(namespaceURI: string | null): string | null;
     normalize(): void;
-    removeChild(oldChild: Node): Node;
-    replaceChild(newChild: Node, oldChild: Node): Node;
+    removeChild<T extends Node>(oldChild: T): T;
+    replaceChild<T extends Node>(newChild: Node, oldChild: T): T;
     readonly ATTRIBUTE_NODE: number;
     readonly CDATA_SECTION_NODE: number;
     readonly COMMENT_NODE: number;
@@ -14523,6 +14401,36 @@ declare var NodeList: {
     new(): NodeList;
 }
 
+interface NotificationEventMap {
+    "click": Event;
+    "close": Event;
+    "error": Event;
+    "show": Event;
+}
+
+interface Notification extends EventTarget {
+    readonly body: string;
+    readonly dir: NotificationDirection;
+    readonly icon: string;
+    readonly lang: string;
+    onclick: (this: Notification, ev: Event) => any;
+    onclose: (this: Notification, ev: Event) => any;
+    onerror: (this: Notification, ev: Event) => any;
+    onshow: (this: Notification, ev: Event) => any;
+    readonly permission: NotificationPermission;
+    readonly tag: string;
+    readonly title: string;
+    close(): void;
+    addEventListener<K extends keyof NotificationEventMap>(type: K, listener: (this: Notification, ev: NotificationEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var Notification: {
+    prototype: Notification;
+    new(title: string, options?: NotificationOptions): Notification;
+    requestPermission(callback?: NotificationPermissionCallback): Promise<NotificationPermission>;
+}
+
 interface OES_element_index_uint {
 }
 
@@ -14557,6 +14465,24 @@ declare var OES_texture_float_linear: {
     new(): OES_texture_float_linear;
 }
 
+interface OES_texture_half_float {
+    readonly HALF_FLOAT_OES: number;
+}
+
+declare var OES_texture_half_float: {
+    prototype: OES_texture_half_float;
+    new(): OES_texture_half_float;
+    readonly HALF_FLOAT_OES: number;
+}
+
+interface OES_texture_half_float_linear {
+}
+
+declare var OES_texture_half_float_linear: {
+    prototype: OES_texture_half_float_linear;
+    new(): OES_texture_half_float_linear;
+}
+
 interface OfflineAudioCompletionEvent extends Event {
     readonly renderedBuffer: AudioBuffer;
 }
@@ -14566,10 +14492,16 @@ declare var OfflineAudioCompletionEvent: {
     new(): OfflineAudioCompletionEvent;
 }
 
-interface OfflineAudioContext extends AudioContext {
-    oncomplete: (this: this, ev: Event) => any;
-    startRendering(): PromiseLike<AudioBuffer>;
-    addEventListener(type: "complete", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+interface OfflineAudioContextEventMap extends AudioContextEventMap {
+    "complete": OfflineAudioCompletionEvent;
+}
+
+interface OfflineAudioContext extends AudioContextBase {
+    readonly length: number;
+    oncomplete: (this: OfflineAudioContext, ev: OfflineAudioCompletionEvent) => any;
+    startRendering(): Promise<AudioBuffer>;
+    suspend(suspendTime: number): Promise<void>;
+    addEventListener<K extends keyof OfflineAudioContextEventMap>(type: K, listener: (this: OfflineAudioContext, ev: OfflineAudioContextEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14578,15 +14510,19 @@ declare var OfflineAudioContext: {
     new(numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
 }
 
+interface OscillatorNodeEventMap {
+    "ended": MediaStreamErrorEvent;
+}
+
 interface OscillatorNode extends AudioNode {
     readonly detune: AudioParam;
     readonly frequency: AudioParam;
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
-    type: string;
+    onended: (this: OscillatorNode, ev: MediaStreamErrorEvent) => any;
+    type: OscillatorType;
     setPeriodicWave(periodicWave: PeriodicWave): void;
     start(when?: number): void;
     stop(when?: number): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof OscillatorNodeEventMap>(type: K, listener: (this: OscillatorNode, ev: OscillatorNodeEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14625,9 +14561,9 @@ interface PannerNode extends AudioNode {
     coneInnerAngle: number;
     coneOuterAngle: number;
     coneOuterGain: number;
-    distanceModel: string;
+    distanceModel: DistanceModelType;
     maxDistance: number;
-    panningModel: string;
+    panningModel: PanningModelType;
     refDistance: number;
     rolloffFactor: number;
     setOrientation(x: number, y: number, z: number): void;
@@ -14638,6 +14574,82 @@ interface PannerNode extends AudioNode {
 declare var PannerNode: {
     prototype: PannerNode;
     new(): PannerNode;
+}
+
+interface Path2D extends Object, CanvasPathMethods {
+}
+
+declare var Path2D: {
+    prototype: Path2D;
+    new(path?: Path2D): Path2D;
+}
+
+interface PaymentAddress {
+    readonly addressLine: string[];
+    readonly city: string;
+    readonly country: string;
+    readonly dependentLocality: string;
+    readonly languageCode: string;
+    readonly organization: string;
+    readonly phone: string;
+    readonly postalCode: string;
+    readonly recipient: string;
+    readonly region: string;
+    readonly sortingCode: string;
+    toJSON(): any;
+}
+
+declare var PaymentAddress: {
+    prototype: PaymentAddress;
+    new(): PaymentAddress;
+}
+
+interface PaymentRequestEventMap {
+    "shippingaddresschange": Event;
+    "shippingoptionchange": Event;
+}
+
+interface PaymentRequest extends EventTarget {
+    onshippingaddresschange: (this: PaymentRequest, ev: Event) => any;
+    onshippingoptionchange: (this: PaymentRequest, ev: Event) => any;
+    readonly shippingAddress: PaymentAddress | null;
+    readonly shippingOption: string | null;
+    readonly shippingType: PaymentShippingType | null;
+    abort(): Promise<void>;
+    show(): Promise<PaymentResponse>;
+    addEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var PaymentRequest: {
+    prototype: PaymentRequest;
+    new(methodData: PaymentMethodData[], details: PaymentDetails, options?: PaymentOptions): PaymentRequest;
+}
+
+interface PaymentRequestUpdateEvent extends Event {
+    updateWith(d: Promise<PaymentDetails>): void;
+}
+
+declare var PaymentRequestUpdateEvent: {
+    prototype: PaymentRequestUpdateEvent;
+    new(type: string, eventInitDict?: PaymentRequestUpdateEventInit): PaymentRequestUpdateEvent;
+}
+
+interface PaymentResponse {
+    readonly details: any;
+    readonly methodName: string;
+    readonly payerEmail: string | null;
+    readonly payerName: string | null;
+    readonly payerPhone: string | null;
+    readonly shippingAddress: PaymentAddress | null;
+    readonly shippingOption: string | null;
+    complete(result?: PaymentComplete): Promise<void>;
+    toJSON(): any;
+}
+
+declare var PaymentResponse: {
+    prototype: PaymentResponse;
+    new(): PaymentResponse;
 }
 
 interface PerfWidgetExternal {
@@ -14759,7 +14771,7 @@ interface PerformanceNavigationTiming extends PerformanceEntry {
     readonly requestStart: number;
     readonly responseEnd: number;
     readonly responseStart: number;
-    readonly type: string;
+    readonly type: NavigationType;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
 }
@@ -14810,6 +14822,7 @@ interface PerformanceTiming {
     readonly responseStart: number;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
+    readonly secureConnectionStart: number;
     toJSON(): any;
 }
 
@@ -14827,7 +14840,7 @@ declare var PeriodicWave: {
 }
 
 interface PermissionRequest extends DeferredPermissionRequest {
-    readonly state: string;
+    readonly state: MSWebViewPermissionState;
     defer(): void;
 }
 
@@ -14904,7 +14917,7 @@ interface PopStateEvent extends Event {
 
 declare var PopStateEvent: {
     prototype: PopStateEvent;
-    new(): PopStateEvent;
+    new(typeArg: string, eventInitDict?: PopStateEventInit): PopStateEvent;
 }
 
 interface Position {
@@ -14955,27 +14968,65 @@ declare var ProgressEvent: {
     new(type: string, eventInitDict?: ProgressEventInit): ProgressEvent;
 }
 
+interface PushManager {
+    getSubscription(): Promise<PushSubscription>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
+    subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
+}
+
+declare var PushManager: {
+    prototype: PushManager;
+    new(): PushManager;
+}
+
+interface PushSubscription {
+    readonly endpoint: USVString;
+    readonly options: PushSubscriptionOptions;
+    getKey(name: PushEncryptionKeyName): ArrayBuffer | null;
+    toJSON(): any;
+    unsubscribe(): Promise<boolean>;
+}
+
+declare var PushSubscription: {
+    prototype: PushSubscription;
+    new(): PushSubscription;
+}
+
+interface PushSubscriptionOptions {
+    readonly applicationServerKey: ArrayBuffer | null;
+    readonly userVisibleOnly: boolean;
+}
+
+declare var PushSubscriptionOptions: {
+    prototype: PushSubscriptionOptions;
+    new(): PushSubscriptionOptions;
+}
+
 interface RTCDTMFToneChangeEvent extends Event {
     readonly tone: string;
 }
 
 declare var RTCDTMFToneChangeEvent: {
     prototype: RTCDTMFToneChangeEvent;
-    new(type: string, eventInitDict: RTCDTMFToneChangeEventInit): RTCDTMFToneChangeEvent;
+    new(typeArg: string, eventInitDict: RTCDTMFToneChangeEventInit): RTCDTMFToneChangeEvent;
+}
+
+interface RTCDtlsTransportEventMap {
+    "dtlsstatechange": RTCDtlsTransportStateChangedEvent;
+    "error": Event;
 }
 
 interface RTCDtlsTransport extends RTCStatsProvider {
-    ondtlsstatechange: ((this: this, ev: RTCDtlsTransportStateChangedEvent) => any) | null;
-    onerror: ((this: this, ev: ErrorEvent) => any) | null;
-    readonly state: string;
+    ondtlsstatechange: ((this: RTCDtlsTransport, ev: RTCDtlsTransportStateChangedEvent) => any) | null;
+    onerror: ((this: RTCDtlsTransport, ev: Event) => any) | null;
+    readonly state: RTCDtlsTransportState;
     readonly transport: RTCIceTransport;
     getLocalParameters(): RTCDtlsParameters;
     getRemoteCertificates(): ArrayBuffer[];
     getRemoteParameters(): RTCDtlsParameters | null;
     start(remoteParameters: RTCDtlsParameters): void;
     stop(): void;
-    addEventListener(type: "dtlsstatechange", listener: (this: this, ev: RTCDtlsTransportStateChangedEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCDtlsTransportEventMap>(type: K, listener: (this: RTCDtlsTransport, ev: RTCDtlsTransportEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -14985,7 +15036,7 @@ declare var RTCDtlsTransport: {
 }
 
 interface RTCDtlsTransportStateChangedEvent extends Event {
-    readonly state: string;
+    readonly state: RTCDtlsTransportState;
 }
 
 declare var RTCDtlsTransportStateChangedEvent: {
@@ -14993,21 +15044,37 @@ declare var RTCDtlsTransportStateChangedEvent: {
     new(): RTCDtlsTransportStateChangedEvent;
 }
 
+interface RTCDtmfSenderEventMap {
+    "tonechange": RTCDTMFToneChangeEvent;
+}
+
 interface RTCDtmfSender extends EventTarget {
     readonly canInsertDTMF: boolean;
     readonly duration: number;
     readonly interToneGap: number;
-    ontonechange: (this: this, ev: RTCDTMFToneChangeEvent) => any;
+    ontonechange: (this: RTCDtmfSender, ev: RTCDTMFToneChangeEvent) => any;
     readonly sender: RTCRtpSender;
     readonly toneBuffer: string;
     insertDTMF(tones: string, duration?: number, interToneGap?: number): void;
-    addEventListener(type: "tonechange", listener: (this: this, ev: RTCDTMFToneChangeEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCDtmfSenderEventMap>(type: K, listener: (this: RTCDtmfSender, ev: RTCDtmfSenderEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var RTCDtmfSender: {
     prototype: RTCDtmfSender;
     new(sender: RTCRtpSender): RTCDtmfSender;
+}
+
+interface RTCIceCandidate {
+    candidate: string | null;
+    sdpMLineIndex: number | null;
+    sdpMid: string | null;
+    toJSON(): any;
+}
+
+declare var RTCIceCandidate: {
+    prototype: RTCIceCandidate;
+    new(candidateInitDict?: RTCIceCandidateInit): RTCIceCandidate;
 }
 
 interface RTCIceCandidatePairChangedEvent extends Event {
@@ -15019,15 +15086,19 @@ declare var RTCIceCandidatePairChangedEvent: {
     new(): RTCIceCandidatePairChangedEvent;
 }
 
+interface RTCIceGathererEventMap {
+    "error": Event;
+    "localcandidate": RTCIceGathererEvent;
+}
+
 interface RTCIceGatherer extends RTCStatsProvider {
-    readonly component: string;
-    onerror: ((this: this, ev: ErrorEvent) => any) | null;
-    onlocalcandidate: ((this: this, ev: RTCIceGathererEvent) => any) | null;
+    readonly component: RTCIceComponent;
+    onerror: ((this: RTCIceGatherer, ev: Event) => any) | null;
+    onlocalcandidate: ((this: RTCIceGatherer, ev: RTCIceGathererEvent) => any) | null;
     createAssociatedGatherer(): RTCIceGatherer;
-    getLocalCandidates(): RTCIceCandidate[];
+    getLocalCandidates(): RTCIceCandidateDictionary[];
     getLocalParameters(): RTCIceParameters;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "localcandidate", listener: (this: this, ev: RTCIceGathererEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCIceGathererEventMap>(type: K, listener: (this: RTCIceGatherer, ev: RTCIceGathererEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15037,7 +15108,7 @@ declare var RTCIceGatherer: {
 }
 
 interface RTCIceGathererEvent extends Event {
-    readonly candidate: RTCIceCandidate | RTCIceCandidateComplete;
+    readonly candidate: RTCIceCandidateDictionary | RTCIceCandidateComplete;
 }
 
 declare var RTCIceGathererEvent: {
@@ -15045,23 +15116,27 @@ declare var RTCIceGathererEvent: {
     new(): RTCIceGathererEvent;
 }
 
+interface RTCIceTransportEventMap {
+    "candidatepairchange": RTCIceCandidatePairChangedEvent;
+    "icestatechange": RTCIceTransportStateChangedEvent;
+}
+
 interface RTCIceTransport extends RTCStatsProvider {
-    readonly component: string;
+    readonly component: RTCIceComponent;
     readonly iceGatherer: RTCIceGatherer | null;
-    oncandidatepairchange: ((this: this, ev: RTCIceCandidatePairChangedEvent) => any) | null;
-    onicestatechange: ((this: this, ev: RTCIceTransportStateChangedEvent) => any) | null;
-    readonly role: string;
-    readonly state: string;
-    addRemoteCandidate(remoteCandidate: RTCIceCandidate | RTCIceCandidateComplete): void;
+    oncandidatepairchange: ((this: RTCIceTransport, ev: RTCIceCandidatePairChangedEvent) => any) | null;
+    onicestatechange: ((this: RTCIceTransport, ev: RTCIceTransportStateChangedEvent) => any) | null;
+    readonly role: RTCIceRole;
+    readonly state: RTCIceTransportState;
+    addRemoteCandidate(remoteCandidate: RTCIceCandidateDictionary | RTCIceCandidateComplete): void;
     createAssociatedTransport(): RTCIceTransport;
     getNominatedCandidatePair(): RTCIceCandidatePair | null;
-    getRemoteCandidates(): RTCIceCandidate[];
+    getRemoteCandidates(): RTCIceCandidateDictionary[];
     getRemoteParameters(): RTCIceParameters | null;
-    setRemoteCandidates(remoteCandidates: RTCIceCandidate[]): void;
-    start(gatherer: RTCIceGatherer, remoteParameters: RTCIceParameters, role?: string): void;
+    setRemoteCandidates(remoteCandidates: RTCIceCandidateDictionary[]): void;
+    start(gatherer: RTCIceGatherer, remoteParameters: RTCIceParameters, role?: RTCIceRole): void;
     stop(): void;
-    addEventListener(type: "candidatepairchange", listener: (this: this, ev: RTCIceCandidatePairChangedEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "icestatechange", listener: (this: this, ev: RTCIceTransportStateChangedEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCIceTransportEventMap>(type: K, listener: (this: RTCIceTransport, ev: RTCIceTransportEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15071,7 +15146,7 @@ declare var RTCIceTransport: {
 }
 
 interface RTCIceTransportStateChangedEvent extends Event {
-    readonly state: string;
+    readonly state: RTCIceTransportState;
 }
 
 declare var RTCIceTransportStateChangedEvent: {
@@ -15079,8 +15154,67 @@ declare var RTCIceTransportStateChangedEvent: {
     new(): RTCIceTransportStateChangedEvent;
 }
 
+interface RTCPeerConnectionEventMap {
+    "addstream": MediaStreamEvent;
+    "icecandidate": RTCPeerConnectionIceEvent;
+    "iceconnectionstatechange": Event;
+    "icegatheringstatechange": Event;
+    "negotiationneeded": Event;
+    "removestream": MediaStreamEvent;
+    "signalingstatechange": Event;
+}
+
+interface RTCPeerConnection extends EventTarget {
+    readonly canTrickleIceCandidates: boolean | null;
+    readonly iceConnectionState: RTCIceConnectionState;
+    readonly iceGatheringState: RTCIceGatheringState;
+    readonly localDescription: RTCSessionDescription | null;
+    onaddstream: (this: RTCPeerConnection, ev: MediaStreamEvent) => any;
+    onicecandidate: (this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any;
+    oniceconnectionstatechange: (this: RTCPeerConnection, ev: Event) => any;
+    onicegatheringstatechange: (this: RTCPeerConnection, ev: Event) => any;
+    onnegotiationneeded: (this: RTCPeerConnection, ev: Event) => any;
+    onremovestream: (this: RTCPeerConnection, ev: MediaStreamEvent) => any;
+    onsignalingstatechange: (this: RTCPeerConnection, ev: Event) => any;
+    readonly remoteDescription: RTCSessionDescription | null;
+    readonly signalingState: RTCSignalingState;
+    addIceCandidate(candidate: RTCIceCandidate, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    addStream(stream: MediaStream): void;
+    close(): void;
+    createAnswer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCSessionDescription>;
+    createOffer(successCallback?: RTCSessionDescriptionCallback, failureCallback?: RTCPeerConnectionErrorCallback, options?: RTCOfferOptions): Promise<RTCSessionDescription>;
+    getConfiguration(): RTCConfiguration;
+    getLocalStreams(): MediaStream[];
+    getRemoteStreams(): MediaStream[];
+    getStats(selector: MediaStreamTrack | null, successCallback?: RTCStatsCallback, failureCallback?: RTCPeerConnectionErrorCallback): Promise<RTCStatsReport>;
+    getStreamById(streamId: string): MediaStream | null;
+    removeStream(stream: MediaStream): void;
+    setLocalDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    setRemoteDescription(description: RTCSessionDescription, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
+    addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: RTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var RTCPeerConnection: {
+    prototype: RTCPeerConnection;
+    new(configuration: RTCConfiguration): RTCPeerConnection;
+}
+
+interface RTCPeerConnectionIceEvent extends Event {
+    readonly candidate: RTCIceCandidate;
+}
+
+declare var RTCPeerConnectionIceEvent: {
+    prototype: RTCPeerConnectionIceEvent;
+    new(type: string, eventInitDict: RTCPeerConnectionIceEventInit): RTCPeerConnectionIceEvent;
+}
+
+interface RTCRtpReceiverEventMap {
+    "error": Event;
+}
+
 interface RTCRtpReceiver extends RTCStatsProvider {
-    onerror: ((this: this, ev: ErrorEvent) => any) | null;
+    onerror: ((this: RTCRtpReceiver, ev: Event) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
     readonly track: MediaStreamTrack | null;
     readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
@@ -15089,7 +15223,7 @@ interface RTCRtpReceiver extends RTCStatsProvider {
     requestSendCSRC(csrc: number): void;
     setTransport(transport: RTCDtlsTransport | RTCSrtpSdesTransport, rtcpTransport?: RTCDtlsTransport): void;
     stop(): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCRtpReceiverEventMap>(type: K, listener: (this: RTCRtpReceiver, ev: RTCRtpReceiverEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15099,9 +15233,14 @@ declare var RTCRtpReceiver: {
     getCapabilities(kind?: string): RTCRtpCapabilities;
 }
 
+interface RTCRtpSenderEventMap {
+    "error": Event;
+    "ssrcconflict": RTCSsrcConflictEvent;
+}
+
 interface RTCRtpSender extends RTCStatsProvider {
-    onerror: ((this: this, ev: ErrorEvent) => any) | null;
-    onssrcconflict: ((this: this, ev: RTCSsrcConflictEvent) => any) | null;
+    onerror: ((this: RTCRtpSender, ev: Event) => any) | null;
+    onssrcconflict: ((this: RTCRtpSender, ev: RTCSsrcConflictEvent) => any) | null;
     readonly rtcpTransport: RTCDtlsTransport;
     readonly track: MediaStreamTrack;
     readonly transport: RTCDtlsTransport | RTCSrtpSdesTransport;
@@ -15109,8 +15248,7 @@ interface RTCRtpSender extends RTCStatsProvider {
     setTrack(track: MediaStreamTrack): void;
     setTransport(transport: RTCDtlsTransport | RTCSrtpSdesTransport, rtcpTransport?: RTCDtlsTransport): void;
     stop(): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ssrcconflict", listener: (this: this, ev: RTCSsrcConflictEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCRtpSenderEventMap>(type: K, listener: (this: RTCRtpSender, ev: RTCRtpSenderEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15120,10 +15258,25 @@ declare var RTCRtpSender: {
     getCapabilities(kind?: string): RTCRtpCapabilities;
 }
 
+interface RTCSessionDescription {
+    sdp: string | null;
+    type: RTCSdpType | null;
+    toJSON(): any;
+}
+
+declare var RTCSessionDescription: {
+    prototype: RTCSessionDescription;
+    new(descriptionInitDict?: RTCSessionDescriptionInit): RTCSessionDescription;
+}
+
+interface RTCSrtpSdesTransportEventMap {
+    "error": Event;
+}
+
 interface RTCSrtpSdesTransport extends EventTarget {
-    onerror: ((this: this, ev: ErrorEvent) => any) | null;
+    onerror: ((this: RTCSrtpSdesTransport, ev: Event) => any) | null;
     readonly transport: RTCIceTransport;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof RTCSrtpSdesTransportEventMap>(type: K, listener: (this: RTCSrtpSdesTransport, ev: RTCSrtpSdesTransportEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15143,8 +15296,8 @@ declare var RTCSsrcConflictEvent: {
 }
 
 interface RTCStatsProvider extends EventTarget {
-    getStats(): PromiseLike<RTCStatsReport>;
-    msGetStats(): PromiseLike<RTCStatsReport>;
+    getStats(): Promise<RTCStatsReport>;
+    msGetStats(): Promise<RTCStatsReport>;
 }
 
 declare var RTCStatsProvider: {
@@ -15166,7 +15319,7 @@ interface Range {
     createContextualFragment(fragment: string): DocumentFragment;
     deleteContents(): void;
     detach(): void;
-    expand(Unit: string): boolean;
+    expand(Unit: ExpandGranularity): boolean;
     extractContents(): DocumentFragment;
     getBoundingClientRect(): ClientRect;
     getClientRects(): ClientRectList;
@@ -15196,8 +15349,69 @@ declare var Range: {
     readonly START_TO_START: number;
 }
 
-interface SVGAElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
+interface ReadableStream {
+    readonly locked: boolean;
+    cancel(): Promise<void>;
+    getReader(): ReadableStreamReader;
+}
+
+declare var ReadableStream: {
+    prototype: ReadableStream;
+    new(): ReadableStream;
+}
+
+interface ReadableStreamReader {
+    cancel(): Promise<void>;
+    read(): Promise<any>;
+    releaseLock(): void;
+}
+
+declare var ReadableStreamReader: {
+    prototype: ReadableStreamReader;
+    new(): ReadableStreamReader;
+}
+
+interface Request extends Object, Body {
+    readonly cache: RequestCache;
+    readonly credentials: RequestCredentials;
+    readonly destination: RequestDestination;
+    readonly headers: Headers;
+    readonly integrity: string;
+    readonly keepalive: boolean;
+    readonly method: string;
+    readonly mode: RequestMode;
+    readonly redirect: RequestRedirect;
+    readonly referrer: string;
+    readonly referrerPolicy: ReferrerPolicy;
+    readonly type: RequestType;
+    readonly url: string;
+    clone(): Request;
+}
+
+declare var Request: {
+    prototype: Request;
+    new(input: Request | string, init?: RequestInit): Request;
+}
+
+interface Response extends Object, Body {
+    readonly body: ReadableStream | null;
+    readonly headers: Headers;
+    readonly ok: boolean;
+    readonly status: number;
+    readonly statusText: string;
+    readonly type: ResponseType;
+    readonly url: string;
+    clone(): Response;
+}
+
+declare var Response: {
+    prototype: Response;
+    new(body?: any, init?: ResponseInit): Response;
+}
+
+interface SVGAElement extends SVGGraphicsElement, SVGURIReference {
     readonly target: SVGAnimatedString;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGAElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15350,10 +15564,11 @@ declare var SVGAnimatedTransformList: {
     new(): SVGAnimatedTransformList;
 }
 
-interface SVGCircleElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGCircleElement extends SVGGraphicsElement {
     readonly cx: SVGAnimatedLength;
     readonly cy: SVGAnimatedLength;
     readonly r: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGCircleElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15362,8 +15577,9 @@ declare var SVGCircleElement: {
     new(): SVGCircleElement;
 }
 
-interface SVGClipPathElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGUnitTypes {
+interface SVGClipPathElement extends SVGGraphicsElement, SVGUnitTypes {
     readonly clipPathUnits: SVGAnimatedEnumeration;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGClipPathElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15386,6 +15602,8 @@ interface SVGComponentTransferFunctionElement extends SVGElement {
     readonly SVG_FECOMPONENTTRANSFER_TYPE_LINEAR: number;
     readonly SVG_FECOMPONENTTRANSFER_TYPE_TABLE: number;
     readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGComponentTransferFunctionElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGComponentTransferFunctionElement: {
@@ -15399,7 +15617,8 @@ declare var SVGComponentTransferFunctionElement: {
     readonly SVG_FECOMPONENTTRANSFER_TYPE_UNKNOWN: number;
 }
 
-interface SVGDefsElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGDefsElement extends SVGGraphicsElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGDefsElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15408,7 +15627,8 @@ declare var SVGDefsElement: {
     new(): SVGDefsElement;
 }
 
-interface SVGDescElement extends SVGElement, SVGStylable, SVGLangSpace {
+interface SVGDescElement extends SVGElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGDescElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15417,67 +15637,36 @@ declare var SVGDescElement: {
     new(): SVGDescElement;
 }
 
+interface SVGElementEventMap extends ElementEventMap {
+    "click": MouseEvent;
+    "dblclick": MouseEvent;
+    "focusin": FocusEvent;
+    "focusout": FocusEvent;
+    "load": Event;
+    "mousedown": MouseEvent;
+    "mousemove": MouseEvent;
+    "mouseout": MouseEvent;
+    "mouseover": MouseEvent;
+    "mouseup": MouseEvent;
+}
+
 interface SVGElement extends Element {
-    onclick: (this: this, ev: MouseEvent) => any;
-    ondblclick: (this: this, ev: MouseEvent) => any;
-    onfocusin: (this: this, ev: FocusEvent) => any;
-    onfocusout: (this: this, ev: FocusEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onmousedown: (this: this, ev: MouseEvent) => any;
-    onmousemove: (this: this, ev: MouseEvent) => any;
-    onmouseout: (this: this, ev: MouseEvent) => any;
-    onmouseover: (this: this, ev: MouseEvent) => any;
-    onmouseup: (this: this, ev: MouseEvent) => any;
+    className: any;
+    onclick: (this: SVGElement, ev: MouseEvent) => any;
+    ondblclick: (this: SVGElement, ev: MouseEvent) => any;
+    onfocusin: (this: SVGElement, ev: FocusEvent) => any;
+    onfocusout: (this: SVGElement, ev: FocusEvent) => any;
+    onload: (this: SVGElement, ev: Event) => any;
+    onmousedown: (this: SVGElement, ev: MouseEvent) => any;
+    onmousemove: (this: SVGElement, ev: MouseEvent) => any;
+    onmouseout: (this: SVGElement, ev: MouseEvent) => any;
+    onmouseover: (this: SVGElement, ev: MouseEvent) => any;
+    onmouseup: (this: SVGElement, ev: MouseEvent) => any;
     readonly ownerSVGElement: SVGSVGElement;
+    readonly style: CSSStyleDeclaration;
     readonly viewportElement: SVGElement;
     xmlbase: string;
-    className: any;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focusin", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focusout", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15512,11 +15701,12 @@ declare var SVGElementInstanceList: {
     new(): SVGElementInstanceList;
 }
 
-interface SVGEllipseElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGEllipseElement extends SVGGraphicsElement {
     readonly cx: SVGAnimatedLength;
     readonly cy: SVGAnimatedLength;
     readonly rx: SVGAnimatedLength;
     readonly ry: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGEllipseElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15546,6 +15736,7 @@ interface SVGFEBlendElement extends SVGElement, SVGFilterPrimitiveStandardAttrib
     readonly SVG_FEBLEND_MODE_SCREEN: number;
     readonly SVG_FEBLEND_MODE_SOFT_LIGHT: number;
     readonly SVG_FEBLEND_MODE_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEBlendElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15580,6 +15771,7 @@ interface SVGFEColorMatrixElement extends SVGElement, SVGFilterPrimitiveStandard
     readonly SVG_FECOLORMATRIX_TYPE_MATRIX: number;
     readonly SVG_FECOLORMATRIX_TYPE_SATURATE: number;
     readonly SVG_FECOLORMATRIX_TYPE_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEColorMatrixElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15595,6 +15787,7 @@ declare var SVGFEColorMatrixElement: {
 
 interface SVGFEComponentTransferElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
     readonly in1: SVGAnimatedString;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEComponentTransferElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15618,6 +15811,7 @@ interface SVGFECompositeElement extends SVGElement, SVGFilterPrimitiveStandardAt
     readonly SVG_FECOMPOSITE_OPERATOR_OVER: number;
     readonly SVG_FECOMPOSITE_OPERATOR_UNKNOWN: number;
     readonly SVG_FECOMPOSITE_OPERATOR_XOR: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFECompositeElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15650,6 +15844,7 @@ interface SVGFEConvolveMatrixElement extends SVGElement, SVGFilterPrimitiveStand
     readonly SVG_EDGEMODE_NONE: number;
     readonly SVG_EDGEMODE_UNKNOWN: number;
     readonly SVG_EDGEMODE_WRAP: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEConvolveMatrixElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15668,6 +15863,7 @@ interface SVGFEDiffuseLightingElement extends SVGElement, SVGFilterPrimitiveStan
     readonly kernelUnitLengthX: SVGAnimatedNumber;
     readonly kernelUnitLengthY: SVGAnimatedNumber;
     readonly surfaceScale: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDiffuseLightingElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15687,6 +15883,7 @@ interface SVGFEDisplacementMapElement extends SVGElement, SVGFilterPrimitiveStan
     readonly SVG_CHANNEL_G: number;
     readonly SVG_CHANNEL_R: number;
     readonly SVG_CHANNEL_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDisplacementMapElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15703,6 +15900,8 @@ declare var SVGFEDisplacementMapElement: {
 interface SVGFEDistantLightElement extends SVGElement {
     readonly azimuth: SVGAnimatedNumber;
     readonly elevation: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEDistantLightElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEDistantLightElement: {
@@ -15711,6 +15910,7 @@ declare var SVGFEDistantLightElement: {
 }
 
 interface SVGFEFloodElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEFloodElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15720,6 +15920,8 @@ declare var SVGFEFloodElement: {
 }
 
 interface SVGFEFuncAElement extends SVGComponentTransferFunctionElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEFuncAElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEFuncAElement: {
@@ -15728,6 +15930,8 @@ declare var SVGFEFuncAElement: {
 }
 
 interface SVGFEFuncBElement extends SVGComponentTransferFunctionElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEFuncBElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEFuncBElement: {
@@ -15736,6 +15940,8 @@ declare var SVGFEFuncBElement: {
 }
 
 interface SVGFEFuncGElement extends SVGComponentTransferFunctionElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEFuncGElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEFuncGElement: {
@@ -15744,6 +15950,8 @@ declare var SVGFEFuncGElement: {
 }
 
 interface SVGFEFuncRElement extends SVGComponentTransferFunctionElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEFuncRElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEFuncRElement: {
@@ -15756,6 +15964,7 @@ interface SVGFEGaussianBlurElement extends SVGElement, SVGFilterPrimitiveStandar
     readonly stdDeviationX: SVGAnimatedNumber;
     readonly stdDeviationY: SVGAnimatedNumber;
     setStdDeviation(stdDeviationX: number, stdDeviationY: number): void;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEGaussianBlurElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15764,8 +15973,9 @@ declare var SVGFEGaussianBlurElement: {
     new(): SVGFEGaussianBlurElement;
 }
 
-interface SVGFEImageElement extends SVGElement, SVGFilterPrimitiveStandardAttributes, SVGLangSpace, SVGURIReference, SVGExternalResourcesRequired {
+interface SVGFEImageElement extends SVGElement, SVGFilterPrimitiveStandardAttributes, SVGURIReference {
     readonly preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEImageElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15775,6 +15985,7 @@ declare var SVGFEImageElement: {
 }
 
 interface SVGFEMergeElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEMergeElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15785,6 +15996,8 @@ declare var SVGFEMergeElement: {
 
 interface SVGFEMergeNodeElement extends SVGElement {
     readonly in1: SVGAnimatedString;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEMergeNodeElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEMergeNodeElement: {
@@ -15800,6 +16013,7 @@ interface SVGFEMorphologyElement extends SVGElement, SVGFilterPrimitiveStandardA
     readonly SVG_MORPHOLOGY_OPERATOR_DILATE: number;
     readonly SVG_MORPHOLOGY_OPERATOR_ERODE: number;
     readonly SVG_MORPHOLOGY_OPERATOR_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEMorphologyElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15815,6 +16029,7 @@ interface SVGFEOffsetElement extends SVGElement, SVGFilterPrimitiveStandardAttri
     readonly dx: SVGAnimatedNumber;
     readonly dy: SVGAnimatedNumber;
     readonly in1: SVGAnimatedString;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEOffsetElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15827,6 +16042,8 @@ interface SVGFEPointLightElement extends SVGElement {
     readonly x: SVGAnimatedNumber;
     readonly y: SVGAnimatedNumber;
     readonly z: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFEPointLightElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFEPointLightElement: {
@@ -15841,6 +16058,7 @@ interface SVGFESpecularLightingElement extends SVGElement, SVGFilterPrimitiveSta
     readonly specularConstant: SVGAnimatedNumber;
     readonly specularExponent: SVGAnimatedNumber;
     readonly surfaceScale: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFESpecularLightingElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15858,6 +16076,8 @@ interface SVGFESpotLightElement extends SVGElement {
     readonly x: SVGAnimatedNumber;
     readonly y: SVGAnimatedNumber;
     readonly z: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFESpotLightElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGFESpotLightElement: {
@@ -15867,6 +16087,7 @@ declare var SVGFESpotLightElement: {
 
 interface SVGFETileElement extends SVGElement, SVGFilterPrimitiveStandardAttributes {
     readonly in1: SVGAnimatedString;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFETileElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15888,6 +16109,7 @@ interface SVGFETurbulenceElement extends SVGElement, SVGFilterPrimitiveStandardA
     readonly SVG_TURBULENCE_TYPE_FRACTALNOISE: number;
     readonly SVG_TURBULENCE_TYPE_TURBULENCE: number;
     readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFETurbulenceElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15902,7 +16124,7 @@ declare var SVGFETurbulenceElement: {
     readonly SVG_TURBULENCE_TYPE_UNKNOWN: number;
 }
 
-interface SVGFilterElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLangSpace, SVGURIReference, SVGExternalResourcesRequired {
+interface SVGFilterElement extends SVGElement, SVGUnitTypes, SVGURIReference {
     readonly filterResX: SVGAnimatedInteger;
     readonly filterResY: SVGAnimatedInteger;
     readonly filterUnits: SVGAnimatedEnumeration;
@@ -15912,6 +16134,7 @@ interface SVGFilterElement extends SVGElement, SVGUnitTypes, SVGStylable, SVGLan
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
     setFilterRes(filterResX: number, filterResY: number): void;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGFilterElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15920,11 +16143,12 @@ declare var SVGFilterElement: {
     new(): SVGFilterElement;
 }
 
-interface SVGForeignObjectElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGForeignObjectElement extends SVGGraphicsElement {
     readonly height: SVGAnimatedLength;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGForeignObjectElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15933,7 +16157,8 @@ declare var SVGForeignObjectElement: {
     new(): SVGForeignObjectElement;
 }
 
-interface SVGGElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGGElement extends SVGGraphicsElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15942,7 +16167,7 @@ declare var SVGGElement: {
     new(): SVGGElement;
 }
 
-interface SVGGradientElement extends SVGElement, SVGStylable, SVGExternalResourcesRequired, SVGURIReference, SVGUnitTypes {
+interface SVGGradientElement extends SVGElement, SVGUnitTypes, SVGURIReference {
     readonly gradientTransform: SVGAnimatedTransformList;
     readonly gradientUnits: SVGAnimatedEnumeration;
     readonly spreadMethod: SVGAnimatedEnumeration;
@@ -15950,6 +16175,7 @@ interface SVGGradientElement extends SVGElement, SVGStylable, SVGExternalResourc
     readonly SVG_SPREADMETHOD_REFLECT: number;
     readonly SVG_SPREADMETHOD_REPEAT: number;
     readonly SVG_SPREADMETHOD_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGradientElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -15962,12 +16188,30 @@ declare var SVGGradientElement: {
     readonly SVG_SPREADMETHOD_UNKNOWN: number;
 }
 
-interface SVGImageElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
+interface SVGGraphicsElement extends SVGElement, SVGTests {
+    readonly farthestViewportElement: SVGElement;
+    readonly nearestViewportElement: SVGElement;
+    readonly transform: SVGAnimatedTransformList;
+    getBBox(): SVGRect;
+    getCTM(): SVGMatrix;
+    getScreenCTM(): SVGMatrix;
+    getTransformToElement(element: SVGElement): SVGMatrix;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGraphicsElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var SVGGraphicsElement: {
+    prototype: SVGGraphicsElement;
+    new(): SVGGraphicsElement;
+}
+
+interface SVGImageElement extends SVGGraphicsElement, SVGURIReference {
     readonly height: SVGAnimatedLength;
     readonly preserveAspectRatio: SVGAnimatedPreserveAspectRatio;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGImageElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16028,11 +16272,12 @@ declare var SVGLengthList: {
     new(): SVGLengthList;
 }
 
-interface SVGLineElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGLineElement extends SVGGraphicsElement {
     readonly x1: SVGAnimatedLength;
     readonly x2: SVGAnimatedLength;
     readonly y1: SVGAnimatedLength;
     readonly y2: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGLineElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16046,6 +16291,8 @@ interface SVGLinearGradientElement extends SVGGradientElement {
     readonly x2: SVGAnimatedLength;
     readonly y1: SVGAnimatedLength;
     readonly y2: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGLinearGradientElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGLinearGradientElement: {
@@ -16053,7 +16300,7 @@ declare var SVGLinearGradientElement: {
     new(): SVGLinearGradientElement;
 }
 
-interface SVGMarkerElement extends SVGElement, SVGStylable, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox {
+interface SVGMarkerElement extends SVGElement, SVGFitToViewBox {
     readonly markerHeight: SVGAnimatedLength;
     readonly markerUnits: SVGAnimatedEnumeration;
     readonly markerWidth: SVGAnimatedLength;
@@ -16069,6 +16316,7 @@ interface SVGMarkerElement extends SVGElement, SVGStylable, SVGLangSpace, SVGExt
     readonly SVG_MARKER_ORIENT_ANGLE: number;
     readonly SVG_MARKER_ORIENT_AUTO: number;
     readonly SVG_MARKER_ORIENT_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMarkerElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16083,13 +16331,14 @@ declare var SVGMarkerElement: {
     readonly SVG_MARKER_ORIENT_UNKNOWN: number;
 }
 
-interface SVGMaskElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGUnitTypes {
+interface SVGMaskElement extends SVGElement, SVGTests, SVGUnitTypes {
     readonly height: SVGAnimatedLength;
     readonly maskContentUnits: SVGAnimatedEnumeration;
     readonly maskUnits: SVGAnimatedEnumeration;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMaskElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16124,6 +16373,8 @@ declare var SVGMatrix: {
 }
 
 interface SVGMetadataElement extends SVGElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGMetadataElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGMetadataElement: {
@@ -16156,7 +16407,8 @@ declare var SVGNumberList: {
     new(): SVGNumberList;
 }
 
-interface SVGPathElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGAnimatedPathData {
+interface SVGPathElement extends SVGGraphicsElement {
+    readonly pathSegList: SVGPathSegList;
     createSVGPathSegArcAbs(x: number, y: number, r1: number, r2: number, angle: number, largeArcFlag: boolean, sweepFlag: boolean): SVGPathSegArcAbs;
     createSVGPathSegArcRel(x: number, y: number, r1: number, r2: number, angle: number, largeArcFlag: boolean, sweepFlag: boolean): SVGPathSegArcRel;
     createSVGPathSegClosePath(): SVGPathSegClosePath;
@@ -16179,6 +16431,7 @@ interface SVGPathElement extends SVGElement, SVGStylable, SVGTransformable, SVGT
     getPathSegAtLength(distance: number): number;
     getPointAtLength(distance: number): SVGPoint;
     getTotalLength(): number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPathElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16463,7 +16716,7 @@ declare var SVGPathSegMovetoRel: {
     new(): SVGPathSegMovetoRel;
 }
 
-interface SVGPatternElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox, SVGURIReference, SVGUnitTypes {
+interface SVGPatternElement extends SVGElement, SVGTests, SVGUnitTypes, SVGFitToViewBox, SVGURIReference {
     readonly height: SVGAnimatedLength;
     readonly patternContentUnits: SVGAnimatedEnumeration;
     readonly patternTransform: SVGAnimatedTransformList;
@@ -16471,6 +16724,7 @@ interface SVGPatternElement extends SVGElement, SVGStylable, SVGTests, SVGLangSp
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPatternElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16506,7 +16760,8 @@ declare var SVGPointList: {
     new(): SVGPointList;
 }
 
-interface SVGPolygonElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGAnimatedPoints {
+interface SVGPolygonElement extends SVGGraphicsElement, SVGAnimatedPoints {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolygonElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16515,7 +16770,8 @@ declare var SVGPolygonElement: {
     new(): SVGPolygonElement;
 }
 
-interface SVGPolylineElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGAnimatedPoints {
+interface SVGPolylineElement extends SVGGraphicsElement, SVGAnimatedPoints {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolylineElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16568,6 +16824,8 @@ interface SVGRadialGradientElement extends SVGGradientElement {
     readonly fx: SVGAnimatedLength;
     readonly fy: SVGAnimatedLength;
     readonly r: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGRadialGradientElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGRadialGradientElement: {
@@ -16587,13 +16845,14 @@ declare var SVGRect: {
     new(): SVGRect;
 }
 
-interface SVGRectElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGRectElement extends SVGGraphicsElement {
     readonly height: SVGAnimatedLength;
     readonly rx: SVGAnimatedLength;
     readonly ry: SVGAnimatedLength;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGRectElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16602,18 +16861,27 @@ declare var SVGRectElement: {
     new(): SVGRectElement;
 }
 
-interface SVGSVGElement extends SVGElement, DocumentEvent, SVGLocatable, SVGTests, SVGStylable, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox, SVGZoomAndPan {
+interface SVGSVGElementEventMap extends SVGElementEventMap {
+    "SVGAbort": Event;
+    "SVGError": Event;
+    "resize": UIEvent;
+    "scroll": UIEvent;
+    "SVGUnload": Event;
+    "SVGZoom": SVGZoomEvent;
+}
+
+interface SVGSVGElement extends SVGGraphicsElement, DocumentEvent, SVGFitToViewBox, SVGZoomAndPan {
     contentScriptType: string;
     contentStyleType: string;
     currentScale: number;
     readonly currentTranslate: SVGPoint;
     readonly height: SVGAnimatedLength;
-    onabort: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: Event) => any;
-    onresize: (this: this, ev: UIEvent) => any;
-    onscroll: (this: this, ev: UIEvent) => any;
-    onunload: (this: this, ev: Event) => any;
-    onzoom: (this: this, ev: SVGZoomEvent) => any;
+    onabort: (this: SVGSVGElement, ev: Event) => any;
+    onerror: (this: SVGSVGElement, ev: Event) => any;
+    onresize: (this: SVGSVGElement, ev: UIEvent) => any;
+    onscroll: (this: SVGSVGElement, ev: UIEvent) => any;
+    onunload: (this: SVGSVGElement, ev: Event) => any;
+    onzoom: (this: SVGSVGElement, ev: SVGZoomEvent) => any;
     readonly pixelUnitToMillimeterX: number;
     readonly pixelUnitToMillimeterY: number;
     readonly screenPixelToMillimeterX: number;
@@ -16645,58 +16913,7 @@ interface SVGSVGElement extends SVGElement, DocumentEvent, SVGLocatable, SVGTest
     unpauseAnimations(): void;
     unsuspendRedraw(suspendHandleID: number): void;
     unsuspendRedrawAll(): void;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGotPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSLostPointerCapture", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "SVGAbort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "SVGError", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "SVGUnload", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "SVGZoom", listener: (this: this, ev: SVGZoomEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ariarequest", listener: (this: this, ev: AriaRequestEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "command", listener: (this: this, ev: CommandEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focusin", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focusout", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "gotpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "lostpointercapture", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "resize", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchcancel", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchend", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchmove", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "touchstart", listener: (this: this, ev: TouchEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "webkitfullscreenerror", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof SVGSVGElementEventMap>(type: K, listener: (this: SVGSVGElement, ev: SVGSVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16705,8 +16922,9 @@ declare var SVGSVGElement: {
     new(): SVGSVGElement;
 }
 
-interface SVGScriptElement extends SVGElement, SVGExternalResourcesRequired, SVGURIReference {
+interface SVGScriptElement extends SVGElement, SVGURIReference {
     type: string;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGScriptElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16715,8 +16933,9 @@ declare var SVGScriptElement: {
     new(): SVGScriptElement;
 }
 
-interface SVGStopElement extends SVGElement, SVGStylable {
+interface SVGStopElement extends SVGElement {
     readonly offset: SVGAnimatedNumber;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGStopElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16741,11 +16960,12 @@ declare var SVGStringList: {
     new(): SVGStringList;
 }
 
-interface SVGStyleElement extends SVGElement, SVGLangSpace {
+interface SVGStyleElement extends SVGElement {
     disabled: boolean;
     media: string;
     title: string;
     type: string;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGStyleElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16754,7 +16974,8 @@ declare var SVGStyleElement: {
     new(): SVGStyleElement;
 }
 
-interface SVGSwitchElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGSwitchElement extends SVGGraphicsElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSwitchElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16763,7 +16984,8 @@ declare var SVGSwitchElement: {
     new(): SVGSwitchElement;
 }
 
-interface SVGSymbolElement extends SVGElement, SVGStylable, SVGLangSpace, SVGExternalResourcesRequired, SVGFitToViewBox {
+interface SVGSymbolElement extends SVGElement, SVGFitToViewBox {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGSymbolElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16773,6 +16995,8 @@ declare var SVGSymbolElement: {
 }
 
 interface SVGTSpanElement extends SVGTextPositioningElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTSpanElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGTSpanElement: {
@@ -16780,7 +17004,7 @@ declare var SVGTSpanElement: {
     new(): SVGTSpanElement;
 }
 
-interface SVGTextContentElement extends SVGElement, SVGStylable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired {
+interface SVGTextContentElement extends SVGGraphicsElement {
     readonly lengthAdjust: SVGAnimatedEnumeration;
     readonly textLength: SVGAnimatedLength;
     getCharNumAtPosition(point: SVGPoint): number;
@@ -16795,6 +17019,7 @@ interface SVGTextContentElement extends SVGElement, SVGStylable, SVGTests, SVGLa
     readonly LENGTHADJUST_SPACING: number;
     readonly LENGTHADJUST_SPACINGANDGLYPHS: number;
     readonly LENGTHADJUST_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextContentElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16806,7 +17031,8 @@ declare var SVGTextContentElement: {
     readonly LENGTHADJUST_UNKNOWN: number;
 }
 
-interface SVGTextElement extends SVGTextPositioningElement, SVGTransformable {
+interface SVGTextElement extends SVGTextPositioningElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16825,6 +17051,7 @@ interface SVGTextPathElement extends SVGTextContentElement, SVGURIReference {
     readonly TEXTPATH_SPACINGTYPE_AUTO: number;
     readonly TEXTPATH_SPACINGTYPE_EXACT: number;
     readonly TEXTPATH_SPACINGTYPE_UNKNOWN: number;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextPathElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16845,6 +17072,8 @@ interface SVGTextPositioningElement extends SVGTextContentElement {
     readonly rotate: SVGAnimatedNumberList;
     readonly x: SVGAnimatedLengthList;
     readonly y: SVGAnimatedLengthList;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTextPositioningElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var SVGTextPositioningElement: {
@@ -16852,7 +17081,8 @@ declare var SVGTextPositioningElement: {
     new(): SVGTextPositioningElement;
 }
 
-interface SVGTitleElement extends SVGElement, SVGStylable, SVGLangSpace {
+interface SVGTitleElement extends SVGElement {
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGTitleElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16917,13 +17147,14 @@ interface SVGUnitTypes {
 }
 declare var SVGUnitTypes: SVGUnitTypes;
 
-interface SVGUseElement extends SVGElement, SVGStylable, SVGTransformable, SVGTests, SVGLangSpace, SVGExternalResourcesRequired, SVGURIReference {
+interface SVGUseElement extends SVGGraphicsElement, SVGURIReference {
     readonly animatedInstanceRoot: SVGElementInstance;
     readonly height: SVGAnimatedLength;
     readonly instanceRoot: SVGElementInstance;
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGUseElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16932,8 +17163,9 @@ declare var SVGUseElement: {
     new(): SVGUseElement;
 }
 
-interface SVGViewElement extends SVGElement, SVGExternalResourcesRequired, SVGFitToViewBox, SVGZoomAndPan {
+interface SVGViewElement extends SVGElement, SVGZoomAndPan, SVGFitToViewBox {
     readonly viewTarget: SVGStringList;
+    addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGViewElement, ev: SVGElementEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -16965,6 +17197,30 @@ declare var SVGZoomEvent: {
     new(): SVGZoomEvent;
 }
 
+interface ScopedCredential {
+    readonly id: ArrayBuffer;
+    readonly type: ScopedCredentialType;
+}
+
+declare var ScopedCredential: {
+    prototype: ScopedCredential;
+    new(): ScopedCredential;
+}
+
+interface ScopedCredentialInfo {
+    readonly credential: ScopedCredential;
+    readonly publicKey: CryptoKey;
+}
+
+declare var ScopedCredentialInfo: {
+    prototype: ScopedCredentialInfo;
+    new(): ScopedCredentialInfo;
+}
+
+interface ScreenEventMap {
+    "MSOrientationChange": Event;
+}
+
 interface Screen extends EventTarget {
     readonly availHeight: number;
     readonly availWidth: number;
@@ -16977,14 +17233,14 @@ interface Screen extends EventTarget {
     readonly logicalXDPI: number;
     readonly logicalYDPI: number;
     readonly msOrientation: string;
-    onmsorientationchange: (this: this, ev: Event) => any;
+    onmsorientationchange: (this: Screen, ev: Event) => any;
     readonly pixelDepth: number;
     readonly systemXDPI: number;
     readonly systemYDPI: number;
     readonly width: number;
     msLockOrientation(orientations: string | string[]): boolean;
     msUnlockOrientation(): void;
-    addEventListener(type: "MSOrientationChange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof ScreenEventMap>(type: K, listener: (this: Screen, ev: ScreenEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -17003,10 +17259,14 @@ declare var ScriptNotifyEvent: {
     new(): ScriptNotifyEvent;
 }
 
+interface ScriptProcessorNodeEventMap {
+    "audioprocess": AudioProcessingEvent;
+}
+
 interface ScriptProcessorNode extends AudioNode {
     readonly bufferSize: number;
-    onaudioprocess: (this: this, ev: AudioProcessingEvent) => any;
-    addEventListener(type: "audioprocess", listener: (this: this, ev: AudioProcessingEvent) => any, useCapture?: boolean): void;
+    onaudioprocess: (this: ScriptProcessorNode, ev: AudioProcessingEvent) => any;
+    addEventListener<K extends keyof ScriptProcessorNodeEventMap>(type: K, listener: (this: ScriptProcessorNode, ev: ScriptProcessorNodeEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -17018,6 +17278,10 @@ declare var ScriptProcessorNode: {
 interface Selection {
     readonly anchorNode: Node;
     readonly anchorOffset: number;
+    readonly baseNode: Node;
+    readonly baseOffset: number;
+    readonly extentNode: Node;
+    readonly extentOffset: number;
     readonly focusNode: Node;
     readonly focusOffset: number;
     readonly isCollapsed: boolean;
@@ -17036,6 +17300,7 @@ interface Selection {
     removeRange(range: Range): void;
     selectAllChildren(parentNode: Node): void;
     setBaseAndExtent(baseNode: Node, baseOffset: number, extentNode: Node, extentOffset: number): void;
+    setPosition(parentNode: Node, offset: number): void;
     toString(): string;
 }
 
@@ -17044,12 +17309,90 @@ declare var Selection: {
     new(): Selection;
 }
 
+interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
+    "statechange": Event;
+}
+
+interface ServiceWorker extends EventTarget, AbstractWorker {
+    onstatechange: (this: ServiceWorker, ev: Event) => any;
+    readonly scriptURL: USVString;
+    readonly state: ServiceWorkerState;
+    postMessage(message: any, transfer?: any[]): void;
+    addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var ServiceWorker: {
+    prototype: ServiceWorker;
+    new(): ServiceWorker;
+}
+
+interface ServiceWorkerContainerEventMap {
+    "controllerchange": Event;
+    "message": ServiceWorkerMessageEvent;
+}
+
+interface ServiceWorkerContainer extends EventTarget {
+    readonly controller: ServiceWorker | null;
+    oncontrollerchange: (this: ServiceWorkerContainer, ev: Event) => any;
+    onmessage: (this: ServiceWorkerContainer, ev: ServiceWorkerMessageEvent) => any;
+    readonly ready: Promise<ServiceWorkerRegistration>;
+    getRegistration(clientURL?: USVString): Promise<any>;
+    getRegistrations(): any;
+    register(scriptURL: USVString, options?: RegistrationOptions): Promise<ServiceWorkerRegistration>;
+    addEventListener<K extends keyof ServiceWorkerContainerEventMap>(type: K, listener: (this: ServiceWorkerContainer, ev: ServiceWorkerContainerEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var ServiceWorkerContainer: {
+    prototype: ServiceWorkerContainer;
+    new(): ServiceWorkerContainer;
+}
+
+interface ServiceWorkerMessageEvent extends Event {
+    readonly data: any;
+    readonly lastEventId: string;
+    readonly origin: string;
+    readonly ports: MessagePort[] | null;
+    readonly source: ServiceWorker | MessagePort | null;
+}
+
+declare var ServiceWorkerMessageEvent: {
+    prototype: ServiceWorkerMessageEvent;
+    new(type: string, eventInitDict?: ServiceWorkerMessageEventInit): ServiceWorkerMessageEvent;
+}
+
+interface ServiceWorkerRegistrationEventMap {
+    "updatefound": Event;
+}
+
+interface ServiceWorkerRegistration extends EventTarget {
+    readonly active: ServiceWorker | null;
+    readonly installing: ServiceWorker | null;
+    onupdatefound: (this: ServiceWorkerRegistration, ev: Event) => any;
+    readonly pushManager: PushManager;
+    readonly scope: USVString;
+    readonly sync: SyncManager;
+    readonly waiting: ServiceWorker | null;
+    getNotifications(filter?: GetNotificationOptions): any;
+    showNotification(title: string, options?: NotificationOptions): Promise<void>;
+    unregister(): Promise<boolean>;
+    update(): Promise<void>;
+    addEventListener<K extends keyof ServiceWorkerRegistrationEventMap>(type: K, listener: (this: ServiceWorkerRegistration, ev: ServiceWorkerRegistrationEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var ServiceWorkerRegistration: {
+    prototype: ServiceWorkerRegistration;
+    new(): ServiceWorkerRegistration;
+}
+
 interface SourceBuffer extends EventTarget {
     appendWindowEnd: number;
     appendWindowStart: number;
     readonly audioTracks: AudioTrackList;
     readonly buffered: TimeRanges;
-    mode: string;
+    mode: AppendMode;
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
@@ -17075,6 +17418,87 @@ declare var SourceBufferList: {
     new(): SourceBufferList;
 }
 
+interface SpeechSynthesisEventMap {
+    "voiceschanged": Event;
+}
+
+interface SpeechSynthesis extends EventTarget {
+    onvoiceschanged: (this: SpeechSynthesis, ev: Event) => any;
+    readonly paused: boolean;
+    readonly pending: boolean;
+    readonly speaking: boolean;
+    cancel(): void;
+    getVoices(): SpeechSynthesisVoice[];
+    pause(): void;
+    resume(): void;
+    speak(utterance: SpeechSynthesisUtterance): void;
+    addEventListener<K extends keyof SpeechSynthesisEventMap>(type: K, listener: (this: SpeechSynthesis, ev: SpeechSynthesisEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var SpeechSynthesis: {
+    prototype: SpeechSynthesis;
+    new(): SpeechSynthesis;
+}
+
+interface SpeechSynthesisEvent extends Event {
+    readonly charIndex: number;
+    readonly elapsedTime: number;
+    readonly name: string;
+    readonly utterance: SpeechSynthesisUtterance | null;
+}
+
+declare var SpeechSynthesisEvent: {
+    prototype: SpeechSynthesisEvent;
+    new(type: string, eventInitDict?: SpeechSynthesisEventInit): SpeechSynthesisEvent;
+}
+
+interface SpeechSynthesisUtteranceEventMap {
+    "boundary": Event;
+    "end": Event;
+    "error": Event;
+    "mark": Event;
+    "pause": Event;
+    "resume": Event;
+    "start": Event;
+}
+
+interface SpeechSynthesisUtterance extends EventTarget {
+    lang: string;
+    onboundary: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onend: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onerror: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onmark: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onpause: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onresume: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    onstart: (this: SpeechSynthesisUtterance, ev: Event) => any;
+    pitch: number;
+    rate: number;
+    text: string;
+    voice: SpeechSynthesisVoice;
+    volume: number;
+    addEventListener<K extends keyof SpeechSynthesisUtteranceEventMap>(type: K, listener: (this: SpeechSynthesisUtterance, ev: SpeechSynthesisUtteranceEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var SpeechSynthesisUtterance: {
+    prototype: SpeechSynthesisUtterance;
+    new(text?: string): SpeechSynthesisUtterance;
+}
+
+interface SpeechSynthesisVoice {
+    readonly default: boolean;
+    readonly lang: string;
+    readonly localService: boolean;
+    readonly name: string;
+    readonly voiceURI: string;
+}
+
+declare var SpeechSynthesisVoice: {
+    prototype: SpeechSynthesisVoice;
+    new(): SpeechSynthesisVoice;
+}
+
 interface StereoPannerNode extends AudioNode {
     readonly pan: AudioParam;
 }
@@ -17087,8 +17511,8 @@ declare var StereoPannerNode: {
 interface Storage {
     readonly length: number;
     clear(): void;
-    getItem(key: string): string;
-    key(index: number): string;
+    getItem(key: string): string | null;
+    key(index: number): string | null;
     removeItem(key: string): void;
     setItem(key: string, data: string): void;
     [key: string]: any;
@@ -17186,14 +17610,25 @@ declare var SubtleCrypto: {
     new(): SubtleCrypto;
 }
 
+interface SyncManager {
+    getTags(): any;
+    register(tag: string): Promise<void>;
+}
+
+declare var SyncManager: {
+    prototype: SyncManager;
+    new(): SyncManager;
+}
+
 interface Text extends CharacterData {
     readonly wholeText: string;
+    readonly assignedSlot: HTMLSlotElement | null;
     splitText(offset: number): Text;
 }
 
 declare var Text: {
     prototype: Text;
-    new(): Text;
+    new(data?: string): Text;
 }
 
 interface TextEvent extends UIEvent {
@@ -17237,6 +17672,12 @@ declare var TextMetrics: {
     new(): TextMetrics;
 }
 
+interface TextTrackEventMap {
+    "cuechange": Event;
+    "error": Event;
+    "load": Event;
+}
+
 interface TextTrack extends EventTarget {
     readonly activeCues: TextTrackCueList;
     readonly cues: TextTrackCueList;
@@ -17245,9 +17686,9 @@ interface TextTrack extends EventTarget {
     readonly label: string;
     readonly language: string;
     mode: any;
-    oncuechange: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onload: (this: this, ev: Event) => any;
+    oncuechange: (this: TextTrack, ev: Event) => any;
+    onerror: (this: TextTrack, ev: Event) => any;
+    onload: (this: TextTrack, ev: Event) => any;
     readonly readyState: number;
     addCue(cue: TextTrackCue): void;
     removeCue(cue: TextTrackCue): void;
@@ -17258,9 +17699,7 @@ interface TextTrack extends EventTarget {
     readonly LOADING: number;
     readonly NONE: number;
     readonly SHOWING: number;
-    addEventListener(type: "cuechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof TextTrackEventMap>(type: K, listener: (this: TextTrack, ev: TextTrackEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -17276,18 +17715,22 @@ declare var TextTrack: {
     readonly SHOWING: number;
 }
 
+interface TextTrackCueEventMap {
+    "enter": Event;
+    "exit": Event;
+}
+
 interface TextTrackCue extends EventTarget {
     endTime: number;
     id: string;
-    onenter: (this: this, ev: Event) => any;
-    onexit: (this: this, ev: Event) => any;
+    onenter: (this: TextTrackCue, ev: Event) => any;
+    onexit: (this: TextTrackCue, ev: Event) => any;
     pauseOnExit: boolean;
     startTime: number;
     text: string;
     readonly track: TextTrack;
     getCueAsHTML(): DocumentFragment;
-    addEventListener(type: "enter", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "exit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof TextTrackCueEventMap>(type: K, listener: (this: TextTrackCue, ev: TextTrackCueEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -17308,11 +17751,15 @@ declare var TextTrackCueList: {
     new(): TextTrackCueList;
 }
 
+interface TextTrackListEventMap {
+    "addtrack": TrackEvent;
+}
+
 interface TextTrackList extends EventTarget {
     readonly length: number;
-    onaddtrack: ((this: this, ev: TrackEvent) => any) | null;
+    onaddtrack: ((this: TextTrackList, ev: TrackEvent) => any) | null;
     item(index: number): TextTrack;
-    addEventListener(type: "addtrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof TextTrackListEventMap>(type: K, listener: (this: TextTrackList, ev: TextTrackListEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [index: number]: TextTrack;
 }
@@ -17352,16 +17799,19 @@ declare var Touch: {
 interface TouchEvent extends UIEvent {
     readonly altKey: boolean;
     readonly changedTouches: TouchList;
+    readonly charCode: number;
     readonly ctrlKey: boolean;
+    readonly keyCode: number;
     readonly metaKey: boolean;
     readonly shiftKey: boolean;
     readonly targetTouches: TouchList;
     readonly touches: TouchList;
+    readonly which: number;
 }
 
 declare var TouchEvent: {
     prototype: TouchEvent;
-    new(): TouchEvent;
+    new(type: string, touchEventInit?: TouchEventInit): TouchEvent;
 }
 
 interface TouchList {
@@ -17376,12 +17826,12 @@ declare var TouchList: {
 }
 
 interface TrackEvent extends Event {
-    readonly track: any;
+    readonly track: VideoTrack | AudioTrack | TextTrack | null;
 }
 
 declare var TrackEvent: {
     prototype: TrackEvent;
-    new(): TrackEvent;
+    new(typeArg: string, eventInitDict?: TrackEventInit): TrackEvent;
 }
 
 interface TransitionEvent extends Event {
@@ -17392,7 +17842,7 @@ interface TransitionEvent extends Event {
 
 declare var TransitionEvent: {
     prototype: TransitionEvent;
-    new(): TransitionEvent;
+    new(typeArg: string, eventInitDict?: TransitionEventInit): TransitionEvent;
 }
 
 interface TreeWalker {
@@ -17423,7 +17873,7 @@ interface UIEvent extends Event {
 
 declare var UIEvent: {
     prototype: UIEvent;
-    new(type: string, eventInitDict?: UIEventInit): UIEvent;
+    new(typeArg: string, eventInitDict?: UIEventInit): UIEvent;
 }
 
 interface URL {
@@ -17438,6 +17888,7 @@ interface URL {
     protocol: string;
     search: string;
     username: string;
+    readonly searchParams: URLSearchParams;
     toString(): string;
 }
 
@@ -17502,17 +17953,21 @@ declare var VideoTrack: {
     new(): VideoTrack;
 }
 
+interface VideoTrackListEventMap {
+    "addtrack": TrackEvent;
+    "change": Event;
+    "removetrack": TrackEvent;
+}
+
 interface VideoTrackList extends EventTarget {
     readonly length: number;
-    onaddtrack: (this: this, ev: TrackEvent) => any;
-    onchange: (this: this, ev: Event) => any;
-    onremovetrack: (this: this, ev: TrackEvent) => any;
+    onaddtrack: (this: VideoTrackList, ev: TrackEvent) => any;
+    onchange: (this: VideoTrackList, ev: Event) => any;
+    onremovetrack: (this: VideoTrackList, ev: TrackEvent) => any;
     readonly selectedIndex: number;
     getTrackById(id: string): VideoTrack | null;
     item(index: number): VideoTrack;
-    addEventListener(type: "addtrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "removetrack", listener: (this: this, ev: TrackEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof VideoTrackListEventMap>(type: K, listener: (this: VideoTrackList, ev: VideoTrackListEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
     [index: number]: VideoTrack;
 }
@@ -17562,12 +18017,34 @@ declare var WEBGL_depth_texture: {
 
 interface WaveShaperNode extends AudioNode {
     curve: Float32Array | null;
-    oversample: string;
+    oversample: OverSampleType;
 }
 
 declare var WaveShaperNode: {
     prototype: WaveShaperNode;
     new(): WaveShaperNode;
+}
+
+interface WebAuthentication {
+    getAssertion(assertionChallenge: any, options?: AssertionOptions): Promise<WebAuthnAssertion>;
+    makeCredential(accountInformation: Account, cryptoParameters: ScopedCredentialParameters[], attestationChallenge: any, options?: ScopedCredentialOptions): Promise<ScopedCredentialInfo>;
+}
+
+declare var WebAuthentication: {
+    prototype: WebAuthentication;
+    new(): WebAuthentication;
+}
+
+interface WebAuthnAssertion {
+    readonly authenticatorData: ArrayBuffer;
+    readonly clientData: ArrayBuffer;
+    readonly credential: ScopedCredential;
+    readonly signature: ArrayBuffer;
+}
+
+declare var WebAuthnAssertion: {
+    prototype: WebAuthnAssertion;
+    new(): WebAuthnAssertion;
 }
 
 interface WebGLActiveInfo {
@@ -17595,7 +18072,7 @@ interface WebGLContextEvent extends Event {
 
 declare var WebGLContextEvent: {
     prototype: WebGLContextEvent;
-    new(type: string, eventInitDict?: WebGLContextEventInit): WebGLContextEvent;
+    new(typeArg: string, eventInitDict?: WebGLContextEventInit): WebGLContextEvent;
 }
 
 interface WebGLFramebuffer extends WebGLObject {
@@ -17722,7 +18199,7 @@ interface WebGLRenderingContext {
     isTexture(texture: WebGLTexture | null): boolean;
     lineWidth(width: number): void;
     linkProgram(program: WebGLProgram | null): void;
-    pixelStorei(pname: number, param: number): void;
+    pixelStorei(pname: number, param: number | boolean): void;
     polygonOffset(factor: number, units: number): void;
     readPixels(x: number, y: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
     renderbufferStorage(target: number, internalformat: number, width: number, height: number): void;
@@ -17735,12 +18212,12 @@ interface WebGLRenderingContext {
     stencilMaskSeparate(face: number, mask: number): void;
     stencilOp(fail: number, zfail: number, zpass: number): void;
     stencilOpSeparate(face: number, fail: number, zfail: number, zpass: number): void;
-    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels?: ArrayBufferView): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
+    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels: ArrayBufferView | null): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     texParameterf(target: number, pname: number, param: number): void;
     texParameteri(target: number, pname: number, param: number): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels?: ArrayBufferView): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
@@ -18448,6 +18925,56 @@ declare var WebKitCSSMatrix: {
     new(text?: string): WebKitCSSMatrix;
 }
 
+interface WebKitDirectoryEntry extends WebKitEntry {
+    createReader(): WebKitDirectoryReader;
+}
+
+declare var WebKitDirectoryEntry: {
+    prototype: WebKitDirectoryEntry;
+    new(): WebKitDirectoryEntry;
+}
+
+interface WebKitDirectoryReader {
+    readEntries(successCallback: WebKitEntriesCallback, errorCallback?: WebKitErrorCallback): void;
+}
+
+declare var WebKitDirectoryReader: {
+    prototype: WebKitDirectoryReader;
+    new(): WebKitDirectoryReader;
+}
+
+interface WebKitEntry {
+    readonly filesystem: WebKitFileSystem;
+    readonly fullPath: string;
+    readonly isDirectory: boolean;
+    readonly isFile: boolean;
+    readonly name: string;
+}
+
+declare var WebKitEntry: {
+    prototype: WebKitEntry;
+    new(): WebKitEntry;
+}
+
+interface WebKitFileEntry extends WebKitEntry {
+    file(successCallback: WebKitFileCallback, errorCallback?: WebKitErrorCallback): void;
+}
+
+declare var WebKitFileEntry: {
+    prototype: WebKitFileEntry;
+    new(): WebKitFileEntry;
+}
+
+interface WebKitFileSystem {
+    readonly name: string;
+    readonly root: WebKitDirectoryEntry;
+}
+
+declare var WebKitFileSystem: {
+    prototype: WebKitFileSystem;
+    new(): WebKitFileSystem;
+}
+
 interface WebKitPoint {
     x: number;
     y: number;
@@ -18458,14 +18985,21 @@ declare var WebKitPoint: {
     new(x?: number, y?: number): WebKitPoint;
 }
 
+interface WebSocketEventMap {
+    "close": CloseEvent;
+    "error": Event;
+    "message": MessageEvent;
+    "open": Event;
+}
+
 interface WebSocket extends EventTarget {
     binaryType: string;
     readonly bufferedAmount: number;
     readonly extensions: string;
-    onclose: (this: this, ev: CloseEvent) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onmessage: (this: this, ev: MessageEvent) => any;
-    onopen: (this: this, ev: Event) => any;
+    onclose: (this: WebSocket, ev: CloseEvent) => any;
+    onerror: (this: WebSocket, ev: Event) => any;
+    onmessage: (this: WebSocket, ev: MessageEvent) => any;
+    onopen: (this: WebSocket, ev: Event) => any;
     readonly protocol: string;
     readonly readyState: number;
     readonly url: string;
@@ -18475,10 +19009,7 @@ interface WebSocket extends EventTarget {
     readonly CLOSING: number;
     readonly CONNECTING: number;
     readonly OPEN: number;
-    addEventListener(type: "close", listener: (this: this, ev: CloseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "open", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: WebSocket, ev: WebSocketEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -18514,8 +19045,98 @@ declare var WheelEvent: {
     readonly DOM_DELTA_PIXEL: number;
 }
 
-interface Window extends EventTarget, WindowTimers, WindowSessionStorage, WindowLocalStorage, WindowConsole, GlobalEventHandlers, IDBEnvironment, WindowBase64 {
+interface WindowEventMap extends GlobalEventHandlersEventMap {
+    "abort": UIEvent;
+    "afterprint": Event;
+    "beforeprint": Event;
+    "beforeunload": BeforeUnloadEvent;
+    "blur": FocusEvent;
+    "canplay": Event;
+    "canplaythrough": Event;
+    "change": Event;
+    "click": MouseEvent;
+    "compassneedscalibration": Event;
+    "contextmenu": PointerEvent;
+    "dblclick": MouseEvent;
+    "devicelight": DeviceLightEvent;
+    "devicemotion": DeviceMotionEvent;
+    "deviceorientation": DeviceOrientationEvent;
+    "drag": DragEvent;
+    "dragend": DragEvent;
+    "dragenter": DragEvent;
+    "dragleave": DragEvent;
+    "dragover": DragEvent;
+    "dragstart": DragEvent;
+    "drop": DragEvent;
+    "durationchange": Event;
+    "emptied": Event;
+    "ended": MediaStreamErrorEvent;
+    "focus": FocusEvent;
+    "hashchange": HashChangeEvent;
+    "input": Event;
+    "invalid": Event;
+    "keydown": KeyboardEvent;
+    "keypress": KeyboardEvent;
+    "keyup": KeyboardEvent;
+    "load": Event;
+    "loadeddata": Event;
+    "loadedmetadata": Event;
+    "loadstart": Event;
+    "message": MessageEvent;
+    "mousedown": MouseEvent;
+    "mouseenter": MouseEvent;
+    "mouseleave": MouseEvent;
+    "mousemove": MouseEvent;
+    "mouseout": MouseEvent;
+    "mouseover": MouseEvent;
+    "mouseup": MouseEvent;
+    "mousewheel": WheelEvent;
+    "MSGestureChange": MSGestureEvent;
+    "MSGestureDoubleTap": MSGestureEvent;
+    "MSGestureEnd": MSGestureEvent;
+    "MSGestureHold": MSGestureEvent;
+    "MSGestureStart": MSGestureEvent;
+    "MSGestureTap": MSGestureEvent;
+    "MSInertiaStart": MSGestureEvent;
+    "MSPointerCancel": MSPointerEvent;
+    "MSPointerDown": MSPointerEvent;
+    "MSPointerEnter": MSPointerEvent;
+    "MSPointerLeave": MSPointerEvent;
+    "MSPointerMove": MSPointerEvent;
+    "MSPointerOut": MSPointerEvent;
+    "MSPointerOver": MSPointerEvent;
+    "MSPointerUp": MSPointerEvent;
+    "offline": Event;
+    "online": Event;
+    "orientationchange": Event;
+    "pagehide": PageTransitionEvent;
+    "pageshow": PageTransitionEvent;
+    "pause": Event;
+    "play": Event;
+    "playing": Event;
+    "popstate": PopStateEvent;
+    "progress": ProgressEvent;
+    "ratechange": Event;
+    "readystatechange": ProgressEvent;
+    "reset": Event;
+    "resize": UIEvent;
+    "scroll": UIEvent;
+    "seeked": Event;
+    "seeking": Event;
+    "select": UIEvent;
+    "stalled": Event;
+    "storage": StorageEvent;
+    "submit": Event;
+    "suspend": Event;
+    "timeupdate": Event;
+    "unload": Event;
+    "volumechange": Event;
+    "waiting": Event;
+}
+
+interface Window extends EventTarget, WindowTimers, WindowSessionStorage, WindowLocalStorage, WindowConsole, GlobalEventHandlers, IDBEnvironment, WindowBase64, GlobalFetch {
     readonly applicationCache: ApplicationCache;
+    readonly caches: CacheStorage;
     readonly clientInformation: Navigator;
     readonly closed: boolean;
     readonly crypto: Crypto;
@@ -18523,113 +19144,115 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly devicePixelRatio: number;
     readonly doNotTrack: string;
     readonly document: Document;
-    event: Event;
+    event: Event | undefined;
     readonly external: External;
     readonly frameElement: Element;
     readonly frames: Window;
     readonly history: History;
     readonly innerHeight: number;
     readonly innerWidth: number;
+    readonly isSecureContext: boolean;
     readonly length: number;
     readonly location: Location;
     readonly locationbar: BarProp;
     readonly menubar: BarProp;
+    readonly msContentScript: ExtensionScriptApis;
     readonly msCredentials: MSCredentials;
     name: string;
     readonly navigator: Navigator;
     offscreenBuffering: string | boolean;
-    onabort: (this: this, ev: UIEvent) => any;
-    onafterprint: (this: this, ev: Event) => any;
-    onbeforeprint: (this: this, ev: Event) => any;
-    onbeforeunload: (this: this, ev: BeforeUnloadEvent) => any;
-    onblur: (this: this, ev: FocusEvent) => any;
-    oncanplay: (this: this, ev: Event) => any;
-    oncanplaythrough: (this: this, ev: Event) => any;
-    onchange: (this: this, ev: Event) => any;
-    onclick: (this: this, ev: MouseEvent) => any;
-    oncompassneedscalibration: (this: this, ev: Event) => any;
-    oncontextmenu: (this: this, ev: PointerEvent) => any;
-    ondblclick: (this: this, ev: MouseEvent) => any;
-    ondevicelight: (this: this, ev: DeviceLightEvent) => any;
-    ondevicemotion: (this: this, ev: DeviceMotionEvent) => any;
-    ondeviceorientation: (this: this, ev: DeviceOrientationEvent) => any;
-    ondrag: (this: this, ev: DragEvent) => any;
-    ondragend: (this: this, ev: DragEvent) => any;
-    ondragenter: (this: this, ev: DragEvent) => any;
-    ondragleave: (this: this, ev: DragEvent) => any;
-    ondragover: (this: this, ev: DragEvent) => any;
-    ondragstart: (this: this, ev: DragEvent) => any;
-    ondrop: (this: this, ev: DragEvent) => any;
-    ondurationchange: (this: this, ev: Event) => any;
-    onemptied: (this: this, ev: Event) => any;
-    onended: (this: this, ev: MediaStreamErrorEvent) => any;
+    onabort: (this: Window, ev: UIEvent) => any;
+    onafterprint: (this: Window, ev: Event) => any;
+    onbeforeprint: (this: Window, ev: Event) => any;
+    onbeforeunload: (this: Window, ev: BeforeUnloadEvent) => any;
+    onblur: (this: Window, ev: FocusEvent) => any;
+    oncanplay: (this: Window, ev: Event) => any;
+    oncanplaythrough: (this: Window, ev: Event) => any;
+    onchange: (this: Window, ev: Event) => any;
+    onclick: (this: Window, ev: MouseEvent) => any;
+    oncompassneedscalibration: (this: Window, ev: Event) => any;
+    oncontextmenu: (this: Window, ev: PointerEvent) => any;
+    ondblclick: (this: Window, ev: MouseEvent) => any;
+    ondevicelight: (this: Window, ev: DeviceLightEvent) => any;
+    ondevicemotion: (this: Window, ev: DeviceMotionEvent) => any;
+    ondeviceorientation: (this: Window, ev: DeviceOrientationEvent) => any;
+    ondrag: (this: Window, ev: DragEvent) => any;
+    ondragend: (this: Window, ev: DragEvent) => any;
+    ondragenter: (this: Window, ev: DragEvent) => any;
+    ondragleave: (this: Window, ev: DragEvent) => any;
+    ondragover: (this: Window, ev: DragEvent) => any;
+    ondragstart: (this: Window, ev: DragEvent) => any;
+    ondrop: (this: Window, ev: DragEvent) => any;
+    ondurationchange: (this: Window, ev: Event) => any;
+    onemptied: (this: Window, ev: Event) => any;
+    onended: (this: Window, ev: MediaStreamErrorEvent) => any;
     onerror: ErrorEventHandler;
-    onfocus: (this: this, ev: FocusEvent) => any;
-    onhashchange: (this: this, ev: HashChangeEvent) => any;
-    oninput: (this: this, ev: Event) => any;
-    oninvalid: (this: this, ev: Event) => any;
-    onkeydown: (this: this, ev: KeyboardEvent) => any;
-    onkeypress: (this: this, ev: KeyboardEvent) => any;
-    onkeyup: (this: this, ev: KeyboardEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onloadeddata: (this: this, ev: Event) => any;
-    onloadedmetadata: (this: this, ev: Event) => any;
-    onloadstart: (this: this, ev: Event) => any;
-    onmessage: (this: this, ev: MessageEvent) => any;
-    onmousedown: (this: this, ev: MouseEvent) => any;
-    onmouseenter: (this: this, ev: MouseEvent) => any;
-    onmouseleave: (this: this, ev: MouseEvent) => any;
-    onmousemove: (this: this, ev: MouseEvent) => any;
-    onmouseout: (this: this, ev: MouseEvent) => any;
-    onmouseover: (this: this, ev: MouseEvent) => any;
-    onmouseup: (this: this, ev: MouseEvent) => any;
-    onmousewheel: (this: this, ev: WheelEvent) => any;
-    onmsgesturechange: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturedoubletap: (this: this, ev: MSGestureEvent) => any;
-    onmsgestureend: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturehold: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturestart: (this: this, ev: MSGestureEvent) => any;
-    onmsgesturetap: (this: this, ev: MSGestureEvent) => any;
-    onmsinertiastart: (this: this, ev: MSGestureEvent) => any;
-    onmspointercancel: (this: this, ev: MSPointerEvent) => any;
-    onmspointerdown: (this: this, ev: MSPointerEvent) => any;
-    onmspointerenter: (this: this, ev: MSPointerEvent) => any;
-    onmspointerleave: (this: this, ev: MSPointerEvent) => any;
-    onmspointermove: (this: this, ev: MSPointerEvent) => any;
-    onmspointerout: (this: this, ev: MSPointerEvent) => any;
-    onmspointerover: (this: this, ev: MSPointerEvent) => any;
-    onmspointerup: (this: this, ev: MSPointerEvent) => any;
-    onoffline: (this: this, ev: Event) => any;
-    ononline: (this: this, ev: Event) => any;
-    onorientationchange: (this: this, ev: Event) => any;
-    onpagehide: (this: this, ev: PageTransitionEvent) => any;
-    onpageshow: (this: this, ev: PageTransitionEvent) => any;
-    onpause: (this: this, ev: Event) => any;
-    onplay: (this: this, ev: Event) => any;
-    onplaying: (this: this, ev: Event) => any;
-    onpopstate: (this: this, ev: PopStateEvent) => any;
-    onprogress: (this: this, ev: ProgressEvent) => any;
-    onratechange: (this: this, ev: Event) => any;
-    onreadystatechange: (this: this, ev: ProgressEvent) => any;
-    onreset: (this: this, ev: Event) => any;
-    onresize: (this: this, ev: UIEvent) => any;
-    onscroll: (this: this, ev: UIEvent) => any;
-    onseeked: (this: this, ev: Event) => any;
-    onseeking: (this: this, ev: Event) => any;
-    onselect: (this: this, ev: UIEvent) => any;
-    onstalled: (this: this, ev: Event) => any;
-    onstorage: (this: this, ev: StorageEvent) => any;
-    onsubmit: (this: this, ev: Event) => any;
-    onsuspend: (this: this, ev: Event) => any;
-    ontimeupdate: (this: this, ev: Event) => any;
+    onfocus: (this: Window, ev: FocusEvent) => any;
+    onhashchange: (this: Window, ev: HashChangeEvent) => any;
+    oninput: (this: Window, ev: Event) => any;
+    oninvalid: (this: Window, ev: Event) => any;
+    onkeydown: (this: Window, ev: KeyboardEvent) => any;
+    onkeypress: (this: Window, ev: KeyboardEvent) => any;
+    onkeyup: (this: Window, ev: KeyboardEvent) => any;
+    onload: (this: Window, ev: Event) => any;
+    onloadeddata: (this: Window, ev: Event) => any;
+    onloadedmetadata: (this: Window, ev: Event) => any;
+    onloadstart: (this: Window, ev: Event) => any;
+    onmessage: (this: Window, ev: MessageEvent) => any;
+    onmousedown: (this: Window, ev: MouseEvent) => any;
+    onmouseenter: (this: Window, ev: MouseEvent) => any;
+    onmouseleave: (this: Window, ev: MouseEvent) => any;
+    onmousemove: (this: Window, ev: MouseEvent) => any;
+    onmouseout: (this: Window, ev: MouseEvent) => any;
+    onmouseover: (this: Window, ev: MouseEvent) => any;
+    onmouseup: (this: Window, ev: MouseEvent) => any;
+    onmousewheel: (this: Window, ev: WheelEvent) => any;
+    onmsgesturechange: (this: Window, ev: MSGestureEvent) => any;
+    onmsgesturedoubletap: (this: Window, ev: MSGestureEvent) => any;
+    onmsgestureend: (this: Window, ev: MSGestureEvent) => any;
+    onmsgesturehold: (this: Window, ev: MSGestureEvent) => any;
+    onmsgesturestart: (this: Window, ev: MSGestureEvent) => any;
+    onmsgesturetap: (this: Window, ev: MSGestureEvent) => any;
+    onmsinertiastart: (this: Window, ev: MSGestureEvent) => any;
+    onmspointercancel: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerdown: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerenter: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerleave: (this: Window, ev: MSPointerEvent) => any;
+    onmspointermove: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerout: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerover: (this: Window, ev: MSPointerEvent) => any;
+    onmspointerup: (this: Window, ev: MSPointerEvent) => any;
+    onoffline: (this: Window, ev: Event) => any;
+    ononline: (this: Window, ev: Event) => any;
+    onorientationchange: (this: Window, ev: Event) => any;
+    onpagehide: (this: Window, ev: PageTransitionEvent) => any;
+    onpageshow: (this: Window, ev: PageTransitionEvent) => any;
+    onpause: (this: Window, ev: Event) => any;
+    onplay: (this: Window, ev: Event) => any;
+    onplaying: (this: Window, ev: Event) => any;
+    onpopstate: (this: Window, ev: PopStateEvent) => any;
+    onprogress: (this: Window, ev: ProgressEvent) => any;
+    onratechange: (this: Window, ev: Event) => any;
+    onreadystatechange: (this: Window, ev: ProgressEvent) => any;
+    onreset: (this: Window, ev: Event) => any;
+    onresize: (this: Window, ev: UIEvent) => any;
+    onscroll: (this: Window, ev: UIEvent) => any;
+    onseeked: (this: Window, ev: Event) => any;
+    onseeking: (this: Window, ev: Event) => any;
+    onselect: (this: Window, ev: UIEvent) => any;
+    onstalled: (this: Window, ev: Event) => any;
+    onstorage: (this: Window, ev: StorageEvent) => any;
+    onsubmit: (this: Window, ev: Event) => any;
+    onsuspend: (this: Window, ev: Event) => any;
+    ontimeupdate: (this: Window, ev: Event) => any;
     ontouchcancel: (ev: TouchEvent) => any;
     ontouchend: (ev: TouchEvent) => any;
     ontouchmove: (ev: TouchEvent) => any;
     ontouchstart: (ev: TouchEvent) => any;
-    onunload: (this: this, ev: Event) => any;
-    onvolumechange: (this: this, ev: Event) => any;
-    onwaiting: (this: this, ev: Event) => any;
-    readonly opener: Window;
+    onunload: (this: Window, ev: Event) => any;
+    onvolumechange: (this: Window, ev: Event) => any;
+    onwaiting: (this: Window, ev: Event) => any;
+    opener: any;
     orientation: string | number;
     readonly outerHeight: number;
     readonly outerWidth: number;
@@ -18647,6 +19270,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly scrollY: number;
     readonly scrollbars: BarProp;
     readonly self: Window;
+    readonly speechSynthesis: SpeechSynthesis;
     status: string;
     readonly statusbar: BarProp;
     readonly styleMedia: StyleMedia;
@@ -18654,13 +19278,16 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly top: Window;
     readonly window: Window;
     URL: typeof URL;
+    URLSearchParams: typeof URLSearchParams;
     Blob: typeof Blob;
+    customElements: CustomElementRegistry;
     alert(message?: any): void;
     blur(): void;
     cancelAnimationFrame(handle: number): void;
     captureEvents(): void;
     close(): void;
     confirm(message?: string): boolean;
+    departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
     focus(): void;
     getComputedStyle(elt: Element, pseudoElt?: string): CSSStyleDeclaration;
     getMatchedCSSRules(elt: Element, pseudoElt?: string): CSSRuleList;
@@ -18680,107 +19307,18 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     scroll(x?: number, y?: number): void;
     scrollBy(x?: number, y?: number): void;
     scrollTo(x?: number, y?: number): void;
+    stop(): void;
     webkitCancelAnimationFrame(handle: number): void;
     webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
-    addEventListener(type: "MSGestureChange", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureDoubleTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureEnd", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureHold", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSGestureTap", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSInertiaStart", listener: (this: this, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerCancel", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerDown", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerEnter", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerLeave", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerMove", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOut", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerOver", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "MSPointerUp", listener: (this: this, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "abort", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "afterprint", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeprint", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "beforeunload", listener: (this: this, ev: BeforeUnloadEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "blur", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplay", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "canplaythrough", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "change", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "click", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "compassneedscalibration", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "contextmenu", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dblclick", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "devicelight", listener: (this: this, ev: DeviceLightEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "devicemotion", listener: (this: this, ev: DeviceMotionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "deviceorientation", listener: (this: this, ev: DeviceOrientationEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drag", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragend", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragenter", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragleave", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragover", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "dragstart", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "drop", listener: (this: this, ev: DragEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "durationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "emptied", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "ended", listener: (this: this, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "focus", listener: (this: this, ev: FocusEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "hashchange", listener: (this: this, ev: HashChangeEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "input", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "invalid", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "keydown", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keypress", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "keyup", listener: (this: this, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadeddata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadedmetadata", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousedown", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseenter", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseleave", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousemove", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseout", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseover", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mouseup", listener: (this: this, ev: MouseEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "mousewheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "offline", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "online", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "orientationchange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pagehide", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pageshow", listener: (this: this, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pause", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "play", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "playing", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "popstate", listener: (this: this, ev: PopStateEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "ratechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "reset", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "resize", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "scroll", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeked", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "seeking", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "select", listener: (this: this, ev: UIEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "stalled", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "storage", listener: (this: this, ev: StorageEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "submit", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "suspend", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeupdate", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "unload", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "volumechange", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "waiting", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    scroll(options?: ScrollToOptions): void;
+    scrollTo(options?: ScrollToOptions): void;
+    scrollBy(options?: ScrollToOptions): void;
+    addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
-    [index: number]: Window;
 }
 
 declare var Window: {
@@ -18788,12 +19326,15 @@ declare var Window: {
     new(): Window;
 }
 
+interface WorkerEventMap extends AbstractWorkerEventMap {
+    "message": MessageEvent;
+}
+
 interface Worker extends EventTarget, AbstractWorker {
-    onmessage: (this: this, ev: MessageEvent) => any;
-    postMessage(message: any, ports?: any): void;
+    onmessage: (this: Worker, ev: MessageEvent) => any;
+    postMessage(message: any, transfer?: any[]): void;
     terminate(): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "message", listener: (this: this, ev: MessageEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof WorkerEventMap>(type: K, listener: (this: Worker, ev: WorkerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -18803,6 +19344,8 @@ declare var Worker: {
 }
 
 interface XMLDocument extends Document {
+    addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: XMLDocument, ev: DocumentEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
 declare var XMLDocument: {
@@ -18810,13 +19353,18 @@ declare var XMLDocument: {
     new(): XMLDocument;
 }
 
+interface XMLHttpRequestEventMap extends XMLHttpRequestEventTargetEventMap {
+    "readystatechange": Event;
+}
+
 interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
-    onreadystatechange: (this: this, ev: ProgressEvent) => any;
+    onreadystatechange: (this: XMLHttpRequest, ev: Event) => any;
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
-    responseType: string;
-    readonly responseXML: any;
+    responseType: XMLHttpRequestResponseType;
+    readonly responseURL: string;
+    readonly responseXML: Document | null;
     readonly status: number;
     readonly statusText: string;
     timeout: number;
@@ -18838,14 +19386,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly LOADING: number;
     readonly OPENED: number;
     readonly UNSENT: number;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "readystatechange", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof XMLHttpRequestEventMap>(type: K, listener: (this: XMLHttpRequest, ev: XMLHttpRequestEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -18857,10 +19398,10 @@ declare var XMLHttpRequest: {
     readonly LOADING: number;
     readonly OPENED: number;
     readonly UNSENT: number;
-    create(): XMLHttpRequest;
 }
 
 interface XMLHttpRequestUpload extends EventTarget, XMLHttpRequestEventTarget {
+    addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestUpload, ev: XMLHttpRequestEventTargetEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -18881,7 +19422,7 @@ declare var XMLSerializer: {
 interface XPathEvaluator {
     createExpression(expression: string, resolver: XPathNSResolver): XPathExpression;
     createNSResolver(nodeResolver?: Node): XPathNSResolver;
-    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver, type: number, result: XPathResult): XPathResult;
+    evaluate(expression: string, contextNode: Node, resolver: XPathNSResolver | null, type: number, result: XPathResult | null): XPathResult;
 }
 
 declare var XPathEvaluator: {
@@ -18890,7 +19431,7 @@ declare var XPathEvaluator: {
 }
 
 interface XPathExpression {
-    evaluate(contextNode: Node, type: number, result: XPathResult): XPathExpression;
+    evaluate(contextNode: Node, type: number, result: XPathResult | null): XPathResult;
 }
 
 declare var XPathExpression: {
@@ -18960,10 +19501,33 @@ declare var XSLTProcessor: {
     new(): XSLTProcessor;
 }
 
-interface AbstractWorker {
-    onerror: (this: this, ev: ErrorEvent) => any;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
+interface webkitRTCPeerConnection extends RTCPeerConnection {
+    addEventListener<K extends keyof RTCPeerConnectionEventMap>(type: K, listener: (this: webkitRTCPeerConnection, ev: RTCPeerConnectionEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+declare var webkitRTCPeerConnection: {
+    prototype: webkitRTCPeerConnection;
+    new(configuration: RTCConfiguration): webkitRTCPeerConnection;
+}
+
+interface AbstractWorkerEventMap {
+    "error": ErrorEvent;
+}
+
+interface AbstractWorker {
+    onerror: (this: AbstractWorker, ev: ErrorEvent) => any;
+    addEventListener<K extends keyof AbstractWorkerEventMap>(type: K, listener: (this: AbstractWorker, ev: AbstractWorkerEventMap[K]) => any, useCapture?: boolean): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface Body {
+    readonly bodyUsed: boolean;
+    arrayBuffer(): Promise<ArrayBuffer>;
+    blob(): Promise<Blob>;
+    json(): Promise<any>;
+    text(): Promise<string>;
+    formData(): Promise<FormData>;
 }
 
 interface CanvasPathMethods {
@@ -18992,12 +19556,10 @@ interface DOML2DeprecatedSizeProperty {
 
 interface DocumentEvent {
     createEvent(eventInterface:"AnimationEvent"): AnimationEvent;
-    createEvent(eventInterface:"AriaRequestEvent"): AriaRequestEvent;
     createEvent(eventInterface:"AudioProcessingEvent"): AudioProcessingEvent;
     createEvent(eventInterface:"BeforeUnloadEvent"): BeforeUnloadEvent;
     createEvent(eventInterface:"ClipboardEvent"): ClipboardEvent;
     createEvent(eventInterface:"CloseEvent"): CloseEvent;
-    createEvent(eventInterface:"CommandEvent"): CommandEvent;
     createEvent(eventInterface:"CompositionEvent"): CompositionEvent;
     createEvent(eventInterface:"CustomEvent"): CustomEvent;
     createEvent(eventInterface:"DeviceLightEvent"): DeviceLightEvent;
@@ -19008,6 +19570,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"Event"): Event;
     createEvent(eventInterface:"Events"): Event;
     createEvent(eventInterface:"FocusEvent"): FocusEvent;
+    createEvent(eventInterface:"FocusNavigationEvent"): FocusNavigationEvent;
     createEvent(eventInterface:"GamepadEvent"): GamepadEvent;
     createEvent(eventInterface:"HashChangeEvent"): HashChangeEvent;
     createEvent(eventInterface:"IDBVersionChangeEvent"): IDBVersionChangeEvent;
@@ -19023,6 +19586,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"MediaEncryptedEvent"): MediaEncryptedEvent;
     createEvent(eventInterface:"MediaKeyMessageEvent"): MediaKeyMessageEvent;
     createEvent(eventInterface:"MediaStreamErrorEvent"): MediaStreamErrorEvent;
+    createEvent(eventInterface:"MediaStreamEvent"): MediaStreamEvent;
     createEvent(eventInterface:"MediaStreamTrackEvent"): MediaStreamTrackEvent;
     createEvent(eventInterface:"MessageEvent"): MessageEvent;
     createEvent(eventInterface:"MouseEvent"): MouseEvent;
@@ -19035,6 +19599,7 @@ interface DocumentEvent {
     createEvent(eventInterface:"OfflineAudioCompletionEvent"): OfflineAudioCompletionEvent;
     createEvent(eventInterface:"OverflowEvent"): OverflowEvent;
     createEvent(eventInterface:"PageTransitionEvent"): PageTransitionEvent;
+    createEvent(eventInterface:"PaymentRequestUpdateEvent"): PaymentRequestUpdateEvent;
     createEvent(eventInterface:"PermissionRequestedEvent"): PermissionRequestedEvent;
     createEvent(eventInterface:"PointerEvent"): PointerEvent;
     createEvent(eventInterface:"PopStateEvent"): PopStateEvent;
@@ -19044,10 +19609,13 @@ interface DocumentEvent {
     createEvent(eventInterface:"RTCIceCandidatePairChangedEvent"): RTCIceCandidatePairChangedEvent;
     createEvent(eventInterface:"RTCIceGathererEvent"): RTCIceGathererEvent;
     createEvent(eventInterface:"RTCIceTransportStateChangedEvent"): RTCIceTransportStateChangedEvent;
+    createEvent(eventInterface:"RTCPeerConnectionIceEvent"): RTCPeerConnectionIceEvent;
     createEvent(eventInterface:"RTCSsrcConflictEvent"): RTCSsrcConflictEvent;
     createEvent(eventInterface:"SVGZoomEvent"): SVGZoomEvent;
     createEvent(eventInterface:"SVGZoomEvents"): SVGZoomEvent;
     createEvent(eventInterface:"ScriptNotifyEvent"): ScriptNotifyEvent;
+    createEvent(eventInterface:"ServiceWorkerMessageEvent"): ServiceWorkerMessageEvent;
+    createEvent(eventInterface:"SpeechSynthesisEvent"): SpeechSynthesisEvent;
     createEvent(eventInterface:"StorageEvent"): StorageEvent;
     createEvent(eventInterface:"TextEvent"): TextEvent;
     createEvent(eventInterface:"TouchEvent"): TouchEvent;
@@ -19063,36 +19631,44 @@ interface DocumentEvent {
 
 interface ElementTraversal {
     readonly childElementCount: number;
-    readonly firstElementChild: Element;
-    readonly lastElementChild: Element;
-    readonly nextElementSibling: Element;
-    readonly previousElementSibling: Element;
+    readonly firstElementChild: Element | null;
+    readonly lastElementChild: Element | null;
+    readonly nextElementSibling: Element | null;
+    readonly previousElementSibling: Element | null;
 }
 
 interface GetSVGDocument {
     getSVGDocument(): Document;
 }
 
+interface GlobalEventHandlersEventMap {
+    "pointercancel": PointerEvent;
+    "pointerdown": PointerEvent;
+    "pointerenter": PointerEvent;
+    "pointerleave": PointerEvent;
+    "pointermove": PointerEvent;
+    "pointerout": PointerEvent;
+    "pointerover": PointerEvent;
+    "pointerup": PointerEvent;
+    "wheel": WheelEvent;
+}
+
 interface GlobalEventHandlers {
-    onpointercancel: (this: this, ev: PointerEvent) => any;
-    onpointerdown: (this: this, ev: PointerEvent) => any;
-    onpointerenter: (this: this, ev: PointerEvent) => any;
-    onpointerleave: (this: this, ev: PointerEvent) => any;
-    onpointermove: (this: this, ev: PointerEvent) => any;
-    onpointerout: (this: this, ev: PointerEvent) => any;
-    onpointerover: (this: this, ev: PointerEvent) => any;
-    onpointerup: (this: this, ev: PointerEvent) => any;
-    onwheel: (this: this, ev: WheelEvent) => any;
-    addEventListener(type: "pointercancel", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerdown", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerenter", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerleave", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointermove", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerout", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerover", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "pointerup", listener: (this: this, ev: PointerEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "wheel", listener: (this: this, ev: WheelEvent) => any, useCapture?: boolean): void;
+    onpointercancel: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerdown: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerenter: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerleave: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointermove: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerout: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerover: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onpointerup: (this: GlobalEventHandlers, ev: PointerEvent) => any;
+    onwheel: (this: GlobalEventHandlers, ev: WheelEvent) => any;
+    addEventListener<K extends keyof GlobalEventHandlersEventMap>(type: K, listener: (this: GlobalEventHandlers, ev: GlobalEventHandlersEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface GlobalFetch {
+    fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 }
 
 interface HTMLTableAlignment {
@@ -19118,25 +19694,29 @@ interface LinkStyle {
     readonly sheet: StyleSheet;
 }
 
+interface MSBaseReaderEventMap {
+    "abort": Event;
+    "error": ErrorEvent;
+    "load": Event;
+    "loadend": ProgressEvent;
+    "loadstart": Event;
+    "progress": ProgressEvent;
+}
+
 interface MSBaseReader {
-    onabort: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onloadend: (this: this, ev: ProgressEvent) => any;
-    onloadstart: (this: this, ev: Event) => any;
-    onprogress: (this: this, ev: ProgressEvent) => any;
+    onabort: (this: MSBaseReader, ev: Event) => any;
+    onerror: (this: MSBaseReader, ev: ErrorEvent) => any;
+    onload: (this: MSBaseReader, ev: Event) => any;
+    onloadend: (this: MSBaseReader, ev: ProgressEvent) => any;
+    onloadstart: (this: MSBaseReader, ev: Event) => any;
+    onprogress: (this: MSBaseReader, ev: ProgressEvent) => any;
     readonly readyState: number;
     readonly result: any;
     abort(): void;
     readonly DONE: number;
     readonly EMPTY: number;
     readonly LOADING: number;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    addEventListener<K extends keyof MSBaseReaderEventMap>(type: K, listener: (this: MSBaseReader, ev: MSBaseReaderEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
 
@@ -19154,6 +19734,14 @@ interface MSNavigatorDoNotTrack {
     storeWebWideTrackingException(args: StoreExceptionsInformation): void;
 }
 
+interface NavigatorBeacon {
+    sendBeacon(url: USVString, data?: BodyInit): boolean;
+}
+
+interface NavigatorConcurrentHardware {
+    readonly hardwareConcurrency: number;
+}
+
 interface NavigatorContentUtils {
 }
 
@@ -19162,6 +19750,7 @@ interface NavigatorGeolocation {
 }
 
 interface NavigatorID {
+    readonly appCodeName: string;
     readonly appName: string;
     readonly appVersion: string;
     readonly platform: string;
@@ -19185,359 +19774,9 @@ interface NavigatorUserMedia {
 }
 
 interface NodeSelector {
-    querySelector(selectors: "a"): HTMLAnchorElement;
-    querySelector(selectors: "abbr"): HTMLElement;
-    querySelector(selectors: "acronym"): HTMLElement;
-    querySelector(selectors: "address"): HTMLElement;
-    querySelector(selectors: "applet"): HTMLAppletElement;
-    querySelector(selectors: "area"): HTMLAreaElement;
-    querySelector(selectors: "article"): HTMLElement;
-    querySelector(selectors: "aside"): HTMLElement;
-    querySelector(selectors: "audio"): HTMLAudioElement;
-    querySelector(selectors: "b"): HTMLElement;
-    querySelector(selectors: "base"): HTMLBaseElement;
-    querySelector(selectors: "basefont"): HTMLBaseFontElement;
-    querySelector(selectors: "bdo"): HTMLElement;
-    querySelector(selectors: "big"): HTMLElement;
-    querySelector(selectors: "blockquote"): HTMLQuoteElement;
-    querySelector(selectors: "body"): HTMLBodyElement;
-    querySelector(selectors: "br"): HTMLBRElement;
-    querySelector(selectors: "button"): HTMLButtonElement;
-    querySelector(selectors: "canvas"): HTMLCanvasElement;
-    querySelector(selectors: "caption"): HTMLTableCaptionElement;
-    querySelector(selectors: "center"): HTMLElement;
-    querySelector(selectors: "circle"): SVGCircleElement;
-    querySelector(selectors: "cite"): HTMLElement;
-    querySelector(selectors: "clippath"): SVGClipPathElement;
-    querySelector(selectors: "code"): HTMLElement;
-    querySelector(selectors: "col"): HTMLTableColElement;
-    querySelector(selectors: "colgroup"): HTMLTableColElement;
-    querySelector(selectors: "datalist"): HTMLDataListElement;
-    querySelector(selectors: "dd"): HTMLElement;
-    querySelector(selectors: "defs"): SVGDefsElement;
-    querySelector(selectors: "del"): HTMLModElement;
-    querySelector(selectors: "desc"): SVGDescElement;
-    querySelector(selectors: "dfn"): HTMLElement;
-    querySelector(selectors: "dir"): HTMLDirectoryElement;
-    querySelector(selectors: "div"): HTMLDivElement;
-    querySelector(selectors: "dl"): HTMLDListElement;
-    querySelector(selectors: "dt"): HTMLElement;
-    querySelector(selectors: "ellipse"): SVGEllipseElement;
-    querySelector(selectors: "em"): HTMLElement;
-    querySelector(selectors: "embed"): HTMLEmbedElement;
-    querySelector(selectors: "feblend"): SVGFEBlendElement;
-    querySelector(selectors: "fecolormatrix"): SVGFEColorMatrixElement;
-    querySelector(selectors: "fecomponenttransfer"): SVGFEComponentTransferElement;
-    querySelector(selectors: "fecomposite"): SVGFECompositeElement;
-    querySelector(selectors: "feconvolvematrix"): SVGFEConvolveMatrixElement;
-    querySelector(selectors: "fediffuselighting"): SVGFEDiffuseLightingElement;
-    querySelector(selectors: "fedisplacementmap"): SVGFEDisplacementMapElement;
-    querySelector(selectors: "fedistantlight"): SVGFEDistantLightElement;
-    querySelector(selectors: "feflood"): SVGFEFloodElement;
-    querySelector(selectors: "fefunca"): SVGFEFuncAElement;
-    querySelector(selectors: "fefuncb"): SVGFEFuncBElement;
-    querySelector(selectors: "fefuncg"): SVGFEFuncGElement;
-    querySelector(selectors: "fefuncr"): SVGFEFuncRElement;
-    querySelector(selectors: "fegaussianblur"): SVGFEGaussianBlurElement;
-    querySelector(selectors: "feimage"): SVGFEImageElement;
-    querySelector(selectors: "femerge"): SVGFEMergeElement;
-    querySelector(selectors: "femergenode"): SVGFEMergeNodeElement;
-    querySelector(selectors: "femorphology"): SVGFEMorphologyElement;
-    querySelector(selectors: "feoffset"): SVGFEOffsetElement;
-    querySelector(selectors: "fepointlight"): SVGFEPointLightElement;
-    querySelector(selectors: "fespecularlighting"): SVGFESpecularLightingElement;
-    querySelector(selectors: "fespotlight"): SVGFESpotLightElement;
-    querySelector(selectors: "fetile"): SVGFETileElement;
-    querySelector(selectors: "feturbulence"): SVGFETurbulenceElement;
-    querySelector(selectors: "fieldset"): HTMLFieldSetElement;
-    querySelector(selectors: "figcaption"): HTMLElement;
-    querySelector(selectors: "figure"): HTMLElement;
-    querySelector(selectors: "filter"): SVGFilterElement;
-    querySelector(selectors: "font"): HTMLFontElement;
-    querySelector(selectors: "footer"): HTMLElement;
-    querySelector(selectors: "foreignobject"): SVGForeignObjectElement;
-    querySelector(selectors: "form"): HTMLFormElement;
-    querySelector(selectors: "frame"): HTMLFrameElement;
-    querySelector(selectors: "frameset"): HTMLFrameSetElement;
-    querySelector(selectors: "g"): SVGGElement;
-    querySelector(selectors: "h1"): HTMLHeadingElement;
-    querySelector(selectors: "h2"): HTMLHeadingElement;
-    querySelector(selectors: "h3"): HTMLHeadingElement;
-    querySelector(selectors: "h4"): HTMLHeadingElement;
-    querySelector(selectors: "h5"): HTMLHeadingElement;
-    querySelector(selectors: "h6"): HTMLHeadingElement;
-    querySelector(selectors: "head"): HTMLHeadElement;
-    querySelector(selectors: "header"): HTMLElement;
-    querySelector(selectors: "hgroup"): HTMLElement;
-    querySelector(selectors: "hr"): HTMLHRElement;
-    querySelector(selectors: "html"): HTMLHtmlElement;
-    querySelector(selectors: "i"): HTMLElement;
-    querySelector(selectors: "iframe"): HTMLIFrameElement;
-    querySelector(selectors: "image"): SVGImageElement;
-    querySelector(selectors: "img"): HTMLImageElement;
-    querySelector(selectors: "input"): HTMLInputElement;
-    querySelector(selectors: "ins"): HTMLModElement;
-    querySelector(selectors: "isindex"): HTMLUnknownElement;
-    querySelector(selectors: "kbd"): HTMLElement;
-    querySelector(selectors: "keygen"): HTMLElement;
-    querySelector(selectors: "label"): HTMLLabelElement;
-    querySelector(selectors: "legend"): HTMLLegendElement;
-    querySelector(selectors: "li"): HTMLLIElement;
-    querySelector(selectors: "line"): SVGLineElement;
-    querySelector(selectors: "lineargradient"): SVGLinearGradientElement;
-    querySelector(selectors: "link"): HTMLLinkElement;
-    querySelector(selectors: "listing"): HTMLPreElement;
-    querySelector(selectors: "map"): HTMLMapElement;
-    querySelector(selectors: "mark"): HTMLElement;
-    querySelector(selectors: "marker"): SVGMarkerElement;
-    querySelector(selectors: "marquee"): HTMLMarqueeElement;
-    querySelector(selectors: "mask"): SVGMaskElement;
-    querySelector(selectors: "menu"): HTMLMenuElement;
-    querySelector(selectors: "meta"): HTMLMetaElement;
-    querySelector(selectors: "metadata"): SVGMetadataElement;
-    querySelector(selectors: "meter"): HTMLMeterElement;
-    querySelector(selectors: "nav"): HTMLElement;
-    querySelector(selectors: "nextid"): HTMLUnknownElement;
-    querySelector(selectors: "nobr"): HTMLElement;
-    querySelector(selectors: "noframes"): HTMLElement;
-    querySelector(selectors: "noscript"): HTMLElement;
-    querySelector(selectors: "object"): HTMLObjectElement;
-    querySelector(selectors: "ol"): HTMLOListElement;
-    querySelector(selectors: "optgroup"): HTMLOptGroupElement;
-    querySelector(selectors: "option"): HTMLOptionElement;
-    querySelector(selectors: "p"): HTMLParagraphElement;
-    querySelector(selectors: "param"): HTMLParamElement;
-    querySelector(selectors: "path"): SVGPathElement;
-    querySelector(selectors: "pattern"): SVGPatternElement;
-    querySelector(selectors: "picture"): HTMLPictureElement;
-    querySelector(selectors: "plaintext"): HTMLElement;
-    querySelector(selectors: "polygon"): SVGPolygonElement;
-    querySelector(selectors: "polyline"): SVGPolylineElement;
-    querySelector(selectors: "pre"): HTMLPreElement;
-    querySelector(selectors: "progress"): HTMLProgressElement;
-    querySelector(selectors: "q"): HTMLQuoteElement;
-    querySelector(selectors: "radialgradient"): SVGRadialGradientElement;
-    querySelector(selectors: "rect"): SVGRectElement;
-    querySelector(selectors: "rt"): HTMLElement;
-    querySelector(selectors: "ruby"): HTMLElement;
-    querySelector(selectors: "s"): HTMLElement;
-    querySelector(selectors: "samp"): HTMLElement;
-    querySelector(selectors: "script"): HTMLScriptElement;
-    querySelector(selectors: "section"): HTMLElement;
-    querySelector(selectors: "select"): HTMLSelectElement;
-    querySelector(selectors: "small"): HTMLElement;
-    querySelector(selectors: "source"): HTMLSourceElement;
-    querySelector(selectors: "span"): HTMLSpanElement;
-    querySelector(selectors: "stop"): SVGStopElement;
-    querySelector(selectors: "strike"): HTMLElement;
-    querySelector(selectors: "strong"): HTMLElement;
-    querySelector(selectors: "style"): HTMLStyleElement;
-    querySelector(selectors: "sub"): HTMLElement;
-    querySelector(selectors: "sup"): HTMLElement;
-    querySelector(selectors: "svg"): SVGSVGElement;
-    querySelector(selectors: "switch"): SVGSwitchElement;
-    querySelector(selectors: "symbol"): SVGSymbolElement;
-    querySelector(selectors: "table"): HTMLTableElement;
-    querySelector(selectors: "tbody"): HTMLTableSectionElement;
-    querySelector(selectors: "td"): HTMLTableDataCellElement;
-    querySelector(selectors: "template"): HTMLTemplateElement;
-    querySelector(selectors: "text"): SVGTextElement;
-    querySelector(selectors: "textpath"): SVGTextPathElement;
-    querySelector(selectors: "textarea"): HTMLTextAreaElement;
-    querySelector(selectors: "tfoot"): HTMLTableSectionElement;
-    querySelector(selectors: "th"): HTMLTableHeaderCellElement;
-    querySelector(selectors: "thead"): HTMLTableSectionElement;
-    querySelector(selectors: "title"): HTMLTitleElement;
-    querySelector(selectors: "tr"): HTMLTableRowElement;
-    querySelector(selectors: "track"): HTMLTrackElement;
-    querySelector(selectors: "tspan"): SVGTSpanElement;
-    querySelector(selectors: "tt"): HTMLElement;
-    querySelector(selectors: "u"): HTMLElement;
-    querySelector(selectors: "ul"): HTMLUListElement;
-    querySelector(selectors: "use"): SVGUseElement;
-    querySelector(selectors: "var"): HTMLElement;
-    querySelector(selectors: "video"): HTMLVideoElement;
-    querySelector(selectors: "view"): SVGViewElement;
-    querySelector(selectors: "wbr"): HTMLElement;
-    querySelector(selectors: "x-ms-webview"): MSHTMLWebViewElement;
-    querySelector(selectors: "xmp"): HTMLPreElement;
-    querySelector(selectors: string): Element;
-    querySelectorAll(selectors: "a"): NodeListOf<HTMLAnchorElement>;
-    querySelectorAll(selectors: "abbr"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "acronym"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "address"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "applet"): NodeListOf<HTMLAppletElement>;
-    querySelectorAll(selectors: "area"): NodeListOf<HTMLAreaElement>;
-    querySelectorAll(selectors: "article"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "aside"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "audio"): NodeListOf<HTMLAudioElement>;
-    querySelectorAll(selectors: "b"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "base"): NodeListOf<HTMLBaseElement>;
-    querySelectorAll(selectors: "basefont"): NodeListOf<HTMLBaseFontElement>;
-    querySelectorAll(selectors: "bdo"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "big"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "blockquote"): NodeListOf<HTMLQuoteElement>;
-    querySelectorAll(selectors: "body"): NodeListOf<HTMLBodyElement>;
-    querySelectorAll(selectors: "br"): NodeListOf<HTMLBRElement>;
-    querySelectorAll(selectors: "button"): NodeListOf<HTMLButtonElement>;
-    querySelectorAll(selectors: "canvas"): NodeListOf<HTMLCanvasElement>;
-    querySelectorAll(selectors: "caption"): NodeListOf<HTMLTableCaptionElement>;
-    querySelectorAll(selectors: "center"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "circle"): NodeListOf<SVGCircleElement>;
-    querySelectorAll(selectors: "cite"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "clippath"): NodeListOf<SVGClipPathElement>;
-    querySelectorAll(selectors: "code"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "col"): NodeListOf<HTMLTableColElement>;
-    querySelectorAll(selectors: "colgroup"): NodeListOf<HTMLTableColElement>;
-    querySelectorAll(selectors: "datalist"): NodeListOf<HTMLDataListElement>;
-    querySelectorAll(selectors: "dd"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "defs"): NodeListOf<SVGDefsElement>;
-    querySelectorAll(selectors: "del"): NodeListOf<HTMLModElement>;
-    querySelectorAll(selectors: "desc"): NodeListOf<SVGDescElement>;
-    querySelectorAll(selectors: "dfn"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "dir"): NodeListOf<HTMLDirectoryElement>;
-    querySelectorAll(selectors: "div"): NodeListOf<HTMLDivElement>;
-    querySelectorAll(selectors: "dl"): NodeListOf<HTMLDListElement>;
-    querySelectorAll(selectors: "dt"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "ellipse"): NodeListOf<SVGEllipseElement>;
-    querySelectorAll(selectors: "em"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "embed"): NodeListOf<HTMLEmbedElement>;
-    querySelectorAll(selectors: "feblend"): NodeListOf<SVGFEBlendElement>;
-    querySelectorAll(selectors: "fecolormatrix"): NodeListOf<SVGFEColorMatrixElement>;
-    querySelectorAll(selectors: "fecomponenttransfer"): NodeListOf<SVGFEComponentTransferElement>;
-    querySelectorAll(selectors: "fecomposite"): NodeListOf<SVGFECompositeElement>;
-    querySelectorAll(selectors: "feconvolvematrix"): NodeListOf<SVGFEConvolveMatrixElement>;
-    querySelectorAll(selectors: "fediffuselighting"): NodeListOf<SVGFEDiffuseLightingElement>;
-    querySelectorAll(selectors: "fedisplacementmap"): NodeListOf<SVGFEDisplacementMapElement>;
-    querySelectorAll(selectors: "fedistantlight"): NodeListOf<SVGFEDistantLightElement>;
-    querySelectorAll(selectors: "feflood"): NodeListOf<SVGFEFloodElement>;
-    querySelectorAll(selectors: "fefunca"): NodeListOf<SVGFEFuncAElement>;
-    querySelectorAll(selectors: "fefuncb"): NodeListOf<SVGFEFuncBElement>;
-    querySelectorAll(selectors: "fefuncg"): NodeListOf<SVGFEFuncGElement>;
-    querySelectorAll(selectors: "fefuncr"): NodeListOf<SVGFEFuncRElement>;
-    querySelectorAll(selectors: "fegaussianblur"): NodeListOf<SVGFEGaussianBlurElement>;
-    querySelectorAll(selectors: "feimage"): NodeListOf<SVGFEImageElement>;
-    querySelectorAll(selectors: "femerge"): NodeListOf<SVGFEMergeElement>;
-    querySelectorAll(selectors: "femergenode"): NodeListOf<SVGFEMergeNodeElement>;
-    querySelectorAll(selectors: "femorphology"): NodeListOf<SVGFEMorphologyElement>;
-    querySelectorAll(selectors: "feoffset"): NodeListOf<SVGFEOffsetElement>;
-    querySelectorAll(selectors: "fepointlight"): NodeListOf<SVGFEPointLightElement>;
-    querySelectorAll(selectors: "fespecularlighting"): NodeListOf<SVGFESpecularLightingElement>;
-    querySelectorAll(selectors: "fespotlight"): NodeListOf<SVGFESpotLightElement>;
-    querySelectorAll(selectors: "fetile"): NodeListOf<SVGFETileElement>;
-    querySelectorAll(selectors: "feturbulence"): NodeListOf<SVGFETurbulenceElement>;
-    querySelectorAll(selectors: "fieldset"): NodeListOf<HTMLFieldSetElement>;
-    querySelectorAll(selectors: "figcaption"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "figure"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "filter"): NodeListOf<SVGFilterElement>;
-    querySelectorAll(selectors: "font"): NodeListOf<HTMLFontElement>;
-    querySelectorAll(selectors: "footer"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "foreignobject"): NodeListOf<SVGForeignObjectElement>;
-    querySelectorAll(selectors: "form"): NodeListOf<HTMLFormElement>;
-    querySelectorAll(selectors: "frame"): NodeListOf<HTMLFrameElement>;
-    querySelectorAll(selectors: "frameset"): NodeListOf<HTMLFrameSetElement>;
-    querySelectorAll(selectors: "g"): NodeListOf<SVGGElement>;
-    querySelectorAll(selectors: "h1"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "h2"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "h3"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "h4"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "h5"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "h6"): NodeListOf<HTMLHeadingElement>;
-    querySelectorAll(selectors: "head"): NodeListOf<HTMLHeadElement>;
-    querySelectorAll(selectors: "header"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "hgroup"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "hr"): NodeListOf<HTMLHRElement>;
-    querySelectorAll(selectors: "html"): NodeListOf<HTMLHtmlElement>;
-    querySelectorAll(selectors: "i"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "iframe"): NodeListOf<HTMLIFrameElement>;
-    querySelectorAll(selectors: "image"): NodeListOf<SVGImageElement>;
-    querySelectorAll(selectors: "img"): NodeListOf<HTMLImageElement>;
-    querySelectorAll(selectors: "input"): NodeListOf<HTMLInputElement>;
-    querySelectorAll(selectors: "ins"): NodeListOf<HTMLModElement>;
-    querySelectorAll(selectors: "isindex"): NodeListOf<HTMLUnknownElement>;
-    querySelectorAll(selectors: "kbd"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "keygen"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "label"): NodeListOf<HTMLLabelElement>;
-    querySelectorAll(selectors: "legend"): NodeListOf<HTMLLegendElement>;
-    querySelectorAll(selectors: "li"): NodeListOf<HTMLLIElement>;
-    querySelectorAll(selectors: "line"): NodeListOf<SVGLineElement>;
-    querySelectorAll(selectors: "lineargradient"): NodeListOf<SVGLinearGradientElement>;
-    querySelectorAll(selectors: "link"): NodeListOf<HTMLLinkElement>;
-    querySelectorAll(selectors: "listing"): NodeListOf<HTMLPreElement>;
-    querySelectorAll(selectors: "map"): NodeListOf<HTMLMapElement>;
-    querySelectorAll(selectors: "mark"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "marker"): NodeListOf<SVGMarkerElement>;
-    querySelectorAll(selectors: "marquee"): NodeListOf<HTMLMarqueeElement>;
-    querySelectorAll(selectors: "mask"): NodeListOf<SVGMaskElement>;
-    querySelectorAll(selectors: "menu"): NodeListOf<HTMLMenuElement>;
-    querySelectorAll(selectors: "meta"): NodeListOf<HTMLMetaElement>;
-    querySelectorAll(selectors: "metadata"): NodeListOf<SVGMetadataElement>;
-    querySelectorAll(selectors: "meter"): NodeListOf<HTMLMeterElement>;
-    querySelectorAll(selectors: "nav"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "nextid"): NodeListOf<HTMLUnknownElement>;
-    querySelectorAll(selectors: "nobr"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "noframes"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "noscript"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "object"): NodeListOf<HTMLObjectElement>;
-    querySelectorAll(selectors: "ol"): NodeListOf<HTMLOListElement>;
-    querySelectorAll(selectors: "optgroup"): NodeListOf<HTMLOptGroupElement>;
-    querySelectorAll(selectors: "option"): NodeListOf<HTMLOptionElement>;
-    querySelectorAll(selectors: "p"): NodeListOf<HTMLParagraphElement>;
-    querySelectorAll(selectors: "param"): NodeListOf<HTMLParamElement>;
-    querySelectorAll(selectors: "path"): NodeListOf<SVGPathElement>;
-    querySelectorAll(selectors: "pattern"): NodeListOf<SVGPatternElement>;
-    querySelectorAll(selectors: "picture"): NodeListOf<HTMLPictureElement>;
-    querySelectorAll(selectors: "plaintext"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "polygon"): NodeListOf<SVGPolygonElement>;
-    querySelectorAll(selectors: "polyline"): NodeListOf<SVGPolylineElement>;
-    querySelectorAll(selectors: "pre"): NodeListOf<HTMLPreElement>;
-    querySelectorAll(selectors: "progress"): NodeListOf<HTMLProgressElement>;
-    querySelectorAll(selectors: "q"): NodeListOf<HTMLQuoteElement>;
-    querySelectorAll(selectors: "radialgradient"): NodeListOf<SVGRadialGradientElement>;
-    querySelectorAll(selectors: "rect"): NodeListOf<SVGRectElement>;
-    querySelectorAll(selectors: "rt"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "ruby"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "s"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "samp"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "script"): NodeListOf<HTMLScriptElement>;
-    querySelectorAll(selectors: "section"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "select"): NodeListOf<HTMLSelectElement>;
-    querySelectorAll(selectors: "small"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "source"): NodeListOf<HTMLSourceElement>;
-    querySelectorAll(selectors: "span"): NodeListOf<HTMLSpanElement>;
-    querySelectorAll(selectors: "stop"): NodeListOf<SVGStopElement>;
-    querySelectorAll(selectors: "strike"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "strong"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "style"): NodeListOf<HTMLStyleElement>;
-    querySelectorAll(selectors: "sub"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "sup"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "svg"): NodeListOf<SVGSVGElement>;
-    querySelectorAll(selectors: "switch"): NodeListOf<SVGSwitchElement>;
-    querySelectorAll(selectors: "symbol"): NodeListOf<SVGSymbolElement>;
-    querySelectorAll(selectors: "table"): NodeListOf<HTMLTableElement>;
-    querySelectorAll(selectors: "tbody"): NodeListOf<HTMLTableSectionElement>;
-    querySelectorAll(selectors: "td"): NodeListOf<HTMLTableDataCellElement>;
-    querySelectorAll(selectors: "template"): NodeListOf<HTMLTemplateElement>;
-    querySelectorAll(selectors: "text"): NodeListOf<SVGTextElement>;
-    querySelectorAll(selectors: "textpath"): NodeListOf<SVGTextPathElement>;
-    querySelectorAll(selectors: "textarea"): NodeListOf<HTMLTextAreaElement>;
-    querySelectorAll(selectors: "tfoot"): NodeListOf<HTMLTableSectionElement>;
-    querySelectorAll(selectors: "th"): NodeListOf<HTMLTableHeaderCellElement>;
-    querySelectorAll(selectors: "thead"): NodeListOf<HTMLTableSectionElement>;
-    querySelectorAll(selectors: "title"): NodeListOf<HTMLTitleElement>;
-    querySelectorAll(selectors: "tr"): NodeListOf<HTMLTableRowElement>;
-    querySelectorAll(selectors: "track"): NodeListOf<HTMLTrackElement>;
-    querySelectorAll(selectors: "tspan"): NodeListOf<SVGTSpanElement>;
-    querySelectorAll(selectors: "tt"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "u"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "ul"): NodeListOf<HTMLUListElement>;
-    querySelectorAll(selectors: "use"): NodeListOf<SVGUseElement>;
-    querySelectorAll(selectors: "var"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "video"): NodeListOf<HTMLVideoElement>;
-    querySelectorAll(selectors: "view"): NodeListOf<SVGViewElement>;
-    querySelectorAll(selectors: "wbr"): NodeListOf<HTMLElement>;
-    querySelectorAll(selectors: "x-ms-webview"): NodeListOf<MSHTMLWebViewElement>;
-    querySelectorAll(selectors: "xmp"): NodeListOf<HTMLPreElement>;
+    querySelector<K extends keyof ElementTagNameMap>(selectors: K): ElementTagNameMap[K] | null;
+    querySelector(selectors: string): Element | null;
+    querySelectorAll<K extends keyof ElementListTagNameMap>(selectors: K): ElementListTagNameMap[K];
     querySelectorAll(selectors: string): NodeListOf<Element>;
 }
 
@@ -19545,20 +19784,12 @@ interface RandomSource {
     getRandomValues(array: ArrayBufferView): ArrayBufferView;
 }
 
-interface SVGAnimatedPathData {
-    readonly pathSegList: SVGPathSegList;
-}
-
 interface SVGAnimatedPoints {
     readonly animatedPoints: SVGPointList;
     readonly points: SVGPointList;
 }
 
-interface SVGExternalResourcesRequired {
-    readonly externalResourcesRequired: SVGAnimatedBoolean;
-}
-
-interface SVGFilterPrimitiveStandardAttributes extends SVGStylable {
+interface SVGFilterPrimitiveStandardAttributes {
     readonly height: SVGAnimatedLength;
     readonly result: SVGAnimatedString;
     readonly width: SVGAnimatedLength;
@@ -19571,34 +19802,11 @@ interface SVGFitToViewBox {
     readonly viewBox: SVGAnimatedRect;
 }
 
-interface SVGLangSpace {
-    xmllang: string;
-    xmlspace: string;
-}
-
-interface SVGLocatable {
-    readonly farthestViewportElement: SVGElement;
-    readonly nearestViewportElement: SVGElement;
-    getBBox(): SVGRect;
-    getCTM(): SVGMatrix;
-    getScreenCTM(): SVGMatrix;
-    getTransformToElement(element: SVGElement): SVGMatrix;
-}
-
-interface SVGStylable {
-    className: any;
-    readonly style: CSSStyleDeclaration;
-}
-
 interface SVGTests {
     readonly requiredExtensions: SVGStringList;
     readonly requiredFeatures: SVGStringList;
     readonly systemLanguage: SVGStringList;
     hasExtension(extension: string): boolean;
-}
-
-interface SVGTransformable extends SVGLocatable {
-    readonly transform: SVGAnimatedTransformList;
 }
 
 interface SVGURIReference {
@@ -19637,22 +19845,34 @@ interface WindowTimersExtension {
     setImmediate(handler: any, ...args: any[]): number;
 }
 
+interface XMLHttpRequestEventTargetEventMap {
+    "abort": Event;
+    "error": ErrorEvent;
+    "load": Event;
+    "loadend": ProgressEvent;
+    "loadstart": Event;
+    "progress": ProgressEvent;
+    "timeout": ProgressEvent;
+}
+
 interface XMLHttpRequestEventTarget {
-    onabort: (this: this, ev: Event) => any;
-    onerror: (this: this, ev: ErrorEvent) => any;
-    onload: (this: this, ev: Event) => any;
-    onloadend: (this: this, ev: ProgressEvent) => any;
-    onloadstart: (this: this, ev: Event) => any;
-    onprogress: (this: this, ev: ProgressEvent) => any;
-    ontimeout: (this: this, ev: ProgressEvent) => any;
-    addEventListener(type: "abort", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "error", listener: (this: this, ev: ErrorEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "load", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadend", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "loadstart", listener: (this: this, ev: Event) => any, useCapture?: boolean): void;
-    addEventListener(type: "progress", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
-    addEventListener(type: "timeout", listener: (this: this, ev: ProgressEvent) => any, useCapture?: boolean): void;
+    onabort: (this: XMLHttpRequestEventTarget, ev: Event) => any;
+    onerror: (this: XMLHttpRequestEventTarget, ev: ErrorEvent) => any;
+    onload: (this: XMLHttpRequestEventTarget, ev: Event) => any;
+    onloadend: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    onloadstart: (this: XMLHttpRequestEventTarget, ev: Event) => any;
+    onprogress: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    ontimeout: (this: XMLHttpRequestEventTarget, ev: ProgressEvent) => any;
+    addEventListener<K extends keyof XMLHttpRequestEventTargetEventMap>(type: K, listener: (this: XMLHttpRequestEventTarget, ev: XMLHttpRequestEventTargetEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+}
+
+interface ErrorEventInit {
+    message?: string;
+    filename?: string;
+    lineno?: number;
+    conlno?: number;
+    error?: any;
 }
 
 interface StorageEventInit extends EventInit {
@@ -19668,6 +19888,56 @@ interface Canvas2DContextAttributes {
     willReadFrequently?: boolean;
     storage?: boolean;
     [attribute: string]: boolean | string | undefined;
+}
+
+interface ImageBitmapOptions {
+    imageOrientation?: "none" | "flipY";
+    premultiplyAlpha?: "none" | "premultiply" | "default";
+    colorSpaceConversion?: "none" | "default";
+    resizeWidth?: number;
+    resizeHeight?: number;
+    resizeQuality?: "pixelated" | "low" | "medium" | "high";
+}
+
+interface ImageBitmap {
+    readonly width: number;
+    readonly height: number;
+    close(): void;
+}
+
+interface URLSearchParams {
+    /**
+      * Appends a specified key/value pair as a new search parameter.
+      */
+    append(name: string, value: string): void;
+    /**
+      * Deletes the given search parameter, and its associated value, from the list of all search parameters.
+      */
+    delete(name: string): void;
+    /**
+      * Returns the first value associated to the given search parameter.
+      */
+    get(name: string): string | null;
+    /**
+      * Returns all the values association with a given search parameter.
+      */
+    getAll(name: string): string[];
+    /**
+      * Returns a Boolean indicating if such a search parameter exists.
+      */
+    has(name: string): boolean;
+    /**
+      * Sets the value associated to a given search parameter to the given value. If there were several values, delete the others.
+      */
+    set(name: string, value: string): void;
+}
+
+declare var URLSearchParams: {
+    prototype: URLSearchParams;
+    /**
+      * Constructor returning a URLSearchParams object.
+      */
+    new (init?: string | URLSearchParams): URLSearchParams;
 }
 
 interface NodeListOf<TNode extends Node> extends NodeList {
@@ -19696,19 +19966,24 @@ interface EventListenerObject {
     handleEvent(evt: Event): void;
 }
 
-interface MessageEventInit extends EventInit {
-    data?: any;
-    origin?: string;
-    lastEventId?: string;
-    channel?: string;
-    source?: any;
-    ports?: MessagePort[];
-}
-
 interface ProgressEventInit extends EventInit {
     lengthComputable?: boolean;
     loaded?: number;
     total?: number;
+}
+
+interface ScrollOptions {
+    behavior?: ScrollBehavior;
+}
+
+interface ScrollToOptions extends ScrollOptions {
+    left?: number;
+    top?: number;
+}
+
+interface ScrollIntoViewOptions extends ScrollOptions {
+    block?: ScrollLogicalPosition;
+    inline?: ScrollLogicalPosition;
 }
 
 interface ClipboardEventInit extends EventInit {
@@ -19754,7 +20029,7 @@ interface EcdsaParams extends Algorithm {
 }
 
 interface EcKeyGenParams extends Algorithm {
-    typedCurve: string;
+    namedCurve: string;
 }
 
 interface EcKeyAlgorithm extends KeyAlgorithm {
@@ -19890,6 +20165,75 @@ interface JsonWebKey {
     k?: string;
 }
 
+interface ParentNode {
+    readonly children: HTMLCollection;
+    readonly firstElementChild: Element | null;
+    readonly lastElementChild: Element | null;
+    readonly childElementCount: number;
+}
+
+interface DocumentOrShadowRoot {
+    readonly activeElement: Element | null;
+    readonly stylesheets: StyleSheetList;
+    getSelection(): Selection | null;
+    elementFromPoint(x: number, y: number): Element | null;
+    elementsFromPoint(x: number, y: number): Element[];
+}
+
+interface ShadowRoot extends DocumentOrShadowRoot, DocumentFragment {
+    readonly host: Element;
+    innerHTML: string;
+}
+
+interface ShadowRootInit {
+    mode: 'open'|'closed';
+    delegatesFocus?: boolean;
+}
+
+interface HTMLSlotElement extends HTMLElement {
+    name: string;
+    assignedNodes(options?: AssignedNodesOptions): Node[];
+}
+
+interface AssignedNodesOptions {
+    flatten?: boolean;
+}
+
+interface ElementDefinitionOptions {
+    extends: string;
+}
+
+interface CustomElementRegistry {
+    define(name: string, constructor: Function, options?: ElementDefinitionOptions): void;
+    get(name: string): any;
+    whenDefined(name: string): PromiseLike<void>;
+}
+
+interface PromiseRejectionEvent extends Event {
+    readonly promise: PromiseLike<any>;
+    readonly reason: any;
+}
+
+interface PromiseRejectionEventInit extends EventInit {
+    promise: PromiseLike<any>;
+    reason?: any;
+}
+
+interface EventListenerOptions {
+    capture?: boolean;
+}
+
+interface AddEventListenerOptions extends EventListenerOptions {
+    passive?: boolean;
+    once?: boolean;
+}
+
+interface TouchEventInit extends EventModifierInit {
+    touches?: Touch[];
+    targetTouches?: Touch[];
+    changedTouches?: Touch[];
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -19925,6 +20269,18 @@ interface DecodeSuccessCallback {
 interface DecodeErrorCallback {
     (error: DOMException): void;
 }
+interface VoidFunction {
+    (): void;
+}
+interface RTCSessionDescriptionCallback {
+    (sdp: RTCSessionDescription): void;
+}
+interface RTCPeerConnectionErrorCallback {
+    (error: DOMError): void;
+}
+interface RTCStatsCallback {
+    (report: RTCStatsReport): void;
+}
 interface FunctionStringCallback {
     (data: string): void;
 }
@@ -19935,12 +20291,469 @@ interface NavigatorUserMediaErrorCallback {
     (error: MediaStreamError): void;
 }
 interface ForEachCallback {
-    (keyId: any, status: string): void;
+    (keyId: any, status: MediaKeyStatus): void;
 }
+interface NotificationPermissionCallback {
+    (permission: NotificationPermission): void;
+}
+interface IntersectionObserverCallback {
+    (entries: IntersectionObserverEntry[], observer: IntersectionObserver): void;
+}
+interface HTMLElementTagNameMap {
+    "a": HTMLAnchorElement;
+    "applet": HTMLAppletElement;
+    "area": HTMLAreaElement;
+    "audio": HTMLAudioElement;
+    "base": HTMLBaseElement;
+    "basefont": HTMLBaseFontElement;
+    "blockquote": HTMLQuoteElement;
+    "body": HTMLBodyElement;
+    "br": HTMLBRElement;
+    "button": HTMLButtonElement;
+    "canvas": HTMLCanvasElement;
+    "caption": HTMLTableCaptionElement;
+    "col": HTMLTableColElement;
+    "colgroup": HTMLTableColElement;
+    "data": HTMLDataElement;
+    "datalist": HTMLDataListElement;
+    "del": HTMLModElement;
+    "dir": HTMLDirectoryElement;
+    "div": HTMLDivElement;
+    "dl": HTMLDListElement;
+    "embed": HTMLEmbedElement;
+    "fieldset": HTMLFieldSetElement;
+    "font": HTMLFontElement;
+    "form": HTMLFormElement;
+    "frame": HTMLFrameElement;
+    "frameset": HTMLFrameSetElement;
+    "h1": HTMLHeadingElement;
+    "h2": HTMLHeadingElement;
+    "h3": HTMLHeadingElement;
+    "h4": HTMLHeadingElement;
+    "h5": HTMLHeadingElement;
+    "h6": HTMLHeadingElement;
+    "head": HTMLHeadElement;
+    "hr": HTMLHRElement;
+    "html": HTMLHtmlElement;
+    "iframe": HTMLIFrameElement;
+    "img": HTMLImageElement;
+    "input": HTMLInputElement;
+    "ins": HTMLModElement;
+    "isindex": HTMLUnknownElement;
+    "label": HTMLLabelElement;
+    "legend": HTMLLegendElement;
+    "li": HTMLLIElement;
+    "link": HTMLLinkElement;
+    "listing": HTMLPreElement;
+    "map": HTMLMapElement;
+    "marquee": HTMLMarqueeElement;
+    "menu": HTMLMenuElement;
+    "meta": HTMLMetaElement;
+    "meter": HTMLMeterElement;
+    "nextid": HTMLUnknownElement;
+    "object": HTMLObjectElement;
+    "ol": HTMLOListElement;
+    "optgroup": HTMLOptGroupElement;
+    "option": HTMLOptionElement;
+    "output": HTMLOutputElement;
+    "p": HTMLParagraphElement;
+    "param": HTMLParamElement;
+    "picture": HTMLPictureElement;
+    "pre": HTMLPreElement;
+    "progress": HTMLProgressElement;
+    "q": HTMLQuoteElement;
+    "script": HTMLScriptElement;
+    "select": HTMLSelectElement;
+    "source": HTMLSourceElement;
+    "span": HTMLSpanElement;
+    "style": HTMLStyleElement;
+    "table": HTMLTableElement;
+    "tbody": HTMLTableSectionElement;
+    "td": HTMLTableDataCellElement;
+    "template": HTMLTemplateElement;
+    "textarea": HTMLTextAreaElement;
+    "tfoot": HTMLTableSectionElement;
+    "th": HTMLTableHeaderCellElement;
+    "thead": HTMLTableSectionElement;
+    "time": HTMLTimeElement;
+    "title": HTMLTitleElement;
+    "tr": HTMLTableRowElement;
+    "track": HTMLTrackElement;
+    "ul": HTMLUListElement;
+    "video": HTMLVideoElement;
+    "x-ms-webview": MSHTMLWebViewElement;
+    "xmp": HTMLPreElement;
+}
+
+interface ElementTagNameMap {
+    "a": HTMLAnchorElement;
+    "abbr": HTMLElement;
+    "acronym": HTMLElement;
+    "address": HTMLElement;
+    "applet": HTMLAppletElement;
+    "area": HTMLAreaElement;
+    "article": HTMLElement;
+    "aside": HTMLElement;
+    "audio": HTMLAudioElement;
+    "b": HTMLElement;
+    "base": HTMLBaseElement;
+    "basefont": HTMLBaseFontElement;
+    "bdo": HTMLElement;
+    "big": HTMLElement;
+    "blockquote": HTMLQuoteElement;
+    "body": HTMLBodyElement;
+    "br": HTMLBRElement;
+    "button": HTMLButtonElement;
+    "canvas": HTMLCanvasElement;
+    "caption": HTMLTableCaptionElement;
+    "center": HTMLElement;
+    "circle": SVGCircleElement;
+    "cite": HTMLElement;
+    "clippath": SVGClipPathElement;
+    "code": HTMLElement;
+    "col": HTMLTableColElement;
+    "colgroup": HTMLTableColElement;
+    "data": HTMLDataElement;
+    "datalist": HTMLDataListElement;
+    "dd": HTMLElement;
+    "defs": SVGDefsElement;
+    "del": HTMLModElement;
+    "desc": SVGDescElement;
+    "dfn": HTMLElement;
+    "dir": HTMLDirectoryElement;
+    "div": HTMLDivElement;
+    "dl": HTMLDListElement;
+    "dt": HTMLElement;
+    "ellipse": SVGEllipseElement;
+    "em": HTMLElement;
+    "embed": HTMLEmbedElement;
+    "feblend": SVGFEBlendElement;
+    "fecolormatrix": SVGFEColorMatrixElement;
+    "fecomponenttransfer": SVGFEComponentTransferElement;
+    "fecomposite": SVGFECompositeElement;
+    "feconvolvematrix": SVGFEConvolveMatrixElement;
+    "fediffuselighting": SVGFEDiffuseLightingElement;
+    "fedisplacementmap": SVGFEDisplacementMapElement;
+    "fedistantlight": SVGFEDistantLightElement;
+    "feflood": SVGFEFloodElement;
+    "fefunca": SVGFEFuncAElement;
+    "fefuncb": SVGFEFuncBElement;
+    "fefuncg": SVGFEFuncGElement;
+    "fefuncr": SVGFEFuncRElement;
+    "fegaussianblur": SVGFEGaussianBlurElement;
+    "feimage": SVGFEImageElement;
+    "femerge": SVGFEMergeElement;
+    "femergenode": SVGFEMergeNodeElement;
+    "femorphology": SVGFEMorphologyElement;
+    "feoffset": SVGFEOffsetElement;
+    "fepointlight": SVGFEPointLightElement;
+    "fespecularlighting": SVGFESpecularLightingElement;
+    "fespotlight": SVGFESpotLightElement;
+    "fetile": SVGFETileElement;
+    "feturbulence": SVGFETurbulenceElement;
+    "fieldset": HTMLFieldSetElement;
+    "figcaption": HTMLElement;
+    "figure": HTMLElement;
+    "filter": SVGFilterElement;
+    "font": HTMLFontElement;
+    "footer": HTMLElement;
+    "foreignobject": SVGForeignObjectElement;
+    "form": HTMLFormElement;
+    "frame": HTMLFrameElement;
+    "frameset": HTMLFrameSetElement;
+    "g": SVGGElement;
+    "h1": HTMLHeadingElement;
+    "h2": HTMLHeadingElement;
+    "h3": HTMLHeadingElement;
+    "h4": HTMLHeadingElement;
+    "h5": HTMLHeadingElement;
+    "h6": HTMLHeadingElement;
+    "head": HTMLHeadElement;
+    "header": HTMLElement;
+    "hgroup": HTMLElement;
+    "hr": HTMLHRElement;
+    "html": HTMLHtmlElement;
+    "i": HTMLElement;
+    "iframe": HTMLIFrameElement;
+    "image": SVGImageElement;
+    "img": HTMLImageElement;
+    "input": HTMLInputElement;
+    "ins": HTMLModElement;
+    "isindex": HTMLUnknownElement;
+    "kbd": HTMLElement;
+    "keygen": HTMLElement;
+    "label": HTMLLabelElement;
+    "legend": HTMLLegendElement;
+    "li": HTMLLIElement;
+    "line": SVGLineElement;
+    "lineargradient": SVGLinearGradientElement;
+    "link": HTMLLinkElement;
+    "listing": HTMLPreElement;
+    "map": HTMLMapElement;
+    "mark": HTMLElement;
+    "marker": SVGMarkerElement;
+    "marquee": HTMLMarqueeElement;
+    "mask": SVGMaskElement;
+    "menu": HTMLMenuElement;
+    "meta": HTMLMetaElement;
+    "metadata": SVGMetadataElement;
+    "meter": HTMLMeterElement;
+    "nav": HTMLElement;
+    "nextid": HTMLUnknownElement;
+    "nobr": HTMLElement;
+    "noframes": HTMLElement;
+    "noscript": HTMLElement;
+    "object": HTMLObjectElement;
+    "ol": HTMLOListElement;
+    "optgroup": HTMLOptGroupElement;
+    "option": HTMLOptionElement;
+    "output": HTMLOutputElement;
+    "p": HTMLParagraphElement;
+    "param": HTMLParamElement;
+    "path": SVGPathElement;
+    "pattern": SVGPatternElement;
+    "picture": HTMLPictureElement;
+    "plaintext": HTMLElement;
+    "polygon": SVGPolygonElement;
+    "polyline": SVGPolylineElement;
+    "pre": HTMLPreElement;
+    "progress": HTMLProgressElement;
+    "q": HTMLQuoteElement;
+    "radialgradient": SVGRadialGradientElement;
+    "rect": SVGRectElement;
+    "rt": HTMLElement;
+    "ruby": HTMLElement;
+    "s": HTMLElement;
+    "samp": HTMLElement;
+    "script": HTMLScriptElement;
+    "section": HTMLElement;
+    "select": HTMLSelectElement;
+    "small": HTMLElement;
+    "source": HTMLSourceElement;
+    "span": HTMLSpanElement;
+    "stop": SVGStopElement;
+    "strike": HTMLElement;
+    "strong": HTMLElement;
+    "style": HTMLStyleElement;
+    "sub": HTMLElement;
+    "sup": HTMLElement;
+    "svg": SVGSVGElement;
+    "switch": SVGSwitchElement;
+    "symbol": SVGSymbolElement;
+    "table": HTMLTableElement;
+    "tbody": HTMLTableSectionElement;
+    "td": HTMLTableDataCellElement;
+    "template": HTMLTemplateElement;
+    "text": SVGTextElement;
+    "textpath": SVGTextPathElement;
+    "textarea": HTMLTextAreaElement;
+    "tfoot": HTMLTableSectionElement;
+    "th": HTMLTableHeaderCellElement;
+    "thead": HTMLTableSectionElement;
+    "time": HTMLTimeElement;
+    "title": HTMLTitleElement;
+    "tr": HTMLTableRowElement;
+    "track": HTMLTrackElement;
+    "tspan": SVGTSpanElement;
+    "tt": HTMLElement;
+    "u": HTMLElement;
+    "ul": HTMLUListElement;
+    "use": SVGUseElement;
+    "var": HTMLElement;
+    "video": HTMLVideoElement;
+    "view": SVGViewElement;
+    "wbr": HTMLElement;
+    "x-ms-webview": MSHTMLWebViewElement;
+    "xmp": HTMLPreElement;
+}
+
+interface ElementListTagNameMap {
+    "a": NodeListOf<HTMLAnchorElement>;
+    "abbr": NodeListOf<HTMLElement>;
+    "acronym": NodeListOf<HTMLElement>;
+    "address": NodeListOf<HTMLElement>;
+    "applet": NodeListOf<HTMLAppletElement>;
+    "area": NodeListOf<HTMLAreaElement>;
+    "article": NodeListOf<HTMLElement>;
+    "aside": NodeListOf<HTMLElement>;
+    "audio": NodeListOf<HTMLAudioElement>;
+    "b": NodeListOf<HTMLElement>;
+    "base": NodeListOf<HTMLBaseElement>;
+    "basefont": NodeListOf<HTMLBaseFontElement>;
+    "bdo": NodeListOf<HTMLElement>;
+    "big": NodeListOf<HTMLElement>;
+    "blockquote": NodeListOf<HTMLQuoteElement>;
+    "body": NodeListOf<HTMLBodyElement>;
+    "br": NodeListOf<HTMLBRElement>;
+    "button": NodeListOf<HTMLButtonElement>;
+    "canvas": NodeListOf<HTMLCanvasElement>;
+    "caption": NodeListOf<HTMLTableCaptionElement>;
+    "center": NodeListOf<HTMLElement>;
+    "circle": NodeListOf<SVGCircleElement>;
+    "cite": NodeListOf<HTMLElement>;
+    "clippath": NodeListOf<SVGClipPathElement>;
+    "code": NodeListOf<HTMLElement>;
+    "col": NodeListOf<HTMLTableColElement>;
+    "colgroup": NodeListOf<HTMLTableColElement>;
+    "data": NodeListOf<HTMLDataElement>;
+    "datalist": NodeListOf<HTMLDataListElement>;
+    "dd": NodeListOf<HTMLElement>;
+    "defs": NodeListOf<SVGDefsElement>;
+    "del": NodeListOf<HTMLModElement>;
+    "desc": NodeListOf<SVGDescElement>;
+    "dfn": NodeListOf<HTMLElement>;
+    "dir": NodeListOf<HTMLDirectoryElement>;
+    "div": NodeListOf<HTMLDivElement>;
+    "dl": NodeListOf<HTMLDListElement>;
+    "dt": NodeListOf<HTMLElement>;
+    "ellipse": NodeListOf<SVGEllipseElement>;
+    "em": NodeListOf<HTMLElement>;
+    "embed": NodeListOf<HTMLEmbedElement>;
+    "feblend": NodeListOf<SVGFEBlendElement>;
+    "fecolormatrix": NodeListOf<SVGFEColorMatrixElement>;
+    "fecomponenttransfer": NodeListOf<SVGFEComponentTransferElement>;
+    "fecomposite": NodeListOf<SVGFECompositeElement>;
+    "feconvolvematrix": NodeListOf<SVGFEConvolveMatrixElement>;
+    "fediffuselighting": NodeListOf<SVGFEDiffuseLightingElement>;
+    "fedisplacementmap": NodeListOf<SVGFEDisplacementMapElement>;
+    "fedistantlight": NodeListOf<SVGFEDistantLightElement>;
+    "feflood": NodeListOf<SVGFEFloodElement>;
+    "fefunca": NodeListOf<SVGFEFuncAElement>;
+    "fefuncb": NodeListOf<SVGFEFuncBElement>;
+    "fefuncg": NodeListOf<SVGFEFuncGElement>;
+    "fefuncr": NodeListOf<SVGFEFuncRElement>;
+    "fegaussianblur": NodeListOf<SVGFEGaussianBlurElement>;
+    "feimage": NodeListOf<SVGFEImageElement>;
+    "femerge": NodeListOf<SVGFEMergeElement>;
+    "femergenode": NodeListOf<SVGFEMergeNodeElement>;
+    "femorphology": NodeListOf<SVGFEMorphologyElement>;
+    "feoffset": NodeListOf<SVGFEOffsetElement>;
+    "fepointlight": NodeListOf<SVGFEPointLightElement>;
+    "fespecularlighting": NodeListOf<SVGFESpecularLightingElement>;
+    "fespotlight": NodeListOf<SVGFESpotLightElement>;
+    "fetile": NodeListOf<SVGFETileElement>;
+    "feturbulence": NodeListOf<SVGFETurbulenceElement>;
+    "fieldset": NodeListOf<HTMLFieldSetElement>;
+    "figcaption": NodeListOf<HTMLElement>;
+    "figure": NodeListOf<HTMLElement>;
+    "filter": NodeListOf<SVGFilterElement>;
+    "font": NodeListOf<HTMLFontElement>;
+    "footer": NodeListOf<HTMLElement>;
+    "foreignobject": NodeListOf<SVGForeignObjectElement>;
+    "form": NodeListOf<HTMLFormElement>;
+    "frame": NodeListOf<HTMLFrameElement>;
+    "frameset": NodeListOf<HTMLFrameSetElement>;
+    "g": NodeListOf<SVGGElement>;
+    "h1": NodeListOf<HTMLHeadingElement>;
+    "h2": NodeListOf<HTMLHeadingElement>;
+    "h3": NodeListOf<HTMLHeadingElement>;
+    "h4": NodeListOf<HTMLHeadingElement>;
+    "h5": NodeListOf<HTMLHeadingElement>;
+    "h6": NodeListOf<HTMLHeadingElement>;
+    "head": NodeListOf<HTMLHeadElement>;
+    "header": NodeListOf<HTMLElement>;
+    "hgroup": NodeListOf<HTMLElement>;
+    "hr": NodeListOf<HTMLHRElement>;
+    "html": NodeListOf<HTMLHtmlElement>;
+    "i": NodeListOf<HTMLElement>;
+    "iframe": NodeListOf<HTMLIFrameElement>;
+    "image": NodeListOf<SVGImageElement>;
+    "img": NodeListOf<HTMLImageElement>;
+    "input": NodeListOf<HTMLInputElement>;
+    "ins": NodeListOf<HTMLModElement>;
+    "isindex": NodeListOf<HTMLUnknownElement>;
+    "kbd": NodeListOf<HTMLElement>;
+    "keygen": NodeListOf<HTMLElement>;
+    "label": NodeListOf<HTMLLabelElement>;
+    "legend": NodeListOf<HTMLLegendElement>;
+    "li": NodeListOf<HTMLLIElement>;
+    "line": NodeListOf<SVGLineElement>;
+    "lineargradient": NodeListOf<SVGLinearGradientElement>;
+    "link": NodeListOf<HTMLLinkElement>;
+    "listing": NodeListOf<HTMLPreElement>;
+    "map": NodeListOf<HTMLMapElement>;
+    "mark": NodeListOf<HTMLElement>;
+    "marker": NodeListOf<SVGMarkerElement>;
+    "marquee": NodeListOf<HTMLMarqueeElement>;
+    "mask": NodeListOf<SVGMaskElement>;
+    "menu": NodeListOf<HTMLMenuElement>;
+    "meta": NodeListOf<HTMLMetaElement>;
+    "metadata": NodeListOf<SVGMetadataElement>;
+    "meter": NodeListOf<HTMLMeterElement>;
+    "nav": NodeListOf<HTMLElement>;
+    "nextid": NodeListOf<HTMLUnknownElement>;
+    "nobr": NodeListOf<HTMLElement>;
+    "noframes": NodeListOf<HTMLElement>;
+    "noscript": NodeListOf<HTMLElement>;
+    "object": NodeListOf<HTMLObjectElement>;
+    "ol": NodeListOf<HTMLOListElement>;
+    "optgroup": NodeListOf<HTMLOptGroupElement>;
+    "option": NodeListOf<HTMLOptionElement>;
+    "output": NodeListOf<HTMLOutputElement>;
+    "p": NodeListOf<HTMLParagraphElement>;
+    "param": NodeListOf<HTMLParamElement>;
+    "path": NodeListOf<SVGPathElement>;
+    "pattern": NodeListOf<SVGPatternElement>;
+    "picture": NodeListOf<HTMLPictureElement>;
+    "plaintext": NodeListOf<HTMLElement>;
+    "polygon": NodeListOf<SVGPolygonElement>;
+    "polyline": NodeListOf<SVGPolylineElement>;
+    "pre": NodeListOf<HTMLPreElement>;
+    "progress": NodeListOf<HTMLProgressElement>;
+    "q": NodeListOf<HTMLQuoteElement>;
+    "radialgradient": NodeListOf<SVGRadialGradientElement>;
+    "rect": NodeListOf<SVGRectElement>;
+    "rt": NodeListOf<HTMLElement>;
+    "ruby": NodeListOf<HTMLElement>;
+    "s": NodeListOf<HTMLElement>;
+    "samp": NodeListOf<HTMLElement>;
+    "script": NodeListOf<HTMLScriptElement>;
+    "section": NodeListOf<HTMLElement>;
+    "select": NodeListOf<HTMLSelectElement>;
+    "small": NodeListOf<HTMLElement>;
+    "source": NodeListOf<HTMLSourceElement>;
+    "span": NodeListOf<HTMLSpanElement>;
+    "stop": NodeListOf<SVGStopElement>;
+    "strike": NodeListOf<HTMLElement>;
+    "strong": NodeListOf<HTMLElement>;
+    "style": NodeListOf<HTMLStyleElement>;
+    "sub": NodeListOf<HTMLElement>;
+    "sup": NodeListOf<HTMLElement>;
+    "svg": NodeListOf<SVGSVGElement>;
+    "switch": NodeListOf<SVGSwitchElement>;
+    "symbol": NodeListOf<SVGSymbolElement>;
+    "table": NodeListOf<HTMLTableElement>;
+    "tbody": NodeListOf<HTMLTableSectionElement>;
+    "td": NodeListOf<HTMLTableDataCellElement>;
+    "template": NodeListOf<HTMLTemplateElement>;
+    "text": NodeListOf<SVGTextElement>;
+    "textpath": NodeListOf<SVGTextPathElement>;
+    "textarea": NodeListOf<HTMLTextAreaElement>;
+    "tfoot": NodeListOf<HTMLTableSectionElement>;
+    "th": NodeListOf<HTMLTableHeaderCellElement>;
+    "thead": NodeListOf<HTMLTableSectionElement>;
+    "time": NodeListOf<HTMLTimeElement>;
+    "title": NodeListOf<HTMLTitleElement>;
+    "tr": NodeListOf<HTMLTableRowElement>;
+    "track": NodeListOf<HTMLTrackElement>;
+    "tspan": NodeListOf<SVGTSpanElement>;
+    "tt": NodeListOf<HTMLElement>;
+    "u": NodeListOf<HTMLElement>;
+    "ul": NodeListOf<HTMLUListElement>;
+    "use": NodeListOf<SVGUseElement>;
+    "var": NodeListOf<HTMLElement>;
+    "video": NodeListOf<HTMLVideoElement>;
+    "view": NodeListOf<SVGViewElement>;
+    "wbr": NodeListOf<HTMLElement>;
+    "x-ms-webview": NodeListOf<MSHTMLWebViewElement>;
+    "xmp": NodeListOf<HTMLPreElement>;
+}
+
 declare var Audio: {new(src?: string): HTMLAudioElement; };
 declare var Image: {new(width?: number, height?: number): HTMLImageElement; };
 declare var Option: {new(text?: string, value?: string, defaultSelected?: boolean, selected?: boolean): HTMLOptionElement; };
 declare var applicationCache: ApplicationCache;
+declare var caches: CacheStorage;
 declare var clientInformation: Navigator;
 declare var closed: boolean;
 declare var crypto: Crypto;
@@ -19948,19 +20761,21 @@ declare var defaultStatus: string;
 declare var devicePixelRatio: number;
 declare var doNotTrack: string;
 declare var document: Document;
-declare var event: Event;
+declare var event: Event | undefined;
 declare var external: External;
 declare var frameElement: Element;
 declare var frames: Window;
 declare var history: History;
 declare var innerHeight: number;
 declare var innerWidth: number;
+declare var isSecureContext: boolean;
 declare var length: number;
 declare var location: Location;
 declare var locationbar: BarProp;
 declare var menubar: BarProp;
+declare var msContentScript: ExtensionScriptApis;
 declare var msCredentials: MSCredentials;
-declare var name: string;
+declare const name: never;
 declare var navigator: Navigator;
 declare var offscreenBuffering: string | boolean;
 declare var onabort: (this: Window, ev: UIEvent) => any;
@@ -20054,7 +20869,7 @@ declare var ontouchstart: (ev: TouchEvent) => any;
 declare var onunload: (this: Window, ev: Event) => any;
 declare var onvolumechange: (this: Window, ev: Event) => any;
 declare var onwaiting: (this: Window, ev: Event) => any;
-declare var opener: Window;
+declare var opener: any;
 declare var orientation: string | number;
 declare var outerHeight: number;
 declare var outerWidth: number;
@@ -20072,18 +20887,21 @@ declare var scrollX: number;
 declare var scrollY: number;
 declare var scrollbars: BarProp;
 declare var self: Window;
+declare var speechSynthesis: SpeechSynthesis;
 declare var status: string;
 declare var statusbar: BarProp;
 declare var styleMedia: StyleMedia;
 declare var toolbar: BarProp;
 declare var top: Window;
 declare var window: Window;
+declare var customElements: CustomElementRegistry;
 declare function alert(message?: any): void;
 declare function blur(): void;
 declare function cancelAnimationFrame(handle: number): void;
 declare function captureEvents(): void;
 declare function close(): void;
 declare function confirm(message?: string): boolean;
+declare function departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
 declare function focus(): void;
 declare function getComputedStyle(elt: Element, pseudoElt?: string): CSSStyleDeclaration;
 declare function getMatchedCSSRules(elt: Element, pseudoElt?: string): CSSRuleList;
@@ -20103,14 +20921,19 @@ declare function resizeTo(x?: number, y?: number): void;
 declare function scroll(x?: number, y?: number): void;
 declare function scrollBy(x?: number, y?: number): void;
 declare function scrollTo(x?: number, y?: number): void;
+declare function stop(): void;
 declare function webkitCancelAnimationFrame(handle: number): void;
 declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+declare function createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function scroll(options?: ScrollToOptions): void;
+declare function scrollTo(options?: ScrollToOptions): void;
+declare function scrollBy(options?: ScrollToOptions): void;
 declare function toString(): string;
-declare function addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 declare function dispatchEvent(evt: Event): boolean;
-declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
 declare function setInterval(handler: (...args: any[]) => void, timeout: number): number;
@@ -20135,104 +20958,13 @@ declare var onwheel: (this: Window, ev: WheelEvent) => any;
 declare var indexedDB: IDBFactory;
 declare function atob(encodedString: string): string;
 declare function btoa(rawString: string): string;
-declare function addEventListener(type: "MSGestureChange", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSGestureDoubleTap", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSGestureEnd", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSGestureHold", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSGestureStart", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSGestureTap", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSInertiaStart", listener: (this: Window, ev: MSGestureEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerCancel", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerDown", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerEnter", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerLeave", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerMove", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerOut", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerOver", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "MSPointerUp", listener: (this: Window, ev: MSPointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "abort", listener: (this: Window, ev: UIEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "afterprint", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "beforeprint", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "beforeunload", listener: (this: Window, ev: BeforeUnloadEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "blur", listener: (this: Window, ev: FocusEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "canplay", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "canplaythrough", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "change", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "click", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "compassneedscalibration", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "contextmenu", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dblclick", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "devicelight", listener: (this: Window, ev: DeviceLightEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "devicemotion", listener: (this: Window, ev: DeviceMotionEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "deviceorientation", listener: (this: Window, ev: DeviceOrientationEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "drag", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dragend", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dragenter", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dragleave", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dragover", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "dragstart", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "drop", listener: (this: Window, ev: DragEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "durationchange", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "emptied", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "ended", listener: (this: Window, ev: MediaStreamErrorEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "focus", listener: (this: Window, ev: FocusEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "hashchange", listener: (this: Window, ev: HashChangeEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "input", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "invalid", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "keydown", listener: (this: Window, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "keypress", listener: (this: Window, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "keyup", listener: (this: Window, ev: KeyboardEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "load", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "loadeddata", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "loadedmetadata", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "loadstart", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "message", listener: (this: Window, ev: MessageEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mousedown", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mouseenter", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mouseleave", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mousemove", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mouseout", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mouseover", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mouseup", listener: (this: Window, ev: MouseEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "mousewheel", listener: (this: Window, ev: WheelEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "offline", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "online", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "orientationchange", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pagehide", listener: (this: Window, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pageshow", listener: (this: Window, ev: PageTransitionEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pause", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "play", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "playing", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointercancel", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerdown", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerenter", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerleave", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointermove", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerout", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerover", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "pointerup", listener: (this: Window, ev: PointerEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "popstate", listener: (this: Window, ev: PopStateEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "progress", listener: (this: Window, ev: ProgressEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "ratechange", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "readystatechange", listener: (this: Window, ev: ProgressEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "reset", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "resize", listener: (this: Window, ev: UIEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "scroll", listener: (this: Window, ev: UIEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "seeked", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "seeking", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "select", listener: (this: Window, ev: UIEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "stalled", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "storage", listener: (this: Window, ev: StorageEvent) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "submit", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "suspend", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "timeupdate", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "unload", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "volumechange", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "waiting", listener: (this: Window, ev: Event) => any, useCapture?: boolean): void;
-declare function addEventListener(type: "wheel", listener: (this: Window, ev: WheelEvent) => any, useCapture?: boolean): void;
+declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+declare function addEventListener<K extends keyof WindowEventMap>(type: K, listener: (this: Window, ev: WindowEventMap[K]) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 type AAGUID = string;
 type AlgorithmIdentifier = string | Algorithm;
+type BodyInit = any;
+type ByteString = string;
 type ConstrainBoolean = boolean | ConstrainBooleanParameters;
 type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
 type ConstrainDouble = number | ConstrainDoubleRange;
@@ -20252,6 +20984,7 @@ type GLsizeiptr = number;
 type GLubyte = number;
 type GLuint = number;
 type GLushort = number;
+type HeadersInit = any;
 type IDBKeyPath = string;
 type KeyFormat = string;
 type KeyType = string;
@@ -20259,17 +20992,98 @@ type KeyUsage = string;
 type MSInboundPayload = MSVideoRecvPayload | MSAudioRecvPayload;
 type MSLocalClientEvent = MSLocalClientEventBase | MSAudioLocalClientEvent;
 type MSOutboundPayload = MSVideoSendPayload | MSAudioSendPayload;
-type RTCIceGatherCandidate = RTCIceCandidate | RTCIceCandidateComplete;
+type RTCIceGatherCandidate = RTCIceCandidateDictionary | RTCIceCandidateComplete;
 type RTCTransport = RTCDtlsTransport | RTCSrtpSdesTransport;
+type RequestInfo = Request | string;
+type USVString = string;
 type payloadtype = number;
+type ScrollBehavior = "auto" | "instant" | "smooth";
+type ScrollLogicalPosition = "start" | "center" | "end" | "nearest";
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
+type ScrollRestoration = "auto" | "manual";
+type FormDataEntryValue = string | File;
+type AppendMode = "segments" | "sequence";
+type AudioContextState = "suspended" | "running" | "closed";
+type BiquadFilterType = "lowpass" | "highpass" | "bandpass" | "lowshelf" | "highshelf" | "peaking" | "notch" | "allpass";
+type CanvasFillRule = "nonzero" | "evenodd";
+type ChannelCountMode = "max" | "clamped-max" | "explicit";
+type ChannelInterpretation = "speakers" | "discrete";
+type DistanceModelType = "linear" | "inverse" | "exponential";
+type ExpandGranularity = "character" | "word" | "sentence" | "textedit";
+type GamepadInputEmulationType = "mouse" | "keyboard" | "gamepad";
+type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
+type IDBRequestReadyState = "pending" | "done";
+type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type ListeningState = "inactive" | "active" | "disambiguation";
+type MSCredentialType = "FIDO_2_0";
+type MSIceAddrType = "os" | "stun" | "turn" | "peer-derived";
+type MSIceType = "failed" | "direct" | "relay";
+type MSStatsType = "description" | "localclientevent" | "inbound-network" | "outbound-network" | "inbound-payload" | "outbound-payload" | "transportdiagnostics";
+type MSTransportType = "Embedded" | "USB" | "NFC" | "BT";
+type MSWebViewPermissionState = "unknown" | "defer" | "allow" | "deny";
+type MSWebViewPermissionType = "geolocation" | "unlimitedIndexedDBQuota" | "media" | "pointerlock" | "webnotifications";
+type MediaDeviceKind = "audioinput" | "audiooutput" | "videoinput";
+type MediaKeyMessageType = "license-request" | "license-renewal" | "license-release" | "individualization-request";
+type MediaKeySessionType = "temporary" | "persistent-license" | "persistent-release-message";
+type MediaKeyStatus = "usable" | "expired" | "output-downscaled" | "output-not-allowed" | "status-pending" | "internal-error";
+type MediaKeysRequirement = "required" | "optional" | "not-allowed";
+type MediaStreamTrackState = "live" | "ended";
+type NavigationReason = "up" | "down" | "left" | "right";
+type NavigationType = "navigate" | "reload" | "back_forward" | "prerender";
+type NotificationDirection = "auto" | "ltr" | "rtl";
+type NotificationPermission = "default" | "denied" | "granted";
+type OscillatorType = "sine" | "square" | "sawtooth" | "triangle" | "custom";
+type OverSampleType = "none" | "2x" | "4x";
+type PanningModelType = "equalpower";
+type PaymentComplete = "success" | "fail" | "";
+type PaymentShippingType = "shipping" | "delivery" | "pickup";
+type PushEncryptionKeyName = "p256dh" | "auth";
+type PushPermissionState = "granted" | "denied" | "prompt";
+type RTCBundlePolicy = "balanced" | "max-compat" | "max-bundle";
+type RTCDegradationPreference = "maintain-framerate" | "maintain-resolution" | "balanced";
+type RTCDtlsRole = "auto" | "client" | "server";
+type RTCDtlsTransportState = "new" | "connecting" | "connected" | "closed";
+type RTCIceCandidateType = "host" | "srflx" | "prflx" | "relay";
+type RTCIceComponent = "RTP" | "RTCP";
+type RTCIceConnectionState = "new" | "checking" | "connected" | "completed" | "failed" | "disconnected" | "closed";
+type RTCIceGatherPolicy = "all" | "nohost" | "relay";
+type RTCIceGathererState = "new" | "gathering" | "complete";
+type RTCIceGatheringState = "new" | "gathering" | "complete";
+type RTCIceProtocol = "udp" | "tcp";
+type RTCIceRole = "controlling" | "controlled";
+type RTCIceTcpCandidateType = "active" | "passive" | "so";
+type RTCIceTransportPolicy = "none" | "relay" | "all";
+type RTCIceTransportState = "new" | "checking" | "connected" | "completed" | "disconnected" | "closed";
+type RTCSdpType = "offer" | "pranswer" | "answer";
+type RTCSignalingState = "stable" | "have-local-offer" | "have-remote-offer" | "have-local-pranswer" | "have-remote-pranswer" | "closed";
+type RTCStatsIceCandidatePairState = "frozen" | "waiting" | "inprogress" | "failed" | "succeeded" | "cancelled";
+type RTCStatsIceCandidateType = "host" | "serverreflexive" | "peerreflexive" | "relayed";
+type RTCStatsType = "inboundrtp" | "outboundrtp" | "session" | "datachannel" | "track" | "transport" | "candidatepair" | "localcandidate" | "remotecandidate";
+type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin-only" | "origin-when-cross-origin" | "unsafe-url";
+type RequestCache = "default" | "no-store" | "reload" | "no-cache" | "force-cache";
+type RequestCredentials = "omit" | "same-origin" | "include";
+type RequestDestination = "" | "document" | "sharedworker" | "subresource" | "unknown" | "worker";
+type RequestMode = "navigate" | "same-origin" | "no-cors" | "cors";
+type RequestRedirect = "follow" | "error" | "manual";
+type RequestType = "" | "audio" | "font" | "image" | "script" | "style" | "track" | "video";
+type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
+type ScopedCredentialType = "ScopedCred";
+type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
+type Transport = "usb" | "nfc" | "ble";
+type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
+type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
+type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+
+
 /////////////////////////////
-/// WorkerGlobalScope APIs 
+/// WorkerGlobalScope APIs
 /////////////////////////////
-// These are only available in a Web Worker 
+// These are only available in a Web Worker
 declare function importScripts(...urls: string[]): void;
+
+
 
 
 /////////////////////////////
@@ -20301,7 +21115,7 @@ interface TextStreamBase {
 
     /**
      * Closes a text stream.
-     * It is not necessary to close standard streams; they close automatically when the process ends. If 
+     * It is not necessary to close standard streams; they close automatically when the process ends. If
      * you close a standard stream, be aware that any other pointers to that standard stream become invalid.
      */
     Close(): void;
@@ -20371,9 +21185,9 @@ interface TextStreamReader extends TextStreamBase {
 
 declare var WScript: {
     /**
-    * Outputs text to either a message box (under WScript.exe) or the command console window followed by
-    * a newline (under CScript.exe).
-    */
+     * Outputs text to either a message box (under WScript.exe) or the command console window followed by
+     * a newline (under CScript.exe).
+     */
     Echo(s: any): void;
 
     /**
@@ -20561,16 +21375,112 @@ interface DateConstructor {
 interface Date {
     getVarDate: () => VarDate;
 }
-/// <reference path="lib.dom.generated.d.ts" />
+
+
+/// <reference path="lib.dom.d.ts" />
 
 interface DOMTokenList {
     [Symbol.iterator](): IterableIterator<string>;
 }
 
+interface FormData {
+    /**
+     * Returns an array of key, value pairs for every entry in the list
+     */
+    entries(): IterableIterator<[string, string | File]>;
+    /**
+     * Returns a list of keys in the list
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the list
+     */
+    values(): IterableIterator<string | File>;
+
+    [Symbol.iterator](): IterableIterator<string | File>;
+}
+
+interface Headers {
+    [Symbol.iterator](): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all key/value pairs contained in this object.
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns an iterator allowing to go through all keys f the key/value pairs contained in this object.
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns an iterator allowing to go through all values of the key/value pairs contained in this object.
+     */
+    values(): IterableIterator<string>;
+}
+
 interface NodeList {
-    [Symbol.iterator](): IterableIterator<Node>
+    /**
+     * Returns an array of key, value pairs for every entry in the list
+     */
+    entries(): IterableIterator<[number, Node]>;
+    /**
+     * Performs the specified action for each node in an list.
+     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
+     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    forEach(callbackfn: (value: Node, index: number, listObj: NodeList) => void, thisArg?: any): void;
+    /**
+     * Returns an list of keys in the list
+     */
+    keys(): IterableIterator<number>;
+
+    /**
+     * Returns an list of values in the list
+     */
+    values(): IterableIterator<Node>;
+
+
+    [Symbol.iterator](): IterableIterator<Node>;
 }
 
 interface NodeListOf<TNode extends Node> {
-    [Symbol.iterator](): IterableIterator<TNode>
+
+    /**
+     * Returns an array of key, value pairs for every entry in the list
+     */
+    entries(): IterableIterator<[number, TNode]>;
+
+    /**
+     * Performs the specified action for each node in an list.
+     * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the list.
+     * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    forEach(callbackfn: (value: TNode, index: number, listObj: NodeListOf<TNode>) => void, thisArg?: any): void;
+    /**
+     * Returns an list of keys in the list
+     */
+    keys(): IterableIterator<number>;
+    /**
+     * Returns an list of values in the list
+     */
+    values(): IterableIterator<TNode>;
+
+    [Symbol.iterator](): IterableIterator<TNode>;
+}
+
+interface URLSearchParams {
+    /**
+     * Returns an array of key, value pairs for every entry in the search params
+     */
+    entries(): IterableIterator<[string, string]>;
+    /**
+     * Returns a list of keys in the search params
+     */
+    keys(): IterableIterator<string>;
+    /**
+     * Returns a list of values in the search params
+     */
+    values(): IterableIterator<string>;
+    /**
+     * iterate over key/value pairs
+     */
+    [Symbol.iterator](): IterableIterator<[string, string]>;
 }

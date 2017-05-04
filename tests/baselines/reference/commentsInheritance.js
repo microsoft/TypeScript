@@ -1,5 +1,4 @@
 //// [commentsInheritance.ts]
-
 /** i1 is interface with properties*/
 interface i1 {
     /** i1_p1*/
@@ -152,11 +151,16 @@ i2_i = i3_i;
 
 
 //// [commentsInheritance.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var c1 = (function () {
     function c1() {
     }
@@ -227,7 +231,7 @@ var c2 = (function () {
 var c3 = (function (_super) {
     __extends(c3, _super);
     function c3() {
-        _super.call(this, 10);
+        return _super.call(this, 10) || this;
     }
     /** c3 f1*/
     c3.prototype.f1 = function () {
@@ -258,7 +262,7 @@ c2_i = c3_i;
 var c4 = (function (_super) {
     __extends(c4, _super);
     function c4() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return c4;
 }(c2));

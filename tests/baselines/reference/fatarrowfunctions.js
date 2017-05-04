@@ -1,5 +1,4 @@
 //// [fatarrowfunctions.ts]
-
 function foo(x:any) {
 	return x();
 }

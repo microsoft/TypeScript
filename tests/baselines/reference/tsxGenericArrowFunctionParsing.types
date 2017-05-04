@@ -7,7 +7,7 @@ declare module JSX {
 >isElement : any
 }
 
-var T, T1, T2;
+var T: any, T1: any, T2: any;
 >T : any
 >T1 : any
 >T2 : any
@@ -50,7 +50,7 @@ var x4 = <T extends={true}>() => {}</T>;
 >x4 : JSX.Element
 ><T extends={true}>() => {}</T> : JSX.Element
 >T : any
->extends : any
+>extends : boolean
 >true : true
 >T : any
 
@@ -64,7 +64,7 @@ var x5 = <T extends>() => {}</T>;
 >x5 : JSX.Element
 ><T extends>() => {}</T> : JSX.Element
 >T : any
->extends : any
+>extends : true
 >T : any
 
 x5.isElement;

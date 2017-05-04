@@ -1,6 +1,10 @@
 /// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
+namespace ts {
+    /** The version of the TypeScript compiler release */
+    export const version = "2.4.0";
+}
 
 /* @internal */
 namespace ts {
@@ -19,10 +23,14 @@ namespace ts {
         True = -1
     }
 
-    const createObject = Object.create;
+    // More efficient to create a collator once and use its `compare` than to call `a.localeCompare(b)` many times.
+    export const collator: { compare(a: string, b: string): number } = typeof Intl === "object" && typeof Intl.Collator === "function" ? new Intl.Collator(/*locales*/ undefined, { usage: "sort", sensitivity: "accent" }) : undefined;
+    // Intl is missing in Safari, and node 0.10 treats "a" as greater than "B".
+    export const localeCompareIsCorrect = ts.collator && ts.collator.compare("a", "B") < 0;
 
-    export function createMap<T>(template?: MapLike<T>): Map<T> {
-        const map: Map<T> = createObject(null); // tslint:disable-line:no-null-keyword
+    /** Create a MapLike with good performance. */
+    function createDictionaryObject<T>(): MapLike<T> {
+        const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -30,52 +38,152 @@ namespace ts {
         map["__"] = undefined;
         delete map["__"];
 
+        return map;
+    }
+
+    /** Create a new map. If a template object is provided, the map will copy entries from it. */
+    export function createMap<T>(): Map<T> {
+        return new MapCtr<T>();
+    }
+
+    export function createMapFromTemplate<T>(template?: MapLike<T>): Map<T> {
+        const map: Map<T> = new MapCtr<T>();
+
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
         for (const key in template) if (hasOwnProperty.call(template, key)) {
-            map[key] = template[key];
+            map.set(key, template[key]);
         }
 
         return map;
     }
 
+    // The global Map object. This may not be available, so we must test for it.
+    declare const Map: { new<T>(): Map<T> } | undefined;
+    // Internet Explorer's Map doesn't support iteration, so don't use it.
+    // tslint:disable-next-line:no-in-operator
+    const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
+
+    // Keep the class inside a function so it doesn't get compiled if it's not used.
+    function shimMap(): { new<T>(): Map<T> } {
+
+        class MapIterator<T, U extends (string | T | [string, T])> {
+            private data: MapLike<T>;
+            private keys: string[];
+            private index = 0;
+            private selector: (data: MapLike<T>, key: string) => U;
+            constructor(data: MapLike<T>, selector: (data: MapLike<T>, key: string) => U) {
+                this.data = data;
+                this.selector = selector;
+                this.keys = Object.keys(data);
+            }
+
+            public next(): { value: U, done: false } | { value: never, done: true } {
+                const index = this.index;
+                if (index < this.keys.length) {
+                    this.index++;
+                    return { value: this.selector(this.data, this.keys[index]), done: false };
+                }
+                return { value: undefined as never, done: true };
+            }
+        }
+
+        return class<T> implements Map<T> {
+            private data = createDictionaryObject<T>();
+            public size = 0;
+
+            get(key: string): T {
+                return this.data[key];
+            }
+
+            set(key: string, value: T): this {
+                if (!this.has(key)) {
+                    this.size++;
+                }
+                this.data[key] = value;
+                return this;
+            }
+
+            has(key: string): boolean {
+                // tslint:disable-next-line:no-in-operator
+                return key in this.data;
+            }
+
+            delete(key: string): boolean {
+                if (this.has(key)) {
+                    this.size--;
+                    delete this.data[key];
+                    return true;
+                }
+                return false;
+            }
+
+            clear(): void {
+                this.data = createDictionaryObject<T>();
+                this.size = 0;
+            }
+
+            keys() {
+                return new MapIterator(this.data, (_data, key) => key);
+            }
+
+            values() {
+                return new MapIterator(this.data, (data, key) => data[key]);
+            }
+
+            entries() {
+                return new MapIterator(this.data, (data, key) => [key, data[key]] as [string, T]);
+            }
+
+            forEach(action: (value: T, key: string) => void): void {
+                for (const key in this.data) {
+                    action(this.data[key], key);
+                }
+            }
+        };
+    }
+
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
-        let files = createMap<T>();
+        const files = createMap<T>();
         return {
             get,
             set,
             contains,
             remove,
             forEachValue: forEachValueInMap,
+            getKeys,
             clear,
         };
 
         function forEachValueInMap(f: (key: Path, value: T) => void) {
-            for (const key in files) {
-                f(<Path>key, files[key]);
-            }
+            files.forEach((file, key) => {
+                f(<Path>key, file);
+            });
+        }
+
+        function getKeys() {
+            return arrayFrom(files.keys()) as Path[];
         }
 
         // path should already be well-formed so it does not need to be normalized
         function get(path: Path): T {
-            return files[toKey(path)];
+            return files.get(toKey(path));
         }
 
         function set(path: Path, value: T) {
-            files[toKey(path)] = value;
+            files.set(toKey(path), value);
         }
 
         function contains(path: Path) {
-            return toKey(path) in files;
+            return files.has(toKey(path));
         }
 
         function remove(path: Path) {
-            const key = toKey(path);
-            delete files[key];
+            files.delete(toKey(path));
         }
 
         function clear() {
-            files = createMap<T>();
+            files.clear();
         }
 
         function toKey(path: Path): string {
@@ -96,6 +204,10 @@ namespace ts {
         GreaterThan = 1
     }
 
+    export function length(array: any[]) {
+        return array ? array.length : 0;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
@@ -103,7 +215,7 @@ namespace ts {
      */
     export function forEach<T, U>(array: T[] | undefined, callback: (element: T, index: number) => U | undefined): U | undefined {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 const result = callback(array[i], i);
                 if (result) {
                     return result;
@@ -111,6 +223,41 @@ namespace ts {
             }
         }
         return undefined;
+    }
+    /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+     * At that point findAncestor returns undefined.
+     */
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node {
+        while (node) {
+            const result = callback(node);
+            if (result === "quit") {
+                return undefined;
+            }
+            else if (result) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
+
+    export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
+        Debug.assert(arrayA.length === arrayB.length);
+        for (let i = 0; i < arrayA.length; i++) {
+            callback(arrayA[i], arrayB[i], i);
+        }
+    }
+
+    export function zipToMap<T>(keys: string[], values: T[]): Map<T> {
+        Debug.assert(keys.length === values.length);
+        const map = createMap<T>();
+        for (let i = 0; i < keys.length; ++i) {
+            map.set(keys[i], values[i]);
+        }
+        return map;
     }
 
     /**
@@ -120,7 +267,7 @@ namespace ts {
      */
     export function every<T>(array: T[], callback: (element: T, index: number) => boolean): boolean {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (!callback(array[i], i)) {
                     return false;
                 }
@@ -132,7 +279,7 @@ namespace ts {
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
     export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
                 return value;
@@ -141,12 +288,22 @@ namespace ts {
         return undefined;
     }
 
+    /** Works like Array.prototype.findIndex, returning `-1` if no element satisfying the predicate is found. */
+    export function findIndex<T>(array: T[], predicate: (element: T, index: number) => boolean): number {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i], i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     /**
      * Returns the first truthy result of `callback`, or else fails.
      * This is like `forEach`, but never returns undefined.
      */
     export function findMap<T, U>(array: T[], callback: (element: T, index: number) => U | undefined): U {
-        for (let i = 0, len = array.length; i < len; i++) {
+        for (let i = 0; i < array.length; i++) {
             const result = callback(array[i], i);
             if (result) {
                 return result;
@@ -168,7 +325,7 @@ namespace ts {
 
     export function indexOf<T>(array: T[], value: T): number {
         if (array) {
-            for (let i = 0, len = array.length; i < len; i++) {
+            for (let i = 0; i < array.length; i++) {
                 if (array[i] === value) {
                     return i;
                 }
@@ -178,7 +335,7 @@ namespace ts {
     }
 
     export function indexOfAnyCharCode(text: string, charCodes: number[], start?: number): number {
-        for (let i = start || 0, len = text.length; i < len; i++) {
+        for (let i = start || 0; i < text.length; i++) {
             if (contains(charCodes, text.charCodeAt(i))) {
                 return i;
             }
@@ -204,7 +361,7 @@ namespace ts {
      * true for all elements, otherwise returns a new array instance containing the filtered subset.
      */
     export function filter<T, U extends T>(array: T[], f: (x: T) => x is U): U[];
-    export function filter<T>(array: T[], f: (x: T) => boolean): T[]
+    export function filter<T>(array: T[], f: (x: T) => boolean): T[];
     export function filter<T>(array: T[], f: (x: T) => boolean): T[] {
         if (array) {
             const len = array.length;
@@ -257,11 +414,31 @@ namespace ts {
         if (array) {
             result = [];
             for (let i = 0; i < array.length; i++) {
-                const v = array[i];
-                result.push(f(v, i));
+                result.push(f(array[i], i));
             }
         }
         return result;
+    }
+
+    // Maps from T to T and avoids allocation if all elements map to themselves
+    export function sameMap<T>(array: T[], f: (x: T, i: number) => T): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                if (result) {
+                    result.push(f(array[i], i));
+                }
+                else {
+                    const item = array[i];
+                    const mapped = f(item, i);
+                    if (item !== mapped) {
+                        result = array.slice(0, i);
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     /**
@@ -377,26 +554,42 @@ namespace ts {
         return result;
     }
 
-    export function mapObject<T, U>(object: MapLike<T>, f: (key: string, x: T) => [string, U]): MapLike<U> {
-        let result: MapLike<U>;
-        if (object) {
-            result = {};
-            for (const v of getOwnKeys(object)) {
-                const [key, value]: [string, U] = f(v, object[v]) || [undefined, undefined];
-                if (key !== undefined) {
-                    result[key] = value;
-                }
-            }
+    export function mapEntries<T, U>(map: Map<T>, f: (key: string, value: T) => [string, U]): Map<U> {
+        if (!map) {
+            return undefined;
         }
+
+        const result = createMap<U>();
+        map.forEach((value, key) => {
+            const [newKey, newValue] = f(key, value);
+            result.set(newKey, newValue);
+        });
         return result;
     }
 
+    export function some<T>(array: T[], predicate?: (value: T) => boolean): boolean {
+        if (array) {
+            if (predicate) {
+                for (const v of array) {
+                    if (predicate(v)) {
+                        return true;
+                    }
+                }
+            }
+            else {
+                return array.length > 0;
+            }
+        }
+        return false;
+    }
+
     export function concatenate<T>(array1: T[], array2: T[]): T[] {
-        if (!array2 || !array2.length) return array1;
-        if (!array1 || !array1.length) return array2;
+        if (!some(array2)) return array1;
+        if (!some(array1)) return array2;
         return [...array1, ...array2];
     }
 
+    // TODO: fixme (N^2) - add optional comparer so collection can be sorted before deduplication.
     export function deduplicate<T>(array: T[], areEqual?: (a: T, b: T) => boolean): T[] {
         let result: T[];
         if (array) {
@@ -411,6 +604,44 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, equaler?: (a: T, b: T) => boolean): boolean {
+        if (!array1 || !array2) {
+            return array1 === array2;
+        }
+
+        if (array1.length !== array2.length) {
+            return false;
+        }
+
+        for (let i = 0; i < array1.length; i++) {
+            const equals = equaler ? equaler(array1[i], array2[i]) : array1[i] === array2[i];
+            if (!equals) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
+        return !oldOptions ||
+            (oldOptions.module !== newOptions.module) ||
+            (oldOptions.moduleResolution !== newOptions.moduleResolution) ||
+            (oldOptions.noResolve !== newOptions.noResolve) ||
+            (oldOptions.target !== newOptions.target) ||
+            (oldOptions.noLib !== newOptions.noLib) ||
+            (oldOptions.jsx !== newOptions.jsx) ||
+            (oldOptions.allowJs !== newOptions.allowJs) ||
+            (oldOptions.rootDir !== newOptions.rootDir) ||
+            (oldOptions.configFilePath !== newOptions.configFilePath) ||
+            (oldOptions.baseUrl !== newOptions.baseUrl) ||
+            (oldOptions.maxNodeModuleJsDepth !== newOptions.maxNodeModuleJsDepth) ||
+            !arrayIsEqualTo(oldOptions.lib, newOptions.lib) ||
+            !arrayIsEqualTo(oldOptions.typeRoots, newOptions.typeRoots) ||
+            !arrayIsEqualTo(oldOptions.rootDirs, newOptions.rootDirs) ||
+            !equalOwnProperties(oldOptions.paths, newOptions.paths);
     }
 
     /**
@@ -434,6 +665,27 @@ namespace ts {
         return result || array;
     }
 
+    /**
+     * Gets the relative complement of `arrayA` with respect to `b`, returning the elements that
+     * are not present in `arrayA` but are present in `arrayB`. Assumes both arrays are sorted
+     * based on the provided comparer.
+     */
+    export function relativeComplement<T>(arrayA: T[] | undefined, arrayB: T[] | undefined, comparer: (x: T, y: T) => Comparison = compareValues, offsetA = 0, offsetB = 0): T[] | undefined {
+        if (!arrayB || !arrayA || arrayB.length === 0 || arrayA.length === 0) return arrayB;
+        const result: T[] = [];
+        outer: for (; offsetB < arrayB.length; offsetB++) {
+            inner: for (; offsetA < arrayA.length; offsetA++) {
+                switch (comparer(arrayB[offsetB], arrayA[offsetA])) {
+                    case Comparison.LessThan: break inner;
+                    case Comparison.EqualTo: continue outer;
+                    case Comparison.GreaterThan: continue inner;
+                }
+            }
+            result.push(arrayB[offsetB]);
+        }
+        return result;
+    }
+
     export function sum(array: any[], prop: string): number {
         let result = 0;
         for (const v of array) {
@@ -442,14 +694,45 @@ namespace ts {
         return result;
     }
 
-    export function addRange<T>(to: T[], from: T[]): void {
-        if (to && from) {
-            for (const v of from) {
-                if (v !== undefined) {
-                    to.push(v);
-                }
-            }
+    /**
+     * Appends a value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param value The value to append to the array. If `value` is `undefined`, nothing is
+     * appended.
+     */
+    export function append<T>(to: T[] | undefined, value: T | undefined): T[] | undefined {
+        if (value === undefined) return to;
+        if (to === undefined) return [value];
+        to.push(value);
+        return to;
+    }
+
+    /**
+     * Appends a range of value to an array, returning the array.
+     *
+     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
+     * is created if `value` was appended.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is
+     * appended. If an element of `from` is `undefined`, that element is not appended.
+     */
+    export function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined {
+        if (from === undefined) return to;
+        for (const v of from) {
+            to = append(to, v);
         }
+        return to;
+    }
+
+    /**
+     * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
+     */
+    export function stableSort<T>(array: T[], comparer: (x: T, y: T) => Comparison = compareValues) {
+        return array
+            .map((_, i) => i) // create array of indices
+            .sort((x, y) => comparer(array[x], array[y]) || compareValues(x, y)) // sort indices by value then position
+            .map(i => array[i]); // get sorted array
     }
 
     export function rangeEquals<T>(array1: T[], array2: T[], pos: number, end: number) {
@@ -462,31 +745,47 @@ namespace ts {
         return true;
     }
 
+    /**
+     * Returns the first element of an array if non-empty, `undefined` otherwise.
+     */
     export function firstOrUndefined<T>(array: T[]): T {
         return array && array.length > 0
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the last element of an array if non-empty, `undefined` otherwise.
+     */
+    export function lastOrUndefined<T>(array: T[]): T {
+        return array && array.length > 0
+            ? array[array.length - 1]
+            : undefined;
+    }
+
+    /**
+     * Returns the only element of an array if it contains only one element, `undefined` otherwise.
+     */
     export function singleOrUndefined<T>(array: T[]): T {
         return array && array.length === 1
             ? array[0]
             : undefined;
     }
 
+    /**
+     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * array.
+     */
     export function singleOrMany<T>(array: T[]): T | T[] {
         return array && array.length === 1
             ? array[0]
             : array;
     }
 
-    /**
-     * Returns the last element of an array if non-empty, undefined otherwise.
-     */
-    export function lastOrUndefined<T>(array: T[]): T {
-        return array && array.length > 0
-            ? array[array.length - 1]
-            : undefined;
+    export function replaceElement<T>(array: T[], index: number, value: T): T[] {
+        const result = array.slice(0);
+        result[index] = value;
+        return result;
     }
 
     /**
@@ -496,18 +795,25 @@ namespace ts {
      * @param array A sorted array whose first element must be no larger than number
      * @param number The value to be searched for in the array.
      */
-    export function binarySearch(array: number[], value: number): number {
-        let low = 0;
+    export function binarySearch<T>(array: T[], value: T, comparer?: (v1: T, v2: T) => number, offset?: number): number {
+        if (!array || array.length === 0) {
+            return -1;
+        }
+
+        let low = offset || 0;
         let high = array.length - 1;
+        comparer = comparer !== undefined
+            ? comparer
+            : (v1, v2) => (v1 < v2 ? -1 : (v1 > v2 ? 1 : 0));
 
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midValue = array[middle];
 
-            if (midValue === value) {
+            if (comparer(midValue, value) === 0) {
                 return middle;
             }
-            else if (midValue > value) {
+            else if (comparer(midValue, value) > 0) {
                 high = middle - 1;
             }
             else {
@@ -575,9 +881,6 @@ namespace ts {
     /**
      * Indicates whether a map-like contains an own property with the specified key.
      *
-     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
-     *       the 'in' operator.
-     *
      * @param map A map-like.
      * @param key A property key.
      */
@@ -587,9 +890,6 @@ namespace ts {
 
     /**
      * Gets the value of an owned property in a map-like.
-     *
-     * NOTE: This is intended for use only with MapLike<T> objects. For Map<T> objects, use
-     *       an indexer.
      *
      * @param map A map-like.
      * @param key A property key.
@@ -614,43 +914,58 @@ namespace ts {
         return keys;
     }
 
-    /**
-     * Enumerates the properties of a Map<T>, invoking a callback and returning the first truthy result.
-     *
-     * @param map A map for which properties should be enumerated.
-     * @param callback A callback to invoke for each property.
-     */
-    export function forEachProperty<T, U>(map: Map<T>, callback: (value: T, key: string) => U): U {
-        let result: U;
-        for (const key in map) {
-            if (result = callback(map[key], key)) break;
+    /** Shims `Array.from`. */
+    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+        const result: any[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(map ? map(value) : value);
+        }
+        return result;
+    }
+
+    export function convertToArray<T, U>(iterator: Iterator<T>, f: (value: T) => U) {
+        const result: U[] = [];
+        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
+            result.push(f(value));
         }
         return result;
     }
 
     /**
-     * Returns true if a Map<T> has some matching property.
-     *
-     * @param map A map whose properties should be tested.
-     * @param predicate An optional callback used to test each property.
+     * Calls `callback` for each entry in the map, returning the first truthy result.
+     * Use `map.forEach` instead for normal iteration.
      */
-    export function someProperties<T>(map: Map<T>, predicate?: (value: T, key: string) => boolean) {
-        for (const key in map) {
-            if (!predicate || predicate(map[key], key)) return true;
+    export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+        const iterator = map.entries();
+        for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
+            const [key, value] = pair;
+            const result = callback(value, key);
+            if (result) {
+                return result;
+            }
         }
-        return false;
+        return undefined;
     }
 
-    /**
-     * Performs a shallow copy of the properties from a source Map<T> to a target MapLike<T>
-     *
-     * @param source A map from which properties should be copied.
-     * @param target A map to which properties should be copied.
-     */
-    export function copyProperties<T>(source: Map<T>, target: MapLike<T>): void {
-        for (const key in source) {
-            target[key] = source[key];
+    /** `forEachEntry` for just keys. */
+    export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined {
+        const iterator = map.keys();
+        for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
+            const result = callback(key);
+            if (result) {
+                return result;
+            }
         }
+        return undefined;
+    }
+
+    /** Copy entries from `source` to `target`. */
+    export function copyEntries<T>(source: Map<T>, target: Map<T>): void {
+        source.forEach((value, key) => {
+            target.set(key, value);
+        });
     }
 
     export function assign<T1 extends MapLike<{}>, T2, T3>(t: T1, arg1: T2, arg2: T3): T1 & T2 & T3;
@@ -658,47 +973,11 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p of getOwnKeys(arg)) {
+            for (const p in arg) if (hasProperty(arg, p)) {
                 t[p] = arg[p];
             }
         }
         return t;
-    }
-
-    /**
-     * Reduce the properties of a map.
-     *
-     * NOTE: This is intended for use with Map<T> objects. For MapLike<T> objects, use
-     *       reduceOwnProperties instead as it offers better runtime safety.
-     *
-     * @param map The map to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceProperties<T, U>(map: Map<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
-    }
-
-    /**
-     * Reduce the properties defined on a map-like (but not from its prototype chain).
-     *
-     * NOTE: This is intended for use with MapLike<T> objects. For Map<T> objects, use
-     *       reduceProperties instead as it offers better performance.
-     *
-     * @param map The map-like to reduce
-     * @param callback An aggregation function that is called for each entry in the map
-     * @param initial The initial value for the reduction.
-     */
-    export function reduceOwnProperties<T, U>(map: MapLike<T>, callback: (aggregate: U, value: T, key: string) => U, initial: U): U {
-        let result = initial;
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            result = callback(result, map[key], String(key));
-        }
-        return result;
     }
 
     /**
@@ -735,23 +1014,14 @@ namespace ts {
     export function arrayToMap<T, U>(array: T[], makeKey: (value: T) => string, makeValue?: (value: T) => U): Map<T | U> {
         const result = createMap<T | U>();
         for (const value of array) {
-            result[makeKey(value)] = makeValue ? makeValue(value) : value;
+            result.set(makeKey(value), makeValue ? makeValue(value) : value);
         }
         return result;
     }
 
-    export function isEmpty<T>(map: Map<T>) {
-        for (const id in map) {
-            if (hasProperty(map, id)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
-        copyProperties(map, clone);
+        copyEntries(map, clone);
         return clone;
     }
 
@@ -765,7 +1035,7 @@ namespace ts {
         return result;
     }
 
-    export function extend<T1, T2>(first: T1 , second: T2): T1 & T2 {
+    export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) if (hasOwnProperty.call(second, id)) {
             (result as any)[id] = (second as any)[id];
@@ -776,32 +1046,43 @@ namespace ts {
         return result;
     }
 
-    /**
-     * Adds the value to an array of values associated with the key, and returns the array.
-     * Creates the array if it does not already exist.
-     */
-    export function multiMapAdd<V>(map: Map<V[]>, key: string, value: V): V[] {
-        const values = map[key];
-        if (values) {
-            values.push(value);
-            return values;
-        }
-        else {
-            return map[key] = [value];
-        }
+    export interface MultiMap<T> extends Map<T[]> {
+        /**
+         * Adds the value to an array of values associated with the key, and returns the array.
+         * Creates the array if it does not already exist.
+         */
+        add(key: string, value: T): T[];
+        /**
+         * Removes a value from an array of values associated with the key.
+         * Does not preserve the order of those values.
+         * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
+         */
+        remove(key: string, value: T): void;
     }
 
-    /**
-     * Removes a value from an array of values associated with the key.
-     * Does not preserve the order of those values.
-     * Does nothing if `key` is not in `map`, or `value` is not in `map[key]`.
-     */
-    export function multiMapRemove<V>(map: Map<V[]>, key: string, value: V): void {
-        const values = map[key];
+    export function createMultiMap<T>(): MultiMap<T> {
+        const map = createMap<T[]>() as MultiMap<T>;
+        map.add = multiMapAdd;
+        map.remove = multiMapRemove;
+        return map;
+    }
+    function multiMapAdd<T>(this: MultiMap<T>, key: string, value: T) {
+        let values = this.get(key);
+        if (values) {
+            values.push(value);
+        }
+        else {
+            this.set(key, values = [value]);
+        }
+        return values;
+
+    }
+    function multiMapRemove<T>(this: MultiMap<T>, key: string, value: T) {
+        const values = this.get(key);
         if (values) {
             unorderedRemoveItem(values, value);
             if (!values.length) {
-                delete map[key];
+                this.delete(key);
             }
         }
     }
@@ -811,6 +1092,14 @@ namespace ts {
      */
     export function isArray(value: any): value is any[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    /** Does nothing. */
+    export function noop(): void {}
+
+    /** Throws an error because a function is not implemented. */
+    export function notImplemented(): never {
+        throw new Error("Not implemented");
     }
 
     export function memoize<T>(callback: () => T): () => T {
@@ -824,19 +1113,85 @@ namespace ts {
         };
     }
 
-    function formatStringFromArgs(text: string, args: { [index: number]: any; }, baseIndex?: number): string {
-        baseIndex = baseIndex || 0;
+    /**
+     * High-order function, creates a function that executes a function composition.
+     * For example, `chain(a, b)` is the equivalent of `x => ((a', b') => y => b'(a'(y)))(a(x), b(x))`
+     *
+     * @param args The functions to chain.
+     */
+    export function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
+    export function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
+        if (e) {
+            const args: ((t: T) => (u: U) => U)[] = [];
+            for (let i = 0; i < arguments.length; i++) {
+                args[i] = arguments[i];
+            }
 
-        return text.replace(/{(\d+)}/g, (match, index?) => args[+index + baseIndex]);
+            return t => compose(...map(args, f => f(t)));
+        }
+        else if (d) {
+            return t => compose(a(t), b(t), c(t), d(t));
+        }
+        else if (c) {
+            return t => compose(a(t), b(t), c(t));
+        }
+        else if (b) {
+            return t => compose(a(t), b(t));
+        }
+        else if (a) {
+            return t => compose(a(t));
+        }
+        else {
+            return _ => u => u;
+        }
     }
 
-    export let localizedDiagnosticMessages: Map<string> = undefined;
+    /**
+     * High-order function, composes functions. Note that functions are composed inside-out;
+     * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
+     *
+     * @param args The functions to compose.
+     */
+    export function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
+    export function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
+        if (e) {
+            const args: ((t: T) => T)[] = [];
+            for (let i = 0; i < arguments.length; i++) {
+                args[i] = arguments[i];
+            }
+
+            return t => reduceLeft<(t: T) => T, T>(args, (u, f) => f(u), t);
+        }
+        else if (d) {
+            return t => d(c(b(a(t))));
+        }
+        else if (c) {
+            return t => c(b(a(t)));
+        }
+        else if (b) {
+            return t => b(a(t));
+        }
+        else if (a) {
+            return t => a(t);
+        }
+        else {
+            return t => t;
+        }
+    }
+
+    export function formatStringFromArgs(text: string, args: { [index: number]: string; }, baseIndex?: number): string {
+        baseIndex = baseIndex || 0;
+
+        return text.replace(/{(\d+)}/g, (_match, index?) => args[+index + baseIndex]);
+    }
+
+    export let localizedDiagnosticMessages: MapLike<string> = undefined;
 
     export function getLocaleSpecificMessage(message: DiagnosticMessage) {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): Diagnostic {
         const end = start + length;
 
@@ -844,8 +1199,8 @@ namespace ts {
         Debug.assert(length >= 0, "length must be non-negative, is " + length);
 
         if (file) {
-            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${ start } > ${ file.text.length }`);
-            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${ end } > ${ file.text.length }`);
+            Debug.assert(start <= file.text.length, `start must be within the bounds of the file. ${start} > ${file.text.length}`);
+            Debug.assert(end <= file.text.length, `end must be the bounds of the file. ${end} > ${file.text.length}`);
         }
 
         let text = getLocaleSpecificMessage(message);
@@ -866,7 +1221,7 @@ namespace ts {
     }
 
     /* internal */
-    export function formatMessage(dummy: any, message: DiagnosticMessage): string {
+    export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
         if (arguments.length > 2) {
@@ -876,7 +1231,7 @@ namespace ts {
         return text;
     }
 
-    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: any[]): Diagnostic;
+    export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
 
@@ -892,6 +1247,18 @@ namespace ts {
             messageText: text,
             category: message.category,
             code: message.code
+        };
+    }
+
+    export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
+        return {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+
+            code: chain.code,
+            category: chain.category,
+            messageText: chain.next ? chain : chain.messageText
         };
     }
 
@@ -934,8 +1301,12 @@ namespace ts {
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
         if (ignoreCase) {
-            if (String.prototype.localeCompare) {
-                const result = a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });
+            // Checking if "collator exists indicates that Intl is available.
+            // We still have to check if "collator.compare" is correct. If it is not, use "String.localeComapre"
+            if (collator) {
+                const result = localeCompareIsCorrect ?
+                    collator.compare(a, b) :
+                    a.localeCompare(b, /*locales*/ undefined, { usage: "sort", sensitivity: "accent" });  // accent means a ≠ b, a ≠ á, a = A
                 return result < 0 ? Comparison.LessThan : result > 0 ? Comparison.GreaterThan : Comparison.EqualTo;
             }
 
@@ -1015,7 +1386,9 @@ namespace ts {
         return path.replace(/\\/g, "/");
     }
 
-    // Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+    /**
+     * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
+     */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1044,8 +1417,14 @@ namespace ts {
         return 0;
     }
 
-    export let directorySeparator = "/";
-    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number) {
+    /**
+     * Internally, we represent paths as strings with '/' as the directory separator.
+     * When we make system calls (eg: LanguageServiceHost.getDirectory()),
+     * we expect the host to correctly handle paths in our specified format.
+     */
+    export const directorySeparator = "/";
+    const directorySeparatorCharCode = CharacterCodes.slash;
+    function getNormalizedParts(normalizedSlashedPath: string, rootLength: number): string[] {
         const parts = normalizedSlashedPath.substr(rootLength).split(directorySeparator);
         const normalized: string[] = [];
         for (const part of parts) {
@@ -1069,13 +1448,30 @@ namespace ts {
     export function normalizePath(path: string): string {
         path = normalizeSlashes(path);
         const rootLength = getRootLength(path);
+        const root = path.substr(0, rootLength);
         const normalized = getNormalizedParts(path, rootLength);
-        return path.substr(0, rootLength) + normalized.join(directorySeparator);
+        if (normalized.length) {
+            const joinedParts = root + normalized.join(directorySeparator);
+            return pathEndsWithDirectorySeparator(path) ? joinedParts + directorySeparator : joinedParts;
+        }
+        else {
+            return root;
+        }
     }
 
+    /** A path ending with '/' refers to a directory only, never a file. */
+    export function pathEndsWithDirectorySeparator(path: string): boolean {
+        return path.charCodeAt(path.length - 1) === directorySeparatorCharCode;
+    }
+
+    /**
+     * Returns the path except for its basename. Eg:
+     *
+     * /path/to/file.ext -> /path/to
+     */
     export function getDirectoryPath(path: Path): Path;
     export function getDirectoryPath(path: string): string;
-    export function getDirectoryPath(path: string): any {
+    export function getDirectoryPath(path: string): string {
         return path.substr(0, Math.max(getRootLength(path), path.lastIndexOf(directorySeparator)));
     }
 
@@ -1083,8 +1479,55 @@ namespace ts {
         return path && !isRootedDiskPath(path) && path.indexOf("://") !== -1;
     }
 
+    export function isExternalModuleNameRelative(moduleName: string): boolean {
+        // TypeScript 1.0 spec (April 2014): 11.2.1
+        // An external module name is "relative" if the first term is "." or "..".
+        return /^\.\.?($|[\\/])/.test(moduleName);
+    }
+
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
+        return compilerOptions.target || ScriptTarget.ES3;
+    }
+
+    export function getEmitModuleKind(compilerOptions: CompilerOptions) {
+        return typeof compilerOptions.module === "number" ?
+            compilerOptions.module :
+            getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;
+    }
+
+    export function getEmitModuleResolutionKind(compilerOptions: CompilerOptions) {
+        let moduleResolution = compilerOptions.moduleResolution;
+        if (moduleResolution === undefined) {
+            moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+        }
+        return moduleResolution;
+    }
+
+    /* @internal */
+    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+        let seenAsterisk = false;
+        for (let i = 0; i < str.length; i++) {
+            if (str.charCodeAt(i) === CharacterCodes.asterisk) {
+                if (!seenAsterisk) {
+                    seenAsterisk = true;
+                }
+                else {
+                    // have already seen asterisk
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     export function isRootedDiskPath(path: string) {
         return getRootLength(path) !== 0;
+    }
+
+    export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
+        return !isRootedDiskPath(absoluteOrRelativePath)
+            ? absoluteOrRelativePath
+            : getRelativePathToDirectoryOrUrl(basePath, absoluteOrRelativePath, basePath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
     }
 
     function normalizedPathComponents(path: string, rootLength: number) {
@@ -1296,6 +1739,10 @@ namespace ts {
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
     }
 
+    export function hasExtension(fileName: string): boolean {
+        return getBaseFileName(fileName).indexOf(".") >= 0;
+    }
+
     export function fileExtensionIs(path: string, extension: string): boolean {
         return path.length > extension.length && endsWith(path, extension);
     }
@@ -1325,12 +1772,24 @@ namespace ts {
     const singleAsteriskRegexFragmentFiles = "([^./]|(\\.(?!min\\.js$))?)*";
     const singleAsteriskRegexFragmentOther = "[^/]*";
 
-    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude") {
+    export function getRegularExpressionForWildcard(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string | undefined {
+        const patterns = getRegularExpressionsForWildcards(specs, basePath, usage);
+        if (!patterns || !patterns.length) {
+            return undefined;
+        }
+
+        const pattern = patterns.map(pattern => `(${pattern})`).join("|");
+        // If excluding, match "foo/bar/baz...", but if including, only allow "foo".
+        const terminator = usage === "exclude" ? "($|/)" : "$";
+        return `^(${pattern})${terminator}`;
+    }
+
+    function getRegularExpressionsForWildcards(specs: string[], basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
 
-        const replaceWildcardCharacter =  usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
+        const replaceWildcardCharacter = usage === "files" ? replaceWildCardCharacterFiles : replaceWildCardCharacterOther;
         const singleAsteriskRegexFragment = usage === "files" ? singleAsteriskRegexFragmentFiles : singleAsteriskRegexFragmentOther;
 
         /**
@@ -1339,83 +1798,82 @@ namespace ts {
          */
         const doubleAsteriskRegexFragment = usage === "exclude" ? "(/.+?)?" : "(/[^/.][^/]*)*?";
 
-        let pattern = "";
-        let hasWrittenSubpattern = false;
-        spec: for (const spec of specs) {
-            if (!spec) {
-                continue;
-            }
+        return flatMap(specs, spec =>
+            spec && getSubPatternFromSpec(spec, basePath, usage, singleAsteriskRegexFragment, doubleAsteriskRegexFragment, replaceWildcardCharacter));
+    }
 
-            let subpattern = "";
-            let hasRecursiveDirectoryWildcard = false;
-            let hasWrittenComponent = false;
-            const components = getNormalizedPathComponents(spec, basePath);
-            if (usage !== "exclude" && components[components.length - 1] === "**") {
-                continue spec;
-            }
+    /**
+     * An "includes" path "foo" is implicitly a glob "foo/** /*" (without the space) if its last component has no extension,
+     * and does not contain any glob characters itself.
+     */
+    export function isImplicitGlob(lastPathComponent: string): boolean {
+        return !/[.*?]/.test(lastPathComponent);
+    }
 
-            // getNormalizedPathComponents includes the separator for the root component.
-            // We need to remove to create our regex correctly.
-            components[0] = removeTrailingDirectorySeparator(components[0]);
-
-            let optionalCount = 0;
-            for (let component of components) {
-                if (component === "**") {
-                    if (hasRecursiveDirectoryWildcard) {
-                        continue spec;
-                    }
-
-                    subpattern += doubleAsteriskRegexFragment;
-                    hasRecursiveDirectoryWildcard = true;
-                    hasWrittenComponent = true;
-                }
-                else {
-                    if (usage === "directories") {
-                        subpattern += "(";
-                        optionalCount++;
-                    }
-
-                    if (hasWrittenComponent) {
-                        subpattern += directorySeparator;
-                    }
-
-                    if (usage !== "exclude") {
-                        // The * and ? wildcards should not match directories or files that start with . if they
-                        // appear first in a component. Dotted directories and files can be included explicitly
-                        // like so: **/.*/.*
-                        if (component.charCodeAt(0) === CharacterCodes.asterisk) {
-                            subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
-                            component = component.substr(1);
-                        }
-                        else if (component.charCodeAt(0) === CharacterCodes.question) {
-                            subpattern += "[^./]";
-                            component = component.substr(1);
-                        }
-                    }
-
-                    subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
-                    hasWrittenComponent = true;
-                }
-            }
-
-            while (optionalCount > 0) {
-                subpattern += ")?";
-                optionalCount--;
-            }
-
-            if (hasWrittenSubpattern) {
-                pattern += "|";
-            }
-
-            pattern += "(" + subpattern + ")";
-            hasWrittenSubpattern = true;
-        }
-
-        if (!pattern) {
+    function getSubPatternFromSpec(spec: string, basePath: string, usage: "files" | "directories" | "exclude", singleAsteriskRegexFragment: string, doubleAsteriskRegexFragment: string, replaceWildcardCharacter: (match: string) => string): string | undefined {
+        let subpattern = "";
+        let hasRecursiveDirectoryWildcard = false;
+        let hasWrittenComponent = false;
+        const components = getNormalizedPathComponents(spec, basePath);
+        const lastComponent = lastOrUndefined(components);
+        if (usage !== "exclude" && lastComponent === "**") {
             return undefined;
         }
 
-        return "^(" + pattern + (usage === "exclude" ? ")($|/)" : ")$");
+        // getNormalizedPathComponents includes the separator for the root component.
+        // We need to remove to create our regex correctly.
+        components[0] = removeTrailingDirectorySeparator(components[0]);
+
+        if (isImplicitGlob(lastComponent)) {
+            components.push("**", "*");
+        }
+
+        let optionalCount = 0;
+        for (let component of components) {
+            if (component === "**") {
+                if (hasRecursiveDirectoryWildcard) {
+                    return undefined;
+                }
+
+                subpattern += doubleAsteriskRegexFragment;
+                hasRecursiveDirectoryWildcard = true;
+            }
+            else {
+                if (usage === "directories") {
+                    subpattern += "(";
+                    optionalCount++;
+                }
+
+                if (hasWrittenComponent) {
+                    subpattern += directorySeparator;
+                }
+
+                if (usage !== "exclude") {
+                    // The * and ? wildcards should not match directories or files that start with . if they
+                    // appear first in a component. Dotted directories and files can be included explicitly
+                    // like so: **/.*/.*
+                    if (component.charCodeAt(0) === CharacterCodes.asterisk) {
+                        subpattern += "([^./]" + singleAsteriskRegexFragment + ")?";
+                        component = component.substr(1);
+                    }
+                    else if (component.charCodeAt(0) === CharacterCodes.question) {
+                        subpattern += "[^./]";
+                        component = component.substr(1);
+                    }
+                }
+
+                subpattern += component.replace(reservedCharacterPattern, replaceWildcardCharacter);
+            }
+
+            hasWrittenComponent = true;
+        }
+
+        while (optionalCount > 0) {
+            subpattern += ")?";
+            optionalCount--;
+        }
+
+        return subpattern;
     }
 
     function replaceWildCardCharacterFiles(match: string) {
@@ -1436,18 +1894,22 @@ namespace ts {
     }
 
     export interface FileMatcherPatterns {
+        /** One pattern for each "include" spec. */
+        includeFilePatterns: string[];
+        /** One pattern matching one of any of the "include" specs. */
         includeFilePattern: string;
         includeDirectoryPattern: string;
         excludePattern: string;
         basePaths: string[];
     }
 
-    export function getFileMatcherPatterns(path: string, extensions: string[], excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
+    export function getFileMatcherPatterns(path: string, excludes: string[], includes: string[], useCaseSensitiveFileNames: boolean, currentDirectory: string): FileMatcherPatterns {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
         const absolutePath = combinePaths(currentDirectory, path);
 
         return {
+            includeFilePatterns: map(getRegularExpressionsForWildcards(includes, absolutePath, "files"), pattern => `^${pattern}$`),
             includeFilePattern: getRegularExpressionForWildcard(includes, absolutePath, "files"),
             includeDirectoryPattern: getRegularExpressionForWildcard(includes, absolutePath, "directories"),
             excludePattern: getRegularExpressionForWildcard(excludes, absolutePath, "exclude"),
@@ -1459,29 +1921,42 @@ namespace ts {
         path = normalizePath(path);
         currentDirectory = normalizePath(currentDirectory);
 
-        const patterns = getFileMatcherPatterns(path, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
+        const patterns = getFileMatcherPatterns(path, excludes, includes, useCaseSensitiveFileNames, currentDirectory);
 
         const regexFlag = useCaseSensitiveFileNames ? "" : "i";
-        const includeFileRegex = patterns.includeFilePattern && new RegExp(patterns.includeFilePattern, regexFlag);
+        const includeFileRegexes = patterns.includeFilePatterns && patterns.includeFilePatterns.map(pattern => new RegExp(pattern, regexFlag));
         const includeDirectoryRegex = patterns.includeDirectoryPattern && new RegExp(patterns.includeDirectoryPattern, regexFlag);
         const excludeRegex = patterns.excludePattern && new RegExp(patterns.excludePattern, regexFlag);
 
-        const result: string[] = [];
+        // Associate an array of results with each include regex. This keeps results in order of the "include" order.
+        // If there are no "includes", then just put everything in results[0].
+        const results: string[][] = includeFileRegexes ? includeFileRegexes.map(() => []) : [[]];
+
+        const comparer = useCaseSensitiveFileNames ? compareStrings : compareStringsCaseInsensitive;
         for (const basePath of patterns.basePaths) {
             visitDirectory(basePath, combinePaths(currentDirectory, basePath));
         }
-        return result;
+
+        return flatten(results);
 
         function visitDirectory(path: string, absolutePath: string) {
-            const { files, directories } = getFileSystemEntries(path);
+            let { files, directories } = getFileSystemEntries(path);
+            files = files.slice().sort(comparer);
+            directories = directories.slice().sort(comparer);
 
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if ((!extensions || fileExtensionIsAny(name, extensions)) &&
-                    (!includeFileRegex || includeFileRegex.test(absoluteName)) &&
-                    (!excludeRegex || !excludeRegex.test(absoluteName))) {
-                    result.push(name);
+                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (excludeRegex && excludeRegex.test(absoluteName)) continue;
+                if (!includeFileRegexes) {
+                    results[0].push(name);
+                }
+                else {
+                    const includeIndex = findIndex(includeFileRegexes, re => re.test(absoluteName));
+                    if (includeIndex !== -1) {
+                        results[includeIndex].push(name);
+                    }
                 }
             }
 
@@ -1502,6 +1977,7 @@ namespace ts {
     function getBasePaths(path: string, includes: string[], useCaseSensitiveFileNames: boolean) {
         // Storage for our results in the form of literal paths (e.g. the paths as written by the user).
         const basePaths: string[] = [path];
+
         if (includes) {
             // Storage for literal base paths amongst the include patterns.
             const includeBasePaths: string[] = [];
@@ -1509,14 +1985,8 @@ namespace ts {
                 // We also need to check the relative paths by converting them to absolute and normalizing
                 // in case they escape the base path (e.g "..\somedirectory")
                 const absolute: string = isRootedDiskPath(include) ? include : normalizePath(combinePaths(path, include));
-
-                const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
-                const includeBasePath = wildcardOffset < 0
-                    ? removeTrailingDirectorySeparator(getDirectoryPath(absolute))
-                    : absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
-
                 // Append the literal and canonical candidate base paths.
-                includeBasePaths.push(includeBasePath);
+                includeBasePaths.push(getIncludeBasePath(absolute));
             }
 
             // Sort the offsets array using either the literal or canonical path representations.
@@ -1524,19 +1994,25 @@ namespace ts {
 
             // Iterate over each include base path and include unique base paths that are not a
             // subpath of an existing base path
-            include: for (let i = 0; i < includeBasePaths.length; i++) {
-                const includeBasePath = includeBasePaths[i];
-                for (let j = 0; j < basePaths.length; j++) {
-                    if (containsPath(basePaths[j], includeBasePath, path, !useCaseSensitiveFileNames)) {
-                        continue include;
-                    }
+            for (const includeBasePath of includeBasePaths) {
+                if (ts.every(basePaths, basePath => !containsPath(basePath, includeBasePath, path, !useCaseSensitiveFileNames))) {
+                    basePaths.push(includeBasePath);
                 }
-
-                basePaths.push(includeBasePath);
             }
         }
 
         return basePaths;
+    }
+
+    function getIncludeBasePath(absolute: string): string {
+        const wildcardOffset = indexOfAnyCharCode(absolute, wildcardCharCodes);
+        if (wildcardOffset < 0) {
+            // No "*" or "?" in the path
+            return !hasExtension(absolute)
+                ? absolute
+                : removeTrailingDirectorySeparator(getDirectoryPath(absolute));
+        }
+        return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
     export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
@@ -1572,16 +2048,34 @@ namespace ts {
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
     export const supportedJavascriptExtensions = [".js", ".jsx"];
-    const allSupportedExtensions  = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
+    const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions): string[] {
-        return options && options.allowJs ? allSupportedExtensions : supportedTypeScriptExtensions;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
+        const needAllExtensions = options && options.allowJs;
+        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
+            return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
+        }
+        const extensions = allSupportedExtensions.slice(0);
+        for (const extInfo of extraFileExtensions) {
+            if (extensions.indexOf(extInfo.extension) === -1) {
+                extensions.push(extInfo.extension);
+            }
+        }
+        return extensions;
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions) {
+    export function hasJavaScriptFileExtension(fileName: string) {
+        return forEach(supportedJavascriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function hasTypeScriptFileExtension(fileName: string) {
+        return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
+    }
+
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions)) {
+        for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -1597,7 +2091,6 @@ namespace ts {
     export const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
 
         Highest = TypeScriptFiles,
         Lowest = DeclarationAndJavaScriptFiles,
@@ -1606,7 +2099,7 @@ namespace ts {
     export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
             }
         }
 
@@ -1618,27 +2111,26 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
+        else if (extensionPriority < supportedExtensions.length) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
-        }
-    }
+            return supportedExtensions.length;
+        }    }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
+            return supportedExtensions.length;
         }
     }
 
@@ -1661,19 +2153,15 @@ namespace ts {
         return path.substring(0, path.length - extension.length);
     }
 
-    export function isJsxOrTsxExtension(ext: string): boolean {
-        return ext === ".jsx" || ext === ".tsx";
-    }
-
     export function changeExtension<T extends string | Path>(path: T, newExtension: string): T {
         return <T>(removeFileExtension(path) + newExtension);
     }
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        getTokenConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
-        getIdentifierConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Token;
-        getSourceFileConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => SourceFile;
+        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
+        getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
+        getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
@@ -1685,11 +2173,11 @@ namespace ts {
         this.declarations = undefined;
     }
 
-    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, _checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
     }
 
-    function Signature(checker: TypeChecker) {
+    function Signature() {
     }
 
     function Node(this: Node, kind: SyntaxKind, pos: number, end: number) {
@@ -1702,7 +2190,6 @@ namespace ts {
         this.transformFlags = TransformFlags.None;
         this.parent = undefined;
         this.original = undefined;
-        this.transformId = 0;
     }
 
     export let objectAllocator: ObjectAllocator = {
@@ -1723,13 +2210,10 @@ namespace ts {
     }
 
     export namespace Debug {
-        declare var process: any;
-        declare var require: any;
-
-        let currentAssertionLevel: AssertionLevel;
+        export let currentAssertionLevel = AssertionLevel.None;
 
         export function shouldAssert(level: AssertionLevel): boolean {
-            return getCurrentAssertionLevel() >= level;
+            return currentAssertionLevel >= level;
         }
 
         export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
@@ -1746,38 +2230,20 @@ namespace ts {
         export function fail(message?: string): void {
             Debug.assert(/*expression*/ false, message);
         }
-
-        function getCurrentAssertionLevel() {
-            if (currentAssertionLevel !== undefined) {
-                return currentAssertionLevel;
-            }
-
-            if (sys === undefined) {
-                return AssertionLevel.None;
-            }
-
-            const developmentMode = /^development$/i.test(getEnvironmentVariable("NODE_ENV"));
-            currentAssertionLevel = developmentMode
-                ? AssertionLevel.Normal
-                : AssertionLevel.None;
-
-            return currentAssertionLevel;
-        }
-    }
-
-    export function getEnvironmentVariable(name: string, host?: CompilerHost) {
-        if (host && host.getEnvironmentVariable) {
-            return host.getEnvironmentVariable(name);
-        }
-
-        if (sys && sys.getEnvironmentVariable) {
-            return sys.getEnvironmentVariable(name);
-        }
-
-        return "";
     }
 
     /** Remove an item from an array, moving everything to its right one space left. */
+    export function orderedRemoveItem<T>(array: T[], item: T): boolean {
+        for (let i = 0; i < array.length; i++) {
+            if (array[i] === item) {
+                orderedRemoveItemAt(array, i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Remove an item by index from an array, moving everything to its right one space left. */
     export function orderedRemoveItemAt<T>(array: T[], index: number): void {
         // This seems to be faster than either `array.splice(i, 1)` or `array.copyWithin(i, i+ 1)`.
         for (let i = index; i < array.length - 1; i++) {
@@ -1811,5 +2277,121 @@ namespace ts {
         return useCaseSensitiveFileNames
             ? ((fileName) => fileName)
             : ((fileName) => fileName.toLowerCase());
+    }
+
+    /**
+     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * Return an exact match if possible, or a pattern match, or undefined.
+     * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
+     */
+    /* @internal */
+    export function matchPatternOrExact(patternStrings: string[], candidate: string): string | Pattern | undefined {
+        const patterns: Pattern[] = [];
+        for (const patternString of patternStrings) {
+            const pattern = tryParsePattern(patternString);
+            if (pattern) {
+                patterns.push(pattern);
+            }
+            else if (patternString === candidate) {
+                // pattern was matched as is - no need to search further
+                return patternString;
+            }
+        }
+
+        return findBestPatternMatch(patterns, _ => _, candidate);
+    }
+
+    /* @internal */
+    export function patternText({prefix, suffix}: Pattern): string {
+        return `${prefix}*${suffix}`;
+    }
+
+    /**
+     * Given that candidate matches pattern, returns the text matching the '*'.
+     * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
+     */
+    /* @internal */
+    export function matchedText(pattern: Pattern, candidate: string): string {
+        Debug.assert(isPatternMatch(pattern, candidate));
+        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+    }
+
+    /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
+    export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+        let matchedValue: T | undefined = undefined;
+        // use length of prefix as betterness criteria
+        let longestMatchPrefixLength = -1;
+
+        for (const v of values) {
+            const pattern = getPattern(v);
+            if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+                longestMatchPrefixLength = pattern.prefix.length;
+                matchedValue = v;
+            }
+        }
+
+        return matchedValue;
+    }
+
+    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+        return candidate.length >= prefix.length + suffix.length &&
+            startsWith(candidate, prefix) &&
+            endsWith(candidate, suffix);
+    }
+
+    /* @internal */
+    export function tryParsePattern(pattern: string): Pattern | undefined {
+        // This should be verified outside of here and a proper error thrown.
+        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+        const indexOfStar = pattern.indexOf("*");
+        return indexOfStar === -1 ? undefined : {
+            prefix: pattern.substr(0, indexOfStar),
+            suffix: pattern.substr(indexOfStar + 1)
+        };
+    }
+
+    export function positionIsSynthesized(pos: number): boolean {
+        // This is a fast way of testing the following conditions:
+        //  pos === undefined || pos === null || isNaN(pos) || pos < 0;
+        return !(pos >= 0);
+    }
+
+    /** True if an extension is one of the supported TypeScript extensions. */
+    export function extensionIsTypeScript(ext: Extension): boolean {
+        return ext <= Extension.LastTypeScriptExtension;
+    }
+
+    /**
+     * Gets the extension from a path.
+     * Path must have a valid extension.
+     */
+    export function extensionFromPath(path: string): Extension {
+        const ext = tryGetExtensionFromPath(path);
+        if (ext !== undefined) {
+            return ext;
+        }
+        Debug.fail(`File ${path} has unknown extension.`);
+    }
+    export function tryGetExtensionFromPath(path: string): Extension | undefined {
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts ===
-
 type Kind = "A" | "B"
 >Kind : Kind
 
@@ -42,12 +41,12 @@ if (kindIs(x, "A")) {
 >"A" : "A"
 
     let a = x;
->a : string
+>a : "A"
 >x : "A"
 }
 else {
     let b = x;
->b : string
+>b : "B"
 >x : "B"
 }
 
@@ -59,11 +58,11 @@ if (!kindIs(x, "B")) {
 >"B" : "B"
 
     let c = x;
->c : string
+>c : "A"
 >x : "A"
 }
 else {
     let d = x;
->d : string
+>d : "B"
 >x : "B"
 }

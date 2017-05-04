@@ -1,13 +1,10 @@
 //// [tests/cases/compiler/systemModule17.ts] ////
 
 //// [f1.ts]
-
-
 export class A {}
 export interface I {}
 
 //// [f2.ts]
-
 var x = 1;
 interface I { }
 
@@ -71,18 +68,18 @@ System.register(["f1"], function (exports_1, context_1) {
         ],
         execute: function () {
             x = 1;
+            exports_1("x", x);
+            exports_1("x1", x);
             (function (N) {
                 N.x = 1;
             })(N || (N = {}));
             IX = N.x;
-            exports_1("x", x);
-            exports_1("x1", x);
+            exports_1("IX", IX);
+            exports_1("IX1", IX);
             exports_1("A", f1_1.A);
             exports_1("A1", f1_1.A);
             exports_1("EA", f1_1.A);
             exports_1("EA1", f1_1.A);
-            exports_1("IX", IX);
-            exports_1("IX1", IX);
         }
     };
 });

@@ -1,5 +1,4 @@
 //// [stringLiteralTypesInUnionTypes01.ts]
-
 type T = "foo" | "bar" | "baz";
 
 var x: "foo" | "bar" | "baz" = undefined;

@@ -1,0 +1,30 @@
+=== tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters4.ts ===
+type Foo<T, Y> = {
+>Foo : Foo<T, Y>
+>T : T
+>Y : Y
+
+    foo<U, J>(): Foo<U, J>
+>foo : <U, J>() => Foo<U, J>
+>U : U
+>J : J
+>Foo : Foo<T, Y>
+>U : U
+>J : J
+
+};
+type SubFoo<R> = Foo<string, R>;
+>SubFoo : Foo<string, R>
+>R : R
+>Foo : Foo<T, Y>
+>R : R
+
+function foo() {
+>foo : () => Foo<string, number>
+
+    return {} as SubFoo<number>;
+>{} as SubFoo<number> : Foo<string, number>
+>{} : {}
+>SubFoo : Foo<string, R>
+}
+

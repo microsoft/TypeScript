@@ -1,0 +1,184 @@
+===================================================================
+JsFile: ES5For-of34.js
+mapUrl: ES5For-of34.js.map
+sourceRoot: 
+sources: ES5For-of34.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/conformance/statements/for-ofStatements/ES5For-of34.js
+sourceFile:ES5For-of34.ts
+-------------------------------------------------------------------
+>>>var __values = (this && this.__values) || function (o) {
+>>>    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+>>>    if (m) return m.call(o);
+>>>    return {
+>>>        next: function () {
+>>>            if (o && i >= o.length) o = void 0;
+>>>            return { value: o && o[i++], done: !o };
+>>>        }
+>>>    };
+>>>};
+>>>function foo() {
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^->
+1 >
+1 >Emitted(11, 1) Source(1, 1) + SourceIndex(0)
+---
+>>>    return { x: 0 };
+1->^^^^
+2 >    ^^^^^^
+3 >          ^
+4 >           ^^
+5 >             ^
+6 >              ^^
+7 >                ^
+8 >                 ^^
+9 >                   ^
+1->function foo() {
+  >    
+2 >    return
+3 >           
+4 >           { 
+5 >             x
+6 >              : 
+7 >                0
+8 >                  }
+9 >                   ;
+1->Emitted(12, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(12, 11) Source(2, 11) + SourceIndex(0)
+3 >Emitted(12, 12) Source(2, 12) + SourceIndex(0)
+4 >Emitted(12, 14) Source(2, 14) + SourceIndex(0)
+5 >Emitted(12, 15) Source(2, 15) + SourceIndex(0)
+6 >Emitted(12, 17) Source(2, 17) + SourceIndex(0)
+7 >Emitted(12, 18) Source(2, 18) + SourceIndex(0)
+8 >Emitted(12, 20) Source(2, 20) + SourceIndex(0)
+9 >Emitted(12, 21) Source(2, 21) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(13, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(3, 2) + SourceIndex(0)
+---
+>>>try {
+>>>    for (var _a = __values(['a', 'b', 'c']), _b = _a.next(); !_b.done; _b = _a.next()) {
+1->^^^^
+2 >    ^^^
+3 >       ^
+4 >        ^
+5 >         ^^^^
+6 >             ^^^^^
+7 >                  ^^^^^^^^^
+8 >                           ^
+9 >                            ^^^
+10>                               ^^
+11>                                 ^^^
+12>                                    ^^
+13>                                      ^^^
+14>                                         ^
+15>                                          ^
+16>                                           ^^^^^^^^^^^^^^^^
+1->
+  >
+2 >    for
+3 >        
+4 >        (foo().x of 
+5 >         
+6 >             
+7 >                  
+8 >                           [
+9 >                            'a'
+10>                               , 
+11>                                 'b'
+12>                                    , 
+13>                                      'c'
+14>                                         ]
+15>                                          
+16>                                           
+1->Emitted(15, 5) Source(4, 1) + SourceIndex(0)
+2 >Emitted(15, 8) Source(4, 4) + SourceIndex(0)
+3 >Emitted(15, 9) Source(4, 5) + SourceIndex(0)
+4 >Emitted(15, 10) Source(4, 17) + SourceIndex(0)
+5 >Emitted(15, 14) Source(4, 17) + SourceIndex(0)
+6 >Emitted(15, 19) Source(4, 17) + SourceIndex(0)
+7 >Emitted(15, 28) Source(4, 17) + SourceIndex(0)
+8 >Emitted(15, 29) Source(4, 18) + SourceIndex(0)
+9 >Emitted(15, 32) Source(4, 21) + SourceIndex(0)
+10>Emitted(15, 34) Source(4, 23) + SourceIndex(0)
+11>Emitted(15, 37) Source(4, 26) + SourceIndex(0)
+12>Emitted(15, 39) Source(4, 28) + SourceIndex(0)
+13>Emitted(15, 42) Source(4, 31) + SourceIndex(0)
+14>Emitted(15, 43) Source(4, 32) + SourceIndex(0)
+15>Emitted(15, 44) Source(4, 32) + SourceIndex(0)
+16>Emitted(15, 60) Source(4, 32) + SourceIndex(0)
+---
+>>>        foo().x = _b.value;
+1 >^^^^^^^^
+2 >        ^^^
+3 >           ^^
+4 >             ^
+5 >              ^
+6 >               ^^^^^^^^^^^
+1 >
+2 >        foo
+3 >           ()
+4 >             .
+5 >              x
+6 >               
+1 >Emitted(16, 9) Source(4, 6) + SourceIndex(0)
+2 >Emitted(16, 12) Source(4, 9) + SourceIndex(0)
+3 >Emitted(16, 14) Source(4, 11) + SourceIndex(0)
+4 >Emitted(16, 15) Source(4, 12) + SourceIndex(0)
+5 >Emitted(16, 16) Source(4, 13) + SourceIndex(0)
+6 >Emitted(16, 27) Source(4, 13) + SourceIndex(0)
+---
+>>>        var p = foo().x;
+1 >^^^^^^^^
+2 >        ^^^^
+3 >            ^
+4 >             ^^^
+5 >                ^^^
+6 >                   ^^
+7 >                     ^
+8 >                      ^
+9 >                       ^
+1 > of ['a', 'b', 'c']) {
+  >    
+2 >        var 
+3 >            p
+4 >              = 
+5 >                foo
+6 >                   ()
+7 >                     .
+8 >                      x
+9 >                       ;
+1 >Emitted(17, 9) Source(5, 5) + SourceIndex(0)
+2 >Emitted(17, 13) Source(5, 9) + SourceIndex(0)
+3 >Emitted(17, 14) Source(5, 10) + SourceIndex(0)
+4 >Emitted(17, 17) Source(5, 13) + SourceIndex(0)
+5 >Emitted(17, 20) Source(5, 16) + SourceIndex(0)
+6 >Emitted(17, 22) Source(5, 18) + SourceIndex(0)
+7 >Emitted(17, 23) Source(5, 19) + SourceIndex(0)
+8 >Emitted(17, 24) Source(5, 20) + SourceIndex(0)
+9 >Emitted(17, 25) Source(5, 21) + SourceIndex(0)
+---
+>>>    }
+1 >^^^^^
+1 >
+  >}
+1 >Emitted(18, 6) Source(6, 2) + SourceIndex(0)
+---
+>>>}
+>>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
+>>>finally {
+>>>    try {
+>>>        if (_b && !_b.done && (_c = _a["return"])) _c.call(_a);
+>>>    }
+>>>    finally { if (e_1) throw e_1.error; }
+>>>}
+>>>var e_1, _c;
+>>>//# sourceMappingURL=ES5For-of34.js.map

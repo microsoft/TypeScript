@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsInheritance.ts ===
-
 /** i1 is interface with properties*/
 interface i1 {
 >i1 : i1

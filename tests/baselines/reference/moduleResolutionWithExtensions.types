@@ -1,6 +1,5 @@
 === /src/a.ts ===
-
-No type information for this code.export default 0;
+export default 0;
 No type information for this code.
 No type information for this code.// No extension: '.ts' added
 No type information for this code.=== /src/b.ts ===

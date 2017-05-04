@@ -1,5 +1,4 @@
 //// [es5ModuleInternalNamedImports.ts]
-
 export module M {
     // variable
     export var M_V = 0;
@@ -39,6 +38,7 @@ import M3 from "M3";
 //// [es5ModuleInternalNamedImports.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var M;
     (function (M) {
         // variable
@@ -59,9 +59,9 @@ define(["require", "exports"], function (require, exports) {
         function M_F() { }
         M.M_F = M_F;
         // enum
+        var M_E;
         (function (M_E) {
-        })(M.M_E || (M.M_E = {}));
-        var M_E = M.M_E;
+        })(M_E = M.M_E || (M.M_E = {}));
         // alias
         M.M_A = M_M;
     })(M = exports.M || (exports.M = {}));

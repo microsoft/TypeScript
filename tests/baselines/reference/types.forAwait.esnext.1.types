@@ -1,0 +1,55 @@
+=== tests/cases/conformance/types/forAwait/types.forAwait.esnext.1.ts ===
+declare const asyncIterable: AsyncIterable<number>;
+>asyncIterable : AsyncIterable<number>
+>AsyncIterable : AsyncIterable<T>
+
+declare const iterable: Iterable<number>;
+>iterable : Iterable<number>
+>Iterable : Iterable<T>
+
+async function f1() {
+>f1 : () => Promise<void>
+
+    let y: number;
+>y : number
+
+    for await (const x of asyncIterable) {
+>x : number
+>asyncIterable : AsyncIterable<number>
+    }
+    for await (const x of iterable) {
+>x : number
+>iterable : Iterable<number>
+    }
+    for await (y of asyncIterable) {
+>y : number
+>asyncIterable : AsyncIterable<number>
+    }
+    for await (y of iterable) {
+>y : number
+>iterable : Iterable<number>
+    }
+}
+async function * f2() {
+>f2 : () => AsyncIterableIterator<any>
+
+    let y: number;
+>y : number
+
+    for await (const x of asyncIterable) {
+>x : number
+>asyncIterable : AsyncIterable<number>
+    }
+    for await (const x of iterable) {
+>x : number
+>iterable : Iterable<number>
+    }
+    for await (y of asyncIterable) {
+>y : number
+>asyncIterable : AsyncIterable<number>
+    }
+    for await (y of iterable) {
+>y : number
+>iterable : Iterable<number>
+    }
+}

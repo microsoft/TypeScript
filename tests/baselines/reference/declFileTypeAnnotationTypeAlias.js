@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationTypeAlias.ts]
-
 module M {
     export type Value = string | number | boolean;
     export var x: Value;
@@ -50,7 +49,6 @@ var M;
         m.c = c;
     })(m = M.m || (M.m = {}));
 })(M || (M = {}));
-var M;
 (function (M) {
     var N;
     (function (N) {

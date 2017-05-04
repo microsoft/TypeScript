@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamespaceBindingWithExport.ts] ////
 
 //// [server.ts]
-
 export var a = 10;
 
 //// [client.ts]
@@ -10,10 +9,12 @@ export var x: number = nameSpaceBinding.a;
 
 //// [server.js]
 "use strict";
+exports.__esModule = true;
 exports.a = 10;
 //// [client.js]
 "use strict";
-var server_1 = require("./server"), nameSpaceBinding = server_1;
+exports.__esModule = true;
+var nameSpaceBinding = require("./server");
 exports.x = nameSpaceBinding.a;
 
 

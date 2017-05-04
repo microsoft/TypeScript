@@ -957,6 +957,7 @@ var TypeScript;
         return AstPathContext;
     }());
     TypeScript.AstPathContext = AstPathContext;
+    var GetAstPathOptions;
     (function (GetAstPathOptions) {
         GetAstPathOptions[GetAstPathOptions["Default"] = 0] = "Default";
         GetAstPathOptions[GetAstPathOptions["EdgeInclusive"] = 1] = "EdgeInclusive";
@@ -968,8 +969,7 @@ var TypeScript;
         // we don't find the "precomment" attached to the errorneous empty stmt.
         //TODO: It would be nice to be able to get rid of this.
         GetAstPathOptions[GetAstPathOptions["DontPruneSearchBasedOnPosition"] = 2] = "DontPruneSearchBasedOnPosition";
-    })(TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));
-    var GetAstPathOptions = TypeScript.GetAstPathOptions;
+    })(GetAstPathOptions = TypeScript.GetAstPathOptions || (TypeScript.GetAstPathOptions = {}));
     ///
     /// Return the stack of AST nodes containing "position"
     ///
@@ -1011,6 +1011,7 @@ var TypeScript;
                         ctx.path.push(cur);
                     }
                     else {
+                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");
                     }
                 }
                 // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually

@@ -1,5 +1,4 @@
 === tests/cases/compiler/useStrictLikePrologueString01.ts ===
-
 "hey!"
 >"hey!" : "hey!"
 

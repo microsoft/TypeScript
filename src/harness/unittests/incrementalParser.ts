@@ -28,7 +28,7 @@ namespace ts {
         const diagnostics2 = file2.parseDiagnostics;
 
         assert.equal(diagnostics1.length, diagnostics2.length, "diagnostics1.length !== diagnostics2.length");
-        for (let i = 0, n = diagnostics1.length; i < n; i++) {
+        for (let i = 0; i < diagnostics1.length; i++) {
             const d1 = diagnostics1[i];
             const d2 = diagnostics2[i];
 
@@ -44,10 +44,10 @@ namespace ts {
 
     // NOTE: 'reusedElements' is the expected count of elements reused from the old tree to the new
     // tree.  It may change as we tweak the parser.  If the count increases then that should always
-    // be a good thing.  If it decreases, that's not great (less reusability), but that may be 
-    // unavoidable.  If it does decrease an investigation should be done to make sure that things 
+    // be a good thing.  If it decreases, that's not great (less reusability), but that may be
+    // unavoidable.  If it does decrease an investigation should be done to make sure that things
     // are still ok and we're still appropriately reusing most of the tree.
-    function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile): SourceFile {
+    function compareTrees(oldText: IScriptSnapshot, newText: IScriptSnapshot, textChangeRange: TextChangeRange, expectedReusedElements: number, oldTree?: SourceFile) {
         oldTree = oldTree || createTree(oldText, /*version:*/ ".");
         Utils.assertInvariants(oldTree, /*parent:*/ undefined);
 
@@ -76,7 +76,7 @@ namespace ts {
             assert.equal(actualReusedCount, expectedReusedElements, actualReusedCount + " !== " + expectedReusedElements);
         }
 
-        return incrementalNewTree;
+        return { oldTree, newTree, incrementalNewTree };
     }
 
     function reusedElements(oldNode: SourceFile, newNode: SourceFile): number {
@@ -103,7 +103,7 @@ namespace ts {
         for (let i = 0; i < repeat; i++) {
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withDelete(oldText, index, 1);
-            const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree);
+            const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
             source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
             oldTree = newTree;
@@ -116,7 +116,7 @@ namespace ts {
         for (let i = 0; i < repeat; i++) {
             const oldText = ScriptSnapshot.fromString(source);
             const newTextAndChange = withInsert(oldText, index + i, toInsert.charAt(i));
-            const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree);
+            const newTree = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1, oldTree).incrementalNewTree;
 
             source = newTextAndChange.text.getText(0, newTextAndChange.text.getLength());
             oldTree = newTree;
@@ -639,7 +639,7 @@ module m3 { }\
         });
 
         it("Unterminated comment after keyword converted to identifier", () => {
-            // 'public' as a keyword should be incrementally unusable (because it has an 
+            // 'public' as a keyword should be incrementally unusable (because it has an
             // unterminated comment).  When we convert it to an identifier, that shouldn't
             // change anything, and we should still get the same errors.
             const source = "return; a.public /*";
@@ -794,6 +794,16 @@ module m3 { }\
             const newTextAndChange = withChange(oldText, 14, "var v =".length, "class C");
 
             compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
+        });
+
+        it("Reuse transformFlags of subtree during bind", () => {
+            const source = `class Greeter { constructor(element: HTMLElement) { } }`;
+            const oldText = ScriptSnapshot.fromString(source);
+            const newTextAndChange = withChange(oldText, 15, 0, "\n");
+            const { oldTree, incrementalNewTree } = compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, -1);
+            bindSourceFile(oldTree, {});
+            bindSourceFile(incrementalNewTree, {});
+            assert.equal(oldTree.transformFlags, incrementalNewTree.transformFlags);
         });
 
         // Simulated typing tests.

@@ -1,5 +1,4 @@
 //// [superCallFromClassThatHasNoBaseType1.ts]
-
 class A {
     constructor(private map: (value: number) => string) {
 
@@ -19,7 +18,7 @@ var A = (function () {
 }());
 var B = (function () {
     function B() {
-        _super.call(this, function (value) { return String(value); });
+        _this = _super.call(this, function (value) { return String(value); }) || this;
     }
     return B;
 }());

@@ -25,33 +25,20 @@
 ////var x3: IList<number>;
 ////var y2 = x./*15*/method(x2, [x3, x3]);
 
-goTo.marker("1");
-verify.quickInfoIs("class Container<T>", undefined);
-goTo.marker("2");
-verify.quickInfoIs("(type parameter) T in IList<T>", undefined);
-goTo.marker("3");
-verify.quickInfoIs("(type parameter) T in IList<T>", undefined);
-goTo.marker("4");
-verify.quickInfoIs("(type parameter) T in List2<T extends IList<number>>", undefined);
-goTo.marker("5");
-verify.quickInfoIs("(type parameter) T in List2<T extends IList<number>>", undefined);
-goTo.marker("6");
-verify.quickInfoIs("(property) List2<T extends IList<number>>.__item: T[]", undefined);
-goTo.marker("7");
-verify.quickInfoIs("(method) List2<T extends IList<number>>.getItem(i: number): T", undefined);
-goTo.marker("8");
-verify.quickInfoIs("(method) List2<T extends IList<number>>.method<S extends IList<T>>(s: S, p: T[]): S", undefined);
-goTo.marker("9");
-verify.quickInfoIs("(type parameter) S in List2<T extends IList<number>>.method<S extends IList<T>>(s: S, p: T[]): S", undefined);
-goTo.marker("10");
-verify.quickInfoIs("(type parameter) T in List2<T extends IList<number>>", undefined);
-goTo.marker("11");
-verify.quickInfoIs("(type parameter) T in foo4<T extends Date>(test: T): T", undefined);
-goTo.marker("12");
-verify.quickInfoIs("(type parameter) S in foo4<S extends string>(test: S): S", undefined);
-goTo.marker("13");
-verify.quickInfoIs("(type parameter) T in foo4<T extends Date>(test: any): any", undefined);
-goTo.marker("14");
-verify.quickInfoIs("(method) List2<IList<number>>.getItem(i: number): IList<number>", undefined);
-goTo.marker("15");
-verify.quickInfoIs("(method) List2<IList<number>>.method<IList<IList<number>>>(s: IList<IList<number>>, p: IList<number>[]): IList<IList<number>>", undefined);
+verify.quickInfos({
+    1: "class Container<T>",
+    2: "(type parameter) T in IList<T>",
+    3: "(type parameter) T in IList<T>",
+    4: "(type parameter) T in List2<T extends IList<number>>",
+    5: "(type parameter) T in List2<T extends IList<number>>",
+    6: "(property) List2<T extends IList<number>>.__item: T[]",
+    7: "(method) List2<T extends IList<number>>.getItem(i: number): T",
+    8: "(method) List2<T extends IList<number>>.method<S extends IList<T>>(s: S, p: T[]): S",
+    9: "(type parameter) S in List2<T extends IList<number>>.method<S extends IList<T>>(s: S, p: T[]): S",
+    10: "(type parameter) T in List2<T extends IList<number>>",
+    11: "(type parameter) T in foo4<T extends Date>(test: T): T",
+    12: "(type parameter) S in foo4<S extends string>(test: S): S",
+    13: "(type parameter) T in foo4<T extends Date>(test: any): any",
+    14: "(method) List2<IList<number>>.getItem(i: number): IList<number>",
+    15: "(method) List2<IList<number>>.method<IList<IList<number>>>(s: IList<IList<number>>, p: IList<number>[]): IList<IList<number>>"
+});

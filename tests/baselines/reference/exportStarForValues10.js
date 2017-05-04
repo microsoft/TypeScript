@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarForValues10.ts] ////
 
 //// [file0.ts]
-
 export var v = 1;
 
 //// [file1.ts]
@@ -42,8 +41,7 @@ System.register(["file0"], function (exports_1, context_1) {
     function exportStar_1(m) {
         var exports = {};
         for (var n in m) {
-            if (n !== "default")
-                exports[n] = m[n];
+            if (n !== "default") exports[n] = m[n];
         }
         exports_1(exports);
     }

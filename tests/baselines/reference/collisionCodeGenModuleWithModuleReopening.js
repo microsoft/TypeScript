@@ -40,7 +40,6 @@ var m1;
     m1_1.m1 = m1;
 })(m1 || (m1 = {}));
 var foo = new m1.m1();
-var m1;
 (function (m1) {
     var c1 = (function () {
         function c1() {
@@ -64,7 +63,6 @@ var m2;
     var x = new c1();
 })(m2 || (m2 = {}));
 var foo3 = new m2.c1();
-var m2;
 (function (m2_1) {
     var m2 = (function () {
         function m2() {

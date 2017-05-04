@@ -1,5 +1,4 @@
 //// [errorsInGenericTypeReference.ts]
-
 interface IFoo<T> { }
 
 class Foo<T> { }
@@ -73,11 +72,16 @@ interface testInterface2 {
 
 
 //// [errorsInGenericTypeReference.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Foo = (function () {
     function Foo() {
     }
@@ -135,7 +139,7 @@ var testClass6 = (function () {
 var testClass7 = (function (_super) {
     __extends(testClass7, _super);
     function testClass7() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return testClass7;
 }(Foo)); // error: could not find symbol V

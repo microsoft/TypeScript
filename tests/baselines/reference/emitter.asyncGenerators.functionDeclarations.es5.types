@@ -1,0 +1,61 @@
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F1.ts ===
+async function * f1() {
+>f1 : () => AsyncIterableIterator<any>
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F2.ts ===
+async function * f2() {
+>f2 : () => AsyncIterableIterator<any>
+
+    const x = yield;
+>x : any
+>yield : any
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F3.ts ===
+async function * f3() {
+>f3 : () => AsyncIterableIterator<1>
+
+    const x = yield 1;
+>x : any
+>yield 1 : any
+>1 : 1
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F4.ts ===
+async function * f4() {
+>f4 : () => AsyncIterableIterator<number>
+
+    const x = yield* [1];
+>x : any
+>yield* [1] : any
+>[1] : number[]
+>1 : 1
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F5.ts ===
+async function * f5() {
+>f5 : () => AsyncIterableIterator<1>
+
+    const x = yield* (async function*() { yield 1; })();
+>x : any
+>yield* (async function*() { yield 1; })() : any
+>(async function*() { yield 1; })() : AsyncIterableIterator<1>
+>(async function*() { yield 1; }) : () => AsyncIterableIterator<1>
+>async function*() { yield 1; } : () => AsyncIterableIterator<1>
+>yield 1 : any
+>1 : 1
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F6.ts ===
+async function * f6() {
+>f6 : () => AsyncIterableIterator<any>
+
+    const x = await 1;
+>x : 1
+>await 1 : 1
+>1 : 1
+}
+=== tests/cases/conformance/emitter/es5/asyncGenerators/F7.ts ===
+async function * f7() {
+>f7 : () => AsyncIterableIterator<1>
+
+    return 1;
+>1 : 1
+}
+

@@ -6,6 +6,7 @@ namespace ts.formatting {
         export interface ITokenAccess {
             GetTokens(): SyntaxKind[];
             Contains(token: SyntaxKind): boolean;
+            isSpecific(): boolean;
         }
 
         export class TokenRangeAccess implements ITokenAccess {
@@ -27,6 +28,8 @@ namespace ts.formatting {
             public Contains(token: SyntaxKind): boolean {
                 return this.tokens.indexOf(token) >= 0;
             }
+
+            public isSpecific() { return true; }
         }
 
         export class TokenValuesAccess implements ITokenAccess {
@@ -43,6 +46,8 @@ namespace ts.formatting {
             public Contains(token: SyntaxKind): boolean {
                 return this.tokens.indexOf(token) >= 0;
             }
+
+            public isSpecific() { return true; }
         }
 
         export class TokenSingleValueAccess implements ITokenAccess {
@@ -56,24 +61,43 @@ namespace ts.formatting {
             public Contains(tokenValue: SyntaxKind): boolean {
                 return tokenValue === this.token;
             }
+
+            public isSpecific() { return true; }
+        }
+
+        const allTokens: SyntaxKind[] = [];
+        for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
+            allTokens.push(token);
         }
 
         export class TokenAllAccess implements ITokenAccess {
             public GetTokens(): SyntaxKind[] {
-                const result: SyntaxKind[] = [];
-                for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
-                    result.push(token);
-                }
-                return result;
+                return allTokens;
             }
 
-            public Contains(tokenValue: SyntaxKind): boolean {
+            public Contains(): boolean {
                 return true;
             }
 
             public toString(): string {
                 return "[allTokens]";
             }
+
+            public isSpecific() { return false; }
+        }
+
+        export class TokenAllExceptAccess implements ITokenAccess {
+            constructor(readonly except: SyntaxKind) {}
+
+            public GetTokens(): SyntaxKind[] {
+                return allTokens.filter(t => t !== this.except);
+            }
+
+            public Contains(token: SyntaxKind): boolean {
+                return token !== this.except;
+            }
+
+            public isSpecific() { return false; }
         }
 
         export class TokenRange {
@@ -92,8 +116,8 @@ namespace ts.formatting {
                 return new TokenRange(new TokenRangeAccess(f, to, except));
             }
 
-            static AllTokens(): TokenRange {
-                return new TokenRange(new TokenAllAccess());
+            static AnyExcept(token: SyntaxKind): TokenRange {
+                return new TokenRange(new TokenAllExceptAccess(token));
             }
 
             public GetTokens(): SyntaxKind[] {
@@ -108,8 +132,12 @@ namespace ts.formatting {
                 return this.tokenAccess.toString();
             }
 
-            static Any: TokenRange = TokenRange.AllTokens();
-            static AnyIncludingMultilineComments = TokenRange.FromTokens(TokenRange.Any.GetTokens().concat([SyntaxKind.MultiLineCommentTrivia]));
+            public isSpecific() {
+                return this.tokenAccess.isSpecific();
+            }
+
+            static Any: TokenRange = new TokenRange(new TokenAllAccess());
+            static AnyIncludingMultilineComments = TokenRange.FromTokens([...allTokens, SyntaxKind.MultiLineCommentTrivia]);
             static Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
             static BinaryOperators = TokenRange.FromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
             static BinaryKeywordOperators = TokenRange.FromTokens([SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword]);

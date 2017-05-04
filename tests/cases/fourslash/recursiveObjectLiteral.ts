@@ -2,5 +2,5 @@
 
 ////var a = { f: /**/a
 
-goTo.marker();
-verify.quickInfoIs("var a: any");
+verify.quickInfoAt("", "var a: any");
+

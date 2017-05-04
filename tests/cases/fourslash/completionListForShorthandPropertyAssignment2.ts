@@ -3,5 +3,5 @@
 //// var person: {name:string; id: number} = { n/**/
 
 goTo.marker();
-verify.memberListContains('name');
-verify.memberListContains('id');
+verify.completionListContains('name');
+verify.completionListContains('id');

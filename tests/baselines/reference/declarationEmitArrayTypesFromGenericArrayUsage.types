@@ -1,0 +1,5 @@
+=== tests/cases/compiler/declarationEmitArrayTypesFromGenericArrayUsage.ts ===
+interface A extends Array<string> { }
+>A : A
+>Array : T[]
+

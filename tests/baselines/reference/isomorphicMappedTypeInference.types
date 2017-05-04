@@ -1,0 +1,586 @@
+=== tests/cases/conformance/types/mapped/isomorphicMappedTypeInference.ts ===
+type Box<T> = {
+>Box : Box<T>
+>T : T
+
+    value: T;
+>value : T
+>T : T
+}
+
+type Boxified<T> = {
+>Boxified : Boxified<T>
+>T : T
+
+    [P in keyof T]: Box<T[P]>;
+>P : P
+>T : T
+>Box : Box<T>
+>T : T
+>P : P
+}
+
+function box<T>(x: T): Box<T> {
+>box : <T>(x: T) => Box<T>
+>T : T
+>x : T
+>T : T
+>Box : Box<T>
+>T : T
+
+    return { value: x };
+>{ value: x } : { value: T; }
+>value : T
+>x : T
+}
+
+function unbox<T>(x: Box<T>): T {
+>unbox : <T>(x: Box<T>) => T
+>T : T
+>x : Box<T>
+>Box : Box<T>
+>T : T
+>T : T
+
+    return x.value;
+>x.value : T
+>x : Box<T>
+>value : T
+}
+
+function boxify<T>(obj: T): Boxified<T> {
+>boxify : <T>(obj: T) => Boxified<T>
+>T : T
+>obj : T
+>T : T
+>Boxified : Boxified<T>
+>T : T
+
+    let result = {} as Boxified<T>;
+>result : Boxified<T>
+>{} as Boxified<T> : Boxified<T>
+>{} : {}
+>Boxified : Boxified<T>
+>T : T
+
+    for (let k in obj) {
+>k : keyof T
+>obj : T
+
+        result[k] = box(obj[k]);
+>result[k] = box(obj[k]) : Box<T[keyof T]>
+>result[k] : Box<T[keyof T]>
+>result : Boxified<T>
+>k : keyof T
+>box(obj[k]) : Box<T[keyof T]>
+>box : <T>(x: T) => Box<T>
+>obj[k] : T[keyof T]
+>obj : T
+>k : keyof T
+    }
+    return result;
+>result : Boxified<T>
+}
+
+function unboxify<T>(obj: Boxified<T>): T {
+>unboxify : <T>(obj: Boxified<T>) => T
+>T : T
+>obj : Boxified<T>
+>Boxified : Boxified<T>
+>T : T
+>T : T
+
+    let result = {} as T;
+>result : T
+>{} as T : T
+>{} : {}
+>T : T
+
+    for (let k in obj) {
+>k : keyof T
+>obj : Boxified<T>
+
+        result[k] = unbox(obj[k]);
+>result[k] = unbox(obj[k]) : T[keyof T]
+>result[k] : T[keyof T]
+>result : T
+>k : keyof T
+>unbox(obj[k]) : T[keyof T]
+>unbox : <T>(x: Box<T>) => T
+>obj[k] : Box<T[keyof T]>
+>obj : Boxified<T>
+>k : keyof T
+    }
+    return result;
+>result : T
+}
+
+function assignBoxified<T>(obj: Boxified<T>, values: T) {
+>assignBoxified : <T>(obj: Boxified<T>, values: T) => void
+>T : T
+>obj : Boxified<T>
+>Boxified : Boxified<T>
+>T : T
+>values : T
+>T : T
+
+    for (let k in values) {
+>k : keyof T
+>values : T
+
+        obj[k].value = values[k];
+>obj[k].value = values[k] : T[keyof T]
+>obj[k].value : T[keyof T]
+>obj[k] : Box<T[keyof T]>
+>obj : Boxified<T>
+>k : keyof T
+>value : T[keyof T]
+>values[k] : T[keyof T]
+>values : T
+>k : keyof T
+    }
+}
+
+function f1() {
+>f1 : () => void
+
+    let v = {
+>v : { a: number; b: string; c: boolean; }
+>{        a: 42,        b: "hello",        c: true    } : { a: number; b: string; c: boolean; }
+
+        a: 42,
+>a : number
+>42 : 42
+
+        b: "hello",
+>b : string
+>"hello" : "hello"
+
+        c: true
+>c : boolean
+>true : true
+
+    };
+    let b = boxify(v);
+>b : Boxified<{ a: number; b: string; c: boolean; }>
+>boxify(v) : Boxified<{ a: number; b: string; c: boolean; }>
+>boxify : <T>(obj: T) => Boxified<T>
+>v : { a: number; b: string; c: boolean; }
+
+    let x: number = b.a.value;
+>x : number
+>b.a.value : number
+>b.a : Box<number>
+>b : Boxified<{ a: number; b: string; c: boolean; }>
+>a : Box<number>
+>value : number
+}
+
+function f2() {
+>f2 : () => void
+
+    let b = {
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+        a: box(42),
+>a : Box<number>
+>box(42) : Box<number>
+>box : <T>(x: T) => Box<T>
+>42 : 42
+
+        b: box("hello"),
+>b : Box<string>
+>box("hello") : Box<string>
+>box : <T>(x: T) => Box<T>
+>"hello" : "hello"
+
+        c: box(true)
+>c : Box<boolean>
+>box(true) : Box<boolean>
+>box : <T>(x: T) => Box<T>
+>true : true
+
+    };
+    let v = unboxify(b);
+>v : { a: number; b: string; c: boolean; }
+>unboxify(b) : { a: number; b: string; c: boolean; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+    let x: number = v.a;
+>x : number
+>v.a : number
+>v : { a: number; b: string; c: boolean; }
+>a : number
+}
+
+function f3() {
+>f3 : () => void
+
+    let b = {
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+        a: box(42),
+>a : Box<number>
+>box(42) : Box<number>
+>box : <T>(x: T) => Box<T>
+>42 : 42
+
+        b: box("hello"),
+>b : Box<string>
+>box("hello") : Box<string>
+>box : <T>(x: T) => Box<T>
+>"hello" : "hello"
+
+        c: box(true)
+>c : Box<boolean>
+>box(true) : Box<boolean>
+>box : <T>(x: T) => Box<T>
+>true : true
+
+    };
+    assignBoxified(b, { c: false });
+>assignBoxified(b, { c: false }) : void
+>assignBoxified : <T>(obj: Boxified<T>, values: T) => void
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>{ c: false } : { c: false; }
+>c : boolean
+>false : false
+}
+
+function f4() {
+>f4 : () => void
+
+    let b = {
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+        a: box(42),
+>a : Box<number>
+>box(42) : Box<number>
+>box : <T>(x: T) => Box<T>
+>42 : 42
+
+        b: box("hello"),
+>b : Box<string>
+>box("hello") : Box<string>
+>box : <T>(x: T) => Box<T>
+>"hello" : "hello"
+
+        c: box(true)
+>c : Box<boolean>
+>box(true) : Box<boolean>
+>box : <T>(x: T) => Box<T>
+>true : true
+
+    };
+    b = boxify(unboxify(b));
+>b = boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>boxify(unboxify(b)) : Boxified<{ a: number; b: string; c: boolean; }>
+>boxify : <T>(obj: T) => Boxified<T>
+>unboxify(b) : { a: number; b: string; c: boolean; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+    b = unboxify(boxify(b));
+>b = unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>boxify(b) : Boxified<{ a: Box<number>; b: Box<string>; c: Box<boolean>; }>
+>boxify : <T>(obj: T) => Boxified<T>
+>b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+}
+
+function makeRecord<T, K extends string>(obj: { [P in K]: T }) {
+>makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>T : T
+>K : K
+>obj : { [P in K]: T; }
+>P : P
+>K : K
+>T : T
+
+    return obj;
+>obj : { [P in K]: T; }
+}
+
+function f5(s: string) {
+>f5 : (s: string) => void
+>s : string
+
+    let b = makeRecord({
+>b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
+>makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
+>makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
+>{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+        a: box(42),
+>a : Box<number>
+>box(42) : Box<number>
+>box : <T>(x: T) => Box<T>
+>42 : 42
+
+        b: box("hello"),
+>b : Box<string>
+>box("hello") : Box<string>
+>box : <T>(x: T) => Box<T>
+>"hello" : "hello"
+
+        c: box(true)
+>c : Box<boolean>
+>box(true) : Box<boolean>
+>box : <T>(x: T) => Box<T>
+>true : true
+
+    });
+    let v = unboxify(b);
+>v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>unboxify(b) : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
+
+    let x: string | number | boolean = v.a;
+>x : string | number | boolean
+>v.a : string | number | boolean
+>v : { a: string | number | boolean; b: string | number | boolean; c: string | number | boolean; }
+>a : string | number | boolean
+}
+
+function makeDictionary<T>(obj: { [x: string]: T }) {
+>makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>T : T
+>obj : { [x: string]: T; }
+>x : string
+>T : T
+
+    return obj;
+>obj : { [x: string]: T; }
+}
+
+function f6(s: string) {
+>f6 : (s: string) => void
+>s : string
+
+    let b = makeDictionary({
+>b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
+>makeDictionary({        a: box(42),        b: box("hello"),        c: box(true)    }) : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
+>makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
+>{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
+
+        a: box(42),
+>a : Box<number>
+>box(42) : Box<number>
+>box : <T>(x: T) => Box<T>
+>42 : 42
+
+        b: box("hello"),
+>b : Box<string>
+>box("hello") : Box<string>
+>box : <T>(x: T) => Box<T>
+>"hello" : "hello"
+
+        c: box(true)
+>c : Box<boolean>
+>box(true) : Box<boolean>
+>box : <T>(x: T) => Box<T>
+>true : true
+
+    });
+    let v = unboxify(b);
+>v : { [x: string]: string | number | boolean; }
+>unboxify(b) : { [x: string]: string | number | boolean; }
+>unboxify : <T>(obj: Boxified<T>) => T
+>b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
+
+    let x: string | number | boolean = v[s];
+>x : string | number | boolean
+>v[s] : string | number | boolean
+>v : { [x: string]: string | number | boolean; }
+>s : string
+}
+
+declare function validate<T>(obj: { [P in keyof T]?: T[P] }): T;
+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
+>T : T
+>obj : { [P in keyof T]?: T[P] | undefined; }
+>P : P
+>T : T
+>T : T
+>P : P
+>T : T
+
+declare function clone<T>(obj: { readonly [P in keyof T]: T[P] }): T;
+>clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
+>T : T
+>obj : { readonly [P in keyof T]: T[P]; }
+>P : P
+>T : T
+>T : T
+>P : P
+>T : T
+
+declare function validateAndClone<T>(obj: { readonly [P in keyof T]?: T[P] }): T;
+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
+>T : T
+>obj : { readonly [P in keyof T]?: T[P] | undefined; }
+>P : P
+>T : T
+>T : T
+>P : P
+>T : T
+
+type Foo = {
+>Foo : Foo
+
+    a?: number;
+>a : number | undefined
+
+    readonly b: string;
+>b : string
+}
+
+function f10(foo: Foo) {
+>f10 : (foo: Foo) => void
+>foo : Foo
+>Foo : Foo
+
+    let x = validate(foo);  // { a: number, readonly b: string }
+>x : { a: number; readonly b: string; }
+>validate(foo) : { a: number; readonly b: string; }
+>validate : <T>(obj: { [P in keyof T]?: T[P] | undefined; }) => T
+>foo : Foo
+
+    let y = clone(foo);  // { a?: number, b: string }
+>y : { a?: number | undefined; b: string; }
+>clone(foo) : { a?: number | undefined; b: string; }
+>clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
+>foo : Foo
+
+    let z = validateAndClone(foo);  // { a: number, b: string }
+>z : { a: number; b: string; }
+>validateAndClone(foo) : { a: number; b: string; }
+>validateAndClone : <T>(obj: { readonly [P in keyof T]?: T[P] | undefined; }) => T
+>foo : Foo
+}
+
+// Repro from #12606
+
+type Func<T> = (...args: any[]) => T;
+>Func : Func<T>
+>T : T
+>args : any[]
+>T : T
+
+type Spec<T> = {
+>Spec : Spec<T>
+>T : T
+
+    [P in keyof T]: Func<T[P]> | Spec<T[P]> ;
+>P : P
+>T : T
+>Func : Func<T>
+>T : T
+>P : P
+>Spec : Spec<T>
+>T : T
+>P : P
+
+};
+
+/**
+ * Given a spec object recursively mapping properties to functions, creates a function
+ * producing an object of the same structure, by mapping each property to the result
+ * of calling its associated function with the supplied arguments.
+ */
+declare function applySpec<T>(obj: Spec<T>): (...args: any[]) => T;
+>applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
+>T : T
+>obj : Spec<T>
+>Spec : Spec<T>
+>T : T
+>args : any[]
+>T : T
+
+// Infers g1: (...args: any[]) => { sum: number, nested: { mul: string } }
+var g1 = applySpec({
+>g1 : (...args: any[]) => { sum: number; nested: { mul: string; }; }
+>applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
+>applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
+>{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
+
+    sum: (a: any) => 3,
+>sum : (a: any) => number
+>(a: any) => 3 : (a: any) => number
+>a : any
+>3 : 3
+
+    nested: {
+>nested : { mul: (b: any) => string; }
+>{        mul: (b: any) => "n"    } : { mul: (b: any) => string; }
+
+        mul: (b: any) => "n"
+>mul : (b: any) => string
+>(b: any) => "n" : (b: any) => string
+>b : any
+>"n" : "n"
+    }
+});
+
+// Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
+var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
+>g2 : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
+>applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
+>applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
+>{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
+>foo : { bar: { baz: (x: any) => boolean; }; }
+>{ bar: { baz: (x: any) => true } } : { bar: { baz: (x: any) => boolean; }; }
+>bar : { baz: (x: any) => boolean; }
+>{ baz: (x: any) => true } : { baz: (x: any) => boolean; }
+>baz : (x: any) => boolean
+>(x: any) => true : (x: any) => boolean
+>x : any
+>true : true
+
+// Repro from #12633
+
+const foo = <T>(object: T, partial: Partial<T>) => object;
+>foo : <T>(object: T, partial: Partial<T>) => T
+><T>(object: T, partial: Partial<T>) => object : <T>(object: T, partial: Partial<T>) => T
+>T : T
+>object : T
+>T : T
+>partial : Partial<T>
+>Partial : Partial<T>
+>T : T
+>object : T
+
+let o = {a: 5, b: 7};
+>o : { a: number; b: number; }
+>{a: 5, b: 7} : { a: number; b: number; }
+>a : number
+>5 : 5
+>b : number
+>7 : 7
+
+foo(o, {b: 9});
+>foo(o, {b: 9}) : { a: number; b: number; }
+>foo : <T>(object: T, partial: Partial<T>) => T
+>o : { a: number; b: number; }
+>{b: 9} : { b: number; }
+>b : number
+>9 : 9
+
+o = foo(o, {b: 9});
+>o = foo(o, {b: 9}) : { a: number; b: number; }
+>o : { a: number; b: number; }
+>foo(o, {b: 9}) : { a: number; b: number; }
+>foo : <T>(object: T, partial: Partial<T>) => T
+>o : { a: number; b: number; }
+>{b: 9} : { b: number; }
+>b : number
+>9 : 9
+

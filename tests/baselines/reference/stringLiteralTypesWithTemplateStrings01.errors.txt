@@ -1,10 +1,9 @@
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(2,5): error TS2322: Type 'string' is not assignable to type '"ABC"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(3,5): error TS2322: Type 'string' is not assignable to type '"DE\nF"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(6,5): error TS2322: Type 'string' is not assignable to type '"JK`L"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(1,5): error TS2322: Type 'string' is not assignable to type '"ABC"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(2,5): error TS2322: Type 'string' is not assignable to type '"DE\nF"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts(5,5): error TS2322: Type 'string' is not assignable to type '"JK`L"'.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithTemplateStrings01.ts (3 errors) ====
-    
     let ABC: "ABC" = `ABC`;
         ~~~
 !!! error TS2322: Type 'string' is not assignable to type '"ABC"'.

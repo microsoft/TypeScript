@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersOverloadSignatures.ts]
-
 export function func(details: number, message: string, ...args: any[]): void;
 export function func(details: number, message: string): any {
     return details + message;
@@ -25,6 +24,7 @@ export function genericFunc(details: number, message: any): any {
 
 //// [unusedLocalsAndParametersOverloadSignatures.js]
 "use strict";
+exports.__esModule = true;
 function func(details, message) {
     return details + message;
 }

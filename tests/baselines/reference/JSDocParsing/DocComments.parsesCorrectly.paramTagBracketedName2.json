@@ -34,7 +34,14 @@
                 "end": 31,
                 "text": "name1"
             },
-            "isBracketed": true
+            "parameterName": {
+                "kind": "Identifier",
+                "pos": 26,
+                "end": 31,
+                "text": "name1"
+            },
+            "isBracketed": true,
+            "comment": "Description text follows"
         },
         "length": 1,
         "pos": 8,

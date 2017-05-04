@@ -11,6 +11,41 @@
 ////    }
 ////}
 
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "A",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor"
+                },
+                {
+                    "text": "x",
+                    "kind": "property"
+                }
+            ]
+        },
+        {
+            "text": "B",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "constructor",
+                    "kind": "constructor"
+                },
+                {
+                    "text": "x",
+                    "kind": "property"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

@@ -1,10 +1,9 @@
-tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(42,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(65,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(87,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(41,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(64,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+tests/cases/compiler/unusedLocalsAndParametersDeferred.ts(86,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
 ==== tests/cases/compiler/unusedLocalsAndParametersDeferred.ts (3 errors) ====
-    
     export { };
     
     function defered<T>(a: () => T): T {

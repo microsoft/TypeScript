@@ -1,0 +1,115 @@
+=== tests/cases/compiler/indexedAccessTypeConstraints.ts ===
+// Repro from #14557
+
+interface IData<T> {
+>IData : IData<T>
+>T : T
+
+    content: T;
+>content : T
+>T : T
+}
+
+type Data<T> = {
+>Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>T : T
+
+    get: <K extends keyof T>(prop: K) => T[K];
+>get : <K extends keyof T>(prop: K) => T[K]
+>K : K
+>T : T
+>prop : K
+>K : K
+>T : T
+>K : K
+
+};
+
+class Parent<M> {
+>Parent : Parent<M>
+>M : M
+
+    private data: Data<M>;
+>data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>M : M
+
+    getData(): Data<M> {
+>getData : () => { get: <K extends keyof M>(prop: K) => M[K]; }
+>Data : { get: <K extends keyof T>(prop: K) => T[K]; }
+>M : M
+
+        return this.data;
+>this.data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>this : this
+>data : { get: <K extends keyof M>(prop: K) => M[K]; }
+    }
+}
+
+export class Foo<C> extends Parent<IData<C>> {
+>Foo : Foo<C>
+>C : C
+>Parent : Parent<IData<C>>
+>IData : IData<T>
+>C : C
+
+    getContent(): C {
+>getContent : () => C
+>C : C
+
+        return this.getData().get('content');
+>this.getData().get('content') : C
+>this.getData().get : <K extends "content">(prop: K) => IData<C>[K]
+>this.getData() : { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>this.getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>this : this
+>getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>get : <K extends "content">(prop: K) => IData<C>[K]
+>'content' : "content"
+    }
+}
+
+export class Bar<C, T extends IData<C>> extends Parent<T> {
+>Bar : Bar<C, T>
+>C : C
+>T : T
+>IData : IData<T>
+>C : C
+>Parent : Parent<T>
+>T : T
+
+    getContent(): C {
+>getContent : () => C
+>C : C
+
+        return this.getData().get('content');
+>this.getData().get('content') : T["content"]
+>this.getData().get : <K extends keyof T>(prop: K) => T[K]
+>this.getData() : { get: <K extends keyof T>(prop: K) => T[K]; }
+>this.getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>this : this
+>getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>get : <K extends keyof T>(prop: K) => T[K]
+>'content' : "content"
+    }
+}
+
+// Repro from #14557
+
+function foo<C, T extends { content: C }>(x: C, y: T['content']) {
+>foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
+>C : C
+>T : T
+>content : C
+>C : C
+>x : C
+>C : C
+>y : T["content"]
+>T : T
+
+    x = y;
+>x = y : T["content"]
+>x : C
+>y : T["content"]
+}
+

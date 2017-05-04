@@ -1,5 +1,4 @@
 //// [systemModuleConstEnumsSeparateCompilation.ts]
-
 declare function use(a: any);
 const enum TopLevelConstEnum { X }
 
@@ -20,8 +19,8 @@ System.register([], function (exports_1, context_1) {
         use(TopLevelConstEnum.X);
         use(M.NonTopLevelConstEnum.X);
     }
-    var TopLevelConstEnum, M;
     exports_1("foo", foo);
+    var TopLevelConstEnum, M;
     return {
         setters: [],
         execute: function () {
@@ -29,10 +28,10 @@ System.register([], function (exports_1, context_1) {
                 TopLevelConstEnum[TopLevelConstEnum["X"] = 0] = "X";
             })(TopLevelConstEnum || (TopLevelConstEnum = {}));
             (function (M) {
+                var NonTopLevelConstEnum;
                 (function (NonTopLevelConstEnum) {
                     NonTopLevelConstEnum[NonTopLevelConstEnum["X"] = 0] = "X";
-                })(M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
-                var NonTopLevelConstEnum = M.NonTopLevelConstEnum;
+                })(NonTopLevelConstEnum = M.NonTopLevelConstEnum || (M.NonTopLevelConstEnum = {}));
             })(M || (M = {}));
         }
     };

@@ -1,5 +1,4 @@
 //// [declFileRestParametersOfFunctionAndFunctionType.ts]
-
 function f1(...args) { }
 function f2(x: (...args) => void) { }
 function f3(x: { (...args): void }) { }
@@ -14,7 +13,7 @@ var f6 = () => { return [<any>10]; }
 function f1() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
 }
 function f2(x) { }

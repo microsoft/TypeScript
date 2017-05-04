@@ -1,4 +1,5 @@
 "use strict";
+exports.__esModule = true;
 var m1 = require("ref/m1");
 exports.a1 = 10;
 var c1 = (function () {

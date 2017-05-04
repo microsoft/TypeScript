@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParameters.ts]
-
 export { };
 
 // function declaration paramter
@@ -86,6 +85,7 @@ namespace N {
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
+exports.__esModule = true;
 // function declaration paramter
 function f(a) {
 }

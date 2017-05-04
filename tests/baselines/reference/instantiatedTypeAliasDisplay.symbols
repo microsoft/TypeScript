@@ -1,0 +1,60 @@
+=== tests/cases/compiler/instantiatedTypeAliasDisplay.ts ===
+// Repros from #12066
+
+interface X<A> {
+>X : Symbol(X, Decl(instantiatedTypeAliasDisplay.ts, 0, 0))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 2, 12))
+
+    a: A;
+>a : Symbol(X.a, Decl(instantiatedTypeAliasDisplay.ts, 2, 16))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 2, 12))
+}
+interface Y<B> {
+>Y : Symbol(Y, Decl(instantiatedTypeAliasDisplay.ts, 4, 1))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 5, 12))
+
+    b: B;
+>b : Symbol(Y.b, Decl(instantiatedTypeAliasDisplay.ts, 5, 16))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 5, 12))
+}
+type Z<A, B> = X<A> | Y<B>;
+>Z : Symbol(Z, Decl(instantiatedTypeAliasDisplay.ts, 7, 1))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 8, 7))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 8, 9))
+>X : Symbol(X, Decl(instantiatedTypeAliasDisplay.ts, 0, 0))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 8, 7))
+>Y : Symbol(Y, Decl(instantiatedTypeAliasDisplay.ts, 4, 1))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 8, 9))
+
+declare function f1<A>(): Z<A, number>;
+>f1 : Symbol(f1, Decl(instantiatedTypeAliasDisplay.ts, 8, 27))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 10, 20))
+>Z : Symbol(Z, Decl(instantiatedTypeAliasDisplay.ts, 7, 1))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 10, 20))
+
+declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
+>f2 : Symbol(f2, Decl(instantiatedTypeAliasDisplay.ts, 10, 39))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 11, 20))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 11, 22))
+>C : Symbol(C, Decl(instantiatedTypeAliasDisplay.ts, 11, 25))
+>D : Symbol(D, Decl(instantiatedTypeAliasDisplay.ts, 11, 28))
+>E : Symbol(E, Decl(instantiatedTypeAliasDisplay.ts, 11, 31))
+>a : Symbol(a, Decl(instantiatedTypeAliasDisplay.ts, 11, 35))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 11, 20))
+>b : Symbol(b, Decl(instantiatedTypeAliasDisplay.ts, 11, 40))
+>B : Symbol(B, Decl(instantiatedTypeAliasDisplay.ts, 11, 22))
+>c : Symbol(c, Decl(instantiatedTypeAliasDisplay.ts, 11, 46))
+>C : Symbol(C, Decl(instantiatedTypeAliasDisplay.ts, 11, 25))
+>d : Symbol(d, Decl(instantiatedTypeAliasDisplay.ts, 11, 52))
+>D : Symbol(D, Decl(instantiatedTypeAliasDisplay.ts, 11, 28))
+>Z : Symbol(Z, Decl(instantiatedTypeAliasDisplay.ts, 7, 1))
+>A : Symbol(A, Decl(instantiatedTypeAliasDisplay.ts, 11, 20))
+
+const x1 = f1<string>();  // Z<string, number>
+>x1 : Symbol(x1, Decl(instantiatedTypeAliasDisplay.ts, 13, 5))
+>f1 : Symbol(f1, Decl(instantiatedTypeAliasDisplay.ts, 8, 27))
+
+const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
+>x2 : Symbol(x2, Decl(instantiatedTypeAliasDisplay.ts, 14, 5))
+>f2 : Symbol(f2, Decl(instantiatedTypeAliasDisplay.ts, 10, 39))
+

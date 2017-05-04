@@ -1,304 +1,178 @@
 /// <reference path="visitor.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
-/// <reference path="transformers/es7.ts" />
-/// <reference path="transformers/es6.ts" />
+/// <reference path="transformers/esnext.ts" />
+/// <reference path="transformers/es2017.ts" />
+/// <reference path="transformers/es2016.ts" />
+/// <reference path="transformers/es2015.ts" />
 /// <reference path="transformers/generators.ts" />
+/// <reference path="transformers/es5.ts" />
 /// <reference path="transformers/module/module.ts" />
 /// <reference path="transformers/module/system.ts" />
-/// <reference path="transformers/module/es6.ts" />
+/// <reference path="transformers/module/es2015.ts" />
 
 /* @internal */
 namespace ts {
-    const moduleTransformerMap = createMap<Transformer>({
-        [ModuleKind.ES6]: transformES6Module,
-        [ModuleKind.System]: transformSystemModule,
-        [ModuleKind.AMD]: transformModule,
-        [ModuleKind.CommonJS]: transformModule,
-        [ModuleKind.UMD]: transformModule,
-        [ModuleKind.None]: transformModule,
-    });
+    function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {
+        switch (moduleKind) {
+            case ModuleKind.ES2015:
+                return transformES2015Module;
+            case ModuleKind.System:
+                return transformSystemModule;
+            default:
+                return transformModule;
+        }
+    }
+
+    const enum TransformationState {
+        Uninitialized,
+        Initialized,
+        Completed,
+        Disposed
+    }
 
     const enum SyntaxKindFeatureFlags {
         Substitution = 1 << 0,
         EmitNotifications = 1 << 1,
     }
 
-    export interface TransformationResult {
-        /**
-         * Gets the transformed source files.
-         */
-        getSourceFiles(): SourceFile[];
-
-        /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         */
-        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
-
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
-        isSubstitutionEnabled(node: Node): boolean;
-
-        /**
-         * Determines whether before/after emit notifications should be raised in the pretty
-         * printer when it emits a node.
-         */
-        isEmitNotificationEnabled(node: Node): boolean;
-
-        /**
-         * Hook used by transformers to substitute expressions just before they
-         * are emitted by the pretty printer.
-         *
-         * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is in an expression context.
-         */
-        onSubstituteNode(node: Node, isExpression: boolean): Node;
-
-        /**
-         * Hook used to allow transformers to capture state before or after
-         * the printer emits a node.
-         *
-         * @param node The node to emit.
-         * @param emitCallback A callback used to emit the node.
-         */
-        onEmitNode(node: Node, emitCallback: (node: Node) => void): void;
-
-        /**
-         * Reset transient transformation properties on parse tree nodes.
-         */
-        dispose(): void;
-    }
-
-    export interface TransformationContext extends LexicalEnvironment {
-        getCompilerOptions(): CompilerOptions;
-        getEmitResolver(): EmitResolver;
-        getEmitHost(): EmitHost;
-
-        /**
-         * Gets flags used to customize later transformations or emit.
-         */
-        getNodeEmitFlags(node: Node): NodeEmitFlags;
-
-        /**
-         * Sets flags used to customize later transformations or emit.
-         */
-        setNodeEmitFlags<T extends Node>(node: T, flags: NodeEmitFlags): T;
-
-        /**
-         * Gets the TextRange to use for source maps for the node.
-         */
-        getSourceMapRange(node: Node): TextRange;
-
-        /**
-         * Sets the TextRange to use for source maps for the node.
-         */
-        setSourceMapRange<T extends Node>(node: T, range: TextRange): T;
-
-        /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         */
-        getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange;
-
-        /**
-         * Sets the TextRange to use for source maps for a token of a node.
-         */
-        setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange): T;
-
-        /**
-         * Gets the TextRange to use for comments for the node.
-         */
-        getCommentRange(node: Node): TextRange;
-
-        /**
-         * Sets the TextRange to use for comments for the node.
-         */
-        setCommentRange<T extends Node>(node: T, range: TextRange): T;
-
-        /**
-         * Hoists a function declaration to the containing scope.
-         */
-        hoistFunctionDeclaration(node: FunctionDeclaration): void;
-
-        /**
-         * Hoists a variable declaration to the containing scope.
-         */
-        hoistVariableDeclaration(node: Identifier): void;
-
-        /**
-         * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
-         */
-        enableSubstitution(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether expression substitutions are enabled for the provided node.
-         */
-        isSubstitutionEnabled(node: Node): boolean;
-
-        /**
-         * Hook used by transformers to substitute expressions just before they
-         * are emitted by the pretty printer.
-         */
-        onSubstituteNode?: (node: Node, isExpression: boolean) => Node;
-
-        /**
-         * Enables before/after emit notifications in the pretty printer for the provided
-         * SyntaxKind.
-         */
-        enableEmitNotification(kind: SyntaxKind): void;
-
-        /**
-         * Determines whether before/after emit notifications should be raised in the pretty
-         * printer when it emits a node.
-         */
-        isEmitNotificationEnabled(node: Node): boolean;
-
-        /**
-         * Hook used to allow transformers to capture state before or after
-         * the printer emits a node.
-         */
-        onEmitNode?: (node: Node, emit: (node: Node) => void) => void;
-    }
-
-    /* @internal */
-    export type Transformer = (context: TransformationContext) => (node: SourceFile) => SourceFile;
-
-    export function getTransformers(compilerOptions: CompilerOptions) {
+    export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
         const jsx = compilerOptions.jsx;
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
-        const transformers: Transformer[] = [];
+        const transformers: TransformerFactory<SourceFile>[] = [];
+
+        addRange(transformers, customTransformers && customTransformers.before);
 
         transformers.push(transformTypeScript);
-        transformers.push(moduleTransformerMap[moduleKind] || moduleTransformerMap[ModuleKind.None]);
 
         if (jsx === JsxEmit.React) {
             transformers.push(transformJsx);
         }
 
-        transformers.push(transformES7);
+        if (languageVersion < ScriptTarget.ESNext) {
+            transformers.push(transformESNext);
+        }
 
-        if (languageVersion < ScriptTarget.ES6) {
-            transformers.push(transformES6);
+        if (languageVersion < ScriptTarget.ES2017) {
+            transformers.push(transformES2017);
+        }
+
+        if (languageVersion < ScriptTarget.ES2016) {
+            transformers.push(transformES2016);
+        }
+
+        if (languageVersion < ScriptTarget.ES2015) {
+            transformers.push(transformES2015);
             transformers.push(transformGenerators);
         }
+
+        transformers.push(getModuleTransformer(moduleKind));
+
+        // The ES5 transformer is last so that it can substitute expressions like `exports.default`
+        // for ES3.
+        if (languageVersion < ScriptTarget.ES5) {
+            transformers.push(transformES5);
+        }
+
+        addRange(transformers, customTransformers && customTransformers.after);
 
         return transformers;
     }
 
     /**
-     * Tracks a monotonically increasing transformation id used to associate a node with a specific
-     * transformation. This ensures transient properties related to transformations can be safely
-     * stored on source tree nodes that may be reused across multiple transformations (such as
-     * with compile-on-save).
-     */
-    let nextTransformId = 1;
-
-    /**
      * Transforms an array of SourceFiles by passing them through each transformer.
      *
      * @param resolver The emit resolver provided by the checker.
-     * @param host The emit host.
-     * @param sourceFiles An array of source files
-     * @param transforms An array of Transformers.
+     * @param host The emit host object used to interact with the file system.
+     * @param options Compiler options to surface in the `TransformationContext`.
+     * @param nodes An array of nodes to transform.
+     * @param transforms An array of `TransformerFactory` callbacks.
+     * @param allowDtsFiles A value indicating whether to allow the transformation of .d.ts files.
      */
-    export function transformFiles(resolver: EmitResolver, host: EmitHost, sourceFiles: SourceFile[], transformers: Transformer[]): TransformationResult {
-        const transformId = nextTransformId;
-        nextTransformId++;
-
-        const tokenSourceMapRanges = createMap<TextRange>();
-        const lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
-        const lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
+    export function transformNodes<T extends Node>(resolver: EmitResolver, host: EmitHost, options: CompilerOptions, nodes: T[], transformers: TransformerFactory<T>[], allowDtsFiles: boolean): TransformationResult<T> {
         const enabledSyntaxKindFeatures = new Array<SyntaxKindFeatureFlags>(SyntaxKind.Count);
-        const parseTreeNodesWithAnnotations: Node[] = [];
-
-        let lastTokenSourceMapRangeNode: Node;
-        let lastTokenSourceMapRangeToken: SyntaxKind;
-        let lastTokenSourceMapRange: TextRange;
+        let lexicalEnvironmentVariableDeclarations: VariableDeclaration[];
+        let lexicalEnvironmentFunctionDeclarations: FunctionDeclaration[];
+        let lexicalEnvironmentVariableDeclarationsStack: VariableDeclaration[][] = [];
+        let lexicalEnvironmentFunctionDeclarationsStack: FunctionDeclaration[][] = [];
         let lexicalEnvironmentStackOffset = 0;
-        let hoistedVariableDeclarations: VariableDeclaration[];
-        let hoistedFunctionDeclarations: FunctionDeclaration[];
-        let lexicalEnvironmentDisabled: boolean;
+        let lexicalEnvironmentSuspended = false;
+        let emitHelpers: EmitHelper[];
+        let onSubstituteNode: TransformationContext["onSubstituteNode"] = (_, node) => node;
+        let onEmitNode: TransformationContext["onEmitNode"] = (hint, node, callback) => callback(hint, node);
+        let state = TransformationState.Uninitialized;
 
         // The transformation context is provided to each transformer as part of transformer
         // initialization.
         const context: TransformationContext = {
-            getCompilerOptions: () => host.getCompilerOptions(),
+            getCompilerOptions: () => options,
             getEmitResolver: () => resolver,
             getEmitHost: () => host,
-            getNodeEmitFlags,
-            setNodeEmitFlags,
-            getSourceMapRange,
-            setSourceMapRange,
-            getTokenSourceMapRange,
-            setTokenSourceMapRange,
-            getCommentRange,
-            setCommentRange,
+            startLexicalEnvironment,
+            suspendLexicalEnvironment,
+            resumeLexicalEnvironment,
+            endLexicalEnvironment,
             hoistVariableDeclaration,
             hoistFunctionDeclaration,
-            startLexicalEnvironment,
-            endLexicalEnvironment,
-            onSubstituteNode,
+            requestEmitHelper,
+            readEmitHelpers,
             enableSubstitution,
-            isSubstitutionEnabled,
-            onEmitNode,
             enableEmitNotification,
-            isEmitNotificationEnabled
+            isSubstitutionEnabled,
+            isEmitNotificationEnabled,
+            get onSubstituteNode() { return onSubstituteNode; },
+            set onSubstituteNode(value) {
+                Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+                Debug.assert(value !== undefined, "Value must not be 'undefined'");
+                onSubstituteNode = value;
+            },
+            get onEmitNode() { return onEmitNode; },
+            set onEmitNode(value) {
+                Debug.assert(state < TransformationState.Initialized, "Cannot modify transformation hooks after initialization has completed.");
+                Debug.assert(value !== undefined, "Value must not be 'undefined'");
+                onEmitNode = value;
+            }
         };
+
+        // Ensure the parse tree is clean before applying transformations
+        for (const node of nodes) {
+            disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+        }
+
+        performance.mark("beforeTransform");
 
         // Chain together and initialize each transformer.
         const transformation = chain(...transformers)(context);
 
-        // Transform each source file.
-        const transformed = map(sourceFiles, transformSourceFile);
+        // prevent modification of transformation hooks.
+        state = TransformationState.Initialized;
 
-        // Disable modification of the lexical environment.
-        lexicalEnvironmentDisabled = true;
+        // Transform each node.
+        const transformed = map(nodes, allowDtsFiles ? transformation : transformRoot);
+
+        // prevent modification of the lexical environment.
+        state = TransformationState.Completed;
+
+        performance.mark("afterTransform");
+        performance.measure("transformTime", "beforeTransform", "afterTransform");
 
         return {
-            getSourceFiles: () => transformed,
-            getTokenSourceMapRange,
-            isSubstitutionEnabled,
-            isEmitNotificationEnabled,
-            onSubstituteNode: context.onSubstituteNode,
-            onEmitNode: context.onEmitNode,
-            dispose() {
-                // During transformation we may need to annotate a parse tree node with transient
-                // transformation properties. As parse tree nodes live longer than transformation
-                // nodes, we need to make sure we reclaim any memory allocated for custom ranges
-                // from these nodes to ensure we do not hold onto entire subtrees just for position
-                // information. We also need to reset these nodes to a pre-transformation state
-                // for incremental parsing scenarios so that we do not impact later emit.
-                for (const node of parseTreeNodesWithAnnotations) {
-                    if (node.transformId === transformId) {
-                        node.transformId = 0;
-                        node.emitFlags = 0;
-                        node.commentRange = undefined;
-                        node.sourceMapRange = undefined;
-                    }
-                }
-
-                parseTreeNodesWithAnnotations.length = 0;
-            }
+            transformed,
+            substituteNode,
+            emitNodeWithNotification,
+            dispose
         };
 
-        /**
-         * Transforms a source file.
-         *
-         * @param sourceFile The source file to transform.
-         */
-        function transformSourceFile(sourceFile: SourceFile) {
-            if (isDeclarationFile(sourceFile)) {
-                return sourceFile;
-            }
-
-            return transformation(sourceFile);
+        function transformRoot(node: T) {
+            return node && (!isSourceFile(node) || !isDeclarationFile(node)) ? transformation(node) : node;
         }
 
         /**
          * Enables expression substitutions in the pretty printer for the provided SyntaxKind.
          */
         function enableSubstitution(kind: SyntaxKind) {
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.Substitution;
         }
 
@@ -306,24 +180,27 @@ namespace ts {
          * Determines whether expression substitutions are enabled for the provided node.
          */
         function isSubstitutionEnabled(node: Node) {
-            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0;
+            return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.Substitution) !== 0
+                && (getEmitFlags(node) & EmitFlags.NoSubstitution) === 0;
         }
 
         /**
-         * Default hook for node substitutions.
+         * Emits a node with possible substitution.
          *
-         * @param node The node to substitute.
-         * @param isExpression A value indicating whether the node is to be used in an expression
-         *                     position.
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node or its substitute.
          */
-        function onSubstituteNode(node: Node, isExpression: boolean) {
-            return node;
+        function substituteNode(hint: EmitHint, node: Node) {
+            Debug.assert(state < TransformationState.Disposed, "Cannot substitute a node after the result is disposed.");
+            return node && isSubstitutionEnabled(node) && onSubstituteNode(hint, node) || node;
         }
 
         /**
          * Enables before/after emit notifications in the pretty printer for the provided SyntaxKind.
          */
         function enableEmitNotification(kind: SyntaxKind) {
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
             enabledSyntaxKindFeatures[kind] |= SyntaxKindFeatureFlags.EmitNotifications;
         }
 
@@ -333,167 +210,40 @@ namespace ts {
          */
         function isEmitNotificationEnabled(node: Node) {
             return (enabledSyntaxKindFeatures[node.kind] & SyntaxKindFeatureFlags.EmitNotifications) !== 0
-                || (getNodeEmitFlags(node) & NodeEmitFlags.AdviseOnEmitNode) !== 0;
+                || (getEmitFlags(node) & EmitFlags.AdviseOnEmitNode) !== 0;
         }
 
         /**
-         * Default hook for node emit.
+         * Emits a node with possible emit notification.
          *
+         * @param hint A hint as to the intended usage of the node.
          * @param node The node to emit.
-         * @param emit A callback used to emit the node in the printer.
+         * @param emitCallback The callback used to emit the node.
          */
-        function onEmitNode(node: Node, emit: (node: Node) => void) {
-            emit(node);
-        }
-
-        /**
-         * Associates a node with the current transformation, initializing
-         * various transient transformation properties.
-         *
-         * @param node The node.
-         */
-        function beforeSetAnnotation(node: Node) {
-            if ((node.flags & NodeFlags.Synthesized) === 0 && node.transformId !== transformId) {
-                // To avoid holding onto transformation artifacts, we keep track of any
-                // parse tree node we are annotating. This allows us to clean them up after
-                // all transformations have completed.
-                parseTreeNodesWithAnnotations.push(node);
-                node.transformId = transformId;
-            }
-        }
-
-        /**
-         * Gets flags that control emit behavior of a node.
-         *
-         * If the node does not have its own NodeEmitFlags set, the node emit flags of its
-         * original pointer are used.
-         *
-         * @param node The node.
-         */
-        function getNodeEmitFlags(node: Node) {
-            return node.emitFlags;
-        }
-
-        /**
-         * Sets flags that control emit behavior of a node.
-         *
-         * @param node The node.
-         * @param emitFlags The NodeEmitFlags for the node.
-         */
-        function setNodeEmitFlags<T extends Node>(node: T, emitFlags: NodeEmitFlags) {
-            beforeSetAnnotation(node);
-            node.emitFlags = emitFlags;
-            return node;
-        }
-
-        /**
-         * Gets a custom text range to use when emitting source maps.
-         *
-         * If a node does not have its own custom source map text range, the custom source map
-         * text range of its original pointer is used.
-         *
-         * @param node The node.
-         */
-        function getSourceMapRange(node: Node) {
-            return node.sourceMapRange || node;
-        }
-
-        /**
-         * Sets a custom text range to use when emitting source maps.
-         *
-         * @param node The node.
-         * @param range The text range.
-         */
-        function setSourceMapRange<T extends Node>(node: T, range: TextRange) {
-            beforeSetAnnotation(node);
-            node.sourceMapRange = range;
-            return node;
-        }
-
-        /**
-         * Gets the TextRange to use for source maps for a token of a node.
-         *
-         * If a node does not have its own custom source map text range for a token, the custom
-         * source map text range for the token of its original pointer is used.
-         *
-         * @param node The node.
-         * @param token The token.
-         */
-        function getTokenSourceMapRange(node: Node, token: SyntaxKind) {
-            // As a performance optimization, use the cached value of the most recent node.
-            // This helps for cases where this function is called repeatedly for the same node.
-            if (lastTokenSourceMapRangeNode === node && lastTokenSourceMapRangeToken === token) {
-                return lastTokenSourceMapRange;
-            }
-
-            // Get the custom token source map range for a node or from one of its original nodes.
-            // Custom token ranges are not stored on the node to avoid the GC burden.
-            let range: TextRange;
-            let current = node;
-            while (current) {
-                range = current.id ? tokenSourceMapRanges[current.id + "-" + token] : undefined;
-                if (range !== undefined) {
-                    break;
+        function emitNodeWithNotification(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            Debug.assert(state < TransformationState.Disposed, "Cannot invoke TransformationResult callbacks after the result is disposed.");
+            if (node) {
+                if (isEmitNotificationEnabled(node)) {
+                    onEmitNode(hint, node, emitCallback);
                 }
-
-                current = current.original;
+                else {
+                    emitCallback(hint, node);
+                }
             }
-
-            // Cache the most recently requested value.
-            lastTokenSourceMapRangeNode = node;
-            lastTokenSourceMapRangeToken = token;
-            lastTokenSourceMapRange = range;
-            return range;
-        }
-
-        /**
-         * Sets the TextRange to use for source maps for a token of a node.
-         *
-         * @param node The node.
-         * @param token The token.
-         * @param range The text range.
-         */
-        function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange) {
-            // Cache the most recently requested value.
-            lastTokenSourceMapRangeNode = node;
-            lastTokenSourceMapRangeToken = token;
-            lastTokenSourceMapRange = range;
-            tokenSourceMapRanges[getNodeId(node) + "-" + token] = range;
-            return node;
-        }
-
-        /**
-         * Gets a custom text range to use when emitting comments.
-         *
-         * If a node does not have its own custom source map text range, the custom source map
-         * text range of its original pointer is used.
-         *
-         * @param node The node.
-         */
-        function getCommentRange(node: Node) {
-            return node.commentRange || node;
-        }
-
-        /**
-         * Sets a custom text range to use when emitting comments.
-         */
-        function setCommentRange<T extends Node>(node: T, range: TextRange) {
-            beforeSetAnnotation(node);
-            node.commentRange = range;
-            return node;
         }
 
         /**
          * Records a hoisted variable declaration for the provided name within a lexical environment.
          */
         function hoistVariableDeclaration(name: Identifier): void {
-            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
             const decl = createVariableDeclaration(name);
-            if (!hoistedVariableDeclarations) {
-                hoistedVariableDeclarations = [decl];
+            if (!lexicalEnvironmentVariableDeclarations) {
+                lexicalEnvironmentVariableDeclarations = [decl];
             }
             else {
-                hoistedVariableDeclarations.push(decl);
+                lexicalEnvironmentVariableDeclarations.push(decl);
             }
         }
 
@@ -501,12 +251,13 @@ namespace ts {
          * Records a hoisted function declaration within a lexical environment.
          */
         function hoistFunctionDeclaration(func: FunctionDeclaration): void {
-            Debug.assert(!lexicalEnvironmentDisabled, "Cannot modify the lexical environment during the print phase.");
-            if (!hoistedFunctionDeclarations) {
-                hoistedFunctionDeclarations = [func];
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            if (!lexicalEnvironmentFunctionDeclarations) {
+                lexicalEnvironmentFunctionDeclarations = [func];
             }
             else {
-                hoistedFunctionDeclarations.push(func);
+                lexicalEnvironmentFunctionDeclarations.push(func);
             }
         }
 
@@ -515,17 +266,35 @@ namespace ts {
          * are pushed onto a stack, and the related storage variables are reset.
          */
         function startLexicalEnvironment(): void {
-            Debug.assert(!lexicalEnvironmentDisabled, "Cannot start a lexical environment during the print phase.");
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             // Save the current lexical environment. Rather than resizing the array we adjust the
             // stack size variable. This allows us to reuse existing array slots we've
             // already allocated between transformations to avoid allocation and GC overhead during
             // transformation.
-            lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedVariableDeclarations;
-            lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = hoistedFunctionDeclarations;
+            lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentVariableDeclarations;
+            lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset] = lexicalEnvironmentFunctionDeclarations;
             lexicalEnvironmentStackOffset++;
-            hoistedVariableDeclarations = undefined;
-            hoistedFunctionDeclarations = undefined;
+            lexicalEnvironmentVariableDeclarations = undefined;
+            lexicalEnvironmentFunctionDeclarations = undefined;
+        }
+
+        /** Suspends the current lexical environment, usually after visiting a parameter list. */
+        function suspendLexicalEnvironment(): void {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is already suspended.");
+            lexicalEnvironmentSuspended = true;
+        }
+
+        /** Resumes a suspended lexical environment, usually before visiting a function body. */
+        function resumeLexicalEnvironment(): void {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            Debug.assert(lexicalEnvironmentSuspended, "Lexical environment is not suspended.");
+            lexicalEnvironmentSuspended = false;
         }
 
         /**
@@ -533,18 +302,20 @@ namespace ts {
          * any hoisted declarations added in this environment are returned.
          */
         function endLexicalEnvironment(): Statement[] {
-            Debug.assert(!lexicalEnvironmentDisabled, "Cannot end a lexical environment during the print phase.");
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
+            Debug.assert(!lexicalEnvironmentSuspended, "Lexical environment is suspended.");
 
             let statements: Statement[];
-            if (hoistedVariableDeclarations || hoistedFunctionDeclarations) {
-                if (hoistedFunctionDeclarations) {
-                    statements = [...hoistedFunctionDeclarations];
+            if (lexicalEnvironmentVariableDeclarations || lexicalEnvironmentFunctionDeclarations) {
+                if (lexicalEnvironmentFunctionDeclarations) {
+                    statements = [...lexicalEnvironmentFunctionDeclarations];
                 }
 
-                if (hoistedVariableDeclarations) {
+                if (lexicalEnvironmentVariableDeclarations) {
                     const statement = createVariableStatement(
                         /*modifiers*/ undefined,
-                        createVariableDeclarationList(hoistedVariableDeclarations)
+                        createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
                     if (!statements) {
@@ -558,75 +329,49 @@ namespace ts {
 
             // Restore the previous lexical environment.
             lexicalEnvironmentStackOffset--;
-            hoistedVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
-            hoistedFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentVariableDeclarations = lexicalEnvironmentVariableDeclarationsStack[lexicalEnvironmentStackOffset];
+            lexicalEnvironmentFunctionDeclarations = lexicalEnvironmentFunctionDeclarationsStack[lexicalEnvironmentStackOffset];
+            if (lexicalEnvironmentStackOffset === 0) {
+                lexicalEnvironmentVariableDeclarationsStack = [];
+                lexicalEnvironmentFunctionDeclarationsStack = [];
+            }
             return statements;
         }
-    }
 
-    /**
-     * High-order function, creates a function that executes a function composition.
-     * For example, `chain(a, b)` is the equivalent of `x => ((a', b') => y => b'(a'(y)))(a(x), b(x))`
-     *
-     * @param args The functions to chain.
-     */
-    function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
-    function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
-        if (e) {
-            const args: ((t: T) => (u: U) => U)[] = [];
-            for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
+        function requestEmitHelper(helper: EmitHelper): void {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+            Debug.assert(!helper.scoped, "Cannot request a scoped emit helper.");
+            emitHelpers = append(emitHelpers, helper);
+        }
+
+        function readEmitHelpers(): EmitHelper[] | undefined {
+            Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the transformation context during initialization.");
+            Debug.assert(state < TransformationState.Completed, "Cannot modify the transformation context after transformation has completed.");
+            const helpers = emitHelpers;
+            emitHelpers = undefined;
+            return helpers;
+        }
+
+        function dispose() {
+            if (state < TransformationState.Disposed) {
+                // Clean up emit nodes on parse tree
+                for (const node of nodes) {
+                    disposeEmitNodes(getSourceFileOfNode(getParseTreeNode(node)));
+                }
+
+                // Release references to external entries for GC purposes.
+                lexicalEnvironmentVariableDeclarations = undefined;
+                lexicalEnvironmentVariableDeclarationsStack = undefined;
+                lexicalEnvironmentFunctionDeclarations = undefined;
+                lexicalEnvironmentFunctionDeclarationsStack = undefined;
+                onSubstituteNode = undefined;
+                onEmitNode = undefined;
+                emitHelpers = undefined;
+
+                // Prevent further use of the transformation result.
+                state = TransformationState.Disposed;
             }
-
-            return t => compose(...map(args, f => f(t)));
-        }
-        else if (d) {
-            return t => compose(a(t), b(t), c(t), d(t));
-        }
-        else if (c) {
-            return t => compose(a(t), b(t), c(t));
-        }
-        else if (b) {
-            return t => compose(a(t), b(t));
-        }
-        else if (a) {
-            return t => compose(a(t));
-        }
-        else {
-            return t => u => u;
-        }
-    }
-
-    /**
-     * High-order function, composes functions. Note that functions are composed inside-out;
-     * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
-     *
-     * @param args The functions to compose.
-     */
-    function compose<T>(...args: ((t: T) => T)[]): (t: T) => T;
-    function compose<T>(a: (t: T) => T, b: (t: T) => T, c: (t: T) => T, d: (t: T) => T, e: (t: T) => T): (t: T) => T {
-        if (e) {
-            const args: ((t: T) => T)[] = [];
-            for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
-            }
-
-            return t => reduceLeft<(t: T) => T, T>(args, (u, f) => f(u), t);
-        }
-        else if (d) {
-            return t => d(c(b(a(t))));
-        }
-        else if (c) {
-            return t => c(b(a(t)));
-        }
-        else if (b) {
-            return t => b(a(t));
-        }
-        else if (a) {
-            return t => a(t);
-        }
-        else {
-            return t => t;
         }
     }
 }

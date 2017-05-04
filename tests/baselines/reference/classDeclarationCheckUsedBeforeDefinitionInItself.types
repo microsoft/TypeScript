@@ -1,0 +1,9 @@
+=== tests/cases/compiler/classDeclarationCheckUsedBeforeDefinitionInItself.ts ===
+class C3 { 
+>C3 : C3
+
+    static intance = new C3();  // ok
+>intance : C3
+>new C3() : C3
+>C3 : typeof C3
+}

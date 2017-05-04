@@ -1,5 +1,4 @@
 //// [noEmitHelpers.ts]
-
 class A { }
 class B extends A { }
 
@@ -13,7 +12,7 @@ var A = (function () {
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));

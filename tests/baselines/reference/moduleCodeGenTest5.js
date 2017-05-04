@@ -23,6 +23,7 @@ var v = E2.B;
 
 //// [moduleCodeGenTest5.js]
 "use strict";
+exports.__esModule = true;
 exports.x = 0;
 var y = 0;
 function f1() { }
@@ -43,10 +44,10 @@ var C2 = (function () {
     C2.prototype.p2 = function () { };
     return C2;
 }());
+var E1;
 (function (E1) {
     E1[E1["A"] = 0] = "A";
-})(exports.E1 || (exports.E1 = {}));
-var E1 = exports.E1;
+})(E1 = exports.E1 || (exports.E1 = {}));
 var u = E1.A;
 var E2;
 (function (E2) {

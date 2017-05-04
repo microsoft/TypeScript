@@ -1,5 +1,4 @@
 //// [typeGuardOfFormIsTypeOnInterfaces.ts]
-
 interface C1 {
     (): C1;
     prototype: C1;

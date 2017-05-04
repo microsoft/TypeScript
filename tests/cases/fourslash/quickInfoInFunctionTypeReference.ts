@@ -4,8 +4,7 @@
 ////}
 ////var x = <{ (fn: (va/*2*/riable2: string) => void, a: string): void; }> () => { };
 
-goTo.marker("1");
-verify.quickInfoIs("(parameter) variable1: string", undefined);
-
-goTo.marker("2");
-verify.quickInfoIs("(parameter) variable2: string", undefined);
+verify.quickInfos({
+    1: "(parameter) variable1: string",
+    2: "(parameter) variable2: string"
+});
