@@ -1,0 +1,25 @@
+tests/cases/conformance/jsx/file.tsx(13,24): error TS2322: Type '{ values: 5; }' is not assignable to type 'IntrinsicAttributes & MyComponentProp'.
+  Type '{ values: 5; }' is not assignable to type 'MyComponentProp'.
+    Types of property 'values' are incompatible.
+      Type '5' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react')
+    
+    interface MyComponentProp {
+        values: string;
+    }
+    
+    function MyComponent1<T extends MyComponentProp>(attr: T) {
+        return <div>attr.values</div>
+    }
+    
+    
+    // Error
+    let i1 = <MyComponent1 values={5}/>;
+                           ~~~~~~~~~~
+!!! error TS2322: Type '{ values: 5; }' is not assignable to type 'IntrinsicAttributes & MyComponentProp'.
+!!! error TS2322:   Type '{ values: 5; }' is not assignable to type 'MyComponentProp'.
+!!! error TS2322:     Types of property 'values' are incompatible.
+!!! error TS2322:       Type '5' is not assignable to type 'string'.

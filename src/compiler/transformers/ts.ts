@@ -2601,14 +2601,16 @@ namespace ts {
          * Adds a leading VariableStatement for a enum or module declaration.
          */
         function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
-            // Emit a variable statement for the module.
+            // Emit a variable statement for the module. We emit top-level enums as a `var`
+            // declaration to avoid static errors in global scripts scripts due to redeclaration.
+            // enums in any other scope are emitted as a `let` declaration.
             const statement = createVariableStatement(
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                [
+                createVariableDeclarationList([
                     createVariableDeclaration(
                         getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                     )
-                ]
+                ], currentScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
             );
 
             setOriginalNode(statement, node);

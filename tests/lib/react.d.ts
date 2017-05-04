@@ -2359,9 +2359,9 @@ declare namespace JSX {
     interface ElementClass extends React.Component<any, any> {
         render(): JSX.Element | null;
     }
-    interface ElementAttributesProperty { props; }
+    interface ElementAttributesProperty { props: any; }
 
-    interface ElementChildrenAttribute { children; }
+    interface ElementChildrenAttribute { children: any; }
 
     interface IntrinsicAttributes extends React.Attributes { }
 
