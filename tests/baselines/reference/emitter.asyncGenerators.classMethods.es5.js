@@ -293,15 +293,13 @@ var C4 = (function () {
     }
     C4.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
-            var x, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = __await;
-                        return [5 /*yield**/, __values(__asyncDelegator(__asyncValues([1])))];
-                    case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
+            var x;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues([1])))];
+                    case 1: return [4 /*yield*/, __await.apply(void 0, [_a.sent()])];
                     case 2:
-                        x = _b.sent();
+                        x = _a.sent();
                         return [2 /*return*/];
                 }
             });
@@ -374,22 +372,20 @@ var C5 = (function () {
     }
     C5.prototype.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
-            var x, _a;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = __await;
-                        return [5 /*yield**/, __values(__asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, 1];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            }); }); })())))];
-                    case 1: return [4 /*yield*/, _a.apply(void 0, [_b.sent()])];
+            var x;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [5 /*yield**/, __values(__asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, 1];
+                                case 1:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        }); }); })())))];
+                    case 1: return [4 /*yield*/, __await.apply(void 0, [_a.sent()])];
                     case 2:
-                        x = _b.sent();
+                        x = _a.sent();
                         return [2 /*return*/];
                 }
             });

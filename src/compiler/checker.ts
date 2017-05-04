@@ -15999,7 +15999,7 @@ namespace ts {
             // From within an async function you can return either a non-promise value or a promise. Any
             // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
             // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-            return (functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+            return (functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? createPromiseReturnType(func, widenedType) // Async function
                 : widenedType; // Generator function, AsyncGenerator function, or normal function
         }
@@ -16215,7 +16215,7 @@ namespace ts {
 
             const functionFlags = getFunctionFlags(node);
             const returnOrPromisedType = node.type &&
-                ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async ?
+                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
                     checkAsyncFunctionReturnType(node) : // Async function
                     getTypeFromTypeNode(node.type)); // AsyncGenerator function, Generator function, or normal function
 
@@ -16245,7 +16245,7 @@ namespace ts {
                     // its return type annotation.
                     const exprType = checkExpression(<Expression>node.body);
                     if (returnOrPromisedType) {
-                        if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) { // Async function
+                        if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                             checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
                         }
@@ -16985,12 +16985,16 @@ namespace ts {
                 // we are in a yield context.
                 const functionFlags = func && getFunctionFlags(func);
                 if (node.asteriskToken) {
-                    if (functionFlags & FunctionFlags.Async) {
-                        if (languageVersion < ScriptTarget.ES2017) {
-                            checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegator);
-                        }
+                    // Async generator functions prior to ESNext require the __await, __asyncDelegator,
+                    // and __asyncValues helpers
+                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator &&
+                        languageVersion < ScriptTarget.ESNext) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
                     }
-                    else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+
+                    // Generator functions prior to ES2015 require the __values helper
+                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Generator &&
+                        languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                     }
                 }
@@ -17509,18 +17513,20 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(<FunctionLikeDeclaration>node);
-            if ((functionFlags & FunctionFlags.InvalidAsyncOrAsyncGenerator) === FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
-                if (languageVersion < ScriptTarget.ES2015) {
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
+            if (!(functionFlags & FunctionFlags.Invalid)) {
+                // Async generators prior to ESNext require the __await and __asyncGenerator helpers
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator && languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncGeneratorIncludes);
                 }
-            }
 
-            if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
-                if (functionFlags & FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncGenerator);
+                // Async functions prior to ES2017 require the __awaiter helper
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
                 }
-                else if (languageVersion < ScriptTarget.ES2015) {
+
+                // Generator functions, Async functions, and Async Generator functions prior to
+                // ES2015 require the __generator helper
+                if ((functionFlags & FunctionFlags.AsyncGenerator) !== FunctionFlags.Normal && languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
                 }
             }
@@ -17548,7 +17554,7 @@ namespace ts {
 
                 if (node.type) {
                     const functionFlags = getFunctionFlags(<FunctionDeclaration>node);
-                    if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
+                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Generator)) === FunctionFlags.Generator) {
                         const returnType = getTypeFromTypeNode(node.type);
                         if (returnType === voidType) {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
@@ -17568,7 +17574,7 @@ namespace ts {
                             checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
-                    else if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) {
+                    else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
@@ -19535,11 +19541,14 @@ namespace ts {
 
             if (node.kind === SyntaxKind.ForOfStatement) {
                 if ((<ForOfStatement>node).awaitModifier) {
-                    if (languageVersion < ScriptTarget.ES2017) {
+                    const functionFlags = getFunctionFlags(getContainingFunction(node));
+                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
+                        // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                     }
                 }
-                else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
+                    // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
                 }
             }
@@ -19969,7 +19978,7 @@ namespace ts {
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? getPromisedTypeOfPromise(returnType) // Async function
                 : returnType; // AsyncGenerator function, Generator function, or normal function
             return unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
@@ -22979,6 +22988,7 @@ namespace ts {
                 case ExternalEmitHelpers.Values: return "__values";
                 case ExternalEmitHelpers.Read: return "__read";
                 case ExternalEmitHelpers.Spread: return "__spread";
+                case ExternalEmitHelpers.Await: return "__await";
                 case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
                 case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
