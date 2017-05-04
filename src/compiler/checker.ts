@@ -6687,11 +6687,7 @@ namespace ts {
                             ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
                             : undefined;
                     symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
-                    const typeArguments = typeArgumentsFromTypeReferenceNode(node);
-                    type = symbol === unknownSymbol ? unknownType :
-                        symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol, typeArguments) :
-                            symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol, typeArguments) :
-                                getTypeFromNonGenericTypeReference(node, symbol);
+                    type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
