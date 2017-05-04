@@ -200,3 +200,22 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
     }
 }
 
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+>f5 : Symbol(f5, Decl(typeVariableTypeGuards.ts, 74, 1))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>K : Symbol(K, Decl(typeVariableTypeGuards.ts, 76, 14))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+>T : Symbol(T, Decl(typeVariableTypeGuards.ts, 76, 12))
+>key : Symbol(key, Decl(typeVariableTypeGuards.ts, 76, 53))
+>K : Symbol(K, Decl(typeVariableTypeGuards.ts, 76, 14))
+
+    if (obj) {
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+
+        obj[key];
+>obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 76, 34))
+>key : Symbol(key, Decl(typeVariableTypeGuards.ts, 76, 53))
+    }
+}
+

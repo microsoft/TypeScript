@@ -75,3 +75,9 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
         obj[x].length;
     }
 }
+
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+    if (obj) {
+        obj[key];
+    }
+}

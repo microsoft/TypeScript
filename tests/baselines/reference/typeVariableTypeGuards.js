@@ -75,6 +75,12 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
     }
 }
 
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+    if (obj) {
+        obj[key];
+    }
+}
+
 
 //// [typeVariableTypeGuards.js]
 "use strict";
@@ -143,5 +149,10 @@ function f3(obj) {
 function f4(obj, x) {
     if (obj) {
         obj[x].length;
+    }
+}
+function f5(obj, key) {
+    if (obj) {
+        obj[key];
     }
 }

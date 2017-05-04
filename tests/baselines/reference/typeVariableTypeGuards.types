@@ -210,3 +210,23 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
     }
 }
 
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+>f5 : <T, K extends keyof T>(obj: T | undefined, key: K) => void
+>T : T
+>K : K
+>T : T
+>obj : T | undefined
+>T : T
+>key : K
+>K : K
+
+    if (obj) {
+>obj : T | undefined
+
+        obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+    }
+}
+
