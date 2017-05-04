@@ -11711,10 +11711,6 @@ namespace ts {
         }
 
         function isApparentTypePosition(node: Node) {
-            // When a node is the left hand expression of a property access or call expression, the node occurs
-            // in an apparent type position. In such a position we fetch the apparent type of the node *before*
-            // performing control flow analysis such that, if the node is a type variable, we apply narrowings
-            // to the constraint type.
             const parent = node.parent;
             return parent.kind === SyntaxKind.PropertyAccessExpression ||
                 parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
@@ -11722,10 +11718,14 @@ namespace ts {
         }
 
         function getDeclaredOrApparentType(symbol: Symbol, node: Node) {
+            // When a node is the left hand expression of a property access, element access, or call expression,
+            // and the type of the node includes type variables with constraints that are nullable, we fetch the
+            // apparent type of the node *before* performing control flow analysis such that narrowings apply to
+            // the constraint type.
             const type = getTypeOfSymbol(symbol);
             if (isApparentTypePosition(node) && maybeTypeOfKind(type, TypeFlags.TypeVariable)) {
                 const apparentType = mapType(getWidenedType(type), getApparentType);
-                if (apparentType !== emptyObjectType) {
+                if (maybeTypeOfKind(apparentType, TypeFlags.Nullable)) {
                     return apparentType;
                 }
             }
