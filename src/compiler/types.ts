@@ -242,6 +242,7 @@ namespace ts {
         IndexedAccessType,
         MappedType,
         LiteralType,
+        SymbolType,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -406,7 +407,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = LiteralType,
+        LastTypeNode = SymbolType,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -957,6 +958,10 @@ namespace ts {
     export interface LiteralTypeNode extends TypeNode {
         kind: SyntaxKind.LiteralType;
         literal: Expression;
+    }
+
+    export interface SymbolTypeNode extends TypeNode {
+        kind: SyntaxKind.SymbolType;
     }
 
     export interface StringLiteral extends LiteralExpression {
@@ -2880,6 +2885,7 @@ namespace ts {
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         dynamicMembers?: SymbolTable;       // Dynamic members with literal names resolved during check
         resolvedMembers?: SymbolTable;
+        uniqueType?: Type;                  // ESSymbol Unique type for a symbol.
     }
 
     /* @internal */
@@ -2974,31 +2980,32 @@ namespace ts {
         BooleanLiteral          = 1 << 7,
         EnumLiteral             = 1 << 8,
         ESSymbol                = 1 << 9,   // Type of symbol primitive introduced in ES6
-        Void                    = 1 << 10,
-        Undefined               = 1 << 11,
-        Null                    = 1 << 12,
-        Never                   = 1 << 13,  // Never type
-        TypeParameter           = 1 << 14,  // Type parameter
-        Object                  = 1 << 15,  // Object type
-        Union                   = 1 << 16,  // Union (T | U)
-        Intersection            = 1 << 17,  // Intersection (T & U)
-        Index                   = 1 << 18,  // keyof T
-        IndexedAccess           = 1 << 19,  // T[K]
+        Unique                  = 1 << 10,  // symbol()
+        Void                    = 1 << 11,
+        Undefined               = 1 << 12,
+        Null                    = 1 << 13,
+        Never                   = 1 << 14,  // Never type
+        TypeParameter           = 1 << 15,  // Type parameter
+        Object                  = 1 << 16,  // Object type
+        Union                   = 1 << 17,  // Union (T | U)
+        Intersection            = 1 << 18,  // Intersection (T & U)
+        Index                   = 1 << 19,  // keyof T
+        IndexedAccess           = 1 << 20,  // T[K]
         /* @internal */
-        FreshLiteral            = 1 << 20,  // Fresh literal type
+        FreshLiteral            = 1 << 21,  // Fresh literal type
         /* @internal */
-        ContainsWideningType    = 1 << 21,  // Type is or contains undefined or null widening type
+        ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 22,  // Type is or contains object literal type
+        ContainsObjectLiteral   = 1 << 23,  // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 23,  // Type is or contains object literal type
-        NonPrimitive            = 1 << 24,  // intrinsic object type
+        ContainsAnyFunctionType = 1 << 24,  // Type is or contains object literal type
+        NonPrimitive            = 1 << 25,  // intrinsic object type
         /* @internal */
-        JsxAttributes           = 1 << 25,  // Jsx attributes type
+        JsxAttributes           = 1 << 26,  // Jsx attributes type
 
         /* @internal */
         Nullable = Undefined | Null,
-        Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral,
+        Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral | Unique,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
@@ -3011,6 +3018,7 @@ namespace ts {
         NumberLike = Number | NumberLiteral | Enum | EnumLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
+        ESSymbolLike = ESSymbol | Unique,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         StructuredOrTypeVariable = StructuredType | TypeParameter | Index | IndexedAccess,
@@ -3018,7 +3026,7 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | NonPrimitive,
+        Narrowable = Any | StructuredType | TypeParameter | Index | IndexedAccess | StringLike | NumberLike | BooleanLike | ESSymbol | Unique | NonPrimitive,
         NotUnionOrUnit = Any | ESSymbol | Object | NonPrimitive,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,

@@ -2499,6 +2499,19 @@ namespace ts {
             return token() === SyntaxKind.DotToken ? undefined : node;
         }
 
+        function parseSymbolType(): TypeNode | undefined {
+            const fullStart = scanner.getStartPos();
+            parseExpected(SyntaxKind.SymbolKeyword);
+            if (token() === SyntaxKind.DotToken) return undefined;
+            if (parseOptional(SyntaxKind.OpenParenToken)) {
+                parseExpected(SyntaxKind.CloseParenToken);
+                return finishNode(<SymbolTypeNode>createNode(SyntaxKind.SymbolType, fullStart));
+            }
+            else {
+                return finishNode(<TypeNode>createNode(SyntaxKind.SymbolKeyword, fullStart));
+            }
+        }
+
         function parseLiteralTypeNode(): LiteralTypeNode {
             const node = <LiteralTypeNode>createNode(SyntaxKind.LiteralType);
             node.literal = parseSimpleUnaryExpression();
@@ -2516,13 +2529,15 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UndefinedKeyword:
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
-                    const node = tryParse(parseKeywordAndNoDot);
-                    return node || parseTypeReference();
+                    return tryParse(parseKeywordAndNoDot) 
+                        || parseTypeReference();
+                case SyntaxKind.SymbolKeyword:
+                    return tryParse(parseSymbolType) 
+                        || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
                 case SyntaxKind.TrueKeyword:

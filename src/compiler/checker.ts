@@ -2331,6 +2331,9 @@ namespace ts {
                 if (type.flags & TypeFlags.BooleanLiteral) {
                     return (<IntrinsicType>type).intrinsicName === "true" ? createTrue() : createFalse();
                 }
+                if (type.flags & TypeFlags.Unique) {
+                    return <SymbolTypeNode>createToken(SyntaxKind.SymbolType);
+                }
                 if (type.flags & TypeFlags.EnumLiteral) {
                     const name = symbolToName(type.symbol, /*expectsIdentifier*/ false);
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
@@ -3079,6 +3082,11 @@ namespace ts {
                     }
                     else if (getObjectFlags(type) & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                         writeAnonymousType(<ObjectType>type, nextFlags);
+                    }
+                    else if (type.flags & TypeFlags.Unique) {
+                        writeKeyword(writer, SyntaxKind.SymbolKeyword);
+                        writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        writePunctuation(writer, SyntaxKind.CloseParenToken);
                     }
                     else if (type.flags & TypeFlags.StringOrNumberLiteral) {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
@@ -5193,7 +5201,7 @@ namespace ts {
                     resolveDynamicMembersOfNode(node, (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members, symbolTable);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
+                    resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
                     break;
             }
         }
@@ -5234,9 +5242,10 @@ namespace ts {
         function resolveDynamicMember(symbolTable: SymbolTable, parent: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement, includes: SymbolFlags, excludes: SymbolFlags) {
             Debug.assert(isComputedPropertyName(member.name));
             const nameType = checkComputedPropertyName(<ComputedPropertyName>member.name);
-            if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
-                // TODO(rbuckton): ESSymbolLiteral
-                const memberName = (<LiteralType>nameType).text;
+            if (nameType.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) {
+                const memberName = nameType.flags & TypeFlags.Unique
+                    ? `__@@symbol@${nameType.symbol.id}@${nameType.symbol.name}`
+                    : (<LiteralType>nameType).text;
                 let symbol = symbolTable.get(memberName);
                 if (!symbol) {
                     symbolTable.set(memberName, symbol = createSymbol(SymbolFlags.Dynamic, memberName));
@@ -5244,10 +5253,11 @@ namespace ts {
                 const staticMember = parent.members && parent.members.get(memberName);
                 if (symbol.flags & excludes || staticMember) {
                     const declarations = staticMember ? concatenate(staticMember.declarations, symbol.declarations) : symbol.declarations;
+                    const name = nameType.flags & TypeFlags.Unique ? `[${entityNameToString(<EntityNameExpression>(<ComputedPropertyName>member.name).expression)}]` : memberName;
                     forEach(declarations, declaration => {
-                        error(declaration.name || declaration, Diagnostics.Duplicate_identifier_0, memberName);
+                        error(declaration.name || declaration, Diagnostics.Duplicate_identifier_0, name);
                     });
-                    error(member.name || member, Diagnostics.Duplicate_identifier_0, memberName);
+                    error(member.name || member, Diagnostics.Duplicate_identifier_0, name);
                     symbol = createSymbol(SymbolFlags.Dynamic, memberName);
                 }
                 addDeclarationToSymbol(symbol, member, includes);
@@ -5912,7 +5922,7 @@ namespace ts {
                 t.flags & TypeFlags.StringLike ? globalStringType :
                     t.flags & TypeFlags.NumberLike ? globalNumberType :
                         t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                            t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
+                            t.flags & TypeFlags.ESSymbolLike ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
                                 t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
                                     t;
         }
@@ -7404,7 +7414,7 @@ namespace ts {
                     return getTypeOfSymbol(prop);
                 }
             }
-            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbol)) {
+            if (isTypeAnyOrAllConstituentTypesHaveKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
                 if (isTypeAny(objectType)) {
                     return anyType;
                 }
@@ -7683,6 +7693,27 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getTypeFromSymbolTypeNode(node: SymbolTypeNode): Type {
+            const parent = node.parent;
+            if (parent.kind === SyntaxKind.VariableDeclaration || 
+                parent.kind === SyntaxKind.PropertyDeclaration ||
+                parent.kind === SyntaxKind.PropertySignature ||
+                parent.kind === SyntaxKind.PropertyAssignment) {
+                const symbol = getSymbolOfNode(parent);
+                if (symbol) return getUniqueTypeForSymbol(symbol);
+            }
+            return esSymbolType;
+        }
+
+        function getUniqueTypeForSymbol(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            if (!links.type) {
+                links.type = createType(TypeFlags.Unique);
+                links.type.symbol = symbol;
+            }
+            return links.type;
+        }
+
         function getTypeFromJSDocVariadicType(node: JSDocVariadicType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -7753,6 +7784,8 @@ namespace ts {
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
                 case SyntaxKind.JSDocLiteralType:
                     return getTypeFromLiteralTypeNode((<JSDocLiteralType>node).literal);
+                case SyntaxKind.SymbolType:
+                    return getTypeFromSymbolTypeNode(<SymbolTypeNode>node);
                 case SyntaxKind.TypeReference:
                 case SyntaxKind.JSDocTypeReference:
                     return getTypeFromTypeReference(<TypeReferenceNode>node);
@@ -8556,11 +8589,13 @@ namespace ts {
             if (source.flags & TypeFlags.StringLike && target.flags & TypeFlags.String) return true;
             if (source.flags & TypeFlags.NumberLike && target.flags & TypeFlags.Number) return true;
             if (source.flags & TypeFlags.BooleanLike && target.flags & TypeFlags.Boolean) return true;
+            if (source.flags & TypeFlags.ESSymbolLike && target.flags & TypeFlags.ESSymbol) return true;
             if (source.flags & TypeFlags.EnumLiteral && target.flags & TypeFlags.Enum && (<EnumLiteralType>source).baseType === target) return true;
             if (source.flags & TypeFlags.Enum && target.flags & TypeFlags.Enum && isEnumTypeRelatedTo(<EnumType>source, <EnumType>target, errorReporter)) return true;
             if (source.flags & TypeFlags.Undefined && (!strictNullChecks || target.flags & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (source.flags & TypeFlags.Null && (!strictNullChecks || target.flags & TypeFlags.Null)) return true;
             if (source.flags & TypeFlags.Object && target.flags & TypeFlags.NonPrimitive) return true;
+            if (source.flags & TypeFlags.Unique || target.flags & TypeFlags.Unique) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (source.flags & TypeFlags.Any) return true;
                 if ((source.flags & TypeFlags.Number | source.flags & TypeFlags.NumberLiteral) && target.flags & TypeFlags.EnumLike) return true;
@@ -10772,7 +10807,7 @@ namespace ts {
             if (flags & TypeFlags.Null) {
                 return TypeFacts.NullFacts;
             }
-            if (flags & TypeFlags.ESSymbol) {
+            if (flags & TypeFlags.ESSymbolLike) {
                 return strictNullChecks ? TypeFacts.SymbolStrictFacts : TypeFacts.SymbolFacts;
             }
             if (flags & TypeFlags.NonPrimitive) {
@@ -13130,7 +13165,7 @@ namespace ts {
 
                 // This will allow types number, string, symbol or any. It will also allow enums, the unknown
                 // type, and any union of these types (like string | number).
-                if (!isTypeAnyOrAllConstituentTypesHaveKind(links.resolvedType, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbol)) {
+                if (!isTypeAnyOrAllConstituentTypesHaveKind(links.resolvedType, TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.ESSymbolLike)) {
                     error(node, Diagnostics.A_computed_property_name_must_be_of_type_string_number_symbol_or_any);
                 }
                 else {
@@ -13174,7 +13209,7 @@ namespace ts {
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
                 const memberDecl = node.properties[i];
-                let member = memberDecl.symbol;
+                let member = getSymbolOfNode(memberDecl);
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
@@ -13259,7 +13294,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (hasDynamicName(memberDecl)) {
+                if (hasDynamicName(memberDecl) && !isLiteralDynamicName(<ComputedPropertyName>memberDecl.name)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
@@ -14407,7 +14442,7 @@ namespace ts {
             }
 
             // Make sure the property type is the primitive symbol type
-            if ((expressionType.flags & TypeFlags.ESSymbol) === 0) {
+            if ((expressionType.flags & TypeFlags.ESSymbolLike) === 0) {
                 if (reportError) {
                     error(expression, Diagnostics.A_computed_property_name_of_the_form_0_must_be_of_type_symbol, getTextOfNode(expression));
                 }
@@ -15011,7 +15046,7 @@ namespace ts {
 
                     case SyntaxKind.ComputedPropertyName:
                         const nameType = checkComputedPropertyName(<ComputedPropertyName>element.name);
-                        if (isTypeOfKind(nameType, TypeFlags.ESSymbol)) {
+                        if (isTypeOfKind(nameType, TypeFlags.ESSymbolLike)) {
                             return nameType;
                         }
                         else {
@@ -15824,14 +15859,46 @@ namespace ts {
                 return resolveExternalModuleTypeByLiteral(<StringLiteral>node.arguments[0]);
             }
 
-            return getReturnTypeOfSignature(signature);
+            const returnType = getReturnTypeOfSignature(signature);
+            // Treat any call to the global 'Symbol' function that is part of a variable or property 
+            // as a fresh unique symbol literal type.
+            if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
+                const parent = skipParentheses(node).parent;
+                if (parent.kind === SyntaxKind.VariableDeclaration || 
+                    parent.kind === SyntaxKind.PropertyDeclaration ||
+                    parent.kind === SyntaxKind.PropertyAssignment) {
+                    const symbol = getSymbolOfNode(parent);
+                    if (symbol) return getUniqueTypeForSymbol(symbol);
+                }
+            }
+            return returnType;
+        }
+
+        function isSymbolOrSymbolForCall(node: Node) {
+            if (!isCallExpression(node)) return false;
+            let left = node.expression;
+            if (isPropertyAccessExpression(left) && left.name.text === "for") {
+                left = left.expression;
+            }
+            if (!isIdentifier(left) || left.text !== "Symbol") {
+                return false;
+            }
+
+            // make sure `Symbol` is the global symbol
+            const globalESSymbol = getGlobalESSymbolConstructorSymbol(/*reportErrors*/ false);
+            if (!globalESSymbol) {
+                return false;
+            }
+
+            return globalESSymbol === resolveName(left, "Symbol", SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
         }
 
         function isCommonJsRequire(node: Node) {
             if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 return false;
             }
-                // Make sure require is not a local function
+            
+            // Make sure require is not a local function
             const resolvedRequire = resolveName(node.expression, (<Identifier>node.expression).text, SymbolFlags.Value, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             if (!resolvedRequire) {
                 // project does not contain symbol named 'require' - assume commonjs require
@@ -16498,7 +16565,7 @@ namespace ts {
                 case SyntaxKind.MinusToken:
                 case SyntaxKind.TildeToken:
                     checkNonNullType(operandType, node.operand);
-                    if (maybeTypeOfKind(operandType, TypeFlags.ESSymbol)) {
+                    if (maybeTypeOfKind(operandType, TypeFlags.ESSymbolLike)) {
                         error(node.operand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(node.operator));
                     }
                     return numberType;
@@ -16618,7 +16685,7 @@ namespace ts {
             // The in operator requires the left operand to be of type Any, the String primitive type, or the Number primitive type,
             // and the right operand to be of type Any, an object type, or a type parameter type.
             // The result is always of the Boolean primitive type.
-            if (!(isTypeComparableTo(leftType, stringType) || isTypeOfKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbol))) {
+            if (!(isTypeComparableTo(leftType, stringType) || isTypeOfKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbolLike))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
             if (!isTypeAnyOrAllConstituentTypesHaveKind(rightType, TypeFlags.Object | TypeFlags.TypeVariable | TypeFlags.NonPrimitive)) {
@@ -17022,8 +17089,8 @@ namespace ts {
             // Return true if there was no error, false if there was an error.
             function checkForDisallowedESSymbolOperand(operator: SyntaxKind): boolean {
                 const offendingSymbolOperand =
-                    maybeTypeOfKind(leftType, TypeFlags.ESSymbol) ? left :
-                        maybeTypeOfKind(rightType, TypeFlags.ESSymbol) ? right :
+                    maybeTypeOfKind(leftType, TypeFlags.ESSymbolLike) ? left :
+                        maybeTypeOfKind(rightType, TypeFlags.ESSymbolLike) ? right :
                             undefined;
                 if (offendingSymbolOperand) {
                     error(offendingSymbolOperand, Diagnostics.The_0_operator_cannot_be_applied_to_type_symbol, tokenToString(operator));
@@ -17303,7 +17370,7 @@ namespace ts {
         function getTypeOfExpression(node: Expression, cache?: boolean) {
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
+            if (node.kind === SyntaxKind.CallExpression && (<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(node, /*checkArgumentIsStringLiteral*/ true) && !isSymbolOrSymbolForCall(node)) {
                 const funcType = checkNonNullExpression((<CallExpression>node).expression);
                 const signature = getSingleCallSignature(funcType);
                 if (signature && !signature.typeParameters) {
@@ -18158,6 +18225,10 @@ namespace ts {
             const type = <MappedType>getTypeFromMappedTypeNode(node);
             const constraintType = getConstraintTypeFromMappedType(type);
             checkTypeAssignableTo(constraintType, stringType, node.typeParameter.constraint);
+        }
+
+        function checkSymbolType(node: SymbolTypeNode) {
+            checkGrammarSymbolTypeNode(node);
         }
 
         function isPrivateWithinAmbient(node: Node): boolean {
@@ -21607,6 +21678,8 @@ namespace ts {
                     return checkIndexedAccessType(<IndexedAccessTypeNode>node);
                 case SyntaxKind.MappedType:
                     return checkMappedType(<MappedTypeNode>node);
+                case SyntaxKind.SymbolType:
+                    return checkSymbolType(<SymbolTypeNode>node);
                 case SyntaxKind.FunctionDeclaration:
                     return checkFunctionDeclaration(<FunctionDeclaration>node);
                 case SyntaxKind.Block:
@@ -22754,7 +22827,7 @@ namespace ts {
             else if (isTupleType(type)) {
                 return TypeReferenceSerializationKind.ArrayLikeType;
             }
-            else if (isTypeOfKind(type, TypeFlags.ESSymbol)) {
+            else if (isTypeOfKind(type, TypeFlags.ESSymbolLike)) {
                 return TypeReferenceSerializationKind.ESSymbolType;
             }
             else if (isFunctionType(type)) {
@@ -22840,9 +22913,8 @@ namespace ts {
         function isLiteralDynamicName(name: ComputedPropertyName) {
             name = getParseTreeNode(name, isComputedPropertyName);
             if (name) {
-                // TODO(rbuckton): ESSymbolLiteral
                 const nameType = checkComputedPropertyName(name);
-                return (nameType.flags & TypeFlags.StringOrNumberLiteral) !== 0;
+                return (nameType.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) !== 0;
             }
             return false;
         }
@@ -23897,10 +23969,24 @@ namespace ts {
             }
         }
 
+        function checkGrammarSymbolTypeNode(node: SymbolTypeNode) {
+            const parent = node.parent;
+            if (parent.kind !== SyntaxKind.VariableDeclaration &&
+                parent.kind !== SyntaxKind.PropertyDeclaration && 
+                parent.kind !== SyntaxKind.PropertySignature &&
+                parent.kind !== SyntaxKind.PropertyAssignment) {
+                return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_are_only_allowed_on_variables_and_properties);
+            }
+            if (parent.kind === SyntaxKind.VariableDeclaration &&
+                (<VariableDeclaration>parent).name.kind !== SyntaxKind.Identifier) {
+                return grammarErrorOnNode(node, Diagnostics.Unique_symbol_types_may_not_be_used_on_a_variable_declaration_with_a_binding_name);
+            }
+        }
+
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
             if (isDynamicName(node)) {
                 if (!isEntityNameExpression((<ComputedPropertyName>node).expression) ||
-                    (checkExpressionCached((<ComputedPropertyName>node).expression).flags & TypeFlags.StringOrNumberLiteral) === 0) {
+                    (checkExpressionCached((<ComputedPropertyName>node).expression).flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) === 0) {
                     return grammarErrorOnNode(node, message);
                 }
             }

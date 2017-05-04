@@ -417,6 +417,8 @@ namespace ts {
                 case SyntaxKind.ThisType:
                 case SyntaxKind.LiteralType:
                     return writeTextOfNode(currentText, type);
+                case SyntaxKind.SymbolType:
+                    return write("symbol()");
                 case SyntaxKind.ExpressionWithTypeArguments:
                     return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>type);
                 case SyntaxKind.TypeReference:
@@ -1297,14 +1299,9 @@ namespace ts {
             function emitDynamicName(entityName: EntityNameExpression) {
                 writer.getSymbolAccessibilityDiagnostic = getVariableDeclarationTypeVisibilityError;
                 const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
-                if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
-                    resolver.writeTypeOfExpression(entityName, enclosingDeclaration, TypeFormatFlags.None, writer);
-                }
-                else {
-                    handleSymbolAccessibilityError(visibilityResult);
-                    recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
-                    writeTextOfNode(currentText, node.name);
-                }
+                handleSymbolAccessibilityError(visibilityResult);
+                recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+                writeTextOfNode(currentText, node.name);
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {

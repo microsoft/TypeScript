@@ -879,6 +879,15 @@
         "category": "Error",
         "code": 1322
     },
+    "Unique 'symbol()' types are only allowed on variables and properties.": {
+        "category": "Error",
+        "code": 1323
+    },
+    "Unique 'symbol()' types may not be used on a variable declaration with a binding name.": {
+        "category": "Error",
+        "code": 1324
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
