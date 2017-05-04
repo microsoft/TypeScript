@@ -1925,16 +1925,18 @@ namespace ts {
     }
 
     export const enum FunctionFlags {
-        Normal = 0,
-        Generator = 1 << 0,
-        Async = 1 << 1,
-        AsyncOrAsyncGenerator = Async | Generator,
-        Invalid = 1 << 2,
-        InvalidAsyncOrAsyncGenerator = AsyncOrAsyncGenerator | Invalid,
-        InvalidGenerator = Generator | Invalid,
+        Normal = 0,             // Function is a normal function
+        Generator = 1 << 0,     // Function is a generator function or async generator function
+        Async = 1 << 1,         // Function is an async function or an async generator function
+        Invalid = 1 << 2,       // Function is a signature or overload and does not have a body.
+        AsyncGenerator = Async | Generator, // Function is an async generator function
     }
 
-    export function getFunctionFlags(node: FunctionLikeDeclaration) {
+    export function getFunctionFlags(node: FunctionLikeDeclaration | undefined) {
+        if (!node) {
+            return FunctionFlags.Invalid;
+        }
+
         let flags = FunctionFlags.Normal;
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:

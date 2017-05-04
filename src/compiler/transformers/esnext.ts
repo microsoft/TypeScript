@@ -884,7 +884,7 @@ namespace ts {
 
     function createAwaitHelper(context: TransformationContext, expression: Expression) {
         context.requestEmitHelper(awaitHelper);
-        return createCall(createIdentifier("__await"), /*typeArguments*/ undefined, [expression]);
+        return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
     const asyncGeneratorHelper: EmitHelper = {
