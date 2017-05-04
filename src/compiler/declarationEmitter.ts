@@ -1134,7 +1134,7 @@ namespace ts {
                     return {
                         diagnosticMessage,
                         errorNode: node,
-                        typeName: (<Declaration>node.parent.parent).name
+                        typeName: getNameOfDeclaration(node.parent.parent)
                     };
                 }
             }

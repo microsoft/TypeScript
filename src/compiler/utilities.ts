@@ -11,6 +11,36 @@ namespace ts {
         isTypeReferenceDirective?: boolean;
     }
 
+    export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
+        if (!declaration) {
+            return undefined;
+        }
+        if (declaration.kind === SyntaxKind.BinaryExpression) {
+            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
+            const lhs = (declaration as BinaryExpression).left;
+            switch (kind) {
+                case SpecialPropertyAssignmentKind.None:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                    return undefined;
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                    if (lhs.kind === SyntaxKind.Identifier) {
+                        return (lhs as PropertyAccessExpression).name;
+                    }
+                    else {
+                        return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
+                    }
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Property:
+                    return (lhs as PropertyAccessExpression).name;
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
+            }
+        }
+        else {
+            return declaration.name;
+        }
+    }
+
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
         if (declarations) {
@@ -566,7 +596,7 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
-                errorNode = (<Declaration>node).name;
+                errorNode = (<RealDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
@@ -1770,7 +1800,7 @@ namespace ts {
         }
 
         if (isDeclaration(parent)) {
-            return (<Declaration>parent).name === name;
+            return parent.name === name;
         }
 
         return false;
@@ -1796,7 +1826,7 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
                 // Name in member declaration or property name in property access
-                return (<Declaration | PropertyAccessExpression>parent).name === node;
+                return (<RealDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
                 // Name on right hand side of dot in a type query
                 if ((<QualifiedName>parent).right === node) {
@@ -1994,7 +2024,7 @@ namespace ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name && isDynamicName(declaration.name);
+        return getNameOfDeclaration(declaration) && isDynamicName(getNameOfDeclaration(declaration));
     }
 
     export function isDynamicName(name: DeclarationName): boolean {
@@ -4071,7 +4101,7 @@ namespace ts {
             || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
-    export function isDeclaration(node: Node): node is Declaration {
+    export function isDeclaration(node: Node): node is RealDeclaration {
         return isDeclarationKind(node.kind);
     }
 
