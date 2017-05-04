@@ -20233,7 +20233,10 @@ namespace ts {
                 // perform property check if property or indexer is declared in 'type'
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                if (propDeclaration && (propDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol)) {
+                if (propDeclaration &&
+                    (getSpecialPropertyAssignmentKind(propDeclaration as BinaryExpression) === SpecialPropertyAssignmentKind.ThisProperty ||
+                     propDeclaration.name.kind === SyntaxKind.ComputedPropertyName ||
+                     prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
                 }
                 else if (indexDeclaration) {
