@@ -18717,7 +18717,10 @@ namespace ts {
          * marked as referenced to prevent import elision.
          */
         function markTypeNodeAsReferenced(node: TypeNode) {
-            const typeName = node && getEntityNameFromTypeNode(node);
+            markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node));
+        }
+
+        function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression) {
             const rootName = typeName && getFirstIdentifier(typeName);
             const rootSymbol = rootName && resolveName(rootName, rootName.text, (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             if (rootSymbol
@@ -18725,6 +18728,61 @@ namespace ts {
                 && symbolIsValue(rootSymbol)
                 && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
                 markAliasSymbolAsReferenced(rootSymbol);
+            }
+        }
+
+        /**
+         * This function marks the type used for metadata decorator as referenced if it is import
+         * from external module.
+         * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
+         * union and intersection type
+         * @param node
+         */
+        function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode): void {
+            const entityName = getEntityNameForDecoratorMetadata(node);
+            if (entityName && isEntityName(entityName)) {
+                markEntityNameOrEntityExpressionAsReference(entityName);
+            }
+        }
+
+        function getEntityNameForDecoratorMetadata(node: TypeNode): EntityName {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.IntersectionType:
+                    case SyntaxKind.UnionType:
+                        let commonEntityName: EntityName;
+                        for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                            const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
+                            if (!individualEntityName) {
+                                // Individual is something like string number
+                                // So it would be serialized to either that type or object
+                                // Safe to return here
+                                return undefined;
+                            }
+
+                            if (commonEntityName) {
+                                // Note this is in sync with the transformation that happens for type node.
+                                // Keep this in sync with serializeUnionOrIntersectionType
+                                // Verify if they refer to same entity and is identifier
+                                // return undefined if they dont match because we would emit object
+                                if (!isIdentifier(commonEntityName) ||
+                                    !isIdentifier(individualEntityName) ||
+                                    commonEntityName.text !== individualEntityName.text) {
+                                    return undefined;
+                                }
+                            }
+                            else {
+                                commonEntityName = individualEntityName;
+                            }
+                        }
+                        return commonEntityName;
+
+                    case SyntaxKind.ParenthesizedType:
+                        return getEntityNameForDecoratorMetadata((<ParenthesizedTypeNode>node).type);
+
+                    case SyntaxKind.TypeReference:
+                        return (<TypeReferenceNode>node).typeName;
+                }
             }
         }
 
@@ -18763,7 +18821,7 @@ namespace ts {
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
-                                markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                                markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                             }
                         }
                         break;
@@ -18772,17 +18830,17 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
-                            markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
-                        markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
+                        markDecoratorMedataDataTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
-                        markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
                         break;
                     case SyntaxKind.Parameter:
-                        markTypeNodeAsReferenced((<PropertyDeclaration>node).type);
+                        markDecoratorMedataDataTypeNodeAsReferenced((<PropertyDeclaration>node).type);
                         break;
                 }
             }
