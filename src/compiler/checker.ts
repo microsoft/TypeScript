@@ -13249,6 +13249,8 @@ namespace ts {
             let spread: Type = emptyObjectType;
             let attributesArray: Symbol[] = [];
             let hasSpreadAnyType = false;
+            let explicitlySpecifyChildrenAttribute = false;
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
 
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
@@ -13267,6 +13269,9 @@ namespace ts {
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.name, attributeSymbol);
                     attributesArray.push(attributeSymbol);
+                    if (attributeDecl.name.text === jsxChildrenPropertyName) {
+                        explicitlySpecifyChildrenAttribute = true;
+                    }
                 }
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
@@ -13327,8 +13332,7 @@ namespace ts {
 
                 // Error if there is a attribute named "children" and children element.
                 // This is because children element will overwrite the value from attributes
-                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                if (explicitlySpecifyChildrenAttribute) {
                     if (attributesTable.has(jsxChildrenPropertyName)) {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
                     }
@@ -13351,7 +13355,7 @@ namespace ts {
              */
             function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
+                const freshObjectLiteralFlag = spread !== emptyObjectType || compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
@@ -13903,7 +13907,15 @@ namespace ts {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
-                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                const isAssignableToTargetAttributes = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                // TODO (yuisu): comment
+                if (isAssignableToTargetAttributes && sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
+                    for (const attribute of openingLikeElement.attributes.properties) {
+                        if (isJsxAttribute(attribute) && !getPropertyOfType(targetAttributesType, attribute.name.text)) {
+                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));
+                        }
+                    }
+                }
             }
         }
 
