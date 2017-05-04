@@ -2992,7 +2992,7 @@ namespace ts {
         Index                   = 1 << 19,  // keyof T
         IndexedAccess           = 1 << 20,  // T[K]
         /* @internal */
-        FreshLiteral            = 1 << 21,  // Fresh literal type
+        Fresh                   = 1 << 21,  // Fresh literal or unique type
         /* @internal */
         ContainsWideningType    = 1 << 22,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -3058,6 +3058,13 @@ namespace ts {
         text: string;               // Text of literal
         freshType?: LiteralType;    // Fresh version of type
         regularType?: LiteralType;  // Regular version of type
+    }
+
+    // Unique symbol types (TypeFlags.Unique)
+    export interface UniqueType extends Type {
+        symbol: Symbol;
+        freshType?: UniqueType;     // Fresh version of the type
+        regularType?: UniqueType;   // Regular version of the type
     }
 
     // Enum types (TypeFlags.Enum)
