@@ -227,12 +227,13 @@ namespace ts {
         // Should not be called on a declaration with a computed property name,
         // unless it is a well known Symbol.
         function getDeclarationName(node: Declaration): string {
-            if (node.name) {
+            const name = getNameOfDeclaration(node);
+            if (name) {
                 if (isAmbientModule(node)) {
-                    return isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${(<LiteralExpression>node.name).text}"`;
+                    return isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${(<LiteralExpression>name).text}"`;
                 }
-                if (node.name.kind === SyntaxKind.ComputedPropertyName) {
-                    const nameExpression = (<ComputedPropertyName>node.name).expression;
+                if (name.kind === SyntaxKind.ComputedPropertyName) {
+                    const nameExpression = (<ComputedPropertyName>name).expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteral(nameExpression)) {
                         return nameExpression.text;
@@ -241,7 +242,7 @@ namespace ts {
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName((<PropertyAccessExpression>nameExpression).name.text);
                 }
-                return (<Identifier | LiteralExpression>node.name).text;
+                return (<Identifier | LiteralExpression>name).text;
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor:
@@ -303,7 +304,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return node.name ? declarationNameToString(node.name) : getDeclarationName(node);
+            return (node as RealDeclaration).name ? declarationNameToString((node as RealDeclaration).name) : getDeclarationName(node);
         }
 
         /**
@@ -366,8 +367,8 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
-                        if (node.name) {
-                            node.name.parent = node;
+                        if ((node as RealDeclaration).name) {
+                            (node as RealDeclaration).name.parent = node;
                         }
 
                         // Report errors every position with duplicate declaration
@@ -396,9 +397,9 @@ namespace ts {
                         }
 
                         forEach(symbol.declarations, declaration => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(declaration.name || declaration, message, getDisplayName(declaration)));
+                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(declaration) || declaration, message, getDisplayName(declaration)));
                         });
-                        file.bindDiagnostics.push(createDiagnosticForNode(node.name || node, message, getDisplayName(node)));
+                        file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(node) || node, message, getDisplayName(node)));
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
