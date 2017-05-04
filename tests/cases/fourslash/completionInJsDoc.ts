@@ -84,23 +84,18 @@ goTo.marker('8');
 verify.completionListContains('number');
 
 goTo.marker('9');
-verify.completionListCount(40);
 verify.completionListContains("@argument");
 
 goTo.marker('10');
-verify.completionListCount(40);
 verify.completionListContains("@returns");
 
 goTo.marker('11');
-verify.completionListCount(40);
 verify.completionListContains("@argument");
 
 goTo.marker('12');
-verify.completionListCount(40);
 verify.completionListContains("@constructor");
 
 goTo.marker('13');
-verify.completionListCount(40);
 verify.completionListContains("@param");
 
 goTo.marker('14');
