@@ -43,9 +43,9 @@ var elements = names.map(function (name) {
 
 var xxx = elements.filter(function (e) {
 >xxx : Symbol(xxx, Decl(genericMethodOverspecialization.ts, 17, 3))
->elements.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>elements.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >elements : Symbol(elements, Decl(genericMethodOverspecialization.ts, 12, 3))
->filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >e : Symbol(e, Decl(genericMethodOverspecialization.ts, 17, 36))
 
     return !e.isDisabled;
