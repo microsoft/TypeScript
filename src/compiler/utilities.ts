@@ -1142,6 +1142,10 @@ namespace ts {
         }
     }
 
+    export function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression {
+        return node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression;
+    }
+
     export function getInvokedExpression(node: CallLikeExpression): Expression {
         if (node.kind === SyntaxKind.TaggedTemplateExpression) {
             return (<TaggedTemplateExpression>node).tag;
