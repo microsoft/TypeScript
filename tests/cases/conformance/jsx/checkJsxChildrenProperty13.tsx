@@ -13,15 +13,10 @@ interface ButtonProp {
 
 class Button extends React.Component<ButtonProp, any> {
     render() {
-		let condition: boolean;
-		if (condition) {
-        	return <InnerButton {...this.props} />
-		}
-		else {
-			return (<InnerButton {...this.props} >
-				<div>Hello World</div>
-				</InnerButton>);
-		}
+        // Error children are specified twice
+        return (<InnerButton {...this.props} children="hi">
+            <div>Hello World</div>
+            </InnerButton>);
     }
 }
 

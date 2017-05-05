@@ -17,15 +17,30 @@ export default function Component(props: ComponentProps) {
 >props : ComponentProps
 >ComponentProps : ComponentProps
 
-    return (
->(        <AnotherComponent {...props} />    ) : JSX.Element
+    let condition1: boolean;
+>condition1 : boolean
 
-        <AnotherComponent {...props} />
-><AnotherComponent {...props} /> : JSX.Element
->AnotherComponent : ({property1}: AnotherComponentProps) => JSX.Element
+    if (condition1) {
+>condition1 : boolean
+
+        return (
+>(            <ChildComponent {...props} />        ) : JSX.Element
+
+            <ChildComponent {...props} />
+><ChildComponent {...props} /> : JSX.Element
+>ChildComponent : ({property1}: AnotherComponentProps) => JSX.Element
 >props : ComponentProps
 
-    );
+        );
+    }
+    else {
+        return (<ChildComponent {...props} property1="NewString" />);
+>(<ChildComponent {...props} property1="NewString" />) : JSX.Element
+><ChildComponent {...props} property1="NewString" /> : JSX.Element
+>ChildComponent : ({property1}: AnotherComponentProps) => JSX.Element
+>props : ComponentProps
+>property1 : string
+    }
 }
 
 interface AnotherComponentProps {
@@ -35,8 +50,8 @@ interface AnotherComponentProps {
 >property1 : string
 }
 
-function AnotherComponent({ property1 }: AnotherComponentProps) {
->AnotherComponent : ({property1}: AnotherComponentProps) => JSX.Element
+function ChildComponent({ property1 }: AnotherComponentProps) {
+>ChildComponent : ({property1}: AnotherComponentProps) => JSX.Element
 >property1 : string
 >AnotherComponentProps : AnotherComponentProps
 

@@ -7,22 +7,19 @@ interface ComponentProps {
 }
 
 export default function Component(props: ComponentProps) {
-    let condition1: boolean;
-    if (condition1) {
-        return (
-            <ChildComponent {...props} />
-        );
-    }
-    else {
-        return (<ChildComponent {...props} property1="NewString" />);
-    }
+    return (
+        // Error: missing property
+        <AnotherComponent {...props} />
+    );
 }
 
 interface AnotherComponentProps {
     property1: string;
+    AnotherProperty1: string;
+    property2: boolean;
 }
 
-function ChildComponent({ property1 }: AnotherComponentProps) {
+function AnotherComponent({ property1 }: AnotherComponentProps) {
     return (
         <span>{property1}</span>
     );
@@ -33,16 +30,12 @@ function ChildComponent({ property1 }: AnotherComponentProps) {
 exports.__esModule = true;
 var React = require("react");
 function Component(props) {
-    var condition1;
-    if (condition1) {
-        return (<ChildComponent {...props}/>);
-    }
-    else {
-        return (<ChildComponent {...props} property1="NewString"/>);
-    }
+    return (
+    // Error: missing property
+    <AnotherComponent {...props}/>);
 }
 exports["default"] = Component;
-function ChildComponent(_a) {
+function AnotherComponent(_a) {
     var property1 = _a.property1;
     return (<span>{property1}</span>);
 }
