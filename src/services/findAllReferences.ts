@@ -1454,6 +1454,13 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function isShortHandPropertyAssignmentInferringPropertyType(shorthandProperty: ShorthandPropertyAssignment) {
+        if (!isArrayLiteralOrObjectLiteralDestructuringPattern(shorthandProperty.parent)) {
+            const variableLike = <VariableLikeDeclaration>findAncestor(shorthandProperty.parent, isVariableLike);
+            return variableLike && !variableLike.type && !isBindingPattern(variableLike.name);
+        }
+    }
+
     function addReferenceToPropertyAccessInObjectBindingPatternWithoutPropertyName(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State,
         bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker)): void {
         if (!state.isForRename) {
@@ -1520,6 +1527,29 @@ namespace ts.FindAllReferences.Core {
              */
             const shorthandValueSymbol = getRelatedShorthandValueSymbol(referenceSymbol, referenceLocation, search, state);
             if (shorthandValueSymbol) {
+                /*
+                 * We are looking for value symbol and since it couldnt find reference symbol in the search set
+                 * here we are just looking for the value at this point
+                 * (meaning search did not originate at short hand property assignment reference location)
+                 * But if this short hand property assignment that leads to inferring the property of a type
+                 * we need to look for that property access too
+                 * e.g when searching for below value x, at const o = {x} it is infering the property x for type o
+                 * so add the search for property x which should search any references of o.x
+                 * const |x| = 1;
+                 * const o = { x };
+                 * {
+                 *     const { x } = o;
+                 *     x;
+                 * }
+                 */
+                if (isShortHandPropertyAssignmentInferringPropertyType(<ShorthandPropertyAssignment>referenceLocation.parent)) {
+                    getReferencesInSourceFile(referenceLocation.getSourceFile(), state.createSearch(referenceLocation, referenceSymbol, /*comingFrom*/ undefined), state);
+
+                    // Return the value symbol access only if this is not the rename search
+                    // so that we avoid duplicate search at same location with property as well as value symbols
+                    return state.isForRename ? undefined : shorthandValueSymbol;
+                }
+
                 return shorthandValueSymbol;
             }
         }

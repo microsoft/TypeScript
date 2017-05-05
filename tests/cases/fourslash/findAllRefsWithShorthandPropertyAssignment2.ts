@@ -10,10 +10,10 @@
 //// M.y.[|dx|];
 
 const [r0, r1, r2, r3] = test.ranges();
+const valueRanges = [r1, r2];
 verify.singleReferenceGroup("var dx: string", [r0]);
-verify.referenceGroups(r1, [{ definition: "var M.dx: any", ranges: [r1, r2] }]);
-verify.referenceGroups(r2, [
-    { definition: "var M.dx: any", ranges: [r1, r2] },
+verify.referenceGroups(valueRanges, [
+    { definition: "var M.dx: any", ranges: valueRanges },
     { definition: "(property) dx: any", ranges: [r2, r3] }
 ]);
 verify.referenceGroups(r3, [
