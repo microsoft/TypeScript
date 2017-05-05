@@ -617,7 +617,7 @@ namespace ts {
             if (!noDeclare) {
                 write("declare ");
             }
-            write("var ");
+            write("const ");
             write(tempVarName);
             write(": ");
             writer.getSymbolAccessibilityDiagnostic = () => diagnostic;
@@ -1096,7 +1096,7 @@ namespace ts {
             }
         }
 
-        function emitHeritageClause(className: Identifier, typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
@@ -1108,16 +1108,6 @@ namespace ts {
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
                     write("null");
-                }
-                else {
-                    writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
-                    errorNameNode = className;
-                    resolver.writeBaseConstructorTypeOfClass(
-                        enclosingDeclaration as ClassLikeDeclaration,
-                        enclosingDeclaration,
-                        TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue,
-                        writer);
-                    errorNameNode = undefined;
                 }
 
                 function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
@@ -1158,12 +1148,14 @@ namespace ts {
             enclosingDeclaration = node;
             const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             let tempVarName: string;
-            if (isNonNullExpression(baseTypeNode)) {
-                tempVarName = emitTempVariableDeclaration(baseTypeNode.expression, `_${node.name.text}_intersection_base`, {
-                    diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
-                    errorNode: baseTypeNode,
-                    typeName: node.name
-                });
+            if (baseTypeNode && !isEntityNameExpression(baseTypeNode.expression)) {
+                tempVarName = baseTypeNode.expression.kind === SyntaxKind.NullKeyword ?
+                    "null" :
+                    emitTempVariableDeclaration(baseTypeNode.expression, `${node.name.text}_base`, {
+                        diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
+                        errorNode: baseTypeNode,
+                        typeName: node.name
+                    });
             }
 
             emitJsDocComments(node);
@@ -1175,7 +1167,7 @@ namespace ts {
             writeTextOfNode(currentText, node.name);
             emitTypeParameters(node.typeParameters);
             if (baseTypeNode) {
-                if (isNonNullExpression(baseTypeNode)) {
+                if (!isEntityNameExpression(baseTypeNode.expression)) {
                     write(" extends ");
                     write(tempVarName);
                     if (baseTypeNode.typeArguments) {
@@ -1185,10 +1177,10 @@ namespace ts {
                     }
                 }
                 else  {
-                    emitHeritageClause(node.name, [baseTypeNode], /*isImplementsList*/ false);
+                    emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
                 }
             }
-            emitHeritageClause(node.name, getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
+            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1210,7 +1202,7 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
             if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
-                emitHeritageClause(node.name, interfaceExtendsTypes, /*isImplementsList*/ false);
+                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
             }
             write(" {");
             writeLine();
@@ -1220,10 +1212,6 @@ namespace ts {
             write("}");
             writeLine();
             enclosingDeclaration = prevEnclosingDeclaration;
-        }
-
-        function isNonNullExpression(node: ExpressionWithTypeArguments) {
-            return node && !isEntityNameExpression(node.expression) && node.expression.kind !== SyntaxKind.NullKeyword;
         }
 
         function emitPropertyDeclaration(node: Declaration) {
