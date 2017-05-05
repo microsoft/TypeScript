@@ -304,7 +304,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return (node as RealDeclaration).name ? declarationNameToString((node as RealDeclaration).name) : getDeclarationName(node);
+            return (node as DeclarationBase).name ? declarationNameToString((node as DeclarationBase).name) : getDeclarationName(node);
         }
 
         /**
@@ -367,8 +367,8 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
-                        if ((node as RealDeclaration).name) {
-                            (node as RealDeclaration).name.parent = node;
+                        if ((node as DeclarationBase).name) {
+                            (node as DeclarationBase).name.parent = node;
                         }
 
                         // Report errors every position with duplicate declaration

@@ -3621,7 +3621,7 @@ namespace ts {
             });
         }
 
-        function isDeclarationVisible(node: Declaration): boolean {
+        function isDeclarationVisible(node: Node): boolean {
             if (node) {
                 const links = getNodeLinks(node);
                 if (links.isVisible === undefined) {
@@ -3635,10 +3635,10 @@ namespace ts {
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
                     case SyntaxKind.BindingElement:
-                        return isDeclarationVisible(<Declaration>node.parent.parent);
+                        return isDeclarationVisible(node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node.name) &&
-                            !(<BindingPattern>node.name).elements.length) {
+                        const declaration = node as VariableDeclaration;
+                        if (isBindingPattern(declaration.name) && !declaration.name.elements.length) {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
@@ -3661,7 +3661,7 @@ namespace ts {
                             return isGlobalSourceFile(parent);
                         }
                         // Exported members/ambient module elements (exception import declaration) are visible if parent is visible
-                        return isDeclarationVisible(<Declaration>parent);
+                        return isDeclarationVisible(parent);
 
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.PropertySignature:
@@ -3691,7 +3691,7 @@ namespace ts {
                     case SyntaxKind.UnionType:
                     case SyntaxKind.IntersectionType:
                     case SyntaxKind.ParenthesizedType:
-                        return isDeclarationVisible(<Declaration>node.parent);
+                        return isDeclarationVisible(node.parent);
 
                     // Default binding, import specifier and namespace import is visible
                     // only on demand so by default it is not visible
@@ -6236,8 +6236,8 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        return (<RealDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName
-                            && traverse((<RealDeclaration>node).name);
+                        return (<DeclarationBase>node).name.kind === SyntaxKind.ComputedPropertyName
+                            && traverse((<DeclarationBase>node).name);
 
                     default:
                         return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && forEachChild(node, traverse);
@@ -21917,7 +21917,7 @@ namespace ts {
         function isTypeDeclarationName(name: Node): boolean {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
-                (<RealDeclaration>name.parent).name === name;
+                (<TypeElement>name.parent).name === name;
         }
 
         function isTypeDeclaration(node: Node): boolean {
@@ -22545,7 +22545,7 @@ namespace ts {
 
         // Return true if the given node is a declaration of a nested block scoped entity with a name that either hides an
         // existing name or might hide a name when compiled downlevel
-        function isDeclarationWithCollidingName(node: Declaration): boolean {
+        function isDeclarationWithCollidingName(node: Node): boolean {
             node = getParseTreeNode(node, isDeclaration);
             if (node) {
                 const symbol = getSymbolOfNode(node);
