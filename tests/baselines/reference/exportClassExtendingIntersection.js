@@ -114,8 +114,8 @@ export declare function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T
 //// [FinalClass.d.ts]
 import { MyBaseClass } from './BaseClass';
 import { MyMixin } from './MixinClass';
-declare var _MyExtendedClass_intersection_base: typeof MyBaseClass & (new (...args: any[]) => MyMixin);
-export declare class MyExtendedClass extends _MyExtendedClass_intersection_base<string> {
+declare const MyExtendedClass_base: typeof MyBaseClass & (new (...args: any[]) => MyMixin);
+export declare class MyExtendedClass extends MyExtendedClass_base<string> {
     extendedClassProperty: number;
 }
 //// [Main.d.ts]
