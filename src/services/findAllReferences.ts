@@ -788,7 +788,6 @@ namespace ts.FindAllReferences.Core {
 
         const relatedSymbol = getRelatedSymbol(search, referenceSymbol, referenceLocation, state);
         if (!relatedSymbol) {
-            getReferenceForShorthandProperty(referenceSymbol, search, state);
             return;
         }
 
@@ -880,20 +879,6 @@ namespace ts.FindAllReferences.Core {
         else {
             // We don't check for `state.isForRename`, even for default exports, because importers that previously matched the export name should be updated to continue matching.
             searchForImportsOfExport(referenceLocation, symbol, importOrExport.exportInfo, state);
-        }
-    }
-
-    function getReferenceForShorthandProperty({ flags, valueDeclaration }: Symbol, search: Search, state: State): void {
-        const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(valueDeclaration);
-        /*
-         * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
-         * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
-         * an identifier is declared, the language service should return the position of the variable declaration as well as
-         * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
-         * position of property accessing, the referenceEntry of such position will be handled in the first case.
-         */
-        if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, search.location, state);
         }
     }
 
@@ -1459,8 +1444,29 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function getRelatedShorthandValueSymbol(referenceSymbol: Symbol, referenceLocation: Node, search: Search, state: State): Symbol | undefined {
+        if (referenceSymbol.valueDeclaration === referenceLocation.parent && isShorthandPropertyAssignment(referenceLocation.parent)) {
+            // If the reference location is short hand property assignment look if the value at this location is being included in the search
+            const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
+            if (!(referenceSymbol.flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
+                return shorthandValueSymbol;
+            }
+        }
+    }
+
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
         if (search.includes(referenceSymbol)) {
+            if (!state.isForRename) {
+                // If we are not getting symbols for rename, give more precise information about presence of referenced by value as well
+                const shorthandValueSymbol = getRelatedShorthandValueSymbol(referenceSymbol, referenceLocation, search, state);
+                if (shorthandValueSymbol) {
+                    /*
+                     * Search included for property as well as value of short hand,
+                     * add reference for value here specially as we would end up adding property reference later
+                     */
+                    addReference(referenceLocation, shorthandValueSymbol, search.location, state);
+                }
+            }
             return referenceSymbol;
         }
 
@@ -1483,6 +1489,18 @@ namespace ts.FindAllReferences.Core {
             const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, state.checker);
             if (propertySymbol && search.includes(propertySymbol)) {
                 return propertySymbol;
+            }
+
+            /*
+             * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
+             * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
+             * an identifier is declared, the language service should return the position of the variable declaration as well as
+             * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
+             * position of property accessing, the referenceEntry of such position will be handled in the first case.
+             */
+            const shorthandValueSymbol = getRelatedShorthandValueSymbol(referenceSymbol, referenceLocation, search, state);
+            if (shorthandValueSymbol) {
+                return shorthandValueSymbol;
             }
         }
 

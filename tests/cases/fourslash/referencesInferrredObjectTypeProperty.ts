@@ -15,7 +15,7 @@ verify.referenceGroups(r0, [
     //{ definition: 'const x: number', ranges: [r2, r3] }
 ]);
 verify.referenceGroups(r1, [
-    { definition: 'const x: 1', ranges: [r0] },
+    { definition: 'const x: 1', ranges: [r0, r1] },
     { definition: '(property) x: 1', ranges: [r1] },
     //{ definition: '(property) x: 1', ranges: [r1, r2] },
     //{ definition: 'const x: number', ranges: [r2, r3] },
