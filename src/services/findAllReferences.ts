@@ -1367,7 +1367,7 @@ namespace ts.FindAllReferences.Core {
         // Include the property in the search
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
         if (bindingElementPropertySymbol) {
-            result.push(bindingElementPropertySymbol);
+            addRange(result, checker.getRootSymbols(bindingElementPropertySymbol));
         }
 
         // If this is a union property, add all the symbols from all its source symbols in all unioned types.
@@ -1454,6 +1454,25 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function addReferenceToPropertyAccessInObjectBindingPatternWithoutPropertyName(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State,
+        bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker)): void {
+        if (!state.isForRename) {
+            if (bindingElementPropertySymbol) {
+                const bindingElementDeclaration = <BindingElement>getDeclarationOfKind(referenceSymbol, SyntaxKind.BindingElement);
+                if (bindingElementDeclaration.name === referenceLocation) {
+                    forEach(state.checker.getRootSymbols(bindingElementPropertySymbol), propertySymbol => {
+                        /*
+                         * If this is the declaration of this binding pattern variable,
+                         * It is reference to both property as well as value
+                         * So add reference to property at this location
+                         */
+                        addReference(referenceLocation, propertySymbol, search.location, state);
+                    });
+                }
+            }
+        }
+    }
+
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): Symbol | undefined {
         if (search.includes(referenceSymbol)) {
             if (!state.isForRename) {
@@ -1467,6 +1486,7 @@ namespace ts.FindAllReferences.Core {
                     addReference(referenceLocation, shorthandValueSymbol, search.location, state);
                 }
             }
+            addReferenceToPropertyAccessInObjectBindingPatternWithoutPropertyName(search, referenceSymbol, referenceLocation, state);
             return referenceSymbol;
         }
 
@@ -1508,8 +1528,11 @@ namespace ts.FindAllReferences.Core {
         // then include the binding element in the related symbols
         //      let { a } : { a };
         const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(referenceSymbol, state.checker);
-        if (bindingElementPropertySymbol && search.includes(bindingElementPropertySymbol)) {
-            return bindingElementPropertySymbol;
+        if (bindingElementPropertySymbol) {
+            if (find(state.checker.getRootSymbols(bindingElementPropertySymbol), search.includes)) {
+                addReferenceToPropertyAccessInObjectBindingPatternWithoutPropertyName(search, referenceSymbol, referenceLocation, state, bindingElementPropertySymbol);
+                return referenceSymbol;
+            }
         }
 
         // Unwrap symbols to get to the root (e.g. transient symbols as a result of widening)
