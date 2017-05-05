@@ -3748,7 +3748,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<RealDeclaration>parent).name === node
+                    return (<DeclarationBase>parent).name === node
                         && resolver.isDeclarationWithCollidingName(<Declaration>parent);
             }
 

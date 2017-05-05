@@ -603,15 +603,75 @@ namespace ts {
 
     export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
 
-    export interface RealDeclaration extends Node {
+    export interface DeclarationBase extends Node {
         _declarationBrand: any;
         name?: DeclarationName;
     }
 
-    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
-    export type Declaration = RealDeclaration | BinaryExpression;
+    export type Declaration =
+        | ArrowFunction
+        // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
+        | BinaryExpression
+        | BindingElement
+        | CallExpression
+        | CallSignatureDeclaration
+        | ClassDeclaration
+        | ClassElement
+        | ClassExpression
+        | ClassLikeDeclaration
+        | ConstructSignatureDeclaration
+        | ConstructorDeclaration
+        | ConstructorTypeNode
+        | EnumDeclaration
+        | EnumMember
+        | ExportAssignment
+        | ExportDeclaration
+        | ExportSpecifier
+        | FunctionDeclaration
+        | FunctionExpression
+        | FunctionTypeNode
+        | GetAccessorDeclaration
+        | ImportClause
+        | ImportEqualsDeclaration
+        | ImportSpecifier
+        | IndexSignatureDeclaration
+        | InterfaceDeclaration
+        | JSDocFunctionType
+        | JSDocNamespaceDeclaration
+        | JSDocPropertyTag
+        | JSDocTypedefTag
+        | JsxAttribute
+        | JsxAttributes
+        | JsxSpreadAttribute
+        | MappedTypeNode
+        | MethodDeclaration
+        | MethodSignature
+        | MissingDeclaration
+        | ModuleDeclaration
+        | NamespaceDeclaration
+        | NamespaceExportDeclaration
+        | NamespaceImport
+        | NewExpression
+        | ObjectLiteralExpression
+        | ParameterDeclaration
+        | PropertyAccessExpression
+        | PropertyAssignment
+        | PropertyDeclaration
+        | PropertySignature
+        | SemicolonClassElement
+        | SetAccessorDeclaration
+        | ShorthandPropertyAssignment
+        | SignatureDeclaration
+        | SourceFile
+        | SpreadAssignment
+        | TypeAliasDeclaration
+        | TypeElement
+        | TypeLiteralNode
+        | TypeParameterDeclaration
+        | VariableDeclaration
+        | VariableLikeDeclaration;
 
-    export interface DeclarationStatement extends RealDeclaration, Statement {
+    export interface DeclarationStatement extends DeclarationBase, Statement {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
 
@@ -625,7 +685,7 @@ namespace ts {
         expression: LeftHandSideExpression;
     }
 
-    export interface TypeParameterDeclaration extends RealDeclaration {
+    export interface TypeParameterDeclaration extends DeclarationBase {
         kind: SyntaxKind.TypeParameter;
         parent?: DeclarationWithTypeParameters;
         name: Identifier;
@@ -636,7 +696,23 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends RealDeclaration {
+    export interface SignatureDeclaration extends DeclarationBase {
+        kind:
+            | SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.ConstructorType
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.FunctionType
+            | SyntaxKind.JSDocFunctionType
+            | SyntaxKind.FunctionDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.Constructor
+            | SyntaxKind.ArrowFunction
+            | SyntaxKind.FunctionExpression
+
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -653,7 +729,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends RealDeclaration {
+    export interface VariableDeclaration extends DeclarationBase {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
         name: BindingName;                  // Declared variable name
@@ -667,7 +743,7 @@ namespace ts {
         declarations: NodeArray<VariableDeclaration>;
     }
 
-    export interface ParameterDeclaration extends RealDeclaration {
+    export interface ParameterDeclaration extends DeclarationBase {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
@@ -677,7 +753,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface BindingElement extends RealDeclaration {
+    export interface BindingElement extends DeclarationBase {
         kind: SyntaxKind.BindingElement;
         parent?: BindingPattern;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
@@ -702,7 +778,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface ObjectLiteralElement extends RealDeclaration {
+    export interface ObjectLiteralElement extends DeclarationBase {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
     }
@@ -737,26 +813,30 @@ namespace ts {
         expression: Expression;
     }
 
-    // SyntaxKind.VariableDeclaration
-    // SyntaxKind.Parameter
-    // SyntaxKind.BindingElement
-    // SyntaxKind.Property
-    // SyntaxKind.PropertyAssignment
-    // SyntaxKind.JsxAttribute
-    // SyntaxKind.ShorthandPropertyAssignment
-    // SyntaxKind.EnumMember
-    // SyntaxKind.JSDocPropertyTag
-    export interface VariableLikeDeclaration extends RealDeclaration {
+    /**
+     * There aren't any explicit subtypes of VariableLikeDeclaration;
+     * it's just structurally relatable to a number of types.
+     * (Maybe it should be an intersection of the below types.)
+     */
+    export interface VariableLikeDeclaration extends DeclarationBase {
+        kind:
+            | SyntaxKind.VariableDeclaration
+            | SyntaxKind.Parameter
+            | SyntaxKind.BindingElement
+            | SyntaxKind.PropertyAssignment
+            | SyntaxKind.PropertyDeclaration
+            | SyntaxKind.PropertySignature
+            | SyntaxKind.JsxAttribute
+            | SyntaxKind.ShorthandPropertyAssignment
+            | SyntaxKind.EnumMember
+            | SyntaxKind.JSDocPropertyTag
+            | SyntaxKind.JSDocRecordMember;
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
         questionToken?: QuestionToken;
         type?: TypeNode;
         initializer?: Expression;
-    }
-
-    export interface PropertyLikeDeclaration extends RealDeclaration {
-        name: PropertyName;
     }
 
     export interface ObjectBindingPattern extends Node {
@@ -904,7 +984,7 @@ namespace ts {
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
-    export interface TypeLiteralNode extends TypeNode, RealDeclaration {
+    export interface TypeLiteralNode extends TypeNode, DeclarationBase {
         kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;
     }
@@ -948,7 +1028,7 @@ namespace ts {
         indexType: TypeNode;
     }
 
-    export interface MappedTypeNode extends TypeNode, RealDeclaration {
+    export interface MappedTypeNode extends TypeNode, DeclarationBase {
         kind: SyntaxKind.MappedType;
         parent?: TypeAliasDeclaration;
         readonlyToken?: ReadonlyToken;
@@ -1405,7 +1485,7 @@ namespace ts {
      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
      */
-    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, RealDeclaration {
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, DeclarationBase {
         properties: NodeArray<T>;
     }
 
@@ -1419,7 +1499,7 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
-    export interface PropertyAccessExpression extends MemberExpression, RealDeclaration {
+    export interface PropertyAccessExpression extends MemberExpression, DeclarationBase {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         name: Identifier;
@@ -1451,7 +1531,7 @@ namespace ts {
         | SuperElementAccessExpression
         ;
 
-    export interface CallExpression extends LeftHandSideExpression, RealDeclaration {
+    export interface CallExpression extends LeftHandSideExpression, DeclarationBase {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
@@ -1470,7 +1550,7 @@ namespace ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
-    export interface NewExpression extends PrimaryExpression, RealDeclaration {
+    export interface NewExpression extends PrimaryExpression, DeclarationBase {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
@@ -1528,6 +1608,7 @@ namespace ts {
     export type JsxTagNameExpression = PrimaryExpression | PropertyAccessExpression;
 
     export interface JsxAttributes extends ObjectLiteralExpressionBase<JsxAttributeLike> {
+        kind: SyntaxKind.JsxAttributes;
         parent?: JsxOpeningLikeElement;
     }
 
@@ -1764,7 +1845,10 @@ namespace ts {
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
 
-    export interface ClassLikeDeclaration extends RealDeclaration {
+    export interface ClassLikeDeclaration extends DeclarationBase {
+        kind:
+            | SyntaxKind.ClassDeclaration
+            | SyntaxKind.ClassExpression;
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -1780,12 +1864,30 @@ namespace ts {
         kind: SyntaxKind.ClassExpression;
     }
 
-    export interface ClassElement extends RealDeclaration {
+    export interface ClassElement extends DeclarationBase {
+        kind:
+            | SyntaxKind.PropertyDeclaration
+            | SyntaxKind.MethodDeclaration
+            | SyntaxKind.Constructor
+            | SyntaxKind.SemicolonClassElement
+            | SyntaxKind.GetAccessor
+            | SyntaxKind.SetAccessor
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.MissingDeclaration;
         _classElementBrand: any;
         name?: PropertyName;
     }
 
-    export interface TypeElement extends RealDeclaration {
+    export interface TypeElement extends DeclarationBase {
+        kind:
+            | SyntaxKind.CallSignature
+            | SyntaxKind.ConstructSignature
+            | SyntaxKind.PropertySignature
+            | SyntaxKind.MethodSignature
+            | SyntaxKind.IndexSignature
+            | SyntaxKind.MissingDeclaration
+            | SyntaxKind.JSDocPropertyTag
+            | SyntaxKind.JSDocRecordMember;
         _typeElementBrand: any;
         name?: PropertyName;
         questionToken?: QuestionToken;
@@ -1813,7 +1915,7 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface EnumMember extends RealDeclaration {
+    export interface EnumMember extends DeclarationBase {
         kind: SyntaxKind.EnumMember;
         parent?: EnumDeclaration;
         // This does include ComputedPropertyName, but the parser will give an error
@@ -1902,14 +2004,14 @@ namespace ts {
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
     // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    export interface ImportClause extends RealDeclaration {
+    export interface ImportClause extends DeclarationBase {
         kind: SyntaxKind.ImportClause;
         parent?: ImportDeclaration;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
 
-    export interface NamespaceImport extends RealDeclaration {
+    export interface NamespaceImport extends DeclarationBase {
         kind: SyntaxKind.NamespaceImport;
         parent?: ImportClause;
         name: Identifier;
@@ -1942,14 +2044,14 @@ namespace ts {
 
     export type NamedImportsOrExports = NamedImports | NamedExports;
 
-    export interface ImportSpecifier extends RealDeclaration {
+    export interface ImportSpecifier extends DeclarationBase {
         kind: SyntaxKind.ImportSpecifier;
         parent?: NamedImports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
-    export interface ExportSpecifier extends RealDeclaration {
+    export interface ExportSpecifier extends DeclarationBase {
         kind: SyntaxKind.ExportSpecifier;
         parent?: NamedExports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
@@ -2115,7 +2217,7 @@ namespace ts {
         typeExpression: JSDocTypeExpression;
     }
 
-    export interface JSDocTypedefTag extends JSDocTag, RealDeclaration {
+    export interface JSDocTypedefTag extends JSDocTag, DeclarationBase {
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2249,7 +2351,7 @@ namespace ts {
 
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends RealDeclaration {
+    export interface SourceFile extends DeclarationBase {
         kind: SyntaxKind.SourceFile;
         statements: NodeArray<Statement>;
         endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
