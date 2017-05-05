@@ -13319,9 +13319,7 @@ namespace ts {
              */
             function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                // Spread object doesn't have freshness flag to allow excess attributes as it is very common for parent component to spread its "props" to other components in its render method.
-                const freshObjectLiteralFlag = spread !== emptyObjectType || compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
@@ -13840,7 +13838,30 @@ namespace ts {
             checkJsxAttributesAssignableToTagNameAttributes(node);
         }
 
-         /**
+        // Check if a property with the given name is known anywhere in the given type. In an object type, a property
+        // is considered known if the object type is empty and the check is for assignability, if the object type has
+        // index signatures, or if the property is actually declared in the object type. In a union or intersection
+        // type, a property is considered known if it is known in any constituent type.
+        function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
+            if (type.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
+                    getPropertyOfType(type, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                    // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
+                    return true;
+                }
+            }
+            else if (type.flags & TypeFlags.UnionOrIntersection) {
+                for (const t of (<UnionOrIntersectionType>type).types) {
+                    if (isKnownProperty(t, name, isComparingJsxAttributes)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /**
           * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
           *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
           *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
@@ -13873,12 +13894,12 @@ namespace ts {
             }
             else {
                 const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
-                // If sourceAttributesType has spread (e.g the type doesn't have freshness flag) after we check for assignability, we will do another pass to check that
+                // After we check for assignability, we will do another pass to check that
                 // all explicitly specified attributes have correct name corresponding with target (as those will be assignable as spread type allows excess properties)
                 // Note: if the type of these explicitly specified attributes do not match it will be an error during above assignability check.
-                if (isSourceAttributeTypeAssignableToTarget && sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
+                if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
-                        if (isJsxAttribute(attribute) && !getPropertyOfType(targetAttributesType, attribute.name.text)) {
+                        if (isJsxAttribute(attribute) && !isKnownProperty(targetAttributesType, attribute.name.text, /*isComparingJsxAttributes*/ true)) {
                             error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));
                         }
                     }
