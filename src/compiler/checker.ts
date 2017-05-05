@@ -2443,11 +2443,11 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter) {
                     const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, context);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
-                    // TODO: add constraint here?
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
-                if (!inTypeAlias && type.aliasSymbol) {
+                if (!inTypeAlias && type.aliasSymbol &&
+                    isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                     const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, context);
                     const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, /*addInElementTypeFlag*/ false);
                     return createTypeReferenceNode(name, typeArgumentNodes);
