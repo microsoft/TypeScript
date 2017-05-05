@@ -23,12 +23,19 @@
 ////class F extends B {
 ////    public /*classThatHasWrittenPublicKeyword*/
 ////}
+////class F2 extends B {
+////    private /*classThatHasWrittenPrivateKeyword*/
+////}
 ////class G extends B {
 ////    static /*classElementContainingStatic*/
+////}
+////class G2 extends B {
+////    private static /*classElementContainingPrivateStatic*/
 ////}
 ////class H extends B {
 ////    prop/*classThatStartedWritingIdentifier*/
 ////}
+//////Class for location verification
 ////class I extends B {
 ////    prop0: number
 ////    /*propDeclarationWithoutSemicolon*/
@@ -68,38 +75,87 @@
 ////class L extends B {
 ////    public identi/*classThatStartedWritingIdentifierAfterModifier*/
 ////}
-////class L extends B {
+////class L2 extends B {
+////    private identi/*classThatStartedWritingIdentifierAfterPrivateModifier*/
+////}
+////class M extends B {
 ////    static identi/*classThatStartedWritingIdentifierAfterStaticModifier*/
+////}
+////class M extends B {
+////    private static identi/*classThatStartedWritingIdentifierAfterPrivateStaticModifier*/
 ////}
 
 const allowedKeywordCount = verify.allowedClassElementKeywords.length;
+type CompletionInfo = [string, string];
+type CompletionInfoVerifier = { validMembers: CompletionInfo[], invalidMembers: CompletionInfo[] };
+
+function verifyClassElementLocations({ validMembers, invalidMembers }: CompletionInfoVerifier, classElementCompletionLocations: string[]) {
+    for (const marker of classElementCompletionLocations) {
+        goTo.marker(marker);
+        verifyCompletionInfo(validMembers, verify);
+        verifyCompletionInfo(invalidMembers, verify.not);
+        verify.completionListContainsClassElementKeywords();
+        verify.completionListCount(allowedKeywordCount + validMembers.length);
+    }
+}
+
+function verifyCompletionInfo(memberInfo: CompletionInfo[], verify: FourSlashInterface.verifyNegatable) {
+    for (const [symbol, text] of memberInfo) {
+        verify.completionListContains(symbol, text, /*documentation*/ undefined, "method");
+    }
+}
+
+const allMembersOfBase: CompletionInfo[] = [
+    ["getValue", "(method) B.getValue(): number"],
+    ["protectedMethod", "(method) B.protectedMethod(): void"],
+    ["privateMethod", "(method) B.privateMethod(): void"],
+    ["staticMethod", "(method) B.staticMethod(): void"]
+];
+function filterCompletionInfo(fn: (a: CompletionInfo) => boolean): CompletionInfoVerifier {
+    const validMembers: CompletionInfo[] = [];
+    const invalidMembers: CompletionInfo[] = [];
+    for (const member of allMembersOfBase) {
+        if (fn(member)) {
+            validMembers.push(member);
+        }
+        else {
+            invalidMembers.push(member);
+        }
+    }
+    return { validMembers, invalidMembers };
+}
+
+
+const instanceMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "getValue" || a === "protectedMethod");
+const staticMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "staticMethod");
+
+// Not a class element declaration location
 const nonClassElementMarkers = [
     "InsideMethod"
 ];
 for (const marker of nonClassElementMarkers) {
     goTo.marker(marker);
-    verify.not.completionListContains("getValue");
+    verifyCompletionInfo(allMembersOfBase, verify.not);
     verify.not.completionListIsEmpty();
 }
 
-// Only keywords allowed at this position since they dont extend the class
+// Only keywords allowed at this position since they dont extend the class or are private
 const onlyClassElementKeywordLocations = [
     "abstractClass",
-    "classThatDoesNotExtendAnotherClass"
+    "classThatDoesNotExtendAnotherClass",
+    "classThatHasWrittenPrivateKeyword",
+    "classElementContainingPrivateStatic",
+    "classThatStartedWritingIdentifierAfterPrivateModifier",
+    "classThatStartedWritingIdentifierAfterPrivateStaticModifier"
 ];
-for (const marker of onlyClassElementKeywordLocations) {
-    goTo.marker(marker);
-    verify.completionListContainsClassElementKeywords();
-    verify.completionListCount(allowedKeywordCount);
-}
+verifyClassElementLocations({ validMembers: [], invalidMembers: allMembersOfBase }, onlyClassElementKeywordLocations);
 
-// Base members and class member keywords allowed
-const classElementCompletionLocations = [
+// Instance base members and class member keywords allowed
+const classInstanceElementLocations = [
     "classThatIsEmptyAndExtendingAnotherClass",
     "classThatHasAlreadyImplementedAnotherClassMethod",
     "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
     "classThatHasWrittenPublicKeyword",
-    "classElementContainingStatic",
     "classThatStartedWritingIdentifier",
     "propDeclarationWithoutSemicolon",
     "propDeclarationWithSemicolon",
@@ -115,25 +171,12 @@ const classElementCompletionLocations = [
     "classThatStartedWritingIdentifierOfGetAccessor",
     "classThatStartedWritingIdentifierOfSetAccessor",
     "classThatStartedWritingIdentifierAfterModifier",
+];
+verifyClassElementLocations(instanceMemberInfo, classInstanceElementLocations);
+
+// Static Base members and class member keywords allowed
+const staticClassLocations = [
+    "classElementContainingStatic",
     "classThatStartedWritingIdentifierAfterStaticModifier"
 ];
-
-const validMembersOfBase = [
-    ["getValue", "(method) B.getValue(): number"],
-    ["protectedMethod", "(method) B.protectedMethod(): void"]
-];
-const invalidMembersOfBase = [
-    ["privateMethod", "(method) B.privateMethod(): void"],
-    ["staticMethod", "(method) B.staticMethod(): void"]
-];
-for (const marker of classElementCompletionLocations) {
-    goTo.marker(marker);
-    for (const [validMemberOfBaseSymbol, validMemberOfBaseText] of validMembersOfBase) {
-        verify.completionListContains(validMemberOfBaseSymbol, validMemberOfBaseText, /*documentation*/ undefined, "method");
-    }
-    for (const [invalidMemberOfBaseSymbol, invalidMemberOfBaseText] of invalidMembersOfBase) {
-        verify.not.completionListContains(invalidMemberOfBaseSymbol, invalidMemberOfBaseText, /*documentation*/ undefined, "method");
-    }
-    verify.completionListContainsClassElementKeywords();
-    verify.completionListCount(allowedKeywordCount + validMembersOfBase.length);
-}
+verifyClassElementLocations(staticMemberInfo, staticClassLocations);

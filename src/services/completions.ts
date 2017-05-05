@@ -939,10 +939,31 @@ namespace ts.Completions {
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
             if (baseTypeNode) {
-                const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
-                // List of property symbols of base type that are not private
-                symbols = filter(typeChecker.getPropertiesOfType(baseType),
-                    baseProperty => !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
+                const classElement = contextToken.parent;
+                let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
+                // If this is context token is not something we are editing now, consider if this would lead to be modifier
+                if (contextToken.kind === SyntaxKind.Identifier && !isCurrentlyEditingNode(contextToken)) {
+                    switch (contextToken.getText()) {
+                        case "private":
+                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Private;
+                            break;
+                        case "static":
+                            classElementModifierFlags = classElementModifierFlags | ModifierFlags.Static;
+                            break;
+                    }
+                }
+
+                // No member list for private methods
+                if (!(classElementModifierFlags & ModifierFlags.Private)) {
+                    const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
+                    const typeToGetPropertiesFrom = (classElementModifierFlags & ModifierFlags.Static) ?
+                        typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, classLikeDeclaration) :
+                        baseType;
+
+                    // List of property symbols of base type that are not private
+                    symbols = filter(typeChecker.getPropertiesOfType(typeToGetPropertiesFrom),
+                        baseProperty =>  baseProperty.getDeclarations() && !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
+                }
             }
 
             return true;
@@ -1248,7 +1269,7 @@ namespace ts.Completions {
 
             for (const element of namedImportsOrExports) {
                 // If this is the current item we are editing right now, do not filter it out
-                if (element.getStart() <= position && position <= element.getEnd()) {
+                if (isCurrentlyEditingNode(element)) {
                     continue;
                 }
 
@@ -1287,7 +1308,7 @@ namespace ts.Completions {
                 }
 
                 // If this is the current item we are editing right now, do not filter it out
-                if (m.getStart() <= position && position <= m.getEnd()) {
+                if (isCurrentlyEditingNode(m)) {
                     continue;
                 }
 
@@ -1322,7 +1343,7 @@ namespace ts.Completions {
             const seenNames = createMap<boolean>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
-                if (attr.getStart() <= position && position <= attr.getEnd()) {
+                if (isCurrentlyEditingNode(attr)) {
                     continue;
                 }
 
@@ -1332,6 +1353,10 @@ namespace ts.Completions {
             }
 
             return filter(symbols, a => !seenNames.get(a.name));
+        }
+
+        function isCurrentlyEditingNode(node: Node): boolean {
+            return node.getStart() <= position && position <= node.getEnd();
         }
     }
 
