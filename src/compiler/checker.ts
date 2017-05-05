@@ -13293,10 +13293,11 @@ namespace ts {
                     }
                 }
 
-                // Error if there is a attribute named "children" and children element.
-                // This is because children element will overwrite the value from attributes
-                if (explicitlySpecifyChildrenAttribute) {
-                    if (attributesTable.has(jsxChildrenPropertyName)) {
+                if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                    // Error if there is a attribute named "children" explicitly specified and children element.
+                    // This is because children element will overwrite the value from attributes.
+                    // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
+                    if (explicitlySpecifyChildrenAttribute) {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
                     }
 
@@ -13318,6 +13319,7 @@ namespace ts {
              */
             function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                // Spread object doesn't have freshness flag to allow excess attributes as it is very common for parent component to spread its "props" to other components in its render method.
                 const freshObjectLiteralFlag = spread !== emptyObjectType || compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
                 result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
@@ -13870,9 +13872,11 @@ namespace ts {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
-                const isAssignableToTargetAttributes = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
-                // TODO (yuisu): comment
-                if (isAssignableToTargetAttributes && sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
+                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                // If sourceAttributesType has spread (e.g the type doesn't have freshness flag) after we check for assignability, we will do another pass to check that
+                // all explicitly specified attributes have correct name corresponding with target (as those will be assignable as spread type allows excess properties)
+                // Note: if the type of these explicitly specified attributes do not match it will be an error during above assignability check.
+                if (sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
                         if (isJsxAttribute(attribute) && !getPropertyOfType(targetAttributesType, attribute.name.text)) {
                             error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));
