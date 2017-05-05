@@ -48,6 +48,6 @@ var x1 = es6ImportDefaultBindingFollowedWithNamedImport_0_5.m;
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
-declare var _default: {};
+declare const _default: {};
 export default _default;
 //// [es6ImportDefaultBindingFollowedWithNamedImport_1.d.ts]

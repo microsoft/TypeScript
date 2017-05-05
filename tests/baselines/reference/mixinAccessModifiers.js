@@ -302,27 +302,27 @@ declare function f4(x: Protected & Protected2): void;
 declare function f5(x: Protected & Public): void;
 declare function f6(x: Public & Public2): void;
 declare function Mix<T, U>(c1: T, c2: U): T & U;
-declare var _C1_intersection_base: typeof Private & typeof Private2;
-declare class C1 extends _C1_intersection_base {
+declare const C1_base: typeof Private & typeof Private2;
+declare class C1 extends C1_base {
 }
-declare var _C2_intersection_base: typeof Private & typeof Protected;
-declare class C2 extends _C2_intersection_base {
+declare const C2_base: typeof Private & typeof Protected;
+declare class C2 extends C2_base {
 }
-declare var _C3_intersection_base: typeof Private & typeof Public;
-declare class C3 extends _C3_intersection_base {
+declare const C3_base: typeof Private & typeof Public;
+declare class C3 extends C3_base {
 }
-declare var _C4_intersection_base: typeof Protected & typeof Protected2;
-declare class C4 extends _C4_intersection_base {
+declare const C4_base: typeof Protected & typeof Protected2;
+declare class C4 extends C4_base {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
-declare var _C5_intersection_base: typeof Protected & typeof Public;
-declare class C5 extends _C5_intersection_base {
+declare const C5_base: typeof Protected & typeof Public;
+declare class C5 extends C5_base {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
-declare var _C6_intersection_base: typeof Public & typeof Public2;
-declare class C6 extends _C6_intersection_base {
+declare const C6_base: typeof Public & typeof Public2;
+declare class C6 extends C6_base {
     f(c4: C4, c5: C5, c6: C6): void;
     static g(): void;
 }
