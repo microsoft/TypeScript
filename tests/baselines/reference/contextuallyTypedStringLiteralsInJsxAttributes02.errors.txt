@@ -1,7 +1,6 @@
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(27,24): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
     Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
-tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(27,64): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(28,24): error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(29,43): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
@@ -11,7 +10,7 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(33,65): err
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,44): error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 
 
-==== tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx (7 errors) ====
+==== tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx (6 errors) ====
     import React = require('react')
     
     export interface ClickableProps {
@@ -43,8 +42,6 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,44): err
 !!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 !!! error TS2322:   Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'LinkProps'.
 !!! error TS2322:     Property 'goTo' is missing in type '{ extra: true; onClick: (k: "left" | "right") => void; }'.
-                                                                   ~~~~~
-!!! error TS2339: Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
