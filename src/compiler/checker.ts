@@ -22750,16 +22750,6 @@ namespace ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
-        function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
-            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
-            resolveBaseTypesOfClass(classType);
-            const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
-            if (!baseType.symbol) {
-                writer.reportIllegalExtends();
-            }
-            getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
-        }
-
         function hasGlobalName(name: string): boolean {
             return globals.has(name);
         }
@@ -22853,7 +22843,6 @@ namespace ts {
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
-                writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue: node => {
