@@ -9,25 +9,9 @@
 
 const ranges = test.ranges();
 const [r0, r1, r2, r3] = ranges;
-verify.referenceGroups(r0, [
+verify.referenceGroups(ranges, [
     { definition: 'const x: 1', ranges: [r0, r1] },
     { definition: '(property) x: 1', ranges: [r1, r2] },
     { definition: 'const x: number', ranges: [r2, r3] },
 ]);
-verify.referenceGroups(r1, [
-    { definition: 'const x: 1', ranges: [r0, r1] },
-    { definition: '(property) x: 1', ranges: [r1, r2] },
-    { definition: 'const x: number', ranges: [r2, r3] },
-]);
-verify.referenceGroups(r2, [
-    { definition: '(property) x: 1', ranges: [r1, r2] },
-    { definition: 'const x: number', ranges: [r2, r3] }
-    //{ definition: 'const x: 1', ranges: [r0, r1] },
-    //{ definition: '(property) x: 1', ranges: [r1, r2] }
-]);
-verify.referenceGroups(r3, [
-    { definition: '(property) x: 1', ranges: [r1, r2] },
-    { definition: 'const x: number', ranges: [r2, r3] }
-    //{ definition: 'const x: 1', ranges: [r0, r1] },
-    //{ definition: '(property) x: 1', ranges: [r1, r2] }
-]);
+verify.rangesAreRenameLocations(ranges);

@@ -14,6 +14,7 @@ verify.referenceGroups(rangesForValueReference, [
 ]);
 verify.singleReferenceGroup("(property) name: string", [r2]);
 verify.referenceGroups(r4, [
+    { definition: "var name: string", ranges: rangesForValueReference },
     { definition: "(property) name: string", ranges: [r1] },
     { definition: "(property) name: string", ranges: [r4] },
 ]);

@@ -17,6 +17,7 @@ verify.referenceGroups(valueRanges, [
     { definition: "(property) dx: any", ranges: [r2, r3] }
 ]);
 verify.referenceGroups(r3, [
+    { definition: "var M.dx: any", ranges: valueRanges },
     { definition: "(property) dx: any", ranges: [r2] },
     { definition: "(property) dx: any", ranges: [r3] }
 ]);

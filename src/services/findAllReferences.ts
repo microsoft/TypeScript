@@ -1444,8 +1444,12 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
+    function isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol: Symbol, referenceLocation: Node) {
+        return referenceSymbol.valueDeclaration === referenceLocation.parent && isShorthandPropertyAssignment(referenceLocation.parent);
+    }
+
     function getRelatedShorthandValueSymbol(referenceSymbol: Symbol, referenceLocation: Node, search: Search, state: State): Symbol | undefined {
-        if (referenceSymbol.valueDeclaration === referenceLocation.parent && isShorthandPropertyAssignment(referenceLocation.parent)) {
+        if (isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol, referenceLocation)) {
             // If the reference location is short hand property assignment look if the value at this location is being included in the search
             const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
             if (!(referenceSymbol.flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
@@ -1493,6 +1497,22 @@ namespace ts.FindAllReferences.Core {
                     addReference(referenceLocation, shorthandValueSymbol, search.location, state);
                 }
             }
+
+            if (isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol, referenceLocation) &&
+                search.location !== referenceLocation) {
+                // If this search was not originated at this reference location and
+                // search was for the property but not value, add references for value as well
+                const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
+                if (!search.includes(shorthandValueSymbol) &&
+                    isShortHandPropertyAssignmentInferringPropertyType(<ShorthandPropertyAssignment>referenceLocation.parent)) {
+                    // Use the value symbol in the search
+                    getReferencesInSourceFile(referenceLocation.getSourceFile(), state.createSearch(referenceLocation, shorthandValueSymbol, /*comingFrom*/ undefined), state);
+
+                    // Use the current symbol reference only if this isnt for rename
+                    return state.isForRename ? undefined : referenceSymbol;
+                }
+            }
+
             addReferenceToPropertyAccessInObjectBindingPatternWithoutPropertyName(search, referenceSymbol, referenceLocation, state);
             return referenceSymbol;
         }
@@ -1542,7 +1562,8 @@ namespace ts.FindAllReferences.Core {
                  *     x;
                  * }
                  */
-                if (isShortHandPropertyAssignmentInferringPropertyType(<ShorthandPropertyAssignment>referenceLocation.parent)) {
+                if (search.location !== referenceLocation &&
+                    isShortHandPropertyAssignmentInferringPropertyType(<ShorthandPropertyAssignment>referenceLocation.parent)) {
                     getReferencesInSourceFile(referenceLocation.getSourceFile(), state.createSearch(referenceLocation, referenceSymbol, /*comingFrom*/ undefined), state);
 
                     // Return the value symbol access only if this is not the rename search
