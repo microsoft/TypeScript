@@ -7,10 +7,7 @@ tests/cases/conformance/jsx/file.tsx(14,22): error TS2322: Type '{ yy1: true; yy
   Type '{ yy1: true; yy: number; }' is not assignable to type '{ yy: number; yy1: string; }'.
     Types of property 'yy1' are incompatible.
       Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(15,22): error TS2322: Type '{ extra: string; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-  Property 'extra' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-tests/cases/conformance/jsx/file.tsx(16,22): error TS2322: Type '{ y1: 10000; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-  Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+tests/cases/conformance/jsx/file.tsx(16,31): error TS2339: Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
 tests/cases/conformance/jsx/file.tsx(17,22): error TS2322: Type '{ yy: boolean; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
   Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
     Types of property 'yy' are incompatible.
@@ -36,7 +33,7 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '{ y1: "hello"; 
   Property 'children' does not exist on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (12 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (11 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -63,14 +60,10 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type '{ y1: "hello"; 
 !!! error TS2322:   Type '{ yy1: true; yy: number; }' is not assignable to type '{ yy: number; yy1: string; }'.
 !!! error TS2322:     Types of property 'yy1' are incompatible.
 !!! error TS2322:       Type 'true' is not assignable to type 'string'.
-    const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  // Extra attribute;
-                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ extra: string; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-!!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+    const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
-                         ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y1: 10000; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
-!!! error TS2322:   Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+                                  ~~~~~~~~~~
+!!! error TS2339: Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
     const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
                          ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ yy: boolean; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
