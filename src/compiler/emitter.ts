@@ -814,6 +814,7 @@ namespace ts {
         function emitTypeParameter(node: TypeParameterDeclaration) {
             emit(node.name);
             emitWithPrefix(" extends ", node.constraint);
+            emitWithPrefix(" = ", node.default);
         }
 
         function emitParameter(node: ParameterDeclaration) {
