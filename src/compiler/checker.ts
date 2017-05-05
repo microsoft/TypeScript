@@ -2297,7 +2297,6 @@ namespace ts {
                 InFirstTypeArgument: boolean;  // Writing first type argument of the instantiated type
                 // TODO: ???
                 InTypeAlias: boolean;           // Writing type in type alias declaration
-                checkAlias: boolean;
                 symbolStack: Symbol[] | undefined;
             }
 
@@ -2310,7 +2309,6 @@ namespace ts {
                     InElementType: false,
                     InFirstTypeArgument: false,
                     InTypeAlias: false,
-                    checkAlias: true,
                     symbolStack: undefined
                 };
             }
@@ -2319,6 +2317,8 @@ namespace ts {
                 const InElementType = context.InElementType;
                 // TODO: why doesn't tts unset the flag?
                 context.InElementType = false;
+                const inTypeAlias = context.InTypeAlias;
+                context.InTypeAlias = false;
 
                 // TODO: should be assert?
                 if (!type) {
@@ -2406,12 +2406,11 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
-                if (!context.InTypeAlias && context.checkAlias && type.aliasSymbol) {
+                if (!inTypeAlias && type.aliasSymbol) {
                     const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, context);
                     const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, /*addInElementTypeFlag*/ false);
                     return createTypeReferenceNode(name, typeArgumentNodes);
                 }
-                context.checkAlias = false;
 
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
