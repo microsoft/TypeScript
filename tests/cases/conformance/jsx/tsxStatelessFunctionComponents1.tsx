@@ -46,7 +46,7 @@ let o = {
     prop1: true;
 }
 
-// Error
+// OK as access properties are allow when spread
 let i2 = <EmptyPropSFC {...o} />
 
 let o1: any;

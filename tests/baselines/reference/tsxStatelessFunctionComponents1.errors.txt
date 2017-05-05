@@ -14,11 +14,9 @@ tests/cases/conformance/jsx/file.tsx(37,23): error TS2322: Type '{ prop1: true; 
 tests/cases/conformance/jsx/file.tsx(38,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
   Property 'ref' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
-tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes'.
-  Property 'prop1' does not exist on type 'IntrinsicAttributes'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (7 errors) ====
     function EmptyPropSFC() {
         return <div> Default Greeting </div>;
     }
@@ -85,11 +83,8 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolea
 !!! error TS1005: ',' expected.
     }
     
-    // Error
+    // OK as access properties are allow when spread
     let i2 = <EmptyPropSFC {...o} />
-                           ~~~~~~
-!!! error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
     
     let o1: any;
     // OK
