@@ -1297,14 +1297,9 @@ namespace ts {
             function emitDynamicName(entityName: EntityNameExpression) {
                 writer.getSymbolAccessibilityDiagnostic = getVariableDeclarationTypeVisibilityError;
                 const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
-                if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
-                    resolver.writeTypeOfExpression(entityName, enclosingDeclaration, TypeFormatFlags.None, writer);
-                }
-                else {
-                    handleSymbolAccessibilityError(visibilityResult);
-                    recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
-                    writeTextOfNode(currentText, node.name);
-                }
+                handleSymbolAccessibilityError(visibilityResult);
+                recordTypeReferenceDirectivesIfNecessary(resolver.getTypeReferenceDirectivesForEntityName(entityName));
+                writeTextOfNode(currentText, node.name);
             }
 
             function emitBindingPattern(bindingPattern: BindingPattern) {

@@ -2610,6 +2610,7 @@ namespace ts {
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
         reportIllegalExtends(): void;
+
     }
 
     export const enum TypeFormatFlags {
@@ -2880,6 +2881,7 @@ namespace ts {
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
         dynamicMembers?: SymbolTable;       // Dynamic members with literal names resolved during check
         resolvedMembers?: SymbolTable;
+        dynamicSource?: Symbol;
     }
 
     /* @internal */

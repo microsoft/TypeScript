@@ -7,10 +7,6 @@ export const c1 = 1;
 >c1 : 1
 >1 : 1
 
-const c2 = "a";
->c2 : "a"
->"a" : "a"
-
 export interface T0 {
 >T0 : T0
 
@@ -37,8 +33,8 @@ export declare class T2 extends T1 {
 export declare type T3 = {
 >T3 : T3
 
-    [c2]: number;
->c2 : "a"
+    [c0]: number;
+>c0 : "a"
 
     [c1]: string;
 >c1 : 1
@@ -100,7 +96,7 @@ namespace N {
 >T5 : T5
     }
     export declare type T7 = {
->T7 : { "a": number; "1": string; }
+>T7 : { [N.c2]: number; [N.c3]: string; }
 
         [N.c2]: number;
 >N.c2 : "a"
@@ -147,7 +143,7 @@ declare class T10 extends T9 {
 >T9 : T9
 }
 declare type T11 = {
->T11 : { "a": number; "1": string; }
+>T11 : { [c4]: number; [c5]: string; }
 
     [c4]: number;
 >c4 : "a"
@@ -239,9 +235,9 @@ let t6: N.T6;
 >T6 : N.T6
 
 let t7: N.T7;
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >N : any
->T7 : { "a": number; "1": string; }
+>T7 : { [N.c2]: number; [N.c3]: string; }
 
 let t8: T8;
 >t8 : T8
@@ -256,8 +252,8 @@ let t10: T10;
 >T10 : T10
 
 let t11: T11;
->t11 : { "a": number; "1": string; }
->T11 : { "a": number; "1": string; }
+>t11 : { [c4]: number; [c5]: string; }
+>T11 : { [c4]: number; [c5]: string; }
 
 let t12: T12;
 >t12 : T12
@@ -329,13 +325,13 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : { "a": number; "1": string; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5 : N.T5
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : { "a": number; "1": string; }
+>t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6 : N.T6
 >t4 = t5, t4 = t6, t4 = t7, t5 = t4 : N.T4
->t4 = t5, t4 = t6, t4 = t7 : { "a": number; "1": string; }
+>t4 = t5, t4 = t6, t4 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t4 = t5, t4 = t6 : N.T6
 >t4 = t5 : N.T5
 >t4 : N.T4
@@ -343,35 +339,35 @@ t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7,
 >t4 = t6 : N.T6
 >t4 : N.T4
 >t6 : N.T6
->t4 = t7 : { "a": number; "1": string; }
+>t4 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t4 : N.T4
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t5 = t4 : N.T4
 >t5 : N.T5
 >t4 : N.T4
 >t5 = t6 : N.T6
 >t5 : N.T5
 >t6 : N.T6
->t5 = t7 : { "a": number; "1": string; }
+>t5 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t5 : N.T5
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t6 = t4 : N.T4
 >t6 : N.T6
 >t4 : N.T4
 >t6 = t5 : N.T5
 >t6 : N.T6
 >t5 : N.T5
->t6 = t7 : { "a": number; "1": string; }
+>t6 = t7 : { [N.c2]: number; [N.c3]: string; }
 >t6 : N.T6
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t7 = t4 : N.T4
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t4 : N.T4
 >t7 = t5 : N.T5
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t5 : N.T5
 >t7 = t6 : N.T6
->t7 : { "a": number; "1": string; }
+>t7 : { [N.c2]: number; [N.c3]: string; }
 >t6 : N.T6
 
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;

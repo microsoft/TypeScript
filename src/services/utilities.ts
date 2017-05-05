@@ -1174,7 +1174,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
-            reportIllegalExtends: noop
+            reportIllegalExtends: noop,
         };
 
         function writeIndent() {

@@ -4,7 +4,6 @@
 // @filename: module.ts
 export const c0 = "a";
 export const c1 = 1;
-const c2 = "a";
 export interface T0 {
     [c0]: number;
     [c1]: string;
@@ -16,7 +15,7 @@ export declare class T1 implements T2 {
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
-    [c2]: number;
+    [c0]: number;
     [c1]: string;
 };
 

@@ -2897,9 +2897,6 @@ namespace ts {
         }
 
         function getNameOfSymbol(symbol: Symbol): string {
-            if (symbol.flags & SymbolFlags.Dynamic) {
-                return `"${escapeString(unescapeIdentifier(symbol.name))}"`;
-            }
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
                 if (declaration.name) {
@@ -3257,6 +3254,9 @@ namespace ts {
                     if (isReadonlySymbol(prop)) {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
+                    }
+                    if (prop.flags & SymbolFlags.Dynamic && (<TransientSymbol>prop).dynamicSource) {
+                        writer.trackSymbol((<TransientSymbol>prop).dynamicSource, enclosingDeclaration, SymbolFlags.Value);
                     }
                     buildSymbolDisplay(prop, writer);
                     if (prop.flags & SymbolFlags.Optional) {
@@ -5193,7 +5193,7 @@ namespace ts {
                     resolveDynamicMembersOfNode(node, (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members, symbolTable);
                     break;
                 case SyntaxKind.ObjectLiteralExpression:
-                resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
+                    resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
                     break;
             }
         }
@@ -13191,7 +13191,20 @@ namespace ts {
                     }
 
                     typeFlags |= type.flags;
-                    const prop = createSymbol(SymbolFlags.Property | member.flags, member.name);
+
+                    let prop: TransientSymbol;
+                    if (hasDynamicName(memberDecl) && isEntityNameExpression((<ComputedPropertyName>memberDecl.name).expression)) {
+                        const nameType = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
+                        if (nameType && nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                            prop = createSymbol(SymbolFlags.Property | SymbolFlags.Dynamic | member.flags, (<LiteralType>nameType).text);
+                            prop.dynamicSource = resolveEntityName(<EntityNameExpression>(<ComputedPropertyName>memberDecl.name).expression, SymbolFlags.Value);
+                        }
+                    }
+
+                    if (!prop) {
+                        prop = createSymbol(SymbolFlags.Property | member.flags, member.name);
+                    }
+
                     if (inDestructuringPattern) {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
@@ -13259,7 +13272,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (hasDynamicName(memberDecl)) {
+                if (hasDynamicName(memberDecl) && !(member && member.flags & SymbolFlags.Dynamic)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
