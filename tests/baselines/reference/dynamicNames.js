@@ -3,7 +3,6 @@
 //// [module.ts]
 export const c0 = "a";
 export const c1 = 1;
-const c2 = "a";
 export interface T0 {
     [c0]: number;
     [c1]: string;
@@ -15,7 +14,7 @@ export declare class T1 implements T2 {
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
-    [c2]: number;
+    [c0]: number;
     [c1]: string;
 };
 
@@ -107,7 +106,6 @@ t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c0 = "a";
 exports.c1 = 1;
-const c2 = "a";
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -158,7 +156,7 @@ export declare class T1 implements T2 {
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
-    "a": number;
+    [c0]: number;
     [c1]: string;
 };
 //// [main.d.ts]

@@ -1,5 +1,6 @@
 // @target: esnext
-
+// @module: commonjs
+// @declaration: true
 const c0 = "1";
 const c1 = 1;
 
@@ -21,8 +22,11 @@ interface T3 {
     [c1]: string;
 }
 
-
 let t1: T1;
 let t2: T2;
 t1 = t2;
 t2 = t1;
+
+export interface T4 {
+    [c0]: number;
+}
