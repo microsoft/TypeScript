@@ -2242,10 +2242,49 @@ namespace ts {
             return result;
         }
 
+        function typeFormatFlagsToNodeBuilderFlags(flags: TypeFormatFlags): NodeBuilderFlags {
+            let result = NodeBuilderFlags.None;
+            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
+                result |= NodeBuilderFlags.WriteArrayAsGenericType;
+            }
+            if (flags & TypeFormatFlags.UseTypeOfFunction) {
+                result |= NodeBuilderFlags.UseTypeOfFunction;
+            }
+            if (flags & TypeFormatFlags.NoTruncation) {
+                result |= NodeBuilderFlags.NoTruncation;
+            }
+            if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
+                result |= NodeBuilderFlags.WriteArrowStyleSignature;
+            }
+            if (flags & TypeFormatFlags.WriteOwnNameForAnyLike) {
+                result |= NodeBuilderFlags.WriteOwnNameForAnyLike;
+            }
+            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
+                result |= NodeBuilderFlags.WriteArrayAsGenericType;
+            }
+            if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
+                result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
+            }
+            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
+                result |= NodeBuilderFlags.UseFullyQualifiedType;
+            }
+            if (flags & TypeFormatFlags.UseTypeAliasValue) {
+                result |= NodeBuilderFlags.UseTypeAliasValue;
+            }
+            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
+                result |= NodeBuilderFlags.SuppressAnyReturnType;
+            }
+            if (flags & TypeFormatFlags.AddUndefined) {
+                result |= NodeBuilderFlags.AddUndefined;
+            }
+
+            return result;       
+        }
+
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const str = oldTypeToString(type, enclosingDeclaration, flags); str;
             const str2 = oldTypeToString(type, enclosingDeclaration, flags); str2;
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, NodeBuilderFlags.ignoreErrors);
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, typeFormatFlagsToNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors, !!(flags & TypeFormatFlags.InTypeAlias));
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const newLine = NewLineKind.None;
             const options = { newLine, removeComments: true };
@@ -2264,8 +2303,9 @@ namespace ts {
 
         function createNodeBuilder() {
             return {
-                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, inTypeAlias?: boolean) => {
                     const context = createNodeBuilderContext(enclosingDeclaration, flags);
+                    context.InTypeAlias = inTypeAlias;
                     const resultingNode = typeToTypeNodeHelper(type, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
@@ -2403,6 +2443,7 @@ namespace ts {
                 if (type.flags & TypeFlags.TypeParameter) {
                     const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, context);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
+                    // TODO: add constraint here?
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
@@ -2585,6 +2626,10 @@ namespace ts {
                 function typeReferenceToTypeNode(type: TypeReference) {
                     const typeArguments: Type[] = type.typeArguments || emptyArray;
                     if (type.target === globalArrayType) {
+                        if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
+                            const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
+                            return createTypeReferenceNode("Array", [typeArgumentNode]);
+                        }
                         context.InElementType = true;
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
                         context.InElementType = false;
