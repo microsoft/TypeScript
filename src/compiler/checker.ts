@@ -2287,7 +2287,7 @@ namespace ts {
             interface NodeBuilderContext {
                 readonly enclosingDeclaration: Node | undefined;
                 readonly flags: NodeBuilderFlags | undefined;
-                
+
                 // State
                 encounteredError: boolean;
                 inObjectTypeLiteral: boolean;
@@ -2564,7 +2564,6 @@ namespace ts {
                     return createTypeLiteralNode(members);
                 }
 
-                
                 function shouldAddParenthesisAroundFunctionType(callSignature: Signature, context: NodeBuilderContext) {
                     if (InElementType) {
                         return true;
@@ -2670,13 +2669,10 @@ namespace ts {
                         return typeElements;
                     }
 
+                    // TODO: make logic mirror that of writeObjectLiteralType
                     for (const propertySymbol of properties) {
                         const propertyType = getTypeOfSymbol(propertySymbol);
-                        const oldDeclaration = propertySymbol.declarations && propertySymbol.declarations[0] as TypeElement;
-                        if (!oldDeclaration) {
-                            return;
-                        }
-                        const propertyName = getDeepSynthesizedClone(oldDeclaration.name);
+                        const propertyName = symbolToName(propertySymbol, /*expectsIdentifier*/ true, context);
                         const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
                         if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
                             const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
@@ -2697,7 +2693,7 @@ namespace ts {
                                 propertyName,
                                 optionalToken,
                                 propertyTypeNode,
-                               /*initializer*/undefined);
+                               /*initializer*/ undefined);
                             typeElements.push(propertySignature);
                         }
                     }
@@ -2744,8 +2740,8 @@ namespace ts {
                     const returnType = getReturnTypeOfSignature(signature);
                     returnTypeNode = returnType && typeToTypeNodeHelper(returnType, context);
                 }
-                if(context.flags & NodeBuilderFlags.SuppressAnyReturnType) {
-                    if(returnTypeNode && returnTypeNode.kind === SyntaxKind.AnyKeyword) {
+                if (context.flags & NodeBuilderFlags.SuppressAnyReturnType) {
+                    if (returnTypeNode && returnTypeNode.kind === SyntaxKind.AnyKeyword) {
                         returnTypeNode = undefined;
                     }
                 }
