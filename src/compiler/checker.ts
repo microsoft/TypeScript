@@ -13909,11 +13909,11 @@ namespace ts {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
-                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
                 // If sourceAttributesType has spread (e.g the type doesn't have freshness flag) after we check for assignability, we will do another pass to check that
                 // all explicitly specified attributes have correct name corresponding with target (as those will be assignable as spread type allows excess properties)
                 // Note: if the type of these explicitly specified attributes do not match it will be an error during above assignability check.
-                if (sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
+                if (isSourceAttributeTypeAssignableToTarget && sourceAttributesType !== anyType && !(sourceAttributesType.flags & TypeFlags.FreshLiteral)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
                         if (isJsxAttribute(attribute) && !getPropertyOfType(targetAttributesType, attribute.name.text)) {
                             error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));

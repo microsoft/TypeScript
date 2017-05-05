@@ -1,6 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(48,24): error TS2322: Type '{ to: "/some/path"; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
-tests/cases/conformance/jsx/file.tsx(49,24): error TS2339: Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
 tests/cases/conformance/jsx/file.tsx(49,24): error TS2322: Type '{ to: string; onClick: (e: any) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Type '{ to: string; onClick: (e: any) => void; children: string; }' is not assignable to type 'HyphenProps'.
     Property '"data-format"' is missing in type '{ to: string; onClick: (e: any) => void; children: string; }'.
@@ -25,7 +24,7 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: 
       Type 'true' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (9 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
     import React = require('react')
     
     export interface ClickableProps {
@@ -78,8 +77,6 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: 
 !!! error TS2322: Type '{ to: "/some/path"; onClick: (e: MouseEvent<any>) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
     const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
-                           ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'onClick' does not exist on type 'IntrinsicAttributes & HyphenProps'.
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ to: string; onClick: (e: any) => void; children: string; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Type '{ to: string; onClick: (e: any) => void; children: string; }' is not assignable to type 'HyphenProps'.
