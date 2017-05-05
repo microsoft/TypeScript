@@ -18091,18 +18091,17 @@ namespace ts {
 
                     forEach(overloads, o => {
                         const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
-                        const name = getNameOfDeclaration(o);
                         if (deviation & ModifierFlags.Export) {
-                            error(name, Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
                         }
                         else if (deviation & ModifierFlags.Ambient) {
-                            error(name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
                         }
                         else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                            error(name || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                            error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & ModifierFlags.Abstract) {
-                            error(name, Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
                         }
                     });
                 }
@@ -20240,17 +20239,9 @@ namespace ts {
                     return;
                 }
 
-                let errorNode: Node;
-                if (propDeclaration && propDeclaration.kind === SyntaxKind.BinaryExpression) {
-                    const specialAssignmentKind = getSpecialPropertyAssignmentKind(propDeclaration as BinaryExpression);
-                    if (specialAssignmentKind === SpecialPropertyAssignmentKind.Property ||
-                        specialAssignmentKind === SpecialPropertyAssignmentKind.PrototypeProperty ||
-                        specialAssignmentKind === SpecialPropertyAssignmentKind.ThisProperty) {
-                        errorNode = propDeclaration;
-                    }
-                }
                 // perform property check if property or indexer is declared in 'type'
-                // this allows to rule out cases when both property and indexer are inherited from the base class
+                // this allows us to rule out cases when both property and indexer are inherited from the base class
+                let errorNode: Node;
                 if (propDeclaration &&
                     (propDeclaration.kind === SyntaxKind.BinaryExpression ||
                      getNameOfDeclaration(propDeclaration).kind === SyntaxKind.ComputedPropertyName ||
