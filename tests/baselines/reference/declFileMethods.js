@@ -370,14 +370,11 @@ export declare class c1 {
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
     /** This comment should appear for privateFoo*/
-    private privateFoo();
+    private privateFoo;
     /** This is comment for function signature*/
-    private privateFooWithParameters(/** this is comment about a*/ a, 
-        /** this is comment for b*/
-        b);
-    private privateFooWithRestParameters(a, ...rests);
-    private privateFooWithOverloads(a);
-    private privateFooWithOverloads(a);
+    private privateFooWithParameters;
+    private privateFooWithRestParameters;
+    private privateFooWithOverloads;
     /** This comment should appear for static foo*/
     static staticFoo(): void;
     /** This is comment for function signature*/
@@ -388,14 +385,11 @@ export declare class c1 {
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
     /** This comment should appear for privateStaticFoo*/
-    private static privateStaticFoo();
+    private static privateStaticFoo;
     /** This is comment for function signature*/
-    private static privateStaticFooWithParameters(/** this is comment about a*/ a, 
-        /** this is comment for b*/
-        b);
-    private static privateStaticFooWithRestParameters(a, ...rests);
-    private static privateStaticFooWithOverloads(a);
-    private static privateStaticFooWithOverloads(a);
+    private static privateStaticFooWithParameters;
+    private static privateStaticFooWithRestParameters;
+    private static privateStaticFooWithOverloads;
 }
 export interface I1 {
     /** This comment should appear for foo*/
@@ -420,14 +414,11 @@ declare class c2 {
     fooWithOverloads(a: string): string;
     fooWithOverloads(a: number): number;
     /** This comment should appear for privateFoo*/
-    private privateFoo();
+    private privateFoo;
     /** This is comment for function signature*/
-    private privateFooWithParameters(/** this is comment about a*/ a, 
-        /** this is comment for b*/
-        b);
-    private privateFooWithRestParameters(a, ...rests);
-    private privateFooWithOverloads(a);
-    private privateFooWithOverloads(a);
+    private privateFooWithParameters;
+    private privateFooWithRestParameters;
+    private privateFooWithOverloads;
     /** This comment should appear for static foo*/
     static staticFoo(): void;
     /** This is comment for function signature*/
@@ -438,14 +429,11 @@ declare class c2 {
     static staticFooWithOverloads(a: string): string;
     static staticFooWithOverloads(a: number): number;
     /** This comment should appear for privateStaticFoo*/
-    private static privateStaticFoo();
+    private static privateStaticFoo;
     /** This is comment for function signature*/
-    private static privateStaticFooWithParameters(/** this is comment about a*/ a, 
-        /** this is comment for b*/
-        b);
-    private static privateStaticFooWithRestParameters(a, ...rests);
-    private static privateStaticFooWithOverloads(a);
-    private static privateStaticFooWithOverloads(a);
+    private static privateStaticFooWithParameters;
+    private static privateStaticFooWithRestParameters;
+    private static privateStaticFooWithOverloads;
 }
 interface I2 {
     /** This comment should appear for foo*/

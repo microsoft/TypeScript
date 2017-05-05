@@ -16,6 +16,5 @@ var C = (function () {
 
 //// [declFileForClassWithPrivateOverloadedFunction.d.ts]
 declare class C {
-    private foo(x);
-    private foo(x);
+    private foo;
 }
