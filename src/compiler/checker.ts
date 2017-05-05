@@ -2406,7 +2406,7 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
-                if (context.checkAlias && type.aliasSymbol) {
+                if (!context.InTypeAlias && context.checkAlias && type.aliasSymbol) {
                     const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, context);
                     const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, /*addInElementTypeFlag*/ false);
                     return createTypeReferenceNode(name, typeArgumentNodes);
@@ -2546,8 +2546,11 @@ namespace ts {
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
                             const signature = resolved.callSignatures[0];
-                             shouldAddParenthesisAroundFunctionType(signature, context);
-                            return <FunctionTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, context);
+                            const functionTypeNode = <FunctionTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, context);
+                            return shouldAddParenthesisAroundFunctionType(signature, context) ?
+                                createParenthesizedTypeNode(functionTypeNode) :
+                                functionTypeNode;
+
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                             const signature = resolved.constructSignatures[0];
@@ -2564,7 +2567,7 @@ namespace ts {
 
                 
                 function shouldAddParenthesisAroundFunctionType(callSignature: Signature, context: NodeBuilderContext) {
-                    if (context.InElementType) {
+                    if (InElementType) {
                         return true;
                     }
                     else if (context.InFirstTypeArgument) {
@@ -2727,6 +2730,10 @@ namespace ts {
 
                 const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
                 const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, context));
+                if (signature.thisParameter) {
+                    const thisParameter = symbolToParameterDeclaration(signature.thisParameter, context);
+                    parameters.unshift(thisParameter);
+                }
                 let returnTypeNode: TypeNode;
                 if (signature.typePredicate) {
                     const typePredicate = signature.typePredicate;
