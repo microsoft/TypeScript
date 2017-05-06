@@ -5229,7 +5229,7 @@ namespace ts {
         function isLateBoundName(node: DeclarationName): node is LateBoundName {
             return isComputedPropertyName(node)
                 && isEntityNameExpression(node.expression)
-                && (checkComputedPropertyName(node).flags & TypeFlags.PossiblyBindable) !== 0;
+                && (checkComputedPropertyName(node).flags & TypeFlags.StringOrNumberLiteralOrUnique) !== 0;
         }
 
         /**
@@ -5304,7 +5304,7 @@ namespace ts {
                 const memberSymbol = member.symbol;
                 links.resolvedSymbol = memberSymbol || unknownSymbol;
                 const type = checkComputedPropertyName(member.name);
-                if (type.flags & TypeFlags.PossiblyBindable) {
+                if (type.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                     const memberName = getLateBoundNameFromType(type);
                     let symbol = lateMembers.get(memberName);
                     if (!symbol) {
@@ -7131,7 +7131,8 @@ namespace ts {
             containsNonWideningType?: boolean;
             containsString?: boolean;
             containsNumber?: boolean;
-            containsStringOrNumberLiteral?: boolean;
+            containsESSymbol?: boolean;
+            containsStringOrNumberLiteralOrUnique?: boolean;
             containsObjectType?: boolean;
             containsEmptyObject?: boolean;
             unionIndex?: number;
@@ -7177,7 +7178,8 @@ namespace ts {
             else if (!(flags & TypeFlags.Never)) {
                 if (flags & TypeFlags.String) typeSet.containsString = true;
                 if (flags & TypeFlags.Number) typeSet.containsNumber = true;
-                if (flags & TypeFlags.StringOrNumberLiteral) typeSet.containsStringOrNumberLiteral = true;
+                if (flags & TypeFlags.ESSymbol) typeSet.containsESSymbol = true;
+                if (flags & TypeFlags.StringOrNumberLiteralOrUnique) typeSet.containsStringOrNumberLiteralOrUnique = true;
                 const len = typeSet.length;
                 const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearchTypes(typeSet, type);
                 if (index < 0) {
@@ -7252,7 +7254,8 @@ namespace ts {
                 const remove =
                     t.flags & TypeFlags.StringLiteral && types.containsString ||
                     t.flags & TypeFlags.NumberLiteral && types.containsNumber ||
-                    t.flags & TypeFlags.StringOrNumberLiteral && t.flags & TypeFlags.Fresh && containsType(types, (<LiteralType>t).regularType);
+                    t.flags & TypeFlags.Unique && types.containsESSymbol ||
+                    t.flags & TypeFlags.StringOrNumberLiteralOrUnique && t.flags & TypeFlags.Fresh && containsType(types, getRegularTypeOfLiteralOrUniqueType(t));
                 if (remove) {
                     orderedRemoveItemAt(types, i);
                 }
@@ -7281,7 +7284,7 @@ namespace ts {
             if (subtypeReduction) {
                 removeSubtypes(typeSet);
             }
-            else if (typeSet.containsStringOrNumberLiteral) {
+            else if (typeSet.containsStringOrNumberLiteralOrUnique) {
                 removeRedundantLiteralTypes(typeSet);
             }
             if (typeSet.length === 0) {
@@ -7723,7 +7726,7 @@ namespace ts {
         }
 
         function getFreshTypeOfLiteralOrUniqueType(type: Type) {
-            if (type.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique) && !(type.flags & TypeFlags.Fresh)) {
+            if (type.flags & TypeFlags.StringOrNumberLiteralOrUnique && !(type.flags & TypeFlags.Fresh)) {
                 if (!(<UniqueType | LiteralType>type).freshType) {
                     const freshType = type.flags & TypeFlags.Unique
                         ? createUniqueType(type.symbol, TypeFlags.Fresh)
@@ -7737,7 +7740,7 @@ namespace ts {
         }
 
         function getRegularTypeOfLiteralOrUniqueType(type: Type) {
-            return type.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique) && type.flags & TypeFlags.Fresh ? (<UniqueType | LiteralType>type).regularType : type;
+            return type.flags & TypeFlags.StringOrNumberLiteralOrUnique && type.flags & TypeFlags.Fresh ? (<UniqueType | LiteralType>type).regularType : type;
         }
 
         function getLiteralTypeForText(flags: TypeFlags, text: string) {
@@ -13293,7 +13296,7 @@ namespace ts {
                     let prop: TransientSymbol;
                     if (hasLateBoundName(memberDecl)) {
                         const nameType = checkComputedPropertyName(memberDecl.name);
-                        if (nameType && nameType.flags & TypeFlags.PossiblyBindable) {
+                        if (nameType && nameType.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
                             prop = createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType));
                         }
                     }
@@ -22999,7 +23002,7 @@ namespace ts {
             name = getParseTreeNode(name, isComputedPropertyName);
             if (name) {
                 const nameType = checkComputedPropertyName(name);
-                return (nameType.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) !== 0;
+                return (nameType.flags & TypeFlags.StringOrNumberLiteralOrUnique) !== 0;
             }
             return false;
         }

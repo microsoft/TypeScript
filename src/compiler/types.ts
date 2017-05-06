@@ -3008,7 +3008,7 @@ namespace ts {
         Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral | Unique,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        PossiblyBindable = StringOrNumberLiteral | Unique,
+        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | Unique,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
