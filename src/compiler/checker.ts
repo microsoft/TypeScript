@@ -27,6 +27,9 @@ namespace ts {
         return symbol.id;
     }
 
+    type LateBoundName = ComputedPropertyName & { expression: EntityNameExpression; };
+    type LateBoundDeclaration = Declaration & { name: LateBoundName; };
+
     export function createTypeChecker(host: TypeCheckerHost, produceDiagnostics: boolean): TypeChecker {
         // Cancellation that controls whether or not we can cancel in the middle of type checking.
         // In general cancelling is *not* safe for the type checker.  We might be in the middle of
@@ -1815,11 +1818,11 @@ namespace ts {
         }
 
         function getSymbolOfNode(node: Node): Symbol {
-            return getMergedSymbol(node.symbol && node.symbol.name === "__computed" && node.id && getNodeLinks(node).resolvedSymbol || node.symbol);
+            return getMergedSymbol(getLateBoundSymbol(node.symbol));
         }
 
         function getParentOfSymbol(symbol: Symbol): Symbol {
-            return getMergedSymbol(symbol.parent);
+            return getMergedSymbol(getLateBoundSymbol(symbol.parent));
         }
 
         function getExportSymbolOfValueSymbolIfExported(symbol: Symbol): Symbol {
@@ -2961,19 +2964,6 @@ namespace ts {
                 }
             }
 
-            function appendPrototypeOfParentSymbolIfNeeded(parentSymbol: Symbol, symbol: Symbol, writer: SymbolWriter) {
-                if (parentSymbol.flags & SymbolFlags.Class &&
-                    symbol.flags & SymbolFlags.ClassMember &&
-                    symbol.valueDeclaration &&
-                    !(getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Static)) {
-                    const prototypeSymbol = parentSymbol.exports && parentSymbol.exports.get("prototype");
-                    if (prototypeSymbol) {
-                        writePunctuation(writer, SyntaxKind.DotToken);
-                        appendSymbolNameOnly(prototypeSymbol, writer);
-                    }
-                }
-            }
-
             /**
              * Enclosing declaration is optional when we don't want to get qualified name in the enclosing declaration scope
              * Meaning needs to be specified if the enclosing declaration is given
@@ -2992,7 +2982,6 @@ namespace ts {
                                 buildTypeParameterDisplayFromSymbol(parentSymbol, writer, enclosingDeclaration);
                             }
                         }
-                        appendPrototypeOfParentSymbolIfNeeded(parentSymbol, symbol, writer);
                         appendPropertyOrElementAccessForSymbol(symbol, writer);
                     }
                     else {
@@ -3284,8 +3273,12 @@ namespace ts {
                         writeKeyword(writer, SyntaxKind.ReadonlyKeyword);
                         writeSpace(writer);
                     }
-                    if (prop.flags & SymbolFlags.Dynamic && (<TransientSymbol>prop).dynamicSource) {
-                        writer.trackSymbol((<TransientSymbol>prop).dynamicSource, enclosingDeclaration, SymbolFlags.Value);
+                    if (prop.flags & SymbolFlags.Late) {
+                        const decl = firstOrUndefined(prop.declarations);
+                        const name = hasLateBoundName(decl) && resolveEntityName(decl.name.expression, SymbolFlags.Value);
+                        if (name) {
+                            writer.trackSymbol(name, enclosingDeclaration, SymbolFlags.Value);
+                        }
                     }
                     buildSymbolDisplay(prop, writer);
                     if (prop.flags & SymbolFlags.Optional) {
@@ -4104,8 +4097,8 @@ namespace ts {
             if (declaration.kind === SyntaxKind.Parameter) {
                 const func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
-                if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
-                    const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
+                if (func.kind === SyntaxKind.SetAccessor && !hasUnboundDynamicName(func)) {
+                    const getter = <AccessorDeclaration>getDeclarationOfKind(getSymbolOfNode(declaration.parent), SyntaxKind.GetAccessor);
                     if (getter) {
                         const getterSignature = getSignatureFromDeclaration(getter);
                         const thisParameter = getAccessorThisParameter(func as AccessorDeclaration);
@@ -5186,117 +5179,159 @@ namespace ts {
             return <InterfaceTypeWithDeclaredMembers>type;
         }
 
+        /**
+         * Gets a SymbolTable containing both the early- and late-bound members of a symbol.
+         */
         function getMembersOfSymbol(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.resolvedMembers) {
                 links.resolvedMembers = emptySymbols;
-                const dynamicMembers = getDynamicMembersOfSymbol(symbol);
-                if (!dynamicMembers || dynamicMembers.size === 0) {
+                const lateMembers = getLateBoundMembersOfSymbol(symbol);
+                if (lateMembers) {
+                    for (const decl of symbol.declarations) {
+                        lateBindMembers(lateMembers, decl);
+                    }
+                }
+                if (!lateMembers || lateMembers.size === 0) {
                     return links.resolvedMembers = symbol.members || emptySymbols;
                 }
                 if (!symbol.members || symbol.members.size === 0) {
-                    return links.resolvedMembers = dynamicMembers;
+                    return links.resolvedMembers = lateMembers;
                 }
                 const resolvedMembers = createMap<Symbol>();
                 mergeSymbolTable(resolvedMembers, symbol.members);
-                mergeSymbolTable(resolvedMembers, dynamicMembers);
+                mergeSymbolTable(resolvedMembers, lateMembers);
                 return links.resolvedMembers = resolvedMembers;
             }
             return links.resolvedMembers;
         }
 
-        function getDynamicMembersOfSymbol(symbol: Symbol) {
+        /**
+         * Gets the late-bound members of a symbol.
+         */
+        function getLateBoundMembersOfSymbol(symbol: Symbol) {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface | SymbolFlags.TypeLiteral | SymbolFlags.ObjectLiteral)) {
                 const links = getSymbolLinks(symbol);
-                if (!links.dynamicMembers) {
-                    const members = createMap<Symbol>();
-                    for (const decl of symbol.declarations) {
-                        resolveDynamicMembersOfSymbol(decl, members);
+                return links.lateMembers || (links.lateMembers = createMap<TransientSymbol>());
+            }
+        }
+
+        /**
+         * Tests whether a declaration has a late-bound dynamic name.
+         */
+        function hasLateBoundName(node: Declaration): node is LateBoundDeclaration {
+            return node.name && isLateBoundName(node.name);
+        }
+
+        /**
+         * Tests whether a declaration name is definately late-bindable.
+         */
+        function isLateBoundName(node: DeclarationName): node is LateBoundName {
+            return isComputedPropertyName(node)
+                && isEntityNameExpression(node.expression)
+                && (checkComputedPropertyName(node).flags & TypeFlags.PossiblyBindable) !== 0;
+        }
+
+        /**
+         * Performs late-binding of the dynamic members of a declaration.
+         */
+        function lateBindMembers(lateMembers: Map<TransientSymbol>, node: Declaration) {
+            const members = getMembersOfDeclaration(node);
+            if (members) {
+                for (const member of members) {
+                    if (hasLateBoundName(member)) {
+                        lateBindMember(lateMembers, node.symbol, member);
                     }
-                    links.dynamicMembers = members;
-                }
-                return links.dynamicMembers;
-            }
-        }
-
-        function resolveDynamicMembersOfSymbol(node: Declaration, symbolTable: SymbolTable) {
-            switch (node.kind) {
-                case SyntaxKind.InterfaceDeclaration:
-                case SyntaxKind.ClassDeclaration:
-                case SyntaxKind.ClassExpression:
-                case SyntaxKind.TypeLiteral:
-                    resolveDynamicMembersOfNode(node, (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members, symbolTable);
-                    break;
-                case SyntaxKind.ObjectLiteralExpression:
-                    resolveDynamicMembersOfNode(node, (<ObjectLiteralExpression>node).properties, symbolTable);
-                    break;
-            }
-        }
-
-        function resolveDynamicMembersOfNode(node: Declaration, members: NodeArray<ClassElement | TypeElement | ObjectLiteralElement>, symbolTable: SymbolTable) {
-            for (const member of members) {
-                if (member.name && isComputedPropertyName(member.name) && isEntityNameExpression(member.name.expression)) {
-                    bindDynamicMember(symbolTable, node.symbol, member);
                 }
             }
         }
 
-        function bindDynamicMember(symbolTable: SymbolTable, parent: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement) {
+        /**
+         * Tests whether a declaration has a dynamic name that cannot be late-bound.
+         */
+        function hasUnboundDynamicName(node: Declaration) {
+            return hasDynamicName(node) && !hasLateBoundName(node);
+        }
+
+        /**
+         * Tests whether a declaration name is a dynamic name that cannot be late-bound.
+         */
+        function isUnboundDynamicName(node: DeclarationName) {
+            return isDynamicName(node) && !isLateBoundName(node);
+        }
+
+        /**
+         * Gets the symbolic name for a late-bound member from its type.
+         */
+        function getLateBoundNameFromType(type: Type) {
+            if (type.flags & TypeFlags.Unique) {
+                return `__@${type.symbol.name}@${getSymbolId(type.symbol)}`;
+            }
+            if (type.flags & TypeFlags.StringOrNumberLiteral) {
+                return escapeIdentifier((<LiteralType>type).text);
+            }
+        }
+
+        /**
+         * Gets the late-bound symbol for a symbol (if it has one).
+         */
+        function getLateBoundSymbol(symbol: Symbol) {
+            if (symbol && (symbol.flags & SymbolFlags.ClassMember) && symbol.name === "__computed") {
+                const links = getSymbolLinks(symbol);
+                if (!links.lateSymbol) {
+                    links.lateSymbol = symbol;
+                    const parent = symbol.parent;
+                    if (parent && (parent.flags & SymbolFlags.HasMembers)) {
+                        const lateMembers = getLateBoundMembersOfSymbol(parent);
+                        for (const decl of symbol.declarations) {
+                            if (hasLateBoundName(decl)) {
+                                lateBindMember(lateMembers, parent, decl);
+                            }
+                        }
+                    }
+                }
+                return links.lateSymbol;
+            }
+            return symbol;
+        }
+
+        /**
+         * Performs late-binding of a dynamic member.
+         */
+        function lateBindMember(lateMembers: Map<TransientSymbol>, parent: Symbol, member: LateBoundDeclaration) {
             const links = getNodeLinks(member);
             if (!links.resolvedSymbol) {
-                switch (member.kind) {
-                    case SyntaxKind.PropertyDeclaration:
-                    case SyntaxKind.PropertySignature:
-                        return resolveDynamicMember(symbolTable, parent, member,
-                            SymbolFlags.Property | ((<PropertyDeclaration>member).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
-                            SymbolFlags.PropertyExcludes);
-                    case SyntaxKind.PropertyAssignment:
-                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                        return resolveDynamicMember(symbolTable, parent, member,
-                            SymbolFlags.Method | ((<MethodDeclaration>member).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
-                            isObjectLiteralMethod(member) ? SymbolFlags.PropertyExcludes : SymbolFlags.MethodExcludes);
-                    case SyntaxKind.GetAccessor:
-                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
-                    case SyntaxKind.SetAccessor:
-                        return resolveDynamicMember(symbolTable, parent, member, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
+                const memberSymbol = member.symbol;
+                links.resolvedSymbol = memberSymbol || unknownSymbol;
+                const type = checkComputedPropertyName(member.name);
+                if (type.flags & TypeFlags.PossiblyBindable) {
+                    const memberName = getLateBoundNameFromType(type);
+                    let symbol = lateMembers.get(memberName);
+                    if (!symbol) {
+                        lateMembers.set(memberName, symbol = createSymbol(SymbolFlags.Late, memberName));
+                    }
+                    const staticMember = parent.members && parent.members.get(memberName);
+                    if (symbol.flags & getExcludedSymbolFlags(memberSymbol.flags) || staticMember) {
+                        const declarations = staticMember ? concatenate(staticMember.declarations, symbol.declarations) : symbol.declarations;
+                        const name = declarationNameToString(member.name);
+                        forEach(declarations, declaration => error(declaration.name || declaration, Diagnostics.Duplicate_declaration_0, name));
+                        error(member.name || member, Diagnostics.Duplicate_declaration_0, name);
+                        symbol = createSymbol(SymbolFlags.Late, memberName);
+                    }
+                    addDeclarationToLateBoundMember(symbol, member, memberSymbol.flags);
+                    symbol.parent = parent;
+                    return links.resolvedSymbol = symbol;
                 }
             }
             return links.resolvedSymbol;
         }
 
-        function resolveDynamicMember(symbolTable: SymbolTable, parent: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement, includes: SymbolFlags, excludes: SymbolFlags) {
-            Debug.assert(isComputedPropertyName(member.name));
-            const nameType = checkComputedPropertyName(<ComputedPropertyName>member.name);
-            if (nameType.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) {
-                const memberName = nameType.flags & TypeFlags.Unique
-                    ? `__@@symbol@${nameType.symbol.id}@${nameType.symbol.name}`
-                    : (<LiteralType>nameType).text;
-                let symbol = symbolTable.get(memberName);
-                if (!symbol) {
-                    symbolTable.set(memberName, symbol = createSymbol(SymbolFlags.Dynamic, memberName));
-                }
-                const staticMember = parent.members && parent.members.get(memberName);
-                if (symbol.flags & excludes || staticMember) {
-                    const declarations = staticMember ? concatenate(staticMember.declarations, symbol.declarations) : symbol.declarations;
-                    const name = nameType.flags & TypeFlags.Unique ? `[${entityNameToString(<EntityNameExpression>(<ComputedPropertyName>member.name).expression)}]` : memberName;
-                    forEach(declarations, declaration => {
-                        error(declaration.name || declaration, Diagnostics.Duplicate_identifier_0, name);
-                    });
-                    error(member.name || member, Diagnostics.Duplicate_identifier_0, name);
-                    symbol = createSymbol(SymbolFlags.Dynamic, memberName);
-                }
-                addDeclarationToSymbol(symbol, member, includes);
-                symbol.parent = parent;
-                return symbol;
-            }
-            return getNodeLinks(member).resolvedSymbol = member.symbol || unknownSymbol;
-        }
-
-        function addDeclarationToSymbol(symbol: Symbol, member: ClassElement | TypeElement | ObjectLiteralElement, symbolFlags: SymbolFlags) {
+        /**
+         * Adds a declaration to a late-bound dynamic member.
+         */
+        function addDeclarationToLateBoundMember(symbol: TransientSymbol, member: LateBoundDeclaration, symbolFlags: SymbolFlags) {
             symbol.flags |= symbolFlags;
-            getNodeLinks(member).resolvedSymbol = symbol;
+            getSymbolLinks(member.symbol).lateSymbol = symbol;
             if (!symbol.declarations) {
                 symbol.declarations = [member];
             }
@@ -6329,10 +6364,10 @@ namespace ts {
 
                 // If only one accessor includes a this-type annotation, the other behaves as if it had the same type annotation
                 if ((declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) &&
-                    !hasDynamicName(declaration) &&
+                    !hasUnboundDynamicName(declaration) &&
                     (!hasThisParameter || !thisParameter)) {
                     const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const other = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
+                    const other = <AccessorDeclaration>getDeclarationOfKind(getSymbolOfNode(declaration), otherKind);
                     if (other) {
                         thisParameter = getAnnotatedAccessorThisParameter(other);
                     }
@@ -6374,8 +6409,8 @@ namespace ts {
 
             // TypeScript 1.0 spec (April 2014):
             // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
-            if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
-                const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
+            if (declaration.kind === SyntaxKind.GetAccessor && !hasUnboundDynamicName(declaration)) {
+                const setter = <AccessorDeclaration>getDeclarationOfKind(getSymbolOfNode(declaration), SyntaxKind.SetAccessor);
                 return getAnnotatedAccessorType(setter);
             }
 
@@ -7687,7 +7722,7 @@ namespace ts {
             return type;
         }
 
-        function getFreshTypeOfType(type: Type) {
+        function getFreshTypeOfLiteralOrUniqueType(type: Type) {
             if (type.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique) && !(type.flags & TypeFlags.Fresh)) {
                 if (!(<UniqueType | LiteralType>type).freshType) {
                     const freshType = type.flags & TypeFlags.Unique
@@ -7701,7 +7736,7 @@ namespace ts {
             return type;
         }
 
-        function getRegularTypeOfType(type: Type) {
+        function getRegularTypeOfLiteralOrUniqueType(type: Type) {
             return type.flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique) && type.flags & TypeFlags.Fresh ? (<UniqueType | LiteralType>type).regularType : type;
         }
 
@@ -7717,7 +7752,7 @@ namespace ts {
         function getTypeFromLiteralTypeNode(node: LiteralTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = getRegularTypeOfType(checkExpression(node.literal));
+                links.resolvedType = getRegularTypeOfLiteralOrUniqueType(checkExpression(node.literal));
             }
             return links.resolvedType;
         }
@@ -8650,8 +8685,8 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            source = getRegularTypeOfType(source);
-            target = getRegularTypeOfType(target);
+            source = getRegularTypeOfLiteralOrUniqueType(source);
+            target = getRegularTypeOfLiteralOrUniqueType(target);
             if (source === target || relation !== identityRelation && isSimpleTypeRelatedTo(source, target, relation)) {
                 return true;
             }
@@ -8776,8 +8811,8 @@ namespace ts {
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
                 let result: Ternary;
-                source = getRegularTypeOfType(source);
-                target = getRegularTypeOfType(target);
+                source = getRegularTypeOfLiteralOrUniqueType(source);
+                target = getRegularTypeOfLiteralOrUniqueType(target);
                 // both types are the same - covers 'they are the same primitive type or both are Any' or the same type parameter cases
                 if (source === target) return Ternary.True;
 
@@ -9894,10 +9929,11 @@ namespace ts {
         function getWidenedLiteralType(type: Type): Type {
             return type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.Fresh ? stringType :
                 type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.Fresh ? numberType :
-                    type.flags & TypeFlags.BooleanLiteral ? booleanType :
-                        type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
-                            type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
-                                type;
+                    type.flags & TypeFlags.Unique && type.flags & TypeFlags.Fresh ? esSymbolType :
+                        type.flags & TypeFlags.BooleanLiteral ? booleanType :
+                            type.flags & TypeFlags.EnumLiteral ? (<EnumLiteralType>type).baseType :
+                                type.flags & TypeFlags.Union && !(type.flags & TypeFlags.Enum) ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
+                                    type;
         }
 
         /**
@@ -11008,7 +11044,7 @@ namespace ts {
 
         function getTypeOfSwitchClause(clause: CaseClause | DefaultClause) {
             if (clause.kind === SyntaxKind.CaseClause) {
-                const caseType = getRegularTypeOfType(getTypeOfExpression((<CaseClause>clause).expression));
+                const caseType = getRegularTypeOfLiteralOrUniqueType(getTypeOfExpression((<CaseClause>clause).expression));
                 return isUnitType(caseType) ? caseType : undefined;
             }
             return neverType;
@@ -11623,8 +11659,8 @@ namespace ts {
                     return narrowedType.flags & TypeFlags.Never ? type : replacePrimitivesWithLiterals(narrowedType, valueType);
                 }
                 if (isUnitType(valueType)) {
-                    const regularType = getRegularTypeOfType(valueType);
-                    return filterType(type, t => getRegularTypeOfType(t) !== regularType);
+                    const regularType = getRegularTypeOfLiteralOrUniqueType(valueType);
+                    return filterType(type, t => getRegularTypeOfLiteralOrUniqueType(t) !== regularType);
                 }
                 return type;
             }
@@ -11681,7 +11717,7 @@ namespace ts {
                 if (!hasDefaultClause) {
                     return caseType;
                 }
-                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfType(t))));
+                const defaultType = filterType(type, t => !(isUnitType(t) && contains(switchTypes, getRegularTypeOfLiteralOrUniqueType(t))));
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
@@ -12797,7 +12833,7 @@ namespace ts {
             const objectLiteral = <ObjectLiteralExpression>element.parent;
             const type = getApparentTypeOfContextualType(objectLiteral);
             if (type) {
-                if (!hasDynamicName(element)) {
+                if (!hasUnboundDynamicName(element)) {
                     // For a (non-symbol) computed property, there is no reason to look up the name
                     // in the type. It will just be "__computed", which does not appear in any
                     // SymbolTable.
@@ -13255,11 +13291,10 @@ namespace ts {
                     typeFlags |= type.flags;
 
                     let prop: TransientSymbol;
-                    if (hasDynamicName(memberDecl) && isEntityNameExpression((<ComputedPropertyName>memberDecl.name).expression)) {
-                        const nameType = checkComputedPropertyName(<ComputedPropertyName>memberDecl.name);
-                        if (nameType && nameType.flags & TypeFlags.StringOrNumberLiteral) {
-                            prop = createSymbol(SymbolFlags.Property | SymbolFlags.Dynamic | member.flags, (<LiteralType>nameType).text);
-                            prop.dynamicSource = resolveEntityName(<EntityNameExpression>(<ComputedPropertyName>memberDecl.name).expression, SymbolFlags.Value);
+                    if (hasLateBoundName(memberDecl)) {
+                        const nameType = checkComputedPropertyName(memberDecl.name);
+                        if (nameType && nameType.flags & TypeFlags.PossiblyBindable) {
+                            prop = createSymbol(SymbolFlags.Property | SymbolFlags.Late | member.flags, getLateBoundNameFromType(nameType));
                         }
                     }
 
@@ -13334,7 +13369,7 @@ namespace ts {
                     checkNodeDeferred(memberDecl);
                 }
 
-                if (hasDynamicName(memberDecl) && !(member && member.flags & SymbolFlags.Dynamic)) {
+                if (hasUnboundDynamicName(memberDecl)) {
                     if (isNumericName(memberDecl.name)) {
                         hasComputedNumberProperty = true;
                     }
@@ -15900,15 +15935,14 @@ namespace ts {
             }
 
             const returnType = getReturnTypeOfSignature(signature);
-            // Treat any call to the global 'Symbol' function that is part of a variable or property
+            // Treat any call to the global 'Symbol' function that is part of a const variable or readonly property
             // as a fresh unique symbol literal type.
             if (returnType.flags & TypeFlags.ESSymbolLike && isSymbolOrSymbolForCall(node)) {
                 const parent = skipParentheses(node).parent;
-                if (parent.kind === SyntaxKind.VariableDeclaration ||
-                    parent.kind === SyntaxKind.PropertyDeclaration ||
-                    parent.kind === SyntaxKind.PropertyAssignment) {
+                if ((parent.kind === SyntaxKind.VariableDeclaration && parent.parent.flags & NodeFlags.Const) ||
+                    (parent.kind === SyntaxKind.PropertyDeclaration && hasModifier(parent, ModifierFlags.Readonly))) {
                     const symbol = getSymbolOfNode(parent);
-                    if (symbol) return getFreshTypeOfType(getUniqueTypeForSymbol(symbol));
+                    if (symbol) return getFreshTypeOfLiteralOrUniqueType(getUniqueTypeForSymbol(symbol));
                 }
             }
             return returnType;
@@ -16269,7 +16303,7 @@ namespace ts {
             if (!switchTypes.length) {
                 return false;
             }
-            return eachTypeContainedIn(mapType(type, getRegularTypeOfType), switchTypes);
+            return eachTypeContainedIn(mapType(type, getRegularTypeOfLiteralOrUniqueType), switchTypes);
         }
 
         function functionHasImplicitReturn(func: FunctionLikeDeclaration) {
@@ -16599,7 +16633,7 @@ namespace ts {
                 return silentNeverType;
             }
             if (node.operator === SyntaxKind.MinusToken && node.operand.kind === SyntaxKind.NumericLiteral) {
-                return getFreshTypeOfType(getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text));
+                return getFreshTypeOfLiteralOrUniqueType(getLiteralTypeForText(TypeFlags.NumberLiteral, "" + -(<LiteralExpression>node.operand).text));
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -17275,9 +17309,9 @@ namespace ts {
             }
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
-                    return getFreshTypeOfType(getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text));
+                    return getFreshTypeOfLiteralOrUniqueType(getLiteralTypeForText(TypeFlags.StringLiteral, (<LiteralExpression>node).text));
                 case SyntaxKind.NumericLiteral:
-                    return getFreshTypeOfType(getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text));
+                    return getFreshTypeOfLiteralOrUniqueType(getLiteralTypeForText(TypeFlags.NumberLiteral, (<LiteralExpression>node).text));
                 case SyntaxKind.TrueKeyword:
                     return trueType;
                 case SyntaxKind.FalseKeyword:
@@ -17333,7 +17367,7 @@ namespace ts {
         function checkDeclarationInitializer(declaration: VariableLikeDeclaration) {
             const type = getTypeOfExpression(declaration.initializer, /*cache*/ true);
             return getCombinedNodeFlags(declaration) & NodeFlags.Const ||
-                getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration) ||
+                (getCombinedModifierFlags(declaration) & ModifierFlags.Readonly && !isParameterPropertyDeclaration(declaration)) ||
                 isTypeAssertion(declaration.initializer) ? type : getWidenedLiteralType(type);
         }
 
@@ -18120,11 +18154,11 @@ namespace ts {
                 if (node.name.kind === SyntaxKind.ComputedPropertyName) {
                     checkComputedPropertyName(<ComputedPropertyName>node.name);
                 }
-                if (!hasDynamicName(node)) {
+                if (!hasUnboundDynamicName(node)) {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
+                    const otherAccessor = <AccessorDeclaration>getDeclarationOfKind(getSymbolOfNode(node), otherKind);
                     if (otherAccessor) {
                         if ((getModifierFlags(node) & ModifierFlags.AccessibilityModifier) !== (getModifierFlags(otherAccessor) & ModifierFlags.AccessibilityModifier)) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
@@ -19029,7 +19063,7 @@ namespace ts {
                 checkComputedPropertyName(<ComputedPropertyName>node.name);
             }
 
-            if (!hasDynamicName(node)) {
+            if (!hasUnboundDynamicName(node)) {
                 // first we want to check the local symbol that contain this declaration
                 // - if node.localSymbol !== undefined - this is current declaration is exported and localSymbol points to the local symbol
                 // - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
@@ -20422,10 +20456,11 @@ namespace ts {
                         // Only process instance properties with computed names here.
                         // Static properties cannot be in conflict with indexers,
                         // and properties with literal names were already checked.
-                        if (!(getModifierFlags(member) & ModifierFlags.Static) && hasDynamicName(member)) {
-                            const propType = getTypeOfSymbol(member.symbol);
-                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
-                            checkIndexConstraintForProperty(member.symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
+                        if (!(getModifierFlags(member) & ModifierFlags.Static) && hasUnboundDynamicName(member)) {
+                            const symbol = getSymbolOfNode(member);
+                            const propType = getTypeOfSymbol(symbol);
+                            checkIndexConstraintForProperty(symbol, propType, type, declaredStringIndexer, stringIndexType, IndexKind.String);
+                            checkIndexConstraintForProperty(symbol, propType, type, declaredNumberIndexer, numberIndexType, IndexKind.Number);
                         }
                     }
                 }
@@ -22463,7 +22498,7 @@ namespace ts {
             if (isRightSideOfQualifiedNameOrPropertyAccess(expr)) {
                 expr = <Expression>expr.parent;
             }
-            return getRegularTypeOfType(getTypeOfExpression(expr));
+            return getRegularTypeOfLiteralOrUniqueType(getTypeOfExpression(expr));
         }
 
         /**
@@ -22885,11 +22920,17 @@ namespace ts {
         function writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
             // Get type of the symbol if this is the valid symbol otherwise get type at location
             const symbol = getSymbolOfNode(declaration);
-            let type = symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))
-                ? getWidenedLiteralType(getTypeOfSymbol(symbol))
-                : unknownType;
-            if (type.flags & TypeFlags.Unique && type.symbol !== symbol) {
-                type = getRegularTypeOfUniqueType(type);
+            let type: Type = unknownType;
+            if (symbol && !(symbol.flags & (SymbolFlags.TypeLiteral | SymbolFlags.Signature))) {
+                type = getTypeOfSymbol(symbol);
+                if (type.flags & TypeFlags.Unique) {
+                    if (type.symbol !== symbol) {
+                        type = getRegularTypeOfUniqueType(type);
+                    }
+                }
+                else {
+                    type = getWidenedLiteralType(type);
+                }
             }
             if (flags & TypeFormatFlags.AddUndefined) {
                 type = includeFalsyTypes(type, TypeFlags.Undefined);
@@ -24028,11 +24069,8 @@ namespace ts {
         }
 
         function checkGrammarForNonSymbolComputedProperty(node: DeclarationName, message: DiagnosticMessage) {
-            if (isDynamicName(node)) {
-                if (!isEntityNameExpression((<ComputedPropertyName>node).expression) ||
-                    (checkExpressionCached((<ComputedPropertyName>node).expression).flags & (TypeFlags.StringOrNumberLiteral | TypeFlags.Unique)) === 0) {
-                    return grammarErrorOnNode(node, message);
-                }
+            if (isUnboundDynamicName(node)) {
+                return grammarErrorOnNode(node, message);
             }
         }
 

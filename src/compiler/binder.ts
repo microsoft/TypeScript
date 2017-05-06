@@ -221,7 +221,7 @@ namespace ts {
                     // other kinds of value declarations take precedence over modules
                     symbol.valueDeclaration = node;
                 }
-        }
+            }
         }
 
         // Should not be called on a declaration with a computed property name,

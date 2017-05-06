@@ -831,6 +831,18 @@ namespace ts {
         }
     }
 
+    export function getMembersOfDeclaration(node: Declaration): NodeArray<ClassElement | TypeElement | ObjectLiteralElement> | undefined {
+        switch (node.kind) {
+            case SyntaxKind.InterfaceDeclaration:
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.TypeLiteral:
+                return (<ClassLikeDeclaration | InterfaceDeclaration | TypeLiteralNode>node).members;
+            case SyntaxKind.ObjectLiteralExpression:
+                return (<ObjectLiteralExpression>node).properties;
+        }
+    }
+
     export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         if (node) {
             switch (node.kind) {

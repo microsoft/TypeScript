@@ -2788,7 +2788,7 @@ namespace ts {
         ExportStar              = 1 << 25,  // Export * declaration
         Optional                = 1 << 26,  // Optional property
         Transient               = 1 << 27,  // Transient symbol (created during type check)
-        Dynamic                 = 1 << 28,  // Dynamically resolved symbol from computed property
+        Late                    = 1 << 28,  // Late-bound symbol from computed property with a dynamic name (created during type check)
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -2872,7 +2872,7 @@ namespace ts {
         instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
         mapper?: TypeMapper;                // Type mapper for instantiation alias
         referenced?: boolean;               // True if alias symbol has been referenced as a value
-        containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
+        containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
         syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
@@ -2880,13 +2880,12 @@ namespace ts {
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
         typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
-        isDeclarationWithCollidingName?: boolean;    // True if symbol is block scoped redeclaration
+        isDeclarationWithCollidingName?: boolean; // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
         exportsSomeValue?: boolean;         // True if module exports some value (not just types)
-        dynamicMembers?: SymbolTable;       // Dynamic members with literal names resolved during check
-        resolvedMembers?: SymbolTable;
-        dynamicSource?: Symbol;
-        uniqueType?: Type;                  // ESSymbol Unique type for a symbol.
+        lateSymbol?: Symbol;                // Late-bound symbol for a computed property
+        lateMembers?: Map<TransientSymbol>; // Late-bound members resolved during check
+        resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
     }
 
     /* @internal */
@@ -3008,6 +3007,8 @@ namespace ts {
         Nullable = Undefined | Null,
         Literal = StringLiteral | NumberLiteral | BooleanLiteral | EnumLiteral | Unique,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
+        /* @internal */
+        PossiblyBindable = StringOrNumberLiteral | Unique,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,

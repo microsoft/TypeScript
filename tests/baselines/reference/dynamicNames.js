@@ -3,76 +3,91 @@
 //// [module.ts]
 export const c0 = "a";
 export const c1 = 1;
+export const s0 = Symbol();
 export interface T0 {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 }
 export declare class T1 implements T2 {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 }
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 };
 
 //// [main.ts]
-import { c0, c1, T0, T1, T2, T3 } from "./module";
+import { c0, c1, s0, T0, T1, T2, T3 } from "./module";
 import * as M from "./module";
 
 namespace N {
     export const c2 = "a";
     export const c3 = 1;
+    export const s1 = s0;
 
     export interface T4 {
         [N.c2]: number;
         [N.c3]: string;
+        [N.s1]: boolean;
     }
     export declare class T5 implements T4 {
         [N.c2]: number;
         [N.c3]: string;
+        [N.s1]: boolean;
     }
     export declare class T6 extends T5 {
     }
     export declare type T7 = {
         [N.c2]: number;
         [N.c3]: string;
+        [N.s1]: boolean;
     };
 }
 
-const c4 = "a";
-const c5 = 1;
+export const c4 = "a";
+export const c5 = 1;
+export const s2 = s0;
 
 interface T8 {
     [c4]: number;
     [c5]: string;
+    [s2]: boolean;
 }
 declare class T9 implements T8 {
     [c4]: number;
     [c5]: string;
+    [s2]: boolean;
 }
 declare class T10 extends T9 {
 }
 declare type T11 = {
     [c4]: number;
     [c5]: string;
+    [s2]: boolean;
 };
 
 interface T12 {
     a: number;
     1: string;
+    [s2]: boolean;
 }
 declare class T13 implements T2 {
     a: number;
     1: string;
+    [s2]: boolean;
 }
 declare class T14 extends T13 {
 }
 declare type T15 = {
     a: number;
     1: string;
+    [s2]: boolean;
 };
 
 let t0: T0;
@@ -101,21 +116,34 @@ t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3,
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
 
+// object literals
+export const o1 = {
+    [c4]: 1,
+    [c5]: "a",
+    [s2]: true
+};
+
+export const o2: T0 = o1;
+
 //// [module.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.c0 = "a";
 exports.c1 = 1;
+exports.s0 = Symbol();
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const module_1 = require("./module");
 var N;
 (function (N) {
     N.c2 = "a";
     N.c3 = 1;
+    N.s1 = module_1.s0;
 })(N || (N = {}));
-const c4 = "a";
-const c5 = 1;
+exports.c4 = "a";
+exports.c5 = 1;
+exports.s2 = module_1.s0;
 let t0;
 let t1;
 let t2;
@@ -140,23 +168,44 @@ let t15;
 t0 = t1, t0 = t2, t0 = t3, t1 = t0, t1 = t2, t1 = t3, t2 = t0, t2 = t1, t2 = t3, t3 = t0, t3 = t1, t3 = t2;
 t4 = t5, t4 = t6, t4 = t7, t5 = t4, t5 = t6, t5 = t7, t6 = t4, t6 = t5, t6 = t7, t7 = t4, t7 = t5, t7 = t6;
 t0 = t12, t0 = t13, t0 = t14, t0 = t15, t12 = t0, t13 = t0, t14 = t0, t15 = t0;
+// object literals
+exports.o1 = {
+    [exports.c4]: 1,
+    [exports.c5]: "a",
+    [exports.s2]: true
+};
+exports.o2 = exports.o1;
 
 
 //// [module.d.ts]
 export declare const c0 = "a";
 export declare const c1 = 1;
+export declare const s0: symbol();
 export interface T0 {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 }
 export declare class T1 implements T2 {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 }
 export declare class T2 extends T1 {
 }
 export declare type T3 = {
     [c0]: number;
     [c1]: string;
+    [s0]: boolean;
 };
 //// [main.d.ts]
+import { s0, T0 } from "./module";
+export declare const c4 = "a";
+export declare const c5 = 1;
+export declare const s2: typeof s0;
+export declare const o1: {
+    [c4]: number;
+    [c5]: string;
+    [s2]: boolean;
+};
+export declare const o2: T0;

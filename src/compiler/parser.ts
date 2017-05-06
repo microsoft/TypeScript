@@ -2533,10 +2533,10 @@ namespace ts {
                 case SyntaxKind.NeverKeyword:
                 case SyntaxKind.ObjectKeyword:
                     // If these are followed by a dot, then parse these out as a dotted type reference instead.
-                    return tryParse(parseKeywordAndNoDot) 
+                    return tryParse(parseKeywordAndNoDot)
                         || parseTypeReference();
                 case SyntaxKind.SymbolKeyword:
-                    return tryParse(parseSymbolType) 
+                    return tryParse(parseSymbolType)
                         || parseTypeReference();
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:

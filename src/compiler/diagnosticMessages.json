@@ -2136,6 +2136,10 @@
         "category": "Error",
         "code": 2711
     },
+    "Duplicate declaration '{0}'.": {
+        "category": "Error",
+        "code": 2712
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
