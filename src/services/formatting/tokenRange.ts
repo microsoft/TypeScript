@@ -3,23 +3,13 @@
 /* @internal */
 namespace ts.formatting {
     export namespace Shared {
-        export interface ITokenAccess {
-            GetTokens(): SyntaxKind[];
-            Contains(token: SyntaxKind): boolean;
-            isSpecific(): boolean;
+        const allTokens: SyntaxKind[] = [];
+        for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
+            allTokens.push(token);
         }
 
-        export class TokenRangeAccess implements ITokenAccess {
-            private tokens: SyntaxKind[];
-
-            constructor(from: SyntaxKind, to: SyntaxKind, except: SyntaxKind[]) {
-                this.tokens = [];
-                for (let token = from; token <= to; token++) {
-                    if (ts.indexOf(except, token) < 0) {
-                        this.tokens.push(token);
-                    }
-                }
-            }
+        class TokenValuesAccess implements TokenRange {
+            constructor(private readonly tokens: SyntaxKind[] = []) { }
 
             public GetTokens(): SyntaxKind[] {
                 return this.tokens;
@@ -32,27 +22,8 @@ namespace ts.formatting {
             public isSpecific() { return true; }
         }
 
-        export class TokenValuesAccess implements ITokenAccess {
-            private tokens: SyntaxKind[];
-
-            constructor(tks: SyntaxKind[]) {
-                this.tokens = tks && tks.length ? tks : <SyntaxKind[]>[];
-            }
-
-            public GetTokens(): SyntaxKind[] {
-                return this.tokens;
-            }
-
-            public Contains(token: SyntaxKind): boolean {
-                return this.tokens.indexOf(token) >= 0;
-            }
-
-            public isSpecific() { return true; }
-        }
-
-        export class TokenSingleValueAccess implements ITokenAccess {
-            constructor(public token: SyntaxKind) {
-            }
+        class TokenSingleValueAccess implements TokenRange {
+            constructor(private readonly token: SyntaxKind) {}
 
             public GetTokens(): SyntaxKind[] {
                 return [this.token];
@@ -65,12 +36,7 @@ namespace ts.formatting {
             public isSpecific() { return true; }
         }
 
-        const allTokens: SyntaxKind[] = [];
-        for (let token = SyntaxKind.FirstToken; token <= SyntaxKind.LastToken; token++) {
-            allTokens.push(token);
-        }
-
-        export class TokenAllAccess implements ITokenAccess {
+        class TokenAllAccess implements TokenRange {
             public GetTokens(): SyntaxKind[] {
                 return allTokens;
             }
@@ -86,8 +52,8 @@ namespace ts.formatting {
             public isSpecific() { return false; }
         }
 
-        export class TokenAllExceptAccess implements ITokenAccess {
-            constructor(readonly except: SyntaxKind) {}
+        class TokenAllExceptAccess implements TokenRange {
+            constructor(private readonly except: SyntaxKind) {}
 
             public GetTokens(): SyntaxKind[] {
                 return allTokens.filter(t => t !== this.except);
@@ -100,55 +66,58 @@ namespace ts.formatting {
             public isSpecific() { return false; }
         }
 
-        export class TokenRange {
-            constructor(public tokenAccess: ITokenAccess) {
+        export interface TokenRange {
+            GetTokens(): SyntaxKind[];
+            Contains(token: SyntaxKind): boolean;
+            isSpecific(): boolean;
+        }
+
+        export namespace TokenRange {
+            export function FromToken(token: SyntaxKind): TokenRange {
+                return new TokenSingleValueAccess(token);
             }
 
-            static FromToken(token: SyntaxKind): TokenRange {
-                return new TokenRange(new TokenSingleValueAccess(token));
+            export function FromTokens(tokens: SyntaxKind[]): TokenRange {
+                return new TokenValuesAccess(tokens);
             }
 
-            static FromTokens(tokens: SyntaxKind[]): TokenRange {
-                return new TokenRange(new TokenValuesAccess(tokens));
+            export function FromRange(from: SyntaxKind, to: SyntaxKind, except: SyntaxKind[] = []): TokenRange {
+                const tokens: SyntaxKind[] = [];
+                for (let token = from; token <= to; token++) {
+                    if (ts.indexOf(except, token) < 0) {
+                        tokens.push(token);
+                    }
+                }
+                return new TokenValuesAccess(tokens);
             }
 
-            static FromRange(f: SyntaxKind, to: SyntaxKind, except: SyntaxKind[] = []): TokenRange {
-                return new TokenRange(new TokenRangeAccess(f, to, except));
+            export function AnyExcept(token: SyntaxKind): TokenRange {
+                return new TokenAllExceptAccess(token);
             }
 
-            static AnyExcept(token: SyntaxKind): TokenRange {
-                return new TokenRange(new TokenAllExceptAccess(token));
-            }
-
-            public GetTokens(): SyntaxKind[] {
-                return this.tokenAccess.GetTokens();
-            }
-
-            public Contains(token: SyntaxKind): boolean {
-                return this.tokenAccess.Contains(token);
-            }
-
-            public toString(): string {
-                return this.tokenAccess.toString();
-            }
-
-            public isSpecific() {
-                return this.tokenAccess.isSpecific();
-            }
-
-            static Any: TokenRange = new TokenRange(new TokenAllAccess());
-            static AnyIncludingMultilineComments = TokenRange.FromTokens([...allTokens, SyntaxKind.MultiLineCommentTrivia]);
-            static Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
-            static BinaryOperators = TokenRange.FromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
-            static BinaryKeywordOperators = TokenRange.FromTokens([SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword]);
-            static UnaryPrefixOperators = TokenRange.FromTokens([SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken]);
-            static UnaryPrefixExpressions = TokenRange.FromTokens([SyntaxKind.NumericLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken, SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPreincrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPostincrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
-            static UnaryPredecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
-            static UnaryPostdecrementExpressions = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
-            static Comments = TokenRange.FromTokens([SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia]);
-            static TypeNames = TokenRange.FromTokens([SyntaxKind.Identifier, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword, SyntaxKind.SymbolKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
+            export const Any: TokenRange = new TokenAllAccess();
+            export const AnyIncludingMultilineComments = TokenRange.FromTokens([...allTokens, SyntaxKind.MultiLineCommentTrivia]);
+            export const Keywords = TokenRange.FromRange(SyntaxKind.FirstKeyword, SyntaxKind.LastKeyword);
+            export const BinaryOperators = TokenRange.FromRange(SyntaxKind.FirstBinaryOperator, SyntaxKind.LastBinaryOperator);
+            export const BinaryKeywordOperators = TokenRange.FromTokens([
+                SyntaxKind.InKeyword, SyntaxKind.InstanceOfKeyword, SyntaxKind.OfKeyword, SyntaxKind.AsKeyword, SyntaxKind.IsKeyword]);
+            export const UnaryPrefixOperators = TokenRange.FromTokens([
+                SyntaxKind.PlusPlusToken, SyntaxKind.MinusMinusToken, SyntaxKind.TildeToken, SyntaxKind.ExclamationToken]);
+            export const UnaryPrefixExpressions = TokenRange.FromTokens([
+                SyntaxKind.NumericLiteral, SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.OpenBracketToken,
+                SyntaxKind.OpenBraceToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            export const UnaryPreincrementExpressions = TokenRange.FromTokens([
+                SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            export const UnaryPostincrementExpressions = TokenRange.FromTokens([
+                SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
+            export const UnaryPredecrementExpressions = TokenRange.FromTokens([
+                SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword]);
+            export const UnaryPostdecrementExpressions = TokenRange.FromTokens([
+                SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword]);
+            export const Comments = TokenRange.FromTokens([SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia]);
+            export const TypeNames = TokenRange.FromTokens([
+                SyntaxKind.Identifier, SyntaxKind.NumberKeyword, SyntaxKind.StringKeyword, SyntaxKind.BooleanKeyword,
+                SyntaxKind.SymbolKeyword, SyntaxKind.VoidKeyword, SyntaxKind.AnyKeyword]);
         }
     }
 }
