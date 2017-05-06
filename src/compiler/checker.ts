@@ -2278,7 +2278,7 @@ namespace ts {
                 result |= NodeBuilderFlags.AddUndefined;
             }
 
-            return result;       
+            return result;
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
@@ -2325,7 +2325,7 @@ namespace ts {
             };
 
             interface NodeBuilderContext {
-                readonly enclosingDeclaration: Node | undefined;
+                enclosingDeclaration: Node | undefined;
                 readonly flags: NodeBuilderFlags | undefined;
 
                 // State
@@ -2382,7 +2382,7 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.Enum) {
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, context);
+                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.StringLiteral)) {
@@ -2396,7 +2396,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.EnumLiteral) {
                     const parentSymbol = getParentOfSymbol(type.symbol);
-                    const parentName = symbolToName(parentSymbol, /*expectsIdentifier*/ false, context);
+                    const parentName = symbolToName(parentSymbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                     const name = getNameOfSymbol(type.symbol, context);
                     const enumLiteralName = createQualifiedName(parentName, name);
                     return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
@@ -2436,19 +2436,19 @@ namespace ts {
                 }
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, context);
+                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                     // TODO(aozgaa): handle type arguments.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, context);
+                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
 
                 if (!inTypeAlias && type.aliasSymbol &&
                     isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
-                    const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, context);
+                    const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                     const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, /*addInElementTypeFlag*/ false);
                     return createTypeReferenceNode(name, typeArgumentNodes);
                 }
@@ -2526,14 +2526,14 @@ namespace ts {
                         if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule) ||
                             shouldWriteTypeOfFunctionSymbol()) {
-                            return createTypeQueryNodeFromSymbol(symbol);
+                            return createTypeQueryNodeFromSymbol(symbol, SymbolFlags.Value);
                         }
                         else if (contains(context.symbolStack, symbol)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = symbolToName(typeAlias, /*expectsIdentifier*/ false, context);
+                                const entityName = symbolToName(typeAlias, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
                                 return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                             }
                             else {
@@ -2618,8 +2618,8 @@ namespace ts {
                     return false;
                 }
 
-                function createTypeQueryNodeFromSymbol(symbol: Symbol) {
-                    const entityName = symbolToName(symbol, /*expectsIdentifier*/ false, context);
+                function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
+                    const entityName = symbolToName(symbol, /*expectsIdentifier*/ false, symbolFlags, context);
                     return createTypeQueryNode(entityName);
                 }
 
@@ -2665,7 +2665,7 @@ namespace ts {
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
                                     // inFirstTypeArgument???
-                                    const qualifiedNamePart = symbolToName(parent, /*expectsIdentifier*/ true, context);
+                                    const qualifiedNamePart = symbolToName(parent, /*expectsIdentifier*/ true, SymbolFlags.Type, context);
                                     if (!qualifiedName) {
                                         qualifiedName = createQualifiedName(qualifiedNamePart, /*right*/ undefined);
                                     }
@@ -2679,7 +2679,7 @@ namespace ts {
                             }
                         }
                         let entityName: EntityName = undefined;
-                        const nameIdentifier = symbolToName(type.symbol, /*expectsIdentifier*/ true, context);
+                        const nameIdentifier = symbolToName(type.symbol, /*expectsIdentifier*/ true, SymbolFlags.Type, context);
                         if (qualifiedName) {
                             Debug.assert(!qualifiedName.right);
                             qualifiedName.right = nameIdentifier;
@@ -2717,7 +2717,10 @@ namespace ts {
                     // TODO: make logic mirror that of writeObjectLiteralType
                     for (const propertySymbol of properties) {
                         const propertyType = getTypeOfSymbol(propertySymbol);
-                        const propertyName = symbolToName(propertySymbol, /*expectsIdentifier*/ true, context);
+                        const saveEnclosingDeclaration = context.enclosingDeclaration;
+                        context.enclosingDeclaration = undefined;
+                        const propertyName = symbolToName(propertySymbol, /*expectsIdentifier*/ true, SymbolFlags.Value, context);
+                        context.enclosingDeclaration = saveEnclosingDeclaration;
                         const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
                         if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
                             const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
@@ -2767,7 +2770,6 @@ namespace ts {
             }
 
             function signatureToSignatureDeclarationHelper(signature: Signature, kind: SyntaxKind, context: NodeBuilderContext): SignatureDeclaration {
-
                 const typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
                 const parameters = signature.parameters.map(parameter => symbolToParameterDeclaration(parameter, context));
                 if (signature.thisParameter) {
@@ -2801,7 +2803,7 @@ namespace ts {
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
-                const name = symbolToName(type.symbol, /*expectsIdentifier*/ true, context);
+                const name = symbolToName(type.symbol, /*expectsIdentifier*/ true, SymbolFlags.Type, context);
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
@@ -2825,15 +2827,15 @@ namespace ts {
 
             // TODO: add meaning: SymbolFlags argument.
             // TODO: add SymbolFormatFlags?? Yes to add outer type parameters. Defer UseOnlyExternalAliasing until a separate symbolbuilder PR.
-            function symbolToName(symbol: Symbol, expectsIdentifier: true, context: NodeBuilderContext): Identifier;
-            function symbolToName(symbol: Symbol, expectsIdentifier: false, context: NodeBuilderContext): EntityName;
-            function symbolToName(symbol: Symbol, expectsIdentifier: boolean, context: NodeBuilderContext): EntityName {
+            function symbolToName(symbol: Symbol, expectsIdentifier: true, meaning: SymbolFlags, context: NodeBuilderContext): Identifier;
+            function symbolToName(symbol: Symbol, expectsIdentifier: false, meaning: SymbolFlags, context: NodeBuilderContext): EntityName;
+            function symbolToName(symbol: Symbol, expectsIdentifier: boolean, meaning: SymbolFlags, context: NodeBuilderContext): EntityName {
 
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
                 if (!isTypeParameter && context.enclosingDeclaration) {
-                    chain = getSymbolChain(symbol, SymbolFlags.None, /*endOfChain*/ true);
+                    chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true);
                     Debug.assert(chain && chain.length > 0);
                 }
                 else {
