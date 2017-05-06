@@ -2308,8 +2308,8 @@ interface Console {
     dirxml(value: any): void;
     error(message?: any, ...optionalParams: any[]): void;
     exception(message?: string, ...optionalParams: any[]): void;
-    group(groupTitle?: string): void;
-    groupCollapsed(groupTitle?: string): void;
+    group(groupTitle?: string, ...optionalParams: any[]): void;
+    groupCollapsed(groupTitle?: string, ...optionalParams: any[]): void;
     groupEnd(): void;
     info(message?: any, ...optionalParams: any[]): void;
     log(message?: any, ...optionalParams: any[]): void;
