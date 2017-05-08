@@ -3539,8 +3539,6 @@
         "category": "Message",
         "code": 90021
     },
-
-
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
@@ -3552,5 +3550,9 @@
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019
+    },
+    "Convert function '{0}' to ES6 class.": {
+        "category": "CodeFix",
+        "code": 100000
     }
 }

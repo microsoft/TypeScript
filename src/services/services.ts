@@ -25,7 +25,9 @@
 /// <reference path='formatting\smartIndenter.ts' />
 /// <reference path='textChanges.ts' />
 /// <reference path='codeFixProvider.ts' />
+/// <reference path='refactorProvider.ts' />
 /// <reference path='codefixes\fixes.ts' />
+/// <reference path='refactors\refactors.ts' />
 
 namespace ts {
     /** The version of the language service API */
@@ -1957,11 +1959,60 @@ namespace ts {
             return Rename.getRenameInfo(program.getTypeChecker(), defaultLibFileName, getCanonicalFileName, getValidSourceFile(fileName), position);
         }
 
+        function getCodeFixDiagnostics(fileName: string): Diagnostic[] {
+            synchronizeHostData();
+
+            const newLineCharacter = host.getNewLine();
+            const boundSourceFile = getValidSourceFile(fileName);
+            const program = getProgram();
+            const context: CodeFixDiagnoseContext = { boundSourceFile, newLineCharacter, program, rulesProvider: ruleProvider };
+            const result: Diagnostic[] = [];
+
+            forEachChild(boundSourceFile, visitor);
+            return result;
+
+            function visitor(node: Node): void {
+                const diags = codefix.getCodeFixDiagnosticsForNode(context, node);
+                if (diags) {
+                    addRange(result, diags);
+                }
+
+                forEachChild(node, visitor);
+            }
+        }
+
+        function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            synchronizeHostData();
+            const newLineCharacter = host.getNewLine();
+            const nonBoundSourceFile = getNonBoundSourceFile(fileName);
+            const context: LightRefactorContext = { newLineCharacter, nonBoundSourceFile };
+            return refactor.getApplicableRefactors(context, positionOrRange);
+        }
+
+        function getRefactorCodeActions(
+            fileName: string,
+            formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorName: string): CodeAction[] | undefined {
+
+            const context: RefactorContext = {
+                boundSourceFile: getValidSourceFile(fileName),
+                newLineCharacter: host.getNewLine(),
+                program: getProgram(),
+                rulesProvider: getRuleProvider(formatOptions)
+            };
+
+            return refactor.getRefactorCodeActions(context, positionOrRange, refactorName);
+        }
+
         return {
             dispose,
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
+            getCodeFixDiagnostics,
+            getApplicableRefactors,
+            getRefactorCodeActions,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,

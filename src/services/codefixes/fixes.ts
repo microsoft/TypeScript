@@ -9,3 +9,4 @@
 /// <reference path='importFixes.ts' />
 /// <reference path='disableJsDiagnostics.ts' />
 /// <reference path='helpers.ts' />
+/// <reference path="convertFunctionToEs6Class.ts" />
