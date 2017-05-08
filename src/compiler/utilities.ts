@@ -566,7 +566,7 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
-                errorNode = (<RealDeclaration>node).name;
+                errorNode = (<NamedDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
@@ -1802,7 +1802,7 @@ namespace ts {
             }
         }
         else {
-            return declaration.name;
+            return (declaration as NamedDeclaration).name;
         }
     }
 
@@ -1826,7 +1826,7 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
                 // Name in member declaration or property name in property access
-                return (<RealDeclaration | PropertyAccessExpression>parent).name === node;
+                return (<NamedDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
                 // Name on right hand side of dot in a type query
                 if ((<QualifiedName>parent).right === node) {
@@ -2790,7 +2790,7 @@ namespace ts {
             forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
                     && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
-                    const memberName = getPropertyNameForPropertyNameNode(member.name);
+                    const memberName = getPropertyNameForPropertyNameNode((member as NamedDeclaration).name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
                         if (!firstAccessor) {
@@ -4102,7 +4102,7 @@ namespace ts {
             || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
-    export function isDeclaration(node: Node): node is RealDeclaration {
+    export function isDeclaration(node: Node): node is NamedDeclaration {
         return isDeclarationKind(node.kind);
     }
 
