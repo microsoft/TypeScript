@@ -31,7 +31,7 @@ var obj4 = { x: 32, y: 32 };
 var obj5 = { x: 32, y: 32 };
 <test1 x="ok" {...obj5} />
 
-// Error
+// Ok
 var obj6 = { x: 'ok', y: 32, extra: 100 };
 <test1 {...obj6} />
 
@@ -56,7 +56,7 @@ var obj4 = { x: 32, y: 32 };
 // Error
 var obj5 = { x: 32, y: 32 };
 <test1 x="ok" {...obj5}/>;
-// Error
+// Ok
 var obj6 = { x: 'ok', y: 32, extra: 100 };
 <test1 {...obj6}/>;
 // OK (spread override)
