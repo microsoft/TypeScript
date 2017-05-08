@@ -304,7 +304,7 @@ namespace ts {
         }
 
         function getDisplayName(node: Declaration): string {
-            return (node as RealDeclaration).name ? declarationNameToString((node as RealDeclaration).name) : getDeclarationName(node);
+            return (node as NamedDeclaration).name ? declarationNameToString((node as NamedDeclaration).name) : getDeclarationName(node);
         }
 
         /**
@@ -367,8 +367,8 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else {
-                        if ((node as RealDeclaration).name) {
-                            (node as RealDeclaration).name.parent = node;
+                        if ((node as NamedDeclaration).name) {
+                            (node as NamedDeclaration).name.parent = node;
                         }
 
                         // Report errors every position with duplicate declaration
@@ -440,9 +440,9 @@ namespace ts {
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
                 const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
-                    node.name &&
-                    node.name.kind === SyntaxKind.Identifier &&
-                    (<Identifier>node.name).isInJSDocNamespace;
+                    (node as JSDocTypedefTag).name &&
+                    (node as JSDocTypedefTag).name.kind === SyntaxKind.Identifier &&
+                    ((node as JSDocTypedefTag).name as Identifier).isInJSDocNamespace;
                 if ((!isAmbientModule(node) && (hasExportModifier || container.flags & NodeFlags.ExportContext)) || isJSDocTypedefInJSDocNamespace) {
                     const exportKind =
                         (symbolFlags & SymbolFlags.Value ? SymbolFlags.ExportValue : 0) |

@@ -52,7 +52,7 @@ namespace ts.NavigateTo {
         rawItems = filter(rawItems, item => {
             const decl = item.declaration;
             if (decl.kind === SyntaxKind.ImportClause || decl.kind === SyntaxKind.ImportSpecifier || decl.kind === SyntaxKind.ImportEqualsDeclaration) {
-                const importer = checker.getSymbolAtLocation(decl.name);
+                const importer = checker.getSymbolAtLocation((decl as NamedDeclaration).name);
                 const imported = checker.getAliasedSymbol(importer);
                 return importer.name !== imported.name;
             }

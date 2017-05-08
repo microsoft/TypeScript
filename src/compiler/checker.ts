@@ -3633,8 +3633,8 @@ namespace ts {
                     case SyntaxKind.BindingElement:
                         return isDeclarationVisible(<Declaration>node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node.name) &&
-                            !(<BindingPattern>node.name).elements.length) {
+                        if (isBindingPattern((node as VariableDeclaration).name) &&
+                            !((node as VariableDeclaration).name as BindingPattern).elements.length) {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
@@ -6235,8 +6235,8 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        return (<RealDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName
-                            && traverse((<RealDeclaration>node).name);
+                        return (<NamedDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName
+                            && traverse((<NamedDeclaration>node).name);
 
                     default:
                         return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && forEachChild(node, traverse);
@@ -9879,7 +9879,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (!declaration.name) {
+                    if (!(declaration as NamedDeclaration).name) {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
                     }
@@ -21832,7 +21832,7 @@ namespace ts {
         function isTypeDeclarationName(name: Node): boolean {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
-                (<RealDeclaration>name.parent).name === name;
+                (<NamedDeclaration>name.parent).name === name;
         }
 
         function isTypeDeclaration(node: Node): boolean {
