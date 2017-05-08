@@ -200,7 +200,7 @@ namespace ts.codefix {
     }
 
     export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
-        return createMethodDeclaration(
+        return createMethod(
             /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,
