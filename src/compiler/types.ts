@@ -2571,7 +2571,6 @@ namespace ts {
         WriteOwnNameForAnyLike                  = 1 << 4,   // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
         // TODO
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
-        // TODO
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         // TODO
         UseTypeAliasValue                       = 1 << 7,   // Serialize the type instead of using type-alias. This is needed when we emit declaration file.

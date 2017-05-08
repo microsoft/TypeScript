@@ -2834,7 +2834,7 @@ namespace ts {
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
-                if (!isTypeParameter && context.enclosingDeclaration) {
+                if (!isTypeParameter && (context.enclosingDeclaration || context.flags & NodeBuilderFlags.UseFullyQualifiedType)) {
                     chain = getSymbolChain(symbol, meaning, /*endOfChain*/ true);
                     Debug.assert(chain && chain.length > 0);
                 }
