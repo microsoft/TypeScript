@@ -1,0 +1,42 @@
+tests/cases/compiler/weird.js(1,1): error TS2304: Cannot find name 'someFunction'.
+tests/cases/compiler/weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
+tests/cases/compiler/weird.js(4,17): error TS8009: 'const' can only be used in a .ts file.
+tests/cases/compiler/weird.js(4,17): error TS1248: A class member cannot have the 'const' keyword.
+tests/cases/compiler/weird.js(5,3): error TS2377: Constructors for derived classes must contain a 'super' call.
+tests/cases/compiler/weird.js(6,4): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/compiler/weird.js(8,25): error TS7006: Parameter 'error' implicitly has an 'any' type.
+tests/cases/compiler/weird.js(9,54): error TS2663: Cannot find name 'DEFAULT_MESSAGE'. Did you mean the instance member 'this.DEFAULT_MESSAGE'?
+
+
+==== tests/cases/compiler/weird.js (8 errors) ====
+    someFunction(function(BaseClass) {
+    ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'someFunction'.
+                          ~~~~~~~~~
+!!! error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
+            'use strict';
+    	class Hello extends BaseClass {
+                    const DEFAULT_MESSAGE = "nop!";
+                    ~~~~~
+!!! error TS8009: 'const' can only be used in a .ts file.
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1248: A class member cannot have the 'const' keyword.
+    		constructor() {
+    		~~~~~~~~~~~~~~~
+    			this.foo = "bar";
+    ~~~~~~~~~~~~~~~~~~~~
+    			~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+    		}
+    ~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
+                    _render(error) {
+                            ~~~~~
+!!! error TS7006: Parameter 'error' implicitly has an 'any' type.
+                        const message = error.message || DEFAULT_MESSAGE;
+                                                         ~~~~~~~~~~~~~~~
+!!! error TS2663: Cannot find name 'DEFAULT_MESSAGE'. Did you mean the instance member 'this.DEFAULT_MESSAGE'?
+                    }
+    	}
+    });
+    
