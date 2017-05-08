@@ -108,10 +108,6 @@ namespace ts.FindAllReferences {
             switch (def.type) {
                 case "symbol": {
                     const { symbol, node } = def;
-                    const declarations = symbol.declarations;
-                    if (!declarations || declarations.length === 0) {
-                        return undefined;
-                    }
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, node, checker);
                     const name = displayParts.map(p => p.text).join("");
                     return { node, name, kind, displayParts };
@@ -273,7 +269,7 @@ namespace ts.FindAllReferences.Core {
             }
         }
 
-        let symbol = checker.getSymbolAtLocation(node);
+        const symbol = checker.getSymbolAtLocation(node);
 
         // Could not find a symbol e.g. unknown identifier
         if (!symbol) {
@@ -282,14 +278,6 @@ namespace ts.FindAllReferences.Core {
                 return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, cancellationToken);
             }
             // Can't have references to something that we have no symbol for.
-            return undefined;
-        }
-
-        // If this property is derived from another one, find references on the original property instead.
-        symbol = (symbol as ts.SymbolLinks).syntheticOrigin || symbol;
-
-        // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-        if (!symbol.declarations || !symbol.declarations.length) {
             return undefined;
         }
 
