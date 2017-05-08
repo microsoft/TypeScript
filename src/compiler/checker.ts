@@ -2812,16 +2812,26 @@ namespace ts {
                 const parameterType = getTypeOfSymbol(parameterSymbol);
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
                 const name = getDeepSynthesizedClone(parameterDeclaration.name);
+
+                let questionToken: Token<SyntaxKind.QuestionToken> | undefined;
+                let initializer: Expression | undefined;
+                if (isOptionalParameter(parameterDeclaration)) {
+                    questionToken = createToken(SyntaxKind.QuestionToken);
+                }
+                else {
                 // TODO(aozgaa): In the future, check initializer accessibility.
+                    initializer = parameterDeclaration.initializer;
+                }
                 const parameterNode = createParameter(
                     parameterDeclaration.decorators,
                     parameterDeclaration.modifiers,
-                    parameterDeclaration.dotDotDotToken && createToken(SyntaxKind.DotDotDotToken),
-                    // Clone name to remove trivia.
+                    (parameterDeclaration ? isRestParameter(parameterDeclaration) : isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) ?
+                        createToken(SyntaxKind.DotDotDotToken) :
+                        undefined,
                     name,
-                    parameterDeclaration.questionToken && createToken(SyntaxKind.QuestionToken),
+                    questionToken,
                     parameterTypeNode,
-                    parameterDeclaration.initializer);
+                    initializer);
                 return parameterNode;
             }
 
