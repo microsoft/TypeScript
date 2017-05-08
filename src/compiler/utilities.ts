@@ -4642,26 +4642,40 @@ namespace ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
-    export function levenshtein(s1: string, s2: string): number {
-        let previous: number[] = new Array(s2.length + 1);
-        let current: number[] = new Array(s2.length + 1);
-        for (let i = 0; i < s2.length + 1; i++) {
+    const CHANGE_COST = 1;
+    const INSERT_COST = 1;
+    const DELETE_COST = 1;
+    const TRANSPOSE_COST = 0.95; // Transpositions slightly cheaper than insertion/deletion/substitution to promote transposed errors
+    export const MIN_LEV_DIST = TRANSPOSE_COST;
+    export function dameraulevenshtein(s1: string, s2: string): number {
+        const rowLength = s2.length + 1;
+        let prevprev: number[] = new Array(rowLength);
+        let previous: number[] = new Array(rowLength);
+        let current: number[] = new Array(rowLength);
+        for (let i = 0; i < rowLength; i++) {
+            prevprev[i] = Infinity;
             previous[i] = i;
-            current[i] = -1;
         }
+
         for (let i = 1; i < s1.length + 1; i++) {
             current[0] = i;
-            for (let j = 1; j < s2.length + 1; j++) {
-                current[j] = Math.min(
-                    previous[j] + 1,
-                    current[j - 1] + 1,
-                    previous[j - 1] + (s1[i - 1] === s2[j - 1] ? 0 : 2));
+            for (let j = 1; j < rowLength; j++) {
+                const eq = s1.charCodeAt(i - 1) === s2.charCodeAt(j - 1);
+                let min = previous[j] + DELETE_COST;
+                let tmp = current[j - 1] + INSERT_COST;
+                if (tmp < min) min = tmp;
+                if ((tmp = previous[j - 1] + (eq ? 0 : CHANGE_COST)) < min) min = tmp;
+                if ((tmp = (i > 1 && j > 1 && s1.charCodeAt(i - 1) === s2.charCodeAt(j - 2) && s1.charCodeAt(i - 2) === s2.charCodeAt(j - 1)) ? (prevprev[j - 2] + (eq ? 0 : TRANSPOSE_COST)) : Infinity) < min) min = tmp;
+                current[j] = min;
             }
+
             // shift current back to previous, and then reuse previous' array
-            const tmp = previous;
+            const tmp = prevprev;
+            prevprev = previous;
             previous = current;
             current = tmp;
         }
-        return previous[previous.length - 1];
+
+        return previous[rowLength - 1];
     }
 }
