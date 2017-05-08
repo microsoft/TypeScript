@@ -13285,11 +13285,7 @@ namespace ts {
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
-                    const exprType = checkExpression(attributeDecl.expression);
-                    if (!isValidSpreadType(exprType)) {
-                        error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                        hasSpreadAnyType = true;
-                    }
+                    const exprType = getApparentType(checkExpression(attributeDecl.expression));
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
