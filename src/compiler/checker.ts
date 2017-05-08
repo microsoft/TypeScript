@@ -13301,19 +13301,15 @@ namespace ts {
                 if (spread !== emptyObjectType) {
                     if (attributesArray.length > 0) {
                         spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
-                        attributesArray = [];
-                        attributesTable = createMap<Symbol>();
                     }
                     attributesArray = getPropertiesOfType(spread);
                 }
 
                 attributesTable = createMap<Symbol>();
-                if (attributesArray) {
-                    forEach(attributesArray, (attr) => {
-                        if (!filter || filter(attr)) {
-                            attributesTable.set(attr.name, attr);
-                        }
-                    });
+                for (const attr of attributesArray) {
+                    if (!filter || filter(attr)) {
+                        attributesTable.set(attr.name, attr);
+                    }
                 }
             }
 
