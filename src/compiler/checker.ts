@@ -13234,7 +13234,7 @@ namespace ts {
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
-                    const exprType = getApparentType(checkExpression(attributeDecl.expression))
+                    const exprType = getApparentType(checkExpression(attributeDecl.expression));
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
