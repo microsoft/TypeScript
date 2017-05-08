@@ -1,15 +1,12 @@
 tests/cases/conformance/jsx/file.tsx(23,8): error TS2322: Type '{ x: "0"; }' is not assignable to type 'Attribs1'.
   Types of property 'x' are incompatible.
     Type '"0"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(24,8): error TS2322: Type '{ y: 0; }' is not assignable to type 'Attribs1'.
-  Property 'y' does not exist on type 'Attribs1'.
-tests/cases/conformance/jsx/file.tsx(25,8): error TS2322: Type '{ y: "foo"; }' is not assignable to type 'Attribs1'.
-  Property 'y' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(24,8): error TS2339: Property 'y' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(25,8): error TS2339: Property 'y' does not exist on type 'Attribs1'.
 tests/cases/conformance/jsx/file.tsx(26,8): error TS2322: Type '{ x: "32"; }' is not assignable to type 'Attribs1'.
   Types of property 'x' are incompatible.
     Type '"32"' is not assignable to type 'number'.
-tests/cases/conformance/jsx/file.tsx(27,8): error TS2322: Type '{ var: "10"; }' is not assignable to type 'Attribs1'.
-  Property 'var' does not exist on type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(27,8): error TS2339: Property 'var' does not exist on type 'Attribs1'.
 tests/cases/conformance/jsx/file.tsx(29,1): error TS2322: Type '{}' is not assignable to type '{ reqd: string; }'.
   Property 'reqd' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(30,8): error TS2322: Type '{ reqd: 10; }' is not assignable to type '{ reqd: string; }'.
@@ -47,12 +44,10 @@ tests/cases/conformance/jsx/file.tsx(30,8): error TS2322: Type '{ reqd: 10; }' i
 !!! error TS2322:     Type '"0"' is not assignable to type 'number'.
     <test1 y={0} />; // Error, no property "y"
            ~~~~~
-!!! error TS2322: Type '{ y: 0; }' is not assignable to type 'Attribs1'.
-!!! error TS2322:   Property 'y' does not exist on type 'Attribs1'.
+!!! error TS2339: Property 'y' does not exist on type 'Attribs1'.
     <test1 y="foo" />; // Error, no property "y"
            ~~~~~~~
-!!! error TS2322: Type '{ y: "foo"; }' is not assignable to type 'Attribs1'.
-!!! error TS2322:   Property 'y' does not exist on type 'Attribs1'.
+!!! error TS2339: Property 'y' does not exist on type 'Attribs1'.
     <test1 x="32" />; // Error, "32" is not number
            ~~~~~~
 !!! error TS2322: Type '{ x: "32"; }' is not assignable to type 'Attribs1'.
@@ -60,8 +55,7 @@ tests/cases/conformance/jsx/file.tsx(30,8): error TS2322: Type '{ reqd: 10; }' i
 !!! error TS2322:     Type '"32"' is not assignable to type 'number'.
     <test1 var="10" />; // Error, no 'var' property
            ~~~~~~~~
-!!! error TS2322: Type '{ var: "10"; }' is not assignable to type 'Attribs1'.
-!!! error TS2322:   Property 'var' does not exist on type 'Attribs1'.
+!!! error TS2339: Property 'var' does not exist on type 'Attribs1'.
     
     <test2 />; // Error, missing reqd
     ~~~~~~~~~
