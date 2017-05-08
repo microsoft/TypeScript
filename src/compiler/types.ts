@@ -3943,6 +3943,7 @@ namespace ts {
     }
 
     export const enum EmitFlags {
+        None       = 0,
         SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
@@ -3969,6 +3970,7 @@ namespace ts {
         NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
         HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
         Iterator = 1 << 22,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        ToStringFormatting = 1 << 23
     }
 
     export interface EmitHelper {

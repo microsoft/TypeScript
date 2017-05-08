@@ -956,7 +956,7 @@ namespace ts {
         function emitTypeLiteral(node: TypeLiteralNode) {
             write("{");
             if (node.members.length > 0) {
-                emitList(node, node.members, ListFormat.SingleLineTypeLiteralMembers);
+                emitList(node, node.members, getEmitFlags(node) & EmitFlags.ToStringFormatting ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers);
             }
             write("}");
         }
@@ -1037,7 +1037,7 @@ namespace ts {
             }
             else {
                 write("{");
-                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
+                emitList(node, elements, getEmitFlags(node) & EmitFlags.ToStringFormatting ? ListFormat.ObjectBindingPatternElements : ListFormat.ObjectBindingPatternElementsWithSpaceBetweenBraces);
                 write("}");
             }
         }
@@ -2948,13 +2948,14 @@ namespace ts {
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings,
         HeritageClauses = SingleLine | SpaceBetweenSiblings,
-        SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings | Indented, // MultiLine | Indented,
+        SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings | Indented,
         MultiLineTypeLiteralMembers = MultiLine | Indented,
 
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElementsWithSpaceBetweenBraces = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,

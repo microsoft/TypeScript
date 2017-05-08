@@ -2602,7 +2602,8 @@ namespace ts {
                     context.inObjectTypeLiteral = true;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.inObjectTypeLiteral = saveInObjectTypeLiteral;
-                    return createTypeLiteralNode(members);
+                    const typeLiteralNode = createTypeLiteralNode(members);
+                    return setEmitFlags(typeLiteralNode, EmitFlags.ToStringFormatting);
                 }
 
                 function shouldAddParenthesisAroundFunctionType(callSignature: Signature, context: NodeBuilderContext) {
@@ -2811,8 +2812,14 @@ namespace ts {
                 const parameterDeclaration = <ParameterDeclaration>getDeclarationOfKind(parameterSymbol, SyntaxKind.Parameter);
                 const parameterType = getTypeOfSymbol(parameterSymbol);
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
-                const name = getDeepSynthesizedClone(parameterDeclaration.name);
-
+                let name: BindingName;
+                if (parameterDeclaration.name.kind === SyntaxKind.Identifier) {
+                    name = getSynthesizedClone(parameterDeclaration.name);
+                }
+                else {
+                    Debug.assert(parameterDeclaration.name.kind === SyntaxKind.ArrayBindingPattern || parameterDeclaration.name.kind === SyntaxKind.ObjectBindingPattern);
+                    name = cloneBindingName(parameterDeclaration.name);
+                }
                 let questionToken: Token<SyntaxKind.QuestionToken> | undefined;
                 let initializer: Expression | undefined;
                 if (isOptionalParameter(parameterDeclaration)) {
@@ -2833,6 +2840,18 @@ namespace ts {
                     parameterTypeNode,
                     initializer);
                 return parameterNode;
+
+                function cloneBindingName(node: BindingName): BindingName {
+                    return <BindingName>elideInitializerAndSetEmitFlags(node);
+                    function elideInitializerAndSetEmitFlags(node: Node): Node {
+                        const visited = visitEachChild(node, elideInitializerAndSetEmitFlags, nullTransformationContext, /*nodesVisitor*/ undefined, elideInitializerAndSetEmitFlags);
+                        const clone = nodeIsSynthesized(visited) ? visited : getSynthesizedClone(visited);
+                        if (clone.kind === SyntaxKind.BindingElement) {
+                            (<BindingElement>clone).initializer = undefined;
+                        }
+                        return setEmitFlags(clone, EmitFlags.ToStringFormatting);
+                    }
+                }
             }
 
             // TODO: add meaning: SymbolFlags argument.
