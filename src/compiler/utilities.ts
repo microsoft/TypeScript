@@ -566,7 +566,7 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
-                errorNode = (<DeclarationBase>node).name;
+                errorNode = (<RealDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
@@ -1781,7 +1781,7 @@ namespace ts {
             return undefined;
         }
         if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const kind = getSpecialPropertyAssignmentKind(declaration);
+            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
             const lhs = (declaration as BinaryExpression).left;
             switch (kind) {
                 case SpecialPropertyAssignmentKind.None:
@@ -1806,7 +1806,6 @@ namespace ts {
         }
     }
 
-
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
         return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
@@ -1827,7 +1826,7 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
                 // Name in member declaration or property name in property access
-                return (<DeclarationBase | PropertyAccessExpression>parent).name === node;
+                return (<RealDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
                 // Name on right hand side of dot in a type query
                 if ((<QualifiedName>parent).right === node) {
@@ -4103,7 +4102,7 @@ namespace ts {
             || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
-    export function isDeclaration(node: Node): node is DeclarationBase {
+    export function isDeclaration(node: Node): node is RealDeclaration {
         return isDeclarationKind(node.kind);
     }
 
