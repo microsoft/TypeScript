@@ -711,7 +711,7 @@ namespace ts {
             | SyntaxKind.SetAccessor
             | SyntaxKind.Constructor
             | SyntaxKind.ArrowFunction
-            | SyntaxKind.FunctionExpression;
+            | SyntaxKind.FunctionExpression
 
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -814,8 +814,9 @@ namespace ts {
     }
 
     /**
-     * There aren't any explicit subtypes of VariableLikeDeclaration,
+     * There aren't any explicit subtypes of VariableLikeDeclaration;
      * it's just structurally relatable to a number of types.
+     * (Maybe it should be an intersection of the below types.)
      */
     export interface VariableLikeDeclaration extends DeclarationBase {
         kind:
