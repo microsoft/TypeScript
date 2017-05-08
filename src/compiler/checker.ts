@@ -20339,7 +20339,7 @@ namespace ts {
                 // this allows to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
                 if (propDeclaration &&
-                    (getSpecialPropertyAssignmentKind(propDeclaration as BinaryExpression) === SpecialPropertyAssignmentKind.ThisProperty ||
+                    (propDeclaration.kind === SyntaxKind.BinaryExpression ||
                      propDeclaration.name.kind === SyntaxKind.ComputedPropertyName ||
                      prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
