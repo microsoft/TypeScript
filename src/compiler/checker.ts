@@ -8688,29 +8688,6 @@ namespace ts {
                 return Ternary.False;
             }
 
-            // Check if a property with the given name is known anywhere in the given type. In an object type, a property
-            // is considered known if the object type is empty and the check is for assignability, if the object type has
-            // index signatures, or if the property is actually declared in the object type. In a union or intersection
-            // type, a property is considered known if it is known in any constituent type.
-            function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
-                if (type.flags & TypeFlags.Object) {
-                    const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                    if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                        getPropertyOfType(type, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
-                        // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
-                        return true;
-                    }
-                }
-                else if (type.flags & TypeFlags.UnionOrIntersection) {
-                    for (const t of (<UnionOrIntersectionType>type).types) {
-                        if (isKnownProperty(t, name, isComparingJsxAttributes)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
@@ -13875,21 +13852,26 @@ namespace ts {
             checkJsxAttributesAssignableToTagNameAttributes(node);
         }
 
-        // Check if a property with the given name is known anywhere in the given type. In an object type, a property
-        // is considered known if the object type is empty and the check is for assignability, if the object type has
-        // index signatures, or if the property is actually declared in the object type. In a union or intersection
-        // type, a property is considered known if it is known in any constituent type.
-        function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
-            if (type.flags & TypeFlags.Object) {
-                const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+        /**
+         * Check if a property with the given name is known anywhere in the given type. In an object type, a property
+         * is considered known if the object type is empty and the check is for assignability, if the object type has
+         * index signatures, or if the property is actually declared in the object type. In a union or intersection
+         * type, a property is considered known if it is known in any constituent type.
+         * @param targetType a type to search a given name in
+         * @param name a property name to search
+         * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
+         */
+        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
+            if (targetType.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
                 if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    getPropertyOfType(type, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                    getPropertyOfType(targetType, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
                 }
             }
-            else if (type.flags & TypeFlags.UnionOrIntersection) {
-                for (const t of (<UnionOrIntersectionType>type).types) {
+            else if (targetType.flags & TypeFlags.UnionOrIntersection) {
+                for (const t of (<UnionOrIntersectionType>targetType).types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
@@ -13898,7 +13880,7 @@ namespace ts {
             return false;
         }
 
-        /**
+         /**
           * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
           *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
           *      Check assignablity between given attributes property, "source attributes", and the "target attributes"
@@ -13930,14 +13912,16 @@ namespace ts {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
+                // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
                 const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
-                // After we check for assignability, we will do another pass to check that
-                // all explicitly specified attributes have correct name corresponding with target (as those will be assignable as spread type allows excess properties)
-                // Note: if the type of these explicitly specified attributes do not match it will be an error during above assignability check.
+                // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
+                // This will allow excess properties in spread type as it is very common pattern to spread outter attributes into React component in its render method.
                 if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
                         if (isJsxAttribute(attribute) && !isKnownProperty(targetAttributesType, attribute.name.text, /*isComparingJsxAttributes*/ true)) {
                             error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));
+                            // We break here so that errors won't be cascading
+                            break;
                         }
                     }
                 }
