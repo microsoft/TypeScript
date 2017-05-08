@@ -6,7 +6,7 @@ tests/cases/conformance/jsx/file.tsx(16,42): error TS2339: Property 'prop1' does
     
     declare function Component<U>(l: U): JSX.Element;
     function createComponent<T extends { prop: number }>(arg: T) {
-        // let a1 = <Component {...arg} />;
+        let a1 = <Component {...arg} />;
         let a2 = <Component {...arg} prop1 />;
     }
     
