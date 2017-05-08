@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd-errors.ts] ////
 
 //// [err1.d.ts]
-
 // Illegal, can't be in script file
 export as namespace Foo;
 

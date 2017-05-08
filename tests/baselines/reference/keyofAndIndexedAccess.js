@@ -1,5 +1,4 @@
 //// [keyofAndIndexedAccess.ts]
-
 class Shape {
     name: string;
     width: number;

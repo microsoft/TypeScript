@@ -1,5 +1,4 @@
 //// [APISample_compile.ts]
-
 /*
  * Note: This test is a public API sample. The sample sources can be found 
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
@@ -35,12 +34,12 @@ compile(process.argv.slice(2), {
 });
 
 //// [APISample_compile.js]
+"use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-"use strict";
 exports.__esModule = true;
 var ts = require("typescript");
 function compile(fileNames, options) {

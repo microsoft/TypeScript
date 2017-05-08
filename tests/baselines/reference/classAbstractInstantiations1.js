@@ -1,5 +1,4 @@
 //// [classAbstractInstantiations1.ts]
-
 //
 // Calling new with (non)abstract classes.
 //

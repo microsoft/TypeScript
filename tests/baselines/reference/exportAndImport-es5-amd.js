@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportAndImport-es5-amd.ts] ////
 
 //// [m1.ts]
-
 export default function f1() {
 }
 

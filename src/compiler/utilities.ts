@@ -122,9 +122,8 @@ namespace ts {
 
     /* @internal */
     export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
-        if (names.length !== newResolutions.length) {
-            return false;
-        }
+        Debug.assert(names.length === newResolutions.length);
+
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
             const oldResolution = oldResolutions && oldResolutions.get(names[i]);
@@ -322,21 +321,11 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
-    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, languageVersion: ScriptTarget) {
-        // Any template literal or string literal with an extended escape
-        // (e.g. "\u{0067}") will need to be downleveled as a escaped string literal.
-        if (languageVersion < ScriptTarget.ES2015 && (isTemplateLiteralKind(node.kind) || node.hasExtendedUnicodeEscape)) {
-            return getQuotedEscapedLiteralText('"', node.text, '"');
-        }
-
+    export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
         if (!nodeIsSynthesized(node) && node.parent) {
-            const text = getSourceTextOfNodeFromSourceFile(sourceFile, node);
-            if (languageVersion < ScriptTarget.ES2015 && isBinaryOrOctalIntegerLiteral(node, text)) {
-                return node.text;
-            }
-            return text;
+            return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
         // If we can't reach the original source text, use the canonical form if it's a number,
@@ -357,55 +346,6 @@ namespace ts {
         }
 
         Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-    }
-
-    export function isBinaryOrOctalIntegerLiteral(node: LiteralLikeNode, text: string) {
-        return node.kind === SyntaxKind.NumericLiteral
-            && (getNumericLiteralFlags(text, /*hint*/ NumericLiteralFlags.BinaryOrOctal) & NumericLiteralFlags.BinaryOrOctal) !== 0;
-    }
-
-    export const enum NumericLiteralFlags {
-        None = 0,
-        Hexadecimal = 1 << 0,
-        Binary = 1 << 1,
-        Octal = 1 << 2,
-        Scientific = 1 << 3,
-
-        BinaryOrOctal = Binary | Octal,
-        BinaryOrOctalOrHexadecimal = BinaryOrOctal | Hexadecimal,
-        All = Hexadecimal | Binary | Octal | Scientific,
-    }
-
-    /**
-     * Scans a numeric literal string to determine the form of the number.
-     * @param text Numeric literal text
-     * @param hint If `Scientific` or `All` is specified, performs a more expensive check to scan for scientific notation.
-     */
-    export function getNumericLiteralFlags(text: string, hint?: NumericLiteralFlags) {
-        if (text.length > 1) {
-            switch (text.charCodeAt(1)) {
-                case CharacterCodes.b:
-                case CharacterCodes.B:
-                    return NumericLiteralFlags.Binary;
-                case CharacterCodes.o:
-                case CharacterCodes.O:
-                    return NumericLiteralFlags.Octal;
-                case CharacterCodes.x:
-                case CharacterCodes.X:
-                    return NumericLiteralFlags.Hexadecimal;
-            }
-
-            if (hint & NumericLiteralFlags.Scientific) {
-                for (let i = text.length - 1; i >= 0; i--) {
-                    switch (text.charCodeAt(i)) {
-                        case CharacterCodes.e:
-                        case CharacterCodes.E:
-                            return NumericLiteralFlags.Scientific;
-                    }
-                }
-            }
-        }
-        return NumericLiteralFlags.None;
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
@@ -438,9 +378,9 @@ namespace ts {
             ((<ModuleDeclaration>node).name.kind === SyntaxKind.StringLiteral || isGlobalScopeAugmentation(<ModuleDeclaration>node));
     }
 
-    /** Given a symbol for a module, checks that it is either an untyped import or a shorthand ambient module. */
-    export function isUntypedOrShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
-        return !moduleSymbol.declarations || isShorthandAmbientModule(moduleSymbol.valueDeclaration);
+    /** Given a symbol for a module, checks that it is a shorthand ambient module. */
+    export function isShorthandAmbientModuleSymbol(moduleSymbol: Symbol): boolean {
+        return isShorthandAmbientModule(moduleSymbol.valueDeclaration);
     }
 
     function isShorthandAmbientModule(node: Node): boolean {
@@ -523,6 +463,10 @@ namespace ts {
     // text of the expression in the computed property.
     export function declarationNameToString(name: DeclarationName) {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
+    }
+
+    export function getNameFromIndexInfo(info: IndexInfo) {
+        return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
     export function getTextOfPropertyName(name: PropertyName): string {
@@ -729,6 +673,7 @@ namespace ts {
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
+                // falls through
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
@@ -740,8 +685,8 @@ namespace ts {
                 //
                 //     let a: A.B.C;
                 //
-                // Calling isPartOfTypeNode would consider the qualified name A.B a type node. Only C or
-                // A.B.C is a type node.
+                // Calling isPartOfTypeNode would consider the qualified name A.B a type node.
+                // Only C and A.B.C are type nodes.
                 if (SyntaxKind.FirstTypeNode <= parent.kind && parent.kind <= SyntaxKind.LastTypeNode) {
                     return true;
                 }
@@ -838,6 +783,7 @@ namespace ts {
                     if (operand) {
                         traverse(operand);
                     }
+                    return;
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
@@ -1055,7 +1001,7 @@ namespace ts {
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                // Fall through
+                    // falls through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
@@ -1091,13 +1037,13 @@ namespace ts {
     }
 
     /**
-      * Given an super call/property node, returns the closest node where
-      * - a super call/property access is legal in the node and not legal in the parent node the node.
-      *   i.e. super call is legal in constructor but not legal in the class body.
-      * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
-      * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
-      *   i.e. super property access is illegal in function declaration but can be legal in the statement list
-      */
+     * Given an super call/property node, returns the closest node where
+     * - a super call/property access is legal in the node and not legal in the parent node the node.
+     *   i.e. super call is legal in constructor but not legal in the class body.
+     * - the container is an arrow function (so caller might need to call getSuperContainer again in case it needs to climb higher)
+     * - a super call/property is definitely illegal in the container (but might be legal in some subnode)
+     *   i.e. super property access is illegal in function declaration but can be legal in the statement list
+     */
     export function getSuperContainer(node: Node, stopOnFunctions: boolean): Node {
         while (true) {
             node = node.parent;
@@ -1114,6 +1060,7 @@ namespace ts {
                     if (!stopOnFunctions) {
                         continue;
                     }
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1193,6 +1140,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression {
+        return node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression;
     }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
@@ -1313,7 +1264,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
@@ -1400,17 +1351,24 @@ namespace ts {
 
     /**
      * Returns true if the node is a CallExpression to the identifier 'require' with
-     * exactly one argument.
+     * exactly one argument (of the form 'require("name")').
      * This function does not test if the node is in a JavaScript file or not.
-    */
-    export function isRequireCall(expression: Node, checkArgumentIsStringLiteral: boolean): expression is CallExpression {
-        // of the form 'require("name")'
-        const isRequire = expression.kind === SyntaxKind.CallExpression &&
-            (<CallExpression>expression).expression.kind === SyntaxKind.Identifier &&
-            (<Identifier>(<CallExpression>expression).expression).text === "require" &&
-            (<CallExpression>expression).arguments.length === 1;
+     */
+    export function isRequireCall(callExpression: Node, checkArgumentIsStringLiteral: boolean): callExpression is CallExpression {
+        if (callExpression.kind !== SyntaxKind.CallExpression) {
+            return false;
+        }
+        const { expression, arguments: args } = callExpression as CallExpression;
 
-        return isRequire && (!checkArgumentIsStringLiteral || (<CallExpression>expression).arguments[0].kind === SyntaxKind.StringLiteral);
+        if (expression.kind !== SyntaxKind.Identifier || (expression as Identifier).text !== "require") {
+            return false;
+        }
+
+        if (args.length !== 1) {
+            return false;
+        }
+        const arg = args[0];
+        return !checkArgumentIsStringLiteral || arg.kind === SyntaxKind.StringLiteral || arg.kind === SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
     export function isSingleOrDoubleQuote(charCode: number) {
@@ -1446,11 +1404,8 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getSpecialPropertyAssignmentKind(expression: Node): SpecialPropertyAssignmentKind {
+    export function getSpecialPropertyAssignmentKind(expression: ts.BinaryExpression): SpecialPropertyAssignmentKind {
         if (!isInJavaScriptFile(expression)) {
-            return SpecialPropertyAssignmentKind.None;
-        }
-        if (expression.kind !== SyntaxKind.BinaryExpression) {
             return SpecialPropertyAssignmentKind.None;
         }
         const expr = <BinaryExpression>expression;
@@ -1587,7 +1542,7 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);
@@ -1918,7 +1873,7 @@ namespace ts {
         }
     }
 
-    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node {
+    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
                 return node;
@@ -1973,16 +1928,18 @@ namespace ts {
     }
 
     export const enum FunctionFlags {
-        Normal = 0,
-        Generator = 1 << 0,
-        Async = 1 << 1,
-        AsyncOrAsyncGenerator = Async | Generator,
-        Invalid = 1 << 2,
-        InvalidAsyncOrAsyncGenerator = AsyncOrAsyncGenerator | Invalid,
-        InvalidGenerator = Generator | Invalid,
+        Normal = 0,             // Function is a normal function
+        Generator = 1 << 0,     // Function is a generator function or async generator function
+        Async = 1 << 1,         // Function is an async function or an async generator function
+        Invalid = 1 << 2,       // Function is a signature or overload and does not have a body.
+        AsyncGenerator = Async | Generator, // Function is an async generator function
     }
 
-    export function getFunctionFlags(node: FunctionLikeDeclaration) {
+    export function getFunctionFlags(node: FunctionLikeDeclaration | undefined) {
+        if (!node) {
+            return FunctionFlags.Invalid;
+        }
+
         let flags = FunctionFlags.Normal;
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
@@ -1991,7 +1948,7 @@ namespace ts {
                 if (node.asteriskToken) {
                     flags |= FunctionFlags.Generator;
                 }
-                // fall through
+                // falls through
             case SyntaxKind.ArrowFunction:
                 if (hasModifier(node, ModifierFlags.Async)) {
                     flags |= FunctionFlags.Async;
@@ -2017,6 +1974,10 @@ namespace ts {
                     && hasModifier(node, ModifierFlags.Async);
         }
         return false;
+    }
+
+    export function isNumericLiteral(node: Node): node is NumericLiteral {
+        return node.kind === SyntaxKind.NumericLiteral;
     }
 
     export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
@@ -3181,7 +3142,7 @@ namespace ts {
         return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+    function isExportDefaultSymbol(symbol: Symbol): boolean {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
@@ -3613,10 +3574,6 @@ namespace ts {
         return node.kind === SyntaxKind.Identifier;
     }
 
-    export function isVoidExpression(node: Node): node is VoidExpression {
-        return node.kind === SyntaxKind.VoidExpression;
-    }
-
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
         // Using `>` here catches both `GeneratedIdentifierKind.None` and `undefined`.
         return isIdentifier(node) && node.autoGenerateKind > GeneratedIdentifierKind.None;
@@ -3693,7 +3650,18 @@ namespace ts {
             || kind === SyntaxKind.GetAccessor
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.IndexSignature
-            || kind === SyntaxKind.SemicolonClassElement;
+            || kind === SyntaxKind.SemicolonClassElement
+            || kind === SyntaxKind.MissingDeclaration;
+    }
+
+    export function isTypeElement(node: Node): node is TypeElement {
+        const kind = node.kind;
+        return kind === SyntaxKind.ConstructSignature
+            || kind === SyntaxKind.CallSignature
+            || kind === SyntaxKind.PropertySignature
+            || kind === SyntaxKind.MethodSignature
+            || kind === SyntaxKind.IndexSignature
+            || kind === SyntaxKind.MissingDeclaration;
     }
 
     export function isObjectLiteralElementLike(node: Node): node is ObjectLiteralElementLike {
@@ -3713,10 +3681,14 @@ namespace ts {
         return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
             || kind === SyntaxKind.AnyKeyword
             || kind === SyntaxKind.NumberKeyword
+            || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
             || kind === SyntaxKind.SymbolKeyword
+            || kind === SyntaxKind.ThisKeyword
             || kind === SyntaxKind.VoidKeyword
+            || kind === SyntaxKind.UndefinedKeyword
+            || kind === SyntaxKind.NullKeyword
             || kind === SyntaxKind.NeverKeyword
             || kind === SyntaxKind.ExpressionWithTypeArguments;
     }
@@ -4245,12 +4217,13 @@ namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
             case ScriptTarget.ESNext:
+                return "lib.esnext.full.d.ts";
             case ScriptTarget.ES2017:
-                return "lib.es2017.d.ts";
+                return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:
-                return "lib.es2016.d.ts";
+                return "lib.es2016.full.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es6.d.ts";
+                return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
             default:
                 return "lib.d.ts";
         }
@@ -4470,7 +4443,7 @@ namespace ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength*/ newEndN - oldStartN);
     }
 
     export function getTypeParameterOwner(d: Declaration): Declaration {
@@ -4542,9 +4515,9 @@ namespace ts {
     }
 
     /**
-      * Checks to see if the locale is in the appropriate format,
-      * and if it is, attempts to set the appropriate language.
-      */
+     * Checks to see if the locale is in the appropriate format,
+     * and if it is, attempts to set the appropriate language.
+     */
     export function validateLocaleAndSetLanguage(
         locale: string,
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string },
@@ -4646,7 +4619,7 @@ namespace ts {
      */
     export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
     export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node == undefined || isParseTreeNode(node)) {
+        if (node === undefined || isParseTreeNode(node)) {
             return node;
         }
 

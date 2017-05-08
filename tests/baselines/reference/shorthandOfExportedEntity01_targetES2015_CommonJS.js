@@ -1,5 +1,4 @@
 //// [shorthandOfExportedEntity01_targetES2015_CommonJS.ts]
-
 export const test = "test";
 
 export function foo () {

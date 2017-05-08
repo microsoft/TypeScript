@@ -1,5 +1,4 @@
 //// [readonlyInDeclarationFile.ts]
-
 interface Foo {
     readonly x: number;
     readonly [x: string]: Object;

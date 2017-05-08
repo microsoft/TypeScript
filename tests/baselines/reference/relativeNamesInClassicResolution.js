@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/relativeNamesInClassicResolution.ts] ////
 
 //// [a.ts]
-
 import {x} from "./b"
 
 //// [b.ts]

@@ -1,5 +1,4 @@
 //// [readonlyMembers.ts]
-
 interface X {
     readonly a: number;
     readonly b?: number;

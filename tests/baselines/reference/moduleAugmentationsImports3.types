@@ -35,7 +35,6 @@ let c = a.getCls().y.toLowerCase();
 >toLowerCase : () => string
 
 === tests/cases/compiler/a.ts ===
-
 export class A {}
 >A : A
 

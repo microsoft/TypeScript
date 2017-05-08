@@ -1,5 +1,4 @@
 //// [controlFlowIIFE.ts]
-
 declare function getStringOrNumber(): string | number;
 
 function f1() {

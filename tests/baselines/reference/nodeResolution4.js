@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/nodeResolution4.ts] ////
 
 //// [ref.ts]
-
 var x = 1;
 
 //// [a.ts]

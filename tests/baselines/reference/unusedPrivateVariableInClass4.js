@@ -1,5 +1,4 @@
 //// [unusedPrivateVariableInClass4.ts]
-
 class greeter {
     private x: string;
     private y: string;

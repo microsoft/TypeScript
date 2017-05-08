@@ -1,29 +1,28 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(7,1): error TS2454: Variable 'a' is used before being assigned.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(8,1): error TS2322: Type 'undefined' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(9,1): error TS2322: Type 'null' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(10,1): error TS2322: Type 'object | null' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(6,1): error TS2454: Variable 'a' is used before being assigned.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(7,1): error TS2322: Type 'undefined' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(8,1): error TS2322: Type 'null' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(9,1): error TS2322: Type 'object | null' is not assignable to type 'object'.
   Type 'null' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(11,1): error TS2322: Type 'object | undefined' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(10,1): error TS2322: Type 'object | undefined' is not assignable to type 'object'.
   Type 'undefined' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(12,1): error TS2322: Type 'object | null | undefined' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(11,1): error TS2322: Type 'object | null | undefined' is not assignable to type 'object'.
   Type 'undefined' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(18,7): error TS2339: Property 'toString' does not exist on type 'never'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(22,5): error TS2322: Type 'object | null' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(17,7): error TS2339: Property 'toString' does not exist on type 'never'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(21,5): error TS2322: Type 'object | null' is not assignable to type 'object'.
   Type 'null' is not assignable to type 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(27,5): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(29,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(33,5): error TS2533: Object is possibly 'null' or 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(39,5): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(41,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(45,5): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(47,5): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(52,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(54,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(26,5): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(28,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(32,5): error TS2533: Object is possibly 'null' or 'undefined'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(38,5): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(40,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(44,5): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(46,5): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(51,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(52,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts(53,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
 ==== tests/cases/conformance/types/nonPrimitive/nonPrimitiveStrictNull.ts (18 errors) ====
-    
     var a: object
     declare var b: object | null
     declare var c: object | undefined

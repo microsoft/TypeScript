@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/controlFlowIIFE.ts ===
-
 declare function getStringOrNumber(): string | number;
 >getStringOrNumber : () => string | number
 

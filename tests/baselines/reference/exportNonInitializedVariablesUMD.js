@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesUMD.ts]
-
 var;
 let;
 const;

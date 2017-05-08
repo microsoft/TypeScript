@@ -1,5 +1,4 @@
 //// [tsxTypeErrors.tsx]
-
 // A built-in element (OK)
 var a1 = <div id="foo" />;
 

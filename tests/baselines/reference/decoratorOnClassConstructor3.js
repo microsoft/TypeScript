@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor3.ts] ////
 
 //// [0.ts]
-
 export class base { }
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 

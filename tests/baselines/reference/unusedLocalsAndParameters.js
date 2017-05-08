@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParameters.ts]
-
 export { };
 
 // function declaration paramter

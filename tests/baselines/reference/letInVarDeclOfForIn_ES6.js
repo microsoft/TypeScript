@@ -1,5 +1,4 @@
 //// [letInVarDeclOfForIn_ES6.ts]
-
 // should not be an error
 for (var let in [1,2,3]) {}
 

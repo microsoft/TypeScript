@@ -1,5 +1,4 @@
 //// [unusedInterfaceinNamespace5.ts]
-
 namespace Validation {
     interface i1 {
 

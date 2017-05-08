@@ -1,5 +1,4 @@
 //// [contextuallyTypeCommaOperator03.ts]
-
 let x: (a: string) => string;
 
 x = (a => a, b => b);

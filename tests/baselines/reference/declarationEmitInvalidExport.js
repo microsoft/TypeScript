@@ -1,5 +1,4 @@
 //// [declarationEmitInvalidExport.ts]
-
 if (false) {
   export var myClass = 0;
 }

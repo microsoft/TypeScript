@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportEqualCallable.ts] ////
 
 //// [exportEqualCallable_0.ts]
-
 var server: {
     (): any;
 };

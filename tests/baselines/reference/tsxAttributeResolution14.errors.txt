@@ -1,13 +1,12 @@
-tests/cases/conformance/jsx/file.tsx(14,28): error TS2322: Type '{ primaryText: 2; }' is not assignable to type 'IProps'.
+tests/cases/conformance/jsx/file.tsx(13,28): error TS2322: Type '{ primaryText: 2; }' is not assignable to type 'IProps'.
   Types of property 'primaryText' are incompatible.
     Type '2' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(16,28): error TS2322: Type '{ justRandomProp1: true; primaryText: "hello"; }' is not assignable to type 'IProps'.
+tests/cases/conformance/jsx/file.tsx(15,28): error TS2322: Type '{ justRandomProp1: true; primaryText: "hello"; }' is not assignable to type 'IProps'.
   Property 'justRandomProp1' is incompatible with index signature.
     Type 'true' is not assignable to type 'string | number'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
-    
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -17,7 +16,6 @@ tests/cases/conformance/jsx/file.tsx(16,28): error TS2322: Type '{ justRandomPro
     }
     
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
-    
     interface IProps {
       primaryText: string,
       [propName: string]: string | number

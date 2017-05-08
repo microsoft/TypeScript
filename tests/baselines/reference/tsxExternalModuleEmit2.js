@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxExternalModuleEmit2.tsx] ////
 
 //// [modules.d.ts]
-
 declare module 'mod' {
   var y: any;
   export default y;

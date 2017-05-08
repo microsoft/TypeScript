@@ -1,23 +1,22 @@
-tests/cases/conformance/jsx/file.tsx(20,14): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(19,14): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
       Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(20,15): error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: "Hi"; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
       Type '"Hi"' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
       Type '3' is not assignable to type '2'.
-tests/cases/conformance/jsx/file.tsx(23,15): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: true; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
       Type 'true' is not assignable to type '2'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
-    
     import React = require('react');
     
     interface OptionProp {

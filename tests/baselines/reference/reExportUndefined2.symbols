@@ -1,10 +1,9 @@
 === tests/cases/compiler/a.ts ===
-
 var undefined;
->undefined : Symbol(undefined, Decl(a.ts, 1, 3))
+>undefined : Symbol(undefined, Decl(a.ts, 0, 3))
 
 export { undefined };
->undefined : Symbol(undefined, Decl(a.ts, 2, 8))
+>undefined : Symbol(undefined, Decl(a.ts, 1, 8))
 
 === tests/cases/compiler/b.ts ===
 import { undefined } from "./a";

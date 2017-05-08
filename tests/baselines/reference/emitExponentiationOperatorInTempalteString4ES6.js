@@ -1,5 +1,4 @@
 //// [emitExponentiationOperatorInTempalteString4ES6.ts]
-
 var t1 = 10;
 var t2 = 10;
 var s;

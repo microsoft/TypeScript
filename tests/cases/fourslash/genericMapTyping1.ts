@@ -20,7 +20,7 @@
 ////var c/*5*/cc = _(aaa).map(xx => xx.length);  // Should not error, should be any[]
 ////var d/*6*/dd = aaa.map(xx => xx.length);     // should not error, should be any[]
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 verify.quickInfos({
     1: "var bb: number[]",
     2: "var cc: number[]",

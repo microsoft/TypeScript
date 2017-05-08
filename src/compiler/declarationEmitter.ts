@@ -590,16 +590,15 @@ namespace ts {
             currentIdentifiers = node.identifiers;
             isCurrentFileExternalModule = isExternalModule(node);
             enclosingDeclaration = node;
-            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, true /* remove comments */);
+            emitDetachedComments(currentText, currentLineMap, writer, writeCommentRange, node, newLine, /*removeComents*/ true);
             emitLines(node.statements);
         }
 
-        // Return a temp variable name to be used in `export default` statements.
+        // Return a temp variable name to be used in `export default`/`export class ... extends` statements.
         // The temp name will be of the form _default_counter.
         // Note that export default is only allowed at most once in a module, so we
         // do not need to keep track of created temp names.
-        function getExportDefaultTempVariableName(): string {
-            const baseName = "_default";
+        function getExportTempVariableName(baseName: string): string {
             if (!currentIdentifiers.has(baseName)) {
                 return baseName;
             }
@@ -613,24 +612,31 @@ namespace ts {
             }
         }
 
+        function emitTempVariableDeclaration(expr: Expression, baseName: string, diagnostic: SymbolAccessibilityDiagnostic): string {
+            const tempVarName = getExportTempVariableName(baseName);
+            if (!noDeclare) {
+                write("declare ");
+            }
+            write("const ");
+            write(tempVarName);
+            write(": ");
+            writer.getSymbolAccessibilityDiagnostic = () => diagnostic;
+            resolver.writeTypeOfExpression(expr, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
+            write(";");
+            writeLine();
+            return tempVarName;
+        }
+
         function emitExportAssignment(node: ExportAssignment) {
             if (node.expression.kind === SyntaxKind.Identifier) {
                 write(node.isExportEquals ? "export = " : "export default ");
                 writeTextOfNode(currentText, node.expression);
             }
             else {
-                // Expression
-                const tempVarName = getExportDefaultTempVariableName();
-                if (!noDeclare) {
-                    write("declare ");
-                }
-                write("var ");
-                write(tempVarName);
-                write(": ");
-                writer.getSymbolAccessibilityDiagnostic = getDefaultExportAccessibilityDiagnostic;
-                resolver.writeTypeOfExpression(node.expression, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
-                write(";");
-                writeLine();
+                const tempVarName = emitTempVariableDeclaration(node.expression, "_default", {
+                    diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
+                    errorNode: node
+                });
                 write(node.isExportEquals ? "export = " : "export default ");
                 write(tempVarName);
             }
@@ -643,13 +649,6 @@ namespace ts {
 
                 // write each of these declarations asynchronously
                 writeAsynchronousModuleElements(nodes);
-            }
-
-            function getDefaultExportAccessibilityDiagnostic(): SymbolAccessibilityDiagnostic {
-                return {
-                    diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
-                    errorNode: node
-                };
             }
         }
 
@@ -1097,7 +1096,7 @@ namespace ts {
             }
         }
 
-        function emitHeritageClause(className: Identifier, typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
+        function emitHeritageClause(typeReferences: ExpressionWithTypeArguments[], isImplementsList: boolean) {
             if (typeReferences) {
                 write(isImplementsList ? " implements " : " extends ");
                 emitCommaList(typeReferences, emitTypeOfTypeReference);
@@ -1109,12 +1108,6 @@ namespace ts {
                 }
                 else if (!isImplementsList && node.expression.kind === SyntaxKind.NullKeyword) {
                     write("null");
-                }
-                else {
-                    writer.getSymbolAccessibilityDiagnostic = getHeritageClauseVisibilityError;
-                    errorNameNode = className;
-                    resolver.writeBaseConstructorTypeOfClass(<ClassLikeDeclaration>enclosingDeclaration, enclosingDeclaration, TypeFormatFlags.UseTypeOfFunction | TypeFormatFlags.UseTypeAliasValue, writer);
-                    errorNameNode = undefined;
                 }
 
                 function getHeritageClauseVisibilityError(): SymbolAccessibilityDiagnostic {
@@ -1151,23 +1144,43 @@ namespace ts {
                 }
             }
 
+            const prevEnclosingDeclaration = enclosingDeclaration;
+            enclosingDeclaration = node;
+            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
+            let tempVarName: string;
+            if (baseTypeNode && !isEntityNameExpression(baseTypeNode.expression)) {
+                tempVarName = baseTypeNode.expression.kind === SyntaxKind.NullKeyword ?
+                    "null" :
+                    emitTempVariableDeclaration(baseTypeNode.expression, `${node.name.text}_base`, {
+                        diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
+                        errorNode: baseTypeNode,
+                        typeName: node.name
+                    });
+            }
+
             emitJsDocComments(node);
             emitModuleElementDeclarationFlags(node);
             if (hasModifier(node, ModifierFlags.Abstract)) {
                 write("abstract ");
             }
-
             write("class ");
             writeTextOfNode(currentText, node.name);
-            const prevEnclosingDeclaration = enclosingDeclaration;
-            enclosingDeclaration = node;
             emitTypeParameters(node.typeParameters);
-            const baseTypeNode = getClassExtendsHeritageClauseElement(node);
             if (baseTypeNode) {
-                node.name;
-                emitHeritageClause(node.name, [baseTypeNode], /*isImplementsList*/ false);
+                if (!isEntityNameExpression(baseTypeNode.expression)) {
+                    write(" extends ");
+                    write(tempVarName);
+                    if (baseTypeNode.typeArguments) {
+                        write("<");
+                        emitCommaList(baseTypeNode.typeArguments, emitType);
+                        write(">");
+                    }
+                }
+                else  {
+                    emitHeritageClause([baseTypeNode], /*isImplementsList*/ false);
+                }
             }
-            emitHeritageClause(node.name, getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
+            emitHeritageClause(getClassImplementsHeritageClauseElements(node), /*isImplementsList*/ true);
             write(" {");
             writeLine();
             increaseIndent();
@@ -1189,7 +1202,7 @@ namespace ts {
             emitTypeParameters(node.typeParameters);
             const interfaceExtendsTypes = filter(getInterfaceBaseTypeNodes(node), base => isEntityNameExpression(base.expression));
             if (interfaceExtendsTypes && interfaceExtendsTypes.length) {
-                emitHeritageClause(node.name, interfaceExtendsTypes, /*isImplementsList*/ false);
+                emitHeritageClause(interfaceExtendsTypes, /*isImplementsList*/ false);
             }
             write(" {");
             writeLine();

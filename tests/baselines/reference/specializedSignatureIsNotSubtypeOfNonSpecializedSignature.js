@@ -1,5 +1,4 @@
 //// [specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts]
-
 function foo(x: 'a');
 function foo(x: number) { }
 

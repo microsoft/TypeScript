@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 import React = require('react')
 >React : typeof React
 
@@ -198,9 +197,9 @@ const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 >extra-prop : true
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 
-const b10 = <MainButton to='/some/path' children="hi" >GO</MainButton>;
+const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 >b10 : JSX.Element
-><MainButton to='/some/path' children="hi" >GO</MainButton> : JSX.Element
+><MainButton to='/some/path' children="hi" ></MainButton> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >to : string
 >children : string

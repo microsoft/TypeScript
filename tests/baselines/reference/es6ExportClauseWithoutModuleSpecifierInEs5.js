@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportClauseWithoutModuleSpecifierInEs5.ts] ////
 
 //// [server.ts]
-
 export class c {
 }
 export interface i {

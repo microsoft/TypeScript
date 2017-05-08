@@ -1,8 +1,8 @@
 //// [file.tsx]
-
 import React = require('react')
 
 declare function OneThing(k: {yxx: string}): JSX.Element;
+declare function OneThing(k: {yxx1: string, children: string}): JSX.Element;
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Element;
 declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element;
@@ -12,6 +12,8 @@ const c1 = <OneThing yxx='ok' />
 const c2 = <OneThing yy={100}  yy1="hello"/>
 const c3 = <OneThing yxx="hello" ignore-prop />
 const c4 = <OneThing data="hello" data-prop />
+const c5 = <OneThing yxx1='ok'>Hello</OneThing>
+
 
 declare function TestingOneThing({y1: string}): JSX.Element;
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
@@ -49,6 +51,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     var c2 = <OneThing yy={100} yy1="hello"/>;
     var c3 = <OneThing yxx="hello" ignore-prop/>;
     var c4 = <OneThing data="hello" data-prop/>;
+    var c5 = <OneThing yxx1='ok'>Hello</OneThing>;
     // OK
     var d1 = <TestingOneThing y1 extra-data/>;
     var d2 = <TestingOneThing extra-data="hello"/>;

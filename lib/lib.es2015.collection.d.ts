@@ -37,7 +37,7 @@ declare var Map: MapConstructor;
 
 interface ReadonlyMap<K, V> {
     forEach(callbackfn: (value: V, key: K, map: ReadonlyMap<K, V>) => void, thisArg?: any): void;
-    get(key: K): V|undefined;
+    get(key: K): V | undefined;
     has(key: K): boolean;
     readonly size: number;
 }
@@ -50,9 +50,9 @@ interface WeakMap<K extends object, V> {
 }
 
 interface WeakMapConstructor {
-    new (): WeakMap<any, any>;
+    new (): WeakMap<object, any>;
     new <K extends object, V>(entries?: [K, V][]): WeakMap<K, V>;
-    readonly prototype: WeakMap<any, any>;
+    readonly prototype: WeakMap<object, any>;
 }
 declare var WeakMap: WeakMapConstructor;
 
@@ -85,8 +85,8 @@ interface WeakSet<T> {
 }
 
 interface WeakSetConstructor {
-    new (): WeakSet<any>;
-    new <T>(values?: T[]): WeakSet<T>;
-    readonly prototype: WeakSet<any>;
+    new (): WeakSet<object>;
+    new <T extends object>(values?: T[]): WeakSet<T>;
+    readonly prototype: WeakSet<object>;
 }
 declare var WeakSet: WeakSetConstructor;

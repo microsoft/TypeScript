@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitImportInExportAssignmentModule.ts ===
-
 module m {
 >m : typeof m
 

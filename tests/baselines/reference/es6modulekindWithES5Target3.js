@@ -1,6 +1,4 @@
 //// [es6modulekindWithES5Target3.ts]
-
-
 declare function foo(...args: any[]): any;
 @foo
 export default class D {

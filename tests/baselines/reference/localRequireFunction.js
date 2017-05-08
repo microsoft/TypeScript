@@ -1,5 +1,4 @@
 //// [app.js]
-
 function require(a) {
     return a;
 }

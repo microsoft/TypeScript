@@ -1,5 +1,4 @@
 //// [numericLiteralTypes2.ts]
-
 type A1 = 1;
 type A2 = 1.0;
 type A3 = 1e0;

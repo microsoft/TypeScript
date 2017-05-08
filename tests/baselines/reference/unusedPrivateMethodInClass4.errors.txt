@@ -1,8 +1,7 @@
-tests/cases/compiler/unusedPrivateMethodInClass4.ts(3,13): error TS6133: 'function1' is declared but never used.
+tests/cases/compiler/unusedPrivateMethodInClass4.ts(2,13): error TS6133: 'function1' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedPrivateMethodInClass4.ts (1 errors) ====
-    
     class greeter {
         private function1() {
                 ~~~~~~~~~

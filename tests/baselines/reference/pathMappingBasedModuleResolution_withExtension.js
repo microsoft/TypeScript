@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/pathMappingBasedModuleResolution_withExtension.ts] ////
 
 //// [foo.ts]
-
 export function foo() {}
 
 //// [bar.js]

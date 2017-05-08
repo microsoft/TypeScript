@@ -191,7 +191,7 @@ namespace Utils {
             for (const childName in node) {
                 if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
                     // for now ignore jsdoc comments
-                    childName === "jsDocComment") {
+                    childName === "jsDocComment" || childName === "checkJsDirective") {
                     continue;
                 }
                 const child = (<any>node)[childName];
@@ -1797,7 +1797,7 @@ namespace Harness {
                     if (currentFileContent === undefined) {
                         currentFileContent = "";
                     }
-                    else {
+                    else if (currentFileContent !== "") {
                         // End-of-line
                         currentFileContent = currentFileContent + "\n";
                     }
@@ -1933,7 +1933,7 @@ namespace Harness {
                 }
 
                 const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory != "") {
+                if (parentDirectory !== "") {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);

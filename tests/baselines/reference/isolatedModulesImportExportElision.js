@@ -1,5 +1,4 @@
 //// [file1.ts]
-
 import {c} from "module"
 import {c2} from "module"
 import * as ns from "module"

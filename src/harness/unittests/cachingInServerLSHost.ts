@@ -64,8 +64,16 @@ namespace ts {
             getLogFileName: (): string => undefined
         };
 
-        const projectService = new server.ProjectService(serverHost, logger, { isCancellationRequested: () => false }, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined);
-        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */true, /*containingProject*/ undefined);
+        const svcOpts: server.ProjectServiceOptions = {
+            host: serverHost,
+            logger,
+            cancellationToken: { isCancellationRequested: () => false },
+            useSingleInferredProject: false,
+            typingsInstaller: undefined
+        };
+        const projectService = new server.ProjectService(svcOpts);
+        const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
+
         const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
         project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
         return {
@@ -193,14 +201,13 @@ namespace ts {
             assert.isTrue(diags.length === 1, "one diagnostic expected");
             assert.isTrue(typeof diags[0].messageText === "string" && ((<string>diags[0].messageText).indexOf("Cannot find module") === 0), "should be 'cannot find module' message");
 
-            // assert that import will success once file appear on disk
             fileMap.set(imported.name, imported);
             fileExistsCalledForBar = false;
             rootScriptInfo.editContent(0, root.content.length, `import {y} from "bar"`);
 
             diags = project.getLanguageService().getSemanticDiagnostics(root.name);
-            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");
-            assert.isTrue(diags.length === 0);
+            assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called.");
+            assert.isTrue(diags.length === 0, "The import should succeed once the imported file appears on disk.");
         });
     });
 }

@@ -1,5 +1,4 @@
 === tests/cases/compiler/db.d.ts ===
-
 declare namespace Db {
 >Db : typeof Types
 

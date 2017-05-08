@@ -55,7 +55,7 @@ namespace ts.codefix {
                 if (isSetAccessor(containingFunction)) {
                     return getCodeActionForSetAccessor(containingFunction);
                 }
-            // Fall through
+            // falls through
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return getCodeActionForParameter(<ParameterDeclaration>token.parent);
 
@@ -164,8 +164,7 @@ namespace ts.codefix {
                 cancellationToken,
                 program.getSourceFiles(),
                 token.getSourceFile(),
-                token.getStart(),
-                /*findInStrings*/ false, /*findInComments*/ false, /*isForRename*/ false);
+                token.getStart());
 
             Debug.assert(!!references, "Found no references!");
             Debug.assert(references.length === 1, "Found more references than expected");
@@ -199,7 +198,7 @@ namespace ts.codefix {
 
             const writer = getSingleLineStringWriter();
             writer.trackSymbol = (symbol, declaration, meaning) => {
-                if (checker.isSymbolAccessible(symbol, declaration, meaning, false).accessibility !== SymbolAccessibility.Accessible) {
+                if (checker.isSymbolAccessible(symbol, declaration, meaning, /*shouldComputeAliasToMarkVisible*/ false).accessibility !== SymbolAccessibility.Accessible) {
                     typeIsAccessible = false;
                 }
             };
@@ -277,12 +276,12 @@ namespace ts.codefix {
                 return checker.getStringType();
             }
             else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), true));
+                return checker.getWidenedType(checker.getUnionType(map(usageContext.candidateTypes, t => checker.getBaseTypeOfLiteralType(t)), /*subtypeReduction*/ true));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("then"))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then").callContexts, /*isRestParameter*/ false, checker);
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
-                return checker.createPromiseType(types.length ? checker.getUnionType(types, true) : checker.getAnyType());
+                return checker.createPromiseType(types.length ? checker.getUnionType(types, /*subtypeReduction*/ true) : checker.getAnyType());
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push"))) {
                 return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push").callContexts, /*isRestParameter*/ false, checker));
@@ -345,7 +344,7 @@ namespace ts.codefix {
             }
 
             if (types.length) {
-                const type = checker.getWidenedType(checker.getUnionType(types, true));
+                const type = checker.getWidenedType(checker.getUnionType(types, /*subtypeReduction*/ true));
                 return isRestParameter ? checker.createArrayType(type) : type;
             }
             return undefined;

@@ -1,5 +1,4 @@
 //// [missingFunctionImplementation.ts]
-
 export class C1 {
   m(): void;
 }

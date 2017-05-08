@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesCommonJS.ts]
-
 var;
 let;
 const;

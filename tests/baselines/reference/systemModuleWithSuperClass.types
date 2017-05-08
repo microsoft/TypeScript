@@ -1,5 +1,4 @@
 === tests/cases/compiler/foo.ts ===
-
 export class Foo {
 >Foo : Foo
 

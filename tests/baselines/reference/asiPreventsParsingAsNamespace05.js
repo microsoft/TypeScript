@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsNamespace05.ts]
-
 let namespace = 10;
 namespace a.b {
     export let c = 20;

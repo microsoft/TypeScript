@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/literal/numericLiteralTypes2.ts ===
-
 type A1 = 1;
 >A1 : 1
 

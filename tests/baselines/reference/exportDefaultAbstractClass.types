@@ -1,0 +1,8 @@
+=== tests/cases/compiler/a.ts ===
+export default abstract class A {}
+>A : A
+
+=== tests/cases/compiler/b.ts ===
+import A from './a'
+>A : typeof A
+

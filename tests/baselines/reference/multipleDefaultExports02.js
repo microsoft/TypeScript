@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/multipleDefaultExports02.ts] ////
 
 //// [m1.ts]
-
 export default function foo() {
 
 }

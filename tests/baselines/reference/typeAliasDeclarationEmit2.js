@@ -1,5 +1,4 @@
 //// [typeAliasDeclarationEmit2.ts]
-
 export type A<a> = { value: a };
 
 //// [typeAliasDeclarationEmit2.js]

@@ -1,5 +1,4 @@
 === tests/cases/compiler/reactNamespaceJSXEmit.tsx ===
-
 declare var myReactLib: any;
 >myReactLib : any
 

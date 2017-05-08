@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
 
 //// [a.ts]
-
 // from #3108
 export var test = 'abc';
 

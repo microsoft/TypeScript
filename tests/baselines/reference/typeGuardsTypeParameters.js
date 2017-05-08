@@ -1,5 +1,4 @@
 //// [typeGuardsTypeParameters.ts]
-
 // Type guards involving type parameters produce intersection types
 
 class C {

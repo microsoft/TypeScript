@@ -1,5 +1,4 @@
 //// [commentOnExpressionStatement1.ts]
-
 1 + 1; // Comment.
 
 //// [commentOnExpressionStatement1.js]

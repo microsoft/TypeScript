@@ -1,5 +1,4 @@
 //// [emptyVariableDeclarationBindingPatterns01_ES5iterable.ts]
-
 (function () {
     var a: any;
 

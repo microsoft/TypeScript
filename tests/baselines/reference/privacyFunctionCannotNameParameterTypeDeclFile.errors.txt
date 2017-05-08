@@ -177,8 +177,6 @@ tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_consumer.ts(
     function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) {
     }
 ==== tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts (0 errors) ====
-    
-    
     declare module "GlobalWidgets" {
         export class Widget3 {
             name: string;
