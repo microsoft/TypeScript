@@ -2552,6 +2552,7 @@ namespace ts {
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
+        /* @internal */ getBaseConstraintOfType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
