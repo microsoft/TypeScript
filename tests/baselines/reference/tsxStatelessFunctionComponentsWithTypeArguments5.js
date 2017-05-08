@@ -3,7 +3,7 @@ import React = require('react')
 
 declare function Component<U>(l: U): JSX.Element;
 function createComponent<T extends { prop: number }>(arg: T) {
-    // let a1 = <Component {...arg} />;
+    let a1 = <Component {...arg} />;
     let a2 = <Component {...arg} prop1 />;
 }
 
@@ -23,7 +23,7 @@ define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
     function createComponent(arg) {
-        // let a1 = <Component {...arg} />;
+        var a1 = <Component {...arg}/>;
         var a2 = <Component {...arg} prop1/>;
     }
     function Bar(arg) {
