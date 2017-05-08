@@ -20678,11 +20678,6 @@ namespace ts {
                             continue;
                         }
 
-                        if ((baseDeclarationFlags & ModifierFlags.Static) !== (derivedDeclarationFlags & ModifierFlags.Static)) {
-                            // value of 'static' is not the same for properties - not override, skip it
-                            continue;
-                        }
-
                         if (isMethodLike(base) && isMethodLike(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
