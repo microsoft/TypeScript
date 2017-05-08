@@ -616,7 +616,6 @@ namespace ts {
         | CallExpression
         | CallSignatureDeclaration
         | ClassDeclaration
-        | ClassElement
         | ClassExpression
         | ClassLikeDeclaration
         | ConstructSignatureDeclaration
@@ -717,13 +716,14 @@ namespace ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
         type?: TypeNode;
+        questionToken?: QuestionToken;
     }
 
-    export interface CallSignatureDeclaration extends SignatureDeclaration, TypeElement {
+    export interface CallSignatureDeclaration extends SignatureDeclaration {
         kind: SyntaxKind.CallSignature;
     }
 
-    export interface ConstructSignatureDeclaration extends SignatureDeclaration, TypeElement {
+    export interface ConstructSignatureDeclaration extends SignatureDeclaration {
         kind: SyntaxKind.ConstructSignature;
     }
 
@@ -762,7 +762,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertySignature extends TypeElement {
+    export interface PropertySignature extends DeclarationBase {
         kind: SyntaxKind.PropertySignature | SyntaxKind.JSDocRecordMember;
         name: PropertyName;                 // Declared property name
         questionToken?: QuestionToken;      // Present on optional property
@@ -770,7 +770,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface PropertyDeclaration extends ClassElement {
+    export interface PropertyDeclaration extends DeclarationBase {
         kind: SyntaxKind.PropertyDeclaration;
         questionToken?: QuestionToken;      // Present for use with reporting a grammar error
         name: PropertyName;
@@ -876,7 +876,7 @@ namespace ts {
         body?: FunctionBody;
     }
 
-    export interface MethodSignature extends SignatureDeclaration, TypeElement {
+    export interface MethodSignature extends SignatureDeclaration {
         kind: SyntaxKind.MethodSignature;
         name: PropertyName;
     }
@@ -890,27 +890,28 @@ namespace ts {
     // Because of this, it may be necessary to determine what sort of MethodDeclaration you have
     // at later stages of the compiler pipeline.  In that case, you can either check the parent kind
     // of the method, or use helpers like isObjectLiteralMethodDeclaration
-    export interface MethodDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface MethodDeclaration extends FunctionLikeDeclaration, ObjectLiteralElement {
         kind: SyntaxKind.MethodDeclaration;
         name: PropertyName;
         body?: FunctionBody;
     }
 
-    export interface ConstructorDeclaration extends FunctionLikeDeclaration, ClassElement {
+    export interface ConstructorDeclaration extends FunctionLikeDeclaration {
         kind: SyntaxKind.Constructor;
         parent?: ClassDeclaration | ClassExpression;
         body?: FunctionBody;
     }
 
     /** For when we encounter a semicolon in a class declaration. ES6 allows these as class elements. */
-    export interface SemicolonClassElement extends ClassElement {
+    export interface SemicolonClassElement extends DeclarationBase {
         kind: SyntaxKind.SemicolonClassElement;
         parent?: ClassDeclaration | ClassExpression;
+        name?: PropertyName;
     }
 
     // See the comment on MethodDeclaration for the intuition behind GetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface GetAccessorDeclaration extends FunctionLikeDeclaration, ObjectLiteralElement {
         kind: SyntaxKind.GetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -919,7 +920,7 @@ namespace ts {
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
     // ClassElement and an ObjectLiteralElement.
-    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ClassElement, ObjectLiteralElement {
+    export interface SetAccessorDeclaration extends FunctionLikeDeclaration, ObjectLiteralElement {
         kind: SyntaxKind.SetAccessor;
         parent?: ClassDeclaration | ClassExpression | ObjectLiteralExpression;
         name: PropertyName;
@@ -928,7 +929,7 @@ namespace ts {
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
 
-    export interface IndexSignatureDeclaration extends SignatureDeclaration, ClassElement, TypeElement {
+    export interface IndexSignatureDeclaration extends SignatureDeclaration {
         kind: SyntaxKind.IndexSignature;
         parent?: ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeLiteralNode;
     }
@@ -1695,7 +1696,7 @@ namespace ts {
         kind: SyntaxKind.DebuggerStatement;
     }
 
-    export interface MissingDeclaration extends DeclarationStatement, ClassElement, ObjectLiteralElement, TypeElement {
+    export interface MissingDeclaration extends DeclarationStatement, ObjectLiteralElement {
         kind: SyntaxKind.MissingDeclaration;
         name?: Identifier;
     }
@@ -1863,34 +1864,26 @@ namespace ts {
         kind: SyntaxKind.ClassExpression;
     }
 
-    export interface ClassElement extends DeclarationBase {
-        kind:
-            | SyntaxKind.PropertyDeclaration
-            | SyntaxKind.MethodDeclaration
-            | SyntaxKind.Constructor
-            | SyntaxKind.SemicolonClassElement
-            | SyntaxKind.GetAccessor
-            | SyntaxKind.SetAccessor
-            | SyntaxKind.IndexSignature
-            | SyntaxKind.MissingDeclaration;
-        _classElementBrand: any;
-        name?: PropertyName;
-    }
+    export type ClassElement =
+        | PropertyDeclaration
+        | MethodDeclaration
+        | ConstructorDeclaration
+        | SemicolonClassElement
+        | GetAccessorDeclaration
+        | SetAccessorDeclaration
+        | IndexSignatureDeclaration
+        | MissingDeclaration;
 
-    export interface TypeElement extends DeclarationBase {
-        kind:
-            | SyntaxKind.CallSignature
-            | SyntaxKind.ConstructSignature
-            | SyntaxKind.PropertySignature
-            | SyntaxKind.MethodSignature
-            | SyntaxKind.IndexSignature
-            | SyntaxKind.MissingDeclaration
-            | SyntaxKind.JSDocPropertyTag
-            | SyntaxKind.JSDocRecordMember;
-        _typeElementBrand: any;
-        name?: PropertyName;
-        questionToken?: QuestionToken;
-    }
+    export type TypeElement =
+        | CallSignatureDeclaration
+        | ConstructSignatureDeclaration
+        | PropertySignature
+        | MethodSignature
+        | IndexSignatureDeclaration
+        | MissingDeclaration
+        | IndexSignatureDeclaration
+        | JSDocPropertyTag
+        | JSDocRecordMember;
 
     export interface InterfaceDeclaration extends DeclarationStatement {
         kind: SyntaxKind.InterfaceDeclaration;
@@ -2224,7 +2217,7 @@ namespace ts {
         jsDocTypeLiteral?: JSDocTypeLiteral;
     }
 
-    export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+    export interface JSDocPropertyTag extends JSDocTag {
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
         typeExpression: JSDocTypeExpression;
