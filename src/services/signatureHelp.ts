@@ -56,7 +56,7 @@ namespace ts.SignatureHelp {
     //                break;
 
     //            case TypeScript.SyntaxKind.CommaToken:
-    //                if (stack == 0) {
+    //                if (stack === 0) {
     //                    argumentIndex++;
     //                }
 
@@ -262,7 +262,7 @@ namespace ts.SignatureHelp {
      * in the argument of an invocation; returns undefined otherwise.
      */
     export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo {
-        if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+        if (isCallOrNewExpression(node.parent)) {
             const callExpression = <CallExpression>node.parent;
             // There are 3 cases to handle:
             //   1. The token introduces a list, and should begin a signature help session

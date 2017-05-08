@@ -18,7 +18,7 @@ namespace ts.codefix {
 
             // figure out if the `this` access is actually inside the supercall
             // i.e. super(this.a), since in that case we won't suggest a fix
-            if (superCall.expression && superCall.expression.kind == SyntaxKind.CallExpression) {
+            if (superCall.expression && superCall.expression.kind === SyntaxKind.CallExpression) {
                 const arguments = (<CallExpression>superCall.expression).arguments;
                 for (let i = 0; i < arguments.length; i++) {
                     if ((<PropertyAccessExpression>arguments[i]).expression === token) {

@@ -228,7 +228,7 @@ namespace ts {
 
             // Add any prologue directives.
             const ensureUseStrict = compilerOptions.alwaysStrict || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
-            const statementOffset = addPrologueDirectives(statements, node.statements, ensureUseStrict, sourceElementVisitor);
+            const statementOffset = addPrologue(statements, node.statements, ensureUseStrict, sourceElementVisitor);
 
             // var __moduleName = context_1 && context_1.id;
             statements.push(
@@ -479,8 +479,8 @@ namespace ts {
                                 // module is imported only for side-effects, no emit required
                                 break;
                             }
+                            // falls through
 
-                        // fall-through
                         case SyntaxKind.ImportEqualsDeclaration:
                             Debug.assert(importVariableName !== undefined);
                             // save import into the local

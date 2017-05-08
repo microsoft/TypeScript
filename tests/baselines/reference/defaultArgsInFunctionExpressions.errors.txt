@@ -5,7 +5,7 @@ tests/cases/compiler/defaultArgsInFunctionExpressions.ts(11,1): error TS2322: Ty
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(14,51): error TS2352: Type 'string' cannot be converted to type 'number'.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(17,41): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/defaultArgsInFunctionExpressions.ts(20,62): error TS2352: Type 'string' cannot be converted to type 'number'.
-tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2708: Cannot use namespace 'T' as a value.
 
 
 ==== tests/cases/compiler/defaultArgsInFunctionExpressions.ts (8 errors) ====
@@ -52,7 +52,7 @@ tests/cases/compiler/defaultArgsInFunctionExpressions.ts(28,15): error TS2304: C
     
     var f6 = (t = T) => { };
                   ~
-!!! error TS2304: Cannot find name 'T'.
+!!! error TS2708: Cannot use namespace 'T' as a value.
     var f7 = (t = U) => { return t; };
     
     f7().x;

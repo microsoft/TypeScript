@@ -3,6 +3,20 @@
 /// <reference path="session.ts" />
 
 namespace ts.server {
+    interface IOSessionOptions {
+        host: ServerHost;
+        cancellationToken: ServerCancellationToken;
+        canUseEvents: boolean;
+        installerEventPort: number;
+        useSingleInferredProject: boolean;
+        disableAutomaticTypingAcquisition: boolean;
+        globalTypingsCacheLocation: string;
+        logger: Logger;
+        typingSafeListLocation: string;
+        telemetryEnabled: boolean;
+        globalPlugins: string[];
+        pluginProbeLocations: string[];
+    }
 
     const net: {
         connect(options: { port: number }, onConnect?: () => void): NodeSocket
@@ -366,41 +380,34 @@ namespace ts.server {
             }
 
             this.projectService.updateTypingsForProject(response);
-            if (response.kind == ActionSet && this.socket) {
+            if (response.kind === ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);
             }
         }
     }
 
     class IOSession extends Session {
-        constructor(
-            host: ServerHost,
-            cancellationToken: ServerCancellationToken,
-            installerEventPort: number,
-            canUseEvents: boolean,
-            useSingleInferredProject: boolean,
-            disableAutomaticTypingAcquisition: boolean,
-            globalTypingsCacheLocation: string,
-            typingSafeListLocation: string,
-            telemetryEnabled: boolean,
-            logger: server.Logger) {
-                const typingsInstaller = disableAutomaticTypingAcquisition
-                    ? undefined
-                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, host.newLine);
+        constructor(options: IOSessionOptions) {
+            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, canUseEvents } = options;
+            const typingsInstaller = disableAutomaticTypingAcquisition
+                ? undefined
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, host.newLine);
 
-                super(
-                    host,
-                    cancellationToken,
-                    useSingleInferredProject,
-                    typingsInstaller || nullTypingsInstaller,
-                    Buffer.byteLength,
-                    process.hrtime,
-                    logger,
-                    canUseEvents);
+            super({
+                host,
+                cancellationToken,
+                useSingleInferredProject,
+                typingsInstaller: typingsInstaller || nullTypingsInstaller,
+                byteLength: Buffer.byteLength,
+                hrtime: process.hrtime,
+                logger,
+                canUseEvents,
+                globalPlugins: options.globalPlugins,
+                pluginProbeLocations: options.pluginProbeLocations});
 
-                if (telemetryEnabled && typingsInstaller) {
-                    typingsInstaller.setTelemetrySender(this);
-                }
+            if (telemetryEnabled && typingsInstaller) {
+                typingsInstaller.setTelemetrySender(this);
+            }
         }
 
         exit() {
@@ -735,21 +742,29 @@ namespace ts.server {
 
     const typingSafeListLocation = findArgument("--typingSafeListLocation");
 
+    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
+    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const ioSession = new IOSession(
-        sys,
+    const options: IOSessionOptions = {
+        host: sys,
         cancellationToken,
-        eventPort,
-        /*canUseEvents*/ eventPort === undefined,
+        installerEventPort: eventPort,
+        canUseEvents: eventPort === undefined,
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
-        getGlobalTypingsCacheLocation(),
+        globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
         typingSafeListLocation,
         telemetryEnabled,
-        logger);
+        logger,
+        globalPlugins,
+        pluginProbeLocations
+    };
+
+    const ioSession = new IOSession(options);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

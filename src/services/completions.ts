@@ -487,7 +487,7 @@ namespace ts.Completions {
                             // It has a left-hand side, so we're not in an opening JSX tag.
                             break;
                         }
-                        // fall through
+                        // falls through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
@@ -1311,7 +1311,7 @@ namespace ts.Completions {
     }
 
     function isEqualityOperatorKind(kind: SyntaxKind) {
-        return kind == SyntaxKind.EqualsEqualsToken ||
+        return kind === SyntaxKind.EqualsEqualsToken ||
             kind === SyntaxKind.ExclamationEqualsToken ||
             kind === SyntaxKind.EqualsEqualsEqualsToken ||
             kind === SyntaxKind.ExclamationEqualsEqualsToken;

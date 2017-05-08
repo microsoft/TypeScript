@@ -257,7 +257,7 @@ namespace ts.server {
         startWatchingContainingDirectoriesForFile(fileName: string, project: InferredProject, callback: (fileName: string) => void) {
             let currentPath = getDirectoryPath(fileName);
             let parentPath = getDirectoryPath(currentPath);
-            while (currentPath != parentPath) {
+            while (currentPath !== parentPath) {
                 if (!this.directoryWatchersForTsconfig.has(currentPath)) {
                     this.projectService.logger.info(`Add watcher for: ${currentPath}`);
                     this.directoryWatchersForTsconfig.set(currentPath, this.projectService.host.watchDirectory(currentPath, callback));
@@ -271,6 +271,18 @@ namespace ts.server {
                 parentPath = getDirectoryPath(parentPath);
             }
         }
+    }
+
+    export interface ProjectServiceOptions {
+        host: ServerHost;
+        logger: Logger;
+        cancellationToken: HostCancellationToken;
+        useSingleInferredProject: boolean;
+        typingsInstaller: ITypingsInstaller;
+        eventHandler?: ProjectServiceEventHandler;
+        throttleWaitMilliseconds?: number;
+        globalPlugins?: string[];
+        pluginProbeLocations?: string[];
     }
 
     export class ProjectService {
@@ -320,19 +332,33 @@ namespace ts.server {
 
         public lastDeletedFile: ScriptInfo;
 
-        constructor(public readonly host: ServerHost,
-            public readonly logger: Logger,
-            public readonly cancellationToken: HostCancellationToken,
-            public readonly useSingleInferredProject: boolean,
-            readonly typingsInstaller: ITypingsInstaller = nullTypingsInstaller,
-            private readonly eventHandler?: ProjectServiceEventHandler,
-            public readonly throttleWaitMilliseconds?: number) {
+        public readonly host: ServerHost;
+        public readonly logger: Logger;
+        public readonly cancellationToken: HostCancellationToken;
+        public readonly useSingleInferredProject: boolean;
+        public readonly typingsInstaller: ITypingsInstaller;
+        public readonly throttleWaitMilliseconds?: number;
+        private readonly eventHandler?: ProjectServiceEventHandler;
 
-            Debug.assert(!!host.createHash, "'ServerHost.createHash' is required for ProjectService");
+        public readonly globalPlugins: ReadonlyArray<string>;
+        public readonly pluginProbeLocations: ReadonlyArray<string>;
 
-            this.toCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        constructor(opts: ProjectServiceOptions) {
+            this.host = opts.host;
+            this.logger = opts.logger;
+            this.cancellationToken = opts.cancellationToken;
+            this.useSingleInferredProject = opts.useSingleInferredProject;
+            this.typingsInstaller = opts.typingsInstaller || nullTypingsInstaller;
+            this.throttleWaitMilliseconds = opts.throttleWaitMilliseconds;
+            this.eventHandler = opts.eventHandler;
+            this.globalPlugins = opts.globalPlugins || emptyArray;
+            this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+
+            Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
+
+            this.toCanonicalFileName = createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
             this.directoryWatchers = new DirectoryWatchers(this);
-            this.throttledOperations = new ThrottledOperations(host);
+            this.throttledOperations = new ThrottledOperations(this.host);
 
             this.typingsInstaller.attach(this);
 
@@ -344,7 +370,7 @@ namespace ts.server {
                 extraFileExtensions: []
             };
 
-            this.documentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames, host.getCurrentDirectory());
+            this.documentRegistry = createDocumentRegistry(this.host.useCaseSensitiveFileNames, this.host.getCurrentDirectory());
         }
 
         /* @internal */
@@ -592,7 +618,7 @@ namespace ts.server {
          */
         private onConfigFileAddedForInferredProject(fileName: string) {
             // TODO: check directory separators
-            if (getBaseFileName(fileName) != "tsconfig.json") {
+            if (getBaseFileName(fileName) !== "tsconfig.json") {
                 this.logger.info(`${fileName} is not tsconfig.json`);
                 return;
             }
@@ -666,18 +692,23 @@ namespace ts.server {
                     // when creation inferred project for some file has added other open files into this project (i.e. as referenced files)
                     // we definitely don't want to delete the project that was just created
                     for (const f of this.openFiles) {
-                        if (f.containingProjects.length === 0) {
+                        if (f.containingProjects.length === 0 || !inferredProject.containsScriptInfo(f)) {
                             // this is orphaned file that we have not processed yet - skip it
                             continue;
                         }
-                        const defaultProject = f.getDefaultProject();
-                        if (isRootFileInInferredProject(info) && defaultProject !== inferredProject && inferredProject.containsScriptInfo(f)) {
-                            // open file used to be root in inferred project,
-                            // this inferred project is different from the one we've just created for current file
-                            // and new inferred project references this open file.
-                            // We should delete old inferred project and attach open file to the new one
-                            this.removeProject(defaultProject);
-                            f.attachToProject(inferredProject);
+
+                        for (const fContainingProject of f.containingProjects) {
+                            if (fContainingProject.projectKind === ProjectKind.Inferred &&
+                                fContainingProject.isRoot(f) &&
+                                fContainingProject !== inferredProject) {
+
+                                // open file used to be root in inferred project,
+                                // this inferred project is different from the one we've just created for current file
+                                // and new inferred project references this open file.
+                                // We should delete old inferred project and attach open file to the new one
+                                this.removeProject(fContainingProject);
+                                f.attachToProject(inferredProject);
+                            }
                         }
                     }
                 }
@@ -756,12 +787,12 @@ namespace ts.server {
          * we first detect if there is already a configured project created for it: if so, we re-read
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
-        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath): OpenConfiguredProjectResult {
+        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             const searchPath = getDirectoryPath(fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
-            const configFileName = this.findConfigFile(asNormalizedPath(searchPath));
+            const configFileName = this.findConfigFile(asNormalizedPath(searchPath), projectRootPath);
             if (!configFileName) {
                 this.logger.info("No config files found.");
                 return {};
@@ -795,8 +826,8 @@ namespace ts.server {
         // current directory (the directory in which tsc was invoked).
         // The server must start searching from the directory containing
         // the newly opened file.
-        private findConfigFile(searchPath: NormalizedPath): NormalizedPath {
-            while (true) {
+        private findConfigFile(searchPath: NormalizedPath, projectRootPath?: NormalizedPath): NormalizedPath {
+            while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 if (this.host.fileExists(tsconfigFileName)) {
                     return tsconfigFileName;
@@ -1002,7 +1033,7 @@ namespace ts.server {
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
                 else {
@@ -1295,17 +1326,17 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): OpenConfiguredProjectResult {
-            return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind);
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult {
+            return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
             let configFileErrors: Diagnostic[];
 
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
-                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName, projectRootPath));
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                 }

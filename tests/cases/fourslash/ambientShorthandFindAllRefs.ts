@@ -11,11 +11,6 @@
 
 const ranges = test.ranges();
 const [r0, r1] = ranges;
-verify.referenceGroups(r0, [
-    { definition: "import x", ranges: [r0] },
-    { definition: 'module "jquery"', ranges: [r1] }
-]);
-verify.referenceGroups(r1, [
-    { definition: 'module "jquery"', ranges: [r0] },
-    { definition: "import x", ranges: [r1] }
-]);
+// TODO: Want these to be in the same group, but that would require creating a symbol for `x`.
+verify.singleReferenceGroup("import x", [r0]);
+verify.singleReferenceGroup("import x", [r1]);

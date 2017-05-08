@@ -54,7 +54,7 @@ namespace ts.formatting {
                 let current = position;
                 while (current > 0) {
                     const char = sourceFile.text.charCodeAt(current);
-                    if (!isWhiteSpace(char)) {
+                    if (!isWhiteSpaceLike(char)) {
                         break;
                     }
                     current--;
@@ -341,10 +341,7 @@ namespace ts.formatting {
                 return Value.Unknown;
             }
 
-            if (node.parent && (
-                node.parent.kind === SyntaxKind.CallExpression ||
-                node.parent.kind === SyntaxKind.NewExpression) &&
-                (<CallExpression>node.parent).expression !== node) {
+            if (node.parent && isCallOrNewExpression(node.parent) && (<CallExpression>node.parent).expression !== node) {
 
                 const fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
                 const startingExpression = getStartingExpression(fullCallOrNewExpression);

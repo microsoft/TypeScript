@@ -308,6 +308,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
@@ -366,7 +367,7 @@ namespace ts {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
-    export function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpaceLike(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
     }
 
@@ -454,6 +455,7 @@ namespace ts {
                       if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                           pos++;
                       }
+                      // falls through
                   case CharacterCodes.lineFeed:
                       pos++;
                       if (stopAfterLineBreak) {
@@ -510,7 +512,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                           pos++;
                           continue;
                       }
@@ -625,6 +627,7 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -691,7 +694,7 @@ namespace ts {
                     }
                     break scan;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                         if (hasPendingCommentRange && isLineBreak(ch)) {
                             pendingHasTrailingNewLine = true;
                         }
@@ -1072,7 +1075,7 @@ namespace ts {
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // fall through
+                    // falls through
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
@@ -1459,6 +1462,7 @@ namespace ts {
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
                         // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
+                        // falls through
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:
@@ -1723,8 +1727,12 @@ namespace ts {
                 return token = SyntaxKind.OpenBraceToken;
             }
 
+            // First non-whitespace character on this line.
+            let firstNonWhitespace = 0;
+            // These initial values are special because the first line is:
+            // firstNonWhitespace = 0 to indicate that we want leading whitspace,
+
             while (pos < end) {
-                pos++;
                 char = text.charCodeAt(pos);
                 if (char === CharacterCodes.openBrace) {
                     break;
@@ -1736,8 +1744,23 @@ namespace ts {
                     }
                     break;
                 }
+
+                // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
+                // i.e (- : whitespace)
+                //      <div>----
+                //      </div> becomes <div></div>
+                //
+                //      <div>----</div> becomes <div>----</div>
+                if (isLineBreak(char) && firstNonWhitespace === 0) {
+                    firstNonWhitespace = -1;
+                }
+                else if (!isWhiteSpaceLike(char)) {
+                    firstNonWhitespace = pos;
+                }
+                pos++;
             }
-            return token = SyntaxKind.JsxText;
+
+            return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
         // Scans a JSX identifier; these differ from normal identifiers in that

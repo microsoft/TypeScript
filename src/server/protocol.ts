@@ -1041,6 +1041,11 @@ namespace ts.server.protocol {
          *      "TS", "JS", "TSX", "JSX"
          */
         scriptKindName?: ScriptKindName;
+        /**
+         * Used to limit the searching for project config file. If given the searching will stop at this
+         * root path; otherwise it will go all the way up to the dist root path.
+         */
+        projectRootPath?: string;
     }
 
     export type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
@@ -1820,9 +1825,19 @@ namespace ts.server.protocol {
         text: string;
 
         /**
+         * The category of the diagnostic message, e.g. "error" vs. "warning"
+         */
+        category: string;
+
+        /**
          * The error code of the diagnostic message.
          */
         code?: number;
+
+        /**
+         * The name of the plugin reporting the message.
+         */
+        source?: string;
     }
 
     export interface DiagnosticEventBody {
@@ -2262,15 +2277,19 @@ namespace ts.server.protocol {
         allowSyntheticDefaultImports?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
+        alwaysStrict?: boolean;
         baseUrl?: string;
         charset?: string;
+        checkJs?: boolean;
         declaration?: boolean;
         declarationDir?: string;
         disableSizeLimit?: boolean;
+        downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
@@ -2310,6 +2329,7 @@ namespace ts.server.protocol {
         skipDefaultLibCheck?: boolean;
         sourceMap?: boolean;
         sourceRoot?: string;
+        strict?: boolean;
         strictNullChecks?: boolean;
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;

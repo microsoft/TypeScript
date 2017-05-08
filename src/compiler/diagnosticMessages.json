@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -866,6 +866,18 @@
     "A default export can only be used in an ECMAScript-style module.": {
         "category": "Error",
         "code": 1319
+    },
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1320
+    },
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1321
+    },
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1322
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2099,6 +2111,18 @@
         "category": "Error",
         "code": 2707
     },
+    "Cannot use namespace '{0}' as a value.": {
+        "category": "Error",
+        "code": 2708
+    },
+    "Cannot use namespace '{0}' as a type.": {
+        "category": "Error",
+        "code": 2709
+    },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3177,7 +3201,18 @@
         "category": "Message",
         "code": 6181
     },
-
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": 6182
+    },
+    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+        "category": "Message",
+        "code": 6183
+    },
+    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+        "category": "Message",
+        "code": 6184
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3281,6 +3316,10 @@
     "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
         "category": "Error",
         "code": 7034
+    },
+    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+        "category": "Error",
+        "code": 7035
     },
     "You cannot rename this element.": {
         "category": "Error",

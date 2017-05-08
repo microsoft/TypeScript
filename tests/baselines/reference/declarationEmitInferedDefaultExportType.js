@@ -18,7 +18,7 @@ exports["default"] = {
 
 
 //// [declarationEmitInferedDefaultExportType.d.ts]
-declare var _default: {
+declare const _default: {
     foo: any[];
     bar: any;
     baz: any;

@@ -17,34 +17,22 @@ namespace ts.DocumentHighlights {
     }
 
     function getSemanticDocumentHighlights(node: Node, typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const context = new FindAllReferences.DefaultFindReferencesContext(typeChecker, cancellationToken);
-        const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(context, node, sourceFilesToSearch);
-        return referencedSymbols && convertReferencedSymbols(referencedSymbols);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, sourceFilesToSearch, typeChecker, cancellationToken);
+        return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
-    function convertReferencedSymbols(referencedSymbols: ReferencedSymbol[]): DocumentHighlights[] {
-        const fileNameToDocumentHighlights = createMap<DocumentHighlights>();
-        const result: DocumentHighlights[] = [];
-        for (const referencedSymbol of referencedSymbols) {
-            for (const referenceEntry of referencedSymbol.references) {
-                const fileName = referenceEntry.fileName;
-                let documentHighlights = fileNameToDocumentHighlights.get(fileName);
-                if (!documentHighlights) {
-                    documentHighlights = { fileName, highlightSpans: [] };
-
-                    fileNameToDocumentHighlights.set(fileName, documentHighlights);
-                    result.push(documentHighlights);
-                }
-
-                documentHighlights.highlightSpans.push({
-                    textSpan: referenceEntry.textSpan,
-                    kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference,
-                    isInString: referenceEntry.isInString
-                });
+    function convertReferencedSymbols(referenceEntries: FindAllReferences.Entry[]): DocumentHighlights[] {
+        const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
+        for (const entry of referenceEntries) {
+            const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
+            let highlightSpans = fileNameToDocumentHighlights.get(fileName);
+            if (!highlightSpans) {
+                fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
             }
+            highlightSpans.push(span);
         }
 
-        return result;
+        return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
@@ -245,7 +233,7 @@ namespace ts.DocumentHighlights {
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         continue;
                     }
-                // Fall through.
+                    // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:

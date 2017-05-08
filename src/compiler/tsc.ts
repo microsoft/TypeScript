@@ -30,7 +30,7 @@ namespace ts {
     }
 
     function reportEmittedFiles(files: string[]): void {
-        if (!files || files.length == 0) {
+        if (!files || files.length === 0) {
             return;
         }
 
@@ -282,7 +282,7 @@ namespace ts {
                     // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current directory; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
-                    directory == "" ? "." : directory,
+                    directory === "" ? "." : directory,
                     watchedDirectoryChanged, /*recursive*/ true);
             }
         }
@@ -334,7 +334,7 @@ namespace ts {
                         // When the configFileName is just "tsconfig.json", the watched directory should be
                         // the current directory; if there is a given "project" parameter, then the configFileName
                         // is an absolute file name.
-                        directory == "" ? "." : directory,
+                        directory === "" ? "." : directory,
                         watchedDirectoryChanged, /*recursive*/ true);
                 }
             }
@@ -739,7 +739,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            sys.writeFile(file, generateTSConfig(options, fileNames));
+            sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 

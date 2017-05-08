@@ -9,7 +9,6 @@
 ////}
 ////C.prototype.[|z|] = 1;
 ////var t = new C(12);
-////t./**/[|z|] = 11;
+////t.[|z|] = 11;
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations();

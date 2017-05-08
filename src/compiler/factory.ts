@@ -368,6 +368,18 @@ namespace ts {
             : node;
     }
 
+    export function createParenthesizedType(type: TypeNode) {
+        const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
+        node.type = type;
+        return node;
+    }
+
+    export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
     export function createTypeLiteralNode(members: TypeElement[]) {
         const typeLiteralNode = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
         typeLiteralNode.members = createNodeArray(members);
@@ -1425,6 +1437,44 @@ namespace ts {
             || node.heritageClauses !== heritageClauses
             || node.members !== members
             ? updateNode(createClassDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+            : node;
+    }
+
+    export function createInterfaceDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        const node = <InterfaceDeclaration>createSynthesizedNode(SyntaxKind.InterfaceDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.heritageClauses = asNodeArray(heritageClauses);
+        node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.heritageClauses !== heritageClauses
+            || node.members !== members
+            ? updateNode(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+            : node;
+    }
+
+    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.type = type;
+        return node;
+    }
+
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.type !== type
+            ? updateNode(createTypeAliasDeclaration(name, typeParameters, type), node)
             : node;
     }
 
@@ -2938,6 +2988,28 @@ namespace ts {
     }
 
     /**
+     * Gets the internal name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the body of an ES5 class function body. An internal name will *never*
+     * be prefixed with an module or namespace export modifier like "exports." when emitted as an
+     * expression. An internal name will also *never* be renamed due to a collision with a block
+     * scoped variable.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its internal name.
+     */
+    export function isInternalName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
+    }
+
+    /**
      * Gets the local name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
      * local name will *never* be prefixed with an module or namespace export modifier like
@@ -3058,7 +3130,18 @@ namespace ts {
      * @param ensureUseStrict: boolean determining whether the function need to add prologue-directives
      * @param visitor: Optional callback used to visit any custom prologue directives.
      */
-    export function addPrologueDirectives(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+    export function addPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean, visitor?: (node: Node) => VisitResult<Node>): number {
+        const offset = addStandardPrologue(target, source, ensureUseStrict);
+        return addCustomPrologue(target, source, offset, visitor);
+    }
+
+    /**
+     * Add just the standard (string-expression) prologue-directives into target statement-array.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
+     */
+    export function addStandardPrologue(target: Statement[], source: Statement[], ensureUseStrict?: boolean): number {
         Debug.assert(target.length === 0, "Prologue directives should be at the first statement in the target statements array");
         let foundUseStrict = false;
         let statementOffset = 0;
@@ -3066,7 +3149,7 @@ namespace ts {
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (isPrologueDirective(statement)) {
-                if (isUseStrictPrologue(statement as ExpressionStatement)) {
+                if (isUseStrictPrologue(statement)) {
                     foundUseStrict = true;
                 }
                 target.push(statement);
@@ -3079,6 +3162,17 @@ namespace ts {
         if (ensureUseStrict && !foundUseStrict) {
             target.push(startOnNewLine(createStatement(createLiteral("use strict"))));
         }
+        return statementOffset;
+    }
+
+    /**
+     * Add just the custom prologue-directives into target statement-array.
+     * The function needs to be called during each transformation step.
+     * This function needs to be called whenever we transform the statement
+     * list of a source file, namespace, or function-like body.
+     */
+    export function addCustomPrologue(target: Statement[], source: Statement[], statementOffset: number, visitor?: (node: Node) => VisitResult<Node>): number {
+        const numStatements = source.length;
         while (statementOffset < numStatements) {
             const statement = source[statementOffset];
             if (getEmitFlags(statement) & EmitFlags.CustomPrologue) {

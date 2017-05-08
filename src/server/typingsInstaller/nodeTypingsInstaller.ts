@@ -31,7 +31,7 @@ namespace ts.server.typingsInstaller {
     }
 
     function getNPMLocation(processName: string) {
-        if (path.basename(processName).indexOf("node") == 0) {
+        if (path.basename(processName).indexOf("node") === 0) {
             return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
         }
         else {
@@ -96,6 +96,9 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
                 }
                 this.execSync(`${this.npmPath} install ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
+                }
             }
             catch (e) {
                 if (this.log.isEnabled()) {

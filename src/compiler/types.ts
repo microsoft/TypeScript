@@ -10,7 +10,7 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
-        get(key: string): T;
+        get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
@@ -65,6 +65,7 @@ namespace ts {
         NumericLiteral,
         StringLiteral,
         JsxText,
+        JsxTextAllWhiteSpaces,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -1572,6 +1573,7 @@ namespace ts {
 
     export interface JsxText extends Node {
         kind: SyntaxKind.JsxText;
+        containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
 
@@ -1886,6 +1888,7 @@ namespace ts {
         kind: SyntaxKind.ImportDeclaration;
         parent?: SourceFile | ModuleBlock;
         importClause?: ImportClause;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
 
@@ -1919,6 +1922,7 @@ namespace ts {
         kind: SyntaxKind.ExportDeclaration;
         parent?: SourceFile | ModuleBlock;
         exportClause?: NamedExports;
+        /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier?: Expression;
     }
 
@@ -2305,8 +2309,8 @@ namespace ts {
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules: Map<ResolvedModuleFull>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
-        /* @internal */ imports: LiteralExpression[];
-        /* @internal */ moduleAugmentations: LiteralExpression[];
+        /* @internal */ imports: StringLiteral[];
+        /* @internal */ moduleAugmentations: StringLiteral[];
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
         /* @internal */ ambientModuleNames: string[];
         /* @internal */ checkJsDirective: CheckJsDirective | undefined;
@@ -2404,7 +2408,14 @@ namespace ts {
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
-        /* @internal */ structureIsReused?: boolean;
+        /* @internal */ structureIsReused?: StructureIsReused;
+    }
+
+    /* @internal */
+    export const enum StructureIsReused {
+        Not         = 0,
+        SafeModules = 1 << 0,
+        Completely  = 1 << 1,
     }
 
     export interface CustomTransformers {
@@ -2522,10 +2533,14 @@ namespace ts {
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
+        /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
+        /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
+        /** Follow a *single* alias to get the immediately aliased symbol. */
+        /* @internal */ getImmediateAliasedSymbol(symbol: Symbol): Symbol;
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
@@ -2719,7 +2734,6 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -2841,6 +2855,7 @@ namespace ts {
 
     /* @internal */
     export interface SymbolLinks {
+        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
         type?: Type;                        // Type of value symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
@@ -2852,7 +2867,7 @@ namespace ts {
         containingType?: UnionOrIntersectionType;  // Containing union or intersection type for synthetic property
         leftSpread?: Symbol;                // Left source for synthetic spread property
         rightSpread?: Symbol;               // Right source for synthetic spread property
-        mappedTypeOrigin?: Symbol;          // For a property on a mapped type, points back to the orignal 'T' from 'keyof T'.
+        syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
         isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
         resolvedExports?: SymbolTable;      // Resolved exports of module
         exportsChecked?: boolean;           // True if exports of external module have been checked
@@ -3343,6 +3358,7 @@ namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
+        source?: string;
     }
 
     export enum DiagnosticCategory {
@@ -3930,13 +3946,15 @@ namespace ts {
         HelperName = 1 << 12,
         ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 16,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 17,
-        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        InternalName = 1 << 15,                  // The name is internal to an ES5 class body function.
+        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 17,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 18,
+        ReuseTempVariableScope = 1 << 19,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 20,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 21,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 22,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        Iterator = 1 << 23,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
     }
 
     export interface EmitHelper {
@@ -3961,17 +3979,24 @@ namespace ts {
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Read = 1 << 9,             // __read (used by ES2015 iterator destructuring transformation)
+        Read = 1 << 9,              // __read (used by ES2015 iterator destructuring transformation)
         Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        AsyncGenerator = 1 << 11,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 12,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 13,      // __asyncValues (used by ES2017 for..await..of transformation)
+        Await = 1 << 11,            // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
 
         // Helpers included by ES2017 for..await..of
         ForAwaitOfIncludes = AsyncValues,
+
+        // Helpers included by ES2017 async generators
+        AsyncGeneratorIncludes = Await | AsyncGenerator,
+
+        // Helpers included by yield* in ES2017 async generators
+        AsyncDelegatorIncludes = Await | AsyncDelegator | AsyncValues,
 
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,

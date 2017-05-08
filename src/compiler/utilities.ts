@@ -122,9 +122,8 @@ namespace ts {
 
     /* @internal */
     export function hasChangesInResolutions<T>(names: string[], newResolutions: T[], oldResolutions: Map<T>, comparer: (oldResolution: T, newResolution: T) => boolean): boolean {
-        if (names.length !== newResolutions.length) {
-            return false;
-        }
+        Debug.assert(names.length === newResolutions.length);
+
         for (let i = 0; i < names.length; i++) {
             const newResolution = newResolutions[i];
             const oldResolution = oldResolutions && oldResolutions.get(names[i]);
@@ -674,6 +673,7 @@ namespace ts {
                 // At this point, node is either a qualified name or an identifier
                 Debug.assert(node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression,
                     "'node' was expected to be a qualified name, identifier or property access in 'isPartOfTypeNode'.");
+                // falls through
             case SyntaxKind.QualifiedName:
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ThisKeyword:
@@ -783,6 +783,7 @@ namespace ts {
                     if (operand) {
                         traverse(operand);
                     }
+                    return;
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.ModuleDeclaration:
@@ -1000,7 +1001,7 @@ namespace ts {
                     if (!includeArrowFunctions) {
                         continue;
                     }
-                // Fall through
+                    // falls through
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ModuleDeclaration:
@@ -1059,6 +1060,7 @@ namespace ts {
                     if (!stopOnFunctions) {
                         continue;
                     }
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
                 case SyntaxKind.MethodDeclaration:
@@ -1138,6 +1140,10 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    export function isCallOrNewExpression(node: Node): node is CallExpression | NewExpression {
+        return node.kind === SyntaxKind.CallExpression || node.kind === SyntaxKind.NewExpression;
     }
 
     export function getInvokedExpression(node: CallLikeExpression): Expression {
@@ -1258,7 +1264,7 @@ namespace ts {
                 if (node.parent.kind === SyntaxKind.TypeQuery || isJSXTagName(node)) {
                     return true;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.NumericLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
@@ -1867,7 +1873,7 @@ namespace ts {
         }
     }
 
-    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node {
+    export function getAncestor(node: Node | undefined, kind: SyntaxKind): Node | undefined {
         while (node) {
             if (node.kind === kind) {
                 return node;
@@ -1922,16 +1928,18 @@ namespace ts {
     }
 
     export const enum FunctionFlags {
-        Normal = 0,
-        Generator = 1 << 0,
-        Async = 1 << 1,
-        AsyncOrAsyncGenerator = Async | Generator,
-        Invalid = 1 << 2,
-        InvalidAsyncOrAsyncGenerator = AsyncOrAsyncGenerator | Invalid,
-        InvalidGenerator = Generator | Invalid,
+        Normal = 0,             // Function is a normal function
+        Generator = 1 << 0,     // Function is a generator function or async generator function
+        Async = 1 << 1,         // Function is an async function or an async generator function
+        Invalid = 1 << 2,       // Function is a signature or overload and does not have a body.
+        AsyncGenerator = Async | Generator, // Function is an async generator function
     }
 
-    export function getFunctionFlags(node: FunctionLikeDeclaration) {
+    export function getFunctionFlags(node: FunctionLikeDeclaration | undefined) {
+        if (!node) {
+            return FunctionFlags.Invalid;
+        }
+
         let flags = FunctionFlags.Normal;
         switch (node.kind) {
             case SyntaxKind.FunctionDeclaration:
@@ -1940,7 +1948,7 @@ namespace ts {
                 if (node.asteriskToken) {
                     flags |= FunctionFlags.Generator;
                 }
-                // fall through
+                // falls through
             case SyntaxKind.ArrowFunction:
                 if (hasModifier(node, ModifierFlags.Async)) {
                     flags |= FunctionFlags.Async;
@@ -3134,7 +3142,7 @@ namespace ts {
         return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
     }
 
-    export function isExportDefaultSymbol(symbol: Symbol): boolean {
+    function isExportDefaultSymbol(symbol: Symbol): boolean {
         return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
     }
 
@@ -3564,10 +3572,6 @@ namespace ts {
 
     export function isIdentifier(node: Node): node is Identifier {
         return node.kind === SyntaxKind.Identifier;
-    }
-
-    export function isVoidExpression(node: Node): node is VoidExpression {
-        return node.kind === SyntaxKind.VoidExpression;
     }
 
     export function isGeneratedIdentifier(node: Node): node is GeneratedIdentifier {
@@ -4202,12 +4206,13 @@ namespace ts {
     export function getDefaultLibFileName(options: CompilerOptions): string {
         switch (options.target) {
             case ScriptTarget.ESNext:
+                return "lib.esnext.full.d.ts";
             case ScriptTarget.ES2017:
-                return "lib.es2017.d.ts";
+                return "lib.es2017.full.d.ts";
             case ScriptTarget.ES2016:
-                return "lib.es2016.d.ts";
+                return "lib.es2016.full.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es6.d.ts";
+                return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
             default:
                 return "lib.d.ts";
         }
@@ -4427,7 +4432,7 @@ namespace ts {
             newEndN = Math.max(newEnd2, newEnd2 + (newEnd1 - oldEnd2));
         }
 
-        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength:*/ newEndN - oldStartN);
+        return createTextChangeRange(createTextSpanFromBounds(oldStartN, oldEndN), /*newLength*/ newEndN - oldStartN);
     }
 
     export function getTypeParameterOwner(d: Declaration): Declaration {
@@ -4603,7 +4608,7 @@ namespace ts {
      */
     export function getParseTreeNode<T extends Node>(node: Node, nodeTest?: (node: Node) => node is T): T;
     export function getParseTreeNode(node: Node, nodeTest?: (node: Node) => boolean): Node {
-        if (node == undefined || isParseTreeNode(node)) {
+        if (node === undefined || isParseTreeNode(node)) {
             return node;
         }
 
