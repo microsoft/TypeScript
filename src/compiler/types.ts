@@ -862,7 +862,6 @@ namespace ts {
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
             | SyntaxKind.SymbolKeyword
-            | SyntaxKind.ThisKeyword
             | SyntaxKind.VoidKeyword
             | SyntaxKind.UndefinedKeyword
             | SyntaxKind.NullKeyword
@@ -1043,7 +1042,7 @@ namespace ts {
         kind: SyntaxKind.TrueKeyword | SyntaxKind.FalseKeyword;
     }
 
-    export interface ThisExpression extends PrimaryExpression, KeywordTypeNode {
+    export interface ThisExpression extends PrimaryExpression {
         kind: SyntaxKind.ThisKeyword;
     }
 

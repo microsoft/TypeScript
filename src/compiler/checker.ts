@@ -2358,7 +2358,7 @@ namespace ts {
                             context.encounteredError = true;
                         }
                     }
-                    return createThis();
+                    return createThisTypeNode();
                 }
 
                 const objectFlags = getObjectFlags(type);
@@ -7615,7 +7615,6 @@ namespace ts {
                 case SyntaxKind.ObjectKeyword:
                     return nonPrimitiveType;
                 case SyntaxKind.ThisType:
-                case SyntaxKind.ThisKeyword:
                     return getTypeFromThisTypeNode(node);
                 case SyntaxKind.LiteralType:
                     return getTypeFromLiteralTypeNode(<LiteralTypeNode>node);
@@ -22184,6 +22183,7 @@ namespace ts {
                     return type.symbol;
 
                 case SyntaxKind.ThisType:
+                case SyntaxKind.ThisKeyword:
                     return getTypeFromTypeNode(<TypeNode>node).symbol;
 
                 case SyntaxKind.ConstructorKeyword:
