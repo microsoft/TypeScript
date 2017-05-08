@@ -1088,58 +1088,38 @@ namespace ts {
      * @param host Instance of ParseConfigHost used to enumerate files in folder.
      * @param basePath A root directory to resolve relative path entries in the config
      *    file to. e.g. outDir
+     * @param resolutionStack Only present for backwards-compatibility. Should be empty.
      */
-    export function parseJsonConfigFileContent(json: any, host: ParseConfigHost, basePath: string, existingOptions: CompilerOptions = {}, configFileName?: string, resolutionStack: Path[] = [], extraFileExtensions: JsFileExtensionInfo[] = []): ParsedCommandLine {
+    export function parseJsonConfigFileContent(
+            json: any,
+            host: ParseConfigHost,
+            basePath: string,
+            existingOptions: CompilerOptions = {},
+            configFileName?: string,
+            resolutionStack: Path[] = [],
+            extraFileExtensions: JsFileExtensionInfo[] = [],
+            ): ParsedCommandLine {
         const errors: Diagnostic[] = [];
-        basePath = normalizeSlashes(basePath);
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
-        const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
-        if (resolutionStack.indexOf(resolvedPath) >= 0) {
-            return {
-                options: {},
-                fileNames: [],
-                typeAcquisition: {},
-                raw: json,
-                errors: [createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> "))],
-                wildcardDirectories: {}
-            };
-        }
 
-        let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json["compilerOptions"], basePath, errors, configFileName);
+        let options = (() => {
+            const { include, exclude, files, options, compileOnSave } = parseConfig(json, host, basePath, configFileName, resolutionStack, errors);
+            if (include) { json.include = include; }
+            if (exclude) { json.exclude = exclude; }
+            if (files) { json.files = files; }
+            if (compileOnSave !== undefined) { json.compileOnSave = compileOnSave; }
+            return options;
+        })();
+
+        options = extend(existingOptions, options);
+        options.configFilePath = configFileName;
+
         // typingOptions has been deprecated and is only supported for backward compatibility purposes.
         // It should be removed in future releases - use typeAcquisition instead.
         const jsonOptions = json["typeAcquisition"] || json["typingOptions"];
         const typeAcquisition: TypeAcquisition = convertTypeAcquisitionFromJsonWorker(jsonOptions, basePath, errors, configFileName);
 
-        let baseCompileOnSave: boolean;
-        if (json["extends"]) {
-            let [include, exclude, files, baseOptions]: [string[], string[], string[], CompilerOptions] = [undefined, undefined, undefined, {}];
-            if (typeof json["extends"] === "string") {
-                [include, exclude, files, baseCompileOnSave, baseOptions] = (tryExtendsName(json["extends"]) || [include, exclude, files, baseCompileOnSave, baseOptions]);
-            }
-            else {
-                errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
-            }
-            if (include && !json["include"]) {
-                json["include"] = include;
-            }
-            if (exclude && !json["exclude"]) {
-                json["exclude"] = exclude;
-            }
-            if (files && !json["files"]) {
-                json["files"] = files;
-            }
-            options = assign({}, baseOptions, options);
-        }
-
-        options = extend(existingOptions, options);
-        options.configFilePath = configFileName;
-
-        const { fileNames, wildcardDirectories } = getFileNames(errors);
-        let compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
-        if (baseCompileOnSave && json[compileOnSaveCommandLineOption.name] === undefined) {
-            compileOnSave = baseCompileOnSave;
-        }
+        const { fileNames, wildcardDirectories } = getFileNames();
+        const compileOnSave = convertCompileOnSaveOptionFromJson(json, basePath, errors);
 
         return {
             options,
@@ -1151,40 +1131,7 @@ namespace ts {
             compileOnSave
         };
 
-        function tryExtendsName(extendedConfig: string): [string[], string[], string[], boolean, CompilerOptions] {
-            // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
-            if (!(isRootedDiskPath(extendedConfig) || startsWith(normalizeSlashes(extendedConfig), "./") || startsWith(normalizeSlashes(extendedConfig), "../"))) {
-                errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
-                return;
-            }
-            let extendedConfigPath = toPath(extendedConfig, basePath, getCanonicalFileName);
-            if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, ".json")) {
-                extendedConfigPath = `${extendedConfigPath}.json` as Path;
-                if (!host.fileExists(extendedConfigPath)) {
-                    errors.push(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
-                    return;
-                }
-            }
-            const extendedResult = readConfigFile(extendedConfigPath, path => host.readFile(path));
-            if (extendedResult.error) {
-                errors.push(extendedResult.error);
-                return;
-            }
-            const extendedDirname = getDirectoryPath(extendedConfigPath);
-            const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
-            const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
-            // Merge configs (copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios)
-            const result = parseJsonConfigFileContent(extendedResult.config, host, extendedDirname, /*existingOptions*/ undefined, getBaseFileName(extendedConfigPath), resolutionStack.concat([resolvedPath]));
-            errors.push(...result.errors);
-            const [include, exclude, files] = map(["include", "exclude", "files"], key => {
-                if (!json[key] && extendedResult.config[key]) {
-                    return map(extendedResult.config[key], updatePath);
-                }
-            });
-            return [include, exclude, files, result.compileOnSave, result.options];
-        }
-
-        function getFileNames(errors: Diagnostic[]): ExpandResult {
+        function getFileNames(): ExpandResult {
             let fileNames: string[];
             if (hasProperty(json, "files")) {
                 if (isArray(json["files"])) {
@@ -1217,9 +1164,6 @@ namespace ts {
                     errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "exclude", "Array"));
                 }
             }
-            else if (hasProperty(json, "excludes")) {
-                errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
-            }
             else {
                 // If no includes were specified, exclude common package folders and the outDir
                 excludeSpecs = includeSpecs ? [] : ["node_modules", "bower_components", "jspm_packages"];
@@ -1249,7 +1193,106 @@ namespace ts {
         }
     }
 
-    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean | undefined {
+    interface ParsedTsconfig {
+        include: string[] | undefined;
+        exclude: string[] | undefined;
+        files: string[] | undefined;
+        options: CompilerOptions;
+        compileOnSave: boolean | undefined;
+    }
+
+    /**
+     * This *just* extracts options/include/exclude/files out of a config file.
+     * It does *not* resolve the included files.
+     */
+    function parseConfig(
+            json: any,
+            host: ParseConfigHost,
+            basePath: string,
+            configFileName: string,
+            resolutionStack: Path[],
+            errors: Diagnostic[],
+            ): ParsedTsconfig {
+
+        basePath = normalizeSlashes(basePath);
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const resolvedPath = toPath(configFileName || "", basePath, getCanonicalFileName);
+
+        if (resolutionStack.indexOf(resolvedPath) >= 0) {
+            errors.push(createCompilerDiagnostic(Diagnostics.Circularity_detected_while_resolving_configuration_Colon_0, [...resolutionStack, resolvedPath].join(" -> ")));
+            return { include: undefined, exclude: undefined, files: undefined, options: {}, compileOnSave: undefined };
+        }
+
+        if (hasProperty(json, "excludes")) {
+            errors.push(createCompilerDiagnostic(Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
+        }
+
+        let options: CompilerOptions = convertCompilerOptionsFromJsonWorker(json.compilerOptions, basePath, errors, configFileName);
+        let include: string[] | undefined = json.include, exclude: string[] | undefined = json.exclude,  files: string[] | undefined = json.files;
+        let compileOnSave: boolean | undefined = json.compileOnSave;
+
+        if (json.extends) {
+            // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
+            resolutionStack = resolutionStack.concat([resolvedPath]);
+            const base = getExtendedConfig(json.extends, host, basePath, getCanonicalFileName, resolutionStack, errors);
+            if (base) {
+                include = include || base.include;
+                exclude = exclude || base.exclude;
+                files = files || base.files;
+                if (compileOnSave === undefined) {
+                    compileOnSave = base.compileOnSave;
+                }
+                options = assign({}, base.options, options);
+            }
+        }
+
+        return { include, exclude, files, options, compileOnSave };
+    }
+
+    function getExtendedConfig(
+            extended: any, // Usually a string.
+            host: ts.ParseConfigHost,
+            basePath: string,
+            getCanonicalFileName: (fileName: string) => string,
+            resolutionStack: Path[],
+            errors: Diagnostic[],
+            ): ParsedTsconfig | undefined {
+        if (typeof extended !== "string") {
+            errors.push(createCompilerDiagnostic(Diagnostics.Compiler_option_0_requires_a_value_of_type_1, "extends", "string"));
+            return undefined;
+        }
+
+        extended = normalizeSlashes(extended);
+
+        // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
+        if (!(isRootedDiskPath(extended) || startsWith(extended, "./") || startsWith(extended, "../"))) {
+            errors.push(createCompilerDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extended));
+            return undefined;
+        }
+
+        let extendedConfigPath = toPath(extended, basePath, getCanonicalFileName);
+        if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, ".json")) {
+            extendedConfigPath = extendedConfigPath + ".json" as Path;
+            if (!host.fileExists(extendedConfigPath)) {
+                errors.push(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, extended));
+                return undefined;
+            }
+        }
+
+        const extendedResult = readConfigFile(extendedConfigPath, path => host.readFile(path));
+        if (extendedResult.error) {
+            errors.push(extendedResult.error);
+            return undefined;
+        }
+
+        const extendedDirname = getDirectoryPath(extendedConfigPath);
+        const relativeDifference = convertToRelativePath(extendedDirname, basePath, getCanonicalFileName);
+        const updatePath: (path: string) => string = path => isRootedDiskPath(path) ? path : combinePaths(relativeDifference, path);
+        const { include, exclude, files, options, compileOnSave } = parseConfig(extendedResult.config, host, extendedDirname, getBaseFileName(extendedConfigPath), resolutionStack, errors);
+        return { include: map(include, updatePath), exclude: map(exclude, updatePath), files: map(files, updatePath), compileOnSave, options };
+    }
+
+    export function convertCompileOnSaveOptionFromJson(jsonOption: any, basePath: string, errors: Diagnostic[]): boolean {
         if (!hasProperty(jsonOption, compileOnSaveCommandLineOption.name)) {
             return false;
         }

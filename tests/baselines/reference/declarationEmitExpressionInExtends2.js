@@ -45,5 +45,6 @@ declare class C<T, U> {
     y: U;
 }
 declare function getClass<T>(c: T): typeof C;
-declare class MyClass extends C<string, number> {
+declare const MyClass_base: typeof C;
+declare class MyClass extends MyClass_base<string, number> {
 }

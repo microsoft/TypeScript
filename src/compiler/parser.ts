@@ -6502,6 +6502,8 @@ namespace ts {
                             case "augments":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
+                            case "arg":
+                            case "argument":
                             case "param":
                                 tag = parseParamTag(atToken, tagName);
                                 break;

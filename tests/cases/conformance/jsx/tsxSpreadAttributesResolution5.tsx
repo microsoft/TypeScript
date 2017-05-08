@@ -34,5 +34,5 @@ class EmptyProp extends React.Component<{}, {}> {
 let o = {
     prop1: false
 }
-// Error
+// Ok
 let e = <EmptyProp {...o} />;

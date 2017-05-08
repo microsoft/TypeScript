@@ -1,0 +1,29 @@
+tests/cases/compiler/weird.js(1,1): error TS2304: Cannot find name 'someFunction'.
+tests/cases/compiler/weird.js(1,23): error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
+tests/cases/compiler/weird.js(6,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/weird.js(9,17): error TS7006: Parameter 'error' implicitly has an 'any' type.
+
+
+==== tests/cases/compiler/weird.js (4 errors) ====
+    someFunction(function(BaseClass) {
+    ~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'someFunction'.
+                          ~~~~~~~~~
+!!! error TS7006: Parameter 'BaseClass' implicitly has an 'any' type.
+        'use strict';
+        const DEFAULT_MESSAGE = "nop!";
+        class Hello extends BaseClass {
+            constructor() {
+                super();
+                ~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+                this.foo = "bar";
+            }
+            _render(error) {
+                    ~~~~~
+!!! error TS7006: Parameter 'error' implicitly has an 'any' type.
+                const message = error.message || DEFAULT_MESSAGE;
+            }
+        }
+    });
+    
