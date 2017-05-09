@@ -260,7 +260,7 @@ namespace ts.Completions {
 
     function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
-            type = typeChecker.getApparentType(type);
+            type = typeChecker.getBaseConstraintOfType(type);
         }
         if (!type) {
             return;

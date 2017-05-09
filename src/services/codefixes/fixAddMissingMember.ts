@@ -111,16 +111,16 @@ namespace ts.codefix {
             if (!isStatic) {
                 const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
                 const indexingParameter = createParameter(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*dotDotDotToken*/ undefined,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
                     "x",
-                /*questionToken*/ undefined,
+                    /*questionToken*/ undefined,
                     stringTypeNode,
-                /*initializer*/ undefined);
-                const indexSignature = createIndexSignatureDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                    /*initializer*/ undefined);
+                const indexSignature = createIndexSignature(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
                     [indexingParameter],
                     typeNode);
 
