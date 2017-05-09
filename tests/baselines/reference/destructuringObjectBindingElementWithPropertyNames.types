@@ -1,0 +1,39 @@
+=== tests/cases/compiler/destructuringObjectBindingElementWithPropertyNames.ts ===
+interface I {
+>I : I
+
+    property1: number;
+>property1 : number
+
+    property2: string;
+>property2 : string
+}
+
+var elems: I[];
+>elems : I[]
+>I : I
+
+for (let { property1: p } of elems) {
+>property1 : any
+>p : number
+>elems : I[]
+}
+for (let { property1 } of elems) {
+>property1 : number
+>elems : I[]
+}
+for (var { property1: p1 } of elems) {
+>property1 : any
+>p1 : number
+>elems : I[]
+}
+var p2;
+>p2 : any
+
+for ({ property1 : p2 } of elems) {
+>{ property1 : p2 } : { property1: any; }
+>property1 : I
+>p2 : any
+>elems : I[]
+}
+

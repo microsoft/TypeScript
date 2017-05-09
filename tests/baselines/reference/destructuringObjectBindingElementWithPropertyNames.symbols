@@ -1,0 +1,38 @@
+=== tests/cases/compiler/destructuringObjectBindingElementWithPropertyNames.ts ===
+interface I {
+>I : Symbol(I, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 0))
+
+    property1: number;
+>property1 : Symbol(I.property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 13))
+
+    property2: string;
+>property2 : Symbol(I.property2, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 1, 22))
+}
+
+var elems: I[];
+>elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
+>I : Symbol(I, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 0))
+
+for (let { property1: p } of elems) {
+>property1 : Symbol(I.property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 13))
+>p : Symbol(p, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 6, 10))
+>elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
+}
+for (let { property1 } of elems) {
+>property1 : Symbol(property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 8, 10))
+>elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
+}
+for (var { property1: p1 } of elems) {
+>property1 : Symbol(I.property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 13))
+>p1 : Symbol(p1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 10, 10))
+>elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
+}
+var p2;
+>p2 : Symbol(p2, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 12, 3))
+
+for ({ property1 : p2 } of elems) {
+>property1 : Symbol(property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 13, 6))
+>p2 : Symbol(p2, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 12, 3))
+>elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
+}
+
