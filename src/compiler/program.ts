@@ -290,6 +290,15 @@ namespace ts {
         return resolutions;
     }
 
+    /**
+     * Parses a set of root files in order, walks their dependency declaration (both imports and triple-slash references)
+     * resolving references to actual files on disk and then pulls them into the compilation process.
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @returns A `Program` which is a collection of `SourceFile`s and a set of `CompilerOptions`.
+     */
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
