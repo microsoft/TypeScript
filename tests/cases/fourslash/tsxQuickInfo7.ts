@@ -15,15 +15,15 @@
 ////     let a3 = <Overloa/*4*/dComponent {...arg1} ignore-prop />;
 ////     let a4 = <Overloa/*5*/dComponent />;
 ////     let a5 = <Overloa/*6*/dComponent {...arg2} ignore-prop="hello" {...arg1} />;
-////     let a6 = <Overloa/*7*/dComponent {...arg2} ignore-prop {...arg1} />;
+////     let a6 = <Overloa/*7*/dComponent {...arg1} ignore-prop {...arg2} />;
 //// }
 
 verify.quickInfos({
-    1: "function OverloadComponent(): any (+2 overloads)",
-    2: "function OverloadComponent(): any (+2 overloads)",
-    3: "function OverloadComponent(): any (+2 overloads)",
-    4: "function OverloadComponent(): any (+2 overloads)",
+    1: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
+    2: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
+    3: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
+    4: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
     5: "function OverloadComponent(): any (+2 overloads)",
-    6: "function OverloadComponent(): any (+2 overloads)",
-    7: "function OverloadComponent(): any (+2 overloads)"
+    6: "function OverloadComponent<boolean, number>(attr: {\n    b: number;\n    a: boolean;\n}): any (+2 overloads)",
+    7: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)"
 });
