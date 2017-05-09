@@ -3,6 +3,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
             Diagnostics.Cannot_find_name_0.code,
+            Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
             Diagnostics.Cannot_find_namespace_0.code,
             Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
         ],

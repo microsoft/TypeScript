@@ -205,6 +205,8 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            getSuggestionForNonexistentProperty,
+            getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
         };
 
@@ -317,6 +319,8 @@ namespace ts {
         const resolutionResults: boolean[] = [];
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
+        let suggestionCount = 0;
+        const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
@@ -841,7 +845,25 @@ namespace ts {
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
-        function resolveName(location: Node | undefined, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
+        function resolveName(
+            location: Node | undefined,
+            name: string,
+            meaning: SymbolFlags,
+            nameNotFoundMessage: DiagnosticMessage,
+            nameArg: string | Identifier,
+            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
+        }
+
+        function resolveNameHelper(
+            location: Node | undefined,
+            name: string,
+            meaning: SymbolFlags,
+            nameNotFoundMessage: DiagnosticMessage,
+            nameArg: string | Identifier,
+            lookup: (symbols: SymbolTable, name: string, meaning: SymbolFlags) => Symbol,
+            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
+            const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol;
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
@@ -852,7 +874,7 @@ namespace ts {
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = getSymbol(location.locals, name, meaning)) {
+                    if (result = lookup(location.locals, name, meaning)) {
                         let useResult = true;
                         if (isFunctionLike(location) && lastLocation && lastLocation !== (<FunctionLikeDeclaration>location).body) {
                             // symbol lookup restrictions for function-like declarations
@@ -930,12 +952,12 @@ namespace ts {
                             }
                         }
 
-                        if (result = getSymbol(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
+                        if (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
                             break loop;
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
+                        if (result = lookup(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
                             break loop;
                         }
                         break;
@@ -950,7 +972,7 @@ namespace ts {
                         if (isClassLike(location.parent) && !(getModifierFlags(location) & ModifierFlags.Static)) {
                             const ctor = findConstructorDeclaration(<ClassLikeDeclaration>location.parent);
                             if (ctor && ctor.locals) {
-                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
+                                if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
                                     propertyWithInvalidInitializer = location;
                                 }
@@ -960,7 +982,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                        if (result = lookup(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
                             if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
                                 // ignore type parameters not declared in this container
                                 result = undefined;
@@ -996,7 +1018,7 @@ namespace ts {
                         grandparent = location.parent.parent;
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
-                            if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                            if (result = lookup(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
                             }
@@ -1060,7 +1082,7 @@ namespace ts {
             }
 
             if (!result) {
-                result = getSymbol(globals, name, meaning);
+                result = lookup(globals, name, meaning);
             }
 
             if (!result) {
@@ -1071,7 +1093,17 @@ namespace ts {
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
-                        error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                        let suggestion: string | undefined;
+                        if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
+                            suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
+                            if (suggestion) {
+                                suggestionCount++;
+                                error(errorLocation, suggestedNameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), suggestion);
+                            }
+                        }
+                        if (!suggestion) {
+                            error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                        }
                     }
                 }
                 return undefined;
@@ -1205,6 +1237,10 @@ namespace ts {
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+                if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
+                    return true;
+                }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
@@ -10402,7 +10438,7 @@ namespace ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
+                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node, Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -14118,44 +14154,6 @@ namespace ts {
             return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
         }
 
-        function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
-            let errorInfo: DiagnosticMessageChain;
-            if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
-                for (const subtype of (containingType as UnionType).types) {
-                    if (!getPropertyOfType(subtype, propNode.text)) {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
-                        break;
-                    }
-                }
-            }
-            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
-            diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
-        }
-
-        function markPropertyAsReferenced(prop: Symbol) {
-            if (prop &&
-                noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-                }
-                else {
-                    prop.isReferenced = true;
-                }
-            }
-        }
-
-        function isInPropertyInitializer(node: Node): boolean {
-            while (node) {
-                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
-                    return true;
-                }
-                node = node.parent;
-            }
-            return false;
-        }
-
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -14217,6 +14215,130 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
+            let errorInfo: DiagnosticMessageChain;
+            if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
+                for (const subtype of (containingType as UnionType).types) {
+                    if (!getPropertyOfType(subtype, propNode.text)) {
+                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
+                        break;
+                    }
+                }
+            }
+            const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+            if (suggestion) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            }
+            else {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+            }
+            diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
+        }
+
+        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined {
+            const suggestion = getSpellingSuggestionForName(node.text, getPropertiesOfObjectType(containingType), SymbolFlags.Value);
+            return suggestion && suggestion.name;
+        }
+
+        function getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string {
+            const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, (symbols, name, meaning) => {
+                const symbol = getSymbol(symbols, name, meaning);
+                if (symbol) {
+                    // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
+                    // So the table *contains* `x` but `x` isn't actually in scope.
+                    // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
+                    return symbol;
+                }
+                return getSpellingSuggestionForName(name, arrayFrom(symbols.values()), meaning);
+            });
+            if (result) {
+                return result.name;
+            }
+        }
+
+        /**
+         * Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+         * Names less than length 3 only check for case-insensitive equality, not levenshtein distance.
+         *
+         * If there is a candidate that's the same except for case, return that.
+         * If there is a candidate that's within one edit of the name, return that.
+         * Otherwise, return the candidate with the smallest Levenshtein distance,
+         *    except for candidates:
+         *      * With no name
+         *      * Whose meaning doesn't match the `meaning` parameter.
+         *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+         *      * Whose levenshtein distance is more than 0.4 of the length of the name
+         *        (0.4 allows 1 substitution/transposition for every 5 characters,
+         *         and 1 insertion/deletion at 3 characters)
+         * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
+         */
+        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
+            const worstDistance = name.length * 0.4;
+            const maximumLengthDifference = Math.min(3, name.length * 0.34);
+            let bestDistance = Number.MAX_VALUE;
+            let bestCandidate = undefined;
+            if (name.length > 30) {
+                return undefined;
+            }
+            name = name.toLowerCase();
+            for (const candidate of symbols) {
+                if (candidate.flags & meaning &&
+                    candidate.name &&
+                    Math.abs(candidate.name.length - name.length) < maximumLengthDifference) {
+                    const candidateName = candidate.name.toLowerCase();
+                    if (candidateName === name) {
+                        return candidate;
+                    }
+                    if (candidateName.length < 3 ||
+                        name.length < 3 ||
+                        candidateName === "eval" ||
+                        candidateName === "intl" ||
+                        candidateName === "undefined" ||
+                        candidateName === "map" ||
+                        candidateName === "nan" ||
+                        candidateName === "set") {
+                        continue;
+                    }
+                    const distance = levenshtein(name, candidateName);
+                    if (distance > worstDistance) {
+                        continue;
+                    }
+                    if (distance < 3) {
+                        return candidate;
+                    }
+                    else if (distance < bestDistance) {
+                        bestDistance = distance;
+                        bestCandidate = candidate;
+                    }
+                }
+            }
+            return bestCandidate;
+        }
+
+        function markPropertyAsReferenced(prop: Symbol) {
+            if (prop &&
+                noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
+                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+                }
+                else {
+                    prop.isReferenced = true;
+                }
+            }
+        }
+
+        function isInPropertyInitializer(node: Node): boolean {
+            while (node) {
+                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
+                    return true;
+                }
+                node = node.parent;
+            }
+            return false;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {

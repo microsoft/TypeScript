@@ -46,7 +46,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(199,42): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(219,33): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(231,48): error TS2304: Cannot find name 'TokenID'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(233,52): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(233,52): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(237,36): error TS2304: Cannot find name 'TypeFlow'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(251,21): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(268,19): error TS2304: Cannot find name 'NodeType'.
@@ -85,27 +85,27 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(427,22): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(441,30): error TS2304: Cannot find name 'Emitter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(441,48): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(445,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(446,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(446,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(449,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(451,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(451,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(453,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(454,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(454,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(457,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(460,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(463,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(465,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(465,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(467,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(469,50): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(472,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(472,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(474,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(476,50): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(479,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(479,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(481,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(483,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(483,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(485,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(487,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(487,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(489,22): error TS2304: Cannot find name 'NodeType'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(491,58): error TS2304: Cannot find name 'TokenID'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(491,58): error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(494,22): error TS2304: Cannot find name 'NodeType'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(496,58): error TS2304: Cannot find name 'TokenID'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(498,22): error TS2304: Cannot find name 'NodeType'.
@@ -848,7 +848,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                 emitter.recordSourceMappingStart(this);
                 emitter.emitJavascriptList(this, null, TokenID.Semicolon, startLine, false, false);
                                                        ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                 emitter.recordSourceMappingEnd(this);
             }
     
@@ -1139,7 +1139,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         emitter.writeToOutput("++");
                         break;
                     case NodeType.LogNot:
@@ -1148,14 +1148,14 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         emitter.writeToOutput("!");
                         emitter.emitJavascript(this.operand, TokenID.Exclamation, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.DecPost:
                          ~~~~~~~~
 !!! error TS2304: Cannot find name 'NodeType'.
                         emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         emitter.writeToOutput("--");
                         break;
                     case NodeType.ObjectLit:
@@ -1174,7 +1174,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         emitter.writeToOutput("~");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.Neg:
                          ~~~~~~~~
@@ -1187,7 +1187,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         }
                         emitter.emitJavascript(this.operand, TokenID.Minus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.Pos:
                          ~~~~~~~~
@@ -1200,7 +1200,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         }
                         emitter.emitJavascript(this.operand, TokenID.Plus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.IncPre:
                          ~~~~~~~~
@@ -1208,7 +1208,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         emitter.writeToOutput("++");
                         emitter.emitJavascript(this.operand, TokenID.PlusPlus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.DecPre:
                          ~~~~~~~~
@@ -1216,7 +1216,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         emitter.writeToOutput("--");
                         emitter.emitJavascript(this.operand, TokenID.MinusMinus, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         break;
                     case NodeType.Throw:
                          ~~~~~~~~
@@ -1224,7 +1224,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts(2356,48): error
                         emitter.writeToOutput("throw ");
                         emitter.emitJavascript(this.operand, TokenID.Tilde, false);
                                                              ~~~~~~~
-!!! error TS2304: Cannot find name 'TokenID'.
+!!! error TS2552: Cannot find name 'TokenID'. Did you mean 'tokenId'?
                         emitter.writeToOutput(";");
                         break;
                     case NodeType.Typeof:

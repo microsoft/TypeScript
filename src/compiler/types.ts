@@ -2552,6 +2552,8 @@ namespace ts {
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
+        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string;
         /* @internal */ getBaseConstraintOfType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
