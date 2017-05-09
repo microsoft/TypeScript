@@ -17,13 +17,8 @@
 ////}
 
 const ranges = test.ranges();
-const [r0, r1, r2, r3, r4] = ranges;
-verify.referenceGroups([r0, r1, r2, r3], [
+const [, , r2] = ranges;
+verify.referenceGroups(ranges, [
     { definition: "(property) I.property1: number", ranges },
     { definition: "let property1: number", ranges: [r2] }
-]);
-verify.referenceGroups(r4, [
-    { definition: "(property) I.property1: number", ranges: [r0, r1, r2, r3] },
-    { definition: "let property1: number", ranges: [r2] },
-    { definition: "(property) property1: I", ranges: [r4] }
 ]);

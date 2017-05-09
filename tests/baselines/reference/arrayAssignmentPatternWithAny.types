@@ -7,7 +7,7 @@ var x: string;
 
 [x] = a;
 >[x] = a : any
->[x] : [string]
+>[x] : any
 >x : string
 >a : any
 

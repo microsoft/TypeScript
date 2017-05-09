@@ -22,9 +22,9 @@ let complex: { x: { ka, ki }, y: number };
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
 >({x: { ka, ...nested }, y: other, ...rest} = complex) : { x: { ka: any; ki: any; }; y: number; }
 >{x: { ka, ...nested }, y: other, ...rest} = complex : { x: { ka: any; ki: any; }; y: number; }
->{x: { ka, ...nested }, y: other, ...rest} : { x: { ki: any; ka: any; }; y: number; }
->x : { ki: any; ka: any; }
->{ ka, ...nested } : { ki: any; ka: any; }
+>{x: { ka, ...nested }, y: other, ...rest} : { x: { ka: any; ki: any; }; y: number; }
+>x : { ka: any; ki: any; }
+>{ ka, ...nested } : { ka: any; ki: any; }
 >ka : any
 >nested : { ki: any; }
 >y : number
@@ -59,15 +59,15 @@ var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
 ({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit);
 >({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit) : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
 >{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
->{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } : { ke: string; ko: string; a: { ka: string; x: string; }[]; b: { ki: string; ku: string; z: string; }; }
+>{ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } : { a: { ka: string; x: string; }[]; b: { z: string; ki: string; ku: string; }; ke: string; ko: string; }
 >a : { ka: string; x: string; }[]
 >[{ ...nested2 }, ...y] : { ka: string; x: string; }[]
 >{ ...nested2 } : { ka: string; x: string; }
 >nested2 : { ka: string; x: string; }
 >...y : { ka: string; x: string; }
 >y : { ka: string; x: string; }[]
->b : { ki: string; ku: string; z: string; }
->{ z, ...c } : { ki: string; ku: string; z: string; }
+>b : { z: string; ki: string; ku: string; }
+>{ z, ...c } : { z: string; ki: string; ku: string; }
 >z : string
 >c : { ki: string; ku: string; }
 >rest2 : { ke: string; ko: string; }

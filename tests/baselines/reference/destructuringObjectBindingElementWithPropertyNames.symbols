@@ -31,7 +31,7 @@ var p2;
 >p2 : Symbol(p2, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 12, 3))
 
 for ({ property1 : p2 } of elems) {
->property1 : Symbol(property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 13, 6))
+>property1 : Symbol(I.property1, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 0, 13))
 >p2 : Symbol(p2, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 12, 3))
 >elems : Symbol(elems, Decl(destructuringObjectBindingElementWithPropertyNames.ts, 5, 3))
 }

@@ -62,8 +62,8 @@ namespace ts.GoToDefinition {
         // go to the declaration of the property name (in this case stay at the same position). However, if go-to-definition
         // is performed at the location of property access, we would like to go to definition of the property in the short-hand
         // assignment. This case and others are handled by the following code.
-        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
-            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(symbol.valueDeclaration);
+        if (isShorthandPropertyAssignment(node.parent)) {
+            const shorthandSymbol = typeChecker.getShorthandAssignmentValueSymbol(node.parent);
             if (!shorthandSymbol) {
                 return [];
             }

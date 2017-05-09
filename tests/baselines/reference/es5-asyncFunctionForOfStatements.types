@@ -106,7 +106,7 @@ async function forOfStatement9() {
 >forOfStatement9 : () => Promise<void>
 
     for ([x] of await y) { z; }
->[x] : [any]
+>[x] : any
 >x : any
 >await y : any
 >y : any
@@ -117,7 +117,7 @@ async function forOfStatement10() {
 >forOfStatement10 : () => Promise<void>
 
     for ([x] of y) { await z; }
->[x] : [any]
+>[x] : any
 >x : any
 >y : any
 >await z : any
@@ -128,7 +128,7 @@ async function forOfStatement11() {
 >forOfStatement11 : () => Promise<void>
 
     for ([x = await a] of y) { z; }
->[x = await a] : [any]
+>[x = await a] : any
 >x = await a : any
 >x : any
 >await a : any
@@ -141,7 +141,7 @@ async function forOfStatement12() {
 >forOfStatement12 : () => Promise<void>
 
     for ([x = a] of await y) { z; }
->[x = a] : [any]
+>[x = a] : any
 >x = a : any
 >x : any
 >a : any
@@ -154,7 +154,7 @@ async function forOfStatement13() {
 >forOfStatement13 : () => Promise<void>
 
     for ([x = a] of y) { await z; }
->[x = a] : [any]
+>[x = a] : any
 >x = a : any
 >x : any
 >a : any
@@ -167,7 +167,7 @@ async function forOfStatement14() {
 >forOfStatement14 : () => Promise<void>
 
     for ({ x } of await y) { z; }
->{ x } : { x: any; }
+>{ x } : any
 >x : any
 >await y : any
 >y : any
@@ -178,7 +178,7 @@ async function forOfStatement15() {
 >forOfStatement15 : () => Promise<void>
 
     for ({ x } of y) { await z; }
->{ x } : { x: any; }
+>{ x } : any
 >x : any
 >y : any
 >await z : any
@@ -189,7 +189,7 @@ async function forOfStatement16() {
 >forOfStatement16 : () => Promise<void>
 
     for ({ x = await a } of y) { z; }
->{ x = await a } : { x?: any; }
+>{ x = await a } : any
 >x : any
 >await a : any
 >a : any
@@ -201,7 +201,7 @@ async function forOfStatement17() {
 >forOfStatement17 : () => Promise<void>
 
     for ({ x = a } of await y) { z; }
->{ x = a } : { x?: any; }
+>{ x = a } : any
 >x : any
 >a : any
 >await y : any
@@ -213,7 +213,7 @@ async function forOfStatement18() {
 >forOfStatement18 : () => Promise<void>
 
     for ({ x = a } of y) { await z; }
->{ x = a } : { x?: any; }
+>{ x = a } : any
 >x : any
 >a : any
 >y : any

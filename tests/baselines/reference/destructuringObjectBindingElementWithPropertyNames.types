@@ -31,8 +31,8 @@ var p2;
 >p2 : any
 
 for ({ property1 : p2 } of elems) {
->{ property1 : p2 } : { property1: any; }
->property1 : I
+>{ property1 : p2 } : I
+>property1 : number
 >p2 : any
 >elems : I[]
 }

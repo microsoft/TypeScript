@@ -23,8 +23,8 @@ var rest: any;
 ({ b, ...rest } = o);
 >({ b, ...rest } = o) : { a: string; b: string; x: number; }
 >{ b, ...rest } = o : { a: string; b: string; x: number; }
->{ b, ...rest } : any
->b : any
+>{ b, ...rest } : { a: string; b: string; x: number; }
+>b : string
 >rest : any
 >o : { a: string; b: string; x: number; }
 

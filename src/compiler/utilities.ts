@@ -3754,6 +3754,38 @@ namespace ts {
             || kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isDestructuringAssignmentTarget(node: Node) {
+        // [a,b,c] from:
+        // [a, b, c] = someExpression;
+        return isAssignmentExpression(node.parent, /*excludeCompoundAssignment*/ true) && node.parent.left === node ||
+            // [a, b, c] from:
+            // for([a, b, c] of expression)
+            node.parent.kind === SyntaxKind.ForOfStatement && (node.parent as ForOfStatement).initializer === node;
+    }
+
+    export function isFromDestructuringAssignmentPatternTarget(node: Node): node is AssignmentPattern {
+        if (isAssignmentPattern(node)) {
+            // [a,b,c] from:
+            // [a, b, c] = someExpression;
+            // or
+            // [a, b, c] from:
+            // for([a, b, c] of expression)
+            if (isDestructuringAssignmentTarget(node)) {
+                return true;
+            }
+
+            // [a, b, c] of
+            // [x, [a, b, c] ] = someExpression
+            // or
+            // {x, a: {a, b, c} } = someExpression
+            if (isFromDestructuringAssignmentPatternTarget(node.parent.kind === SyntaxKind.PropertyAssignment ? node.parent.parent : node.parent)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     export function isBindingElement(node: Node): node is BindingElement {
         return node.kind === SyntaxKind.BindingElement;
     }

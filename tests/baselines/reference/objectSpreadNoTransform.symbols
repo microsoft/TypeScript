@@ -16,7 +16,7 @@ var rest: any;
 >rest : Symbol(rest, Decl(objectSpreadNoTransform.ts, 3, 3))
 
 ({ b, ...rest } = o);
->b : Symbol(b, Decl(objectSpreadNoTransform.ts, 4, 2))
+>b : Symbol(b, Decl(objectSpreadNoTransform.ts, 0, 21))
 >rest : Symbol(rest, Decl(objectSpreadNoTransform.ts, 3, 3))
 >o : Symbol(o, Decl(objectSpreadNoTransform.ts, 1, 5))
 

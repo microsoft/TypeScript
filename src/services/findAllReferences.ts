@@ -68,9 +68,9 @@ namespace ts.FindAllReferences {
     function getImplementationReferenceEntries(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], node: Node): Entry[] | undefined {
         // If invoked directly on a shorthand property assignment, then return
         // the declaration of the symbol being assigned (not the symbol being assigned to).
-        if (node.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+        if (isShorthandPropertyAssignment(node.parent)) {
             const result: NodeEntry[] = [];
-            Core.getReferenceEntriesForShorthandPropertyAssignment(node, typeChecker, node => result.push(nodeEntry(node)));
+            Core.getReferenceEntriesForShorthandPropertyAssignment(node.parent, typeChecker, node => result.push(nodeEntry(node)));
             return result;
         }
         else if (node.kind === SyntaxKind.SuperKeyword || isSuperProperty(node.parent)) {
@@ -544,11 +544,6 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function getPropertySymbolOfDestructuringAssignment(location: Node, checker: TypeChecker): Symbol | undefined {
-        return isArrayLiteralOrObjectLiteralDestructuringPattern(location.parent.parent) &&
-            checker.getPropertySymbolOfDestructuringAssignment(<Identifier>location);
-    }
-
     function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol): boolean {
         const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
         return bindingElement &&
@@ -976,9 +971,9 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        if (refNode.parent.kind === SyntaxKind.ShorthandPropertyAssignment) {
+        if (isShorthandPropertyAssignment(refNode.parent)) {
             // Go ahead and dereference the shorthand assignment by going to its definition
-            getReferenceEntriesForShorthandPropertyAssignment(refNode, state.checker, addReference);
+            getReferenceEntriesForShorthandPropertyAssignment(refNode.parent, state.checker, addReference);
         }
 
         // Check if the node is within an extends or implements clause
@@ -1320,16 +1315,6 @@ namespace ts.FindAllReferences.Core {
 
         const containingObjectLiteralElement = getContainingObjectLiteralElement(location);
         if (containingObjectLiteralElement) {
-            // If the location is name of property symbol from object literal destructuring pattern
-            // Search the property symbol
-            //      for ( { property: p2 } of elems) { }
-            if (containingObjectLiteralElement.kind !== SyntaxKind.ShorthandPropertyAssignment) {
-                const propertySymbol = getPropertySymbolOfDestructuringAssignment(location, checker);
-                if (propertySymbol) {
-                    result.push(propertySymbol);
-                }
-            }
-
             // If the location is in a context sensitive location (i.e. in an object literal) try
             // to get a contextual type for it, and add the property symbol from the contextual
             // type to the search set
@@ -1348,9 +1333,8 @@ namespace ts.FindAllReferences.Core {
              * so that when matching with potential reference symbol, both symbols from property declaration and variable declaration
              * will be included correctly.
              */
-            const shorthandValueSymbol = checker.getShorthandAssignmentValueSymbol(location.parent);
-            if (shorthandValueSymbol) {
-                result.push(shorthandValueSymbol);
+            if (isShorthandPropertyAssignment(location.parent)) {
+                result.push(checker.getShorthandAssignmentValueSymbol(location.parent));
             }
         }
 
@@ -1444,22 +1428,8 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    function isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol: Symbol, referenceLocation: Node) {
-        return referenceSymbol.valueDeclaration === referenceLocation.parent && isShorthandPropertyAssignment(referenceLocation.parent);
-    }
-
-    function getRelatedShorthandValueSymbol(referenceSymbol: Symbol, referenceLocation: Node, search: Search, state: State): Symbol | undefined {
-        if (isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol, referenceLocation)) {
-            // If the reference location is short hand property assignment look if the value at this location is being included in the search
-            const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
-            if (!(referenceSymbol.flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-                return shorthandValueSymbol;
-            }
-        }
-    }
-
     function isShortHandPropertyAssignmentInferringPropertyType(shorthandProperty: ShorthandPropertyAssignment) {
-        if (!isArrayLiteralOrObjectLiteralDestructuringPattern(shorthandProperty.parent)) {
+        if (!isFromDestructuringAssignmentPatternTarget(shorthandProperty.parent)) {
             const variableLike = <VariableLikeDeclaration>findAncestor(shorthandProperty.parent, isVariableLike);
             return variableLike && !variableLike.type && !isBindingPattern(variableLike.name);
         }
@@ -1488,18 +1458,21 @@ namespace ts.FindAllReferences.Core {
         if (search.includes(referenceSymbol)) {
             if (!state.isForRename) {
                 // If we are not getting symbols for rename, give more precise information about presence of referenced by value as well
-                const shorthandValueSymbol = getRelatedShorthandValueSymbol(referenceSymbol, referenceLocation, search, state);
-                if (shorthandValueSymbol) {
-                    /*
-                     * Search included for property as well as value of short hand,
-                     * add reference for value here specially as we would end up adding property reference later
-                     */
-                    addReference(referenceLocation, shorthandValueSymbol, search.location, state);
+                if (isShorthandPropertyAssignment(referenceLocation.parent)) {
+                    const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
+                    if (search.includes(shorthandValueSymbol)) {
+                        /*
+                         * Search included for property as well as value of short hand,
+                         * add reference for value here specially as we would end up adding property reference later
+                         */
+                        addReference(referenceLocation, shorthandValueSymbol, search.location, state);
+                    }
                 }
             }
 
-            if (isReferencedSymbolAtLocationFromShorthandAssignment(referenceSymbol, referenceLocation) &&
-                search.location !== referenceLocation) {
+            if (isShorthandPropertyAssignment(referenceLocation.parent) &&
+                search.location !== referenceLocation &&
+                isShortHandPropertyAssignmentInferringPropertyType(referenceLocation.parent)) {
                 // If this search was not originated at this reference location and
                 // search was for the property but not value, add references for value as well
                 const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
@@ -1529,49 +1502,43 @@ namespace ts.FindAllReferences.Core {
                 return contextualSymbol;
             }
 
-            // If the reference location is the name of property from object literal destructuring pattern
-            // Get the property symbol from the object literal's type and look if thats the search symbol
-            // In below eg. get 'property' from type of elems iterating type
-            //      for ( { property: p2 } of elems) { }
-            const propertySymbol = getPropertySymbolOfDestructuringAssignment(referenceLocation, state.checker);
-            if (propertySymbol && search.includes(propertySymbol)) {
-                return propertySymbol;
-            }
+            if (isShorthandPropertyAssignment(referenceLocation.parent)) {
+                // If the reference location is short hand property assignment look if the value at this location is being included in the search
+                const shorthandValueSymbol = state.checker.getShorthandAssignmentValueSymbol(referenceLocation.parent);
+                if (search.includes(shorthandValueSymbol)) {
+                    /*
+                     * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
+                     * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
+                     * an identifier is declared, the language service should return the position of the variable declaration as well as
+                     * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
+                     * position of property accessing, the referenceEntry of such position will be handled in the first case.
+                     */
+                    /*
+                     * We are looking for value symbol and since it couldnt find reference symbol in the search set
+                     * here we are just looking for the value at this point
+                     * (meaning search did not originate at short hand property assignment reference location)
+                     * But if this short hand property assignment that leads to inferring the property of a type
+                     * we need to look for that property access too
+                     * e.g when searching for below value x, at const o = {x} it is infering the property x for type o
+                     * so add the search for property x which should search any references of o.x
+                     * const |x| = 1;
+                     * const o = { x };
+                     * {
+                     *     const { x } = o;
+                     *     x;
+                     * }
+                     */
+                    if (search.location !== referenceLocation &&
+                        isShortHandPropertyAssignmentInferringPropertyType(referenceLocation.parent)) {
+                        getReferencesInSourceFile(referenceLocation.getSourceFile(), state.createSearch(referenceLocation, referenceSymbol, /*comingFrom*/ undefined), state);
 
-            /*
-             * Because in short-hand property assignment, an identifier which stored as name of the short-hand property assignment
-             * has two meanings: property name and property value. Therefore when we do findAllReference at the position where
-             * an identifier is declared, the language service should return the position of the variable declaration as well as
-             * the position in short-hand property assignment excluding property accessing. However, if we do findAllReference at the
-             * position of property accessing, the referenceEntry of such position will be handled in the first case.
-             */
-            const shorthandValueSymbol = getRelatedShorthandValueSymbol(referenceSymbol, referenceLocation, search, state);
-            if (shorthandValueSymbol) {
-                /*
-                 * We are looking for value symbol and since it couldnt find reference symbol in the search set
-                 * here we are just looking for the value at this point
-                 * (meaning search did not originate at short hand property assignment reference location)
-                 * But if this short hand property assignment that leads to inferring the property of a type
-                 * we need to look for that property access too
-                 * e.g when searching for below value x, at const o = {x} it is infering the property x for type o
-                 * so add the search for property x which should search any references of o.x
-                 * const |x| = 1;
-                 * const o = { x };
-                 * {
-                 *     const { x } = o;
-                 *     x;
-                 * }
-                 */
-                if (search.location !== referenceLocation &&
-                    isShortHandPropertyAssignmentInferringPropertyType(<ShorthandPropertyAssignment>referenceLocation.parent)) {
-                    getReferencesInSourceFile(referenceLocation.getSourceFile(), state.createSearch(referenceLocation, referenceSymbol, /*comingFrom*/ undefined), state);
+                        // Return the value symbol access only if this is not the rename search
+                        // so that we avoid duplicate search at same location with property as well as value symbols
+                        return state.isForRename ? undefined : shorthandValueSymbol;
+                    }
 
-                    // Return the value symbol access only if this is not the rename search
-                    // so that we avoid duplicate search at same location with property as well as value symbols
-                    return state.isForRename ? undefined : shorthandValueSymbol;
+                    return shorthandValueSymbol;
                 }
-
-                return shorthandValueSymbol;
             }
         }
 
@@ -1717,9 +1684,8 @@ namespace ts.FindAllReferences.Core {
         }
     }
 
-    export function getReferenceEntriesForShorthandPropertyAssignment(node: Node, checker: TypeChecker, addReference: (node: Node) => void): void {
-        const refSymbol = checker.getSymbolAtLocation(node);
-        const shorthandSymbol = checker.getShorthandAssignmentValueSymbol(refSymbol.valueDeclaration);
+    export function getReferenceEntriesForShorthandPropertyAssignment(node: ShorthandPropertyAssignment, checker: TypeChecker, addReference: (node: Node) => void): void {
+        const shorthandSymbol = checker.getShorthandAssignmentValueSymbol(node);
 
         if (shorthandSymbol) {
             for (const declaration of shorthandSymbol.getDeclarations()) {

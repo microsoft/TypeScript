@@ -11,9 +11,6 @@ let x, y, z, a1, a2, a3;
 >a3 : Symbol(a3, Decl(emptyAssignmentPatterns02_ES5.ts, 1, 20))
 
 ({} = { x, y, z } = a);
->x : Symbol(x, Decl(emptyAssignmentPatterns02_ES5.ts, 3, 7))
->y : Symbol(y, Decl(emptyAssignmentPatterns02_ES5.ts, 3, 10))
->z : Symbol(z, Decl(emptyAssignmentPatterns02_ES5.ts, 3, 13))
 >a : Symbol(a, Decl(emptyAssignmentPatterns02_ES5.ts, 0, 3))
 
 ([] = [ a1, a2, a3] = a);

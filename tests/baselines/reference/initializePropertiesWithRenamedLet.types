@@ -47,8 +47,8 @@ if (true) {
     ({ z: z } = { z: 0 });
 >({ z: z } = { z: 0 }) : { z: number; }
 >{ z: z } = { z: 0 } : { z: number; }
->{ z: z } : { z: any; }
->z : any
+>{ z: z } : { z: number; }
+>z : number
 >z : any
 >{ z: 0 } : { z: number; }
 >z : number
@@ -57,8 +57,8 @@ if (true) {
     ({ z } = { z: 0 });
 >({ z } = { z: 0 }) : { z: number; }
 >{ z } = { z: 0 } : { z: number; }
->{ z } : { z: any; }
->z : any
+>{ z } : { z: number; }
+>z : number
 >{ z: 0 } : { z: number; }
 >z : number
 >0 : 0
