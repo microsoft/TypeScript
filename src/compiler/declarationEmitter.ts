@@ -1266,7 +1266,9 @@ namespace ts {
                         Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                 }
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
-                else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
+                // The only exception here is if the constructor was marked as private. we are not emitting the constructor paramters at all.
+                else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
+                    (node.kind === SyntaxKind.Parameter && hasModifier(node.parent, ModifierFlags.Private))) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (hasModifier(node, ModifierFlags.Static)) {
                         return symbolAccessibilityResult.errorModuleName ?
@@ -1275,7 +1277,7 @@ namespace ts {
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
-                    else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1501,6 +1503,11 @@ namespace ts {
                 write("[");
             }
             else {
+                if (node.kind === SyntaxKind.Constructor && hasModifier(node, ModifierFlags.Private)) {
+                    write("();");
+                    writeLine();
+                    return;
+                }
                 // Construct signature or constructor type write new Signature
                 if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                     write("new ");
