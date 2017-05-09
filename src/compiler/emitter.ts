@@ -2965,7 +2965,7 @@ namespace ts {
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | CommaDelimited | SpaceBetweenSiblings,
         ObjectBindingPatternElementsWithSpaceBetweenBraces = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
