@@ -2411,6 +2411,8 @@ namespace ts {
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
+
+        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
     }
 
     /* @internal */

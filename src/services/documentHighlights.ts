@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
         const node = getTouchingWord(sourceFile, position);
-        return node && (getSemanticDocumentHighlights(node, typeChecker, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
+        return node && (getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -16,8 +16,8 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(node: Node, typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, sourceFilesToSearch, typeChecker, cancellationToken);
+    function getSemanticDocumentHighlights(node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, program, sourceFilesToSearch, cancellationToken);
         return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
