@@ -2810,7 +2810,10 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = <ParameterDeclaration>getDeclarationOfKind(parameterSymbol, SyntaxKind.Parameter);
-                const parameterType = getTypeOfSymbol(parameterSymbol);
+                let parameterType = getTypeOfSymbol(parameterSymbol);
+                if (isRequiredInitializedParameter(parameterDeclaration)) {
+                    parameterType = includeFalsyTypes(parameterType, TypeFlags.Undefined);
+                }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
                 let name: BindingName;
                 if (parameterDeclaration.name.kind === SyntaxKind.Identifier) {
@@ -2820,25 +2823,19 @@ namespace ts {
                     Debug.assert(parameterDeclaration.name.kind === SyntaxKind.ArrayBindingPattern || parameterDeclaration.name.kind === SyntaxKind.ObjectBindingPattern);
                     name = cloneBindingName(parameterDeclaration.name);
                 }
-                let questionToken: Token<SyntaxKind.QuestionToken> | undefined;
-                let initializer: Expression | undefined;
-                if (isOptionalParameter(parameterDeclaration)) {
-                    questionToken = createToken(SyntaxKind.QuestionToken);
-                }
-                else {
-                // TODO(aozgaa): In the future, check initializer accessibility.
-                    initializer = parameterDeclaration.initializer;
-                }
+                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+                const dotDotDotToken = (parameterDeclaration ? isRestParameter(parameterDeclaration) : isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) ?
+                    createToken(SyntaxKind.DotDotDotToken) :
+                    undefined;
+
                 const parameterNode = createParameter(
                     /*decorators*/ undefined,
                     cloneNodeArray(parameterDeclaration.modifiers),
-                    (parameterDeclaration ? isRestParameter(parameterDeclaration) : isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) ?
-                        createToken(SyntaxKind.DotDotDotToken) :
-                        undefined,
+                    dotDotDotToken,
                     name,
                     questionToken,
                     parameterTypeNode,
-                    initializer);
+                    /*initializer*/ undefined);
                 return parameterNode;
 
                 function cloneBindingName(node: BindingName): BindingName {
