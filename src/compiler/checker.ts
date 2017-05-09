@@ -2516,7 +2516,8 @@ namespace ts {
                     const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                     const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
 
-                    return createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
+                    return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {

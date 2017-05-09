@@ -1004,9 +1004,15 @@ namespace ts {
         }
 
         function emitMappedType(node: MappedTypeNode) {
+            const emitFlags = getEmitFlags(node);
             write("{");
-            writeLine();
-            increaseIndent();
+            if (emitFlags & EmitFlags.SingleLine) {
+                write(" ");
+            }
+            else {
+                writeLine();
+                increaseIndent();
+            }
             writeIfPresent(node.readonlyToken, "readonly ");
             write("[");
             emit(node.typeParameter.name);
@@ -1017,8 +1023,13 @@ namespace ts {
             write(": ");
             emit(node.type);
             write(";");
-            writeLine();
-            decreaseIndent();
+            if (emitFlags & EmitFlags.SingleLine) {
+                write(" ");
+            }
+            else {
+                writeLine();
+                decreaseIndent();
+            }
             write("}");
         }
 
