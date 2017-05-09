@@ -4681,10 +4681,7 @@ namespace ts {
             }
 
             // shift current back to previous, and then reuse previous' array
-            const tmp = prevprev;
-            prevprev = previous;
-            previous = current;
-            current = tmp;
+            [prevprev, previous, current] = [previous, current, prevprev];
         }
 
         return previous[rowLength - 1];
