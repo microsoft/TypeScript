@@ -4642,7 +4642,7 @@ namespace ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
-    const CHANGE_COST = 1;
+    const CHANGE_COST = 2; // Make substitutions costly, since when they appear in short strings they're normally obvious errors we don't want to promote
     const INSERT_COST = 1;
     const DELETE_COST = 1;
     const TRANSPOSE_COST = 0.95; // Transpositions slightly cheaper than insertion/deletion/substitution to promote transposed errors
