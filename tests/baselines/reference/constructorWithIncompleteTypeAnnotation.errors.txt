@@ -64,12 +64,12 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,21): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,44): error TS2369: A parameter property is only allowed in a constructor implementation.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(254,69): error TS1110: Type expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2304: Cannot find name 'Overloads'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,16): error TS2552: Cannot find name 'Overloads'. Did you mean 'Overloading'?
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,26): error TS2304: Cannot find name 'value'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,31): error TS1005: ',' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(256,33): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,9): error TS1128: Declaration or statement expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2304: Cannot find name 'Overloads'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,16): error TS2552: Cannot find name 'Overloads'. Did you mean 'Overloading'?
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,27): error TS1135: Argument expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,33): error TS1005: '(' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2693: 'string' only refers to a type, but is being used as a value here.
@@ -480,7 +480,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
             ~~~~~~
 !!! error TS1128: Declaration or statement expected.
                    ~~~~~~~~~
-!!! error TS2304: Cannot find name 'Overloads'.
+!!! error TS2552: Cannot find name 'Overloads'. Did you mean 'Overloading'?
                              ~~~~~
 !!! error TS2304: Cannot find name 'value'.
                                   ~
@@ -491,7 +491,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
             ~~~~~~
 !!! error TS1128: Declaration or statement expected.
                    ~~~~~~~~~
-!!! error TS2304: Cannot find name 'Overloads'.
+!!! error TS2552: Cannot find name 'Overloads'. Did you mean 'Overloading'?
                               ~~~~~
 !!! error TS1135: Argument expression expected.
                                     ~
