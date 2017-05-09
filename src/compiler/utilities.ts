@@ -4648,6 +4648,7 @@ namespace ts {
     const TRANSPOSE_COST = 0.95; // Transpositions slightly cheaper than insertion/deletion/substitution to promote transposed errors
     export const MIN_LEV_DIST = TRANSPOSE_COST;
     export function dameraulevenshtein(s1: string, s2: string): number {
+        if (s1.length > s2.length) [s1, s2] = [s2, s1]; // Swap arguments so s2 is always the short one to use minimal memory
         const rowLength = s2.length + 1;
         let prevprev: number[] = new Array(rowLength);
         let previous: number[] = new Array(rowLength);
@@ -4657,15 +4658,25 @@ namespace ts {
             previous[i] = i;
         }
 
+        // For each row in the matrix beyond the first (which is in previous)
         for (let i = 1; i < s1.length + 1; i++) {
+            // Set the first element to the row number (representing the distance required to remove the prefix to that point)
             current[0] = i;
+            // Then for each element in the row, minimize it's cost based on the cost of editing the string at that point to match the character in the second string
             for (let j = 1; j < rowLength; j++) {
+                // Check if the characters match, which makes a 'substitution' or 'transposition' free (since they match, and so aren't really an edit)
                 const eq = s1.charCodeAt(i - 1) === s2.charCodeAt(j - 1);
+                // First, assume delete is cheapest
                 let min = previous[j] + DELETE_COST;
-                let tmp = current[j - 1] + INSERT_COST;
-                if (tmp < min) min = tmp;
-                if ((tmp = previous[j - 1] + (eq ? 0 : CHANGE_COST)) < min) min = tmp;
-                if ((tmp = (i > 1 && j > 1 && s1.charCodeAt(i - 1) === s2.charCodeAt(j - 2) && s1.charCodeAt(i - 2) === s2.charCodeAt(j - 1)) ? (prevprev[j - 2] + (eq ? 0 : TRANSPOSE_COST)) : Infinity) < min) min = tmp;
+                // Then calculate an insertion's cost
+                let potentialDist = current[j - 1] + INSERT_COST;
+                // And see if it's cheaper
+                if (potentialDist < min) min = potentialDist;
+                // Then check against the cost of a substitution
+                if ((potentialDist = previous[j - 1] + (eq ? 0 : CHANGE_COST)) < min) min = potentialDist;
+                // And finally check if a transposition is cheapest if one is present
+                if ((potentialDist = (i > 1 && j > 1 && s1.charCodeAt(i - 1) === s2.charCodeAt(j - 2) && s1.charCodeAt(i - 2) === s2.charCodeAt(j - 1)) ? (prevprev[j - 2] + (eq ? 0 : TRANSPOSE_COST)) : Infinity) < min) min = potentialDist;
+                // Then actually set the element to the minimal cost for that edit
                 current[j] = min;
             }
 
