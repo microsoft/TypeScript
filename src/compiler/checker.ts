@@ -2359,6 +2359,8 @@ namespace ts {
                 context.InElementType = false;
                 const inTypeAlias = context.InTypeAlias;
                 context.InTypeAlias = false;
+                const inFirstTypeArgument = context.InFirstTypeArgument;
+                context.InFirstTypeArgument = false;
 
                 // TODO: should be assert?
                 if (!type) {
@@ -2366,8 +2368,6 @@ namespace ts {
                     // TODO(aozgaa): should we return implict any (undefined) or explicit any (keywordtypenode)?
                     return undefined;
                 }
-
-
 
                 if (type.flags & TypeFlags.Any) {
                     return createKeywordTypeNode(SyntaxKind.AnyKeyword);
@@ -2586,15 +2586,18 @@ namespace ts {
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
                             const signature = resolved.callSignatures[0];
-                            const functionTypeNode = <FunctionTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, context);
+                            const signatureNode = <FunctionTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.FunctionType, context);
                             return shouldAddParenthesisAroundFunctionType(signature, context) ?
-                                createParenthesizedTypeNode(functionTypeNode) :
-                                functionTypeNode;
+                                createParenthesizedTypeNode(signatureNode) :
+                                signatureNode;
 
                         }
                         if (resolved.constructSignatures.length === 1 && !resolved.callSignatures.length) {
                             const signature = resolved.constructSignatures[0];
-                            return <ConstructorTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructorType, context);
+                            const signatureNode = <ConstructorTypeNode>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructorType, context);
+                            return shouldAddParenthesisAroundFunctionType(signature, context) ?
+                                createParenthesizedTypeNode(signatureNode) :
+                                signatureNode;
                         }
                     }
 
@@ -2610,7 +2613,7 @@ namespace ts {
                     if (InElementType) {
                         return true;
                     }
-                    else if (context.InFirstTypeArgument) {
+                    else if (inFirstTypeArgument) {
                         // Add parenthesis around function type for the first type argument to avoid ambiguity
                         const typeParameters = callSignature.target && (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature) ?
                             callSignature.target.typeParameters : callSignature.typeParameters;
@@ -2690,7 +2693,14 @@ namespace ts {
                             entityName = nameIdentifier;
                         }
                         const typeParameterCount = (type.target.typeParameters || emptyArray).length;
-                        const typeArgumentNodes = some(typeArguments) ? mapToTypeNodeArray(typeArguments.slice(i, typeParameterCount - i), /*addInElementTypeFlag*/ false) : undefined;
+
+                        let typeArgumentNodes: TypeNode[] | undefined;
+                        if (some(typeArguments)) {
+                            const slice = typeArguments.slice(i, typeParameterCount - i);
+                            context.InFirstTypeArgument = true;
+                            typeArgumentNodes = mapToTypeNodeArray(slice, /*addInElementTypeFlag*/ false);
+                        }
+
                         return createTypeReferenceNode(entityName, typeArgumentNodes);
                     }
                 }
@@ -2851,7 +2861,6 @@ namespace ts {
                 }
             }
 
-            // TODO: add meaning: SymbolFlags argument.
             // TODO: add SymbolFormatFlags?? Yes to add outer type parameters. Defer UseOnlyExternalAliasing until a separate symbolbuilder PR.
             function symbolToName(symbol: Symbol, expectsIdentifier: true, meaning: SymbolFlags, context: NodeBuilderContext): Identifier;
             function symbolToName(symbol: Symbol, expectsIdentifier: false, meaning: SymbolFlags, context: NodeBuilderContext): EntityName;
