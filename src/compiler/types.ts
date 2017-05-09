@@ -904,7 +904,7 @@ namespace ts {
     }
 
     // A TypeLiteral is the declaration node for an anonymous symbol.
-    export interface TypeLiteralNode extends TypeNode, NamedDeclaration {
+    export interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
         members: NodeArray<TypeElement>;
     }
@@ -948,7 +948,7 @@ namespace ts {
         indexType: TypeNode;
     }
 
-    export interface MappedTypeNode extends TypeNode, NamedDeclaration {
+    export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
         parent?: TypeAliasDeclaration;
         readonlyToken?: ReadonlyToken;
@@ -1405,7 +1405,7 @@ namespace ts {
      * JSXAttribute or JSXSpreadAttribute. ObjectLiteralExpression, on the other hand, can only have properties of type
      * ObjectLiteralElement (e.g. PropertyAssignment, ShorthandPropertyAssignment etc.)
      */
-    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, NamedDeclaration {
+    export interface ObjectLiteralExpressionBase<T extends ObjectLiteralElement> extends PrimaryExpression, Declaration {
         properties: NodeArray<T>;
     }
 
@@ -1451,7 +1451,7 @@ namespace ts {
         | SuperElementAccessExpression
         ;
 
-    export interface CallExpression extends LeftHandSideExpression, NamedDeclaration {
+    export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
@@ -1470,7 +1470,7 @@ namespace ts {
         typeArguments?: NodeArray<TypeNode>;
     }
 
-    export interface NewExpression extends PrimaryExpression, NamedDeclaration {
+    export interface NewExpression extends PrimaryExpression, Declaration {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
         typeArguments?: NodeArray<TypeNode>;
@@ -2249,7 +2249,7 @@ namespace ts {
 
 
     // Source files are declarations when they are external modules.
-    export interface SourceFile extends NamedDeclaration {
+    export interface SourceFile extends Declaration {
         kind: SyntaxKind.SourceFile;
         statements: NodeArray<Statement>;
         endOfFileToken: Token<SyntaxKind.EndOfFileToken>;
