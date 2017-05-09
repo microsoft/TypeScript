@@ -466,7 +466,7 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
-    export function getNameFromIndexInfo(info: IndexInfo) {
+    export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 

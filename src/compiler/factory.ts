@@ -89,6 +89,10 @@ namespace ts {
         return nodeIsSynthesized(clone) ? clone : getSynthesizedClone(clone);
     }
 
+    export function cloneNodeArray<T extends Node>(nodeArray: NodeArray<T>) {
+        return nodeArray && nodeArray.map(getDeepSynthesizedClone);
+    }
+
     // Literals
 
     export function createLiteral(value: string): StringLiteral;

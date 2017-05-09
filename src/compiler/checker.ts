@@ -2752,7 +2752,7 @@ namespace ts {
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
                 const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
-                const name = getNameFromIndexInfo(indexInfo);
+                const name = getNameFromIndexInfo(indexInfo) || "x";
 
                 const indexingParameter = createParameter(
                     /*decorators*/ undefined,
@@ -2830,8 +2830,8 @@ namespace ts {
                     initializer = parameterDeclaration.initializer;
                 }
                 const parameterNode = createParameter(
-                    parameterDeclaration.decorators,
-                    parameterDeclaration.modifiers,
+                    /*decorators*/ undefined,
+                    cloneNodeArray(parameterDeclaration.modifiers),
                     (parameterDeclaration ? isRestParameter(parameterDeclaration) : isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) ?
                         createToken(SyntaxKind.DotDotDotToken) :
                         undefined,
