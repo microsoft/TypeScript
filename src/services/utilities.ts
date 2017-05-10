@@ -21,7 +21,6 @@ namespace ts {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.EnumMember:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -40,6 +39,7 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
                 return SemanticMeaning.Type;
 
+            case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
 
@@ -63,7 +63,7 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+                return SemanticMeaning.All;
 
             // An external module can be a Value
             case SyntaxKind.SourceFile:
