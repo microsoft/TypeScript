@@ -41,8 +41,10 @@ namespace ts {
                 return SemanticMeaning.Type;
 
             case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.EnumDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
+
+            case SyntaxKind.EnumDeclaration:
+                return SemanticMeaning.All;
 
             case SyntaxKind.ModuleDeclaration:
                 if (isAmbientModule(<ModuleDeclaration>node)) {
