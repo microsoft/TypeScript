@@ -1,5 +1,5 @@
 tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,10): error TS2304: Cannot find name 'T'.
-tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,13): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,13): error TS2552: Cannot find name 'a'. Did you mean 'A'?
 
 
 ==== tests/cases/compiler/typeParametersAndParametersInComputedNames.ts (2 errors) ====
@@ -12,6 +12,6 @@ tests/cases/compiler/typeParametersAndParametersInComputedNames.ts(6,13): error 
              ~
 !!! error TS2304: Cannot find name 'T'.
                 ~
-!!! error TS2304: Cannot find name 'a'.
+!!! error TS2552: Cannot find name 'a'. Did you mean 'A'?
         }
     }

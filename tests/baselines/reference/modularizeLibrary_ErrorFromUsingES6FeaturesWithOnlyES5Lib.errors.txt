@@ -1,7 +1,7 @@
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(4,18): error TS2339: Property 'from' does not exist on type 'ArrayConstructor'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(10,13): error TS2304: Cannot find name 'Map'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(17,5): error TS2339: Property 'name' does not exist on type '() => void'.
-tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(20,6): error TS2339: Property 'sign' does not exist on type 'Math'.
+tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(20,6): error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(25,6): error TS2304: Cannot find name 'Symbol'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(29,18): error TS2304: Cannot find name 'Symbol'.
 tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.ts(33,13): error TS2304: Cannot find name 'Proxy'.
@@ -40,7 +40,7 @@ tests/cases/compiler/modularizeLibrary_ErrorFromUsingES6FeaturesWithOnlyES5Lib.t
     // Using ES6 math
     Math.sign(1);
          ~~~~
-!!! error TS2339: Property 'sign' does not exist on type 'Math'.
+!!! error TS2551: Property 'sign' does not exist on type 'Math'. Did you mean 'sin'?
     
     // Using ES6 object
     var o = {

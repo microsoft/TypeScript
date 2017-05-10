@@ -1,5 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(18,23): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
-  Property 'x' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(18,23): error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
   Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
     Types of property 'x' are incompatible.
@@ -32,8 +31,7 @@ tests/cases/conformance/jsx/file.tsx(21,27): error TS2322: Type '{}' is not assi
     // Error
     let a = <EmptySFCComp x />;
                           ~
-!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes'.
     let b = <SFC2AndEmptyComp x="hi" />;
                               ~~~~~~
 !!! error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.

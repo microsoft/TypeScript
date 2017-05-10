@@ -82,6 +82,7 @@
         "formatting/tokenRange.ts",
         "codeFixProvider.ts",
         "codefixes/fixAddMissingMember.ts",
+        "codefixes/fixSpelling.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
         "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",

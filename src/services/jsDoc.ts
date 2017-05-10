@@ -28,6 +28,7 @@ namespace ts.JsDoc {
         "namespace",
         "param",
         "private",
+        "prop",
         "property",
         "public",
         "requires",
@@ -38,8 +39,6 @@ namespace ts.JsDoc {
         "throws",
         "type",
         "typedef",
-        "property",
-        "prop",
         "version"
     ];
     let jsDocTagNameCompletionEntries: CompletionEntry[];
