@@ -219,6 +219,9 @@ namespace ts {
         }
 
         switch (node.kind) {
+            case SyntaxKind.Identifier:
+                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNode));
+
             case SyntaxKind.SemicolonClassElement:
             case SyntaxKind.EmptyStatement:
             case SyntaxKind.OmittedExpression:

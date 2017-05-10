@@ -780,6 +780,7 @@ namespace ts {
 
         function emitIdentifier(node: Identifier) {
             write(getTextOfNode(node, /*includeTrivia*/ false));
+            emitTypeArguments(node, node.typeArguments);
         }
 
         //

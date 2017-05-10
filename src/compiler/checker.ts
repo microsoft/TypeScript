@@ -2449,13 +2449,13 @@ namespace ts {
                 if (!inTypeAlias && type.aliasSymbol &&
                     isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                     const name = symbolToName(type.aliasSymbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
-                    const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, /*addInElementTypeFlag*/ false);
+                    const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, context, /*addInElementTypeFlag*/ false, /*addInFirstTypeArgumentFlag*/ true);
                     return createTypeReferenceNode(name, typeArgumentNodes);
                 }
 
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
-                    const typeNodes = types && mapToTypeNodeArray(types, /*addInElementTypeFlag*/ true);
+                    const typeNodes = types && mapToTypeNodeArray(types, context, /*addInElementTypeFlag*/ true, /*addInFirstTypeArgumentFlag*/ false);
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
                         return InElementType ? createParenthesizedTypeNode(unionOrIntersectionTypeNode) : unionOrIntersectionTypeNode;
@@ -2491,20 +2491,6 @@ namespace ts {
                 }
 
                 Debug.fail("Should be unreachable.");
-
-                function mapToTypeNodeArray(types: Type[], addInElementTypeFlag: boolean): TypeNode[] {
-                    const result = [];
-                    Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
-                    for (const type of types) {
-                        context.InElementType = addInElementTypeFlag;
-                        const typeNode = typeToTypeNodeHelper(type, context);
-                        if (typeNode) {
-                            result.push(typeNode);
-                        }
-                    }
-                    Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
-                    return result;
-                }
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
@@ -2642,7 +2628,7 @@ namespace ts {
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
-                            const tupleConstituentNodes = mapToTypeNodeArray(typeArguments.slice(0, getTypeReferenceArity(type)), /*addInElementTypeFlag*/ false);
+                            const tupleConstituentNodes = mapToTypeNodeArray(typeArguments.slice(0, getTypeReferenceArity(type)), context, /*addInElementTypeFlag*/ false, /*addInFirstTypeArgumentFlag*/ false);
                             if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
@@ -2669,8 +2655,11 @@ namespace ts {
                                 // When type parameters are their own type arguments for the whole group (i.e. we have
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    // inFirstTypeArgument???
+                                    const qualifiedNamePartTypeArguments = typeArguments.slice(start,i);
+                                    const qualifiedNamePartTypeArgumentNodes = qualifiedNamePartTypeArguments && createNodeArray(mapToTypeNodeArray(qualifiedNamePartTypeArguments, context, /*addInElementTypeFlag*/ false, /*addInFirstTypeArgumentFlag*/ true));
                                     const qualifiedNamePart = symbolToName(parent, /*expectsIdentifier*/ true, SymbolFlags.Type, context);
+                                    qualifiedNamePart.typeArguments = qualifiedNamePartTypeArgumentNodes;
+
                                     if (!qualifiedName) {
                                         qualifiedName = createQualifiedName(qualifiedNamePart, /*right*/ undefined);
                                     }
@@ -2699,7 +2688,7 @@ namespace ts {
                         if (some(typeArguments)) {
                             const slice = typeArguments.slice(i, typeParameterCount - i);
                             context.InFirstTypeArgument = true;
-                            typeArgumentNodes = mapToTypeNodeArray(slice, /*addInElementTypeFlag*/ false);
+                            typeArgumentNodes = mapToTypeNodeArray(slice, context, /*addInElementTypeFlag*/ false, /*addInFirstTypeArgumentFlag*/ true);
                         }
 
                         return createTypeReferenceNode(entityName, typeArgumentNodes);
@@ -2759,6 +2748,24 @@ namespace ts {
                     }
                     return typeElements.length ? typeElements : undefined;
                 }
+            }
+
+            function mapToTypeNodeArray(types: Type[], context: NodeBuilderContext, addInElementTypeFlag: boolean, addInFirstTypeArgumentFlag: boolean): TypeNode[] {
+                const result = [];
+                Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
+                for (let i = 0; i < types.length; ++i) {
+                    let type = types[i]
+                    context.InElementType = addInElementTypeFlag;
+                    if (i === 0) {
+                        context.InFirstTypeArgument = addInFirstTypeArgumentFlag;
+                    }
+                    const typeNode = typeToTypeNodeHelper(type, context);
+                    if (typeNode) {
+                        result.push(typeNode);
+                    }
+                }
+                Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
+                return result;
             }
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
@@ -2889,9 +2896,8 @@ namespace ts {
                     Debug.assert(chain && 0 <= index && index < chain.length);
                     // const parentIndex = index - 1;
                     const symbol = chain[index];
-                    let typeParameterString = "";
+                    let typeParameterNodes: TypeNode[] | undefined;
                     if (index > 0) {
-
                         const parentSymbol = chain[index - 1];
                         let typeParameters: TypeParameter[];
                         if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
@@ -2907,17 +2913,12 @@ namespace ts {
                             if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowTypeParameterInQualifiedName)) {
                                 context.encounteredError = true;
                             }
-                            const writer = getSingleLineStringWriter();
-                            const displayBuilder = getSymbolDisplayBuilder();
-                            displayBuilder.buildDisplayForTypeParametersAndDelimiters(typeParameters, writer, context.enclosingDeclaration, 0);
-                            typeParameterString = writer.string();
-                            releaseStringWriter(writer);
-
+                            typeParameterNodes = typeParameters && mapToTypeNodeArray(typeParameters, context, /*addInElementTypeFlag*/ false, /*addInFirstTypeArgumentFlag*/ true);
                         }
                     }
+
                     const symbolName = getNameOfSymbol(symbol, context);
-                    const symbolNameWithTypeParameters = typeParameterString.length > 0 ? `${symbolName}<${typeParameterString}>` : symbolName;
-                    const identifier = createIdentifier(symbolNameWithTypeParameters);
+                    const identifier = createIdentifier(symbolName, typeParameterNodes);
 
                     return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }

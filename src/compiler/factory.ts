@@ -136,13 +136,20 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
+    export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.text = escapeIdentifier(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
+        node.typeArguments = asNodeArray(typeArguments);
         return node;
+    }
+
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
+        return node.typeArguments !== typeArguments
+        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        : node;
     }
 
     let nextAutoGenerateId = 0;
