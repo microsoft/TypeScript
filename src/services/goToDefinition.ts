@@ -85,17 +85,6 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
-        if (isJsxOpeningLikeElement(node.parent)) {
-            // If there are errors when trying to figure out stateless component function, just return the first declaration
-            // For example:
-            //      declare function /*firstSource*/MainButton(buttonProps: ButtonProps): JSX.Element;
-            //      declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
-            //      declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
-            //      let opt = <Main/*firstTarget*/Button />;  // Error - We get undefined for resolved signature indicating an error, then just return the first declaration
-            const {symbolName, symbolKind, containerName} = getSymbolInfo(typeChecker, symbol, node);
-            return [createDefinitionInfo(symbol.valueDeclaration, symbolKind, symbolName, containerName)];
-        }
-
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
         // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
         // For example
@@ -106,15 +95,9 @@ namespace ts.GoToDefinition {
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
         const element = getContainingObjectLiteralElement(node);
-        if (element) {
-            if (typeChecker.getContextualType(element.parent as Expression)) {
-                const result: DefinitionInfo[] = [];
-                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, element);
-                for (const propertySymbol of propertySymbols) {
-                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
-                }
-                return result;
-            }
+        if (element && typeChecker.getContextualType(element.parent as Expression)) {
+            return flatMap(getPropertySymbolsFromContextualType(typeChecker, element), propertySymbol =>
+                getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
