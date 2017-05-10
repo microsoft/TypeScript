@@ -67,7 +67,7 @@ namespace ts {
         let errorNameNode: DeclarationName;
         const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
-        let noDeclare: boolean;
+        let needsDeclare: boolean = true;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -110,11 +110,11 @@ namespace ts {
 
             resultHasExternalModuleIndicator = false;
             if (!isBundledEmit || !isExternalModule(sourceFile)) {
-                noDeclare = false;
+                needsDeclare = true;
                 emitSourceFile(sourceFile);
             }
             else if (isExternalModule(sourceFile)) {
-                noDeclare = true;
+                needsDeclare = false;
                 write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
                 writeLine();
                 increaseIndent();
@@ -612,9 +612,9 @@ namespace ts {
             }
         }
 
-        function emitTempVariableDeclaration(expr: Expression, baseName: string, diagnostic: SymbolAccessibilityDiagnostic): string {
+        function emitTempVariableDeclaration(expr: Expression, baseName: string, diagnostic: SymbolAccessibilityDiagnostic, needsDeclare: boolean): string {
             const tempVarName = getExportTempVariableName(baseName);
-            if (!noDeclare) {
+            if (needsDeclare) {
                 write("declare ");
             }
             write("const ");
@@ -636,7 +636,7 @@ namespace ts {
                 const tempVarName = emitTempVariableDeclaration(node.expression, "_default", {
                     diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                     errorNode: node
-                });
+                }, needsDeclare);
                 write(node.isExportEquals ? "export = " : "export default ");
                 write(tempVarName);
             }
@@ -728,7 +728,7 @@ namespace ts {
                 if (modifiers & ModifierFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && needsDeclare) {
                     write("declare ");
                 }
             }
@@ -1155,7 +1155,7 @@ namespace ts {
                         diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                         errorNode: baseTypeNode,
                         typeName: node.name
-                    });
+                    }, !findAncestor(node, n => n.kind === SyntaxKind.ModuleDeclaration));
             }
 
             emitJsDocComments(node);
