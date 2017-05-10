@@ -1758,22 +1758,14 @@ namespace ts {
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
-            return false;
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                return isDeclaration(name.parent) && name.parent.name === name;
+            default:
+                return false;
         }
-
-        const parent = name.parent;
-        if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
-            if ((<ImportOrExportSpecifier>parent).propertyName) {
-                return true;
-            }
-        }
-
-        if (isDeclaration(parent)) {
-            return parent.name === name;
-        }
-
-        return false;
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
