@@ -22254,7 +22254,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
@@ -22401,7 +22401,7 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
@@ -24428,6 +24428,21 @@ namespace ts {
                 }
             });
             return result;
+        }
+    }
+
+    /** Like 'isDeclarationName', but returns true for LHS of `import { x as y }` or `export { x as y }`. */
+    function isDeclarationNameOrImportPropertyName(name: Node): boolean {
+        switch (name.parent.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                if ((name.parent as ImportOrExportSpecifier).propertyName) {
+                    return true;
+                }
+                // falls through
+            default:
+                return isDeclarationName(name);
+
         }
     }
 }

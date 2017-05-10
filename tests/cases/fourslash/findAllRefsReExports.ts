@@ -4,10 +4,10 @@
 ////export function [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {}
 
 // @Filename: /b.ts
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true |}bar|] } from "./a";
+////export { [|foo|] as [|{| "isWriteAccess": true, "isDefinition": true |}bar|] } from "./a";
 
 // @Filename: /c.ts
-////export { [|{| "isWriteAccess": true, "isDefinition": true |}foo|] as [|{| "isWriteAccess": true, "isDefinition": true |}default|] } from "./a";
+////export { [|foo|] as [|{| "isWriteAccess": true, "isDefinition": true |}default|] } from "./a";
 
 // @Filename: /d.ts
 ////export { [|{| "isWriteAccess": true, "isDefinition": true |}default|] } from "./c";
@@ -15,7 +15,7 @@
 // @Filename: /e.ts
 ////import { [|{| "isWriteAccess": true, "isDefinition": true |}bar|] } from "./b";
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}baz|] from "./c";
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}default|] as [|{| "isWriteAccess": true, "isDefinition": true |}bang|] } from "./c";
+////import { [|default|] as [|{| "isWriteAccess": true, "isDefinition": true |}bang|] } from "./c";
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}boom|] from "./d";
 ////[|bar|](); [|baz|](); [|bang|](); [|boom|]();
 
