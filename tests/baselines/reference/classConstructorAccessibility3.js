@@ -90,7 +90,7 @@ declare class Baz {
 }
 declare class Qux {
     x: number;
-    private constructor(x);
+    private constructor();
 }
 declare let a: typeof Foo;
 declare let b: typeof Baz;
