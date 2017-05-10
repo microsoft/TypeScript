@@ -238,7 +238,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
-                    return (<Declaration>node.parent).name === node;
+                    return getNameOfDeclaration(<Declaration>node.parent) === node;
                 case SyntaxKind.ElementAccessExpression:
                     return (<ElementAccessExpression>node.parent).argumentExpression === node;
                 case SyntaxKind.ComputedPropertyName:

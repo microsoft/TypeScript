@@ -605,10 +605,13 @@ namespace ts {
 
     export interface Declaration extends Node {
         _declarationBrand: any;
+    }
+
+    export interface NamedDeclaration extends Declaration {
         name?: DeclarationName;
     }
 
-    export interface DeclarationStatement extends Declaration, Statement {
+    export interface DeclarationStatement extends NamedDeclaration, Statement {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
 
@@ -622,7 +625,7 @@ namespace ts {
         expression: LeftHandSideExpression;
     }
 
-    export interface TypeParameterDeclaration extends Declaration {
+    export interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
         parent?: DeclarationWithTypeParameters;
         name: Identifier;
@@ -633,7 +636,7 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration {
+    export interface SignatureDeclaration extends NamedDeclaration {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -650,7 +653,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends Declaration {
+    export interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
         name: BindingName;                  // Declared variable name
@@ -664,7 +667,7 @@ namespace ts {
         declarations: NodeArray<VariableDeclaration>;
     }
 
-    export interface ParameterDeclaration extends Declaration {
+    export interface ParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
@@ -674,7 +677,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface BindingElement extends Declaration {
+    export interface BindingElement extends NamedDeclaration {
         kind: SyntaxKind.BindingElement;
         parent?: BindingPattern;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
@@ -699,7 +702,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface ObjectLiteralElement extends Declaration {
+    export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
     }
@@ -743,7 +746,7 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     // SyntaxKind.JSDocPropertyTag
-    export interface VariableLikeDeclaration extends Declaration {
+    export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
@@ -752,7 +755,7 @@ namespace ts {
         initializer?: Expression;
     }
 
-    export interface PropertyLikeDeclaration extends Declaration {
+    export interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
     }
 
@@ -1216,8 +1219,7 @@ namespace ts {
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
-    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
-    export interface BinaryExpression extends Expression, Declaration {
+    export interface BinaryExpression extends Expression, Declaration  {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
@@ -1417,7 +1419,7 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
-    export interface PropertyAccessExpression extends MemberExpression, Declaration {
+    export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         name: Identifier;
@@ -1762,7 +1764,7 @@ namespace ts {
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
 
-    export interface ClassLikeDeclaration extends Declaration {
+    export interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -1778,12 +1780,12 @@ namespace ts {
         kind: SyntaxKind.ClassExpression;
     }
 
-    export interface ClassElement extends Declaration {
+    export interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
         name?: PropertyName;
     }
 
-    export interface TypeElement extends Declaration {
+    export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
         questionToken?: QuestionToken;
@@ -1811,7 +1813,7 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface EnumMember extends Declaration {
+    export interface EnumMember extends NamedDeclaration {
         kind: SyntaxKind.EnumMember;
         parent?: EnumDeclaration;
         // This does include ComputedPropertyName, but the parser will give an error
@@ -1900,14 +1902,14 @@ namespace ts {
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
     // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    export interface ImportClause extends Declaration {
+    export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent?: ImportDeclaration;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
 
-    export interface NamespaceImport extends Declaration {
+    export interface NamespaceImport extends NamedDeclaration {
         kind: SyntaxKind.NamespaceImport;
         parent?: ImportClause;
         name: Identifier;
@@ -1940,14 +1942,14 @@ namespace ts {
 
     export type NamedImportsOrExports = NamedImports | NamedExports;
 
-    export interface ImportSpecifier extends Declaration {
+    export interface ImportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ImportSpecifier;
         parent?: NamedImports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
-    export interface ExportSpecifier extends Declaration {
+    export interface ExportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ExportSpecifier;
         parent?: NamedExports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
@@ -2113,7 +2115,7 @@ namespace ts {
         typeExpression: JSDocTypeExpression;
     }
 
-    export interface JSDocTypedefTag extends JSDocTag, Declaration {
+    export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;

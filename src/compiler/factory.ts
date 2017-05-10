@@ -3099,9 +3099,10 @@ namespace ts {
     }
 
     function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
-        if (node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name)) {
-            const name = getMutableClone(node.name);
-            emitFlags |= getEmitFlags(node.name);
+        const nodeName = getNameOfDeclaration(node);
+        if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
+            const name = getMutableClone(nodeName);
+            emitFlags |= getEmitFlags(nodeName);
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
             if (!allowComments) emitFlags |= EmitFlags.NoComments;
             if (emitFlags) setEmitFlags(name, emitFlags);

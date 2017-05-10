@@ -1,13 +1,13 @@
 ///<reference path="fourslash.ts" />
 
-// In an inferred class, we can to-to-def successfully
+// In an inferred class, we can go-to-def successfully
 
 // @allowNonTsExtensions: true
 // @Filename: Foo.js
 //// class Foo {
 ////    constructor() {
-////        /*dst1*/this.alpha = 10;
-////        /*dst2*/this.beta = 'gamma';
+////        this./*dst1*/alpha = 10;
+////        this./*dst2*/beta = 'gamma';
 ////    }
 ////    method() { return this.alpha; }
 //// }

@@ -1,4 +1,4 @@
-tests/cases/compiler/a.js(14,5): error TS2424: Class 'A' defines instance member function 'foo', but extended class 'B' defines it as instance member property.
+tests/cases/compiler/a.js(14,10): error TS2424: Class 'A' defines instance member function 'foo', but extended class 'B' defines it as instance member property.
 
 
 ==== tests/cases/compiler/a.js (1 errors) ====
@@ -16,7 +16,7 @@ tests/cases/compiler/a.js(14,5): error TS2424: Class 'A' defines instance member
       constructor() {
         super();
         this.foo = () => 3;
-        ~~~~~~~~~~~~~~~~~~
+             ~~~
 !!! error TS2424: Class 'A' defines instance member function 'foo', but extended class 'B' defines it as instance member property.
       }
     }

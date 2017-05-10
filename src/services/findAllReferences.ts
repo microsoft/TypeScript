@@ -899,7 +899,7 @@ namespace ts.FindAllReferences.Core {
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
         if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(valueDeclaration.name, shorthandValueSymbol, search.location, state);
+            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, search.location, state);
         }
     }
 
