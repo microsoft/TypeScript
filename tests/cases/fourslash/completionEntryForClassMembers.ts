@@ -30,6 +30,18 @@
 ////    }
 ////    /*classThatHasDifferentMethodThanBaseAfterProtectedMethod*/
 ////}
+////class D3 extends D1 {
+////    /*classThatExtendsClassExtendingAnotherClass*/
+////}
+////class D4 extends D1 {
+////    static /*classThatExtendsClassExtendingAnotherClassAndTypesStatic*/
+////}
+////class D5 extends D2 {
+////    /*classThatExtendsClassExtendingAnotherClassWithOverridingMember*/
+////}
+////class D6 extends D2 {
+////    static /*classThatExtendsClassExtendingAnotherClassWithOverridingMemberAndTypesStatic*/
+////}
 ////class E {
 ////    /*classThatDoesNotExtendAnotherClass*/
 ////}
@@ -127,6 +139,12 @@ const allMembersOfBase: CompletionInfo[] = [
     ["privateMethod", "(method) B.privateMethod(): void"],
     ["staticMethod", "(method) B.staticMethod(): void"]
 ];
+const publicCompletionInfoOfD1: CompletionInfo[] = [
+    ["getValue1", "(method) D1.getValue1(): number"]
+];
+const publicCompletionInfoOfD2: CompletionInfo[] = [
+    ["protectedMethod", "(method) D2.protectedMethod(): void"]
+];
 function filterCompletionInfo(fn: (a: CompletionInfo) => boolean): CompletionInfoVerifier {
     const validMembers: CompletionInfo[] = [];
     const invalidMembers: CompletionInfo[] = [];
@@ -146,6 +164,19 @@ const instanceMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "
 const staticMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "staticMethod");
 const instanceWithoutProtectedMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "getValue");
 const instanceWithoutPublicMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "protectedMethod");
+
+const instanceMemberInfoD1: CompletionInfoVerifier = {
+    validMembers: instanceMemberInfo.validMembers.concat(publicCompletionInfoOfD1),
+    invalidMembers: instanceMemberInfo.invalidMembers
+};
+const instanceMemberInfoD2: CompletionInfoVerifier = {
+    validMembers: instanceWithoutProtectedMemberInfo.validMembers.concat(publicCompletionInfoOfD2),
+    invalidMembers: instanceWithoutProtectedMemberInfo.invalidMembers
+};
+const staticMemberInfoDn: CompletionInfoVerifier = {
+    validMembers: staticMemberInfo.validMembers,
+    invalidMembers: staticMemberInfo.invalidMembers.concat(publicCompletionInfoOfD1, publicCompletionInfoOfD2)
+};
 
 // Not a class element declaration location
 const nonClassElementMarkers = [
@@ -211,3 +242,15 @@ const classInstanceElementWithoutProtectedMethodLocations = [
     "classThatHasDifferentMethodThanBaseAfterProtectedMethod",
 ];
 verifyClassElementLocations(instanceWithoutProtectedMemberInfo, classInstanceElementWithoutProtectedMethodLocations);
+
+// instance memebers in D1 and base class are shown
+verifyClassElementLocations(instanceMemberInfoD1, ["classThatExtendsClassExtendingAnotherClass"]);
+
+// instance memebers in D2 and base class are shown
+verifyClassElementLocations(instanceMemberInfoD2, ["classThatExtendsClassExtendingAnotherClassWithOverridingMember"]);
+
+// static base members and class member keywords allowed
+verifyClassElementLocations(staticMemberInfoDn, [
+    "classThatExtendsClassExtendingAnotherClassAndTypesStatic",
+    "classThatExtendsClassExtendingAnotherClassWithOverridingMemberAndTypesStatic"
+]);

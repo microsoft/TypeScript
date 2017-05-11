@@ -937,7 +937,8 @@ namespace ts.Completions {
             hasFilteredClassMemberKeywords = true;
 
             const baseTypeNode = getClassExtendsHeritageClauseElement(classLikeDeclaration);
-            if (baseTypeNode) {
+            const implementsTypeNodes = getClassImplementsHeritageClauseElements(classLikeDeclaration);
+            if (baseTypeNode || implementsTypeNodes) {
                 const classElement = contextToken.parent;
                 let classElementModifierFlags = isClassElement(classElement) && getModifierFlags(classElement);
                 // If this is context token is not something we are editing now, consider if this would lead to be modifier
@@ -954,13 +955,27 @@ namespace ts.Completions {
 
                 // No member list for private methods
                 if (!(classElementModifierFlags & ModifierFlags.Private)) {
-                    const baseType = typeChecker.getTypeAtLocation(baseTypeNode);
-                    const typeToGetPropertiesFrom = (classElementModifierFlags & ModifierFlags.Static) ?
-                        typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, classLikeDeclaration) :
-                        baseType;
+                    let baseClassTypeToGetPropertiesFrom: Type;
+                    if (baseTypeNode) {
+                        baseClassTypeToGetPropertiesFrom = typeChecker.getTypeAtLocation(baseTypeNode);
+                        if (classElementModifierFlags & ModifierFlags.Static) {
+                            // Use static class to get property symbols from
+                            baseClassTypeToGetPropertiesFrom = typeChecker.getTypeOfSymbolAtLocation(
+                                baseClassTypeToGetPropertiesFrom.symbol, classLikeDeclaration);
+                        }
+                    }
+                    const implementedInterfaceTypePropertySymbols = (classElementModifierFlags & ModifierFlags.Static) ?
+                        undefined :
+                        flatMap(implementsTypeNodes, typeNode => typeChecker.getPropertiesOfType(typeChecker.getTypeAtLocation(typeNode)));
 
                     // List of property symbols of base type that are not private and already implemented
-                    symbols = filterClassMembersList(typeChecker.getPropertiesOfType(typeToGetPropertiesFrom), classLikeDeclaration.members, classElementModifierFlags);
+                    symbols = filterClassMembersList(
+                        baseClassTypeToGetPropertiesFrom ?
+                            typeChecker.getPropertiesOfType(baseClassTypeToGetPropertiesFrom) :
+                            undefined,
+                        implementedInterfaceTypePropertySymbols,
+                        classLikeDeclaration.members,
+                        classElementModifierFlags);
                 }
             }
         }
@@ -1334,7 +1349,7 @@ namespace ts.Completions {
          *
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
-        function filterClassMembersList(baseSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+        function filterClassMembersList(baseSymbols: Symbol[], implementingTypeSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
             const existingMemberNames = createMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
@@ -1358,7 +1373,7 @@ namespace ts.Completions {
                 // do not filter it out if the static presence doesnt match
                 const mIsStatic = hasModifier(m, ModifierFlags.Static);
                 const currentElementIsStatic = !!(currentClassElementModifierFlags & ModifierFlags.Static);
-                if ((mIsStatic && currentElementIsStatic) ||
+                if ((mIsStatic && !currentElementIsStatic) ||
                     (!mIsStatic && currentElementIsStatic)) {
                     continue;
                 }
@@ -1369,10 +1384,16 @@ namespace ts.Completions {
                 }
             }
 
-            return filter(baseSymbols, baseProperty =>
-                !existingMemberNames.get(baseProperty.name) &&
-                baseProperty.getDeclarations() &&
-                !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
+            return concatenate(
+                filter(baseSymbols, baseProperty => isValidProperty(baseProperty, ModifierFlags.Private)),
+                filter(implementingTypeSymbols, implementingProperty => isValidProperty(implementingProperty, ModifierFlags.NonPublicAccessibilityModifier))
+            );
+
+            function isValidProperty(propertySymbol: Symbol, inValidModifierFlags: ModifierFlags) {
+                return !existingMemberNames.get(propertySymbol.name) &&
+                    propertySymbol.getDeclarations() &&
+                    !(getDeclarationModifierFlagsFromSymbol(propertySymbol) & inValidModifierFlags);
+            }
         }
 
         /**
