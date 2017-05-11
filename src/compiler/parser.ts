@@ -5856,22 +5856,22 @@ namespace ts {
                 const comment = sourceText.substring(range.pos, range.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, range);
                 if (referencePathMatchResult) {
-                    const fileReference = referencePathMatchResult.fileReference;
-                    sourceFile.hasNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    const diagnosticMessage = referencePathMatchResult.diagnosticMessage;
-                    if (fileReference) {
-                        if (referencePathMatchResult.isTypeReferenceDirective) {
-                            typeReferenceDirectives.push(fileReference);
-                        }
-                        else if (referencePathMatchResult.isLibReferenceDirective) {
-                            libReferenceDirectives.push(fileReference);
-                        }
-                        else {
-                            referencedFiles.push(fileReference);
-                        }
-                    }
-                    if (diagnosticMessage) {
-                        parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, diagnosticMessage));
+                    switch (referencePathMatchResult.kind) {
+                        case "error":
+                            parseDiagnostics.push(createFileDiagnostic(sourceFile, range.pos, range.end - range.pos, referencePathMatchResult.diagnosticMessage));
+                            break;
+                        case "no-default-lib":
+                            sourceFile.hasNoDefaultLib = true;
+                            break;
+                        case "types":
+                            typeReferenceDirectives.push(referencePathMatchResult.fileReference);
+                            break;
+                        case "lib":
+                            libReferenceDirectives.push(referencePathMatchResult.fileReference);
+                            break;
+                        case "path":
+                            referencedFiles.push(referencePathMatchResult.fileReference);
+                            break;
                     }
                 }
                 else {

@@ -27,14 +27,18 @@ namespace ts {
                 const comment = sourceText.substring(commentRange.pos, commentRange.end);
                 const referencePathMatchResult = getFileReferenceFromReferencePath(comment, commentRange);
                 if (referencePathMatchResult) {
-                    isNoDefaultLib = referencePathMatchResult.isNoDefaultLib;
-                    const fileReference = referencePathMatchResult.fileReference;
-                    if (fileReference) {
-                        const collection = referencePathMatchResult.isTypeReferenceDirective
-                            ? typeReferenceDirectives
-                            : referencedFiles;
-
-                        collection.push(fileReference);
+                    switch (referencePathMatchResult.kind) {
+                        case "no-default-lib":
+                            isNoDefaultLib = true;
+                            break;
+                        case "types":
+                            typeReferenceDirectives.push(referencePathMatchResult.fileReference);
+                            break;
+                        case "path":
+                            referencedFiles.push(referencePathMatchResult.fileReference);
+                            break;
+                        // TODO(rbuckton): pass lib references to core services
+                        // case "lib":
                     }
                 }
             });

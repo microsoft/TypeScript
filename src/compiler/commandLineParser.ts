@@ -41,6 +41,9 @@ namespace ts {
     });
 
     /* @internal */
+    export const libs = arrayFrom(libMap.keys());
+
+    /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
         // CommandLine only options
         {

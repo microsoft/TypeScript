@@ -4,13 +4,21 @@
 namespace ts {
     export const externalHelpersModuleNameText = "tslib";
 
-    export interface ReferencePathMatchResult {
-        fileReference?: FileReference;
-        diagnosticMessage?: DiagnosticMessage;
-        isNoDefaultLib?: boolean;
-        isTypeReferenceDirective?: boolean;
-        isLibReferenceDirective?: boolean;
+    export interface NoDefaultLibDirective {
+        kind: "no-default-lib";
     }
+
+    export interface ReferenceDirective {
+        kind: "path" | "types" | "lib";
+        fileReference: FileReference;
+    }
+
+    export interface ReferenceDirectiveError {
+        kind: "error";
+        diagnosticMessage: DiagnosticMessage;
+    }
+
+    export type ReferencePathMatchResult = NoDefaultLibDirective | ReferenceDirective | ReferenceDirectiveError;
 
     export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
         const declarations = symbol.declarations;
@@ -1929,40 +1937,32 @@ namespace ts {
         return fullTripleSlashReferencePathOrAmdDependencyPathRegEx.test(comment);
     }
 
-    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult {
-        if (simpleReferenceRegEx.test(comment)) {
-            const match = fullTripleSlashReferenceRegEx.exec(comment);
-            if (match) {
-                const name = match[1];
-                if (name === "no-default-lib") {
-                    return {
-                        isNoDefaultLib: true
-                    };
-                }
-                else if (name === "path" || name === "types" || name === "lib") {
-                    const value = match[3];
-                    const start = commentRange.pos;
-                    const end = commentRange.end;
-                    return {
-                        fileReference: {
-                            pos: start,
-                            end: end,
-                            fileName: value
-                        },
-                        isNoDefaultLib: false,
-                        isTypeReferenceDirective: name === "types",
-                        isLibReferenceDirective: name === "lib"
-                    };
-                }
-            }
-            else {
-                return {
-                    diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
-                    isNoDefaultLib: false
-                };
-            }
+    export function getFileReferenceFromReferencePath(comment: string, commentRange: CommentRange): ReferencePathMatchResult | undefined {
+        if (!simpleReferenceRegEx.test(comment)) {
+            return undefined;
         }
-        return undefined;
+        const match = fullTripleSlashReferenceRegEx.exec(comment);
+        if (!match) {
+            return {
+                diagnosticMessage: Diagnostics.Invalid_reference_directive_syntax,
+                kind: "error"
+            };
+        }
+        const kind = match[1] as "no-default-lib" | "path" | "types" | "lib";
+        if (kind === "no-default-lib") {
+            return { kind };
+        }
+        const value = match[3];
+        const start = commentRange.pos;
+        const end = commentRange.end;
+        return {
+            fileReference: {
+                pos: start,
+                end: end,
+                fileName: value
+            },
+            kind
+        };
     }
 
     export function isKeyword(token: SyntaxKind): boolean {

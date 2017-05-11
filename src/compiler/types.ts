@@ -22,16 +22,6 @@ namespace ts {
         entries(): Iterator<[string, T]>;
     }
 
-    export interface ReadonlyMap<T> {
-        readonly size: number;
-        get(key: string): T | undefined;
-        has(key: string): boolean;
-        forEach(action: (value: T, key: string) => void): void;
-        keys(): Iterator<string>;
-        values(): Iterator<T>;
-        entries(): Iterator<[string, T]>;
-    }
-
     /** ES6 Iterator type. */
     export interface Iterator<T> {
         next(): { value: T, done: false } | { value: never, done: true };

@@ -8,6 +8,8 @@
 /// <reference lib="es2015.foo" />
 //// [d.ts]
 /// <reference lib="es2015.collections" />
+//// [e.ts]
+/// <reference lib="lib.es2015.d.ts" />
 
 //// [a.js]
 /// <reference /> 
@@ -17,3 +19,5 @@
 /// <reference lib="es2015.foo" /> 
 //// [d.js]
 /// <reference lib="es2015.collections" /> 
+//// [e.js]
+/// <reference lib="lib.es2015.d.ts" /> 

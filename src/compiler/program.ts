@@ -1583,7 +1583,7 @@ namespace ts {
                     if (endsWith(unqualifiedLibName, ".d.ts")) {
                         unqualifiedLibName = removeExtension(unqualifiedLibName, ".d.ts");
                     }
-                    const suggestion = getSpellingSuggestion(unqualifiedLibName, arrayFrom(libMap.keys()));
+                    const suggestion = getSpellingSuggestion(unqualifiedLibName, libs);
                     const message = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
                     fileProcessingDiagnostics.add(createDiagnostic(file, libReference.pos, libReference.end, message, libName, suggestion));
                 }
