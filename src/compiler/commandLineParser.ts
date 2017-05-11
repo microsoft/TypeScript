@@ -917,19 +917,19 @@ namespace ts {
                 {
                     name: "compilerOptions",
                     type: "object",
-                    optionDeclarations: commandLineOptionsToMap(optionDeclarations),
+                    elementOptions: commandLineOptionsToMap(optionDeclarations),
                     extraKeyDiagnosticMessage: Diagnostics.Unknown_compiler_option_0
                 },
                 {
                     name: "typingOptions",
                     type: "object",
-                    optionDeclarations: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                    elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
                     extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
                 },
                 {
                     name: "typeAcquisition",
                     type: "object",
-                    optionDeclarations: commandLineOptionsToMap(typeAcquisitionDeclarations),
+                    elementOptions: commandLineOptionsToMap(typeAcquisitionDeclarations),
                     extraKeyDiagnosticMessage: Diagnostics.Unknown_type_acquisition_option_0
                 },
                 {
@@ -967,27 +967,48 @@ namespace ts {
     }
 
     interface JsonConversionNotifier {
-        /** Notifies options object is being set with the optionKey and optionValue is being set */
-        onSetOptionKeyValue(optionsObject: string, option: CommandLineOption, value: CompilerOptionsValue): void;
-        /** Notify when root key value is being set */
-        onRootKeyValue(key: string, propertyName: PropertyName, value: CompilerOptionsValue, node: Expression): void;
+        /**
+         * Notifies parent option object is being set with the optionKey and a valid optionValue
+         * Currently it notifies only if there is element with type object (parentOption) and
+         * has element's option declarations map associated with it
+         * @param parentOption parent option name in which the option and value are being set
+         * @param option option declaration which is being set with the value
+         * @param value value of the option
+         */
+        onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue): void;
+        /**
+         * Notify when valid root key value option is being set
+         * @param key option key
+         * @param keyNode node corresponding to node in the source file
+         * @param value computed value of the key
+         * @param ValueNode node corresponding to value in the source file
+         */
+        onSetValidOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
+        /**
+         * Notify when unknown root key value option is being set
+         * @param key option key
+         * @param keyNode node corresponding to node in the source file
+         * @param value computed value of the key
+         * @param ValueNode node corresponding to value in the source file
+         */
+        onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression): void;
     }
 
     /**
      * Convert the json syntax tree into the json value
-     * @param jsonNode
-     * @param errors
      */
     export function convertToObject(sourceFile: JsonSourceFile, errors: Diagnostic[]): any {
-        return convertToObjectWorker(sourceFile, errors);
+        return convertToObjectWorker(sourceFile, errors, /*knownRootOptions*/ undefined, /*jsonConversionNotifier*/ undefined);
     }
 
     /**
      * Convert the json syntax tree into the json value
-     * @param jsonNode
-     * @param errors
      */
-    function convertToObjectWorker(sourceFile: JsonSourceFile, errors: Diagnostic[], knownRootOptions?: Map<CommandLineOption>, optionsIterator?: JsonConversionNotifier): any {
+    function convertToObjectWorker(
+        sourceFile: JsonSourceFile,
+        errors: Diagnostic[],
+        knownRootOptions: Map<CommandLineOption> | undefined,
+        jsonConversionNotifier: JsonConversionNotifier | undefined): any {
         if (!sourceFile.jsonObject) {
             if (sourceFile.endOfFileToken) {
                 return {};
@@ -995,9 +1016,15 @@ namespace ts {
             return undefined;
         }
 
-        return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions);
+        return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions,
+            /*extraKeyDiagnosticMessage*/ undefined, /*parentOption*/ undefined);
 
-        function convertObjectLiteralExpressionToJson(node: ObjectLiteralExpression, knownOptions: Map<CommandLineOption>, extraKeyDiagnosticMessage?: DiagnosticMessage, optionsObject?: string): any {
+        function convertObjectLiteralExpressionToJson(
+            node: ObjectLiteralExpression,
+            knownOptions: Map<CommandLineOption> | undefined,
+            extraKeyDiagnosticMessage: DiagnosticMessage | undefined,
+            parentOption: string | undefined
+        ): any {
             const result: any = {};
             for (const element of node.properties) {
                 if (element.kind !== SyntaxKind.PropertyAssignment) {
@@ -1021,32 +1048,45 @@ namespace ts {
                 if (typeof keyText !== undefined && typeof value !== undefined) {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
-                    if (optionsIterator &&
-                        (optionsObject || knownOptions === knownRootOptions)) {
+                    if (jsonConversionNotifier &&
+                        // Current callbacks are only on known parent option or if we are setting values in the root
+                        (parentOption || knownOptions === knownRootOptions)) {
                         const isValidOptionValue = isCompilerOptionsValue(option, value);
-                        if (optionsObject && isValidOptionValue) {
-                            optionsIterator.onSetOptionKeyValue(optionsObject, option, value);
+                        if (parentOption) {
+                            if (isValidOptionValue) {
+                                // Notify option set in the parent if its a valid option value
+                                jsonConversionNotifier.onSetValidOptionKeyValueInParent(parentOption, option, value);
+                            }
                         }
-                        if (knownOptions === knownRootOptions && (isValidOptionValue || !option)) {
-                            optionsIterator.onRootKeyValue(keyText, element.name, value, element.initializer);
+                        else if (knownOptions === knownRootOptions) {
+                            if (isValidOptionValue) {
+                                // Notify about the valid root key value being set
+                                jsonConversionNotifier.onSetValidOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
+                            }
+                            else if (!option) {
+                                // Notify about the unknown root key value being set
+                                jsonConversionNotifier.onSetUnknownOptionKeyValueInRoot(keyText, element.name, value, element.initializer);
+                            }
                         }
                     }
-
                 }
             }
             return result;
         }
 
-        function convertArrayLiteralExpressionToJson(elements: NodeArray<Expression>, option?: CommandLineOption): any[] {
+        function convertArrayLiteralExpressionToJson(
+            elements: NodeArray<Expression>,
+            elementOption: CommandLineOption | undefined
+        ): any[] {
             const result: any[] = [];
             for (const element of elements) {
-                result.push(convertPropertyValueToJson(element, option));
+                result.push(convertPropertyValueToJson(element, elementOption));
             }
             return result;
         }
 
-        function convertPropertyValueToJson(node: Expression, option: CommandLineOption): any {
-            switch (node.kind) {
+        function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption): any {
+            switch (valueExpression.kind) {
                 case SyntaxKind.TrueKeyword:
                     reportInvalidOptionValue(option && option.type !== "boolean");
                     return true;
@@ -1060,11 +1100,11 @@ namespace ts {
                     return null; // tslint:disable-line:no-null-keyword
 
                 case SyntaxKind.StringLiteral:
-                    if (!isDoubleQuotedString(node)) {
-                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.String_literal_with_double_quotes_expected));
+                    if (!isDoubleQuotedString(valueExpression)) {
+                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.String_literal_with_double_quotes_expected));
                     }
                     reportInvalidOptionValue(option && (typeof option.type === "string" && option.type !== "string"));
-                    const text = (<StringLiteral>node).text;
+                    const text = (<StringLiteral>valueExpression).text;
                     if (option && typeof option.type !== "string") {
                         const customOption = <CommandLineOptionOfCustomType>option;
                         // Validate custom option type
@@ -1072,7 +1112,7 @@ namespace ts {
                             errors.push(
                                 createDiagnosticForInvalidCustomType(
                                     customOption,
-                                    (message, arg0, arg1) => createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0, arg1)
+                                    (message, arg0, arg1) => createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, message, arg0, arg1)
                                 )
                             );
                         }
@@ -1081,22 +1121,34 @@ namespace ts {
 
                 case SyntaxKind.NumericLiteral:
                     reportInvalidOptionValue(option && option.type !== "number");
-                    return Number((<NumericLiteral>node).text);
+                    return Number((<NumericLiteral>valueExpression).text);
 
                 case SyntaxKind.ObjectLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "object");
-                    const objectOption = <TsConfigOnlyOption>option;
-                    const optionDeclarations = option && objectOption.optionDeclarations;
-                    return convertObjectLiteralExpressionToJson(
-                        <ObjectLiteralExpression>node,
-                        optionDeclarations,
-                        option && objectOption.extraKeyDiagnosticMessage,
-                        optionDeclarations && option.name
-                    );
+                    const objectLiteralExpression = <ObjectLiteralExpression>valueExpression;
+
+                    // Currently having element option declaration in the tsconfig with type "object"
+                    // determines if it needs onSetValidOptionKeyValueInParent callback or not
+                    // At moment there are only "compilerOptions", "typeAcquisition" and "typingOptions"
+                    // that satifies it and need it to modify options set in them (for normalizing file paths)
+                    // vs what we set in the json
+                    // If need arises, we can modify this interface and callbacks as needed
+                    if (option) {
+                        const { elementOptions, extraKeyDiagnosticMessage, name: optionName } = <TsConfigOnlyOption>option;
+                        return convertObjectLiteralExpressionToJson(objectLiteralExpression,
+                            elementOptions, extraKeyDiagnosticMessage, optionName);
+                    }
+                    else {
+                        return convertObjectLiteralExpressionToJson(
+                            objectLiteralExpression, /* knownOptions*/ undefined,
+                            /*extraKeyDiagnosticMessage */ undefined, /*parentOption*/ undefined);
+                    }
 
                 case SyntaxKind.ArrayLiteralExpression:
                     reportInvalidOptionValue(option && option.type !== "list");
-                    return convertArrayLiteralExpressionToJson((<ArrayLiteralExpression>node).elements, option && (<CommandLineOptionOfListType>option).element);
+                    return convertArrayLiteralExpressionToJson(
+                        (<ArrayLiteralExpression>valueExpression).elements,
+                        option && (<CommandLineOptionOfListType>option).element);
             }
 
             // Not in expected format
@@ -1104,14 +1156,14 @@ namespace ts {
                 reportInvalidOptionValue(/*isError*/ true);
             }
             else {
-                errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal));
+                errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Property_value_can_only_be_string_literal_numeric_literal_true_false_null_object_literal_or_array_literal));
             }
 
             return undefined;
 
             function reportInvalidOptionValue(isError: boolean) {
                 if (isError) {
-                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)));
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueExpression, Diagnostics.Compiler_option_0_requires_a_value_of_type_1, option.name, getCompilerOptionValueTypeString(option)));
                 }
             }
         }
@@ -1542,15 +1594,17 @@ namespace ts {
         let extendedConfigPath: Path;
 
         const optionsIterator: JsonConversionNotifier = {
-            onSetOptionKeyValue(optionsObject: string, option: CommandLineOption, value: CompilerOptionsValue) {
-                Debug.assert(optionsObject === "compilerOptions" || optionsObject === "typeAcquisition" || optionsObject === "typingOptions");
-                const currentOption = optionsObject === "compilerOptions" ? options :
-                    optionsObject === "typeAcquisition" ? (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName))) :
+            onSetValidOptionKeyValueInParent(parentOption: string, option: CommandLineOption, value: CompilerOptionsValue) {
+                Debug.assert(parentOption === "compilerOptions" || parentOption === "typeAcquisition" || parentOption === "typingOptions");
+                const currentOption = parentOption === "compilerOptions" ?
+                    options :
+                    parentOption === "typeAcquisition" ?
+                        (typeAcquisition || (typeAcquisition = getDefaultTypeAcquisition(configFileName))) :
                         (typingOptionstypeAcquisition || (typingOptionstypeAcquisition = getDefaultTypeAcquisition(configFileName)));
 
                 currentOption[option.name] = normalizeOptionValue(option, basePath, value);
             },
-            onRootKeyValue(key: string, propertyName: PropertyName, value: CompilerOptionsValue, node: Expression) {
+            onSetValidOptionKeyValueInRoot(key: string, _keyNode: PropertyName, value: CompilerOptionsValue, valueNode: Expression) {
                 switch (key) {
                     case "extends":
                         extendedConfigPath = getExtendsConfigPath(
@@ -1560,17 +1614,19 @@ namespace ts {
                             getCanonicalFileName,
                             errors,
                             (message, arg0) =>
-                                createDiagnosticForNodeInSourceFile(sourceFile, node, message, arg0)
+                                createDiagnosticForNodeInSourceFile(sourceFile, valueNode, message, arg0)
                         );
-                        return;
-                    case "excludes":
-                        errors.push(createDiagnosticForNodeInSourceFile(sourceFile, propertyName, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                         return;
                     case "files":
                         if ((<string[]>value).length === 0) {
-                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, node, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
+                            errors.push(createDiagnosticForNodeInSourceFile(sourceFile, valueNode, Diagnostics.The_files_list_in_config_file_0_is_empty, configFileName || "tsconfig.json"));
                         }
                         return;
+                }
+            },
+            onSetUnknownOptionKeyValueInRoot(key: string, keyNode: PropertyName, _value: CompilerOptionsValue, _valueNode: Expression) {
+                if (key === "excludes") {
+                    errors.push(createDiagnosticForNodeInSourceFile(sourceFile, keyNode, Diagnostics.Unknown_option_excludes_Did_you_mean_exclude));
                 }
             }
         };
