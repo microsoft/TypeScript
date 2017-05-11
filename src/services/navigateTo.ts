@@ -52,7 +52,7 @@ namespace ts.NavigateTo {
         rawItems = filter(rawItems, item => {
             const decl = item.declaration;
             if (decl.kind === SyntaxKind.ImportClause || decl.kind === SyntaxKind.ImportSpecifier || decl.kind === SyntaxKind.ImportEqualsDeclaration) {
-                const importer = checker.getSymbolAtLocation(decl.name);
+                const importer = checker.getSymbolAtLocation((decl as NamedDeclaration).name);
                 const imported = checker.getAliasedSymbol(importer);
                 return importer.name !== imported.name;
             }
@@ -97,17 +97,20 @@ namespace ts.NavigateTo {
         }
 
         function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]) {
-            if (declaration && declaration.name) {
-                const text = getTextOfIdentifierOrLiteral(declaration.name);
-                if (text !== undefined) {
-                    containers.unshift(text);
-                }
-                else if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                    return tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion*/ true);
-                }
-                else {
-                    // Don't know how to add this.
-                    return false;
+            if (declaration) {
+                const name = getNameOfDeclaration(declaration);
+                if (name) {
+                    const text = getTextOfIdentifierOrLiteral(name);
+                    if (text !== undefined) {
+                        containers.unshift(text);
+                    }
+                    else if (name.kind === SyntaxKind.ComputedPropertyName) {
+                        return tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ true);
+                    }
+                    else {
+                        // Don't know how to add this.
+                        return false;
+                    }
                 }
             }
 
@@ -143,8 +146,9 @@ namespace ts.NavigateTo {
 
             // First, if we started with a computed property name, then add all but the last
             // portion into the container array.
-            if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (!tryAddComputedPropertyName((<ComputedPropertyName>declaration.name).expression, containers, /*includeLastPortion*/ false)) {
+            const name = getNameOfDeclaration(declaration);
+            if (name.kind === SyntaxKind.ComputedPropertyName) {
+                if (!tryAddComputedPropertyName((<ComputedPropertyName>name).expression, containers, /*includeLastPortion*/ false)) {
                     return undefined;
                 }
             }
@@ -190,6 +194,7 @@ namespace ts.NavigateTo {
         function createNavigateToItem(rawItem: RawNavigateToItem): NavigateToItem {
             const declaration = rawItem.declaration;
             const container = <Declaration>getContainerNode(declaration);
+            const containerName = container && getNameOfDeclaration(container);
             return {
                 name: rawItem.name,
                 kind: getNodeKind(declaration),
@@ -199,8 +204,8 @@ namespace ts.NavigateTo {
                 fileName: rawItem.fileName,
                 textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                containerName: container && container.name ? (<Identifier>container.name).text : "",
-                containerKind: container && container.name ? getNodeKind(container) : ""
+                containerName: containerName ? (<Identifier>containerName).text : "",
+                containerKind: containerName ? getNodeKind(container) : ""
             };
         }
     }

@@ -1,13 +1,13 @@
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(14,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(18,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(22,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(26,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(30,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(34,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(38,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(42,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(46,3): error TS2304: Cannot find name '$ERROR'.
-tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(50,3): error TS2304: Cannot find name '$ERROR'.
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(14,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(18,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(22,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(26,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(30,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(34,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(38,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(42,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(46,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
+tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(50,3): error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
 tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(54,3): error TS2304: Cannot find name '$ERROR'.
 tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(58,3): error TS2304: Cannot find name '$ERROR'.
 tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(62,3): error TS2304: Cannot find name '$ERROR'.
@@ -49,61 +49,61 @@ tests/cases/conformance/parser/ecmascript5/parserS7.6_A4.2_T1.ts(142,3): error T
     if (А !== 1) {
       $ERROR('#А');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0411 = 1;
     if (Б !== 1) {
       $ERROR('#Б');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0412 = 1;
     if (В !== 1) {
       $ERROR('#В');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0413 = 1;
     if (Г !== 1) {
       $ERROR('#Г');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0414 = 1;
     if (Д !== 1) {
       $ERROR('#Д');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0415 = 1;
     if (Е !== 1) {
       $ERROR('#Е');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0416 = 1;
     if (Ж !== 1) {
       $ERROR('#Ж');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0417 = 1;
     if (З !== 1) {
       $ERROR('#З');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0418 = 1;
     if (И !== 1) {
       $ERROR('#И');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u0419 = 1;
     if (Й !== 1) {
       $ERROR('#Й');
       ~~~~~~
-!!! error TS2304: Cannot find name '$ERROR'.
+!!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
     }
     var \u041A = 1;
     if (К !== 1) {

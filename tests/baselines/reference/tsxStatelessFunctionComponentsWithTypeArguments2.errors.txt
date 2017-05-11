@@ -1,5 +1,10 @@
-tests/cases/conformance/jsx/file.tsx(8,34): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(13,34): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(8,34): error TS2322: Type '{ ignore-prop: 10; prop: number; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+  Type '{ ignore-prop: 10; prop: number; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+    Types of property '"ignore-prop"' are incompatible.
+      Type '10' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(13,34): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
+  Type '{}' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+    Property 'prop' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ func: (a: number, b: string) => void; }' is not assignable to type 'IntrinsicAttributes & { func: (arg: number) => void; }'.
   Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
     Types of property 'func' are incompatible.
@@ -19,15 +24,20 @@ tests/cases/conformance/jsx/file.tsx(31,10): error TS2453: The type argument for
     // Error
     function Bar<T extends {prop: number}>(arg: T) {
         let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
-                                     ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ ignore-prop: 10; prop: number; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+!!! error TS2322:   Type '{ ignore-prop: 10; prop: number; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+!!! error TS2322:     Types of property '"ignore-prop"' are incompatible.
+!!! error TS2322:       Type '10' is not assignable to type 'string'.
      }
     
     // Error
     function Baz<T>(arg: T) {
         let a0 = <ComponentSpecific1 {...arg} />
                                      ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
+!!! error TS2322:   Type '{}' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+!!! error TS2322:     Property 'prop' is missing in type '{}'.
     }
     
     declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;

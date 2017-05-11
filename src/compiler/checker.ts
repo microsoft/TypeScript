@@ -206,6 +206,9 @@ namespace ts {
             },
             getApparentType,
             getAllPossiblePropertiesOfType,
+            getSuggestionForNonexistentProperty,
+            getSuggestionForNonexistentSymbol,
+            getBaseConstraintOfType,
         };
 
         const tupleTypes: GenericType[] = [];
@@ -317,6 +320,8 @@ namespace ts {
         const resolutionResults: boolean[] = [];
         const resolutionPropertyNames: TypeSystemPropertyName[] = [];
 
+        let suggestionCount = 0;
+        const maximumSuggestionCount = 10;
         const mergedSymbols: Symbol[] = [];
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
@@ -581,16 +586,16 @@ namespace ts {
                 recordMergedSymbol(target, source);
             }
             else if (target.flags & SymbolFlags.NamespaceModule) {
-                error(source.declarations[0].name, Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
+                error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
             }
             else {
                 const message = target.flags & SymbolFlags.BlockScopedVariable || source.flags & SymbolFlags.BlockScopedVariable
                     ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
                 forEach(source.declarations, node => {
-                    error(node.name ? node.name : node, message, symbolToString(source));
+                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
                 });
                 forEach(target.declarations, node => {
-                    error(node.name ? node.name : node, message, symbolToString(source));
+                    error(getNameOfDeclaration(node) || node, message, symbolToString(source));
                 });
             }
         }
@@ -733,7 +738,8 @@ namespace ts {
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
-                    (!compilerOptions.outFile && !compilerOptions.out)) {
+                    (!compilerOptions.outFile && !compilerOptions.out) ||
+                    isInAmbientContext(declaration)) {
                     // nodes are in different files and order cannot be determined
                     return true;
                 }
@@ -841,7 +847,25 @@ namespace ts {
         // Resolve a given name for a given meaning at a given location. An error is reported if the name was not found and
         // the nameNotFoundMessage argument is not undefined. Returns the resolved symbol, or undefined if no symbol with
         // the given name can be found.
-        function resolveName(location: Node | undefined, name: string, meaning: SymbolFlags, nameNotFoundMessage: DiagnosticMessage, nameArg: string | Identifier): Symbol {
+        function resolveName(
+            location: Node | undefined,
+            name: string,
+            meaning: SymbolFlags,
+            nameNotFoundMessage: DiagnosticMessage,
+            nameArg: string | Identifier,
+            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
+            return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
+        }
+
+        function resolveNameHelper(
+            location: Node | undefined,
+            name: string,
+            meaning: SymbolFlags,
+            nameNotFoundMessage: DiagnosticMessage,
+            nameArg: string | Identifier,
+            lookup: (symbols: SymbolTable, name: string, meaning: SymbolFlags) => Symbol,
+            suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
+            const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
             let result: Symbol;
             let lastLocation: Node;
             let propertyWithInvalidInitializer: Node;
@@ -852,7 +876,7 @@ namespace ts {
             loop: while (location) {
                 // Locals of a source file are not in scope (because they get merged into the global symbol table)
                 if (location.locals && !isGlobalSourceFile(location)) {
-                    if (result = getSymbol(location.locals, name, meaning)) {
+                    if (result = lookup(location.locals, name, meaning)) {
                         let useResult = true;
                         if (isFunctionLike(location) && lastLocation && lastLocation !== (<FunctionLikeDeclaration>location).body) {
                             // symbol lookup restrictions for function-like declarations
@@ -930,12 +954,12 @@ namespace ts {
                             }
                         }
 
-                        if (result = getSymbol(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
+                        if (result = lookup(moduleExports, name, meaning & SymbolFlags.ModuleMember)) {
                             break loop;
                         }
                         break;
                     case SyntaxKind.EnumDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
+                        if (result = lookup(getSymbolOfNode(location).exports, name, meaning & SymbolFlags.EnumMember)) {
                             break loop;
                         }
                         break;
@@ -950,7 +974,7 @@ namespace ts {
                         if (isClassLike(location.parent) && !(getModifierFlags(location) & ModifierFlags.Static)) {
                             const ctor = findConstructorDeclaration(<ClassLikeDeclaration>location.parent);
                             if (ctor && ctor.locals) {
-                                if (getSymbol(ctor.locals, name, meaning & SymbolFlags.Value)) {
+                                if (lookup(ctor.locals, name, meaning & SymbolFlags.Value)) {
                                     // Remember the property node, it will be used later to report appropriate error
                                     propertyWithInvalidInitializer = location;
                                 }
@@ -960,7 +984,7 @@ namespace ts {
                     case SyntaxKind.ClassDeclaration:
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
-                        if (result = getSymbol(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
+                        if (result = lookup(getSymbolOfNode(location).members, name, meaning & SymbolFlags.Type)) {
                             if (!isTypeParameterSymbolDeclaredInContainer(result, location)) {
                                 // ignore type parameters not declared in this container
                                 result = undefined;
@@ -996,7 +1020,7 @@ namespace ts {
                         grandparent = location.parent.parent;
                         if (isClassLike(grandparent) || grandparent.kind === SyntaxKind.InterfaceDeclaration) {
                             // A reference to this grandparent's type parameters would be an error
-                            if (result = getSymbol(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
+                            if (result = lookup(getSymbolOfNode(grandparent).members, name, meaning & SymbolFlags.Type)) {
                                 error(errorLocation, Diagnostics.A_computed_property_name_cannot_reference_a_type_parameter_from_its_containing_type);
                                 return undefined;
                             }
@@ -1060,7 +1084,7 @@ namespace ts {
             }
 
             if (!result) {
-                result = getSymbol(globals, name, meaning);
+                result = lookup(globals, name, meaning);
             }
 
             if (!result) {
@@ -1071,7 +1095,17 @@ namespace ts {
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
-                        error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                        let suggestion: string | undefined;
+                        if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
+                            suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
+                            if (suggestion) {
+                                suggestionCount++;
+                                error(errorLocation, suggestedNameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), suggestion);
+                            }
+                        }
+                        if (!suggestion) {
+                            error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
+                        }
                     }
                 }
                 return undefined;
@@ -1205,6 +1239,10 @@ namespace ts {
 
         function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: string, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
+                if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
+                    return true;
+                }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
                     error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, name);
@@ -1241,13 +1279,13 @@ namespace ts {
 
             if (!isInAmbientContext(declaration) && !isBlockScopedNameDeclaredBeforeUse(declaration, errorLocation)) {
                 if (result.flags & SymbolFlags.BlockScopedVariable) {
-                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                    error(errorLocation, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
                 else if (result.flags & SymbolFlags.Class) {
-                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                    error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
                 else if (result.flags & SymbolFlags.Enum) {
-                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(declaration.name));
+                    error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
             }
         }
@@ -1684,10 +1722,9 @@ namespace ts {
         // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
-            let symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+            const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
             if (!dontResolveAlias && symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
                 error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
-                symbol = undefined;
             }
             return symbol;
         }
@@ -2390,7 +2427,7 @@ namespace ts {
                     const formattedUnionTypes = formatUnionTypes((<UnionType>type).types);
                     const unionTypeNodes = formattedUnionTypes && mapToTypeNodeArray(formattedUnionTypes);
                     if (unionTypeNodes && unionTypeNodes.length > 0) {
-                        return createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, unionTypeNodes);
+                        return createUnionTypeNode(unionTypeNodes);
                     }
                     else {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowEmptyUnionOrIntersection)) {
@@ -2401,7 +2438,7 @@ namespace ts {
                 }
 
                 if (type.flags & TypeFlags.Intersection) {
-                    return createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, mapToTypeNodeArray((type as UnionType).types));
+                    return createIntersectionTypeNode(mapToTypeNodeArray((type as IntersectionType).types));
                 }
 
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
@@ -2661,7 +2698,7 @@ namespace ts {
                     indexerTypeNode,
                     /*initializer*/ undefined);
                 const typeNode = typeToTypeNodeHelper(indexInfo.type);
-                return createIndexSignatureDeclaration(
+                return createIndexSignature(
                     /*decorators*/ undefined,
                     indexInfo.isReadonly ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined,
                     [indexingParameter],
@@ -2810,8 +2847,9 @@ namespace ts {
                 function getNameOfSymbol(symbol: Symbol): string {
                     const declaration = firstOrUndefined(symbol.declarations);
                     if (declaration) {
-                        if (declaration.name) {
-                            return declarationNameToString(declaration.name);
+                        const name = getNameOfDeclaration(declaration);
+                        if (name) {
+                            return declarationNameToString(name);
                         }
                         if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                             return declarationNameToString((<VariableDeclaration>declaration.parent).name);
@@ -2898,8 +2936,9 @@ namespace ts {
         function getNameOfSymbol(symbol: Symbol): string {
             if (symbol.declarations && symbol.declarations.length) {
                 const declaration = symbol.declarations[0];
-                if (declaration.name) {
-                    return declarationNameToString(declaration.name);
+                const name = getNameOfDeclaration(declaration);
+                if (name) {
+                    return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                     return declarationNameToString((<VariableDeclaration>declaration.parent).name);
@@ -3636,8 +3675,8 @@ namespace ts {
                     case SyntaxKind.BindingElement:
                         return isDeclarationVisible(<Declaration>node.parent.parent);
                     case SyntaxKind.VariableDeclaration:
-                        if (isBindingPattern(node.name) &&
-                            !(<BindingPattern>node.name).elements.length) {
+                        if (isBindingPattern((node as VariableDeclaration).name) &&
+                            !((node as VariableDeclaration).name as BindingPattern).elements.length) {
                             // If the binding pattern is empty, this variable declaration is not visible
                             return false;
                         }
@@ -4715,7 +4754,7 @@ namespace ts {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol);
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgumentsFromTypeReferenceNode(baseTypeNode));
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
@@ -5239,7 +5278,7 @@ namespace ts {
             }
             const baseTypeNode = getBaseTypeNodeOfClass(classType);
             const isJavaScript = isInJavaScriptFile(baseTypeNode);
-            const typeArguments = map(baseTypeNode.typeArguments, getTypeFromTypeNode);
+            const typeArguments = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             const typeArgCount = length(typeArguments);
             const result: Signature[] = [];
             for (const baseSig of baseSignatures) {
@@ -5792,11 +5831,11 @@ namespace ts {
             const t = type.flags & TypeFlags.TypeVariable ? getBaseConstraintOfType(type) || emptyObjectType : type;
             return t.flags & TypeFlags.Intersection ? getApparentTypeOfIntersectionType(<IntersectionType>t) :
                 t.flags & TypeFlags.StringLike ? globalStringType :
-                    t.flags & TypeFlags.NumberLike ? globalNumberType :
-                        t.flags & TypeFlags.BooleanLike ? globalBooleanType :
-                            t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
-                                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
-                                    t;
+                t.flags & TypeFlags.NumberLike ? globalNumberType :
+                t.flags & TypeFlags.BooleanLike ? globalBooleanType :
+                t.flags & TypeFlags.ESSymbol ? getGlobalESSymbolType(/*reportErrors*/ languageVersion >= ScriptTarget.ES2015) :
+                t.flags & TypeFlags.NonPrimitive ? emptyObjectType :
+                t;
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: string): Symbol {
@@ -6251,8 +6290,8 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        return (<Declaration>node).name.kind === SyntaxKind.ComputedPropertyName
-                            && traverse((<Declaration>node).name);
+                        return (<NamedDeclaration>node).name.kind === SyntaxKind.ComputedPropertyName
+                            && traverse((<NamedDeclaration>node).name);
 
                     default:
                         return !nodeStartsNewLexicalEnvironment(node) && !isPartOfTypeNode(node) && forEachChild(node, traverse);
@@ -6332,8 +6371,9 @@ namespace ts {
                     type = anyType;
                     if (noImplicitAny) {
                         const declaration = <Declaration>signature.declaration;
-                        if (declaration.name) {
-                            error(declaration.name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(declaration.name));
+                        const name = getNameOfDeclaration(declaration);
+                        if (name) {
+                            error(name, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, declarationNameToString(name));
                         }
                         else {
                             error(declaration, Diagnostics.Function_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions);
@@ -6518,7 +6558,7 @@ namespace ts {
         }
 
         // Get type from reference to class or interface
-        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
+        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol, typeArgs: Type[]): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -6537,7 +6577,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(map(node.typeArguments, getTypeFromTypeNode), typeParameters, minTypeArgumentCount, node));
+                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -6562,7 +6602,7 @@ namespace ts {
         // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
         // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
         // declared type. Instantiations are cached using the type identities of the type arguments as the key.
-        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
+        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -6578,7 +6618,6 @@ namespace ts {
                         typeParameters.length);
                     return unknownType;
                 }
-                const typeArguments = map(node.typeArguments, getTypeFromTypeNode);
                 return getTypeAliasInstantiation(symbol, typeArguments);
             }
             if (node.typeArguments) {
@@ -6626,16 +6665,18 @@ namespace ts {
         }
 
         function getTypeReferenceType(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol) {
+            const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
+
             if (symbol === unknownSymbol) {
                 return unknownType;
             }
 
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol);
+                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
 
             if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol);
+                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
             }
 
             if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
@@ -6703,10 +6744,7 @@ namespace ts {
                             ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
                             : undefined;
                     symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
-                    type = symbol === unknownSymbol ? unknownType :
-                        symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? getTypeFromClassOrInterfaceReference(node, symbol) :
-                            symbol.flags & SymbolFlags.TypeAlias ? getTypeFromTypeAliasReference(node, symbol) :
-                                getTypeFromNonGenericTypeReference(node, symbol);
+                    type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
                 // type reference in checkTypeReferenceOrExpressionWithTypeArguments.
@@ -6714,6 +6752,10 @@ namespace ts {
                 links.resolvedType = type;
             }
             return links.resolvedType;
+        }
+
+        function typeArgumentsFromTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type[] {
+            return map(node.typeArguments, getTypeFromTypeNode);
         }
 
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
@@ -8705,29 +8747,6 @@ namespace ts {
                 return Ternary.False;
             }
 
-            // Check if a property with the given name is known anywhere in the given type. In an object type, a property
-            // is considered known if the object type is empty and the check is for assignability, if the object type has
-            // index signatures, or if the property is actually declared in the object type. In a union or intersection
-            // type, a property is considered known if it is known in any constituent type.
-            function isKnownProperty(type: Type, name: string, isComparingJsxAttributes: boolean): boolean {
-                if (type.flags & TypeFlags.Object) {
-                    const resolved = resolveStructuredTypeMembers(<ObjectType>type);
-                    if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                        getPropertyOfType(type, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
-                        // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
-                        return true;
-                    }
-                }
-                else if (type.flags & TypeFlags.UnionOrIntersection) {
-                    for (const t of (<UnionOrIntersectionType>type).types) {
-                        if (isKnownProperty(t, name, isComparingJsxAttributes)) {
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            }
-
             function hasExcessProperties(source: FreshObjectLiteralType, target: Type, reportErrors: boolean): boolean {
                 if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
                     const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
@@ -9937,7 +9956,7 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (!declaration.name) {
+                    if (!(declaration as NamedDeclaration).name) {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
                     }
@@ -9946,7 +9965,7 @@ namespace ts {
                 default:
                     diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
             }
-            error(declaration, diagnostic, declarationNameToString(declaration.name), typeAsString);
+            error(declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
@@ -10039,7 +10058,7 @@ namespace ts {
             const templateType = getTemplateTypeFromMappedType(target);
             const readonlyMask = target.declaration.readonlyToken ? false : true;
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
-            const members = createSymbolTable(properties);
+            const members = createMap<Symbol>();
             for (const prop of properties) {
                 const inferredPropType = inferTargetType(getTypeOfSymbol(prop));
                 if (!inferredPropType) {
@@ -10439,7 +10458,7 @@ namespace ts {
         function getResolvedSymbol(node: Identifier): Symbol {
             const links = getNodeLinks(node);
             if (!links.resolvedSymbol) {
-                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node) || unknownSymbol;
+                links.resolvedSymbol = !nodeIsMissing(node) && resolveName(node, node.text, SymbolFlags.Value | SymbolFlags.ExportValue, Diagnostics.Cannot_find_name_0, node, Diagnostics.Cannot_find_name_0_Did_you_mean_1) || unknownSymbol;
             }
             return links.resolvedSymbol;
         }
@@ -10456,11 +10475,13 @@ namespace ts {
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
         // separated by dots). The key consists of the id of the symbol referenced by the
         // leftmost identifier followed by zero or more property names separated by dots.
-        // The result is undefined if the reference isn't a dotted name.
+        // The result is undefined if the reference isn't a dotted name. We prefix nodes
+        // occurring in an apparent type position with '@' because the control flow type
+        // of such nodes may be based on the apparent type instead of the declared type.
         function getFlowCacheKey(node: Node): string {
             if (node.kind === SyntaxKind.Identifier) {
                 const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? "" + getSymbolId(symbol) : undefined;
+                return symbol !== unknownSymbol ? (isApparentTypePosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
             }
             if (node.kind === SyntaxKind.ThisKeyword) {
                 return "0";
@@ -11725,6 +11746,29 @@ namespace ts {
             return annotationIncludesUndefined ? getTypeWithFacts(declaredType, TypeFacts.NEUndefined) : declaredType;
         }
 
+        function isApparentTypePosition(node: Node) {
+            const parent = node.parent;
+            return parent.kind === SyntaxKind.PropertyAccessExpression ||
+                parent.kind === SyntaxKind.CallExpression && (<CallExpression>parent).expression === node ||
+                parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>parent).expression === node;
+        }
+
+        function typeHasNullableConstraint(type: Type) {
+            return type.flags & TypeFlags.TypeVariable && maybeTypeOfKind(getBaseConstraintOfType(type) || emptyObjectType, TypeFlags.Nullable);
+        }
+
+        function getDeclaredOrApparentType(symbol: Symbol, node: Node) {
+            // When a node is the left hand expression of a property access, element access, or call expression,
+            // and the type of the node includes type variables with constraints that are nullable, we fetch the
+            // apparent type of the node *before* performing control flow analysis such that narrowings apply to
+            // the constraint type.
+            const type = getTypeOfSymbol(symbol);
+            if (isApparentTypePosition(node) && forEachType(type, typeHasNullableConstraint)) {
+                return mapType(getWidenedType(type), getApparentType);
+            }
+            return type;
+        }
+
         function checkIdentifier(node: Identifier): Type {
             const symbol = getResolvedSymbol(node);
             if (symbol === unknownSymbol) {
@@ -11800,7 +11844,7 @@ namespace ts {
             checkCollisionWithCapturedNewTargetVariable(node, node);
             checkNestedBlockScopedBinding(node, symbol);
 
-            const type = getTypeOfSymbol(localOrExportSymbol);
+            const type = getDeclaredOrApparentType(localOrExportSymbol, node);
             const declaration = localOrExportSymbol.valueDeclaration;
             const assignmentKind = getAssignmentTargetKind(node);
 
@@ -11851,7 +11895,7 @@ namespace ts {
             if (type === autoType || type === autoArrayType) {
                 if (flowType === autoType || flowType === autoArrayType) {
                     if (noImplicitAny) {
-                        error(declaration.name, Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
+                        error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
                         error(node, Diagnostics.Variable_0_implicitly_has_an_1_type, symbolToString(symbol), typeToString(flowType));
                     }
                     return convertAutoToAny(flowType);
@@ -12728,7 +12772,7 @@ namespace ts {
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression): Type {
+        function getContextualType(node: Expression): Type | undefined {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -13265,6 +13309,10 @@ namespace ts {
             let attributesTable = createMap<Symbol>();
             let spread: Type = emptyObjectType;
             let attributesArray: Symbol[] = [];
+            let hasSpreadAnyType = false;
+            let explicitlySpecifyChildrenAttribute = false;
+            const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
+
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
@@ -13282,6 +13330,9 @@ namespace ts {
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.name, attributeSymbol);
                     attributesArray.push(attributeSymbol);
+                    if (attributeDecl.name.text === jsxChildrenPropertyName) {
+                        explicitlySpecifyChildrenAttribute = true;
+                    }
                 }
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
@@ -13290,34 +13341,28 @@ namespace ts {
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
-                    const exprType = checkExpression(attributeDecl.expression);
-                    if (!isValidSpreadType(exprType)) {
-                        error(attributeDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
-                        return anyType;
-                    }
+                    const exprType = getApparentType(checkExpression(attributeDecl.expression));
                     if (isTypeAny(exprType)) {
-                        return anyType;
+                        hasSpreadAnyType = true;
                     }
                     spread = getSpreadType(spread, exprType);
                 }
             }
 
-            if (spread !== emptyObjectType) {
-                if (attributesArray.length > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
-                    attributesArray = [];
-                    attributesTable = createMap<Symbol>();
+            if (!hasSpreadAnyType) {
+                if (spread !== emptyObjectType) {
+                    if (attributesArray.length > 0) {
+                        spread = getSpreadType(spread, createJsxAttributesType(attributes.symbol, attributesTable));
+                    }
+                    attributesArray = getPropertiesOfType(spread);
                 }
-                attributesArray = getPropertiesOfType(spread);
-            }
 
-            attributesTable = createMap<Symbol>();
-            if (attributesArray) {
-                forEach(attributesArray, (attr) => {
+                attributesTable = createMap<Symbol>();
+                for (const attr of attributesArray) {
                     if (!filter || filter(attr)) {
                         attributesTable.set(attr.name, attr);
                     }
-                });
+                }
             }
 
             // Handle children attribute
@@ -13338,11 +13383,11 @@ namespace ts {
                     }
                 }
 
-                // Error if there is a attribute named "children" and children element.
-                // This is because children element will overwrite the value from attributes
-                const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
-                if (jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
-                    if (attributesTable.has(jsxChildrenPropertyName)) {
+                if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
+                    // Error if there is a attribute named "children" explicitly specified and children element.
+                    // This is because children element will overwrite the value from attributes.
+                    // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
+                    if (explicitlySpecifyChildrenAttribute) {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, jsxChildrenPropertyName);
                     }
 
@@ -13355,7 +13400,7 @@ namespace ts {
                 }
             }
 
-            return createJsxAttributesType(attributes.symbol, attributesTable);
+            return hasSpreadAnyType ? anyType : createJsxAttributesType(attributes.symbol, attributesTable);
 
             /**
              * Create anonymous type from given attributes symbol table.
@@ -13364,8 +13409,7 @@ namespace ts {
              */
             function createJsxAttributesType(symbol: Symbol, attributesTable: Map<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag;
+                result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
                 return result;
             }
@@ -13451,7 +13495,18 @@ namespace ts {
                 }
             }
 
-            return getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+            const instantiatedSignatures = [];
+            for (const signature of signatures) {
+                if (signature.typeParameters) {
+                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0);
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments));
+                }
+                else {
+                    instantiatedSignatures.push(signature);
+                }
+            }
+
+            return getUnionType(map(instantiatedSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
         }
 
         /**
@@ -13873,6 +13928,34 @@ namespace ts {
             checkJsxAttributesAssignableToTagNameAttributes(node);
         }
 
+        /**
+         * Check if a property with the given name is known anywhere in the given type. In an object type, a property
+         * is considered known if the object type is empty and the check is for assignability, if the object type has
+         * index signatures, or if the property is actually declared in the object type. In a union or intersection
+         * type, a property is considered known if it is known in any constituent type.
+         * @param targetType a type to search a given name in
+         * @param name a property name to search
+         * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
+         */
+        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
+            if (targetType.flags & TypeFlags.Object) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
+                if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
+                    getPropertyOfType(targetType, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                    // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
+                    return true;
+                }
+            }
+            else if (targetType.flags & TypeFlags.UnionOrIntersection) {
+                for (const t of (<UnionOrIntersectionType>targetType).types) {
+                    if (isKnownProperty(t, name, isComparingJsxAttributes)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
          /**
           * Check whether the given attributes of JSX opening-like element is assignable to the tagName attributes.
           *      Get the attributes type of the opening-like element through resolving the tagName, "target attributes"
@@ -13905,7 +13988,19 @@ namespace ts {
                 error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, getJsxElementPropertiesName());
             }
             else {
-                checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
+                const isSourceAttributeTypeAssignableToTarget = checkTypeAssignableTo(sourceAttributesType, targetAttributesType, openingLikeElement.attributes.properties.length > 0 ? openingLikeElement.attributes : openingLikeElement);
+                // After we check for assignability, we will do another pass to check that all explicitly specified attributes have correct name corresponding in targetAttributeType.
+                // This will allow excess properties in spread type as it is very common pattern to spread outter attributes into React component in its render method.
+                if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
+                    for (const attribute of openingLikeElement.attributes.properties) {
+                        if (isJsxAttribute(attribute) && !isKnownProperty(targetAttributesType, attribute.name.text, /*isComparingJsxAttributes*/ true)) {
+                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, attribute.name.text, typeToString(targetAttributesType));
+                            // We break here so that errors won't be cascading
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -14079,44 +14174,6 @@ namespace ts {
             return checkPropertyAccessExpressionOrQualifiedName(node, node.left, node.right);
         }
 
-        function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
-            let errorInfo: DiagnosticMessageChain;
-            if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
-                for (const subtype of (containingType as UnionType).types) {
-                    if (!getPropertyOfType(subtype, propNode.text)) {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
-                        break;
-                    }
-                }
-            }
-            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
-            diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
-        }
-
-        function markPropertyAsReferenced(prop: Symbol) {
-            if (prop &&
-                noUnusedIdentifiers &&
-                (prop.flags & SymbolFlags.ClassMember) &&
-                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
-                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
-                    getSymbolLinks(prop).target.isReferenced = true;
-                }
-                else {
-                    prop.isReferenced = true;
-                }
-            }
-        }
-
-        function isInPropertyInitializer(node: Node): boolean {
-            while (node) {
-                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
-                    return true;
-                }
-                node = node.parent;
-            }
-            return false;
-        }
-
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, right: Identifier) {
             const type = checkNonNullExpression(left);
             if (isTypeAny(type) || type === silentNeverType) {
@@ -14158,7 +14215,7 @@ namespace ts {
 
             checkPropertyAccessibility(node, left, apparentType, prop);
 
-            const propType = getTypeOfSymbol(prop);
+            const propType = getDeclaredOrApparentType(prop, node);
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -14178,6 +14235,130 @@ namespace ts {
             }
             const flowType = getFlowTypeOfReference(node, propType);
             return assignmentKind ? getBaseTypeOfLiteralType(flowType) : flowType;
+        }
+
+        function reportNonexistentProperty(propNode: Identifier, containingType: Type) {
+            let errorInfo: DiagnosticMessageChain;
+            if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
+                for (const subtype of (containingType as UnionType).types) {
+                    if (!getPropertyOfType(subtype, propNode.text)) {
+                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
+                        break;
+                    }
+                }
+            }
+            const suggestion = getSuggestionForNonexistentProperty(propNode, containingType);
+            if (suggestion) {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestion);
+            }
+            else {
+                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+            }
+            diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
+        }
+
+        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined {
+            const suggestion = getSpellingSuggestionForName(node.text, getPropertiesOfObjectType(containingType), SymbolFlags.Value);
+            return suggestion && suggestion.name;
+        }
+
+        function getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string {
+            const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, (symbols, name, meaning) => {
+                const symbol = getSymbol(symbols, name, meaning);
+                if (symbol) {
+                    // Sometimes the symbol is found when location is a return type of a function: `typeof x` and `x` is declared in the body of the function
+                    // So the table *contains* `x` but `x` isn't actually in scope.
+                    // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
+                    return symbol;
+                }
+                return getSpellingSuggestionForName(name, arrayFrom(symbols.values()), meaning);
+            });
+            if (result) {
+                return result.name;
+            }
+        }
+
+        /**
+         * Given a name and a list of symbols whose names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
+         * Names less than length 3 only check for case-insensitive equality, not levenshtein distance.
+         *
+         * If there is a candidate that's the same except for case, return that.
+         * If there is a candidate that's within one edit of the name, return that.
+         * Otherwise, return the candidate with the smallest Levenshtein distance,
+         *    except for candidates:
+         *      * With no name
+         *      * Whose meaning doesn't match the `meaning` parameter.
+         *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+         *      * Whose levenshtein distance is more than 0.4 of the length of the name
+         *        (0.4 allows 1 substitution/transposition for every 5 characters,
+         *         and 1 insertion/deletion at 3 characters)
+         * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
+         */
+        function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
+            const worstDistance = name.length * 0.4;
+            const maximumLengthDifference = Math.min(3, name.length * 0.34);
+            let bestDistance = Number.MAX_VALUE;
+            let bestCandidate = undefined;
+            if (name.length > 30) {
+                return undefined;
+            }
+            name = name.toLowerCase();
+            for (const candidate of symbols) {
+                if (candidate.flags & meaning &&
+                    candidate.name &&
+                    Math.abs(candidate.name.length - name.length) < maximumLengthDifference) {
+                    const candidateName = candidate.name.toLowerCase();
+                    if (candidateName === name) {
+                        return candidate;
+                    }
+                    if (candidateName.length < 3 ||
+                        name.length < 3 ||
+                        candidateName === "eval" ||
+                        candidateName === "intl" ||
+                        candidateName === "undefined" ||
+                        candidateName === "map" ||
+                        candidateName === "nan" ||
+                        candidateName === "set") {
+                        continue;
+                    }
+                    const distance = levenshtein(name, candidateName);
+                    if (distance > worstDistance) {
+                        continue;
+                    }
+                    if (distance < 3) {
+                        return candidate;
+                    }
+                    else if (distance < bestDistance) {
+                        bestDistance = distance;
+                        bestCandidate = candidate;
+                    }
+                }
+            }
+            return bestCandidate;
+        }
+
+        function markPropertyAsReferenced(prop: Symbol) {
+            if (prop &&
+                noUnusedIdentifiers &&
+                (prop.flags & SymbolFlags.ClassMember) &&
+                prop.valueDeclaration && (getModifierFlags(prop.valueDeclaration) & ModifierFlags.Private)) {
+                if (getCheckFlags(prop) & CheckFlags.Instantiated) {
+                    getSymbolLinks(prop).target.isReferenced = true;
+                }
+                else {
+                    prop.isReferenced = true;
+                }
+            }
+        }
+
+        function isInPropertyInitializer(node: Node): boolean {
+            while (node) {
+                if (node.parent && node.parent.kind === SyntaxKind.PropertyDeclaration && (node.parent as PropertyDeclaration).initializer === node) {
+                    return true;
+                }
+                node = node.parent;
+            }
+            return false;
         }
 
         function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean {
@@ -14320,7 +14501,18 @@ namespace ts {
             return true;
         }
 
+        function callLikeExpressionMayHaveTypeArguments(node: CallLikeExpression): node is CallExpression | NewExpression {
+            // TODO: Also include tagged templates (https://github.com/Microsoft/TypeScript/issues/11947)
+            return isCallOrNewExpression(node);
+        }
+
         function resolveUntypedCall(node: CallLikeExpression): Signature {
+            if (callLikeExpressionMayHaveTypeArguments(node)) {
+                // Check type arguments even though we will give an error that untyped calls may not accept type arguments.
+                // This gets us diagnostics for the type arguments and marks them as referenced.
+                forEach(node.typeArguments, checkSourceElement);
+            }
+
             if (node.kind === SyntaxKind.TaggedTemplateExpression) {
                 checkExpression((<TaggedTemplateExpression>node).template);
             }
@@ -15388,7 +15580,7 @@ namespace ts {
             // only the class declaration node will have the Abstract flag set.
             const valueDecl = expressionType.symbol && getClassLikeDeclarationOfSymbol(expressionType.symbol);
             if (valueDecl && getModifierFlags(valueDecl) & ModifierFlags.Abstract) {
-                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(valueDecl.name));
+                error(node, Diagnostics.Cannot_create_an_instance_of_the_abstract_class_0, declarationNameToString(getNameOfDeclaration(valueDecl)));
                 return resolveErrorCall(node);
             }
 
@@ -15852,11 +16044,11 @@ namespace ts {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
                 links.type = instantiateType(contextualType, mapper);
+                const name = getNameOfDeclaration(parameter.valueDeclaration);
                 // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                 if (links.type === emptyObjectType &&
-                    (parameter.valueDeclaration.name.kind === SyntaxKind.ObjectBindingPattern ||
-                        parameter.valueDeclaration.name.kind === SyntaxKind.ArrayBindingPattern)) {
-                    links.type = getTypeFromBindingPattern(<BindingPattern>parameter.valueDeclaration.name);
+                    (name.kind === SyntaxKind.ObjectBindingPattern || name.kind === SyntaxKind.ArrayBindingPattern)) {
+                    links.type = getTypeFromBindingPattern(<BindingPattern>name);
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
             }
@@ -16001,7 +16193,7 @@ namespace ts {
             // From within an async function you can return either a non-promise value or a promise. Any
             // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
             // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-            return (functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+            return (functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? createPromiseReturnType(func, widenedType) // Async function
                 : widenedType; // Generator function, AsyncGenerator function, or normal function
         }
@@ -16217,7 +16409,7 @@ namespace ts {
 
             const functionFlags = getFunctionFlags(node);
             const returnOrPromisedType = node.type &&
-                ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async ?
+                ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async ?
                     checkAsyncFunctionReturnType(node) : // Async function
                     getTypeFromTypeNode(node.type)); // AsyncGenerator function, Generator function, or normal function
 
@@ -16247,7 +16439,7 @@ namespace ts {
                     // its return type annotation.
                     const exprType = checkExpression(<Expression>node.body);
                     if (returnOrPromisedType) {
-                        if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) { // Async function
+                        if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) { // Async function
                             const awaitedType = checkAwaitedType(exprType, node.body, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                             checkTypeAssignableTo(awaitedType, returnOrPromisedType, node.body);
                         }
@@ -16987,12 +17179,16 @@ namespace ts {
                 // we are in a yield context.
                 const functionFlags = func && getFunctionFlags(func);
                 if (node.asteriskToken) {
-                    if (functionFlags & FunctionFlags.Async) {
-                        if (languageVersion < ScriptTarget.ES2017) {
-                            checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegator);
-                        }
+                    // Async generator functions prior to ESNext require the __await, __asyncDelegator,
+                    // and __asyncValues helpers
+                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator &&
+                        languageVersion < ScriptTarget.ESNext) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncDelegatorIncludes);
                     }
-                    else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+
+                    // Generator functions prior to ES2015 require the __values helper
+                    if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Generator &&
+                        languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.Values);
                     }
                 }
@@ -17511,18 +17707,20 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(<FunctionLikeDeclaration>node);
-            if ((functionFlags & FunctionFlags.InvalidAsyncOrAsyncGenerator) === FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
-                checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
-                if (languageVersion < ScriptTarget.ES2015) {
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
+            if (!(functionFlags & FunctionFlags.Invalid)) {
+                // Async generators prior to ESNext require the __await and __asyncGenerator helpers
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.AsyncGenerator && languageVersion < ScriptTarget.ESNext) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncGeneratorIncludes);
                 }
-            }
 
-            if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
-                if (functionFlags & FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
-                    checkExternalEmitHelpers(node, ExternalEmitHelpers.AsyncGenerator);
+                // Async functions prior to ES2017 require the __awaiter helper
+                if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async && languageVersion < ScriptTarget.ES2017) {
+                    checkExternalEmitHelpers(node, ExternalEmitHelpers.Awaiter);
                 }
-                else if (languageVersion < ScriptTarget.ES2015) {
+
+                // Generator functions, Async functions, and Async Generator functions prior to
+                // ES2015 require the __generator helper
+                if ((functionFlags & FunctionFlags.AsyncGenerator) !== FunctionFlags.Normal && languageVersion < ScriptTarget.ES2015) {
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.Generator);
                 }
             }
@@ -17550,7 +17748,7 @@ namespace ts {
 
                 if (node.type) {
                     const functionFlags = getFunctionFlags(<FunctionDeclaration>node);
-                    if ((functionFlags & FunctionFlags.InvalidGenerator) === FunctionFlags.Generator) {
+                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Generator)) === FunctionFlags.Generator) {
                         const returnType = getTypeFromTypeNode(node.type);
                         if (returnType === voidType) {
                             error(node.type, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
@@ -17570,7 +17768,7 @@ namespace ts {
                             checkTypeAssignableTo(iterableIteratorInstantiation, returnType, node.type);
                         }
                     }
-                    else if ((functionFlags & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async) {
+                    else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
                         checkAsyncFunctionReturnType(<FunctionLikeDeclaration>node);
                     }
                 }
@@ -17694,7 +17892,7 @@ namespace ts {
                     }
 
                     if (names.get(memberName)) {
-                        error(member.symbol.valueDeclaration.name, Diagnostics.Duplicate_identifier_0, memberName);
+                        error(getNameOfDeclaration(member.symbol.valueDeclaration), Diagnostics.Duplicate_identifier_0, memberName);
                         error(member.name, Diagnostics.Duplicate_identifier_0, memberName);
                     }
                     else {
@@ -17795,7 +17993,8 @@ namespace ts {
             }
 
             function containsSuperCallAsComputedPropertyName(n: Declaration): boolean {
-                return n.name && containsSuperCall(n.name);
+                const name = getNameOfDeclaration(n);
+                return name && containsSuperCall(name);
             }
 
             function containsSuperCall(n: Node): boolean {
@@ -18090,16 +18289,16 @@ namespace ts {
                     forEach(overloads, o => {
                         const deviation = getEffectiveDeclarationFlags(o, flagsToCheck) ^ canonicalFlags;
                         if (deviation & ModifierFlags.Export) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_exported_or_non_exported);
                         }
                         else if (deviation & ModifierFlags.Ambient) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_ambient_or_non_ambient);
                         }
                         else if (deviation & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                            error(o.name || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
+                            error(getNameOfDeclaration(o) || o, Diagnostics.Overload_signatures_must_all_be_public_private_or_protected);
                         }
                         else if (deviation & ModifierFlags.Abstract) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_abstract_or_non_abstract);
                         }
                     });
                 }
@@ -18111,7 +18310,7 @@ namespace ts {
                     forEach(overloads, o => {
                         const deviation = hasQuestionToken(o) !== canonicalHasQuestionToken;
                         if (deviation) {
-                            error(o.name, Diagnostics.Overload_signatures_must_all_be_optional_or_required);
+                            error(getNameOfDeclaration(o), Diagnostics.Overload_signatures_must_all_be_optional_or_required);
                         }
                     });
                 }
@@ -18247,7 +18446,7 @@ namespace ts {
 
             if (duplicateFunctionDeclaration) {
                 forEach(declarations, declaration => {
-                    error(declaration.name, Diagnostics.Duplicate_function_implementation);
+                    error(getNameOfDeclaration(declaration), Diagnostics.Duplicate_function_implementation);
                 });
             }
 
@@ -18329,12 +18528,13 @@ namespace ts {
                 for (const d of symbol.declarations) {
                     const declarationSpaces = getDeclarationSpaces(d);
 
+                    const name = getNameOfDeclaration(d);
                     // Only error on the declarations that contributed to the intersecting spaces.
                     if (declarationSpaces & commonDeclarationSpacesForDefaultAndNonDefault) {
-                        error(d.name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(d.name));
+                        error(name, Diagnostics.Merged_declaration_0_cannot_include_a_default_export_declaration_Consider_adding_a_separate_export_default_0_declaration_instead, declarationNameToString(name));
                     }
                     else if (declarationSpaces & commonDeclarationSpacesForExportsAndLocals) {
-                        error(d.name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(d.name));
+                        error(name, Diagnostics.Individual_declarations_in_merged_declaration_0_must_be_all_exported_or_all_local, declarationNameToString(name));
                     }
                 }
             }
@@ -18700,7 +18900,10 @@ namespace ts {
          * marked as referenced to prevent import elision.
          */
         function markTypeNodeAsReferenced(node: TypeNode) {
-            const typeName = node && getEntityNameFromTypeNode(node);
+            markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node));
+        }
+
+        function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression) {
             const rootName = typeName && getFirstIdentifier(typeName);
             const rootSymbol = rootName && resolveName(rootName, rootName.text, (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             if (rootSymbol
@@ -18708,6 +18911,61 @@ namespace ts {
                 && symbolIsValue(rootSymbol)
                 && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))) {
                 markAliasSymbolAsReferenced(rootSymbol);
+            }
+        }
+
+        /**
+         * This function marks the type used for metadata decorator as referenced if it is import
+         * from external module.
+         * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
+         * union and intersection type
+         * @param node
+         */
+        function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode): void {
+            const entityName = getEntityNameForDecoratorMetadata(node);
+            if (entityName && isEntityName(entityName)) {
+                markEntityNameOrEntityExpressionAsReference(entityName);
+            }
+        }
+
+        function getEntityNameForDecoratorMetadata(node: TypeNode): EntityName {
+            if (node) {
+                switch (node.kind) {
+                    case SyntaxKind.IntersectionType:
+                    case SyntaxKind.UnionType:
+                        let commonEntityName: EntityName;
+                        for (const typeNode of (<UnionOrIntersectionTypeNode>node).types) {
+                            const individualEntityName = getEntityNameForDecoratorMetadata(typeNode);
+                            if (!individualEntityName) {
+                                // Individual is something like string number
+                                // So it would be serialized to either that type or object
+                                // Safe to return here
+                                return undefined;
+                            }
+
+                            if (commonEntityName) {
+                                // Note this is in sync with the transformation that happens for type node.
+                                // Keep this in sync with serializeUnionOrIntersectionType
+                                // Verify if they refer to same entity and is identifier
+                                // return undefined if they dont match because we would emit object
+                                if (!isIdentifier(commonEntityName) ||
+                                    !isIdentifier(individualEntityName) ||
+                                    commonEntityName.text !== individualEntityName.text) {
+                                    return undefined;
+                                }
+                            }
+                            else {
+                                commonEntityName = individualEntityName;
+                            }
+                        }
+                        return commonEntityName;
+
+                    case SyntaxKind.ParenthesizedType:
+                        return getEntityNameForDecoratorMetadata((<ParenthesizedTypeNode>node).type);
+
+                    case SyntaxKind.TypeReference:
+                        return (<TypeReferenceNode>node).typeName;
+                }
             }
         }
 
@@ -18746,7 +19004,7 @@ namespace ts {
                         const constructor = getFirstConstructorWithBody(<ClassDeclaration>node);
                         if (constructor) {
                             for (const parameter of constructor.parameters) {
-                                markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                                markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                             }
                         }
                         break;
@@ -18755,17 +19013,17 @@ namespace ts {
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         for (const parameter of (<FunctionLikeDeclaration>node).parameters) {
-                            markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
                         }
 
-                        markTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
+                        markDecoratorMedataDataTypeNodeAsReferenced((<FunctionLikeDeclaration>node).type);
                         break;
 
                     case SyntaxKind.PropertyDeclaration:
-                        markTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(<ParameterDeclaration>node));
                         break;
                     case SyntaxKind.Parameter:
-                        markTypeNodeAsReferenced((<PropertyDeclaration>node).type);
+                        markDecoratorMedataDataTypeNodeAsReferenced((<PropertyDeclaration>node).type);
                         break;
                 }
             }
@@ -18915,15 +19173,16 @@ namespace ts {
                     if (!local.isReferenced) {
                         if (local.valueDeclaration && getRootDeclaration(local.valueDeclaration).kind === SyntaxKind.Parameter) {
                             const parameter = <ParameterDeclaration>getRootDeclaration(local.valueDeclaration);
+                            const name = getNameOfDeclaration(local.valueDeclaration);
                             if (compilerOptions.noUnusedParameters &&
                                 !isParameterPropertyDeclaration(parameter) &&
                                 !parameterIsThisKeyword(parameter) &&
-                                !parameterNameStartsWithUnderscore(local.valueDeclaration.name)) {
-                                error(local.valueDeclaration.name, Diagnostics._0_is_declared_but_never_used, local.name);
+                                !parameterNameStartsWithUnderscore(name)) {
+                                error(name, Diagnostics._0_is_declared_but_never_used, local.name);
                             }
                         }
                         else if (compilerOptions.noUnusedLocals) {
-                            forEach(local.declarations, d => errorUnusedLocal(d.name || d, local.name));
+                            forEach(local.declarations, d => errorUnusedLocal(getNameOfDeclaration(d) || d, local.name));
                         }
                     }
                 });
@@ -19007,7 +19266,7 @@ namespace ts {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
                             if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(declaration.name, local.name);
+                                errorUnusedLocal(getNameOfDeclaration(declaration), local.name);
                             }
                         }
                     }
@@ -19086,7 +19345,7 @@ namespace ts {
                 if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureThis) {
                     const isDeclaration = node.kind !== SyntaxKind.Identifier;
                     if (isDeclaration) {
-                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference);
+                        error(getNameOfDeclaration(<Declaration>node), Diagnostics.Duplicate_identifier_this_Compiler_uses_variable_declaration_this_to_capture_this_reference);
                     }
                     else {
                         error(node, Diagnostics.Expression_resolves_to_variable_declaration_this_that_compiler_uses_to_capture_this_reference);
@@ -19101,7 +19360,7 @@ namespace ts {
                 if (getNodeCheckFlags(current) & NodeCheckFlags.CaptureNewTarget) {
                     const isDeclaration = node.kind !== SyntaxKind.Identifier;
                     if (isDeclaration) {
-                        error((<Declaration>node).name, Diagnostics.Duplicate_identifier_newTarget_Compiler_uses_variable_declaration_newTarget_to_capture_new_target_meta_property_reference);
+                        error(getNameOfDeclaration(<Declaration>node), Diagnostics.Duplicate_identifier_newTarget_Compiler_uses_variable_declaration_newTarget_to_capture_new_target_meta_property_reference);
                     }
                     else {
                         error(node, Diagnostics.Expression_resolves_to_variable_declaration_newTarget_that_compiler_uses_to_capture_new_target_meta_property_reference);
@@ -19400,7 +19659,7 @@ namespace ts {
                     checkTypeAssignableTo(checkExpressionCached(node.initializer), declarationType, node, /*headMessage*/ undefined);
                 }
                 if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
-                    error(symbol.valueDeclaration.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
+                    error(getNameOfDeclaration(symbol.valueDeclaration), Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                     error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                 }
             }
@@ -19537,11 +19796,14 @@ namespace ts {
 
             if (node.kind === SyntaxKind.ForOfStatement) {
                 if ((<ForOfStatement>node).awaitModifier) {
-                    if (languageVersion < ScriptTarget.ES2017) {
+                    const functionFlags = getFunctionFlags(getContainingFunction(node));
+                    if ((functionFlags & (FunctionFlags.Invalid | FunctionFlags.Async)) === FunctionFlags.Async && languageVersion < ScriptTarget.ESNext) {
+                        // for..await..of in an async function or async generator function prior to ESNext requires the __asyncValues helper
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ForAwaitOfIncludes);
                     }
                 }
-                else if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
+                else if (compilerOptions.downlevelIteration && languageVersion < ScriptTarget.ES2015) {
+                    // for..of prior to ES2015 requires the __values helper when downlevelIteration is enabled
                     checkExternalEmitHelpers(node, ExternalEmitHelpers.ForOfIncludes);
                 }
             }
@@ -19971,7 +20233,7 @@ namespace ts {
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncOrAsyncGenerator) === FunctionFlags.Async
+            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? getPromisedTypeOfPromise(returnType) // Async function
                 : returnType; // AsyncGenerator function, Generator function, or normal function
             return unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.Any);
@@ -20228,14 +20490,17 @@ namespace ts {
                 const propDeclaration = prop.valueDeclaration;
 
                 // index is numeric and property name is not valid numeric literal
-                if (indexKind === IndexKind.Number && !(propDeclaration ? isNumericName(propDeclaration.name) : isNumericLiteralName(prop.name))) {
+                if (indexKind === IndexKind.Number && !(propDeclaration ? isNumericName(getNameOfDeclaration(propDeclaration)) : isNumericLiteralName(prop.name))) {
                     return;
                 }
 
                 // perform property check if property or indexer is declared in 'type'
-                // this allows to rule out cases when both property and indexer are inherited from the base class
+                // this allows us to rule out cases when both property and indexer are inherited from the base class
                 let errorNode: Node;
-                if (propDeclaration && (propDeclaration.name.kind === SyntaxKind.ComputedPropertyName || prop.parent === containingType.symbol)) {
+                if (propDeclaration &&
+                    (propDeclaration.kind === SyntaxKind.BinaryExpression ||
+                     getNameOfDeclaration(propDeclaration).kind === SyntaxKind.ComputedPropertyName ||
+                     prop.parent === containingType.symbol)) {
                     errorNode = propDeclaration;
                 }
                 else if (indexDeclaration) {
@@ -20572,11 +20837,6 @@ namespace ts {
                             continue;
                         }
 
-                        if ((baseDeclarationFlags & ModifierFlags.Static) !== (derivedDeclarationFlags & ModifierFlags.Static)) {
-                            // value of 'static' is not the same for properties - not override, skip it
-                            continue;
-                        }
-
                         if (isMethodLike(base) && isMethodLike(derived) || base.flags & SymbolFlags.PropertyOrAccessor && derived.flags & SymbolFlags.PropertyOrAccessor) {
                             // method is overridden with method or property/accessor is overridden with property/accessor - correct case
                             continue;
@@ -20598,7 +20858,7 @@ namespace ts {
                             errorMessage = Diagnostics.Class_0_defines_instance_member_accessor_1_but_extended_class_2_defines_it_as_instance_member_function;
                         }
 
-                        error(derived.valueDeclaration.name || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
+                        error(getNameOfDeclaration(derived.valueDeclaration) || derived.valueDeclaration, errorMessage, typeToString(baseType), symbolToString(base), typeToString(type));
                     }
                 }
             }
@@ -20929,7 +21189,7 @@ namespace ts {
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
                         if (isConstEnumDeclaration(decl) !== enumIsConst) {
-                            error(decl.name, Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
+                            error(getNameOfDeclaration(decl), Diagnostics.Enum_declarations_must_all_be_const_or_non_const);
                         }
                     });
                 }
@@ -21202,6 +21462,11 @@ namespace ts {
                         Diagnostics.Export_declaration_conflicts_with_exported_declaration_of_0 :
                         Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                     error(node, message, symbolToString(symbol));
+                }
+
+                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
+                if (node.kind === SyntaxKind.ExportSpecifier && compilerOptions.isolatedModules && !(target.flags & SymbolFlags.Value)) {
+                    error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
                 }
             }
         }
@@ -21822,7 +22087,7 @@ namespace ts {
         function isTypeDeclarationName(name: Node): boolean {
             return name.kind === SyntaxKind.Identifier &&
                 isTypeDeclaration(name.parent) &&
-                (<Declaration>name.parent).name === name;
+                (<NamedDeclaration>name.parent).name === name;
         }
 
         function isTypeDeclaration(node: Node): boolean {
@@ -22011,7 +22276,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
@@ -22158,7 +22423,7 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
@@ -22669,16 +22934,6 @@ namespace ts {
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
 
-        function writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter) {
-            const classType = <InterfaceType>getDeclaredTypeOfSymbol(getSymbolOfNode(node));
-            resolveBaseTypesOfClass(classType);
-            const baseType = classType.resolvedBaseTypes.length ? classType.resolvedBaseTypes[0] : unknownType;
-            if (!baseType.symbol) {
-                writer.reportIllegalExtends();
-            }
-            getSymbolDisplayBuilder().buildTypeDisplay(baseType, writer, enclosingDeclaration, flags);
-        }
-
         function hasGlobalName(name: string): boolean {
             return globals.has(name);
         }
@@ -22772,7 +23027,6 @@ namespace ts {
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
-                writeBaseConstructorTypeOfClass,
                 isSymbolAccessible,
                 isEntityNameVisible,
                 getConstantValue: node => {
@@ -22978,6 +23232,7 @@ namespace ts {
                 case ExternalEmitHelpers.Values: return "__values";
                 case ExternalEmitHelpers.Read: return "__read";
                 case ExternalEmitHelpers.Spread: return "__spread";
+                case ExternalEmitHelpers.Await: return "__await";
                 case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
                 case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
@@ -24195,6 +24450,21 @@ namespace ts {
                 }
             });
             return result;
+        }
+    }
+
+    /** Like 'isDeclarationName', but returns true for LHS of `import { x as y }` or `export { x as y }`. */
+    function isDeclarationNameOrImportPropertyName(name: Node): boolean {
+        switch (name.parent.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                if ((name.parent as ImportOrExportSpecifier).propertyName) {
+                    return true;
+                }
+                // falls through
+            default:
+                return isDeclarationName(name);
+
         }
     }
 }

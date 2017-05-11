@@ -1762,23 +1762,19 @@ namespace ts {
         }
 
         function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
+            // Note when updating logic here also update getEntityNameForDecoratorMetadata
+            // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode;
             for (const typeNode of node.types) {
                 const serializedIndividual = serializeTypeNode(typeNode);
 
-                if (isVoidExpression(serializedIndividual)) {
-                    // If we dont have any other type already set, set the initial type
-                    if (!serializedUnion) {
-                        serializedUnion = serializedIndividual;
-                    }
-                }
-                else if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
+                if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
                 // If there exists union that is not void 0 expression, check if the the common type is identifier.
                 // anything more complex and we will just default to Object
-                else if (serializedUnion && !isVoidExpression(serializedUnion)) {
+                else if (serializedUnion) {
                     // Different types
                     if (!isIdentifier(serializedUnion) ||
                         !isIdentifier(serializedIndividual) ||
@@ -2922,7 +2918,7 @@ namespace ts {
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.exportClause) {
                 // Elide a star export if the module it references does not export a value.
-                return resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
+                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
             }
 
             if (!resolver.isValueAliasDeclaration(node)) {

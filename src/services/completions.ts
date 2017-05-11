@@ -260,7 +260,7 @@ namespace ts.Completions {
 
     function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
-            type = typeChecker.getApparentType(type);
+            type = typeChecker.getBaseConstraintOfType(type);
         }
         if (!type) {
             return;
@@ -1209,7 +1209,7 @@ namespace ts.Completions {
                     // TODO(jfreeman): Account for computed property name
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
-                    existingName = (<Identifier>m.name).text;
+                    existingName = (getNameOfDeclaration(m) as Identifier).text;
                 }
 
                 existingMemberNames.set(existingName, true);

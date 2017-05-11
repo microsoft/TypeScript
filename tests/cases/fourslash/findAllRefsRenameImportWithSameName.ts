@@ -4,7 +4,7 @@
 ////export const [|{| "isWriteAccess": true, "isDefinition": true |}x|] = 0;
 
 //@Filename: /b.ts
-////import { [|{| "isWriteAccess": true, "isDefinition": true |}x|] as [|{| "isWriteAccess": true, "isDefinition": true |}x|] } from "./a";
+////import { [|x|] as [|{| "isWriteAccess": true, "isDefinition": true |}x|] } from "./a";
 ////[|x|];
 
 verify.noErrors();

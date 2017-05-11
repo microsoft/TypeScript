@@ -1,0 +1,232 @@
+=== tests/cases/compiler/typeVariableTypeGuards.ts ===
+// Repro from #14091
+
+interface Foo {
+>Foo : Foo
+
+    foo(): void
+>foo : () => void
+}
+
+class A<P extends Partial<Foo>> {
+>A : A<P>
+>P : P
+>Partial : Partial<T>
+>Foo : Foo
+
+    props: Readonly<P>
+>props : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+
+    doSomething() {
+>doSomething : () => void
+
+        this.props.foo && this.props.foo()
+>this.props.foo && this.props.foo() : void
+>this.props.foo : P["foo"]
+>this.props : Readonly<P>
+>this : this
+>props : Readonly<P>
+>foo : P["foo"]
+>this.props.foo() : void
+>this.props.foo : () => void
+>this.props : Readonly<P>
+>this : this
+>props : Readonly<P>
+>foo : () => void
+    }
+}
+
+// Repro from #14415
+
+interface Banana {
+>Banana : Banana
+
+    color: 'yellow';
+>color : "yellow"
+}
+
+class Monkey<T extends Banana | undefined> {
+>Monkey : Monkey<T>
+>T : T
+>Banana : Banana
+
+    a: T;
+>a : T
+>T : T
+
+    render() {
+>render : () => void
+
+        if (this.a) {
+>this.a : T
+>this : this
+>a : T
+
+            this.a.color;
+>this.a.color : "yellow"
+>this.a : Banana
+>this : this
+>a : Banana
+>color : "yellow"
+        }
+    }
+}
+
+interface BigBanana extends Banana {
+>BigBanana : BigBanana
+>Banana : Banana
+}
+
+class BigMonkey extends Monkey<BigBanana> {
+>BigMonkey : BigMonkey
+>Monkey : Monkey<BigBanana>
+>BigBanana : BigBanana
+
+    render() {
+>render : () => void
+
+        if (this.a) {
+>this.a : BigBanana
+>this : this
+>a : BigBanana
+
+            this.a.color;
+>this.a.color : "yellow"
+>this.a : BigBanana
+>this : this
+>a : BigBanana
+>color : "yellow"
+        }
+    }
+}
+
+// Another repro
+
+type Item = {
+>Item : Item
+
+    (): string;
+    x: string;
+>x : string
+}
+
+function f1<T extends Item | undefined>(obj: T) {
+>f1 : <T extends Item | undefined>(obj: T) => void
+>T : T
+>Item : Item
+>obj : T
+>T : T
+
+    if (obj) {
+>obj : T
+
+        obj.x;
+>obj.x : string
+>obj : Item
+>x : string
+
+        obj["x"];
+>obj["x"] : string
+>obj : Item
+>"x" : "x"
+
+        obj();
+>obj() : string
+>obj : Item
+    }
+}
+
+function f2<T extends Item | undefined>(obj: T | undefined) {
+>f2 : <T extends Item | undefined>(obj: T | undefined) => void
+>T : T
+>Item : Item
+>obj : T | undefined
+>T : T
+
+    if (obj) {
+>obj : T | undefined
+
+        obj.x;
+>obj.x : string
+>obj : Item
+>x : string
+
+        obj["x"];
+>obj["x"] : string
+>obj : Item
+>"x" : "x"
+
+        obj();
+>obj() : string
+>obj : Item
+    }
+}
+
+function f3<T extends Item | undefined>(obj: T | null) {
+>f3 : <T extends Item | undefined>(obj: T | null) => void
+>T : T
+>Item : Item
+>obj : T | null
+>T : T
+>null : null
+
+    if (obj) {
+>obj : T | null
+
+        obj.x;
+>obj.x : string
+>obj : Item
+>x : string
+
+        obj["x"];
+>obj["x"] : string
+>obj : Item
+>"x" : "x"
+
+        obj();
+>obj() : string
+>obj : Item
+    }
+}
+
+function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
+>f4 : <T extends string[] | undefined>(obj: T | undefined, x: number) => void
+>T : T
+>obj : T | undefined
+>T : T
+>x : number
+
+    if (obj) {
+>obj : T | undefined
+
+        obj[x].length;
+>obj[x].length : number
+>obj[x] : string
+>obj : string[]
+>x : number
+>length : number
+    }
+}
+
+function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
+>f5 : <T, K extends keyof T>(obj: T | undefined, key: K) => void
+>T : T
+>K : K
+>T : T
+>obj : T | undefined
+>T : T
+>key : K
+>K : K
+
+    if (obj) {
+>obj : T | undefined
+
+        obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+    }
+}
+

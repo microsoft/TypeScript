@@ -18,6 +18,8 @@ const obj = {};
 let p = <Poisoned {...obj} />;
 let y = <Poisoned />;
 let z = <Poisoned x y/>;
+let w = <Poisoned {...{x: 5, y: "2"}}/>;
+let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 
 //// [file.jsx]
 "use strict";
@@ -48,3 +50,5 @@ var obj = {};
 var p = <Poisoned {...obj}/>;
 var y = <Poisoned />;
 var z = <Poisoned x y/>;
+var w = <Poisoned {...{ x: 5, y: "2" }}/>;
+var w1 = <Poisoned {...{ x: 5, y: "2" }} X="hi"/>;

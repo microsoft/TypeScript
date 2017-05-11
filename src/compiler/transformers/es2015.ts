@@ -2009,13 +2009,14 @@ namespace ts {
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            setTextRange(assignment, decl);
                         }
 
                         assignments = append(assignments, assignment);
                     }
                 }
                 if (assignments) {
-                    updated = setTextRange(createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc))), node);
+                    updated = setTextRange(createStatement(inlineExpressions(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -3748,7 +3749,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<Declaration>parent).name === node
+                    return (<NamedDeclaration>parent).name === node
                         && resolver.isDeclarationWithCollidingName(<Declaration>parent);
             }
 
@@ -3781,7 +3782,7 @@ namespace ts {
             if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
                 if (declaration && !(isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
-                    return setTextRange(getGeneratedNameForNode(declaration.name), node);
+                    return setTextRange(getGeneratedNameForNode(getNameOfDeclaration(declaration)), node);
                 }
             }
 
