@@ -153,7 +153,7 @@ namespace ts {
             for (let i = 0; i < numNodes; i++) {
                 const currentNode = bundle ? bundle.sourceFiles[i] : node;
                 const sourceFile = isSourceFile(currentNode) ? currentNode : currentSourceFile;
-                const shouldSkip = compilerOptions.noEmitHelpers || (sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+                const shouldSkip = compilerOptions.noEmitHelpers || getExternalHelpersModuleName(sourceFile) !== undefined;
                 const shouldBundle = isSourceFile(currentNode) && !isOwnFileEmit;
                 const helpers = getEmitHelpers(currentNode);
                 if (helpers) {
@@ -234,6 +234,11 @@ namespace ts {
             writeBundle
         };
 
+        /**
+         * If `sourceFile` is `undefined`, `node` must be a synthesized `TypeNode`.
+         */
+        function printNode(hint: EmitHint, node: TypeNode, sourceFile: undefined): string;
+        function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
         function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined): string {
             switch (hint) {
                 case EmitHint.SourceFile:
@@ -1112,7 +1117,7 @@ namespace ts {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             let indentBeforeDot = false;
             let indentAfterDot = false;
-            if (currentSourceFile && !(getEmitFlags(node) & EmitFlags.NoIndentation)) {
+            if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
                 const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
                 const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
@@ -2520,7 +2525,7 @@ namespace ts {
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return !(currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile));
+                    return !(rangeIsOnSingleLine(parentNode, currentSourceFile));
                 }
                 else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
                     return synthesizedNodeStartsOnNewLine(firstChild, format);
@@ -2546,7 +2551,7 @@ namespace ts {
                     return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
                 }
                 else {
-                    return !(currentSourceFile && rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile));
+                    return !(rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile));
                 }
             }
             else {
@@ -2565,13 +2570,13 @@ namespace ts {
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return !(currentSourceFile && rangeIsOnSingleLine(parentNode, currentSourceFile));
+                    return !(rangeIsOnSingleLine(parentNode, currentSourceFile));
                 }
                 else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
                     return synthesizedNodeStartsOnNewLine(lastChild, format);
                 }
                 else {
-                    return !(currentSourceFile && rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile));
+                    return !(rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile));
                 }
             }
             else {

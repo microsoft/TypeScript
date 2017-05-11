@@ -2289,9 +2289,9 @@ namespace ts {
             const newLine = NewLineKind.None;
             const options = { newLine, removeComments: true };
             const writer = createTextWriter("");
-            // writer.writeLine = noop;
             const printer = createPrinter(options, writer);
-            printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ undefined, writer);
+            const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
+            printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
 
             const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
