@@ -330,7 +330,7 @@ namespace ts.FindAllReferences {
 
     /** Calls `action` for each import, re-export, or require() in a file. */
     function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteral) => void): void {
-        if (sourceFile.externalModuleIndicator) {
+        if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
             for (const moduleSpecifier of sourceFile.imports) {
                 action(importerFromModuleSpecifier(moduleSpecifier), moduleSpecifier);
             }
@@ -358,27 +358,21 @@ namespace ts.FindAllReferences {
                     }
                 }
             });
-
-            if (sourceFile.flags & NodeFlags.JavaScriptFile) {
-                // Find all 'require()' calls.
-                sourceFile.forEachChild(function recur(node: Node): void {
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                        action(node, node.arguments[0] as StringLiteral);
-                    } else {
-                        node.forEachChild(recur);
-                    }
-                });
-            }
         }
     }
 
-    function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): Importer {
+    function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): ImporterOrCallExpression {
         const decl = moduleSpecifier.parent;
-        if (decl.kind === SyntaxKind.ImportDeclaration || decl.kind === SyntaxKind.ExportDeclaration) {
-            return decl as ImportDeclaration | ExportDeclaration;
+        switch (decl.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+                return decl as ImportDeclaration | ExportDeclaration | CallExpression;
+            case SyntaxKind.ExternalModuleReference:
+                return (decl as ExternalModuleReference).parent;
+            default:
+                Debug.assert(false);
         }
-        Debug.assert(decl.kind === SyntaxKind.ExternalModuleReference);
-        return (decl as ExternalModuleReference).parent;
     }
 
     export interface ImportedSymbol {
@@ -537,7 +531,10 @@ namespace ts.FindAllReferences {
             return symbol.name;
         }
 
-        const name = forEach(symbol.declarations, ({ name }) => name && name.kind === SyntaxKind.Identifier && name.text);
+        const name = forEach(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier && name.text;
+        });
         Debug.assert(!!name);
         return name;
     }

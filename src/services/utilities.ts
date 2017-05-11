@@ -21,7 +21,6 @@ namespace ts {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.EnumMember:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -40,9 +39,12 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
                 return SemanticMeaning.Type;
 
+            case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.EnumDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
+
+            case SyntaxKind.EnumDeclaration:
+                return SemanticMeaning.All;
 
             case SyntaxKind.ModuleDeclaration:
                 if (isAmbientModule(<ModuleDeclaration>node)) {
@@ -61,7 +63,7 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+                return SemanticMeaning.All;
 
             // An external module can be a Value
             case SyntaxKind.SourceFile:
@@ -238,7 +240,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
-                    return (<Declaration>node.parent).name === node;
+                    return getNameOfDeclaration(<Declaration>node.parent) === node;
                 case SyntaxKind.ElementAccessExpression:
                     return (<ElementAccessExpression>node.parent).argumentExpression === node;
                 case SyntaxKind.ComputedPropertyName:

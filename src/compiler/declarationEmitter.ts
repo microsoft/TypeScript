@@ -67,7 +67,7 @@ namespace ts {
         let errorNameNode: DeclarationName;
         const emitJsDocComments = compilerOptions.removeComments ? noop : writeJsDocComments;
         const emit = compilerOptions.stripInternal ? stripInternal : emitNode;
-        let noDeclare: boolean;
+        let needsDeclare = true;
 
         let moduleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         let asynchronousSubModuleDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[];
@@ -110,11 +110,11 @@ namespace ts {
 
             resultHasExternalModuleIndicator = false;
             if (!isBundledEmit || !isExternalModule(sourceFile)) {
-                noDeclare = false;
+                needsDeclare = true;
                 emitSourceFile(sourceFile);
             }
             else if (isExternalModule(sourceFile)) {
-                noDeclare = true;
+                needsDeclare = false;
                 write(`declare module "${getResolvedExternalModuleName(host, sourceFile)}" {`);
                 writeLine();
                 increaseIndent();
@@ -612,9 +612,9 @@ namespace ts {
             }
         }
 
-        function emitTempVariableDeclaration(expr: Expression, baseName: string, diagnostic: SymbolAccessibilityDiagnostic): string {
+        function emitTempVariableDeclaration(expr: Expression, baseName: string, diagnostic: SymbolAccessibilityDiagnostic, needsDeclare: boolean): string {
             const tempVarName = getExportTempVariableName(baseName);
-            if (!noDeclare) {
+            if (needsDeclare) {
                 write("declare ");
             }
             write("const ");
@@ -636,7 +636,7 @@ namespace ts {
                 const tempVarName = emitTempVariableDeclaration(node.expression, "_default", {
                     diagnosticMessage: Diagnostics.Default_export_of_the_module_has_or_is_using_private_name_0,
                     errorNode: node
-                });
+                }, needsDeclare);
                 write(node.isExportEquals ? "export = " : "export default ");
                 write(tempVarName);
             }
@@ -728,7 +728,7 @@ namespace ts {
                 if (modifiers & ModifierFlags.Default) {
                     write("default ");
                 }
-                else if (node.kind !== SyntaxKind.InterfaceDeclaration && !noDeclare) {
+                else if (node.kind !== SyntaxKind.InterfaceDeclaration && needsDeclare) {
                     write("declare ");
                 }
             }
@@ -1127,7 +1127,7 @@ namespace ts {
                     return {
                         diagnosticMessage,
                         errorNode: node,
-                        typeName: (<Declaration>node.parent.parent).name
+                        typeName: getNameOfDeclaration(node.parent.parent)
                     };
                 }
             }
@@ -1155,7 +1155,7 @@ namespace ts {
                         diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                         errorNode: baseTypeNode,
                         typeName: node.name
-                    });
+                    }, !findAncestor(node, n => n.kind === SyntaxKind.ModuleDeclaration));
             }
 
             emitJsDocComments(node);
@@ -1266,7 +1266,9 @@ namespace ts {
                         Diagnostics.Exported_variable_0_has_or_is_using_private_name_1;
                 }
                 // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
-                else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature) {
+                // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
+                else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
+                    (node.kind === SyntaxKind.Parameter && hasModifier(node.parent, ModifierFlags.Private))) {
                     // TODO(jfreeman): Deal with computed properties in error reporting.
                     if (hasModifier(node, ModifierFlags.Static)) {
                         return symbolAccessibilityResult.errorModuleName ?
@@ -1275,7 +1277,7 @@ namespace ts {
                                 Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_name_1_from_private_module_2 :
                             Diagnostics.Public_static_property_0_of_exported_class_has_or_is_using_private_name_1;
                     }
-                    else if (node.parent.kind === SyntaxKind.ClassDeclaration) {
+                    else if (node.parent.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.Parameter) {
                         return symbolAccessibilityResult.errorModuleName ?
                             symbolAccessibilityResult.accessibility === SymbolAccessibility.CannotBeNamed ?
                                 Diagnostics.Public_property_0_of_exported_class_has_or_is_using_name_1_from_external_module_2_but_cannot_be_named :
@@ -1501,6 +1503,11 @@ namespace ts {
                 write("[");
             }
             else {
+                if (node.kind === SyntaxKind.Constructor && hasModifier(node, ModifierFlags.Private)) {
+                    write("();");
+                    writeLine();
+                    return;
+                }
                 // Construct signature or constructor type write new Signature
                 if (node.kind === SyntaxKind.ConstructSignature || node.kind === SyntaxKind.ConstructorType) {
                     write("new ");

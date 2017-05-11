@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206

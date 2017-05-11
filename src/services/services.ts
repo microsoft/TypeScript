@@ -578,14 +578,15 @@ namespace ts {
             }
 
             function getDeclarationName(declaration: Declaration) {
-                if (declaration.name) {
-                    const result = getTextOfIdentifierOrLiteral(declaration.name);
+                const name = getNameOfDeclaration(declaration);
+                if (name) {
+                    const result = getTextOfIdentifierOrLiteral(name);
                     if (result !== undefined) {
                         return result;
                     }
 
-                    if (declaration.name.kind === SyntaxKind.ComputedPropertyName) {
-                        const expr = (<ComputedPropertyName>declaration.name).expression;
+                    if (name.kind === SyntaxKind.ComputedPropertyName) {
+                        const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
                             return (<PropertyAccessExpression>expr).name.text;
                         }

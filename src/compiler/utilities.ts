@@ -566,7 +566,7 @@ namespace ts {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.TypeAliasDeclaration:
-                errorNode = (<Declaration>node).name;
+                errorNode = (<NamedDeclaration>node).name;
                 break;
             case SyntaxKind.ArrowFunction:
                 return getErrorSpanForArrowFunction(sourceFile, <ArrowFunction>node);
@@ -1761,22 +1761,44 @@ namespace ts {
 
     // True if the given identifier, string literal, or number literal is the name of a declaration node
     export function isDeclarationName(name: Node): boolean {
-        if (name.kind !== SyntaxKind.Identifier && name.kind !== SyntaxKind.StringLiteral && name.kind !== SyntaxKind.NumericLiteral) {
-            return false;
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                return isDeclaration(name.parent) && name.parent.name === name;
+            default:
+                return false;
         }
+    }
 
-        const parent = name.parent;
-        if (parent.kind === SyntaxKind.ImportSpecifier || parent.kind === SyntaxKind.ExportSpecifier) {
-            if ((<ImportOrExportSpecifier>parent).propertyName) {
-                return true;
+    export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
+        if (!declaration) {
+            return undefined;
+        }
+        if (declaration.kind === SyntaxKind.BinaryExpression) {
+            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
+            const lhs = (declaration as BinaryExpression).left;
+            switch (kind) {
+                case SpecialPropertyAssignmentKind.None:
+                case SpecialPropertyAssignmentKind.ModuleExports:
+                    return undefined;
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                    if (lhs.kind === SyntaxKind.Identifier) {
+                        return (lhs as PropertyAccessExpression).name;
+                    }
+                    else {
+                        return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
+                    }
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Property:
+                    return (lhs as PropertyAccessExpression).name;
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
             }
         }
-
-        if (isDeclaration(parent)) {
-            return (<Declaration>parent).name === name;
+        else {
+            return (declaration as NamedDeclaration).name;
         }
-
-        return false;
     }
 
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
@@ -1799,7 +1821,7 @@ namespace ts {
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.PropertyAccessExpression:
                 // Name in member declaration or property name in property access
-                return (<Declaration | PropertyAccessExpression>parent).name === node;
+                return (<NamedDeclaration | PropertyAccessExpression>parent).name === node;
             case SyntaxKind.QualifiedName:
                 // Name on right hand side of dot in a type query
                 if ((<QualifiedName>parent).right === node) {
@@ -1997,7 +2019,8 @@ namespace ts {
      *      Symbol.
      */
     export function hasDynamicName(declaration: Declaration): boolean {
-        return declaration.name && isDynamicName(declaration.name);
+        const name = getNameOfDeclaration(declaration);
+        return name && isDynamicName(name);
     }
 
     export function isDynamicName(name: DeclarationName): boolean {
@@ -2770,7 +2793,7 @@ namespace ts {
             forEach(declarations, (member: Declaration) => {
                 if ((member.kind === SyntaxKind.GetAccessor || member.kind === SyntaxKind.SetAccessor)
                     && hasModifier(member, ModifierFlags.Static) === hasModifier(accessor, ModifierFlags.Static)) {
-                    const memberName = getPropertyNameForPropertyNameNode(member.name);
+                    const memberName = getPropertyNameForPropertyNameNode((member as NamedDeclaration).name);
                     const accessorName = getPropertyNameForPropertyNameNode(accessor.name);
                     if (memberName === accessorName) {
                         if (!firstAccessor) {
@@ -4103,7 +4126,7 @@ namespace ts {
             || kind === SyntaxKind.MergeDeclarationMarker;
     }
 
-    export function isDeclaration(node: Node): node is Declaration {
+    export function isDeclaration(node: Node): node is NamedDeclaration {
         return isDeclarationKind(node.kind);
     }
 

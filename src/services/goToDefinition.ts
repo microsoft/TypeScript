@@ -235,7 +235,7 @@ namespace ts.GoToDefinition {
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
     function createDefinitionInfo(node: Declaration, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-        return createDefinitionInfoFromName(node.name || node, symbolKind, symbolName, containerName);
+        return createDefinitionInfoFromName(getNameOfDeclaration(node) || node, symbolKind, symbolName, containerName);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
