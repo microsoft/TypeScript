@@ -732,7 +732,8 @@ namespace ts {
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
-                    (!compilerOptions.outFile && !compilerOptions.out)) {
+                    (!compilerOptions.outFile && !compilerOptions.out) ||
+                    isInAmbientContext(declaration)) {
                     // nodes are in different files and order cannot be determined
                     return true;
                 }
