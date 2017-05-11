@@ -2,7 +2,6 @@
 /// <reference path="diagnosticInformationMap.generated.ts" />
 
 namespace ts {
-
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
     export function trace(host: ModuleResolutionHost): void {
@@ -15,6 +14,7 @@ namespace ts {
     }
 
     /** Array that is only intended to be pushed to, never read. */
+    /* @internal */
     export interface Push<T> {
         push(value: T): void;
     }
@@ -378,7 +378,7 @@ namespace ts {
                     directoryPathMap.set(parent, result);
                     current = parent;
 
-                    if (current == commonPrefix) {
+                    if (current === commonPrefix) {
                         break;
                     }
                 }
@@ -675,12 +675,25 @@ namespace ts {
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /*jsOnly*/ false);
+        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, /*jsOnly*/ false);
     }
 
+    /**
+     * Expose resolution logic to allow us to use Node module resolution logic from arbitrary locations.
+     * No way to do this with `require()`: https://github.com/nodejs/node/issues/5963
+     * Throws an error if the module can't be resolved.
+     */
     /* @internal */
-    export function nodeModuleNameResolverWorker(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, jsOnly = false): ResolvedModuleWithFailedLookupLocations {
-        const containingDirectory = getDirectoryPath(containingFile);
+    export function resolveJavaScriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+        const { resolvedModule, failedLookupLocations } =
+            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+        if (!resolvedModule) {
+            throw new Error(`Could not resolve JS module ${moduleName} starting at ${initialDir}. Looked in: ${failedLookupLocations.join(", ")}`);
+        }
+        return resolvedModule.resolvedFileName;
+    }
+
+    function nodeModuleNameResolverWorker(moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, jsOnly: boolean): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
@@ -954,8 +967,23 @@ namespace ts {
                 }
                 nodeModulesAtTypesExists = false;
             }
-            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, moduleName, nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
+            return loadModuleFromNodeModulesFolder(Extensions.DtsOnly, mangleScopedPackage(moduleName, state), nodeModulesAtTypes, nodeModulesAtTypesExists, failedLookupLocations, state);
         }
+    }
+
+    /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
+    function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
+        if (startsWith(moduleName, "@")) {
+            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            if (replaceSlash !== moduleName) {
+                const mangled = replaceSlash.slice(1); // Take off the "@"
+                if (state.traceEnabled) {
+                    trace(state.host, Diagnostics.Scoped_package_detected_looking_in_0, mangled);
+                }
+                return mangled;
+            }
+        }
+        return moduleName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

@@ -188,7 +188,7 @@ function f2() {
 }
 function f3(b) {
     if (true) {
-        var E;
+        var E = void 0;
         (function (E) {
             E[E["A"] = 0] = "A";
             E[E["B"] = 1] = "B";
@@ -206,9 +206,9 @@ function f3(b) {
         }
         else {
             var A_1 = (function () {
-                function A_1() {
+                function A() {
                 }
-                return A_1;
+                return A;
             }());
             var c = [new A_1()];
             c[0].x = E.B;

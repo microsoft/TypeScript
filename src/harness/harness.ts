@@ -1940,7 +1940,7 @@ namespace Harness {
                 }
 
                 const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory != "") {
+                if (parentDirectory !== "") {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);

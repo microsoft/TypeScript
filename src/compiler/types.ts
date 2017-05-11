@@ -10,7 +10,7 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
-        get(key: string): T;
+        get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
@@ -65,6 +65,7 @@ namespace ts {
         NumericLiteral,
         StringLiteral,
         JsxText,
+        JsxTextAllWhiteSpaces,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -1505,7 +1506,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind;
+        keywordToken: SyntaxKind.NewKeyword;
         name: Identifier;
     }
 
@@ -1572,6 +1573,7 @@ namespace ts {
 
     export interface JsxText extends Node {
         kind: SyntaxKind.JsxText;
+        containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
 
@@ -2410,7 +2412,14 @@ namespace ts {
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
-        /* @internal */ structureIsReused?: boolean;
+        /* @internal */ structureIsReused?: StructureIsReused;
+    }
+
+    /* @internal */
+    export const enum StructureIsReused {
+        Not         = 0,
+        SafeModules = 1 << 0,
+        Completely  = 1 << 1,
     }
 
     export interface CustomTransformers {
@@ -2547,6 +2556,9 @@ namespace ts {
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
+        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string;
+        /* @internal */ getBaseConstraintOfType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
@@ -2729,7 +2741,6 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -3354,6 +3365,7 @@ namespace ts {
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
+        source?: string;
     }
 
     export enum DiagnosticCategory {
@@ -3945,14 +3957,15 @@ namespace ts {
         HelperName = 1 << 12,
         ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 16,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 17,
-        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-        Iterator = 1 << 22,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        InternalName = 1 << 15,                  // The name is internal to an ES5 class body function.
+        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 17,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 18,
+        ReuseTempVariableScope = 1 << 19,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 20,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 21,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 22,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        Iterator = 1 << 23,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
     }
 
     export interface EmitHelper {
@@ -3977,17 +3990,24 @@ namespace ts {
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Read = 1 << 9,             // __read (used by ES2015 iterator destructuring transformation)
+        Read = 1 << 9,              // __read (used by ES2015 iterator destructuring transformation)
         Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        AsyncGenerator = 1 << 11,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 12,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 13,      // __asyncValues (used by ES2017 for..await..of transformation)
+        Await = 1 << 11,            // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
 
         // Helpers included by ES2017 for..await..of
         ForAwaitOfIncludes = AsyncValues,
+
+        // Helpers included by ES2017 async generators
+        AsyncGeneratorIncludes = Await | AsyncGenerator,
+
+        // Helpers included by yield* in ES2017 async generators
+        AsyncDelegatorIncludes = Await | AsyncDelegator | AsyncValues,
 
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,

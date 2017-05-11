@@ -212,6 +212,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (!decl.importClause) {
+                return;
+            }
+
             const { importClause } = decl;
 
             const { namedBindings } = importClause;
@@ -387,6 +391,7 @@ namespace ts.FindAllReferences {
         symbol: Symbol;
         exportInfo: ExportInfo;
     }
+
     /**
      * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
      * If at an import, look locally for the symbol it imports.
@@ -398,7 +403,7 @@ namespace ts.FindAllReferences {
         return comingFromExport ? getExport() : getExport() || getImport();
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
-            const { parent } = node;
+            const parent = node.parent!;
             if (symbol.flags & SymbolFlags.Export) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
@@ -414,8 +419,8 @@ namespace ts.FindAllReferences {
                 }
             }
             else {
-                const exportNode = parent.kind === SyntaxKind.VariableDeclaration ? getAncestor(parent, SyntaxKind.VariableStatement) : parent;
-                if (hasModifier(exportNode, ModifierFlags.Export)) {
+                const exportNode = getExportNode(parent);
+                if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
                     if (exportNode.kind === SyntaxKind.ImportEqualsDeclaration && (exportNode as ImportEqualsDeclaration).moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
                         if (comingFromExport) {
@@ -489,6 +494,16 @@ namespace ts.FindAllReferences {
         // Not meant for use with export specifiers or export assignment.
         function getExportKindForDeclaration(node: Node): ExportKind | undefined {
             return hasModifier(node, ModifierFlags.Default) ? ExportKind.Default : ExportKind.Named;
+        }
+    }
+
+    // If a reference is a variable declaration, the exported node would be the variable statement.
+    function getExportNode(parent: Node): Node | undefined {
+        if (parent.kind === SyntaxKind.VariableDeclaration) {
+            const p = parent as ts.VariableDeclaration;
+            return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+        } else {
+            return parent;
         }
     }
 

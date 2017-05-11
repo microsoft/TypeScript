@@ -7,7 +7,7 @@ namespace ts.FindAllReferences {
         references: Entry[];
     }
 
-    type Definition =
+    export type Definition =
         | { type: "symbol"; symbol: Symbol; node: Node }
         | { type: "label"; node: Identifier }
         | { type: "keyword"; node: ts.Node }
@@ -20,7 +20,7 @@ namespace ts.FindAllReferences {
         node: Node;
         isInString?: true;
     }
-    interface SpanEntry {
+    export interface SpanEntry {
         type: "span";
         fileName: string;
         textSpan: TextSpan;
@@ -108,10 +108,6 @@ namespace ts.FindAllReferences {
             switch (def.type) {
                 case "symbol": {
                     const { symbol, node } = def;
-                    const declarations = symbol.declarations;
-                    if (!declarations || declarations.length === 0) {
-                        return undefined;
-                    }
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, node, checker);
                     const name = displayParts.map(p => p.text).join("");
                     return { node, name, kind, displayParts };
@@ -282,11 +278,6 @@ namespace ts.FindAllReferences.Core {
                 return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, cancellationToken);
             }
             // Can't have references to something that we have no symbol for.
-            return undefined;
-        }
-
-        // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-        if (!symbol.declarations || !symbol.declarations.length) {
             return undefined;
         }
 
@@ -1234,7 +1225,7 @@ namespace ts.FindAllReferences.Core {
                 if (isObjectLiteralMethod(searchSpaceNode)) {
                     break;
                 }
-            // fall through
+                // falls through
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.Constructor:
@@ -1247,7 +1238,7 @@ namespace ts.FindAllReferences.Core {
                 if (isExternalModule(<SourceFile>searchSpaceNode)) {
                     return undefined;
                 }
-            // Fall through
+                // falls through
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
                 break;

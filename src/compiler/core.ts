@@ -3,7 +3,7 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.3.0";
+    export const version = "2.4.0";
 }
 
 /* @internal */
@@ -224,12 +224,40 @@ namespace ts {
         }
         return undefined;
     }
+    /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+     * At that point findAncestor returns undefined.
+     */
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node {
+        while (node) {
+            const result = callback(node);
+            if (result === "quit") {
+                return undefined;
+            }
+            else if (result) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
 
     export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             callback(arrayA[i], arrayB[i], i);
         }
+    }
+
+    export function zipToMap<T>(keys: string[], values: T[]): Map<T> {
+        Debug.assert(keys.length === values.length);
+        const map = createMap<T>();
+        for (let i = 0; i < keys.length; ++i) {
+            map.set(keys[i], values[i]);
+        }
+        return map;
     }
 
     /**

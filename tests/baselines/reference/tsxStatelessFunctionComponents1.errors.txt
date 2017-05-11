@@ -1,24 +1,20 @@
 tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
-  Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
+  Type '{ naaame: "world"; }' is not assignable to type '{ name: string; }'.
+    Property 'name' is missing in type '{ naaame: "world"; }'.
 tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Type '{ name: 42; }' is not assignable to type '{ name?: string; }'.
     Types of property 'name' are incompatible.
       Type '42' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(29,15): error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-  Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+tests/cases/conformance/jsx/file.tsx(29,15): error TS2339: Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
   Type '{}' is not assignable to type '{ "prop-name": string; }'.
     Property '"prop-name"' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(37,23): error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
-  Property 'prop1' does not exist on type 'IntrinsicAttributes'.
-tests/cases/conformance/jsx/file.tsx(38,24): error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
-  Property 'ref' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(37,23): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(38,24): error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes'.
 tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
-tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes'.
-  Property 'prop1' does not exist on type 'IntrinsicAttributes'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (7 errors) ====
     function EmptyPropSFC() {
         return <div> Default Greeting </div>;
     }
@@ -40,7 +36,8 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolea
     let b = <Greet naaame='world' />;
                    ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ naaame: "world"; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
-!!! error TS2322:   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
+!!! error TS2322:   Type '{ naaame: "world"; }' is not assignable to type '{ name: string; }'.
+!!! error TS2322:     Property 'name' is missing in type '{ naaame: "world"; }'.
     
     // OK
     let c = <Meet />;
@@ -57,8 +54,7 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolea
     // Error
     let f = <Meet naaaaaaame='no' />;
                   ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ naaaaaaame: "no"; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
-!!! error TS2322:   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2339: Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
     
     // OK
     let g = <MeetAndGreet prop-name="Bob" />;
@@ -72,12 +68,10 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolea
     // Error
     let i = <EmptyPropSFC prop1 />
                           ~~~~~
-!!! error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes'.
     let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes'.
+!!! error TS2339: Property 'ref' does not exist on type 'IntrinsicAttributes'.
     
     let o = {
         prop1: true;
@@ -85,11 +79,8 @@ tests/cases/conformance/jsx/file.tsx(45,24): error TS2322: Type '{ prop1: boolea
 !!! error TS1005: ',' expected.
     }
     
-    // Error
+    // OK as access properties are allow when spread
     let i2 = <EmptyPropSFC {...o} />
-                           ~~~~~~
-!!! error TS2322: Type '{ prop1: boolean; }' is not assignable to type 'IntrinsicAttributes'.
-!!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
     
     let o1: any;
     // OK

@@ -552,7 +552,7 @@ namespace ts.server {
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            if (!oldProgram || (this.program !== oldProgram && !oldProgram.structureIsReused)) {
+            if (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely))) {
                 hasChanges = true;
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
@@ -643,7 +643,7 @@ namespace ts.server {
             // check if requested version is the same that we have reported last time
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 // if current structure version is the same - return info without any changes
-                if (this.projectStructureVersion == this.lastReportedVersion && !updatedFileNames) {
+                if (this.projectStructureVersion === this.lastReportedVersion && !updatedFileNames) {
                     return { info, projectErrors: this.projectErrors };
                 }
                 // compute and return the difference

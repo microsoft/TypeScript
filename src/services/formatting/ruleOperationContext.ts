@@ -12,12 +12,11 @@ namespace ts.formatting {
 
         static Any: RuleOperationContext = new RuleOperationContext();
 
-
         public IsAny(): boolean {
             return this === RuleOperationContext.Any;
         }
 
-        public  InContext(context: FormattingContext): boolean {
+        public InContext(context: FormattingContext): boolean {
             if (this.IsAny()) {
                 return true;
             }

@@ -298,6 +298,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
+        let modifiedFilePaths: Path[] | undefined;
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache = {};
@@ -368,7 +369,8 @@ namespace ts {
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
-        if (!tryReuseStructureFromOldProgram()) {
+        const structuralIsReused = tryReuseStructureFromOldProgram();
+        if (structuralIsReused !== StructureIsReused.Completely) {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
@@ -477,89 +479,114 @@ namespace ts {
         }
 
         interface OldProgramState {
-            program: Program;
+            program: Program | undefined;
             file: SourceFile;
+            /** The collection of paths modified *since* the old program. */
             modifiedFilePaths: Path[];
         }
 
-        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState?: OldProgramState) {
-            if (!oldProgramState && !file.ambientModuleNames.length) {
-                // if old program state is not supplied and file does not contain locally defined ambient modules
-                // then the best we can do is fallback to the default logic
+        function resolveModuleNamesReusingOldState(moduleNames: string[], containingFile: string, file: SourceFile, oldProgramState: OldProgramState) {
+            if (structuralIsReused === StructureIsReused.Not && !file.ambientModuleNames.length) {
+                // If the old program state does not permit reusing resolutions and `file` does not contain locally defined ambient modules,
+                // the best we can do is fallback to the default logic.
                 return resolveModuleNamesWorker(moduleNames, containingFile);
             }
 
-            // at this point we know that either
+            const oldSourceFile = oldProgramState.program && oldProgramState.program.getSourceFile(containingFile);
+            if (oldSourceFile !== file && file.resolvedModules) {
+                // `file` was created for the new program.
+                //
+                // We only set `file.resolvedModules` via work from the current function,
+                // so it is defined iff we already called the current function on `file`.
+                // That call happened no later than the creation of the `file` object,
+                // which per above occured during the current program creation.
+                // Since we assume the filesystem does not change during program creation,
+                // it is safe to reuse resolutions from the earlier call.
+                const result: ResolvedModuleFull[] = [];
+                for (const moduleName of moduleNames) {
+                    const resolvedModule = file.resolvedModules.get(moduleName);
+                    result.push(resolvedModule);
+                }
+                return result;
+            }
+            // At this point, we know at least one of the following hold:
             // - file has local declarations for ambient modules
-            // OR
             // - old program state is available
-            // OR
-            // - both of items above
-            // With this it is possible that we can tell how some module names from the initial list will be resolved
-            // without doing actual resolution (in particular if some name was resolved to ambient module).
-            // Such names should be excluded from the list of module names that will be provided to `resolveModuleNamesWorker`
-            // since we don't want to resolve them again.
+            // With this information, we can infer some module resolutions without performing resolution.
 
-            // this is a list of modules for which we cannot predict resolution so they should be actually resolved
+            /** An ordered list of module names for which we cannot recover the resolution. */
             let unknownModuleNames: string[];
-            // this is a list of combined results assembles from predicted and resolved results.
-            // Order in this list matches the order in the original list of module names `moduleNames` which is important
-            // so later we can split results to resolutions of modules and resolutions of module augmentations.
+            /**
+             * The indexing of elements in this list matches that of `moduleNames`.
+             *
+             * Before combining results, result[i] is in one of the following states:
+             * * undefined: needs to be recomputed,
+             * * predictedToResolveToAmbientModuleMarker: known to be an ambient module.
+             * Needs to be reset to undefined before returning,
+             * * ResolvedModuleFull instance: can be reused.
+             */
             let result: ResolvedModuleFull[];
-            // a transient placeholder that is used to mark predicted resolution in the result list
+            /** A transient placeholder used to mark predicted resolution in the result list. */
             const predictedToResolveToAmbientModuleMarker: ResolvedModuleFull = <any>{};
+
 
             for (let i = 0; i < moduleNames.length; i++) {
                 const moduleName = moduleNames[i];
-                // module name is known to be resolved to ambient module if
-                // - module name is contained in the list of ambient modules that are locally declared in the file
-                // - in the old program module name was resolved to ambient module whose declaration is in non-modified file
+                // If we want to reuse resolutions more aggressively, we can refine this to check for whether the
+                // text of the corresponding modulenames has changed.
+                if (file === oldSourceFile) {
+                    const oldResolvedModule = oldSourceFile && oldSourceFile.resolvedModules.get(moduleName);
+                    if (oldResolvedModule) {
+                        if (isTraceEnabled(options, host)) {
+                            trace(host, Diagnostics.Reusing_resolution_of_module_0_to_file_1_from_old_program, moduleName, containingFile);
+                        }
+                        (result || (result = new Array(moduleNames.length)))[i] = oldResolvedModule;
+                        continue;
+                    }
+                }
+                // We know moduleName resolves to an ambient module provided that moduleName:
+                // - is in the list of ambient modules locally declared in the current source file.
+                // - resolved to an ambient module in the old program whose declaration is in an unmodified file
                 //   (so the same module declaration will land in the new program)
-                let isKnownToResolveToAmbientModule = false;
+                let resolvesToAmbientModuleInNonModifiedFile = false;
                 if (contains(file.ambientModuleNames, moduleName)) {
-                    isKnownToResolveToAmbientModule = true;
+                    resolvesToAmbientModuleInNonModifiedFile = true;
                     if (isTraceEnabled(options, host)) {
                         trace(host, Diagnostics.Module_0_was_resolved_as_locally_declared_ambient_module_in_file_1, moduleName, containingFile);
                     }
                 }
                 else {
-                    isKnownToResolveToAmbientModule = checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
+                    resolvesToAmbientModuleInNonModifiedFile = moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName, oldProgramState);
                 }
 
-                if (isKnownToResolveToAmbientModule) {
-                    if (!unknownModuleNames) {
-                        // found a first module name for which result can be prediced
-                        // this means that this module name should not be passed to `resolveModuleNamesWorker`.
-                        // We'll use a separate list for module names that are definitely unknown.
-                        result = new Array(moduleNames.length);
-                        // copy all module names that appear before the current one in the list
-                        // since they are known to be unknown
-                        unknownModuleNames = moduleNames.slice(0, i);
-                    }
-                    // mark prediced resolution in the result list
-                    result[i] = predictedToResolveToAmbientModuleMarker;
+                if (resolvesToAmbientModuleInNonModifiedFile) {
+                    (result || (result = new Array(moduleNames.length)))[i] = predictedToResolveToAmbientModuleMarker;
                 }
-                else if (unknownModuleNames) {
-                    // found unknown module name and we are already using separate list for those - add it to the list
-                    unknownModuleNames.push(moduleName);
+                else {
+                    // Resolution failed in the old program, or resolved to an ambient module for which we can't reuse the result.
+                    (unknownModuleNames || (unknownModuleNames = [])).push(moduleName);
                 }
             }
 
-            if (!unknownModuleNames) {
-                // we've looked throught the list but have not seen any predicted resolution
-                // use default logic
-                return resolveModuleNamesWorker(moduleNames, containingFile);
-            }
-
-            const resolutions = unknownModuleNames.length
+            const resolutions = unknownModuleNames && unknownModuleNames.length
                 ? resolveModuleNamesWorker(unknownModuleNames, containingFile)
                 : emptyArray;
 
-            // combine results of resolutions and predicted results
+            // Combine results of resolutions and predicted results
+            if (!result) {
+                // There were no unresolved/ambient resolutions.
+                Debug.assert(resolutions.length === moduleNames.length);
+                return <ResolvedModuleFull[]>resolutions;
+            }
+
             let j = 0;
             for (let i = 0; i < result.length; i++) {
-                if (result[i] == predictedToResolveToAmbientModuleMarker) {
-                    result[i] = undefined;
+                if (result[i]) {
+                    // `result[i]` is either a `ResolvedModuleFull` or a marker.
+                    // If it is the former, we can leave it as is.
+                    if (result[i] === predictedToResolveToAmbientModuleMarker) {
+                        result[i] = undefined;
+                    }
                 }
                 else {
                     result[i] = resolutions[j];
@@ -567,18 +594,18 @@ namespace ts {
                 }
             }
             Debug.assert(j === resolutions.length);
+
             return result;
 
-            function checkModuleNameResolvedToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState?: OldProgramState): boolean {
-                if (!oldProgramState) {
-                    return false;
-                }
+            // If we change our policy of rechecking failed lookups on each program create,
+            // we should adjust the value returned here.
+            function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string, oldProgramState: OldProgramState): boolean {
                 const resolutionToFile = getResolvedModule(oldProgramState.file, moduleName);
                 if (resolutionToFile) {
                     // module used to be resolved to file - ignore it
                     return false;
                 }
-                const ambientModule = oldProgram.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
+                const ambientModule = oldProgramState.program && oldProgramState.program.getTypeChecker().tryFindAmbientModuleWithoutAugmentations(moduleName);
                 if (!(ambientModule && ambientModule.declarations)) {
                     return false;
                 }
@@ -600,99 +627,107 @@ namespace ts {
             }
         }
 
-        function tryReuseStructureFromOldProgram(): boolean {
+        function tryReuseStructureFromOldProgram(): StructureIsReused {
             if (!oldProgram) {
-                return false;
+                return StructureIsReused.Not;
             }
 
             // check properties that can affect structure of the program or module resolution strategy
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if (changesAffectModuleResolution(oldOptions, options)) {
-                return false;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
-            Debug.assert(!oldProgram.structureIsReused);
+            Debug.assert(!(oldProgram.structureIsReused & (StructureIsReused.Completely | StructureIsReused.SafeModules)));
 
             // there is an old program, check if we can reuse its structure
             const oldRootNames = oldProgram.getRootFileNames();
             if (!arrayIsEqualTo(oldRootNames, rootNames)) {
-                return false;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             if (!arrayIsEqualTo(options.types, oldOptions.types)) {
-                return false;
+                return oldProgram.structureIsReused = StructureIsReused.Not;
             }
 
             // check if program source files has changed in the way that can affect structure of the program
             const newSourceFiles: SourceFile[] = [];
             const filePaths: Path[] = [];
             const modifiedSourceFiles: { oldFile: SourceFile, newFile: SourceFile }[] = [];
+            oldProgram.structureIsReused = StructureIsReused.Completely;
 
             for (const oldSourceFile of oldProgram.getSourceFiles()) {
-                let newSourceFile = host.getSourceFileByPath
+                const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
 
                 if (!newSourceFile) {
-                    return false;
+                    return oldProgram.structureIsReused = StructureIsReused.Not;
                 }
 
                 newSourceFile.path = oldSourceFile.path;
                 filePaths.push(newSourceFile.path);
 
                 if (oldSourceFile !== newSourceFile) {
+                    // The `newSourceFile` object was created for the new program.
+
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
                         // value of no-default-lib has changed
                         // this will affect if default library is injected into the list of files
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // check tripleslash references
                     if (!arrayIsEqualTo(oldSourceFile.referencedFiles, newSourceFile.referencedFiles, fileReferenceIsEqualTo)) {
                         // tripleslash references has changed
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // check imports and module augmentations
                     collectExternalModuleReferences(newSourceFile);
                     if (!arrayIsEqualTo(oldSourceFile.imports, newSourceFile.imports, moduleNameIsEqualTo)) {
                         // imports has changed
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
                     if (!arrayIsEqualTo(oldSourceFile.moduleAugmentations, newSourceFile.moduleAugmentations, moduleNameIsEqualTo)) {
                         // moduleAugmentations has changed
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
                         // 'types' references has changed
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     // tentatively approve the file
                     modifiedSourceFiles.push({ oldFile: oldSourceFile, newFile: newSourceFile });
-                }
-                else {
-                    // file has no changes - use it as is
-                    newSourceFile = oldSourceFile;
                 }
 
                 // if file has passed all checks it should be safe to reuse it
                 newSourceFiles.push(newSourceFile);
             }
 
-            const modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
+            if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
+                return oldProgram.structureIsReused;
+            }
+
+            modifiedFilePaths = modifiedSourceFiles.map(f => f.newFile.path);
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.fileName, currentDirectory);
                 if (resolveModuleNamesWorker) {
                     const moduleNames = map(concatenate(newSourceFile.imports, newSourceFile.moduleAugmentations), getTextOfLiteral);
-                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, { file: oldSourceFile, program: oldProgram, modifiedFilePaths });
+                    const oldProgramState = { program: oldProgram, file: oldSourceFile, modifiedFilePaths };
+                    const resolutions = resolveModuleNamesReusingOldState(moduleNames, newSourceFilePath, newSourceFile, oldProgramState);
                     // ensure that module resolution results are still correct
                     const resolutionsChanged = hasChangesInResolutions(moduleNames, resolutions, oldSourceFile.resolvedModules, moduleResolutionIsEqualTo);
                     if (resolutionsChanged) {
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        newSourceFile.resolvedModules = zipToMap(moduleNames, resolutions);
+                    }
+                    else {
+                        newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
                     }
                 }
                 if (resolveTypeReferenceDirectiveNamesWorker) {
@@ -701,12 +736,17 @@ namespace ts {
                     // ensure that types resolutions are still correct
                     const resolutionsChanged = hasChangesInResolutions(typesReferenceDirectives, resolutions, oldSourceFile.resolvedTypeReferenceDirectiveNames, typeDirectiveIsEqualTo);
                     if (resolutionsChanged) {
-                        return false;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                        newSourceFile.resolvedTypeReferenceDirectiveNames = zipToMap(typesReferenceDirectives, resolutions);
+                    }
+                    else {
+                        newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
                     }
                 }
-                // pass the cache of module/types resolutions from the old source file
-                newSourceFile.resolvedModules = oldSourceFile.resolvedModules;
-                newSourceFile.resolvedTypeReferenceDirectiveNames = oldSourceFile.resolvedTypeReferenceDirectiveNames;
+            }
+
+            if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
+                return oldProgram.structureIsReused;
             }
 
             // update fileName -> file mapping
@@ -721,9 +761,8 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
-            oldProgram.structureIsReused = true;
 
-            return true;
+            return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
 
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
@@ -909,6 +948,13 @@ namespace ts {
 
         function getSemanticDiagnosticsForFileNoCache(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
             return runWithCancellationToken(() => {
+                // If skipLibCheck is enabled, skip reporting errors if file is a declaration file.
+                // If skipDefaultLibCheck is enabled, skip reporting errors if file contains a
+                // '/// <reference no-default-lib="true"/>' directive.
+                if (options.skipLibCheck && sourceFile.isDeclarationFile || options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) {
+                    return emptyArray;
+                }
+
                 const typeChecker = getDiagnosticsProducingTypeChecker();
 
                 Debug.assert(!!sourceFile.bindDiagnostics);
@@ -931,20 +977,22 @@ namespace ts {
          */
         function shouldReportDiagnostic(diagnostic: Diagnostic) {
             const { file, start } = diagnostic;
-            const lineStarts = getLineStarts(file);
-            let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
-            while (line > 0) {
-                const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
-                const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
-                if (!result) {
-                    // non-empty line
-                    return true;
+            if (file) {
+                const lineStarts = getLineStarts(file);
+                let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
+                while (line > 0) {
+                    const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
+                    const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
+                    if (!result) {
+                        // non-empty line
+                        return true;
+                    }
+                    if (result[3]) {
+                        // @ts-ignore
+                        return false;
+                    }
+                    line--;
                 }
-                if (result[3]) {
-                    // @ts-ignore
-                    return false;
-                }
-                line--;
             }
             return true;
         }
@@ -968,8 +1016,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_can_only_be_used_in_a_ts_file, "?"));
                                 return;
                             }
-
-                        // Pass through
+                            // falls through
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
@@ -1049,7 +1096,7 @@ namespace ts {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
                                 return;
                             }
-                            // pass through
+                            // falls through
                         case SyntaxKind.VariableStatement:
                             // Check modifiers
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration | VariableStatement>parent).modifiers) {
@@ -1097,7 +1144,8 @@ namespace ts {
                                 if (isConstValid) {
                                     continue;
                                 }
-                                // Fallthrough to report error
+                                // to report error,
+                                // falls through
                             case SyntaxKind.PublicKeyword:
                             case SyntaxKind.PrivateKeyword:
                             case SyntaxKind.ProtectedKeyword:
@@ -1368,7 +1416,7 @@ namespace ts {
 
                 // If the file was previously found via a node_modules search, but is now being processed as a root file,
                 // then everything it sucks in may also be marked incorrectly, and needs to be checked again.
-                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth == 0) {
+                if (file && sourceFilesFoundSearchingNodeModules.get(file.path) && currentNodeModulesDepth === 0) {
                     sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);
@@ -1523,11 +1571,11 @@ namespace ts {
         function processImportedModules(file: SourceFile) {
             collectExternalModuleReferences(file);
             if (file.imports.length || file.moduleAugmentations.length) {
-                file.resolvedModules = createMap<ResolvedModuleFull>();
                 // Because global augmentation doesn't have string literal name, we can check for global augmentation as such.
                 const nonGlobalAugmentation = filter(file.moduleAugmentations, (moduleAugmentation) => moduleAugmentation.kind === SyntaxKind.StringLiteral);
                 const moduleNames = map(concatenate(file.imports, nonGlobalAugmentation), getTextOfLiteral);
-                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file);
+                const oldProgramState = { program: oldProgram, file, modifiedFilePaths };
+                const resolutions = resolveModuleNamesReusingOldState(moduleNames, getNormalizedAbsolutePath(file.fileName, currentDirectory), file, oldProgramState);
                 Debug.assert(resolutions.length === moduleNames.length);
                 for (let i = 0; i < moduleNames.length; i++) {
                     const resolution = resolutions[i];
