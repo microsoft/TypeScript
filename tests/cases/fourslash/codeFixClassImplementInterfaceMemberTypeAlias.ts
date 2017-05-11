@@ -5,7 +5,7 @@
 //// class C implements I {[| |]}
 
 verify.rangeAfterCodeFix(`
-    test(a: MyType): void {
+    test(a: [string, number]): void {
         throw new Error("Method not implemented.");
     }
 `);
