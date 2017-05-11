@@ -84,6 +84,9 @@
 ////class M extends B {
 ////    private static identi/*classThatStartedWritingIdentifierAfterPrivateStaticModifier*/
 ////}
+////class N extends B {
+////    async /*classThatHasWrittenAsyncKeyword*/
+////}
 
 const allowedKeywordCount = verify.allowedClassElementKeywords.length;
 type CompletionInfo = [string, string];
@@ -171,6 +174,7 @@ const classInstanceElementLocations = [
     "classThatStartedWritingIdentifierOfGetAccessor",
     "classThatStartedWritingIdentifierOfSetAccessor",
     "classThatStartedWritingIdentifierAfterModifier",
+    "classThatHasWrittenAsyncKeyword"
 ];
 verifyClassElementLocations(instanceMemberInfo, classInstanceElementLocations);
 

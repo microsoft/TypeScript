@@ -3426,7 +3426,8 @@ namespace FourSlashInterface {
             "readonly",
             "get",
             "set",
-            "constructor"
+            "constructor",
+            "async"
         ];
 
         constructor(protected state: FourSlash.TestState, private negative = false) {

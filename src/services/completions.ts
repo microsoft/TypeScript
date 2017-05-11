@@ -618,7 +618,8 @@ namespace ts.Completions {
 
             if (classLikeContainer = tryGetClassLikeCompletionContainer(contextToken)) {
                 // cursor inside class declaration
-                return tryGetClassLikeCompletionSymbols(classLikeContainer);
+                getGetClassLikeCompletionSymbols(classLikeContainer);
+                return true;
             }
 
             if (jsxContainer = tryGetContainingJsxElement(contextToken)) {
@@ -929,7 +930,7 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration): boolean {
+        function getGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration) {
             // We're looking up possible property names from parent type.
             isMemberCompletion = true;
             // Declaring new property/method/accessor
@@ -965,8 +966,6 @@ namespace ts.Completions {
                         baseProperty =>  baseProperty.getDeclarations() && !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
                 }
             }
-
-            return true;
         }
 
         /**
@@ -1431,6 +1430,7 @@ namespace ts.Completions {
             case SyntaxKind.ReadonlyKeyword:
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
+            case SyntaxKind.AsyncKeyword:
                 return true;
         }
     }
