@@ -4158,6 +4158,7 @@ namespace ts {
             const types: Type[] = [];
             let definedInConstructor = false;
             let definedInMethod = false;
+            let jsDocType: Type;
             for (const declaration of symbol.declarations) {
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                     declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
@@ -4176,19 +4177,26 @@ namespace ts {
                     }
                 }
 
-                if (expression.flags & NodeFlags.JavaScriptFile) {
-                    // If there is a JSDoc type, use it
-                    const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                    if (type && type !== unknownType) {
-                        types.push(getWidenedType(type));
-                        continue;
+                // If there is a JSDoc type, use it
+                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                if (type) {
+                    const declarationType = getWidenedType(type);
+                    if (!jsDocType) {
+                        jsDocType = declarationType;
+                    }
+                    else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
+                        const name = getNameOfDeclaration(declaration);
+                        error(name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(name), typeToString(jsDocType), typeToString(declarationType));
                     }
                 }
-
-                types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                else if (!jsDocType) {
+                    // If we don't have an explicit JSDoc type, get the type from the expression.
+                    types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                }
             }
 
-            return getWidenedType(addOptionality(getUnionType(types, /*subtypeReduction*/ true), definedInMethod && !definedInConstructor));
+            const type = jsDocType || getUnionType(types, /*subtypeReduction*/ true);
+            return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -13229,7 +13237,7 @@ namespace ts {
                 }
                 return result;
             }
-       }
+        }
 
         function isValidSpreadType(type: Type): boolean {
             return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
