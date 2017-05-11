@@ -212,6 +212,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (!decl.importClause) {
+                return;
+            }
+
             const { importClause } = decl;
 
             const { namedBindings } = importClause;
@@ -326,7 +330,7 @@ namespace ts.FindAllReferences {
 
     /** Calls `action` for each import, re-export, or require() in a file. */
     function forEachImport(sourceFile: SourceFile, action: (importStatement: ImporterOrCallExpression, imported: StringLiteral) => void): void {
-        if (sourceFile.externalModuleIndicator) {
+        if (sourceFile.externalModuleIndicator || sourceFile.imports !== undefined) {
             for (const moduleSpecifier of sourceFile.imports) {
                 action(importerFromModuleSpecifier(moduleSpecifier), moduleSpecifier);
             }
@@ -354,27 +358,21 @@ namespace ts.FindAllReferences {
                     }
                 }
             });
-
-            if (sourceFile.flags & NodeFlags.JavaScriptFile) {
-                // Find all 'require()' calls.
-                sourceFile.forEachChild(function recur(node: Node): void {
-                    if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
-                        action(node, node.arguments[0] as StringLiteral);
-                    } else {
-                        node.forEachChild(recur);
-                    }
-                });
-            }
         }
     }
 
-    function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): Importer {
+    function importerFromModuleSpecifier(moduleSpecifier: StringLiteral): ImporterOrCallExpression {
         const decl = moduleSpecifier.parent;
-        if (decl.kind === SyntaxKind.ImportDeclaration || decl.kind === SyntaxKind.ExportDeclaration) {
-            return decl as ImportDeclaration | ExportDeclaration;
+        switch (decl.kind) {
+            case SyntaxKind.CallExpression:
+            case SyntaxKind.ImportDeclaration:
+            case SyntaxKind.ExportDeclaration:
+                return decl as ImportDeclaration | ExportDeclaration | CallExpression;
+            case SyntaxKind.ExternalModuleReference:
+                return (decl as ExternalModuleReference).parent;
+            default:
+                Debug.assert(false);
         }
-        Debug.assert(decl.kind === SyntaxKind.ExternalModuleReference);
-        return (decl as ExternalModuleReference).parent;
     }
 
     export interface ImportedSymbol {
@@ -387,6 +385,7 @@ namespace ts.FindAllReferences {
         symbol: Symbol;
         exportInfo: ExportInfo;
     }
+
     /**
      * Given a local reference, we might notice that it's an import/export and recursively search for references of that.
      * If at an import, look locally for the symbol it imports.
@@ -398,7 +397,7 @@ namespace ts.FindAllReferences {
         return comingFromExport ? getExport() : getExport() || getImport();
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
-            const { parent } = node;
+            const parent = node.parent!;
             if (symbol.flags & SymbolFlags.Export) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
@@ -414,8 +413,8 @@ namespace ts.FindAllReferences {
                 }
             }
             else {
-                const exportNode = parent.kind === SyntaxKind.VariableDeclaration ? getAncestor(parent, SyntaxKind.VariableStatement) : parent;
-                if (hasModifier(exportNode, ModifierFlags.Export)) {
+                const exportNode = getExportNode(parent);
+                if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
                     if (exportNode.kind === SyntaxKind.ImportEqualsDeclaration && (exportNode as ImportEqualsDeclaration).moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
                         if (comingFromExport) {
@@ -492,6 +491,16 @@ namespace ts.FindAllReferences {
         }
     }
 
+    // If a reference is a variable declaration, the exported node would be the variable statement.
+    function getExportNode(parent: Node): Node | undefined {
+        if (parent.kind === SyntaxKind.VariableDeclaration) {
+            const p = parent as ts.VariableDeclaration;
+            return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
+        } else {
+            return parent;
+        }
+    }
+
     function isNodeImport(node: Node): { isNamedImport: boolean } | undefined {
         const { parent } = node;
         switch (parent.kind) {
@@ -522,7 +531,10 @@ namespace ts.FindAllReferences {
             return symbol.name;
         }
 
-        const name = forEach(symbol.declarations, ({ name }) => name && name.kind === SyntaxKind.Identifier && name.text);
+        const name = forEach(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier && name.text;
+        });
         Debug.assert(!!name);
         return name;
     }

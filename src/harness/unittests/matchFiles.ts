@@ -460,8 +460,7 @@ namespace ts {
                         "c:/dev/x": ts.WatchDirectoryFlags.None
                     },
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveHost, caseInsensitiveBasePath);
-                assertParsed(actual, expected);
+                validateMatches(expected, json, caseInsensitiveHost, caseInsensitiveBasePath);
             });
 
             it("same named declarations are excluded", () => {
@@ -963,8 +962,7 @@ namespace ts {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     }
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assertParsed(actual, expected);
+                validateMatches(expected, json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
             });
             it("with jsx=none, allowJs=true", () => {
                 const json = {
@@ -1040,8 +1038,7 @@ namespace ts {
                         "c:/dev": ts.WatchDirectoryFlags.Recursive
                     }
                 };
-                const actual = ts.parseJsonConfigFileContent(json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
-                assertParsed(actual, expected);
+                validateMatches(expected, json, caseInsensitiveMixedExtensionHost, caseInsensitiveBasePath);
             });
             it("exclude .min.js files using wildcards", () => {
                 const json = {

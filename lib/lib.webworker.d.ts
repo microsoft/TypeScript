@@ -74,11 +74,15 @@ interface MessageEventInit extends EventInit {
 }
 
 interface NotificationOptions {
-    dir?: string;
+    dir?: NotificationDirection;
     lang?: string;
     body?: string;
     tag?: string;
     icon?: string;
+}
+
+interface ObjectURLOptions {
+    oneTimeOnly?: boolean;
 }
 
 interface PushSubscriptionOptionsInit {
@@ -91,11 +95,11 @@ interface RequestInit {
     headers?: any;
     body?: any;
     referrer?: string;
-    referrerPolicy?: string;
-    mode?: string;
-    credentials?: string;
-    cache?: string;
-    redirect?: string;
+    referrerPolicy?: ReferrerPolicy;
+    mode?: RequestMode;
+    credentials?: RequestCredentials;
+    cache?: RequestCache;
+    redirect?: RequestRedirect;
     integrity?: string;
     keepalive?: boolean;
     window?: any;
@@ -109,7 +113,7 @@ interface ResponseInit {
 
 interface ClientQueryOptions {
     includeUncontrolled?: boolean;
-    type?: string;
+    type?: ClientType;
 }
 
 interface ExtendableEventInit extends EventInit {
@@ -419,9 +423,9 @@ declare var Event: {
 }
 
 interface EventTarget {
-    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventTarget: {
@@ -481,7 +485,7 @@ declare var Headers: {
 }
 
 interface IDBCursor {
-    readonly direction: string;
+    readonly direction: IDBCursorDirection;
     key: IDBKeyRange | IDBValidKey;
     readonly primaryKey: any;
     source: IDBObjectStore | IDBIndex;
@@ -633,7 +637,7 @@ interface IDBRequest extends EventTarget {
     readonly error: DOMError;
     onerror: (this: IDBRequest, ev: Event) => any;
     onsuccess: (this: IDBRequest, ev: Event) => any;
-    readonly readyState: string;
+    readonly readyState: IDBRequestReadyState;
     readonly result: any;
     source: IDBObjectStore | IDBIndex | IDBCursor;
     readonly transaction: IDBTransaction;
@@ -655,7 +659,7 @@ interface IDBTransactionEventMap {
 interface IDBTransaction extends EventTarget {
     readonly db: IDBDatabase;
     readonly error: DOMError;
-    readonly mode: string;
+    readonly mode: IDBTransactionMode;
     onabort: (this: IDBTransaction, ev: Event) => any;
     oncomplete: (this: IDBTransaction, ev: Event) => any;
     onerror: (this: IDBTransaction, ev: Event) => any;
@@ -748,14 +752,14 @@ interface NotificationEventMap {
 
 interface Notification extends EventTarget {
     readonly body: string;
-    readonly dir: string;
+    readonly dir: NotificationDirection;
     readonly icon: string;
     readonly lang: string;
     onclick: (this: Notification, ev: Event) => any;
     onclose: (this: Notification, ev: Event) => any;
     onerror: (this: Notification, ev: Event) => any;
     onshow: (this: Notification, ev: Event) => any;
-    readonly permission: string;
+    readonly permission: NotificationPermission;
     readonly tag: string;
     readonly title: string;
     close(): void;
@@ -766,7 +770,7 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
-    requestPermission(callback?: NotificationPermissionCallback): Promise<string>;
+    requestPermission(callback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 }
 
 interface Performance {
@@ -883,7 +887,7 @@ declare var ProgressEvent: {
 
 interface PushManager {
     getSubscription(): Promise<PushSubscription>;
-    permissionState(options?: PushSubscriptionOptionsInit): Promise<string>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
 
@@ -895,7 +899,7 @@ declare var PushManager: {
 interface PushSubscription {
     readonly endpoint: USVString;
     readonly options: PushSubscriptionOptions;
-    getKey(name: string): ArrayBuffer | null;
+    getKey(name: PushEncryptionKeyName): ArrayBuffer | null;
     toJSON(): any;
     unsubscribe(): Promise<boolean>;
 }
@@ -938,18 +942,18 @@ declare var ReadableStreamReader: {
 }
 
 interface Request extends Object, Body {
-    readonly cache: string;
-    readonly credentials: string;
-    readonly destination: string;
+    readonly cache: RequestCache;
+    readonly credentials: RequestCredentials;
+    readonly destination: RequestDestination;
     readonly headers: Headers;
     readonly integrity: string;
     readonly keepalive: boolean;
     readonly method: string;
-    readonly mode: string;
-    readonly redirect: string;
+    readonly mode: RequestMode;
+    readonly redirect: RequestRedirect;
     readonly referrer: string;
-    readonly referrerPolicy: string;
-    readonly type: string;
+    readonly referrerPolicy: ReferrerPolicy;
+    readonly type: RequestType;
     readonly url: string;
     clone(): Request;
 }
@@ -965,7 +969,7 @@ interface Response extends Object, Body {
     readonly ok: boolean;
     readonly status: number;
     readonly statusText: string;
-    readonly type: string;
+    readonly type: ResponseType;
     readonly url: string;
     clone(): Response;
 }
@@ -982,7 +986,7 @@ interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
 interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: (this: ServiceWorker, ev: Event) => any;
     readonly scriptURL: USVString;
-    readonly state: string;
+    readonly state: ServiceWorkerState;
     postMessage(message: any, transfer?: any[]): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -1026,6 +1030,29 @@ interface SyncManager {
 declare var SyncManager: {
     prototype: SyncManager;
     new(): SyncManager;
+}
+
+interface URL {
+    hash: string;
+    host: string;
+    hostname: string;
+    href: string;
+    readonly origin: string;
+    password: string;
+    pathname: string;
+    port: string;
+    protocol: string;
+    search: string;
+    username: string;
+    readonly searchParams: URLSearchParams;
+    toString(): string;
+}
+
+declare var URL: {
+    prototype: URL;
+    new(url: string, base?: string): URL;
+    createObjectURL(object: any, options?: ObjectURLOptions): string;
+    revokeObjectURL(url: string): void;
 }
 
 interface WebSocketEventMap {
@@ -1091,7 +1118,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
-    responseType: string;
+    responseType: XMLHttpRequestResponseType;
     readonly responseURL: string;
     readonly responseXML: any;
     readonly status: number;
@@ -1242,7 +1269,7 @@ interface XMLHttpRequestEventTarget {
 }
 
 interface Client {
-    readonly frameType: string;
+    readonly frameType: FrameType;
     readonly id: string;
     readonly url: USVString;
     postMessage(message: any, transfer?: any[]): void;
@@ -1405,7 +1432,7 @@ declare var SyncEvent: {
 
 interface WindowClient extends Client {
     readonly focused: boolean;
-    readonly visibilityState: string;
+    readonly visibilityState: VisibilityState;
     focus(): Promise<WindowClient>;
     navigate(url: USVString): Promise<WindowClient>;
 }
@@ -1427,6 +1454,8 @@ interface WorkerGlobalScope extends EventTarget, WorkerUtils, WindowConsole, Glo
     readonly performance: Performance;
     readonly self: WorkerGlobalScope;
     msWriteProfilerMark(profilerMarkName: string): void;
+    createImageBitmap(image: ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     addEventListener<K extends keyof WorkerGlobalScopeEventMap>(type: K, listener: (this: WorkerGlobalScope, ev: WorkerGlobalScopeEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 }
@@ -1485,6 +1514,56 @@ interface ErrorEventInit {
     lineno?: number;
     conlno?: number;
     error?: any;
+}
+
+interface ImageBitmapOptions {
+    imageOrientation?: "none" | "flipY";
+    premultiplyAlpha?: "none" | "premultiply" | "default";
+    colorSpaceConversion?: "none" | "default";
+    resizeWidth?: number;
+    resizeHeight?: number;
+    resizeQuality?: "pixelated" | "low" | "medium" | "high";
+}
+
+interface ImageBitmap {
+    readonly width: number;
+    readonly height: number;
+    close(): void;
+}
+
+interface URLSearchParams {
+    /**
+      * Appends a specified key/value pair as a new search parameter.
+      */
+    append(name: string, value: string): void;
+    /**
+      * Deletes the given search parameter, and its associated value, from the list of all search parameters.
+      */
+    delete(name: string): void;
+    /**
+      * Returns the first value associated to the given search parameter.
+      */
+    get(name: string): string | null;
+    /**
+      * Returns all the values association with a given search parameter.
+      */
+    getAll(name: string): string[];
+    /**
+      * Returns a Boolean indicating if such a search parameter exists.
+      */
+    has(name: string): boolean;
+    /**
+      * Sets the value associated to a given search parameter to the given value. If there were several values, delete the others.
+      */
+    set(name: string, value: string): void;
+}
+
+declare var URLSearchParams: {
+    prototype: URLSearchParams;
+    /**
+      * Constructor returning a URLSearchParams object.
+      */
+    new (init?: string | URLSearchParams): URLSearchParams;
 }
 
 interface BlobPropertyBag {
@@ -1681,6 +1760,15 @@ interface JsonWebKey {
     k?: string;
 }
 
+interface EventListenerOptions {
+    capture?: boolean;
+}
+
+interface AddEventListenerOptions extends EventListenerOptions {
+    passive?: boolean;
+    once?: boolean;
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -1702,10 +1790,10 @@ interface FunctionStringCallback {
     (data: string): void;
 }
 interface ForEachCallback {
-    (keyId: any, status: string): void;
+    (keyId: any, status: MediaKeyStatus): void;
 }
 interface NotificationPermissionCallback {
-    (permission: string): void;
+    (permission: NotificationPermission): void;
 }
 declare var onmessage: (this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any;
 declare function close(): void;
@@ -1717,8 +1805,10 @@ declare var onerror: (this: DedicatedWorkerGlobalScope, ev: ErrorEvent) => any;
 declare var performance: Performance;
 declare var self: WorkerGlobalScope;
 declare function msWriteProfilerMark(profilerMarkName: string): void;
+declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function dispatchEvent(evt: Event): boolean;
-declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 declare var indexedDB: IDBFactory;
 declare var msIndexedDB: IDBFactory;
 declare var navigator: WorkerNavigator;
@@ -1737,7 +1827,7 @@ declare function btoa(rawString: string): string;
 declare var console: Console;
 declare function fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
 declare function dispatchEvent(evt: Event): boolean;
-declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 declare function addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, useCapture?: boolean): void;
 declare function addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
 type AlgorithmIdentifier = string | Algorithm;
@@ -1747,3 +1837,25 @@ type RequestInfo = Request | string;
 type USVString = string;
 type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
+type FormDataEntryValue = string | File;
+type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
+type IDBRequestReadyState = "pending" | "done";
+type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type MediaKeyStatus = "usable" | "expired" | "output-downscaled" | "output-not-allowed" | "status-pending" | "internal-error";
+type NotificationDirection = "auto" | "ltr" | "rtl";
+type NotificationPermission = "default" | "denied" | "granted";
+type PushEncryptionKeyName = "p256dh" | "auth";
+type PushPermissionState = "granted" | "denied" | "prompt";
+type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin-only" | "origin-when-cross-origin" | "unsafe-url";
+type RequestCache = "default" | "no-store" | "reload" | "no-cache" | "force-cache";
+type RequestCredentials = "omit" | "same-origin" | "include";
+type RequestDestination = "" | "document" | "sharedworker" | "subresource" | "unknown" | "worker";
+type RequestMode = "navigate" | "same-origin" | "no-cors" | "cors";
+type RequestRedirect = "follow" | "error" | "manual";
+type RequestType = "" | "audio" | "font" | "image" | "script" | "style" | "track" | "video";
+type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
+type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
+type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
+type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
+type ClientType = "window" | "worker" | "sharedworker" | "all";
+type FrameType = "auxiliary" | "top-level" | "nested" | "none";

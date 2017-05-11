@@ -16,6 +16,6 @@ System.register("pi", [], function (exports_1, context_1) {
 
 //// [app.d.ts]
 declare module "pi" {
-    var _default: 3.14159;
+    const _default: 3.14159;
     export default _default;
 }

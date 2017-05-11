@@ -47,7 +47,7 @@ define(["require", "exports", "server", "server", "server", "server", "server"],
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
-declare var _default: {};
+declare const _default: {};
 export default _default;
 //// [client.d.ts]
 export declare var x1: number;

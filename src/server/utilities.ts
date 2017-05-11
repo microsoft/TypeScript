@@ -217,7 +217,7 @@ namespace ts.server {
         }
 
         public scheduleCollect() {
-            if (!this.host.gc || this.timerId != undefined) {
+            if (!this.host.gc || this.timerId !== undefined) {
                 // no global.gc or collection was already scheduled - skip this request
                 return;
             }

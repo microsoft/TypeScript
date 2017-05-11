@@ -1,4 +1,4 @@
-﻿{
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -867,13 +871,25 @@
         "category": "Error",
         "code": 1319
     },
-    "String literal with double quotes expected.": {
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1320
     },
-    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1321
+    },
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1322
+    },
+    "String literal with double quotes expected.": {
+        "category": "Error",
+        "code": 1323
+    },
+    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+        "category": "Error",
+        "code": 1324
     },
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1839,6 +1855,14 @@
         "category": "Error",
         "code": 2550
     },
+    "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2551
+    },
+    "Cannot find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2552
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2114,6 +2138,10 @@
     "Cannot use namespace '{0}' as a type.": {
         "category": "Error",
         "code": 2709
+    },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3193,7 +3221,18 @@
         "category": "Message",
         "code": 6181
     },
-
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": 6182
+    },
+    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+        "category": "Message",
+        "code": 6183
+    },
+    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+        "category": "Message",
+        "code": 6184
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3297,6 +3336,10 @@
     "Variable '{0}' implicitly has type '{1}' in some locations where its type cannot be determined.": {
         "category": "Error",
         "code": 7034
+    },
+    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+        "category": "Error",
+        "code": 7035
     },
     "You cannot rename this element.": {
         "category": "Error",
@@ -3516,7 +3559,10 @@
         "category": "Message",
         "code": 90021
     },
-
+    "Change spelling to '{0}'.": {
+        "category": "Message",
+        "code": 90022
+    },
 
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

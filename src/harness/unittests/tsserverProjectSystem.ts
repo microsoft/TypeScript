@@ -3208,6 +3208,122 @@ namespace ts.projectSystem {
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
         });
+
+        it("should not report bind errors for declaration files with skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: "let x = 1;"
+            };
+            const dTsFile1 = {
+                path: "/a/dTsFile1.d.ts",
+                content: `
+                declare var x: number;`
+            };
+            const dTsFile2 = {
+                path: "/a/dTsFile2.d.ts",
+                content: `
+                declare var x: string;`
+            };
+            const host = createServerHost([jsconfigFile, jsFile, dTsFile1, dTsFile2]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const dTsFile1GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile1.path }
+            );
+            const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
+            assert.isTrue(error1Result.length === 0);
+
+             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile2.path }
+            );
+            const error2Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile2GetErrRequest).response;
+            assert.isTrue(error2Result.length === 0);
+        });
+
+        it("should report semanitc errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `
+                // @ts-check
+                let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
+
+        it("should report semanitc errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `
+                // @ts-check
+                let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsconfigFile, jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
+
+        it("should report semanitc errors for configured js project with checkJs=true and skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        checkJs: true,
+                        skipLibCheck: true
+                    },
+                })
+            };
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsconfigFile, jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
     });
 
     describe("non-existing directories listed in config file input array", () => {
@@ -3232,7 +3348,7 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 1);
 
             const configuredProject = projectService.configuredProjects[0];
-            assert.isTrue(configuredProject.getFileNames().length == 0);
+            assert.isTrue(configuredProject.getFileNames().length === 0);
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
@@ -3494,6 +3610,30 @@ namespace ts.projectSystem {
             const service = createProjectService(host);
             service.openExternalProject({ projectFileName: "p", rootFiles: [toExternalFile(f1.path)], options: { importHelpers: true } });
             service.checkNumberOfProjects({ externalProjects: 1 });
+        });
+    });
+
+    describe("searching for config file", () => {
+        it("should stop at projectRootPath if given", () => {
+            const f1 = {
+                path: "/a/file1.ts",
+                content: ""
+            };
+            const configFile = {
+                path: "/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
+
+            checkNumberOfConfiguredProjects(service, 0);
+            checkNumberOfInferredProjects(service, 1);
+
+            service.closeClientFile(f1.path);
+            service.openClientFile(f1.path);
+            checkNumberOfConfiguredProjects(service, 1);
+            checkNumberOfInferredProjects(service, 0);
         });
     });
 

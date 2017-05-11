@@ -11,7 +11,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): erro
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS1005: '>' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS1005: ')' expected.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,17): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,48): error TS1005: ';' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(45,2): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
@@ -19,7 +19,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,32): err
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS1005: ')' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,41): error TS2304: Cannot find name 'is'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS1005: ';' expected.
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS2304: Cannot find name 'string'.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,44): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): error TS1005: ';' expected.
 
 
@@ -91,7 +91,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
                     ~~~~~~
 !!! error TS1005: ')' expected.
                     ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                    ~
 !!! error TS1005: ';' expected.
     	str = numOrStr; // Error, no narrowing occurred
@@ -110,7 +110,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
                                                ~~~~~~
 !!! error TS1005: ';' expected.
                                                ~~~~~~
-!!! error TS2304: Cannot find name 'string'.
+!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
                                                      ~
 !!! error TS1005: ';' expected.
     }
