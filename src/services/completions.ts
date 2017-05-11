@@ -221,7 +221,7 @@ namespace ts.Completions {
     function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, typeChecker: TypeChecker): CompletionInfo | undefined {
         const candidates: Signature[] = [];
         const entries: CompletionEntry[] = [];
-        const uniques = createMap<string>();
+        const uniques = createMap<true>();
 
         typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
 
@@ -259,7 +259,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker, uniques = createMap<string>()): void {
+    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker, uniques = createMap<true>()): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
             type = typeChecker.getBaseConstraintOfType(type);
         }
@@ -273,8 +273,8 @@ namespace ts.Completions {
         }
         else if (type.flags & TypeFlags.StringLiteral) {
             const name = (<LiteralType>type).text;
-            if (!uniques.get(name)) {
-                uniques.set(name, name);
+            if (!uniques.has(name)) {
+                uniques.set(name, true);
                 result.push({
                     name,
                     kindModifiers: ScriptElementKindModifier.none,
