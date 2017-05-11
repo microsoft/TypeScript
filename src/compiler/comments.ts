@@ -419,9 +419,7 @@ namespace ts {
                 commentPos + 2 < commentEnd &&
                 currentText.charCodeAt(commentPos + 2) === CharacterCodes.slash) {
                 const textSubStr = currentText.substring(commentPos, commentEnd);
-                return textSubStr.match(fullTripleSlashReferencePathRegEx) ||
-                    textSubStr.match(fullTripleSlashAMDReferencePathRegEx) ?
-                    true : false;
+                return isTripleSlashPathReferenceOrAmdDependency(textSubStr);
             }
             return false;
         }

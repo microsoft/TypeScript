@@ -5828,6 +5828,7 @@ namespace ts {
             const triviaScanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
             const referencedFiles: FileReference[] = [];
             const typeReferenceDirectives: FileReference[] = [];
+            const libReferenceDirectives: FileReference[] = [];
             const amdDependencies: { path: string; name: string }[] = [];
             let amdModuleName: string;
             let checkJsDirective: CheckJsDirective = undefined;
@@ -5861,6 +5862,9 @@ namespace ts {
                     if (fileReference) {
                         if (referencePathMatchResult.isTypeReferenceDirective) {
                             typeReferenceDirectives.push(fileReference);
+                        }
+                        else if (referencePathMatchResult.isLibReferenceDirective) {
+                            libReferenceDirectives.push(fileReference);
                         }
                         else {
                             referencedFiles.push(fileReference);
@@ -5907,6 +5911,7 @@ namespace ts {
 
             sourceFile.referencedFiles = referencedFiles;
             sourceFile.typeReferenceDirectives = typeReferenceDirectives;
+            sourceFile.libReferenceDirectives = libReferenceDirectives;
             sourceFile.amdDependencies = amdDependencies;
             sourceFile.moduleName = amdModuleName;
             sourceFile.checkJsDirective = checkJsDirective;

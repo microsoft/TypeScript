@@ -1,0 +1,6 @@
+=== tests/cases/compiler/libReferenceDirective.ts ===
+/// <reference lib="es2015" />
+const m = new Map<string, number>();
+>m : Symbol(m, Decl(libReferenceDirective.ts, 1, 5))
+>Map : Symbol(Map, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+

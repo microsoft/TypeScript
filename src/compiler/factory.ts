@@ -1978,6 +1978,7 @@ namespace ts {
             if (node.moduleName !== undefined) updated.moduleName = node.moduleName;
             if (node.referencedFiles !== undefined) updated.referencedFiles = node.referencedFiles;
             if (node.typeReferenceDirectives !== undefined) updated.typeReferenceDirectives = node.typeReferenceDirectives;
+            if (node.libReferenceDirectives !== undefined) updated.libReferenceDirectives = node.libReferenceDirectives;
             if (node.languageVariant !== undefined) updated.languageVariant = node.languageVariant;
             if (node.isDeclarationFile !== undefined) updated.isDeclarationFile = node.isDeclarationFile;
             if (node.renamedDependencies !== undefined) updated.renamedDependencies = node.renamedDependencies;

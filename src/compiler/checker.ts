@@ -14278,46 +14278,7 @@ namespace ts {
          * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
          */
         function getSpellingSuggestionForName(name: string, symbols: Symbol[], meaning: SymbolFlags): Symbol | undefined {
-            const worstDistance = name.length * 0.4;
-            const maximumLengthDifference = Math.min(3, name.length * 0.34);
-            let bestDistance = Number.MAX_VALUE;
-            let bestCandidate = undefined;
-            if (name.length > 30) {
-                return undefined;
-            }
-            name = name.toLowerCase();
-            for (const candidate of symbols) {
-                if (candidate.flags & meaning &&
-                    candidate.name &&
-                    Math.abs(candidate.name.length - name.length) < maximumLengthDifference) {
-                    const candidateName = candidate.name.toLowerCase();
-                    if (candidateName === name) {
-                        return candidate;
-                    }
-                    if (candidateName.length < 3 ||
-                        name.length < 3 ||
-                        candidateName === "eval" ||
-                        candidateName === "intl" ||
-                        candidateName === "undefined" ||
-                        candidateName === "map" ||
-                        candidateName === "nan" ||
-                        candidateName === "set") {
-                        continue;
-                    }
-                    const distance = levenshtein(name, candidateName);
-                    if (distance > worstDistance) {
-                        continue;
-                    }
-                    if (distance < 3) {
-                        return candidate;
-                    }
-                    else if (distance < bestDistance) {
-                        bestDistance = distance;
-                        bestCandidate = candidate;
-                    }
-                }
-            }
-            return bestCandidate;
+            return getSpellingSuggestion(name, symbols, ["eval", "intl", "undefined", "map", "set"], candidate => candidate.flags & meaning ? candidate.name : undefined);
         }
 
         function markPropertyAsReferenced(prop: Symbol) {

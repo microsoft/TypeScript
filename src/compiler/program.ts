@@ -295,6 +295,7 @@ namespace ts {
         let program: Program;
         let files: SourceFile[] = [];
         let commonSourceDirectory: string;
+        let libDirectory: string;
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: Map<string>;
@@ -370,7 +371,7 @@ namespace ts {
 
         const structuralIsReused = tryReuseStructureFromOldProgram();
         if (structuralIsReused !== StructureIsReused.Completely) {
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
             const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
@@ -393,12 +394,12 @@ namespace ts {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 if (!options.lib) {
-                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true);
+                    processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                 }
                 else {
-                    const libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
+                    const libDirectory = getLibDirectory();
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true);
+                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                     });
                 }
             }
@@ -461,6 +462,13 @@ namespace ts {
                 }
             }
             return commonSourceDirectory;
+        }
+
+        function getLibDirectory() {
+            if (libDirectory === undefined) {
+                libDirectory = host.getDefaultLibLocation ? host.getDefaultLibLocation() : getDirectoryPath(host.getDefaultLibFileName(options));
+            }
+            return libDirectory;
         }
 
         function getClassifiableNames() {
@@ -670,6 +678,11 @@ namespace ts {
 
                 if (oldSourceFile !== newSourceFile) {
                     // The `newSourceFile` object was created for the new program.
+
+                    if (!arrayIsEqualTo(oldSourceFile.libReferenceDirectives, newSourceFile.libReferenceDirectives, fileReferenceIsEqualTo)) {
+                        // 'lib' references has changed, matches behavior in changesAffectModuleResolution
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
+                    }
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
                         // value of no-default-lib has changed
@@ -1230,8 +1243,8 @@ namespace ts {
             return sortAndDeduplicateDiagnostics(allDiagnostics);
         }
 
-        function processRootFile(fileName: string, isDefaultLib: boolean) {
-            processSourceFile(normalizePath(fileName), isDefaultLib);
+        function processRootFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean) {
+            processSourceFile(normalizePath(fileName), isDefaultLib, ignoreNoDefaultLib);
         }
 
         function fileReferenceIsEqualTo(a: FileReference, b: FileReference): boolean {
@@ -1348,7 +1361,7 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
+        function processSourceFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
             let diagnosticArgument: string[];
             let diagnostic: DiagnosticMessage;
             if (hasExtension(fileName)) {
@@ -1356,7 +1369,7 @@ namespace ts {
                     diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
                     diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
+                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, ignoreNoDefaultLib, refFile, refPos, refEnd)) {
                     diagnostic = Diagnostics.File_0_not_found;
                     diagnosticArgument = [fileName];
                 }
@@ -1366,13 +1379,13 @@ namespace ts {
                 }
             }
             else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
+                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, ignoreNoDefaultLib, refFile, refPos, refEnd);
                 if (!nonTsFile) {
                     if (options.allowNonTsExtensions) {
                         diagnostic = Diagnostics.File_0_not_found;
                         diagnosticArgument = [fileName];
                     }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
+                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, ignoreNoDefaultLib, refFile, refPos, refEnd))) {
                         diagnostic = Diagnostics.File_0_not_found;
                         fileName += ".ts";
                         diagnosticArgument = [fileName];
@@ -1401,7 +1414,7 @@ namespace ts {
         }
 
         // Get source file from normalized fileName
-        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
+        function findSourceFile(fileName: string, path: Path, isDefaultLib: boolean, ignoreNoDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): SourceFile {
             if (filesByName.contains(path)) {
                 const file = filesByName.get(path);
                 // try to check if we've already seen this file but with a different casing in path
@@ -1416,6 +1429,7 @@ namespace ts {
                     sourceFilesFoundSearchingNodeModules.set(file.path, false);
                     if (!options.noResolve) {
                         processReferencedFiles(file, isDefaultLib);
+                        processLibReferenceDirectives(file);
                         processTypeReferenceDirectives(file);
                     }
 
@@ -1460,10 +1474,11 @@ namespace ts {
                     }
                 }
 
-                skipDefaultLib = skipDefaultLib || file.hasNoDefaultLib;
+                skipDefaultLib = skipDefaultLib || (file.hasNoDefaultLib && !ignoreNoDefaultLib);
 
                 if (!options.noResolve) {
                     processReferencedFiles(file, isDefaultLib);
+                    processLibReferenceDirectives(file);
                     processTypeReferenceDirectives(file);
                 }
 
@@ -1484,7 +1499,7 @@ namespace ts {
         function processReferencedFiles(file: SourceFile, isDefaultLib: boolean) {
             forEach(file.referencedFiles, ref => {
                 const referencedFileName = resolveTripleslashReference(ref.fileName, file.fileName);
-                processSourceFile(referencedFileName, isDefaultLib, file, ref.pos, ref.end);
+                processSourceFile(referencedFileName, isDefaultLib, /*ignoreNoDefaultLib*/ false, file, ref.pos, ref.end);
             });
         }
 
@@ -1515,7 +1530,7 @@ namespace ts {
             if (resolvedTypeReferenceDirective) {
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, refFile, refPos, refEnd);
                 }
                 else {
                     // If we already resolved to this file, it must have been a secondary reference. Check file contents
@@ -1538,7 +1553,7 @@ namespace ts {
                     }
                     else {
                         // First resolution of this library
-                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, refFile, refPos, refEnd);
+                        processSourceFile(resolvedTypeReferenceDirective.resolvedFileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, refFile, refPos, refEnd);
                     }
                 }
             }
@@ -1549,6 +1564,30 @@ namespace ts {
             if (saveResolution) {
                 resolvedTypeReferenceDirectives.set(typeReferenceDirective, resolvedTypeReferenceDirective);
             }
+        }
+
+        function processLibReferenceDirectives(file: SourceFile) {
+            const libDirectory = getLibDirectory();
+            forEach(file.libReferenceDirectives, libReference => {
+                const libName = libReference.fileName.toLocaleLowerCase();
+                const libFileName = libMap.get(libName);
+                if (libFileName) {
+                    // we ignore any 'no-default-lib' reference set on this import.
+                    processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
+                }
+                else {
+                    let unqualifiedLibName = libName;
+                    if (startsWith(unqualifiedLibName, "lib.")) {
+                        unqualifiedLibName = unqualifiedLibName.substr(4);
+                    }
+                    if (endsWith(unqualifiedLibName, ".d.ts")) {
+                        unqualifiedLibName = removeExtension(unqualifiedLibName, ".d.ts");
+                    }
+                    const suggestion = getSpellingSuggestion(unqualifiedLibName, arrayFrom(libMap.keys()));
+                    const message = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
+                    fileProcessingDiagnostics.add(createDiagnostic(file, libReference.pos, libReference.end, message, libName, suggestion));
+                }
+            });
         }
 
         function createDiagnostic(refFile: SourceFile, refPos: number, refEnd: number, message: DiagnosticMessage, ...args: any[]): Diagnostic {
@@ -1605,7 +1644,7 @@ namespace ts {
                     else if (shouldAddFile) {
                         const path = toPath(resolvedFileName, currentDirectory, getCanonicalFileName);
                         const pos = skipTrivia(file.text, file.imports[i].pos);
-                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, file, pos, file.imports[i].end);
+                        findSourceFile(resolvedFileName, path, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, file, pos, file.imports[i].end);
                     }
 
                     if (isFromNodeModulesSearch) {

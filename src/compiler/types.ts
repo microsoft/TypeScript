@@ -10,13 +10,23 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
+        readonly size: number;
         get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
         clear(): void;
         forEach(action: (value: T, key: string) => void): void;
+        keys(): Iterator<string>;
+        values(): Iterator<T>;
+        entries(): Iterator<[string, T]>;
+    }
+
+    export interface ReadonlyMap<T> {
         readonly size: number;
+        get(key: string): T | undefined;
+        has(key: string): boolean;
+        forEach(action: (value: T, key: string) => void): void;
         keys(): Iterator<string>;
         values(): Iterator<T>;
         entries(): Iterator<[string, T]>;
@@ -2262,6 +2272,7 @@ namespace ts {
         moduleName: string;
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
+        libReferenceDirectives: FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
 
