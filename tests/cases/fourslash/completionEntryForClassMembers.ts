@@ -17,6 +17,19 @@
 ////    }
 ////    /*classThatHasAlreadyImplementedAnotherClassMethodAfterMethod*/
 ////}
+////class D1 extends B {
+////    /*classThatHasDifferentMethodThanBase*/
+////    getValue1() {
+////        return 10;
+////    }
+////    /*classThatHasDifferentMethodThanBaseAfterMethod*/
+////}
+////class D2 extends B {
+////    /*classThatHasAlreadyImplementedAnotherClassProtectedMethod*/
+////    protectedMethod() {
+////    }
+////    /*classThatHasDifferentMethodThanBaseAfterProtectedMethod*/
+////}
 ////class E {
 ////    /*classThatDoesNotExtendAnotherClass*/
 ////}
@@ -131,6 +144,8 @@ function filterCompletionInfo(fn: (a: CompletionInfo) => boolean): CompletionInf
 
 const instanceMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "getValue" || a === "protectedMethod");
 const staticMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "staticMethod");
+const instanceWithoutProtectedMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "getValue");
+const instanceWithoutPublicMemberInfo = filterCompletionInfo(([a]: CompletionInfo) => a === "protectedMethod");
 
 // Not a class element declaration location
 const nonClassElementMarkers = [
@@ -156,8 +171,8 @@ verifyClassElementLocations({ validMembers: [], invalidMembers: allMembersOfBase
 // Instance base members and class member keywords allowed
 const classInstanceElementLocations = [
     "classThatIsEmptyAndExtendingAnotherClass",
-    "classThatHasAlreadyImplementedAnotherClassMethod",
-    "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
+    "classThatHasDifferentMethodThanBase",
+    "classThatHasDifferentMethodThanBaseAfterMethod",
     "classThatHasWrittenPublicKeyword",
     "classThatStartedWritingIdentifier",
     "propDeclarationWithoutSemicolon",
@@ -184,3 +199,15 @@ const staticClassLocations = [
     "classThatStartedWritingIdentifierAfterStaticModifier"
 ];
 verifyClassElementLocations(staticMemberInfo, staticClassLocations);
+
+const classInstanceElementWithoutPublicMethodLocations = [
+    "classThatHasAlreadyImplementedAnotherClassMethod",
+    "classThatHasAlreadyImplementedAnotherClassMethodAfterMethod",
+];
+verifyClassElementLocations(instanceWithoutPublicMemberInfo, classInstanceElementWithoutPublicMethodLocations);
+
+const classInstanceElementWithoutProtectedMethodLocations = [
+    "classThatHasAlreadyImplementedAnotherClassProtectedMethod",
+    "classThatHasDifferentMethodThanBaseAfterProtectedMethod",
+];
+verifyClassElementLocations(instanceWithoutProtectedMemberInfo, classInstanceElementWithoutProtectedMethodLocations);

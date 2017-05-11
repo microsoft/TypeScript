@@ -927,8 +927,6 @@ namespace ts.Completions {
         /**
          * Aggregates relevant symbols for completion in class declaration
          * Relevant symbols are stored in the captured 'symbols' variable.
-         *
-         * @returns true if 'symbols' was successfully populated; false otherwise.
          */
         function getGetClassLikeCompletionSymbols(classLikeDeclaration: ClassLikeDeclaration) {
             // We're looking up possible property names from parent type.
@@ -961,9 +959,8 @@ namespace ts.Completions {
                         typeChecker.getTypeOfSymbolAtLocation(baseType.symbol, classLikeDeclaration) :
                         baseType;
 
-                    // List of property symbols of base type that are not private
-                    symbols = filter(typeChecker.getPropertiesOfType(typeToGetPropertiesFrom),
-                        baseProperty =>  baseProperty.getDeclarations() && !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
+                    // List of property symbols of base type that are not private and already implemented
+                    symbols = filterClassMembersList(typeChecker.getPropertiesOfType(typeToGetPropertiesFrom), classLikeDeclaration.members, classElementModifierFlags);
                 }
             }
         }
@@ -1330,6 +1327,52 @@ namespace ts.Completions {
             }
 
             return filter(contextualMemberSymbols, m => !existingMemberNames.get(m.name));
+        }
+
+        /**
+         * Filters out completion suggestions for class elements.
+         *
+         * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
+         */
+        function filterClassMembersList(baseSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
+            const existingMemberNames = createMap<boolean>();
+            for (const m of existingMembers) {
+                // Ignore omitted expressions for missing members
+                if (m.kind !== SyntaxKind.PropertyDeclaration &&
+                    m.kind !== SyntaxKind.MethodDeclaration &&
+                    m.kind !== SyntaxKind.GetAccessor &&
+                    m.kind !== SyntaxKind.SetAccessor) {
+                    continue;
+                }
+
+                // If this is the current item we are editing right now, do not filter it out
+                if (isCurrentlyEditingNode(m)) {
+                    continue;
+                }
+
+                // Dont filter member even if the name matches if it is declared private in the list
+                if (hasModifier(m, ModifierFlags.Private)) {
+                    continue;
+                }
+
+                // do not filter it out if the static presence doesnt match
+                const mIsStatic = hasModifier(m, ModifierFlags.Static);
+                const currentElementIsStatic = !!(currentClassElementModifierFlags & ModifierFlags.Static);
+                if ((mIsStatic && currentElementIsStatic) ||
+                    (!mIsStatic && currentElementIsStatic)) {
+                    continue;
+                }
+
+                const existingName = getPropertyNameForPropertyNameNode(m.name);
+                if (existingName) {
+                    existingMemberNames.set(existingName, true);
+                }
+            }
+
+            return filter(baseSymbols, baseProperty =>
+                !existingMemberNames.get(baseProperty.name) &&
+                baseProperty.getDeclarations() &&
+                !(getDeclarationModifierFlagsFromSymbol(baseProperty) & ModifierFlags.Private));
         }
 
         /**
