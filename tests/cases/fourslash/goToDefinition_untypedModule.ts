@@ -4,7 +4,7 @@
 ////not read
 
 // @Filename: /a.ts
-////import { f } from "foo";
-/////**/f();
+////import { /*def*/f } from "foo";
+/////*use*/f();
 
-verify.goToDefinition("", []);
+verify.goToDefinition("use", "def");
