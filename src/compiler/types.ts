@@ -2497,7 +2497,7 @@ namespace ts {
 
         /** Note that the resulting nodes cannot be checked. */
 
-        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, inTypeAlias?: boolean): TypeNode;
+        typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
         /** Note that the resulting nodes cannot be checked. */
@@ -2562,22 +2562,10 @@ namespace ts {
         None                                    = 0,
         // Options
         NoTruncation                            = 1 << 0,   // Don't truncate result
-        // TODO: part of emit.
         WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
-        // TODO: part of emit.
-        UseTypeOfFunction                       = 1 << 2,   // Write typeof instead of function type literal
-        // TODO: part of emit.
-        WriteArrowStyleSignature                = 1 << 3,   // Write arrow style signature
-        // TODO: turn it into a failing type reference?
-        WriteOwnNameForAnyLike                  = 1 << 4,   // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        // TODO
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        // TODO
-        UseTypeAliasValue                       = 1 << 7,   // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
-        // TODO
-        AddUndefined                            = 1 << 9,   // Add undefined to types of initialized, non-optional parameters
 
         // Error handling
         allowThisInObjectLiteral                = 1 << 10,

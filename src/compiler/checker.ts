@@ -2232,38 +2232,23 @@ namespace ts {
 
         function typeFormatFlagsToNodeBuilderFlags(flags: TypeFormatFlags): NodeBuilderFlags {
             let result = NodeBuilderFlags.None;
-            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
-                result |= NodeBuilderFlags.WriteArrayAsGenericType;
-            }
-            if (flags & TypeFormatFlags.UseTypeOfFunction) {
-                result |= NodeBuilderFlags.UseTypeOfFunction;
+            if (flags === TypeFormatFlags.None) {
+                return result;
             }
             if (flags & TypeFormatFlags.NoTruncation) {
                 result |= NodeBuilderFlags.NoTruncation;
             }
-            if (flags & TypeFormatFlags.WriteArrowStyleSignature) {
-                result |= NodeBuilderFlags.WriteArrowStyleSignature;
+            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
+                result |= NodeBuilderFlags.UseFullyQualifiedType;
             }
-            if (flags & TypeFormatFlags.WriteOwnNameForAnyLike) {
-                result |= NodeBuilderFlags.WriteOwnNameForAnyLike;
+            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
+                result |= NodeBuilderFlags.SuppressAnyReturnType;
             }
             if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
                 result |= NodeBuilderFlags.WriteArrayAsGenericType;
             }
             if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
                 result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
-            }
-            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
-                result |= NodeBuilderFlags.UseFullyQualifiedType;
-            }
-            if (flags & TypeFormatFlags.UseTypeAliasValue) {
-                result |= NodeBuilderFlags.UseTypeAliasValue;
-            }
-            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
-                result |= NodeBuilderFlags.SuppressAnyReturnType;
-            }
-            if (flags & TypeFormatFlags.AddUndefined) {
-                result |= NodeBuilderFlags.AddUndefined;
             }
 
             return result;
@@ -2893,7 +2878,6 @@ namespace ts {
 
                 function createEntityNameFromSymbolChain(chain: Symbol[], index: number): EntityName {
                     Debug.assert(chain && 0 <= index && index < chain.length);
-                    // const parentIndex = index - 1;
                     const symbol = chain[index];
                     let typeParameterNodes: TypeNode[] | undefined;
                     if (index > 0) {
