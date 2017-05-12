@@ -13467,13 +13467,16 @@ namespace ts {
             return _jsxElementChildrenPropertyName;
         }
 
-        function createIntersectionOfApparentTypeOfJsxPropsType(propsType: Type): Type {
-            if (propsType && propsType.flags & TypeFlags.Intersection) {
-                const propsApprentType: Type[] = [];
-                for (const t of (<UnionOrIntersectionType>propsType).types) {
-                    propsApprentType.push(getApparentType(t));
+        function getApparentTypeOfJsxPropsType(propsType: Type): Type {
+            if (propsType) {
+                if (propsType.flags & TypeFlags.Intersection) {
+                    const propsApprentType: Type[] = [];
+                    for (const t of (<UnionOrIntersectionType>propsType).types) {
+                        propsApprentType.push(getApparentType(t));
+                    }
+                    return getIntersectionType(propsApprentType);
                 }
-                return getIntersectionType(propsApprentType);
+                return getApparentType(propsType);
             }
             return propsType;
         }
@@ -13498,7 +13501,7 @@ namespace ts {
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
-                        paramType = createIntersectionOfApparentTypeOfJsxPropsType(paramType);
+                        paramType = getApparentTypeOfJsxPropsType(paramType);
                         if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
@@ -13537,7 +13540,7 @@ namespace ts {
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
                         let paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
-                        paramType = createIntersectionOfApparentTypeOfJsxPropsType(paramType);
+                        paramType = getApparentTypeOfJsxPropsType(paramType);
                         if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
