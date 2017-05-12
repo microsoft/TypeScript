@@ -1,0 +1,35 @@
+tests/cases/compiler/literalTypeRelatabilityMessages01.ts(6,9): error TS2322: Type 'string | number | boolean' is not assignable to type 'number | boolean'.
+  Type 'boolean' is not assignable to type 'false | 0'.
+tests/cases/compiler/literalTypeRelatabilityMessages01.ts(9,9): error TS2322: Type 'number | boolean' is not assignable to type 'true | 1 | "hello"'.
+  Type 'boolean' is not assignable to type 'true | 1 | "hello"'.
+tests/cases/compiler/literalTypeRelatabilityMessages01.ts(13,1): error TS2365: Operator '===' cannot be applied to types 'false | 0' and 'true | 1 | "hello"'.
+tests/cases/compiler/literalTypeRelatabilityMessages01.ts(15,1): error TS2365: Operator '===' cannot be applied to types 'true | 1 | "hello"' and 'false | 0'.
+
+
+==== tests/cases/compiler/literalTypeRelatabilityMessages01.ts (4 errors) ====
+    declare let a: false | 0;
+    declare let b: true | 1 | "hello";
+    
+    function nope() {
+        if (Math.random() < 0.5) {
+            a = b;
+            ~
+!!! error TS2322: Type 'string | number | boolean' is not assignable to type 'number | boolean'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'false | 0'.
+        }
+        else {
+            b = a;
+            ~
+!!! error TS2322: Type 'number | boolean' is not assignable to type 'true | 1 | "hello"'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'true | 1 | "hello"'.
+        }
+    }
+    
+    a === b;
+    ~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'false | 0' and 'true | 1 | "hello"'.
+    
+    b === a;
+    ~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types 'true | 1 | "hello"' and 'false | 0'.
+    
