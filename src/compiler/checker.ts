@@ -737,7 +737,8 @@ namespace ts {
             const useFile = getSourceFileOfNode(usage);
             if (declarationFile !== useFile) {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
-                    (!compilerOptions.outFile && !compilerOptions.out)) {
+                    (!compilerOptions.outFile && !compilerOptions.out) ||
+                    isInAmbientContext(declaration)) {
                     // nodes are in different files and order cannot be determined
                     return true;
                 }
@@ -1720,10 +1721,9 @@ namespace ts {
         // references a symbol that is at least declared as a module or a variable. The target of the 'export =' may
         // combine other declarations with the module or variable (e.g. a class/module, function/module, interface/variable).
         function resolveESModuleSymbol(moduleSymbol: Symbol, moduleReferenceExpression: Expression, dontResolveAlias: boolean): Symbol {
-            let symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
+            const symbol = resolveExternalModuleSymbol(moduleSymbol, dontResolveAlias);
             if (!dontResolveAlias && symbol && !(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable))) {
                 error(moduleReferenceExpression, Diagnostics.Module_0_resolves_to_a_non_module_entity_and_cannot_be_imported_using_this_construct, symbolToString(moduleSymbol));
-                symbol = undefined;
             }
             return symbol;
         }
@@ -4158,6 +4158,7 @@ namespace ts {
             const types: Type[] = [];
             let definedInConstructor = false;
             let definedInMethod = false;
+            let jsDocType: Type;
             for (const declaration of symbol.declarations) {
                 const expression = declaration.kind === SyntaxKind.BinaryExpression ? <BinaryExpression>declaration :
                     declaration.kind === SyntaxKind.PropertyAccessExpression ? <BinaryExpression>getAncestor(declaration, SyntaxKind.BinaryExpression) :
@@ -4176,19 +4177,26 @@ namespace ts {
                     }
                 }
 
-                if (expression.flags & NodeFlags.JavaScriptFile) {
-                    // If there is a JSDoc type, use it
-                    const type = getTypeForDeclarationFromJSDocComment(expression.parent);
-                    if (type && type !== unknownType) {
-                        types.push(getWidenedType(type));
-                        continue;
+                // If there is a JSDoc type, use it
+                const type = getTypeForDeclarationFromJSDocComment(expression.parent);
+                if (type) {
+                    const declarationType = getWidenedType(type);
+                    if (!jsDocType) {
+                        jsDocType = declarationType;
+                    }
+                    else if (jsDocType !== unknownType && declarationType !== unknownType && !isTypeIdenticalTo(jsDocType, declarationType)) {
+                        const name = getNameOfDeclaration(declaration);
+                        error(name, Diagnostics.Subsequent_variable_declarations_must_have_the_same_type_Variable_0_must_be_of_type_1_but_here_has_type_2, declarationNameToString(name), typeToString(jsDocType), typeToString(declarationType));
                     }
                 }
-
-                types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                else if (!jsDocType) {
+                    // If we don't have an explicit JSDoc type, get the type from the expression.
+                    types.push(getWidenedLiteralType(checkExpressionCached(expression.right)));
+                }
             }
 
-            return getWidenedType(addOptionality(getUnionType(types, /*subtypeReduction*/ true), definedInMethod && !definedInConstructor));
+            const type = jsDocType || getUnionType(types, /*subtypeReduction*/ true);
+            return getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
         }
 
         // Return the type implied by a binding pattern element. This is the type of the initializer of the element if
@@ -12755,7 +12763,7 @@ namespace ts {
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression): Type {
+        function getContextualType(node: Expression): Type | undefined {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -13229,7 +13237,7 @@ namespace ts {
                 }
                 return result;
             }
-       }
+        }
 
         function isValidSpreadType(type: Type): boolean {
             return !!(type.flags & (TypeFlags.Any | TypeFlags.Null | TypeFlags.Undefined | TypeFlags.NonPrimitive) ||
@@ -21407,6 +21415,11 @@ namespace ts {
                         Diagnostics.Import_declaration_conflicts_with_local_declaration_of_0;
                     error(node, message, symbolToString(symbol));
                 }
+
+                // Don't allow to re-export something with no value side when `--isolatedModules` is set.
+                if (node.kind === SyntaxKind.ExportSpecifier && compilerOptions.isolatedModules && !(target.flags & SymbolFlags.Value)) {
+                    error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
+                }
             }
         }
 
@@ -22215,7 +22228,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(node.parent);
             }
@@ -22362,7 +22375,7 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node)) {
                 const symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
@@ -24389,6 +24402,21 @@ namespace ts {
                 }
             });
             return result;
+        }
+    }
+
+    /** Like 'isDeclarationName', but returns true for LHS of `import { x as y }` or `export { x as y }`. */
+    function isDeclarationNameOrImportPropertyName(name: Node): boolean {
+        switch (name.parent.kind) {
+            case SyntaxKind.ImportSpecifier:
+            case SyntaxKind.ExportSpecifier:
+                if ((name.parent as ImportOrExportSpecifier).propertyName) {
+                    return true;
+                }
+                // falls through
+            default:
+                return isDeclarationName(name);
+
         }
     }
 }
