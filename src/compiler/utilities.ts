@@ -2327,6 +2327,9 @@ namespace ts {
             case SyntaxKind.SpreadElement:
                 return 1;
 
+            case SyntaxKind.CommaListExpression:
+                return 0;
+
             default:
                 return -1;
         }
@@ -3915,6 +3918,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
+            || kind === SyntaxKind.CommaListExpression
             || isUnaryExpressionKind(kind);
     }
 

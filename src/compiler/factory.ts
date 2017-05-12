@@ -2077,6 +2077,30 @@ namespace ts {
         return node;
     }
 
+    function flattenCommaElements(node: Expression): Expression | Expression[] {
+        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+            if (node.kind === SyntaxKind.CommaListExpression) {
+                return (<CommaListExpression>node).elements;
+            }
+            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+                return [node.left, node.right];
+            }
+        }
+        return node;
+    }
+
+    export function createCommaList(elements: Expression[]) {
+        const node = <CommaListExpression>createSynthesizedNode(SyntaxKind.CommaListExpression);
+        node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
+        return node;
+    }
+
+    export function updateCommaList(node: CommaListExpression, elements: Expression[]) {
+        return node.elements !== elements
+            ? updateNode(createCommaList(elements), node)
+            : node;
+    }
+
     export function createBundle(sourceFiles: SourceFile[]) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
@@ -2865,7 +2889,11 @@ namespace ts {
     }
 
     export function inlineExpressions(expressions: Expression[]) {
-        return reduceLeft(expressions, createComma);
+        // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
+        // stack size exceeded" errors.
+        return expressions.length > 10
+            ? createCommaList(expressions)
+            : reduceLeft(expressions, createComma);
     }
 
     export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
