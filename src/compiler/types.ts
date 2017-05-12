@@ -2589,6 +2589,14 @@ namespace ts {
 
         ignoreErrors = allowThisInObjectLiteral | allowQualifedNameInPlaceOfIdentifier | allowTypeParameterInQualifiedName | allowAnonymousIdentifier | allowEmptyUnionOrIntersection | allowEmptyTuple,
 
+        // State
+        inObjectTypeLiteral                     = 1 << 20,
+        InElementType                           = 1 << 21,   // Writing an array or union element type
+        InFirstTypeArgument                     = 1 << 22,   // Writing first type argument of the instantiated type
+        InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
+
+        /** Flags that should not be passed on to sub-nodes of the current node being built. */
+        StateClearingFlags = InElementType | InFirstTypeArgument | InTypeAlias
     }
 
     export interface SymbolDisplayBuilder {

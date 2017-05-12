@@ -2229,7 +2229,7 @@ namespace ts {
 
             return result;
         }
-        
+
         function typeFormatFlagsToNodeBuilderFlags(flags: TypeFormatFlags): NodeBuilderFlags {
             let result = NodeBuilderFlags.None;
             if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
@@ -2270,7 +2270,7 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, typeFormatFlagsToNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors, !!(flags & TypeFormatFlags.InTypeAlias));
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, typeFormatFlagsToNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors);
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const newLine = NewLineKind.None;
             const options = { newLine, removeComments: true };
@@ -2289,9 +2289,8 @@ namespace ts {
 
         function createNodeBuilder() {
             return {
-                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, inTypeAlias?: boolean) => {
+                typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags) => {
                     const context = createNodeBuilderContext(enclosingDeclaration, flags);
-                    context.InTypeAlias = inTypeAlias;
                     const resultingNode = typeToTypeNodeHelper(type, context);
                     const result = context.encounteredError ? undefined : resultingNode;
                     return result;
@@ -2312,14 +2311,10 @@ namespace ts {
 
             interface NodeBuilderContext {
                 enclosingDeclaration: Node | undefined;
-                readonly flags: NodeBuilderFlags | undefined;
+                flags: NodeBuilderFlags | undefined;
 
                 // State
                 encounteredError: boolean;
-                inObjectTypeLiteral: boolean;
-                InElementType: boolean;         // Writing an array or union element type
-                InFirstTypeArgument: boolean;   // Writing first type argument of the instantiated type
-                InTypeAlias: boolean;           // Writing type in type alias declaration
                 symbolStack: Symbol[] | undefined;
             }
 
@@ -2328,21 +2323,15 @@ namespace ts {
                     enclosingDeclaration,
                     flags,
                     encounteredError: false,
-                    inObjectTypeLiteral: false,
-                    InElementType: false,
-                    InFirstTypeArgument: false,
-                    InTypeAlias: false,
                     symbolStack: undefined
                 };
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
-                const inElementType = context.InElementType;
-                context.InElementType = false;
-                const inTypeAlias = context.InTypeAlias;
-                context.InTypeAlias = false;
-                const inFirstTypeArgument = context.InFirstTypeArgument;
-                context.InFirstTypeArgument = false;
+                const inElementType = context.flags & NodeBuilderFlags.InElementType;
+                const inFirstTypeArgument = context.flags & NodeBuilderFlags.InFirstTypeArgument;
+                const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
+                context.flags &= ~(NodeBuilderFlags.StateClearingFlags);
 
                 if (!type) {
                     context.encounteredError = true;
@@ -2400,7 +2389,7 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
-                    if (context.inObjectTypeLiteral) {
+                    if (context.flags & NodeBuilderFlags.inObjectTypeLiteral) {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
@@ -2455,16 +2444,16 @@ namespace ts {
 
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
-                    context.InElementType = <boolean>true;
+                    context.flags |= NodeBuilderFlags.InElementType;
                     const indexTypeNode = typeToTypeNodeHelper(indexedType, context);
-                    Debug.assert(context.InElementType === false);
+                    Debug.assert(!(context.flags & NodeBuilderFlags.InElementType));
                     return createTypeOperatorNode(indexTypeNode);
                 }
 
                 if (type.flags & TypeFlags.IndexedAccess) {
-                    context.InElementType = <boolean>true;
+                    context.flags |= NodeBuilderFlags.InElementType;
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
-                    Debug.assert(context.InElementType === false);
+                    Debug.assert(!(context.flags & NodeBuilderFlags.InElementType));
                     const indexTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).indexType, context);
                     return createIndexedAccessTypeNode(objectTypeNode, indexTypeNode);
                 }
@@ -2567,10 +2556,10 @@ namespace ts {
                         }
                     }
 
-                    const saveInObjectTypeLiteral = context.inObjectTypeLiteral;
-                    context.inObjectTypeLiteral = true;
+                    const savedFlags = context.flags;
+                    context.flags |= NodeBuilderFlags.inObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
-                    context.inObjectTypeLiteral = saveInObjectTypeLiteral;
+                    context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
                     return setEmitFlags(typeLiteralNode, EmitFlags.ToStringFormatting);
                 }
@@ -2606,9 +2595,11 @@ namespace ts {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
                             return createTypeReferenceNode("Array", [typeArgumentNode]);
                         }
-                        context.InElementType = true;
+
+                        context.flags |= NodeBuilderFlags.InElementType;
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
-                        context.InElementType = false;
+                        Debug.assert(!(context.flags & NodeBuilderFlags.InElementType));
+
                         return createArrayTypeNode(elementType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
@@ -2756,19 +2747,21 @@ namespace ts {
 
             function mapToTypeNodeArray(types: Type[], context: NodeBuilderContext, addInElementTypeFlag: boolean, addInFirstTypeArgumentFlag: boolean): TypeNode[] {
                 const result = [];
-                Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
+                Debug.assert(!(context.flags & NodeBuilderFlags.InElementType), "should be unset at the beginning of the helper");
                 for (let i = 0; i < types.length; ++i) {
                     const type = types[i];
-                    context.InElementType = addInElementTypeFlag;
-                    if (i === 0) {
-                        context.InFirstTypeArgument = addInFirstTypeArgumentFlag;
+                    if (addInElementTypeFlag) {
+                        context.flags |= NodeBuilderFlags.InElementType;
+                    }
+                    if (i === 0 && addInFirstTypeArgumentFlag) {
+                        context.flags |= NodeBuilderFlags.InFirstTypeArgument;
                     }
                     const typeNode = typeToTypeNodeHelper(type, context);
                     if (typeNode) {
                         result.push(typeNode);
                     }
                 }
-                Debug.assert(context.InElementType === false, "should be unset at the beginning of the helper");
+                Debug.assert(!(context.flags & NodeBuilderFlags.InElementType), "should be unset at the end of the helper");
                 return result;
             }
 
