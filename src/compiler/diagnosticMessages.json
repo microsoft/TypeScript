@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -1842,6 +1846,14 @@
     "Generic type instantiation is excessively deep and possibly infinite.": {
         "category": "Error",
         "code": 2550
+    },
+    "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2551
+    },
+    "Cannot find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2552
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -3539,7 +3551,10 @@
         "category": "Message",
         "code": 90021
     },
-
+    "Change spelling to '{0}'.": {
+        "category": "Message",
+        "code": 90022
+    },
 
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

@@ -1,7 +1,7 @@
 tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(22,7): error TS2339: Property 'method' does not exist on type '{}'.
 tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(23,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(28,7): error TS2339: Property 'mesage' does not exist on type 'Error'.
-tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error TS2339: Property 'getHuors' does not exist on type 'Date'.
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(28,7): error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
+tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
 
 
 ==== tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts (4 errors) ====
@@ -38,13 +38,13 @@ tests/cases/conformance/types/any/narrowFromAnyWithTypePredicate.ts(33,7): error
         x.message;
         x.mesage;
           ~~~~~~
-!!! error TS2339: Property 'mesage' does not exist on type 'Error'.
+!!! error TS2551: Property 'mesage' does not exist on type 'Error'. Did you mean 'message'?
     }
     
     if (isDate(x)) {
         x.getDate();
         x.getHuors();
           ~~~~~~~~
-!!! error TS2339: Property 'getHuors' does not exist on type 'Date'.
+!!! error TS2551: Property 'getHuors' does not exist on type 'Date'. Did you mean 'getHours'?
     }
     

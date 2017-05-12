@@ -12,7 +12,7 @@
 
 verify.quickInfoAt("useFoo", "import foo");
 verify.goToDefinition({
-    useFoo: "importFoo",
+    useFoo: "module",
     importFoo: "module"
 });
 
@@ -27,6 +27,6 @@ verify.goToDefinition({
 
 verify.quickInfoAt("useBang", "import bang = require(\"jquery\")");
 verify.goToDefinition({
-    useBang: "importBang",
+    useBang: "module",
     importBang: "module"
 });

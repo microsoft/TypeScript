@@ -91,7 +91,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,30): e
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,32): error TS1138: Parameter declaration expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,39): error TS1005: ';' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,40): error TS1128: Declaration or statement expected.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS2304: Cannot find name 'number'.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,42): error TS2693: 'number' only refers to a type, but is being used as a value here.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(172,49): error TS1005: ';' expected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,1): error TS7027: Unreachable code detected.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,29): error TS2304: Cannot find name 'm'.
@@ -425,7 +425,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
                                            ~
 !!! error TS1128: Declaration or statement expected.
                                              ~~~~~~
-!!! error TS2304: Cannot find name 'number'.
+!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
                                                     ~
 !!! error TS1005: ';' expected.
     

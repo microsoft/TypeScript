@@ -1,6 +1,6 @@
 //// [APISample_watcher.ts]
 /*
- * Note: This test is a public API sample. The sample sources can be found 
+ * Note: This test is a public API sample. The sample sources can be found
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#incremental-build-support-using-the-language-services
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
@@ -91,7 +91,7 @@ function watch(rootFileNames: string[], options: ts.CompilerOptions) {
         allDiagnostics.forEach(diagnostic => {
             let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, "\n");
             if (diagnostic.file) {
-                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start);
+                let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start!);
                 console.log(`  Error ${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`);
             }
             else {
@@ -107,6 +107,7 @@ const currentDirectoryFiles = fs.readdirSync(process.cwd()).
 
 // Start the watcher
 watch(currentDirectoryFiles, { module: ts.ModuleKind.CommonJS });
+
 
 //// [APISample_watcher.js]
 "use strict";
