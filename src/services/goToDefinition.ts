@@ -51,7 +51,10 @@ namespace ts.GoToDefinition {
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
         if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
-            symbol = typeChecker.getAliasedSymbol(symbol);
+            const aliased = typeChecker.getAliasedSymbol(symbol);
+            if (aliased.declarations) {
+                symbol = aliased;
+            }
         }
 
         // Because name in short-hand property assignment has two different meanings: property name and property value,
