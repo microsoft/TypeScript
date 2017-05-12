@@ -2728,7 +2728,6 @@ namespace ts {
                             }
                         }
                         else {
-                            // TODO(aozgaa): should we create a node with explicit or implict any?
                             const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
 
                             const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
