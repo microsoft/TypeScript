@@ -2436,24 +2436,17 @@ namespace ts {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     return typeReferenceToTypeNode(<TypeReference>type);
                 }
-                if (objectFlags & ObjectFlags.ClassOrInterface) {
-                    Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
-                }
-                if (type.flags & TypeFlags.TypeParameter) {
+                if (type.flags & TypeFlags.TypeParameter || objectFlags & ObjectFlags.ClassOrInterface) {
                     const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
-
                 if (!inTypeAlias && type.aliasSymbol &&
                     isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = toTypeArgumentNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
                 }
-
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
                     const typeNodes = types && mapToTypeNodeArray(types, context, /*addInElementTypeFlag*/ true, /*addInFirstTypeArgumentFlag*/ false);
@@ -2468,13 +2461,11 @@ namespace ts {
                         return undefined;
                     }
                 }
-
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     // The type is an object literal type.
                     return createAnonymousTypeNode(<ObjectType>type);
                 }
-
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
                     context.flags |= NodeBuilderFlags.InElementType;
@@ -2482,7 +2473,6 @@ namespace ts {
                     Debug.assert(!(context.flags & NodeBuilderFlags.InElementType));
                     return createTypeOperatorNode(indexTypeNode);
                 }
-
                 if (type.flags & TypeFlags.IndexedAccess) {
                     context.flags |= NodeBuilderFlags.InElementType;
                     const objectTypeNode = typeToTypeNodeHelper((<IndexedAccessType>type).objectType, context);
@@ -2495,13 +2485,10 @@ namespace ts {
 
                 function createMappedTypeNodeFromType(type: MappedType) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const typeParameter = getTypeParameterFromMappedType(type);
-                    const typeParameterNode = typeParameterToDeclaration(typeParameter, context);
-
-                    const templateType = getTemplateTypeFromMappedType(type);
-                    const templateTypeNode = typeToTypeNodeHelper(templateType, context);
                     const readonlyToken = type.declaration && type.declaration.readonlyToken ? createToken(SyntaxKind.ReadonlyKeyword) : undefined;
                     const questionToken = type.declaration && type.declaration.questionToken ? createToken(SyntaxKind.QuestionToken) : undefined;
+                    const typeParameterNode = typeParameterToDeclaration(getTypeParameterFromMappedType(type), context);
+                    const templateTypeNode = typeToTypeNodeHelper(getTemplateTypeFromMappedType(type), context);
 
                     const mappedTypeNode = createMappedTypeNode(readonlyToken, typeParameterNode, questionToken, templateTypeNode);
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
@@ -2521,7 +2508,7 @@ namespace ts {
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = symbolToName(typeAlias, context, SymbolFlags.Type, /*expectsIdentifier*/ false );
+                                const entityName = symbolToName(typeAlias, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                                 return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                             }
                             else {
@@ -2802,8 +2789,8 @@ namespace ts {
             }
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
-                const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
                 const name = getNameFromIndexInfo(indexInfo) || "x";
+                const indexerTypeNode = createKeywordTypeNode(kind === IndexKind.String ? SyntaxKind.StringKeyword : SyntaxKind.NumberKeyword);
 
                 const indexingParameter = createParameter(
                     /*decorators*/ undefined,
@@ -2851,37 +2838,32 @@ namespace ts {
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext): TypeParameterDeclaration {
+                const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 const constraint = getConstraintFromTypeParameter(type);
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
-                const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = <ParameterDeclaration>getDeclarationOfKind(parameterSymbol, SyntaxKind.Parameter);
+                const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
+                const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
+                const name = parameterDeclaration.name.kind === SyntaxKind.Identifier ?
+                    getSynthesizedClone(parameterDeclaration.name) :
+                    cloneBindingName(parameterDeclaration.name);
+                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
+
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (isRequiredInitializedParameter(parameterDeclaration)) {
                     parameterType = includeFalsyTypes(parameterType, TypeFlags.Undefined);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
-                let name: BindingName;
-                if (parameterDeclaration.name.kind === SyntaxKind.Identifier) {
-                    name = getSynthesizedClone(parameterDeclaration.name);
-                }
-                else {
-                    Debug.assert(parameterDeclaration.name.kind === SyntaxKind.ArrayBindingPattern || parameterDeclaration.name.kind === SyntaxKind.ObjectBindingPattern);
-                    name = cloneBindingName(parameterDeclaration.name);
-                }
-                const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
-                const dotDotDotToken = (parameterDeclaration ? isRestParameter(parameterDeclaration) : isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) ?
-                    createToken(SyntaxKind.DotDotDotToken) :
-                    undefined;
 
                 const parameterNode = createParameter(
                     /*decorators*/ undefined,
-                    cloneNodeArray(parameterDeclaration.modifiers),
+                    modifiers,
                     dotDotDotToken,
                     name,
                     questionToken,

@@ -84,15 +84,6 @@ namespace ts {
         return clone;
     }
 
-    export function getDeepSynthesizedClone<T extends Node>(node: T | undefined): T {
-        const clone = visitEachChild(node, getDeepSynthesizedClone, nullTransformationContext, /*nodeVisitor*/ undefined, getSynthesizedClone);
-        return nodeIsSynthesized(clone) ? clone : getSynthesizedClone(clone);
-    }
-
-    export function cloneNodeArray<T extends Node>(nodeArray: NodeArray<T>) {
-        return nodeArray && nodeArray.map(getDeepSynthesizedClone);
-    }
-
     // Literals
 
     export function createLiteral(value: string): StringLiteral;
