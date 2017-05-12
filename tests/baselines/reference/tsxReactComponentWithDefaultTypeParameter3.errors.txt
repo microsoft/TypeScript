@@ -1,0 +1,26 @@
+tests/cases/conformance/jsx/file.tsx(16,17): error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(17,18): error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    interface Prop {
+        a: number,
+        b: string
+    }
+    
+    declare class MyComp<P extends Prop> extends React.Component<P, {}> {
+        internalProp: P;
+    }
+    
+    // OK: we fille in missing type argument with empty object
+    let x1 = <MyComp />
+    
+    // Error
+    let x = <MyComp a={10} b="hi" />
+                    ~~~~~~
+!!! error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+    let x2 = <MyComp a="hi"/>
+                     ~~~~~~
+!!! error TS2339: Property 'a' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.

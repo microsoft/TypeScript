@@ -108,10 +108,6 @@ namespace ts.FindAllReferences {
             switch (def.type) {
                 case "symbol": {
                     const { symbol, node } = def;
-                    const declarations = symbol.declarations;
-                    if (!declarations || declarations.length === 0) {
-                        return undefined;
-                    }
                     const { displayParts, kind } = getDefinitionKindAndDisplayParts(symbol, node, checker);
                     const name = displayParts.map(p => p.text).join("");
                     return { node, name, kind, displayParts };
@@ -282,11 +278,6 @@ namespace ts.FindAllReferences.Core {
                 return getReferencesForStringLiteral(<StringLiteral>node, sourceFiles, cancellationToken);
             }
             // Can't have references to something that we have no symbol for.
-            return undefined;
-        }
-
-        // The symbol was an internal symbol and does not have a declaration e.g. undefined symbol
-        if (!symbol.declarations || !symbol.declarations.length) {
             return undefined;
         }
 
@@ -646,7 +637,9 @@ namespace ts.FindAllReferences.Core {
         return parent ? scope.getSourceFile() : scope;
     }
 
-    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, start: number, end: number): number[] {
+    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile, fullStart = false): number[] {
+        const start = fullStart ? container.getFullStart() : container.getStart(sourceFile);
+        const end = container.getEnd();
         const positions: number[] = [];
 
         /// TODO: Cache symbol existence for files to save text search
@@ -685,16 +678,11 @@ namespace ts.FindAllReferences.Core {
         const references: Entry[] = [];
         const sourceFile = container.getSourceFile();
         const labelName = targetLabel.text;
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container.getStart(), container.getEnd());
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container);
         for (const position of possiblePositions) {
             const node = getTouchingWord(sourceFile, position);
-            if (!node || node.getWidth() !== labelName.length) {
-                continue;
-            }
-
             // Only pick labels that are either the target label, or have a target that is the target label
-            if (node === targetLabel ||
-                (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel)) {
+            if (node && (node === targetLabel || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel))) {
                 references.push(nodeEntry(node));
             }
         }
@@ -706,15 +694,14 @@ namespace ts.FindAllReferences.Core {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
         switch (node && node.kind) {
             case SyntaxKind.Identifier:
-                return node.getWidth() === searchSymbolName.length;
+                return unescapeIdentifier((node as Identifier).text).length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&
-                    // For string literals we have two additional chars for the quotes
-                    node.getWidth() === searchSymbolName.length + 2;
+                    (node as StringLiteral).text.length === searchSymbolName.length;
 
             case SyntaxKind.NumericLiteral:
-                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && node.getWidth() === searchSymbolName.length;
+                return isLiteralNameOfPropertyDeclarationOrIndexAccess(node) && (node as NumericLiteral).text.length === searchSymbolName.length;
 
             default:
                 return false;
@@ -731,7 +718,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, references: Push<NodeEntry>): void {
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile.getStart(), sourceFile.getEnd());
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText);
         for (const position of possiblePositions) {
             const referenceLocation = getTouchingPropertyName(sourceFile, position);
             if (referenceLocation.kind === kind) {
@@ -755,9 +742,7 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        const start = state.findInComments ? container.getFullStart() : container.getStart();
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, search.text, start, container.getEnd());
-        for (const position of possiblePositions) {
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.findInComments)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
@@ -908,7 +893,7 @@ namespace ts.FindAllReferences.Core {
          * position of property accessing, the referenceEntry of such position will be handled in the first case.
          */
         if (!(flags & SymbolFlags.Transient) && search.includes(shorthandValueSymbol)) {
-            addReference(valueDeclaration.name, shorthandValueSymbol, search.location, state);
+            addReference(getNameOfDeclaration(valueDeclaration), shorthandValueSymbol, search.location, state);
         }
     }
 
@@ -1201,7 +1186,7 @@ namespace ts.FindAllReferences.Core {
         const references: Entry[] = [];
 
         const sourceFile = searchSpaceNode.getSourceFile();
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode);
         for (const position of possiblePositions) {
             const node = getTouchingWord(sourceFile, position);
 
@@ -1263,13 +1248,13 @@ namespace ts.FindAllReferences.Core {
         if (searchSpaceNode.kind === SyntaxKind.SourceFile) {
             forEach(sourceFiles, sourceFile => {
                 cancellationToken.throwIfCancellationRequested();
-                possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", sourceFile.getStart(), sourceFile.getEnd());
+                possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this");
                 getThisReferencesInFile(sourceFile, sourceFile, possiblePositions, references);
             });
         }
         else {
             const sourceFile = searchSpaceNode.getSourceFile();
-            possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode.getStart(), searchSpaceNode.getEnd());
+            possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "this", searchSpaceNode);
             getThisReferencesInFile(sourceFile, searchSpaceNode, possiblePositions, references);
         }
 
@@ -1323,7 +1308,7 @@ namespace ts.FindAllReferences.Core {
 
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
-            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, node.text, sourceFile.getStart(), sourceFile.getEnd());
+            const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, node.text);
             getReferencesForStringLiteralInFile(sourceFile, node.text, possiblePositions, references);
         }
 

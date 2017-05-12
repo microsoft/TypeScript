@@ -221,11 +221,12 @@ namespace ts.Completions {
     function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, typeChecker: TypeChecker): CompletionInfo | undefined {
         const candidates: Signature[] = [];
         const entries: CompletionEntry[] = [];
+        const uniques = createMap<true>();
 
         typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
 
         for (const candidate of candidates) {
-            addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker);
+            addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker, uniques);
         }
 
         if (entries.length) {
@@ -258,25 +259,29 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker): void {
+    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker, uniques = createMap<true>()): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
-            type = typeChecker.getApparentType(type);
+            type = typeChecker.getBaseConstraintOfType(type);
         }
         if (!type) {
             return;
         }
         if (type.flags & TypeFlags.Union) {
             for (const t of (<UnionType>type).types) {
-                addStringLiteralCompletionsFromType(t, result, typeChecker);
+                addStringLiteralCompletionsFromType(t, result, typeChecker, uniques);
             }
         }
         else if (type.flags & TypeFlags.StringLiteral) {
-            result.push({
-                name: (<LiteralType>type).text,
-                kindModifiers: ScriptElementKindModifier.none,
-                kind: ScriptElementKind.variableElement,
-                sortText: "0"
-            });
+            const name = (<LiteralType>type).text;
+            if (!uniques.has(name)) {
+                uniques.set(name, true);
+                result.push({
+                    name,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.variableElement,
+                    sortText: "0"
+                });
+            }
         }
     }
 
@@ -813,19 +818,16 @@ namespace ts.Completions {
             // We're looking up possible property names from contextual/inferred/declared type.
             isMemberCompletion = true;
 
-            let typeForObject: Type;
+            let typeMembers: Symbol[];
             let existingMembers: Declaration[];
 
             if (objectLikeContainer.kind === SyntaxKind.ObjectLiteralExpression) {
                 // We are completing on contextual types, but may also include properties
                 // other than those within the declared type.
                 isNewIdentifierLocation = true;
-
-                // If the object literal is being assigned to something of type 'null | { hello: string }',
-                // it clearly isn't trying to satisfy the 'null' type. So we grab the non-nullable type if possible.
-                typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
-                typeForObject = typeForObject && typeForObject.getNonNullableType();
-
+                const typeForObject = typeChecker.getContextualType(<ObjectLiteralExpression>objectLikeContainer);
+                if (!typeForObject) return false;
+                typeMembers = typeChecker.getAllPossiblePropertiesOfType(typeForObject);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
             else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
@@ -849,7 +851,10 @@ namespace ts.Completions {
                         }
                     }
                     if (canGetType) {
-                        typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                        if (!typeForObject) return false;
+                        // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
+                        typeMembers = typeChecker.getPropertiesOfType(typeForObject);
                         existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                     }
                 }
@@ -861,11 +866,6 @@ namespace ts.Completions {
                 Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
             }
 
-            if (!typeForObject) {
-                return false;
-            }
-
-            const typeMembers = typeChecker.getPropertiesOfType(typeForObject);
             if (typeMembers && typeMembers.length > 0) {
                 // Add filtered items to the completion list
                 symbols = filterObjectMembersList(typeMembers, existingMembers);
@@ -1214,7 +1214,7 @@ namespace ts.Completions {
                     // TODO(jfreeman): Account for computed property name
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
-                    existingName = (<Identifier>m.name).text;
+                    existingName = (getNameOfDeclaration(m) as Identifier).text;
                 }
 
                 existingMemberNames.set(existingName, true);

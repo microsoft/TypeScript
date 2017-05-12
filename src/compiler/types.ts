@@ -10,7 +10,7 @@ namespace ts {
 
     /** ES6 Map interface. */
     export interface Map<T> {
-        get(key: string): T;
+        get(key: string): T | undefined;
         has(key: string): boolean;
         set(key: string, value: T): this;
         delete(key: string): boolean;
@@ -65,6 +65,7 @@ namespace ts {
         NumericLiteral,
         StringLiteral,
         JsxText,
+        JsxTextAllWhiteSpaces,
         RegularExpressionLiteral,
         NoSubstitutionTemplateLiteral,
         // Pseudo-literals
@@ -570,11 +571,15 @@ namespace ts {
 
     export interface Identifier extends PrimaryExpression {
         kind: SyntaxKind.Identifier;
-        text: string;                                               // Text of identifier (with escapes converted to characters)
-        originalKeywordKind?: SyntaxKind;                           // Original syntaxKind which get set so that we can report an error later
-        /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind;   // Specifies whether to auto-generate the text for an identifier.
-        /*@internal*/ autoGenerateId?: number;                      // Ensures unique generated identifiers get unique names, but clones get the same name.
-        isInJSDocNamespace?: boolean;                               // if the node is a member in a JSDoc namespace
+        /**
+         * Text of identifier (with escapes converted to characters).
+         * If the identifier begins with two underscores, this will begin with three.
+         */
+        text: string;
+        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
+        /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
         /*@internal*/ typeArguments?: NodeArray<TypeNode>;          // Only defined on synthesized nodes.Though not syntactically valid, used in emitting diagnostics.
     }
 
@@ -605,10 +610,13 @@ namespace ts {
 
     export interface Declaration extends Node {
         _declarationBrand: any;
+    }
+
+    export interface NamedDeclaration extends Declaration {
         name?: DeclarationName;
     }
 
-    export interface DeclarationStatement extends Declaration, Statement {
+    export interface DeclarationStatement extends NamedDeclaration, Statement {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
 
@@ -622,7 +630,7 @@ namespace ts {
         expression: LeftHandSideExpression;
     }
 
-    export interface TypeParameterDeclaration extends Declaration {
+    export interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
         parent?: DeclarationWithTypeParameters;
         name: Identifier;
@@ -633,7 +641,7 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface SignatureDeclaration extends Declaration {
+    export interface SignatureDeclaration extends NamedDeclaration {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -650,7 +658,7 @@ namespace ts {
 
     export type BindingName = Identifier | BindingPattern;
 
-    export interface VariableDeclaration extends Declaration {
+    export interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
         name: BindingName;                  // Declared variable name
@@ -664,7 +672,7 @@ namespace ts {
         declarations: NodeArray<VariableDeclaration>;
     }
 
-    export interface ParameterDeclaration extends Declaration {
+    export interface ParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
@@ -674,7 +682,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface BindingElement extends Declaration {
+    export interface BindingElement extends NamedDeclaration {
         kind: SyntaxKind.BindingElement;
         parent?: BindingPattern;
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
@@ -699,7 +707,7 @@ namespace ts {
         initializer?: Expression;           // Optional initializer
     }
 
-    export interface ObjectLiteralElement extends Declaration {
+    export interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
     }
@@ -743,7 +751,7 @@ namespace ts {
     // SyntaxKind.ShorthandPropertyAssignment
     // SyntaxKind.EnumMember
     // SyntaxKind.JSDocPropertyTag
-    export interface VariableLikeDeclaration extends Declaration {
+    export interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
@@ -752,7 +760,7 @@ namespace ts {
         initializer?: Expression;
     }
 
-    export interface PropertyLikeDeclaration extends Declaration {
+    export interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
     }
 
@@ -1216,8 +1224,7 @@ namespace ts {
 
     export type BinaryOperatorToken = Token<BinaryOperator>;
 
-    // Binary expressions can be declarations if they are 'exports.foo = bar' expressions in JS files
-    export interface BinaryExpression extends Expression, Declaration {
+    export interface BinaryExpression extends Expression, Declaration  {
         kind: SyntaxKind.BinaryExpression;
         left: Expression;
         operatorToken: BinaryOperatorToken;
@@ -1417,7 +1424,7 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
-    export interface PropertyAccessExpression extends MemberExpression, Declaration {
+    export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         name: Identifier;
@@ -1506,7 +1513,7 @@ namespace ts {
     //       for the same reasons we treat NewExpression as a PrimaryExpression.
     export interface MetaProperty extends PrimaryExpression {
         kind: SyntaxKind.MetaProperty;
-        keywordToken: SyntaxKind;
+        keywordToken: SyntaxKind.NewKeyword;
         name: Identifier;
     }
 
@@ -1573,6 +1580,7 @@ namespace ts {
 
     export interface JsxText extends Node {
         kind: SyntaxKind.JsxText;
+        containsOnlyWhiteSpaces: boolean;
         parent?: JsxElement;
     }
 
@@ -1761,7 +1769,7 @@ namespace ts {
 
     export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
 
-    export interface ClassLikeDeclaration extends Declaration {
+    export interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -1777,12 +1785,12 @@ namespace ts {
         kind: SyntaxKind.ClassExpression;
     }
 
-    export interface ClassElement extends Declaration {
+    export interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
         name?: PropertyName;
     }
 
-    export interface TypeElement extends Declaration {
+    export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
         questionToken?: QuestionToken;
@@ -1810,7 +1818,7 @@ namespace ts {
         type: TypeNode;
     }
 
-    export interface EnumMember extends Declaration {
+    export interface EnumMember extends NamedDeclaration {
         kind: SyntaxKind.EnumMember;
         parent?: EnumDeclaration;
         // This does include ComputedPropertyName, but the parser will give an error
@@ -1899,14 +1907,14 @@ namespace ts {
     // import d, * as ns from "mod" => name = d, namedBinding: NamespaceImport = { name: ns }
     // import { a, b as x } from "mod" => name = undefined, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
     // import d, { a, b as x } from "mod" => name = d, namedBinding: NamedImports = { elements: [{ name: a }, { name: x, propertyName: b}]}
-    export interface ImportClause extends Declaration {
+    export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent?: ImportDeclaration;
         name?: Identifier; // Default binding
         namedBindings?: NamedImportBindings;
     }
 
-    export interface NamespaceImport extends Declaration {
+    export interface NamespaceImport extends NamedDeclaration {
         kind: SyntaxKind.NamespaceImport;
         parent?: ImportClause;
         name: Identifier;
@@ -1939,14 +1947,14 @@ namespace ts {
 
     export type NamedImportsOrExports = NamedImports | NamedExports;
 
-    export interface ImportSpecifier extends Declaration {
+    export interface ImportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ImportSpecifier;
         parent?: NamedImports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
-    export interface ExportSpecifier extends Declaration {
+    export interface ExportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ExportSpecifier;
         parent?: NamedExports;
         propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
@@ -2112,7 +2120,7 @@ namespace ts {
         typeExpression: JSDocTypeExpression;
     }
 
-    export interface JSDocTypedefTag extends JSDocTag, Declaration {
+    export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2407,7 +2415,14 @@ namespace ts {
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
-        /* @internal */ structureIsReused?: boolean;
+        /* @internal */ structureIsReused?: StructureIsReused;
+    }
+
+    /* @internal */
+    export const enum StructureIsReused {
+        Not         = 0,
+        SafeModules = 1 << 0,
+        Completely  = 1 << 1,
     }
 
     export interface CustomTransformers {
@@ -2518,7 +2533,7 @@ namespace ts {
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
-        getContextualType(node: Expression): Type;
+        getContextualType(node: Expression): Type | undefined;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
@@ -2544,6 +2559,9 @@ namespace ts {
 
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
+        getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
+        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string;
+        /* @internal */ getBaseConstraintOfType(type: Type): Type;
 
         /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
 
@@ -2556,6 +2574,12 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        /**
+         * For a union, will include a property if it's defined in *any* of the member types.
+         * So for `{ a } | { b }`, this will include both `a` and `b`.
+         */
+        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
     }
 
     export enum NodeBuilderFlags {
@@ -2745,7 +2769,6 @@ namespace ts {
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
-        writeBaseConstructorTypeOfClass(node: ClassLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node, meaning: SymbolFlags, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -3364,12 +3387,13 @@ namespace ts {
     }
 
     export interface Diagnostic {
-        file: SourceFile;
-        start: number;
-        length: number;
+        file: SourceFile | undefined;
+        start: number | undefined;
+        length: number | undefined;
         messageText: string | DiagnosticMessageChain;
         category: DiagnosticCategory;
         code: number;
+        source?: string;
     }
 
     export enum DiagnosticCategory {
@@ -3959,14 +3983,15 @@ namespace ts {
         HelperName = 1 << 12,
         ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
         LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        Indented = 1 << 15,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 16,                 // Do not indent the node.
-        AsyncFunctionBody = 1 << 17,
-        ReuseTempVariableScope = 1 << 18,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 19,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 20,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 21,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-        Iterator = 1 << 22,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        InternalName = 1 << 15,                  // The name is internal to an ES5 class body function.
+        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 17,                 // Do not indent the node.
+        AsyncFunctionBody = 1 << 18,
+        ReuseTempVariableScope = 1 << 19,        // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 20,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 21,                    // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 22,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        Iterator = 1 << 23,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
     }
 
     export interface EmitHelper {
@@ -3991,17 +4016,24 @@ namespace ts {
         Awaiter = 1 << 6,           // __awaiter (used by ES2017 async functions transformation)
         Generator = 1 << 7,         // __generator (used by ES2015 generator transformation)
         Values = 1 << 8,            // __values (used by ES2015 for..of and yield* transformations)
-        Read = 1 << 9,             // __read (used by ES2015 iterator destructuring transformation)
+        Read = 1 << 9,              // __read (used by ES2015 iterator destructuring transformation)
         Spread = 1 << 10,           // __spread (used by ES2015 array spread and argument list spread transformations)
-        AsyncGenerator = 1 << 11,   // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 12,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 13,      // __asyncValues (used by ES2017 for..await..of transformation)
+        Await = 1 << 11,            // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
 
         // Helpers included by ES2017 for..await..of
         ForAwaitOfIncludes = AsyncValues,
+
+        // Helpers included by ES2017 async generators
+        AsyncGeneratorIncludes = Await | AsyncGenerator,
+
+        // Helpers included by yield* in ES2017 async generators
+        AsyncDelegatorIncludes = Await | AsyncDelegator | AsyncValues,
 
         // Helpers included by ES2015 spread
         SpreadIncludes = Read | Spread,

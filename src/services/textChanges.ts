@@ -588,7 +588,7 @@ namespace ts.textChanges {
             if (force || !isTrivia(s)) {
                 this.lastNonTriviaPosition = this.writer.getTextPos();
                 let i = 0;
-                while (isWhiteSpace(s.charCodeAt(s.length - i - 1))) {
+                while (isWhiteSpaceLike(s.charCodeAt(s.length - i - 1))) {
                     i++;
                 }
                 // trim trailing whitespaces

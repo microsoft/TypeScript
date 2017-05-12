@@ -78,11 +78,11 @@ let nested: { a: number, b: boolean, c: string } =
 >c : string
 
     { ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' }
->{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: boolean; a: number; }
->{ a: 3, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
+>{ ...{ a: 3, ...{ b: false, c: 'overriden' } }, c: 'whatever' } : { c: string; b: false; a: number; }
+>{ a: 3, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >3 : 3
->{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -148,11 +148,11 @@ let combinedNested: { a: number, b: boolean, c: string, d: string } =
 >d : string
 
     { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
->{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: boolean; c: string; }
->{ a: 4, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
+>{ ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } } : { a: number; d: string; b: false; c: string; }
+>{ a: 4, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >4 : 4
->{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
 >b : boolean
 >false : false
 >c : string
@@ -172,11 +172,11 @@ let combinedNestedChangeType: { a: number, b: boolean, c: number } =
 >c : number
 
     { ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 }
->{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: boolean; a: number; }
->{ a: 1, ...{ b: false, c: 'overriden' } } : { b: boolean; c: string; a: number; }
+>{ ...{ a: 1, ...{ b: false, c: 'overriden' } }, c: -1 } : { c: number; b: false; a: number; }
+>{ a: 1, ...{ b: false, c: 'overriden' } } : { b: false; c: string; a: number; }
 >a : number
 >1 : 1
->{ b: false, c: 'overriden' } : { b: boolean; c: string; }
+>{ b: false, c: 'overriden' } : { b: false; c: string; }
 >b : boolean
 >false : false
 >c : string

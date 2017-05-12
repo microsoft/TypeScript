@@ -22,8 +22,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(160,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(166,11): error TS2339: Property 'foo2' does not exist on type 'G1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(182,11): error TS2339: Property 'bar' does not exist on type 'H'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(187,11): error TS2339: Property 'foo1' does not exist on type 'H'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2339: Property 'foo2' does not exist on type 'H'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(187,11): error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
 
 
 ==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts (20 errors) ====
@@ -257,10 +257,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
     if (obj16 instanceof H) {
         obj16.foo1;
               ~~~~
-!!! error TS2339: Property 'foo1' does not exist on type 'H'.
+!!! error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
         obj16.foo2;
               ~~~~
-!!! error TS2339: Property 'foo2' does not exist on type 'H'.
+!!! error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
     }
     
     var obj17: any;

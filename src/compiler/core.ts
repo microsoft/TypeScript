@@ -3,7 +3,7 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.3.0";
+    export const version = "2.4.0";
 }
 
 /* @internal */
@@ -249,6 +249,15 @@ namespace ts {
         for (let i = 0; i < arrayA.length; i++) {
             callback(arrayA[i], arrayB[i], i);
         }
+    }
+
+    export function zipToMap<T>(keys: string[], values: T[]): Map<T> {
+        Debug.assert(keys.length === values.length);
+        const map = createMap<T>();
+        for (let i = 0; i < keys.length; ++i) {
+            map.set(keys[i], values[i]);
+        }
+        return map;
     }
 
     /**

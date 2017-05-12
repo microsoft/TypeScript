@@ -120,7 +120,7 @@ namespace ts.SymbolDisplay {
 
                 // try get the call/construct signature from the type if it matches
                 let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement;
-                if (location.kind === SyntaxKind.CallExpression || location.kind === SyntaxKind.NewExpression) {
+                if (isCallOrNewExpression(location)) {
                     callExpressionLike = <CallExpression | NewExpression>location;
                 }
                 else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {

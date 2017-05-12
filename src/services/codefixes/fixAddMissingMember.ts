@@ -1,7 +1,8 @@
 /* @internal */
 namespace ts.codefix {
     registerCodeFix({
-        errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code],
+        errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code,
+                     Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
         getCodeActions: getActionsForAddMissingMember
     });
 
@@ -110,16 +111,16 @@ namespace ts.codefix {
             if (!isStatic) {
                 const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
                 const indexingParameter = createParameter(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
-                /*dotDotDotToken*/ undefined,
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
+                    /*dotDotDotToken*/ undefined,
                     "x",
-                /*questionToken*/ undefined,
+                    /*questionToken*/ undefined,
                     stringTypeNode,
-                /*initializer*/ undefined);
-                const indexSignature = createIndexSignatureDeclaration(
-                /*decorators*/ undefined,
-                /*modifiers*/ undefined,
+                    /*initializer*/ undefined);
+                const indexSignature = createIndexSignature(
+                    /*decorators*/ undefined,
+                    /*modifiers*/ undefined,
                     [indexingParameter],
                     typeNode);
 

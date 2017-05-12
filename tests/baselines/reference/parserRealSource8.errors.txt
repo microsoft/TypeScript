@@ -47,7 +47,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,52): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,76): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(160,99): error TS2304: Cannot find name 'StringHashTable'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(162,28): error TS2304: Cannot find name 'Type'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error TS2304: Cannot find name 'WithSymbol'.
+tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(163,30): error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(170,40): error TS2339: Property 'SymbolScopeBuilder' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(176,50): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(177,25): error TS2304: Cannot find name 'FuncDecl'.
@@ -397,7 +397,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource8.ts(454,35): error T
 !!! error TS2304: Cannot find name 'Type'.
             var withSymbol = new WithSymbol(withStmt.minChar, context.typeFlow.checker.locationInfo.unitIndex, withType);
                                  ~~~~~~~~~~
-!!! error TS2304: Cannot find name 'WithSymbol'.
+!!! error TS2552: Cannot find name 'WithSymbol'. Did you mean 'withSymbol'?
             withType.members = members;
             withType.ambientMembers = ambientMembers;
             withType.symbol = withSymbol;
