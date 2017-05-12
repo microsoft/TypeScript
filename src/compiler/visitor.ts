@@ -876,9 +876,9 @@ namespace ts {
                 return updatePartiallyEmittedExpression(<PartiallyEmittedExpression>node,
                     visitNode((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
-            case SyntaxKind.CommaList:
-                return updateCommaList(<CommaList>node,
-                    nodesVisitor((<CommaList>node).elements, visitor, isExpression));
+            case SyntaxKind.CommaListExpression:
+                return updateCommaList(<CommaListExpression>node,
+                    nodesVisitor((<CommaListExpression>node).elements, visitor, isExpression));
 
             default:
                 // No need to visit nodes with no children.
@@ -1393,8 +1393,8 @@ namespace ts {
                 result = reduceNode((<PartiallyEmittedExpression>node).expression, cbNode, result);
                 break;
 
-            case SyntaxKind.CommaList:
-                result = reduceNodes((<CommaList>node).elements, cbNodes, result);
+            case SyntaxKind.CommaListExpression:
+                result = reduceNodes((<CommaListExpression>node).elements, cbNodes, result);
                 break;
 
             default:

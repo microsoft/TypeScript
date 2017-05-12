@@ -389,9 +389,9 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        CommaListExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
-        CommaList,
 
         // Enum value count
         Count,
@@ -1604,8 +1604,11 @@ namespace ts {
         kind: SyntaxKind.EndOfDeclarationMarker;
     }
 
-    export interface CommaList extends Expression {
-        kind: SyntaxKind.CommaList;
+    /**
+     * A list of comma-seperated expressions. This node is only created by transformations.
+     */
+    export interface CommaListExpression extends Expression {
+        kind: SyntaxKind.CommaListExpression;
         elements: NodeArray<Expression>;
     }
 

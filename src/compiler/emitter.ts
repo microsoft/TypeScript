@@ -734,8 +734,8 @@ namespace ts {
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
 
-                case SyntaxKind.CommaList:
-                    return emitCommaList(<CommaList>node);
+                case SyntaxKind.CommaListExpression:
+                    return emitCommaList(<CommaListExpression>node);
             }
         }
 
@@ -2104,7 +2104,7 @@ namespace ts {
             emitExpression(node.expression);
         }
 
-        function emitCommaList(node: CommaList) {
+        function emitCommaList(node: CommaListExpression) {
             emitExpressionList(node, node.elements, ListFormat.CommaListElements);
         }
 
