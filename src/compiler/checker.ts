@@ -8564,6 +8564,35 @@ namespace ts {
             }
 
             function reportRelationError(message: DiagnosticMessage, source: Type, target: Type) {
+                // Much of the time, a user will write something simple like
+                //
+                //      let x: boolean | number
+                //      x = Math.random() < 0.5 ? "hello" : Symbol.iterator
+                //
+                // In such cases, we'd rather not give an error like
+                //
+                //      Type '"hello" | symbol' is not assignable to type 'number | boolean'
+                //
+                // The fact that "hello" had a string literal type is, at best, confusing for newcomers,
+                // and noise for experienced users. Here we can do an extra check in the error case to
+                // see whether or not substituting in the base types could simplify what we display to the user.
+                replaceLiterals: {
+                    if (isTypeOfKind(source, TypeFlags.Literal)) {
+                        const baseSource = getBaseTypeOfLiteralType(source);
+                        if (isTypeRelatedTo(baseSource, target, relation)) {
+                            break replaceLiterals;
+                        }
+                        source = baseSource;
+                    }
+                    if (isTypeOfKind(target, TypeFlags.Literal)) {
+                        const baseTarget = getBaseTypeOfLiteralType(target);
+                        if (isTypeRelatedTo(source, baseTarget, relation)) {
+                            break replaceLiterals;
+                        }
+                        target = baseTarget;
+                    }
+                }
+
                 let sourceType = typeToString(source);
                 let targetType = typeToString(target);
                 if (sourceType === targetType) {
