@@ -221,11 +221,12 @@ namespace ts.Completions {
     function getStringLiteralCompletionEntriesFromCallExpression(argumentInfo: SignatureHelp.ArgumentListInfo, typeChecker: TypeChecker): CompletionInfo | undefined {
         const candidates: Signature[] = [];
         const entries: CompletionEntry[] = [];
+        const uniques = createMap<true>();
 
         typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
 
         for (const candidate of candidates) {
-            addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker);
+            addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker, uniques);
         }
 
         if (entries.length) {
@@ -258,7 +259,7 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker): void {
+    function addStringLiteralCompletionsFromType(type: Type, result: Push<CompletionEntry>, typeChecker: TypeChecker, uniques = createMap<true>()): void {
         if (type && type.flags & TypeFlags.TypeParameter) {
             type = typeChecker.getBaseConstraintOfType(type);
         }
@@ -267,16 +268,20 @@ namespace ts.Completions {
         }
         if (type.flags & TypeFlags.Union) {
             for (const t of (<UnionType>type).types) {
-                addStringLiteralCompletionsFromType(t, result, typeChecker);
+                addStringLiteralCompletionsFromType(t, result, typeChecker, uniques);
             }
         }
         else if (type.flags & TypeFlags.StringLiteral) {
-            result.push({
-                name: (<LiteralType>type).text,
-                kindModifiers: ScriptElementKindModifier.none,
-                kind: ScriptElementKind.variableElement,
-                sortText: "0"
-            });
+            const name = (<LiteralType>type).text;
+            if (!uniques.has(name)) {
+                uniques.set(name, true);
+                result.push({
+                    name,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    kind: ScriptElementKind.variableElement,
+                    sortText: "0"
+                });
+            }
         }
     }
 
