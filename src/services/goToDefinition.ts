@@ -19,7 +19,7 @@ namespace ts.GoToDefinition {
                 [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
         }
 
-        const node = getTouchingPropertyName(sourceFile, position);
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         if (node === sourceFile) {
             return undefined;
         }
@@ -104,7 +104,7 @@ namespace ts.GoToDefinition {
 
     /// Goto type
     export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): DefinitionInfo[] {
-        const node = getTouchingPropertyName(sourceFile, position);
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         if (node === sourceFile) {
             return undefined;
         }

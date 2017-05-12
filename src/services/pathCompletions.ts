@@ -283,7 +283,7 @@ namespace ts.Completions.PathCompletions {
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionInfo {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         if (!token) {
             return undefined;
         }

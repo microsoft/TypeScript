@@ -202,7 +202,7 @@ namespace ts.textChanges {
                 return this;
             }
             if (index !== containingList.length - 1) {
-                const nextToken = getTokenAtPosition(sourceFile, node.end);
+                const nextToken = getTokenAtPosition(sourceFile, node.end, /*includeJsDocComment*/ false);
                 if (nextToken && isSeparator(node, nextToken)) {
                     // find first non-whitespace position in the leading trivia of the node
                     const startPosition = skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
@@ -214,7 +214,7 @@ namespace ts.textChanges {
                 }
             }
             else {
-                const previousToken = getTokenAtPosition(sourceFile, containingList[index - 1].end);
+                const previousToken = getTokenAtPosition(sourceFile, containingList[index - 1].end, /*includeJsDocComment*/ false);
                 if (previousToken && isSeparator(node, previousToken)) {
                     this.deleteNodeRange(sourceFile, previousToken, node);
                 }
@@ -292,7 +292,7 @@ namespace ts.textChanges {
             if (index !== containingList.length - 1) {
                 // any element except the last one
                 // use next sibling as an anchor
-                const nextToken = getTokenAtPosition(sourceFile, after.end);
+                const nextToken = getTokenAtPosition(sourceFile, after.end, /*includeJsDocComment*/ false);
                 if (nextToken && isSeparator(after, nextToken)) {
                     // for list
                     // a, b, c

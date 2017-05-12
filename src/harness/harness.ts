@@ -172,7 +172,7 @@ namespace Utils {
                     assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
                     currentPos = child.end;
                 },
-                (array: ts.NodeArray<ts.Node>) => {
+                array => {
                     assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
                     assert.isFalse(array.end > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
@@ -383,7 +383,7 @@ namespace Utils {
 
                 assertStructuralEquals(child1, child2);
             },
-            (array1: ts.NodeArray<ts.Node>) => {
+            array1 => {
                 const childName = findChildName(node1, array1);
                 const array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
 
