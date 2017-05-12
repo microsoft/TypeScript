@@ -8577,19 +8577,29 @@ namespace ts {
                 // and noise for experienced users. Here we can do an extra check in the error case to
                 // see whether or not substituting in the base types could simplify what we display to the user.
                 replaceLiterals: {
+                    let sourceReplacement;
+                    let targetReplacement;
                     if (isTypeOfKind(source, TypeFlags.Literal)) {
-                        const baseSource = getBaseTypeOfLiteralType(source);
-                        if (isTypeRelatedTo(baseSource, target, relation)) {
-                            break replaceLiterals;
-                        }
-                        source = baseSource;
+                        sourceReplacement = getBaseTypeOfLiteralType(source);
                     }
                     if (isTypeOfKind(target, TypeFlags.Literal)) {
-                        const baseTarget = getBaseTypeOfLiteralType(target);
-                        if (isTypeRelatedTo(source, baseTarget, relation)) {
-                            break replaceLiterals;
-                        }
-                        target = baseTarget;
+                        targetReplacement = getBaseTypeOfLiteralType(target);
+                    }
+                    // If they both have the same base type, it's probably useful to report the literal type.
+                    if (sourceReplacement === targetReplacement) {
+                        break replaceLiterals;
+                    }
+
+                    // We substitute the source with the base type *only* if
+                    // the relation with the target remains the same.
+                    if (sourceReplacement && !isTypeRelatedTo(sourceReplacement, target, relation)) {
+                        source = sourceReplacement;
+                    }
+
+                    // Likewise, only substitue the target if the relation with the source
+                    // (or potentially the base-type of the source!) remains the same.
+                    if (targetReplacement && !isTypeRelatedTo(source, targetReplacement, relation)) {
+                        target = targetReplacement;
                     }
                 }
 
