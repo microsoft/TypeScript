@@ -14312,11 +14312,11 @@ namespace ts {
                         candidateName === "set") {
                         continue;
                     }
-                    const distance = levenshtein(name, candidateName);
+                    const distance = dameraulevenshtein(name, candidateName);
                     if (distance > worstDistance) {
                         continue;
                     }
-                    if (distance < 3) {
+                    if (distance <= MIN_LEV_DIST) {
                         return candidate;
                     }
                     else if (distance < bestDistance) {
