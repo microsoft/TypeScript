@@ -38,7 +38,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     Type 'string' is not assignable to type 'EX'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(32,11): error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.
   Types of property 'a' are incompatible.
-    Type 'number' is not assignable to type '"hello"'.
+    Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(33,29): error TS2411: Property 'a' of type 'string' is not assignable to string index type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(33,29): error TS2411: Property 'prototype' of type 'CX' is not assignable to string index type 'number'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(34,29): error TS2413: Numeric index type 'string' is not assignable to string index type 'number'.
@@ -147,7 +147,7 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
               ~~~
 !!! error TS2430: Interface 'I12' incorrectly extends interface 'typeof NX'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'number' is not assignable to type '"hello"'.
+!!! error TS2430:     Type 'number' is not assignable to type 'string'.
     interface I14 extends TCX { [x: string]: number }
                                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property 'a' of type 'string' is not assignable to string index type 'number'.

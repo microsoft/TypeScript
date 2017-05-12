@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/Symbols/symbolProperty46.ts(10,1): error TS2322: Type '0' is not assignable to type 'string'.
+tests/cases/conformance/es6/Symbols/symbolProperty46.ts(10,1): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/es6/Symbols/symbolProperty46.ts (1 errors) ====
@@ -13,5 +13,5 @@ tests/cases/conformance/es6/Symbols/symbolProperty46.ts(10,1): error TS2322: Typ
     
     (new C)[Symbol.hasInstance] = 0;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '0' is not assignable to type 'string'.
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
     (new C)[Symbol.hasInstance] = "";

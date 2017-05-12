@@ -4,7 +4,7 @@ tests/cases/conformance/jsx/file.tsx(19,16): error TS2322: Type '{ naaame: "worl
 tests/cases/conformance/jsx/file.tsx(27,15): error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
   Type '{ name: 42; }' is not assignable to type '{ name?: string; }'.
     Types of property 'name' are incompatible.
-      Type '42' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(29,15): error TS2339: Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
 tests/cases/conformance/jsx/file.tsx(34,23): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { "prop-name": string; }'.
   Type '{}' is not assignable to type '{ "prop-name": string; }'.
@@ -50,7 +50,7 @@ tests/cases/conformance/jsx/file.tsx(41,16): error TS1005: ',' expected.
 !!! error TS2322: Type '{ name: 42; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
 !!! error TS2322:   Type '{ name: 42; }' is not assignable to type '{ name?: string; }'.
 !!! error TS2322:     Types of property 'name' are incompatible.
-!!! error TS2322:       Type '42' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
     // Error
     let f = <Meet naaaaaaame='no' />;
                   ~~~~~~~~~~~~~~~

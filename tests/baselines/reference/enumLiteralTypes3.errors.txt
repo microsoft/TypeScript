@@ -1,12 +1,12 @@
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(10,5): error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
-  Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(10,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+  Type 'Choice' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(11,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(12,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(18,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(19,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
-tests/cases/conformance/types/literal/enumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+tests/cases/conformance/types/literal/enumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(52,5): error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.Unknown'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(54,5): error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.No'.
 tests/cases/conformance/types/literal/enumLiteralTypes3.ts(55,5): error TS2365: Operator '===' cannot be applied to types 'YesNo' and 'Choice.Unknown'.
@@ -27,8 +27,8 @@ tests/cases/conformance/types/literal/enumLiteralTypes3.ts(96,14): error TS2678:
         a = a;
         a = b;
         ~
-!!! error TS2322: Type 'YesNo' is not assignable to type 'Choice.Yes'.
-!!! error TS2322:   Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+!!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
+!!! error TS2322:   Type 'Choice' is not assignable to type 'Choice.Yes'.
         a = c;
         ~
 !!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
@@ -65,14 +65,14 @@ tests/cases/conformance/types/literal/enumLiteralTypes3.ts(96,14): error TS2678:
     function f5(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
         a = Choice.Unknown;
         ~
-!!! error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
+!!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
         a = Choice.Yes;
         a = Choice.No;
         ~
-!!! error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
+!!! error TS2322: Type 'Choice' is not assignable to type 'Choice.Yes'.
         b = Choice.Unknown;
         ~
-!!! error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
+!!! error TS2322: Type 'Choice' is not assignable to type 'YesNo'.
         b = Choice.Yes;
         b = Choice.No;
         c = Choice.Unknown;

@@ -1,4 +1,4 @@
-tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts(9,5): error TS2322: Type '123' is not assignable to type 'object'.
+tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts(9,5): error TS2322: Type 'number' is not assignable to type 'object'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts(13,7): error TS2339: Property 'toFixed' does not exist on type 'never'.
 tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts(21,6): error TS2339: Property 'toString' does not exist on type 'never'.
 
@@ -14,7 +14,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveNarrow.ts(21,6): error TS
         a.narrowed; // ok
         a = 123; // error
         ~
-!!! error TS2322: Type '123' is not assignable to type 'object'.
+!!! error TS2322: Type 'number' is not assignable to type 'object'.
     }
     
     if (typeof a === 'number') {

@@ -1,4 +1,4 @@
-tests/cases/compiler/superCallArgsMustMatch.ts(17,15): error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'number'.
+tests/cases/compiler/superCallArgsMustMatch.ts(17,15): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
 
 ==== tests/cases/compiler/superCallArgsMustMatch.ts (1 errors) ====
@@ -20,7 +20,7 @@ tests/cases/compiler/superCallArgsMustMatch.ts(17,15): error TS2345: Argument of
             // which is instantiated with 'number' in the extends clause
             super("hi");
                   ~~~~
-!!! error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     
             var x: number = this.foo;
     

@@ -1,4 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(9,15): error TS2345: Argument of type '2' is not assignable to parameter of type 'string | 1'.
+tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts(9,15): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | 1'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference.ts (1 errors) ====
@@ -12,7 +12,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/unionTypeInference
     var a1: number;
     var a1 = f(1, 2);
                   ~
-!!! error TS2345: Argument of type '2' is not assignable to parameter of type 'string | 1'.
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string | 1'.
     var a2: number;
     var a2 = f(1, "hello");
     var a3: number;

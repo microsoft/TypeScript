@@ -4,7 +4,7 @@ tests/cases/conformance/jsx/file.tsx(13,9): error TS2322: Type '{}' is not assig
 tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
   Type '{ a: "hi"; }' is not assignable to type 'Prop'.
     Types of property 'a' are incompatible.
-      Type '"hi"' is not assignable to type 'number'.
+      Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -30,4 +30,4 @@ tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: "hi"; }' i
 !!! error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
 !!! error TS2322:   Type '{ a: "hi"; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'a' are incompatible.
-!!! error TS2322:       Type '"hi"' is not assignable to type 'number'.
+!!! error TS2322:       Type 'string' is not assignable to type 'number'.

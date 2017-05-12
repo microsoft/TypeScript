@@ -12,7 +12,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWith
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(35,9): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(44,9): error TS1015: Parameter cannot have question mark and initializer.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS1015: Parameter cannot have question mark and initializer.
-tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS2322: Type '""' is not assignable to type 'number'.
+tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(45,32): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWithOptionalParameterAndInitializer.ts(46,9): error TS1015: Parameter cannot have question mark and initializer.
 
 
@@ -91,7 +91,7 @@ tests/cases/conformance/types/objectTypeLiteral/callSignatures/callSignatureWith
                                    ~
 !!! error TS1015: Parameter cannot have question mark and initializer.
                                    ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'number'.
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
         b: (x?: any = '') => { }
             ~
 !!! error TS1015: Parameter cannot have question mark and initializer.

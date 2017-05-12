@@ -1,4 +1,4 @@
-tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts(4,9): error TS2322: Type '5' is not assignable to type '1'.
+tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts(4,9): error TS2322: Type 'number' is not assignable to type '1'.
 
 
 ==== tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts (1 errors) ====
@@ -7,7 +7,7 @@ tests/cases/conformance/types/literal/literalTypesWidenInParameterPosition.ts(4,
         constructor(readonly widen = 2) {
             this.noWiden = 5; // error
             ~~~~~~~~~~~~
-!!! error TS2322: Type '5' is not assignable to type '1'.
+!!! error TS2322: Type 'number' is not assignable to type '1'.
             this.widen = 6; // ok
         }
     }

@@ -1,7 +1,7 @@
 tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(24,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
 tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(25,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
-tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(26,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.B'.
-tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(27,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.A'.
+tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(26,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
+tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(27,7): error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
 
 
 ==== tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts (4 errors) ====
@@ -36,9 +36,9 @@ tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts(27,7): error TS23
 !!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
     const e3: X.Foo.B | boolean = Z.Foo.A; // not legal
           ~~
-!!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.B'.
+!!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
     const e4: X.Foo.A | boolean = Z.Foo.A; // not legal either because Z.Foo is computed and Z.Foo.A is not necessarily assignable to X.Foo.A
           ~~
-!!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo.A'.
+!!! error TS2322: Type 'Foo' is not assignable to type 'boolean | Foo'.
     const e5: Ka.Foo | boolean = Z.Foo.A; // ok
     

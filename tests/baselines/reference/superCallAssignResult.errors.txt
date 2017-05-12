@@ -1,4 +1,4 @@
-tests/cases/compiler/superCallAssignResult.ts(8,9): error TS2322: Type '5' is not assignable to type 'void'.
+tests/cases/compiler/superCallAssignResult.ts(8,9): error TS2322: Type 'number' is not assignable to type 'void'.
 
 
 ==== tests/cases/compiler/superCallAssignResult.ts (1 errors) ====
@@ -11,6 +11,6 @@ tests/cases/compiler/superCallAssignResult.ts(8,9): error TS2322: Type '5' is no
             var x = super(5); // Should be of type void, not E.
             x = 5;
             ~
-!!! error TS2322: Type '5' is not assignable to type 'void'.
+!!! error TS2322: Type 'number' is not assignable to type 'void'.
         }
     }

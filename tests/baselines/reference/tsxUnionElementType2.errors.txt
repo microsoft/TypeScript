@@ -2,7 +2,7 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' i
   Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
     Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
       Types of property 'x' are incompatible.
-        Type '"hi"' is not assignable to type 'boolean'.
+        Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -23,4 +23,4 @@ tests/cases/conformance/jsx/file.tsx(12,10): error TS2322: Type '{ x: "hi"; }' i
 !!! error TS2322:   Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
 !!! error TS2322:     Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
 !!! error TS2322:       Types of property 'x' are incompatible.
-!!! error TS2322:         Type '"hi"' is not assignable to type 'boolean'.
+!!! error TS2322:         Type 'string' is not assignable to type 'boolean'.

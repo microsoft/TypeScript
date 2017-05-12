@@ -22,7 +22,7 @@ tests/cases/conformance/jsx/file.tsx(55,24): error TS2322: Type '{ children: "he
 tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
     Types of property '"data-format"' are incompatible.
-      Type 'true' is not assignable to type 'string'.
+      Type 'boolean' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (8 errors) ====
@@ -114,4 +114,4 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type '{ data-format: 
 !!! error TS2322: Type '{ data-format: true; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
 !!! error TS2322:   Type '{ data-format: true; }' is not assignable to type 'HyphenProps'.
 !!! error TS2322:     Types of property '"data-format"' are incompatible.
-!!! error TS2322:       Type 'true' is not assignable to type 'string'.
+!!! error TS2322:       Type 'boolean' is not assignable to type 'string'.
