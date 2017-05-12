@@ -13549,17 +13549,17 @@ namespace ts {
         }
 
         function getApparentTypeOfJsxPropsType(propsType: Type): Type {
-            if (propsType) {
-                if (propsType.flags & TypeFlags.Intersection) {
-                    const propsApprentType: Type[] = [];
-                    for (const t of (<UnionOrIntersectionType>propsType).types) {
-                        propsApprentType.push(getApparentType(t));
-                    }
-                    return getIntersectionType(propsApprentType);
-                }
-                return getApparentType(propsType);
+            if (!propsType) {
+                return undefined;
             }
-            return propsType;
+            if (propsType.flags & TypeFlags.Intersection) {
+                const propsApparentType: Type[] = [];
+                for (const t of (<UnionOrIntersectionType>propsType).types) {
+                    propsApparentType.push(getApparentType(t));
+                }
+                return getIntersectionType(propsApparentType);
+            }
+            return getApparentType(propsType);
         }
 
         /**
