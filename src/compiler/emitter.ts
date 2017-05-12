@@ -962,7 +962,7 @@ namespace ts {
         function emitTypeLiteral(node: TypeLiteralNode) {
             write("{");
             if (node.members.length > 0) {
-                emitList(node, node.members, getEmitFlags(node) & EmitFlags.ToStringFormatting ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers);
+                emitList(node, node.members, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers);
             }
             write("}");
         }
@@ -1054,7 +1054,7 @@ namespace ts {
             }
             else {
                 write("{");
-                emitList(node, elements, getEmitFlags(node) & EmitFlags.ToStringFormatting ? ListFormat.ObjectBindingPatternElements : ListFormat.ObjectBindingPatternElementsWithSpaceBetweenBraces);
+                emitList(node, elements, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.ObjectBindingPatternElements : ListFormat.ObjectBindingPatternElementsWithSpaceBetweenBraces);
                 write("}");
             }
         }

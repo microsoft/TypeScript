@@ -2561,7 +2561,7 @@ namespace ts {
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
-                    return setEmitFlags(typeLiteralNode, EmitFlags.ToStringFormatting);
+                    return setEmitFlags(typeLiteralNode, EmitFlags.SingleLine);
                 }
 
                 function shouldAddParenthesisAroundFunctionType(callSignature: Signature, context: NodeBuilderContext) {
@@ -2865,7 +2865,7 @@ namespace ts {
                         if (clone.kind === SyntaxKind.BindingElement) {
                             (<BindingElement>clone).initializer = undefined;
                         }
-                        return setEmitFlags(clone, EmitFlags.ToStringFormatting);
+                        return setEmitFlags(clone, EmitFlags.SingleLine);
                     }
                 }
             }
