@@ -2,11 +2,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(19,20): error TS2313: T
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(20,20): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(21,20): error TS2322: Type 'Date' is not assignable to type 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(22,19): error TS2344: Type 'Date' does not satisfy the constraint 'string'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-  Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
-tests/cases/conformance/types/mapped/mappedTypeErrors.ts(28,24): error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-  Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(25,24): error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(26,24): error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+  Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(28,24): error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+  Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(30,24): error TS2344: Type 'undefined' does not satisfy the constraint 'string'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(33,24): error TS2344: Type 'T' does not satisfy the constraint 'string'.
   Type 'T' is not assignable to type 'string'.
@@ -84,16 +84,16 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: 
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
                            ~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '"foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
     type T12 = Pick<Shape, "name" | "foo">;  // Error
                            ~~~~~~~~~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '"name" | "foo"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344:   Type '"foo"' is not assignable to type '"name" | "width" | "height" | "visible"'.
     type T13 = Pick<Shape, keyof Named>;
     type T14 = Pick<Shape, keyof Point>;  // Error
                            ~~~~~~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '"x" | "y"' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344:   Type '"x"' is not assignable to type '"name" | "width" | "height" | "visible"'.
     type T15 = Pick<Shape, never>;
     type T16 = Pick<Shape, undefined>;  // Error
                            ~~~~~~~~~

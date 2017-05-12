@@ -1,7 +1,7 @@
 tests/cases/conformance/jsx/file.tsx(19,14): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
-      Type 'number' is not assignable to type '2'.
+      Type '3' is not assignable to type '2'.
 tests/cases/conformance/jsx/file.tsx(20,15): error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: "Hi"; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
@@ -9,7 +9,7 @@ tests/cases/conformance/jsx/file.tsx(20,15): error TS2322: Type '{ x: "Hi"; }' i
 tests/cases/conformance/jsx/file.tsx(21,15): error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
-      Type 'number' is not assignable to type '2'.
+      Type '3' is not assignable to type '2'.
 tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
   Type '{ x: true; }' is not assignable to type 'OptionProp'.
     Types of property 'x' are incompatible.
@@ -40,7 +40,7 @@ tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: true; }' i
 !!! error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
 !!! error TS2322:   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
 !!! error TS2322:     Types of property 'x' are incompatible.
-!!! error TS2322:       Type 'number' is not assignable to type '2'.
+!!! error TS2322:       Type '3' is not assignable to type '2'.
     let y1 = <Opt {...obj1} x="Hi"/>;
                   ~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ x: "Hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
@@ -52,7 +52,7 @@ tests/cases/conformance/jsx/file.tsx(22,15): error TS2322: Type '{ x: true; }' i
 !!! error TS2322: Type '{ x: 3; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.
 !!! error TS2322:   Type '{ x: 3; }' is not assignable to type 'OptionProp'.
 !!! error TS2322:     Types of property 'x' are incompatible.
-!!! error TS2322:       Type 'number' is not assignable to type '2'.
+!!! error TS2322:       Type '3' is not assignable to type '2'.
     let y3 = <Opt x />;
                   ~
 !!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Opt> & OptionProp & { children?: ReactNode; }'.

@@ -1,6 +1,6 @@
 tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(4,10): error TS2678: Type 'typeof Foo' is not comparable to type 'number'.
 tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(5,10): error TS2678: Type 'string' is not comparable to type 'number'.
-tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(6,10): error TS2678: Type 'number' is not comparable to type '0'.
+tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(6,10): error TS2678: Type '123' is not comparable to type '0'.
 tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: Type 'boolean' is not comparable to type 'number'.
 
 
@@ -16,7 +16,7 @@ tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: T
 !!! error TS2678: Type 'string' is not comparable to type 'number'.
         case 123: break;    // Error
              ~~~
-!!! error TS2678: Type 'number' is not comparable to type '0'.
+!!! error TS2678: Type '123' is not comparable to type '0'.
         case true: break;   // Error
              ~~~~
 !!! error TS2678: Type 'boolean' is not comparable to type 'number'.
