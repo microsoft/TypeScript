@@ -2229,19 +2229,7 @@ namespace ts {
 
             return result;
         }
-        function oldTypeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
-            let result = writer.string();
-            releaseStringWriter(writer);
-
-            const maxLength = compilerOptions.noErrorTruncation || flags & TypeFormatFlags.NoTruncation ? undefined : 100;
-            if (maxLength && result.length >= maxLength) {
-                result = result.substr(0, maxLength - "...".length) + "...";
-            }
-            return result;
-        }
-
+        
         function typeFormatFlagsToNodeBuilderFlags(flags: TypeFormatFlags): NodeBuilderFlags {
             let result = NodeBuilderFlags.None;
             if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
@@ -2282,8 +2270,6 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const str = oldTypeToString(type, enclosingDeclaration, flags); str;
-            const str2 = oldTypeToString(type, enclosingDeclaration, flags); str2;
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, typeFormatFlagsToNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors, !!(flags & TypeFormatFlags.InTypeAlias));
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const newLine = NewLineKind.None;
@@ -2331,11 +2317,8 @@ namespace ts {
                 // State
                 encounteredError: boolean;
                 inObjectTypeLiteral: boolean;
-                // TODO: needed for part of parens handling
                 InElementType: boolean;         // Writing an array or union element type
-                // TODO: ???
-                InFirstTypeArgument: boolean;  // Writing first type argument of the instantiated type
-                // TODO: ???
+                InFirstTypeArgument: boolean;   // Writing first type argument of the instantiated type
                 InTypeAlias: boolean;           // Writing type in type alias declaration
                 symbolStack: Symbol[] | undefined;
             }
@@ -2354,18 +2337,15 @@ namespace ts {
             }
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
-                const InElementType = context.InElementType;
-                // TODO: why doesn't tts unset the flag?
+                const inElementType = context.InElementType;
                 context.InElementType = false;
                 const inTypeAlias = context.InTypeAlias;
                 context.InTypeAlias = false;
                 const inFirstTypeArgument = context.InFirstTypeArgument;
                 context.InFirstTypeArgument = false;
 
-                // TODO: should be assert?
                 if (!type) {
                     context.encounteredError = true;
-                    // TODO(aozgaa): should we return implict any (undefined) or explicit any (keywordtypenode)?
                     return undefined;
                 }
 
@@ -2382,7 +2362,7 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.BooleanKeyword);
                 }
                 if (type.flags & TypeFlags.Enum) {
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
+                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.StringLiteral)) {
@@ -2396,7 +2376,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.EnumLiteral) {
                     const parentSymbol = getParentOfSymbol(type.symbol);
-                    const parentName = symbolToName(parentSymbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
+                    const parentName = symbolToName(parentSymbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     const name = getNameOfSymbol(type.symbol, context);
                     const enumLiteralName = createQualifiedName(parentName, name);
                     return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
@@ -2436,12 +2416,11 @@ namespace ts {
                 }
                 if (objectFlags & ObjectFlags.ClassOrInterface) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
-                    // TODO(aozgaa): handle type arguments.
+                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & TypeFlags.TypeParameter) {
-                    const name = symbolToName(type.symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
+                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
                     // Ignore constraint/default when creating a usage (as opposed to declaration) of a type parameter.
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
@@ -2451,7 +2430,6 @@ namespace ts {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
                     const typeArgumentNodes = toTypeArgumentNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
-                    // return symbolToTypeReferenceIdentifier(type.aliasSymbol, type.aliasTypeArguments);
                 }
 
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
@@ -2459,7 +2437,7 @@ namespace ts {
                     const typeNodes = types && mapToTypeNodeArray(types, context, /*addInElementTypeFlag*/ true, /*addInFirstTypeArgumentFlag*/ false);
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
-                        return InElementType ? createParenthesizedTypeNode(unionOrIntersectionTypeNode) : unionOrIntersectionTypeNode;
+                        return inElementType ? createParenthesizedTypeNode(unionOrIntersectionTypeNode) : unionOrIntersectionTypeNode;
                     }
                     else {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowEmptyUnionOrIntersection)) {
@@ -2521,7 +2499,7 @@ namespace ts {
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
                                 // The specified symbol flags need to be reinterpreted as type flags
-                                const entityName = symbolToName(typeAlias, /*expectsIdentifier*/ false, SymbolFlags.Type, context);
+                                const entityName = symbolToName(typeAlias, context, SymbolFlags.Type, /*expectsIdentifier*/ false );
                                 return createTypeReferenceNode(entityName, /*typeArguments*/ undefined);
                             }
                             else {
@@ -2598,7 +2576,7 @@ namespace ts {
                 }
 
                 function shouldAddParenthesisAroundFunctionType(callSignature: Signature, context: NodeBuilderContext) {
-                    if (InElementType) {
+                    if (inElementType) {
                         return true;
                     }
                     else if (inFirstTypeArgument) {
@@ -2611,14 +2589,13 @@ namespace ts {
                 }
 
                 function createTypeQueryNodeFromSymbol(symbol: Symbol, symbolFlags: SymbolFlags) {
-                    const entityName = symbolToName(symbol, /*expectsIdentifier*/ false, symbolFlags, context);
+                    const entityName = symbolToName(symbol, context, symbolFlags, /*expectsIdentifier*/ false);
                     return createTypeQueryNode(entityName);
                 }
 
                 function symbolToTypeReferenceName(symbol: Symbol) {
                     // Unnamed function expressions and arrow functions have reserved names that we don't want to display
-                    const entityName = symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.name) ? symbolToName(symbol, /*expectsIdentifier*/ false, SymbolFlags.Type, context) : createIdentifier("");
-                    // TODO: assert no type args?
+                    const entityName = symbol.flags & SymbolFlags.Class || !isReservedMemberName(symbol.name) ? symbolToName(symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false) : createIdentifier("");
                     return entityName;
                 }
 
@@ -2651,7 +2628,6 @@ namespace ts {
                         let i = 0;
                         let qualifiedName: QualifiedName | undefined;
                         if (outerTypeParameters) {
-                            let inFirstTypeArgument = true;
                             const length = outerTypeParameters.length;
                             while (i < length) {
                                 // Find group of type arguments for type parameters with the same declaring container.
@@ -2676,7 +2652,6 @@ namespace ts {
                                         qualifiedName = createQualifiedName(namePart, /*right*/ undefined);
                                     }
                                 }
-                                inFirstTypeArgument = false;
                             }
                         }
 
@@ -2745,12 +2720,11 @@ namespace ts {
                         return typeElements;
                     }
 
-                    // TODO: make logic mirror that of writeObjectLiteralType
                     for (const propertySymbol of properties) {
                         const propertyType = getTypeOfSymbol(propertySymbol);
                         const saveEnclosingDeclaration = context.enclosingDeclaration;
                         context.enclosingDeclaration = undefined;
-                        const propertyName = symbolToName(propertySymbol, /*expectsIdentifier*/ true, SymbolFlags.Value, context);
+                        const propertyName = symbolToName(propertySymbol, context, SymbolFlags.Value, /*expectsIdentifier*/ true);
                         context.enclosingDeclaration = saveEnclosingDeclaration;
                         const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
                         if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
@@ -2856,7 +2830,7 @@ namespace ts {
                 const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
-                const name = symbolToName(type.symbol, /*expectsIdentifier*/ true, SymbolFlags.Type, context);
+                const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ true);
                 return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
             }
 
@@ -2903,10 +2877,9 @@ namespace ts {
                 }
             }
 
-            // TODO: add SymbolFormatFlags?? Yes to add outer type parameters. Defer UseOnlyExternalAliasing until a separate symbolbuilder PR.
-            function symbolToName(symbol: Symbol, expectsIdentifier: true, meaning: SymbolFlags, context: NodeBuilderContext): Identifier;
-            function symbolToName(symbol: Symbol, expectsIdentifier: false, meaning: SymbolFlags, context: NodeBuilderContext): EntityName;
-            function symbolToName(symbol: Symbol, expectsIdentifier: boolean, meaning: SymbolFlags, context: NodeBuilderContext): EntityName {
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: true): Identifier;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: false): EntityName;
+            function symbolToName(symbol: Symbol, context: NodeBuilderContext, meaning: SymbolFlags, expectsIdentifier: boolean): EntityName {
 
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
