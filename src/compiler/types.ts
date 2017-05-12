@@ -576,11 +576,11 @@ namespace ts {
          * If the identifier begins with two underscores, this will begin with three.
          */
         text: string;
-        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
-        /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
-        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
-        /*@internal*/ typeArguments?: NodeArray<TypeNode>;          // Only defined on synthesized nodes.Though not syntactically valid, used in emitting diagnostics.
+        /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
+        /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes.Though not syntactically valid, used in emitting diagnostics.
     }
 
     // Transient identifier node (marked by id === -1)
@@ -2592,14 +2592,14 @@ namespace ts {
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
 
         // Error handling
-        allowThisInObjectLiteral                = 1 << 10,
-        allowQualifedNameInPlaceOfIdentifier    = 1 << 11,
-        allowTypeParameterInQualifiedName       = 1 << 12,
-        allowAnonymousIdentifier                = 1 << 13,
-        allowEmptyUnionOrIntersection           = 1 << 14,
-        allowEmptyTuple                         = 1 << 15,
+        AllowThisInObjectLiteral                = 1 << 10,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 11,
+        AllowTypeParameterInQualifiedName       = 1 << 12,
+        AllowAnonymousIdentifier                = 1 << 13,
+        AllowEmptyUnionOrIntersection           = 1 << 14,
+        AllowEmptyTuple                         = 1 << 15,
 
-        ignoreErrors = allowThisInObjectLiteral | allowQualifedNameInPlaceOfIdentifier | allowTypeParameterInQualifiedName | allowAnonymousIdentifier | allowEmptyUnionOrIntersection | allowEmptyTuple,
+        ignoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowTypeParameterInQualifiedName | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
 
         // State
         inObjectTypeLiteral                     = 1 << 20,
@@ -3538,8 +3538,7 @@ namespace ts {
 
     export const enum NewLineKind {
         CarriageReturnLineFeed = 0,
-        LineFeed = 1,
-        None = 2
+        LineFeed = 1
     }
 
     export interface LineAndCharacter {
@@ -3964,7 +3963,6 @@ namespace ts {
     }
 
     export const enum EmitFlags {
-        None       = 0,
         SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
         AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
         NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
@@ -4195,7 +4193,7 @@ namespace ts {
          * the identifiers of the source file are used when generating unique names to avoid
          * collisions.
          */
-        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined): string;
+        printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
         /**
          * Prints a source file as-is, without any emit transformations.
          */

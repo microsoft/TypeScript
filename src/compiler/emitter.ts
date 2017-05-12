@@ -234,12 +234,7 @@ namespace ts {
             writeBundle
         };
 
-        /**
-         * If `sourceFile` is `undefined`, `node` must be a synthesized `TypeNode`.
-         */
-        function printNode(hint: EmitHint, node: TypeNode, sourceFile: undefined): string;
-        function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string;
-        function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined): string {
+        function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
             switch (hint) {
                 case EmitHint.SourceFile:
                     Debug.assert(isSourceFile(node), "Expected a SourceFile node.");
@@ -269,6 +264,11 @@ namespace ts {
             return endPrint();
         }
 
+        /**
+         * If `sourceFile` is `undefined`, `node` must be a synthesized `TypeNode`.
+         */
+        function writeNode(hint: EmitHint, node: TypeNode, sourceFile: undefined, output: EmitTextWriter): void;
+        function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, output: EmitTextWriter): void;
         function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
             const previousWriter = writer;
             setWriter(output);
@@ -961,6 +961,7 @@ namespace ts {
 
         function emitTypeLiteral(node: TypeLiteralNode) {
             write("{");
+            // TODO: fix added indentation so we can remove this check.
             if (node.members.length > 0) {
                 emitList(node, node.members, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers);
             }
@@ -2525,7 +2526,7 @@ namespace ts {
 
                 const firstChild = children[0];
                 if (firstChild === undefined) {
-                    return !(rangeIsOnSingleLine(parentNode, currentSourceFile));
+                    return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                 }
                 else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(firstChild)) {
                     return synthesizedNodeStartsOnNewLine(firstChild, format);
@@ -2551,7 +2552,7 @@ namespace ts {
                     return synthesizedNodeStartsOnNewLine(previousNode, format) || synthesizedNodeStartsOnNewLine(nextNode, format);
                 }
                 else {
-                    return !(rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile));
+                    return !rangeEndIsOnSameLineAsRangeStart(previousNode, nextNode, currentSourceFile);
                 }
             }
             else {
@@ -2570,13 +2571,13 @@ namespace ts {
 
                 const lastChild = lastOrUndefined(children);
                 if (lastChild === undefined) {
-                    return !(rangeIsOnSingleLine(parentNode, currentSourceFile));
+                    return !rangeIsOnSingleLine(parentNode, currentSourceFile);
                 }
                 else if (positionIsSynthesized(parentNode.pos) || nodeIsSynthesized(lastChild)) {
                     return synthesizedNodeStartsOnNewLine(lastChild, format);
                 }
                 else {
-                    return !(rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile));
+                    return !rangeEndPositionsAreOnSameLine(parentNode, lastChild, currentSourceFile);
                 }
             }
             else {

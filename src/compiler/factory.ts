@@ -2,26 +2,6 @@
 /// <reference path="utilities.ts"/>
 
 namespace ts {
-    export const nullTransformationContext: TransformationContext = {
-        enableEmitNotification: noop,
-        enableSubstitution: noop,
-        endLexicalEnvironment: () => undefined,
-        getCompilerOptions: notImplemented,
-        getEmitHost: notImplemented,
-        getEmitResolver: notImplemented,
-        hoistFunctionDeclaration: noop,
-        hoistVariableDeclaration: noop,
-        isEmitNotificationEnabled: notImplemented,
-        isSubstitutionEnabled: notImplemented,
-        onEmitNode: noop,
-        onSubstituteNode: notImplemented,
-        readEmitHelpers: notImplemented,
-        requestEmitHelper: noop,
-        resumeLexicalEnvironment: noop,
-        startLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop
-    };
-
     function createSynthesizedNode(kind: SyntaxKind): Node {
         const node = createNode(kind, -1, -1);
         node.flags |= NodeFlags.Synthesized;
@@ -127,13 +107,18 @@ namespace ts {
 
     // Identifiers
 
+    export function createIdentifier(text: string): Identifier;
+    /* @internal */
+    export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
     export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.text = escapeIdentifier(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
-        node.typeArguments = asNodeArray(typeArguments);
+        if (typeArguments) {
+            node.typeArguments = createNodeArray(typeArguments);
+        }
         return node;
     }
 
@@ -299,13 +284,13 @@ namespace ts {
     // Type Elements
 
     export function createPropertySignature(modifiers: Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
-        const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
-        propertySignature.modifiers = asNodeArray(modifiers);
-        propertySignature.name = asName(name);
-        propertySignature.questionToken = questionToken;
-        propertySignature.type = type;
-        propertySignature.initializer = initializer;
-        return propertySignature;
+        const node = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.questionToken = questionToken;
+        node.type = type;
+        node.initializer = initializer;
+        return node;
     }
 
     export function updatePropertySignature(node: PropertySignature, modifiers: Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
@@ -2494,6 +2479,25 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
 
     // Compound nodes
 

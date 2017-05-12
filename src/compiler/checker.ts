@@ -2278,35 +2278,10 @@ namespace ts {
             return result;
         }
 
-        function typeFormatFlagsToNodeBuilderFlags(flags: TypeFormatFlags): NodeBuilderFlags {
-            let result = NodeBuilderFlags.None;
-            if (flags === TypeFormatFlags.None) {
-                return result;
-            }
-            if (flags & TypeFormatFlags.NoTruncation) {
-                result |= NodeBuilderFlags.NoTruncation;
-            }
-            if (flags & TypeFormatFlags.UseFullyQualifiedType) {
-                result |= NodeBuilderFlags.UseFullyQualifiedType;
-            }
-            if (flags & TypeFormatFlags.SuppressAnyReturnType) {
-                result |= NodeBuilderFlags.SuppressAnyReturnType;
-            }
-            if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
-                result |= NodeBuilderFlags.WriteArrayAsGenericType;
-            }
-            if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
-                result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
-            }
-
-            return result;
-        }
-
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, typeFormatFlagsToNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors);
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors);
             Debug.assert(typeNode !== undefined, "should always get typenode?");
-            const newLine = NewLineKind.None;
-            const options = { newLine, removeComments: true };
+            const options = { removeComments: true };
             const writer = createTextWriter("");
             const printer = createPrinter(options, writer);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
@@ -2318,6 +2293,30 @@ namespace ts {
                 return result.substr(0, maxLength - "...".length) + "...";
             }
             return result;
+
+            function toNodeBuilderFlags(flags?: TypeFormatFlags): NodeBuilderFlags {
+                let result = NodeBuilderFlags.None;
+                if (!flags) {
+                    return result;
+                }
+                if (flags & TypeFormatFlags.NoTruncation) {
+                    result |= NodeBuilderFlags.NoTruncation;
+                }
+                if (flags & TypeFormatFlags.UseFullyQualifiedType) {
+                    result |= NodeBuilderFlags.UseFullyQualifiedType;
+                }
+                if (flags & TypeFormatFlags.SuppressAnyReturnType) {
+                    result |= NodeBuilderFlags.SuppressAnyReturnType;
+                }
+                if (flags & TypeFormatFlags.WriteArrayAsGenericType) {
+                    result |= NodeBuilderFlags.WriteArrayAsGenericType;
+                }
+                if (flags & TypeFormatFlags.WriteTypeArgumentsOfSignature) {
+                    result |= NodeBuilderFlags.WriteTypeArgumentsOfSignature;
+                }
+
+                return result;
+            }
         }
 
         function createNodeBuilder() {
@@ -2423,7 +2422,7 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
                     if (context.flags & NodeBuilderFlags.inObjectTypeLiteral) {
-                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowThisInObjectLiteral)) {
+                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
                     }
@@ -2455,7 +2454,7 @@ namespace ts {
                         return inElementType ? createParenthesizedType(unionOrIntersectionTypeNode) : unionOrIntersectionTypeNode;
                     }
                     else {
-                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowEmptyUnionOrIntersection)) {
+                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyUnionOrIntersection)) {
                             context.encounteredError = true;
                         }
                         return undefined;
@@ -2629,7 +2628,7 @@ namespace ts {
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
                         }
-                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowEmptyTuple)) {
+                        if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
                             context.encounteredError = true;
                         }
                         return undefined;
@@ -2901,7 +2900,7 @@ namespace ts {
 
                 if (expectsIdentifier && chain.length !== 1
                     && !context.encounteredError
-                    && !(context.flags & NodeBuilderFlags.allowQualifedNameInPlaceOfIdentifier)) {
+                    && !(context.flags & NodeBuilderFlags.AllowQualifedNameInPlaceOfIdentifier)) {
                     context.encounteredError = true;
                 }
                 return createEntityNameFromSymbolChain(chain, chain.length - 1);
@@ -2923,7 +2922,7 @@ namespace ts {
                             }
                         }
                         if (typeParameters && typeParameters.length > 0) {
-                            if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowTypeParameterInQualifiedName)) {
+                            if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowTypeParameterInQualifiedName)) {
                                 context.encounteredError = true;
                             }
                             typeParameterNodes = toTypeArgumentNodes(typeParameters, context);
@@ -2981,7 +2980,7 @@ namespace ts {
                     if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
                         return declarationNameToString((<VariableDeclaration>declaration.parent).name);
                     }
-                    if (!context.encounteredError && !(context.flags & NodeBuilderFlags.allowAnonymousIdentifier)) {
+                    if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowAnonymousIdentifier)) {
                         context.encounteredError = true;
                     }
                     switch (declaration.kind) {

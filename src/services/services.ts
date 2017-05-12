@@ -360,7 +360,7 @@ namespace ts {
         _incrementExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
-        typeArguments: any;
+        /*@internal*/typeArguments: NodeArray<TypeNode>;
         constructor(_kind: SyntaxKind.Identifier, pos: number, end: number) {
             super(pos, end);
         }

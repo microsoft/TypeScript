@@ -3253,8 +3253,6 @@ namespace ts {
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
         switch (options.newLine) {
-            case NewLineKind.None:
-                return "";
             case NewLineKind.CarriageReturnLineFeed:
                 return carriageReturnLineFeed;
             case NewLineKind.LineFeed:

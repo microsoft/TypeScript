@@ -254,6 +254,7 @@ namespace ts {
             case SyntaxKind.Decorator:
                 return updateDecorator(<Decorator>node,
                     visitNode((<Decorator>node).expression, visitor, isExpression));
+
             // Type elements
 
             case SyntaxKind.PropertySignature:
@@ -970,6 +971,15 @@ namespace ts {
                 break;
 
             // Type member
+
+            case SyntaxKind.PropertySignature:
+                result = reduceNodes((<PropertySignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<PropertySignature>node).name, cbNode, result);
+                result = reduceNode((<PropertySignature>node).questionToken, cbNode, result);
+                result = reduceNode((<PropertySignature>node).type, cbNode, result);
+                result = reduceNode((<PropertySignature>node).initializer, cbNode, result);
+                break;
+
             case SyntaxKind.PropertyDeclaration:
                 result = reduceNodes((<PropertyDeclaration>node).decorators, cbNodes, result);
                 result = reduceNodes((<PropertyDeclaration>node).modifiers, cbNodes, result);
@@ -977,6 +987,8 @@ namespace ts {
                 result = reduceNode((<PropertyDeclaration>node).type, cbNode, result);
                 result = reduceNode((<PropertyDeclaration>node).initializer, cbNode, result);
                 break;
+
+            case SyntaxKind.PropertySignature:
 
             case SyntaxKind.MethodDeclaration:
                 result = reduceNodes((<MethodDeclaration>node).decorators, cbNodes, result);
