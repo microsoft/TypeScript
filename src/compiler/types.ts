@@ -391,6 +391,7 @@ namespace ts {
         PartiallyEmittedExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
+        CommaList,
 
         // Enum value count
         Count,
@@ -1601,6 +1602,11 @@ namespace ts {
     /* @internal */
     export interface EndOfDeclarationMarker extends Statement {
         kind: SyntaxKind.EndOfDeclarationMarker;
+    }
+
+    export interface CommaList extends Expression {
+        kind: SyntaxKind.CommaList;
+        elements: NodeArray<Expression>;
     }
 
     /**

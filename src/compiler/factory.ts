@@ -2077,6 +2077,18 @@ namespace ts {
         return node;
     }
 
+    export function createCommaList(elements: Expression[]) {
+        const node = <CommaList>createSynthesizedNode(SyntaxKind.CommaList);
+        node.elements = createNodeArray(elements);
+        return node;
+    }
+
+    export function updateCommaList(node: CommaList, elements: Expression[]) {
+        return node.elements !== elements
+            ? updateNode(createCommaList(elements), node)
+            : node;
+    }
+
     export function createBundle(sourceFiles: SourceFile[]) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
@@ -2865,7 +2877,9 @@ namespace ts {
     }
 
     export function inlineExpressions(expressions: Expression[]) {
-        return reduceLeft(expressions, createComma);
+        return expressions.length > 10
+            ? createCommaList(expressions)
+            : reduceLeft(expressions, createComma);
     }
 
     export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
