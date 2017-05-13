@@ -43,11 +43,11 @@ Object.prototype.hasOwnProperty("string");
 
 Object.prototype.isPrototypeOf(Object);
 >Object.prototype.isPrototypeOf(Object) : boolean
->Object.prototype.isPrototypeOf : (v: Object) => boolean
+>Object.prototype.isPrototypeOf : (v: object) => boolean
 >Object.prototype : Object
 >Object : ObjectConstructor
 >prototype : Object
->isPrototypeOf : (v: Object) => boolean
+>isPrototypeOf : (v: object) => boolean
 >Object : ObjectConstructor
 
 Object.prototype.propertyIsEnumerable("string");
