@@ -362,6 +362,8 @@ namespace ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+            case SyntaxKind.CommaListExpression:
+                return visitNodes(cbNodes, (<CommaListExpression>node).elements);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (<JsxElement>node).openingElement) ||

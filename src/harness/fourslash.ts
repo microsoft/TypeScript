@@ -3417,6 +3417,18 @@ namespace FourSlashInterface {
 
     export class VerifyNegatable {
         public not: VerifyNegatable;
+        public allowedClassElementKeywords = [
+            "public",
+            "private",
+            "protected",
+            "static",
+            "abstract",
+            "readonly",
+            "get",
+            "set",
+            "constructor",
+            "async"
+        ];
 
         constructor(protected state: FourSlash.TestState, private negative = false) {
             if (!negative) {
@@ -3451,6 +3463,12 @@ namespace FourSlashInterface {
 
         public completionListIsEmpty() {
             this.state.verifyCompletionListIsEmpty(this.negative);
+        }
+
+        public completionListContainsClassElementKeywords() {
+            for (const keyword of this.allowedClassElementKeywords) {
+                this.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
+            }
         }
 
         public completionListIsGlobal(expected: boolean) {

@@ -389,6 +389,7 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        CommaListExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
 
@@ -1604,6 +1605,14 @@ namespace ts {
     }
 
     /**
+     * A list of comma-seperated expressions. This node is only created by transformations.
+     */
+    export interface CommaListExpression extends Expression {
+        kind: SyntaxKind.CommaListExpression;
+        elements: NodeArray<Expression>;
+    }
+
+    /**
      * Marks the beginning of a merged transformed declaration.
      */
     /* @internal */
@@ -2574,6 +2583,12 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+
+        /**
+         * For a union, will include a property if it's defined in *any* of the member types.
+         * So for `{ a } | { b }`, this will include both `a` and `b`.
+         */
+        /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
     }
 
     export enum NodeBuilderFlags {

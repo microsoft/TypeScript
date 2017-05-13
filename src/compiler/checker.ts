@@ -205,6 +205,7 @@ namespace ts {
                 return tryFindAmbientModule(moduleName, /*withAugmentations*/ false);
             },
             getApparentType,
+            getAllPossiblePropertiesOfType,
             getSuggestionForNonexistentProperty,
             getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
@@ -682,10 +683,6 @@ namespace ts {
 
         function getObjectFlags(type: Type): ObjectFlags {
             return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
-        }
-
-        function getCheckFlags(symbol: Symbol): CheckFlags {
-            return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -5693,6 +5690,22 @@ namespace ts {
             return type.flags & TypeFlags.UnionOrIntersection ?
                 getPropertiesOfUnionOrIntersectionType(<UnionType>type) :
                 getPropertiesOfObjectType(type);
+        }
+
+        function getAllPossiblePropertiesOfType(type: Type): Symbol[] {
+            if (type.flags & TypeFlags.Union) {
+                const props = createMap<Symbol>();
+                for (const memberType of (type as UnionType).types) {
+                    for (const { name } of getPropertiesOfType(memberType)) {
+                        if (!props.has(name)) {
+                            props.set(name, createUnionOrIntersectionProperty(type as UnionType, name));
+                        }
+                    }
+                }
+                return arrayFrom(props.values());
+            } else {
+                return getPropertiesOfType(type);
+            }
         }
 
         function getConstraintOfType(type: TypeVariable | UnionOrIntersectionType): Type {
@@ -13557,6 +13570,20 @@ namespace ts {
             return _jsxElementChildrenPropertyName;
         }
 
+        function getApparentTypeOfJsxPropsType(propsType: Type): Type {
+            if (!propsType) {
+                return undefined;
+            }
+            if (propsType.flags & TypeFlags.Intersection) {
+                const propsApparentType: Type[] = [];
+                for (const t of (<UnionOrIntersectionType>propsType).types) {
+                    propsApparentType.push(getApparentType(t));
+                }
+                return getIntersectionType(propsApparentType);
+            }
+            return getApparentType(propsType);
+        }
+
         /**
          * Get JSX attributes type by trying to resolve openingLikeElement as a stateless function component.
          * Return only attributes type of successfully resolved call signature.
@@ -13577,6 +13604,7 @@ namespace ts {
                     if (callSignature !== unknownSignature) {
                         const callReturnType = callSignature && getReturnTypeOfSignature(callSignature);
                         let paramType = callReturnType && (callSignature.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(callSignature.parameters[0]));
+                        paramType = getApparentTypeOfJsxPropsType(paramType);
                         if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             // Intersect in JSX.IntrinsicAttributes if it exists
                             const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes);
@@ -13614,7 +13642,8 @@ namespace ts {
                     let allMatchingAttributesType: Type;
                     for (const candidate of candidatesOutArray) {
                         const callReturnType = getReturnTypeOfSignature(candidate);
-                        const paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
+                        let paramType = callReturnType && (candidate.parameters.length === 0 ? emptyObjectType : getTypeOfSymbol(candidate.parameters[0]));
+                        paramType = getApparentTypeOfJsxPropsType(paramType);
                         if (callReturnType && isTypeAssignableTo(callReturnType, jsxStatelessElementType)) {
                             let shouldBeCandidate = true;
                             for (const attribute of openingLikeElement.attributes.properties) {
@@ -14012,25 +14041,6 @@ namespace ts {
         // '.prototype' property as well as synthesized tuple index properties.
         function getDeclarationKindFromSymbol(s: Symbol) {
             return s.valueDeclaration ? s.valueDeclaration.kind : SyntaxKind.PropertyDeclaration;
-        }
-
-        function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
-            if (s.valueDeclaration) {
-                const flags = getCombinedModifierFlags(s.valueDeclaration);
-                return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
-            }
-            if (getCheckFlags(s) & CheckFlags.Synthetic) {
-                const checkFlags = (<TransientSymbol>s).checkFlags;
-                const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
-                    checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
-                    ModifierFlags.Protected;
-                const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
-                return accessModifier | staticModifier;
-            }
-            if (s.flags & SymbolFlags.Prototype) {
-                return ModifierFlags.Public | ModifierFlags.Static;
-            }
-            return 0;
         }
 
         function getDeclarationNodeFlagsFromSymbol(s: Symbol): NodeFlags {
