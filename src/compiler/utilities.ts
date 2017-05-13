@@ -4254,25 +4254,37 @@ namespace ts {
     /**
      * Given a name and a list of names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
      * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
      */
     export function getSpellingSuggestion(name: string, choices: string[]): string | undefined;
 
     /**
      * Given a name and a list of names are *not* equal to the name, return a spelling suggestion if there is one that is close enough.
      * Names less than length 3 only check for case-insensitive equality, not Levenshtein distance.
+     *
+     * If there is a candidate that's the same except for case, return that.
+     * If there is a candidate that's within one edit of the name, return that.
+     * Otherwise, return the candidate with the smallest Levenshtein distance,
+     *    except for candidates:
+     *      * With no name
+     *      * Whose length differs from the target name by more than 0.3 of the length of the name.
+     *      * Whose levenshtein distance is more than 0.4 of the length of the name
+     *        (0.4 allows 1 substitution/transposition for every 5 characters,
+     *         and 1 insertion/deletion at 3 characters)
+     * Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
      */
     export function getSpellingSuggestion<T>(name: string, choices: T[], exclusions: string[] | undefined, getName: (candidate: T) => string | undefined): T | undefined;
     export function getSpellingSuggestion<T>(name: string, choices: T[], exclusions?: string[], getName: (candidate: T) => string | undefined = identity): T | undefined {
-        // If there is a candidate that's the same except for case, return that.
-        // If there is a candidate that's within one edit of the name, return that.
-        // Otherwise, return the candidate with the smallest Levenshtein distance,
-        //    except for candidates:
-        //      * With no name
-        //      * Whose length differs from the target name by more than 0.3 of the length of the name.
-        //      * Whose levenshtein distance is more than 0.4 of the length of the name
-        //        (0.4 allows 1 substitution/transposition for every 5 characters,
-        //         and 1 insertion/deletion at 3 characters)
-        // Names longer than 30 characters don't get suggestions because Levenshtein distance is an n**2 algorithm.
         const worstDistance = name.length * 0.4;
         const maximumLengthDifference = Math.min(3, name.length * 0.34);
         let bestDistance = Number.MAX_VALUE;

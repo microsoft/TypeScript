@@ -397,9 +397,8 @@ namespace ts {
                     processRootFile(host.getDefaultLibFileName(options), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                 }
                 else {
-                    const libDirectory = getLibDirectory();
                     forEach(options.lib, libFileName => {
-                        processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
+                        processRootFile(combinePaths(getLibDirectory(), libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
                     });
                 }
             }
@@ -1567,13 +1566,12 @@ namespace ts {
         }
 
         function processLibReferenceDirectives(file: SourceFile) {
-            const libDirectory = getLibDirectory();
             forEach(file.libReferenceDirectives, libReference => {
                 const libName = libReference.fileName.toLocaleLowerCase();
                 const libFileName = libMap.get(libName);
                 if (libFileName) {
                     // we ignore any 'no-default-lib' reference set on this import.
-                    processRootFile(combinePaths(libDirectory, libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ false);
+                    processRootFile(combinePaths(getLibDirectory(), libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true);
                 }
                 else {
                     let unqualifiedLibName = libName;
