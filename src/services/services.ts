@@ -1198,6 +1198,7 @@ namespace ts {
 
             function getOrCreateSourceFileByPath(fileName: string, path: Path): SourceFile {
                 Debug.assert(hostCache !== undefined);
+                fileName = getCanonicalFileName(normalizeSlashes(fileName));
                 // The program is asking for this file, check first if the host can locate it.
                 // If the host can not locate the file, then it does not exist. return undefined
                 // to the program to allow reporting of errors for missing files.
