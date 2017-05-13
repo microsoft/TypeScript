@@ -3743,7 +3743,7 @@ namespace ts {
 
                     // Export assignments do not create name bindings outside the module
                     case SyntaxKind.ExportAssignment:
-                        return false;
+                        return !(node as ExportAssignment).isExportEquals;;
 
                     default:
                         return false;

@@ -1,0 +1,32 @@
+=== tests/cases/compiler/declarationEmit_mergedDeclarationWithExportDefault.ts ===
+
+class Logger {
+>Logger : Logger
+
+  public logLevel = Logger.LogLevel.Info;
+>logLevel : default.LogLevel
+>Logger.LogLevel.Info : default.LogLevel
+>Logger.LogLevel : typeof default.LogLevel
+>Logger : typeof Logger
+>LogLevel : typeof default.LogLevel
+>Info : default.LogLevel
+}
+
+namespace Logger {
+>Logger : typeof Logger
+
+  export enum LogLevel {
+>LogLevel : LogLevel
+
+    Verbose,
+>Verbose : LogLevel
+
+    Info
+>Info : LogLevel
+  }
+}
+
+
+export default Logger;
+>Logger : Logger
+
