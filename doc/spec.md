@@ -286,7 +286,7 @@ function f(s) {
 }
 ```
 
-In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emiting JavaScript.
+In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emitting JavaScript.
 
 ## <a name="1.1"/>1.1 Ambient Declarations
 
@@ -3178,7 +3178,7 @@ These operators require their operands to be of type Any, the Number primitive t
 |String||||||
 |Other||||||
 
-*TODO: Document the [exponentation operator](https://github.com/Microsoft/TypeScript/issues/4812)*.
+*TODO: Document the [exponentiation operator](https://github.com/Microsoft/TypeScript/issues/4812)*.
 
 ### <a name="4.19.2"/>4.19.2 The + operator
 
@@ -3715,7 +3715,7 @@ the array literal initializer expression is contextually typed by the implied ty
 
 ## <a name="5.3"/>5.3 Let and Const Declarations
 
-Let and const declarations are exended to include optional type annotations.
+Let and const declarations are extended to include optional type annotations.
 
 &emsp;&emsp;*LexicalBinding:*  *( Modified )*  
 &emsp;&emsp;&emsp;*SimpleLexicalBinding*  
