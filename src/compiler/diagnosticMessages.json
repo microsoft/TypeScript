@@ -771,7 +771,7 @@
         "category": "Error",
         "code": 1239
     },
-    "Unable to resolve signature of property decorator when called as an expression.": {
+    "Expression type is not assignable to decorator type. Check type of parameters, or missing ().": {
         "category": "Error",
         "code": 1240
     },
