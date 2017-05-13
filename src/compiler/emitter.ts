@@ -961,7 +961,7 @@ namespace ts {
 
         function emitTypeLiteral(node: TypeLiteralNode) {
             write("{");
-            // TODO: fix added indentation so we can remove this check.
+            // If the literal is empty, do not add spaces between braces.
             if (node.members.length > 0) {
                 emitList(node, node.members, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers);
             }

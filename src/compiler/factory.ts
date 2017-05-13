@@ -3294,16 +3294,6 @@ namespace ts {
         return statements;
     }
 
-    export function parenthesizeConditionalHead(condition: Expression) {
-        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
-        const emittedCondition = skipPartiallyEmittedExpressions(condition);
-        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
-            return createParen(condition);
-        }
-        return condition;
-    }
-
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.
@@ -3604,6 +3594,8 @@ namespace ts {
 
         return expression;
     }
+
+    function parenthesizeElementTypeMembers() {}
 
     /**
      * Clones a series of not-emitted expressions with a new inner expression.

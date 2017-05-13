@@ -2555,7 +2555,7 @@ namespace ts {
                     const resolved = resolveStructuredTypeMembers(type);
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
-                            return createTypeLiteralNode(/*members*/ undefined);
+                            return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
                         }
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
