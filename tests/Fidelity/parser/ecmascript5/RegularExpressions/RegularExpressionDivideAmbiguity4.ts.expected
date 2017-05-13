@@ -1,0 +1,163 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 4,
+            "length": 1,
+            "diagnosticCode": "Expression expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 16,
+        "start": 0,
+        "end": 16,
+        "fullWidth": 16,
+        "width": 16,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 16,
+                "start": 0,
+                "end": 16,
+                "fullWidth": 16,
+                "width": 16,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "InvocationExpression",
+                    "fullStart": 0,
+                    "fullEnd": 15,
+                    "start": 0,
+                    "end": 15,
+                    "fullWidth": 15,
+                    "width": 15,
+                    "isIncrementallyUnusable": true,
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 0,
+                        "fullEnd": 3,
+                        "start": 0,
+                        "end": 3,
+                        "fullWidth": 3,
+                        "width": 3,
+                        "text": "foo",
+                        "value": "foo",
+                        "valueText": "foo"
+                    },
+                    "argumentList": {
+                        "kind": "ArgumentList",
+                        "fullStart": 3,
+                        "fullEnd": 15,
+                        "start": 3,
+                        "end": 15,
+                        "fullWidth": 12,
+                        "width": 12,
+                        "isIncrementallyUnusable": true,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 3,
+                            "fullEnd": 4,
+                            "start": 3,
+                            "end": 4,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": "(",
+                            "value": "(",
+                            "valueText": "("
+                        },
+                        "arguments": [
+                            {
+                                "kind": "DivideExpression",
+                                "fullStart": 4,
+                                "fullEnd": 14,
+                                "start": 4,
+                                "end": 14,
+                                "fullWidth": 10,
+                                "width": 10,
+                                "isIncrementallyUnusable": true,
+                                "left": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 4,
+                                    "fullEnd": 4,
+                                    "start": 4,
+                                    "end": 4,
+                                    "fullWidth": 0,
+                                    "width": 0,
+                                    "text": ""
+                                },
+                                "operatorToken": {
+                                    "kind": "SlashToken",
+                                    "fullStart": 4,
+                                    "fullEnd": 5,
+                                    "start": 4,
+                                    "end": 5,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "/",
+                                    "value": "/",
+                                    "valueText": "/"
+                                },
+                                "right": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 5,
+                                    "fullEnd": 14,
+                                    "start": 5,
+                                    "end": 14,
+                                    "fullWidth": 9,
+                                    "width": 9,
+                                    "text": "notregexp",
+                                    "value": "notregexp",
+                                    "valueText": "notregexp"
+                                }
+                            }
+                        ],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 14,
+                            "fullEnd": 15,
+                            "start": 14,
+                            "end": 15,
+                            "fullWidth": 1,
+                            "width": 1,
+                            "text": ")",
+                            "value": ")",
+                            "valueText": ")"
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 15,
+                    "fullEnd": 16,
+                    "start": 15,
+                    "end": 16,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 16,
+            "fullEnd": 16,
+            "start": 16,
+            "end": 16,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 16
+    }
+}

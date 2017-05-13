@@ -1,0 +1,71 @@
+{
+    "isDeclaration": true,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 5,
+            "diagnosticCode": "Statements are not allowed in ambient contexts."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 6,
+        "start": 0,
+        "end": 6,
+        "fullWidth": 6,
+        "width": 6,
+        "moduleElements": [
+            {
+                "kind": "BreakStatement",
+                "fullStart": 0,
+                "fullEnd": 6,
+                "start": 0,
+                "end": 6,
+                "fullWidth": 6,
+                "width": 6,
+                "breakKeyword": {
+                    "kind": "BreakKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 5,
+                    "start": 0,
+                    "end": 5,
+                    "fullWidth": 5,
+                    "width": 5,
+                    "text": "break",
+                    "value": "break",
+                    "valueText": "break"
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 5,
+                    "fullEnd": 6,
+                    "start": 5,
+                    "end": 6,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 6,
+            "fullEnd": 6,
+            "start": 6,
+            "end": 6,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 6
+    }
+}

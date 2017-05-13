@@ -1,0 +1,127 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 11,
+        "start": 0,
+        "end": 11,
+        "fullWidth": 11,
+        "width": 11,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 11,
+                "start": 0,
+                "end": 11,
+                "fullWidth": 11,
+                "width": 11,
+                "expression": {
+                    "kind": "LessThanExpression",
+                    "fullStart": 0,
+                    "fullEnd": 10,
+                    "start": 0,
+                    "end": 10,
+                    "fullWidth": 10,
+                    "width": 10,
+                    "left": {
+                        "kind": "ObjectCreationExpression",
+                        "fullStart": 0,
+                        "fullEnd": 8,
+                        "start": 0,
+                        "end": 8,
+                        "fullWidth": 8,
+                        "width": 8,
+                        "newKeyword": {
+                            "kind": "NewKeyword",
+                            "fullStart": 0,
+                            "fullEnd": 4,
+                            "start": 0,
+                            "end": 3,
+                            "fullWidth": 4,
+                            "width": 3,
+                            "text": "new",
+                            "value": "new",
+                            "valueText": "new",
+                            "hasTrailingTrivia": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 3,
+                                    "fullEnd": 4,
+                                    "text": " "
+                                }
+                            ]
+                        },
+                        "expression": {
+                            "kind": "IdentifierName",
+                            "fullStart": 4,
+                            "fullEnd": 8,
+                            "start": 4,
+                            "end": 8,
+                            "fullWidth": 4,
+                            "width": 4,
+                            "text": "Date",
+                            "value": "Date",
+                            "valueText": "Date"
+                        }
+                    },
+                    "operatorToken": {
+                        "kind": "LessThanToken",
+                        "fullStart": 8,
+                        "fullEnd": 9,
+                        "start": 8,
+                        "end": 9,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "<",
+                        "value": "<",
+                        "valueText": "<"
+                    },
+                    "right": {
+                        "kind": "IdentifierName",
+                        "fullStart": 9,
+                        "fullEnd": 10,
+                        "start": 9,
+                        "end": 10,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "A",
+                        "value": "A",
+                        "valueText": "A"
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 10,
+                    "fullEnd": 11,
+                    "start": 10,
+                    "end": 11,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 11,
+            "fullEnd": 11,
+            "start": 11,
+            "end": 11,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 11
+    }
+}

@@ -1,0 +1,2 @@
+switch (foo) {
+}

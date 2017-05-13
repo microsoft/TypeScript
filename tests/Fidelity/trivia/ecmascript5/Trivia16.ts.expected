@@ -1,0 +1,59 @@
+[
+    {
+        "kind": "SemicolonToken",
+        "fullStart": 0,
+        "fullEnd": 17,
+        "start": 0,
+        "end": 1,
+        "fullWidth": 17,
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasTrailingTrivia": true,
+        "hasTrailingComment": true,
+        "hasTrailingNewLine": true,
+        "trailingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "fullStart": 1,
+                "fullEnd": 2,
+                "text": " "
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "fullStart": 2,
+                "fullEnd": 8,
+                "text": "/*\r\n*/"
+            },
+            {
+                "kind": "WhitespaceTrivia",
+                "fullStart": 8,
+                "fullEnd": 9,
+                "text": " "
+            },
+            {
+                "kind": "MultiLineCommentTrivia",
+                "fullStart": 9,
+                "fullEnd": 15,
+                "text": "/*\r\n*/"
+            },
+            {
+                "kind": "NewLineTrivia",
+                "fullStart": 15,
+                "fullEnd": 17,
+                "text": "\r\n"
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "fullStart": 17,
+        "fullEnd": 17,
+        "start": 17,
+        "end": 17,
+        "fullWidth": 0,
+        "width": 0,
+        "text": ""
+    }
+]

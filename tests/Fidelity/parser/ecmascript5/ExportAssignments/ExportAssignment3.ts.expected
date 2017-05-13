@@ -1,0 +1,92 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 8,
+            "length": 0,
+            "diagnosticCode": "Identifier expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 8,
+        "start": 0,
+        "end": 8,
+        "fullWidth": 8,
+        "width": 8,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExportAssignment",
+                "fullStart": 0,
+                "fullEnd": 8,
+                "start": 0,
+                "end": 8,
+                "fullWidth": 8,
+                "width": 8,
+                "isIncrementallyUnusable": true,
+                "exportKeyword": {
+                    "kind": "ExportKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 7,
+                    "start": 0,
+                    "end": 6,
+                    "fullWidth": 7,
+                    "width": 6,
+                    "text": "export",
+                    "value": "export",
+                    "valueText": "export",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 6,
+                            "fullEnd": 7,
+                            "text": " "
+                        }
+                    ]
+                },
+                "equalsToken": {
+                    "kind": "EqualsToken",
+                    "fullStart": 7,
+                    "fullEnd": 8,
+                    "start": 7,
+                    "end": 8,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "=",
+                    "value": "=",
+                    "valueText": "="
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 8,
+                    "fullEnd": 8,
+                    "start": 8,
+                    "end": 8,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 8,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 8
+    }
+}

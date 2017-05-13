@@ -1,0 +1,200 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 9,
+            "length": 2,
+            "diagnosticCode": "Identifier expected."
+        },
+        {
+            "start": 11,
+            "length": 0,
+            "diagnosticCode": "Expression expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 11,
+        "start": 0,
+        "end": 11,
+        "fullWidth": 11,
+        "width": 11,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "FunctionDeclaration",
+                "fullStart": 0,
+                "fullEnd": 9,
+                "start": 0,
+                "end": 8,
+                "fullWidth": 9,
+                "width": 8,
+                "isIncrementallyUnusable": true,
+                "modifiers": [],
+                "functionKeyword": {
+                    "kind": "FunctionKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 9,
+                    "start": 0,
+                    "end": 8,
+                    "fullWidth": 9,
+                    "width": 8,
+                    "text": "function",
+                    "value": "function",
+                    "valueText": "function",
+                    "hasTrailingTrivia": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 8,
+                            "fullEnd": 9,
+                            "text": " "
+                        }
+                    ]
+                },
+                "identifier": {
+                    "kind": "IdentifierName",
+                    "fullStart": 9,
+                    "fullEnd": 9,
+                    "start": 9,
+                    "end": 9,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                },
+                "callSignature": {
+                    "kind": "CallSignature",
+                    "fullStart": -1,
+                    "fullEnd": -1,
+                    "start": -1,
+                    "end": -1,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "isIncrementallyUnusable": true,
+                    "parameterList": {
+                        "kind": "ParameterList",
+                        "fullStart": -1,
+                        "fullEnd": -1,
+                        "start": -1,
+                        "end": -1,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "isIncrementallyUnusable": true,
+                        "openParenToken": {
+                            "kind": "OpenParenToken",
+                            "fullStart": 9,
+                            "fullEnd": 9,
+                            "start": 9,
+                            "end": 9,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        },
+                        "parameters": [],
+                        "closeParenToken": {
+                            "kind": "CloseParenToken",
+                            "fullStart": 9,
+                            "fullEnd": 9,
+                            "start": 9,
+                            "end": 9,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        }
+                    }
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 9,
+                    "fullEnd": 9,
+                    "start": 9,
+                    "end": 9,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 9,
+                "fullEnd": 11,
+                "start": 9,
+                "end": 11,
+                "fullWidth": 2,
+                "width": 2,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "SimpleArrowFunctionExpression",
+                    "fullStart": 9,
+                    "fullEnd": 11,
+                    "start": 9,
+                    "end": 11,
+                    "fullWidth": 2,
+                    "width": 2,
+                    "isIncrementallyUnusable": true,
+                    "parameter": {
+                        "kind": "Parameter",
+                        "fullStart": -1,
+                        "fullEnd": -1,
+                        "start": -1,
+                        "end": -1,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "isIncrementallyUnusable": true,
+                        "modifiers": [],
+                        "identifier": {
+                            "kind": "IdentifierName",
+                            "fullStart": 9,
+                            "fullEnd": 9,
+                            "start": 9,
+                            "end": 9,
+                            "fullWidth": 0,
+                            "width": 0,
+                            "text": ""
+                        }
+                    },
+                    "equalsGreaterThanToken": {
+                        "kind": "EqualsGreaterThanToken",
+                        "fullStart": 9,
+                        "fullEnd": 11,
+                        "start": 9,
+                        "end": 11,
+                        "fullWidth": 2,
+                        "width": 2,
+                        "text": "=>",
+                        "value": "=>",
+                        "valueText": "=>"
+                    },
+                    "expression": {
+                        "kind": "IdentifierName",
+                        "fullStart": 11,
+                        "fullEnd": 11,
+                        "start": 11,
+                        "end": 11,
+                        "fullWidth": 0,
+                        "width": 0,
+                        "text": ""
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 11,
+            "fullEnd": 11,
+            "start": 11,
+            "end": 11,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 11
+    }
+}

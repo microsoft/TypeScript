@@ -1,0 +1,24 @@
+[
+    {
+        "kind": "NumericLiteral",
+        "fullStart": 0,
+        "fullEnd": 3,
+        "start": 0,
+        "end": 3,
+        "fullWidth": 3,
+        "width": 3,
+        "text": "1e0",
+        "value": 1,
+        "valueText": "1"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "fullStart": 3,
+        "fullEnd": 3,
+        "start": 3,
+        "end": 3,
+        "fullWidth": 0,
+        "width": 0,
+        "text": ""
+    }
+]

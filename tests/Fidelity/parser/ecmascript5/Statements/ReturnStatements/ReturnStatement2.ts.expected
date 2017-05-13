@@ -1,0 +1,137 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 6,
+            "length": 6,
+            "diagnosticCode": "'return' statement must be contained within a function body."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 16,
+        "start": 0,
+        "end": 16,
+        "fullWidth": 16,
+        "width": 16,
+        "moduleElements": [
+            {
+                "kind": "Block",
+                "fullStart": 0,
+                "fullEnd": 16,
+                "start": 0,
+                "end": 16,
+                "fullWidth": 16,
+                "width": 16,
+                "openBraceToken": {
+                    "kind": "OpenBraceToken",
+                    "fullStart": 0,
+                    "fullEnd": 3,
+                    "start": 0,
+                    "end": 1,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": "{",
+                    "value": "{",
+                    "valueText": "{",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 1,
+                            "fullEnd": 3,
+                            "text": "\r\n"
+                        }
+                    ]
+                },
+                "statements": [
+                    {
+                        "kind": "ReturnStatement",
+                        "fullStart": 3,
+                        "fullEnd": 15,
+                        "start": 6,
+                        "end": 13,
+                        "fullWidth": 12,
+                        "width": 7,
+                        "returnKeyword": {
+                            "kind": "ReturnKeyword",
+                            "fullStart": 3,
+                            "fullEnd": 12,
+                            "start": 6,
+                            "end": 12,
+                            "fullWidth": 9,
+                            "width": 6,
+                            "text": "return",
+                            "value": "return",
+                            "valueText": "return",
+                            "hasLeadingTrivia": true,
+                            "leadingTrivia": [
+                                {
+                                    "kind": "WhitespaceTrivia",
+                                    "fullStart": 3,
+                                    "fullEnd": 6,
+                                    "text": "   "
+                                }
+                            ]
+                        },
+                        "semicolonToken": {
+                            "kind": "SemicolonToken",
+                            "fullStart": 12,
+                            "fullEnd": 15,
+                            "start": 12,
+                            "end": 13,
+                            "fullWidth": 3,
+                            "width": 1,
+                            "text": ";",
+                            "value": ";",
+                            "valueText": ";",
+                            "hasTrailingTrivia": true,
+                            "hasTrailingNewLine": true,
+                            "trailingTrivia": [
+                                {
+                                    "kind": "NewLineTrivia",
+                                    "fullStart": 13,
+                                    "fullEnd": 15,
+                                    "text": "\r\n"
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "closeBraceToken": {
+                    "kind": "CloseBraceToken",
+                    "fullStart": 15,
+                    "fullEnd": 16,
+                    "start": 15,
+                    "end": 16,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "}",
+                    "value": "}",
+                    "valueText": "}"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 16,
+            "fullEnd": 16,
+            "start": 16,
+            "end": 16,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            3,
+            15
+        ],
+        "length": 16
+    }
+}

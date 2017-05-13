@@ -1,0 +1,335 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 20,
+            "length": 1,
+            "diagnosticCode": "A parameter list must follow a generic type argument list. '(' expected."
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 33,
+        "start": 0,
+        "end": 33,
+        "fullWidth": 33,
+        "width": 33,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullStart": 0,
+                "fullEnd": 33,
+                "start": 0,
+                "end": 33,
+                "fullWidth": 33,
+                "width": 33,
+                "isIncrementallyUnusable": true,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullStart": 0,
+                    "fullEnd": 32,
+                    "start": 0,
+                    "end": 32,
+                    "fullWidth": 32,
+                    "width": 32,
+                    "isIncrementallyUnusable": true,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 4,
+                        "start": 0,
+                        "end": 3,
+                        "fullWidth": 4,
+                        "width": 3,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 3,
+                                "fullEnd": 4,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "variableDeclarators": [
+                        {
+                            "kind": "VariableDeclarator",
+                            "fullStart": 4,
+                            "fullEnd": 32,
+                            "start": 4,
+                            "end": 32,
+                            "fullWidth": 28,
+                            "width": 28,
+                            "isIncrementallyUnusable": true,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "fullStart": 4,
+                                "fullEnd": 6,
+                                "start": 4,
+                                "end": 5,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": "v",
+                                "value": "v",
+                                "valueText": "v",
+                                "hasTrailingTrivia": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "WhitespaceTrivia",
+                                        "fullStart": 5,
+                                        "fullEnd": 6,
+                                        "text": " "
+                                    }
+                                ]
+                            },
+                            "equalsValueClause": {
+                                "kind": "EqualsValueClause",
+                                "fullStart": 6,
+                                "fullEnd": 32,
+                                "start": 6,
+                                "end": 32,
+                                "fullWidth": 26,
+                                "width": 26,
+                                "isIncrementallyUnusable": true,
+                                "equalsToken": {
+                                    "kind": "EqualsToken",
+                                    "fullStart": 6,
+                                    "fullEnd": 8,
+                                    "start": 6,
+                                    "end": 7,
+                                    "fullWidth": 2,
+                                    "width": 1,
+                                    "text": "=",
+                                    "value": "=",
+                                    "valueText": "=",
+                                    "hasTrailingTrivia": true,
+                                    "trailingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 7,
+                                            "fullEnd": 8,
+                                            "text": " "
+                                        }
+                                    ]
+                                },
+                                "value": {
+                                    "kind": "InvocationExpression",
+                                    "fullStart": 8,
+                                    "fullEnd": 32,
+                                    "start": 8,
+                                    "end": 32,
+                                    "fullWidth": 24,
+                                    "width": 24,
+                                    "isIncrementallyUnusable": true,
+                                    "expression": {
+                                        "kind": "MemberAccessExpression",
+                                        "fullStart": 8,
+                                        "fullEnd": 30,
+                                        "start": 8,
+                                        "end": 30,
+                                        "fullWidth": 22,
+                                        "width": 22,
+                                        "isIncrementallyUnusable": true,
+                                        "expression": {
+                                            "kind": "InvocationExpression",
+                                            "fullStart": 8,
+                                            "fullEnd": 20,
+                                            "start": 8,
+                                            "end": 20,
+                                            "fullWidth": 12,
+                                            "width": 12,
+                                            "isIncrementallyUnusable": true,
+                                            "expression": {
+                                                "kind": "IdentifierName",
+                                                "fullStart": 8,
+                                                "fullEnd": 12,
+                                                "start": 8,
+                                                "end": 12,
+                                                "fullWidth": 4,
+                                                "width": 4,
+                                                "text": "List",
+                                                "value": "List",
+                                                "valueText": "List"
+                                            },
+                                            "argumentList": {
+                                                "kind": "ArgumentList",
+                                                "fullStart": 12,
+                                                "fullEnd": 20,
+                                                "start": 12,
+                                                "end": 20,
+                                                "fullWidth": 8,
+                                                "width": 8,
+                                                "isIncrementallyUnusable": true,
+                                                "typeArgumentList": {
+                                                    "kind": "TypeArgumentList",
+                                                    "fullStart": 12,
+                                                    "fullEnd": 20,
+                                                    "start": 12,
+                                                    "end": 20,
+                                                    "fullWidth": 8,
+                                                    "width": 8,
+                                                    "lessThanToken": {
+                                                        "kind": "LessThanToken",
+                                                        "fullStart": 12,
+                                                        "fullEnd": 13,
+                                                        "start": 12,
+                                                        "end": 13,
+                                                        "fullWidth": 1,
+                                                        "width": 1,
+                                                        "text": "<",
+                                                        "value": "<",
+                                                        "valueText": "<"
+                                                    },
+                                                    "typeArguments": [
+                                                        {
+                                                            "kind": "NumberKeyword",
+                                                            "fullStart": 13,
+                                                            "fullEnd": 19,
+                                                            "start": 13,
+                                                            "end": 19,
+                                                            "fullWidth": 6,
+                                                            "width": 6,
+                                                            "text": "number",
+                                                            "value": "number",
+                                                            "valueText": "number"
+                                                        }
+                                                    ],
+                                                    "greaterThanToken": {
+                                                        "kind": "GreaterThanToken",
+                                                        "fullStart": 19,
+                                                        "fullEnd": 20,
+                                                        "start": 19,
+                                                        "end": 20,
+                                                        "fullWidth": 1,
+                                                        "width": 1,
+                                                        "text": ">",
+                                                        "value": ">",
+                                                        "valueText": ">"
+                                                    }
+                                                },
+                                                "openParenToken": {
+                                                    "kind": "OpenParenToken",
+                                                    "fullStart": 20,
+                                                    "fullEnd": 20,
+                                                    "start": 20,
+                                                    "end": 20,
+                                                    "fullWidth": 0,
+                                                    "width": 0,
+                                                    "text": ""
+                                                },
+                                                "arguments": [],
+                                                "closeParenToken": {
+                                                    "kind": "CloseParenToken",
+                                                    "fullStart": 20,
+                                                    "fullEnd": 20,
+                                                    "start": 20,
+                                                    "end": 20,
+                                                    "fullWidth": 0,
+                                                    "width": 0,
+                                                    "text": ""
+                                                }
+                                            }
+                                        },
+                                        "dotToken": {
+                                            "kind": "DotToken",
+                                            "fullStart": 20,
+                                            "fullEnd": 21,
+                                            "start": 20,
+                                            "end": 21,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": ".",
+                                            "value": ".",
+                                            "valueText": "."
+                                        },
+                                        "name": {
+                                            "kind": "IdentifierName",
+                                            "fullStart": 21,
+                                            "fullEnd": 30,
+                                            "start": 21,
+                                            "end": 30,
+                                            "fullWidth": 9,
+                                            "width": 9,
+                                            "text": "makeChild",
+                                            "value": "makeChild",
+                                            "valueText": "makeChild"
+                                        }
+                                    },
+                                    "argumentList": {
+                                        "kind": "ArgumentList",
+                                        "fullStart": 30,
+                                        "fullEnd": 32,
+                                        "start": 30,
+                                        "end": 32,
+                                        "fullWidth": 2,
+                                        "width": 2,
+                                        "openParenToken": {
+                                            "kind": "OpenParenToken",
+                                            "fullStart": 30,
+                                            "fullEnd": 31,
+                                            "start": 30,
+                                            "end": 31,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": "(",
+                                            "value": "(",
+                                            "valueText": "("
+                                        },
+                                        "arguments": [],
+                                        "closeParenToken": {
+                                            "kind": "CloseParenToken",
+                                            "fullStart": 31,
+                                            "fullEnd": 32,
+                                            "start": 31,
+                                            "end": 32,
+                                            "fullWidth": 1,
+                                            "width": 1,
+                                            "text": ")",
+                                            "value": ")",
+                                            "valueText": ")"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 32,
+                    "fullEnd": 33,
+                    "start": 32,
+                    "end": 33,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 33,
+            "fullEnd": 33,
+            "start": 33,
+            "end": 33,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 33
+    }
+}

@@ -1,0 +1,80 @@
+{
+    "diagnostics": [
+        {
+            "start": 325,
+            "length": 0,
+            "diagnosticCode": "'*/' expected."
+        }
+    ],
+    "tokens": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 325,
+            "start": 325,
+            "end": 325,
+            "fullWidth": 325,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 60,
+                    "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 60,
+                    "fullEnd": 61,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 61,
+                    "fullEnd": 131,
+                    "text": "// This code is governed by the BSD license found in the LICENSE file."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 131,
+                    "fullEnd": 132,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 132,
+                    "fullEnd": 133,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 133,
+                    "fullEnd": 311,
+                    "text": "/**\n * Correct interpretation of multi line comments\n *\n * @path ch07/7.4/S7.4_A2_T2.js\n * @description Try use /*CHECK#1/. This is not closed multi line comment\n * @negative\n */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 311,
+                    "fullEnd": 312,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 312,
+                    "fullEnd": 313,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 313,
+                    "fullEnd": 325,
+                    "text": "/*CHECK#1/\n\n"
+                }
+            ]
+        }
+    ]
+}

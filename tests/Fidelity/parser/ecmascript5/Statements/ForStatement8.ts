@@ -1,0 +1,2 @@
+for (this in b) {
+}

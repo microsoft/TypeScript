@@ -1,0 +1,126 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 297,
+        "start": 297,
+        "end": 297,
+        "fullWidth": 297,
+        "width": 0,
+        "moduleElements": [],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 297,
+            "start": 297,
+            "end": 297,
+            "fullWidth": 297,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 60,
+                    "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 60,
+                    "fullEnd": 61,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 61,
+                    "fullEnd": 131,
+                    "text": "// This code is governed by the BSD license found in the LICENSE file."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 131,
+                    "fullEnd": 132,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 132,
+                    "fullEnd": 133,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 133,
+                    "fullEnd": 280,
+                    "text": "/**\n * Correct interpretation of single line comments\n *\n * @path ch07/7.4/S7.4_A1_T2.js\n * @description Simple test, create empty comment: ///\n */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 280,
+                    "fullEnd": 281,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 281,
+                    "fullEnd": 282,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 282,
+                    "fullEnd": 291,
+                    "text": "//CHECK#1"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 291,
+                    "fullEnd": 292,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 292,
+                    "fullEnd": 295,
+                    "text": "///"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 295,
+                    "fullEnd": 296,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 296,
+                    "fullEnd": 297,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            187,
+            190,
+            222,
+            277,
+            281,
+            282,
+            292,
+            296,
+            297
+        ],
+        "length": 297
+    }
+}

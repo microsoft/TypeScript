@@ -1,0 +1,132 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 9,
+            "length": 1,
+            "diagnosticCode": "Unexpected character {0}.",
+            "arguments": [
+                "\"\\\""
+            ]
+        },
+        {
+            "start": 9,
+            "length": 1,
+            "diagnosticCode": "'{0}' expected.",
+            "arguments": [
+                ";"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 12,
+        "start": 0,
+        "end": 12,
+        "fullWidth": 12,
+        "width": 12,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "ExpressionStatement",
+                "fullStart": 0,
+                "fullEnd": 11,
+                "start": 0,
+                "end": 8,
+                "fullWidth": 11,
+                "width": 8,
+                "isIncrementallyUnusable": true,
+                "expression": {
+                    "kind": "RegularExpressionLiteral",
+                    "fullStart": 0,
+                    "fullEnd": 11,
+                    "start": 0,
+                    "end": 8,
+                    "fullWidth": 11,
+                    "width": 8,
+                    "text": "/regexp/",
+                    "value": {},
+                    "valueText": "/regexp/",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingSkippedText": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 8,
+                            "fullEnd": 9,
+                            "text": " "
+                        },
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "ErrorToken",
+                                "fullStart": 9,
+                                "fullEnd": 10,
+                                "start": 9,
+                                "end": 10,
+                                "fullWidth": 1,
+                                "width": 1,
+                                "text": "\\"
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 10,
+                            "fullEnd": 11,
+                            "text": " "
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 11,
+                    "fullEnd": 11,
+                    "start": 11,
+                    "end": 11,
+                    "fullWidth": 0,
+                    "width": 0,
+                    "text": ""
+                }
+            },
+            {
+                "kind": "EmptyStatement",
+                "fullStart": 11,
+                "fullEnd": 12,
+                "start": 11,
+                "end": 12,
+                "fullWidth": 1,
+                "width": 1,
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 11,
+                    "fullEnd": 12,
+                    "start": 11,
+                    "end": 12,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 12,
+            "fullEnd": 12,
+            "start": 12,
+            "end": 12,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 12
+    }
+}

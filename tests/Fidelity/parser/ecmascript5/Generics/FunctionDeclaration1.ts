@@ -1,0 +1,1 @@
+function foo8<T extends "">(test: T) { }

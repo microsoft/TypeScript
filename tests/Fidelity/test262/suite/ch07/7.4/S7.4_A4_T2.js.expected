@@ -1,0 +1,140 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 324,
+        "start": 324,
+        "end": 324,
+        "fullWidth": 324,
+        "width": 0,
+        "moduleElements": [],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 0,
+            "fullEnd": 324,
+            "start": 324,
+            "end": 324,
+            "fullWidth": 324,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 0,
+                    "fullEnd": 60,
+                    "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 60,
+                    "fullEnd": 61,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 61,
+                    "fullEnd": 131,
+                    "text": "// This code is governed by the BSD license found in the LICENSE file."
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 131,
+                    "fullEnd": 132,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 132,
+                    "fullEnd": 133,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 133,
+                    "fullEnd": 293,
+                    "text": "/**\n * Single and Multi line comments are used together\n *\n * @path ch07/7.4/S7.4_A4_T2.js\n * @description Fist Multi line comment, then Single line comment\n */"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 293,
+                    "fullEnd": 294,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 294,
+                    "fullEnd": 295,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 295,
+                    "fullEnd": 306,
+                    "text": "/*CHECK#1*/"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 306,
+                    "fullEnd": 307,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 307,
+                    "fullEnd": 308,
+                    "text": "\n"
+                },
+                {
+                    "kind": "MultiLineCommentTrivia",
+                    "fullStart": 308,
+                    "fullEnd": 317,
+                    "text": "/* var\n*/"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 317,
+                    "fullEnd": 322,
+                    "text": "//x*/"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 322,
+                    "fullEnd": 323,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 323,
+                    "fullEnd": 324,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            189,
+            192,
+            224,
+            290,
+            294,
+            295,
+            307,
+            308,
+            315,
+            323,
+            324
+        ],
+        "length": 324
+    }
+}

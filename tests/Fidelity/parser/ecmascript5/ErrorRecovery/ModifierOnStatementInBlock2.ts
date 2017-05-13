@@ -1,0 +1,3 @@
+{
+   declare var x = this;
+}

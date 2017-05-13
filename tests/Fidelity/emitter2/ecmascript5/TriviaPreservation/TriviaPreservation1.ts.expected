@@ -1,0 +1,470 @@
+// Hello
+/* World
+*/
+
+// aaa
+var x1;
+
+// aaa
+// bbb
+var x2 = 1;
+
+/* aaa */
+var x3;
+
+/* aaa
+bbb */
+var x4 = "";
+
+// aaa
+window.console;
+
+// aaa
+var x5 = [];
+
+var x5a = /*////*/[];
+
+/* aaa */
+var x6 = {};
+
+var x6a = /*;;;*/{};
+
+var test = {
+    // hm
+    a: 1
+}
+
+// hm
+var x7 = {
+    // a
+    a: 1,
+    // b
+    b: "",
+    // c
+    c: [],
+    // d
+    d: {
+        /* e */
+        e: /* e2 */ 2
+    }
+}
+
+// aaa
+var x8 = /* a */ function() /* b */ { /* returns */ return 1; };
+
+/// aaa
+var x9 = function() {
+    // a
+    var a /* hm*/ = function() { return; } /* ok */;
+    // return
+    return a();
+}
+
+// aaa
+function x10() {
+    // bbb
+    return;
+}
+
+// aaa
+function x11(/*x*/x/*x*/, /*y*/y/*y*/, /*z*/z/*z*/) {
+    // bbb
+    return;
+}
+
+var x12 = /*aaa*/function /*bbb*/ (x, y) {
+    /// aaa
+    x10();
+}
+
+var x13 = /*aaa*/function /*bbb*/ foo(/*x*/x/*x2*/, y) {
+    /// aaa
+    if (false) {
+        // hm
+        //foo(x, y); // TODO: how does this work?
+    }
+}
+
+// if
+if (true) {
+    // do BUG?
+}
+// then
+else {
+    // do
+}
+
+// try
+try {
+    // aaa
+    var xx;
+}
+// catch
+catch (e) {
+    // bbb
+    throw e;
+}
+// finally
+finally {
+    // ccc
+}
+
+// for
+for (var i = 0 /*var*/; i < 10 /*condition*/; i++) {
+    // do
+    var xx = i;
+}
+
+// for
+for (var i = 0 /*var*/, j = 0 /*and*/; i < 10 /*condition*/; i++) {
+    // do
+    var xx = i;
+}
+
+// class
+var X = (function() {
+    function X() {
+
+        this.x = 1
+        // y
+        this.y = ""
+        // z
+        this.z = {
+            // z.a BUG? z.a after : but also different ordering of the two comments for a vs b
+            a: 1, // and BUG?
+            /* z.b */
+            b: "" // also BUG?
+            }
+    }
+    // public
+    X.prototype.x1 = function(/*x*/x/*x2*/,/*y*/y/*y2*/) {
+    }
+    // private BUG appears at the end of x1's definition instead of where //public does
+    X.prototype.x2 = function(/*x*/x/*x*/, /*y*/y/*y2*/) {
+    }
+    // none
+    X.prototype.x3 = function(/*hm*/) {
+    }
+    return X;
+})()
+
+// class
+var X2 = (function(_super) {
+    __extends(X2, _super)
+    function X2() {
+        _super.apply(this, arguments)
+        // x
+        this.x = 1
+        // y
+        this.y = ""
+    }
+    return X2;
+})(I)
+
+// class
+var X3 = (function(_super) {
+    __extends(X3, _super)
+    function X3() {
+        _super.apply(this, arguments)
+        // x
+        this.x = {}
+        /* y */
+        this.y = new X(/*hm*/)
+    }
+    // public
+    X3.prototype.foo = function() {
+        // return
+        return this.y; // something
+    }
+
+    // hm: BUG static comments are lost and put in the wrong place
+    X3.a = 1
+    return X3;
+})(I3)
+
+// class
+var X4 = (function() {
+    function X4() {
+    }
+    // right? BUG drop all these comments
+    X4.prototype.foo = function(x) {
+        return x;
+    }
+    return X4;
+})()
+
+// class // BUG: interleaved comments are dropped with certain class contents
+var X5 = (function(_super) {
+    __extends(X5, _super)
+    function X5() {
+        _super.apply(this, arguments)
+    }
+    // that
+    X5.prototype.foo = function(x) {
+        return x;
+    }
+    return X5;
+})(X4)
+
+var X6 = (function(_super) {
+    __extends(X6, _super)
+    function X6() {
+        _super.apply(this, arguments)
+    }
+    // hm
+    X6.prototype.foo = function() {
+        return this.y;
+    }
+    return X6;
+})(X3)
+
+// class
+var X7 = (function() {
+    // constructor
+    function X7() {
+    }
+
+    // getter BUG not great, getter and setter comments in different places
+    Object.defineProperty(X7.prototype, "x", {
+        get: function() {
+            // get
+            return 1;
+        },
+        set: function() {
+            // set
+        },
+        enumerable: true,
+        configurable: true
+    })
+
+    // rest BUG inside defineProperty definition
+    X7.prototype.foo = function(p/*params*/) {
+        // ok
+        return p[0];
+    }
+    return X7;
+})()
+
+// class 
+var X8 = (function(_super) {
+    __extends(X8, _super)
+    // constructor
+    function X8() {
+        _super.call(this); // super
+
+        // x2 BUG not in the right place at all
+        this.x2 = function foo() {
+            // does
+            return x1();
+        }
+        // x
+        var x = 1; /* x */
+        // xx
+        var xx; // xx BUG not compiled away?
+        // done
+    } // end1
+
+    // x1
+    X8.prototype.x1 = function() {
+        return "";
+    }
+    return X8;
+})(X7)
+
+// BUG: statics are almost all wrong
+var X9 = (function() {
+    function X9() {
+    }
+    /* y */ // BUG removed
+    X9.y = 1
+    // foo
+    X9.foo = function() {
+        // returning
+        return;
+    }
+
+    // getter BUG not great, getter and setter comments in different places
+    Object.defineProperty(X9.prototype, "z", {
+        get: function() {
+            // get
+            return 1;
+        },
+        set: function() {
+            // set
+        },
+        enumerable: true,
+        configurable: true
+    })
+    return X9;
+})()
+
+// 1
+var x; // 2
+; // 7 BUG
+// 8
+var dC = (function() {
+    function dC() {
+    }
+    return dC;
+})()
+; // 10 BUG
+// 11
+var dM
+(function(dM) {
+})(dM||(dM={}))
+; // 13 BUG
+
+/// 14
+/// 14_1 BUG removed when it shouldn't be
+var x2; /// 15
+; /// 20 BUG
+/// 21
+var dC2 = (function() {
+    function dC2() {
+    }
+    return dC2;
+})()
+; /// 23 BUG
+/// 24
+var dM2
+(function(dM2) {
+})(dM2||(dM2={}))
+; /// 26
+
+/** 27 
+ * BUG removed when it shouldn't be
+ */
+var x3; /** 28 */
+; /** 33 */
+/** declareC */
+var dC3 = (function() {
+    function dC3() {
+    }
+    return dC3;
+})()
+; /** 35 */
+/** 36 */
+var dM3
+(function(dM3) {
+})(dM3||(dM3={}))
+; /** 38 */
+
+////////////////// MODULE WRAPPING
+
+// M1
+var M1
+(function(M1) {
+    // x
+    var x = 1;
+    
+    // class
+    var X2 = (function(_super) {
+        __extends(X2, _super)
+        function X2() {
+            _super.apply(this, arguments)
+            // x
+            this.x = 1
+            // y
+            this.y = ""
+        }
+        return X2;
+    })(I)
+
+    // class
+    var X3 = (function(_super) {
+        __extends(X3, _super)
+        function X3() {
+            _super.apply(this, arguments)
+            // x
+            this.x = { /* hello */ }
+            /* y */
+            this.y = new X(/*hm*/)
+        }
+        // public
+        X3.prototype.foo = function() {
+            // return
+            return this.y; // something
+        }
+
+        // hm: BUG static comments are lost and put in the wrong place
+        X3.a = 1
+        return X3;
+    })(I3)
+
+    // declare
+    var x; // x
+; // di8 BUG not removed
+    // declareC
+    var dC = (function() {
+        function dC() {
+        }
+        return dC;
+    })()
+; // dc BUG not removed
+    var dM
+    (function(dM) {
+    })(dM||(dM={}))
+; // dM BUG not removed
+
+    // nested
+    var N1
+    (function(N1) {
+        // BUG: statics are all wrong
+        var X9 = (function() {
+            function X9() {
+            }
+            /* y */ // BUG removed
+            X9.y = 1
+            // foo
+            X9.foo = function() {
+                // returning
+                return;
+            }
+            return X9;
+        })()
+        N1.X9 = X9
+    })(N1||(N1={}))
+    M1.x = x
+    M1.X2 = X2
+    M1.X3 = X3
+    M1.x = x
+    M1.dFoo = dFoo
+    M1.dC = dC
+    M1.dM = dM
+    M1.N1 = N1
+})(M1||(M1={}))
+
+/**
+ * A class
+ * Does stuff
+ * @author me
+ */
+var X10 = (function() {
+    /**
+     * @constructor
+     */
+    function X10(x) {
+
+        this.x = 1
+        this.y = ""
+        var z = x;
+    }
+
+    /** BUG this is inside foo's definition
+     * @deprecated
+     * @this (X10)
+     */
+    X10.prototype.foo = function() { }
+    /** BUG this is inside foo's definition
+     * Does some other stuff
+     *
+     * @param (number) x a number
+     * @param (string) y a string
+     * @return (string) aValue
+     *
+     */
+    X10.prototype.bar = function(x, y) {
+        return y;
+    }
+    return X10;
+})()

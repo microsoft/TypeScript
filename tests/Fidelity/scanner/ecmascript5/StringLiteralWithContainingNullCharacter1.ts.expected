@@ -1,0 +1,36 @@
+[
+    {
+        "kind": "StringLiteral",
+        "fullStart": 0,
+        "fullEnd": 5,
+        "start": 0,
+        "end": 5,
+        "fullWidth": 5,
+        "width": 5,
+        "text": "\" \u0000 \"",
+        "value": " \u0000 ",
+        "valueText": " \u0000 "
+    },
+    {
+        "kind": "SemicolonToken",
+        "fullStart": 5,
+        "fullEnd": 6,
+        "start": 5,
+        "end": 6,
+        "fullWidth": 1,
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";"
+    },
+    {
+        "kind": "EndOfFileToken",
+        "fullStart": 6,
+        "fullEnd": 6,
+        "start": 6,
+        "end": 6,
+        "fullWidth": 0,
+        "width": 0,
+        "text": ""
+    }
+]

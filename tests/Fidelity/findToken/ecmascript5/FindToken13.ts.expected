@@ -1,0 +1,253 @@
+{
+    "tokens": {
+        "0": {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        },
+        "1": {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        },
+        "2": {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        },
+        "3": {
+            "kind": "EndOfFileToken",
+            "fullStart": 3,
+            "fullEnd": 3,
+            "start": 3,
+            "end": 3,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "tokensOnLeft": {
+        "0": null,
+        "1": null,
+        "2": null,
+        "3": {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        }
+    },
+    "leftToRight": [
+        {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        },
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 3,
+            "fullEnd": 3,
+            "start": 3,
+            "end": 3,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    ],
+    "rightToLeft": [
+        {
+            "kind": "EndOfFileToken",
+            "fullStart": 3,
+            "fullEnd": 3,
+            "start": 3,
+            "end": 3,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        },
+        {
+            "kind": "SemicolonToken",
+            "fullStart": 0,
+            "fullEnd": 3,
+            "start": 2,
+            "end": 3,
+            "fullWidth": 3,
+            "width": 1,
+            "text": ";",
+            "value": ";",
+            "valueText": ";",
+            "hasLeadingTrivia": true,
+            "hasLeadingSkippedText": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SkippedTokenTrivia",
+                    "skippedToken": {
+                        "kind": "ErrorToken",
+                        "fullStart": 0,
+                        "fullEnd": 1,
+                        "start": 0,
+                        "end": 1,
+                        "fullWidth": 1,
+                        "width": 1,
+                        "text": "\\"
+                    }
+                },
+                {
+                    "kind": "WhitespaceTrivia",
+                    "fullStart": 1,
+                    "fullEnd": 2,
+                    "text": " "
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,112 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "diagnostics": [
+        {
+            "start": 0,
+            "length": 6,
+            "diagnosticCode": "Unexpected token; '{0}' expected.",
+            "arguments": [
+                "module, class, interface, enum, import or statement"
+            ]
+        }
+    ],
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 15,
+        "start": 7,
+        "end": 15,
+        "fullWidth": 15,
+        "width": 8,
+        "isIncrementallyUnusable": true,
+        "moduleElements": [
+            {
+                "kind": "BreakStatement",
+                "fullStart": 0,
+                "fullEnd": 15,
+                "start": 7,
+                "end": 13,
+                "fullWidth": 15,
+                "width": 6,
+                "isIncrementallyUnusable": true,
+                "breakKeyword": {
+                    "kind": "BreakKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 12,
+                    "start": 7,
+                    "end": 12,
+                    "fullWidth": 12,
+                    "width": 5,
+                    "text": "break",
+                    "value": "break",
+                    "valueText": "break",
+                    "hasLeadingTrivia": true,
+                    "hasLeadingSkippedText": true,
+                    "leadingTrivia": [
+                        {
+                            "kind": "SkippedTokenTrivia",
+                            "skippedToken": {
+                                "kind": "PublicKeyword",
+                                "fullStart": 0,
+                                "fullEnd": 6,
+                                "start": 0,
+                                "end": 6,
+                                "fullWidth": 6,
+                                "width": 6,
+                                "text": "public",
+                                "value": "public",
+                                "valueText": "public"
+                            }
+                        },
+                        {
+                            "kind": "WhitespaceTrivia",
+                            "fullStart": 6,
+                            "fullEnd": 7,
+                            "text": " "
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 12,
+                    "fullEnd": 15,
+                    "start": 12,
+                    "end": 13,
+                    "fullWidth": 3,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 13,
+                            "fullEnd": 15,
+                            "text": "\r\n"
+                        }
+                    ]
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 15,
+            "fullEnd": 15,
+            "start": 15,
+            "end": 15,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            15
+        ],
+        "length": 15
+    }
+}

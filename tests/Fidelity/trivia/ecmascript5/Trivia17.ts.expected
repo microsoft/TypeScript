@@ -1,0 +1,33 @@
+[
+    {
+        "kind": "SemicolonToken",
+        "fullStart": 0,
+        "fullEnd": 2,
+        "start": 1,
+        "end": 2,
+        "fullWidth": 2,
+        "width": 1,
+        "text": ";",
+        "value": ";",
+        "valueText": ";",
+        "hasLeadingTrivia": true,
+        "leadingTrivia": [
+            {
+                "kind": "WhitespaceTrivia",
+                "fullStart": 0,
+                "fullEnd": 1,
+                "text": " "
+            }
+        ]
+    },
+    {
+        "kind": "EndOfFileToken",
+        "fullStart": 2,
+        "fullEnd": 2,
+        "start": 2,
+        "end": 2,
+        "fullWidth": 0,
+        "width": 0,
+        "text": ""
+    }
+]

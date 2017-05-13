@@ -1,0 +1,2 @@
+class C extends A, {
+}

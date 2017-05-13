@@ -1,0 +1,52 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 8,
+        "start": 0,
+        "end": 8,
+        "fullWidth": 8,
+        "width": 8,
+        "moduleElements": [
+            {
+                "kind": "DebuggerStatement",
+                "fullStart": 0,
+                "fullEnd": 8,
+                "start": 0,
+                "end": 8,
+                "fullWidth": 8,
+                "width": 8,
+                "debuggerKeyword": {
+                    "kind": "DebuggerKeyword",
+                    "fullStart": 0,
+                    "fullEnd": 8,
+                    "start": 0,
+                    "end": 8,
+                    "fullWidth": 8,
+                    "width": 8,
+                    "text": "debugger",
+                    "value": "debugger",
+                    "valueText": "debugger"
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 8,
+            "fullEnd": 8,
+            "start": 8,
+            "end": 8,
+            "fullWidth": 0,
+            "width": 0,
+            "text": ""
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0
+        ],
+        "length": 8
+    }
+}

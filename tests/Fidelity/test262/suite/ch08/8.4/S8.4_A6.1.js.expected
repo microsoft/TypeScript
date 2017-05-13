@@ -1,0 +1,551 @@
+{
+    "isDeclaration": false,
+    "languageVersion": "EcmaScript5",
+    "sourceUnit": {
+        "kind": "SourceUnit",
+        "fullStart": 0,
+        "fullEnd": 8639,
+        "start": 315,
+        "end": 8639,
+        "fullWidth": 8639,
+        "width": 8324,
+        "moduleElements": [
+            {
+                "kind": "VariableStatement",
+                "fullStart": 0,
+                "fullEnd": 4425,
+                "start": 315,
+                "end": 4424,
+                "fullWidth": 4425,
+                "width": 4109,
+                "modifiers": [],
+                "variableDeclaration": {
+                    "kind": "VariableDeclaration",
+                    "fullStart": 0,
+                    "fullEnd": 4423,
+                    "start": 315,
+                    "end": 4423,
+                    "fullWidth": 4423,
+                    "width": 4108,
+                    "varKeyword": {
+                        "kind": "VarKeyword",
+                        "fullStart": 0,
+                        "fullEnd": 319,
+                        "start": 315,
+                        "end": 318,
+                        "fullWidth": 319,
+                        "width": 3,
+                        "text": "var",
+                        "value": "var",
+                        "valueText": "var",
+                        "hasLeadingTrivia": true,
+                        "hasLeadingComment": true,
+                        "hasLeadingNewLine": true,
+                        "hasTrailingTrivia": true,
+                        "leadingTrivia": [
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 0,
+                                "fullEnd": 60,
+                                "text": "// Copyright 2009 the Sputnik authors.  All rights reserved."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 60,
+                                "fullEnd": 61,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 61,
+                                "fullEnd": 131,
+                                "text": "// This code is governed by the BSD license found in the LICENSE file."
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 131,
+                                "fullEnd": 132,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 132,
+                                "fullEnd": 133,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "MultiLineCommentTrivia",
+                                "fullStart": 133,
+                                "fullEnd": 249,
+                                "text": "/**\n * Large string 4096 bytes\n *\n * @path ch08/8.4/S8.4_A6.1.js\n * @description Assign variable by large string\n */"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 249,
+                                "fullEnd": 250,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 250,
+                                "fullEnd": 251,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 251,
+                                "fullEnd": 303,
+                                "text": "////////////////////////////////////////////////////"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 303,
+                                "fullEnd": 304,
+                                "text": "\n"
+                            },
+                            {
+                                "kind": "SingleLineCommentTrivia",
+                                "fullStart": 304,
+                                "fullEnd": 314,
+                                "text": "// Check#1"
+                            },
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 314,
+                                "fullEnd": 315,
+                                "text": "\n"
+                            }
+                        ],
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 318,
+                                "fullEnd": 319,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "variableDeclarators": [
+                        {
+                            "kind": "VariableDeclarator",
+                            "fullStart": 319,
+                            "fullEnd": 4423,
+                            "start": 319,
+                            "end": 4423,
+                            "fullWidth": 4104,
+                            "width": 4104,
+                            "propertyName": {
+                                "kind": "IdentifierName",
+                                "fullStart": 319,
+                                "fullEnd": 327,
+                                "start": 319,
+                                "end": 327,
+                                "fullWidth": 8,
+                                "width": 8,
+                                "text": "largeStr",
+                                "value": "largeStr",
+                                "valueText": "largeStr"
+                            },
+                            "equalsValueClause": {
+                                "kind": "EqualsValueClause",
+                                "fullStart": 327,
+                                "fullEnd": 4423,
+                                "start": 327,
+                                "end": 4423,
+                                "fullWidth": 4096,
+                                "width": 4096,
+                                "equalsToken": {
+                                    "kind": "EqualsToken",
+                                    "fullStart": 327,
+                                    "fullEnd": 328,
+                                    "start": 327,
+                                    "end": 328,
+                                    "fullWidth": 1,
+                                    "width": 1,
+                                    "text": "=",
+                                    "value": "=",
+                                    "valueText": "="
+                                },
+                                "value": {
+                                    "kind": "StringLiteral",
+                                    "fullStart": 328,
+                                    "fullEnd": 4423,
+                                    "start": 328,
+                                    "end": 4423,
+                                    "fullWidth": 4095,
+                                    "width": 4095,
+                                    "text": "'Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap'",
+                                    "value": "Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap",
+                                    "valueText": "Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap"
+                                }
+                            }
+                        }
+                    ]
+                },
+                "semicolonToken": {
+                    "kind": "SemicolonToken",
+                    "fullStart": 4423,
+                    "fullEnd": 4425,
+                    "start": 4423,
+                    "end": 4424,
+                    "fullWidth": 2,
+                    "width": 1,
+                    "text": ";",
+                    "value": ";",
+                    "valueText": ";",
+                    "hasTrailingTrivia": true,
+                    "hasTrailingNewLine": true,
+                    "trailingTrivia": [
+                        {
+                            "kind": "NewLineTrivia",
+                            "fullStart": 4424,
+                            "fullEnd": 4425,
+                            "text": "\n"
+                        }
+                    ]
+                }
+            },
+            {
+                "kind": "IfStatement",
+                "fullStart": 4425,
+                "fullEnd": 8582,
+                "start": 4425,
+                "end": 8581,
+                "fullWidth": 4157,
+                "width": 4156,
+                "ifKeyword": {
+                    "kind": "IfKeyword",
+                    "fullStart": 4425,
+                    "fullEnd": 4427,
+                    "start": 4425,
+                    "end": 4427,
+                    "fullWidth": 2,
+                    "width": 2,
+                    "text": "if",
+                    "value": "if",
+                    "valueText": "if"
+                },
+                "openParenToken": {
+                    "kind": "OpenParenToken",
+                    "fullStart": 4427,
+                    "fullEnd": 4428,
+                    "start": 4427,
+                    "end": 4428,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": "(",
+                    "value": "(",
+                    "valueText": "("
+                },
+                "condition": {
+                    "kind": "NotEqualsExpression",
+                    "fullStart": 4428,
+                    "fullEnd": 8536,
+                    "start": 4428,
+                    "end": 8536,
+                    "fullWidth": 4108,
+                    "width": 4108,
+                    "left": {
+                        "kind": "IdentifierName",
+                        "fullStart": 4428,
+                        "fullEnd": 4437,
+                        "start": 4428,
+                        "end": 4436,
+                        "fullWidth": 9,
+                        "width": 8,
+                        "text": "largeStr",
+                        "value": "largeStr",
+                        "valueText": "largeStr",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 4436,
+                                "fullEnd": 4437,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "operatorToken": {
+                        "kind": "ExclamationEqualsEqualsToken",
+                        "fullStart": 4437,
+                        "fullEnd": 4441,
+                        "start": 4437,
+                        "end": 4440,
+                        "fullWidth": 4,
+                        "width": 3,
+                        "text": "!==",
+                        "value": "!==",
+                        "valueText": "!==",
+                        "hasTrailingTrivia": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "WhitespaceTrivia",
+                                "fullStart": 4440,
+                                "fullEnd": 4441,
+                                "text": " "
+                            }
+                        ]
+                    },
+                    "right": {
+                        "kind": "StringLiteral",
+                        "fullStart": 4441,
+                        "fullEnd": 8536,
+                        "start": 4441,
+                        "end": 8536,
+                        "fullWidth": 4095,
+                        "width": 4095,
+                        "text": "'Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap'",
+                        "value": "Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap",
+                        "valueText": "Standard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chECMAScript LanguageSpecificationStandard ECMA-2623r d Edition - December 1999S t a n d a r d i z i n g Informat i o n and Commu n i c a t i o n SystemsPhone: +41 22 849.60.00 - Fax: +41 22 849.60.01 - URL: ht tp: / /www.ecma.ch - Internet: helpdesk@ecma.chMB Ecma-262.doc 08-04-02 16,53ECMAScript LanguageSpecificationBrief HistoryThis ECMA Standard is based on several originating technologies, the most well known being JavaScript (Netscape)and JScript (Microsoft). The language was invented by Brendan Eich at Netscape and first appeared in thatcompan Navigator 2.0 browser. It has appeared in all subsequent browsers from Netscape and in all browsers fromMicrosoft starting with Internet Explorer 3.0.The development of this Standard started in November 1996. The first edition of this ECMA Standard was adopted bythe ECMA General Assembly of June 1997.That ECMA Standard was submitted to ISO/IEC JTC 1 for adoption under the fast-track procedure, and approved asinternational standard ISO/IEC 16262, in April 1998. The ECMA General Assembly of June 1998 approved thesecond edition of ECMA-262 to keep it fully aligned with ISO/IEC 16262. Changes between the first and the secondedition are editorial in nature.The current document defines the third edition of the Standard and includes powerful regular expressions, betterstring handling, new control statements, try/catch exception handling, tighter definition of errors, formatting fornumeric output and minor changes in anticipation of forthcoming internationalisation facilities and future languagegrowth.Work on the language is not complete. The technical committee is working on significant enhancements, includingmechanisms for scripts to be created and used across the Internet, and tighter coordination with other standards bodiessuch as groups within the World Wide Web Consortium and the Wireless Application Protocol Forum.This Standard has been adopted as 3rd Edition of ECMA-262 by the ECMA General Assembly in December, 1999.- i -Table of contents1 Scope 12 Conformance 13 References 14 Overview 1 4.1 Web Scripting 2 4.2 Language Overview 2 4.2.1 Objects 3 4.3 Definitions 4 4.3.1 Type 4 4.3.2 Primitive Value 4 4.3.3 Object 4 4.3.4 Constructor 4 4.3.5 Prototype 4 4.3.6 Native Object 4 4.3.7 Built-in Object 4 4.3.8 Host Object 4 4.3.9 Undefined Value 4 4.3.10 Undefined Type 4 4.3.11 Null Value 4 4.3.12 Null Type 4 4.3.13 Boolean Value 4 4.3.14 Boolean Type 4 4.3.15 Boolean Object 5 4.3.16 String Value 5 4.3.17 String Type 5 4.3.18 String Object 5 4.3.19 Number Value 5 4.3.20 Number Type 5 4.3.21 Number Object 5 4.3.22 Infinity 5 4.3.23 NaN 5 5 Notational Conventions 6 5.1 Syntactic and Lexical Grammars 6 5.1.1 Context-Free Grammars 6 5.1.2 The Lexical and RegExp Grammars 6 5.1.3 The Numeric String Grammar 6 5.1.4 The Syntactic Grammar 6 5.1.5 Grammar Notation 7 5.2 Algorithm Conventions 9 6. Source Text 10 7 Lexical Conventions 11 7.1 Unicode Format-Control Characters 11 7.2 White Space 11 7.3 Line Terminators 12 7.4 Comments 12 - ii - 7.5 Tokens 13 7.5.1 Reserved Words 13 7.5.2 Keywords 13 7.5.3 Future Reserved Words 14 7.6 Identifiers 14 7.7 Punctuators 15 7.8 Literals 16 7.8.1 Null Literals 16 7.8.2 Boolean Literals 16 7.8.3 Numeric Literals 16 7.8.4 String Literals 18 7.8.5 Regular Expression Literals 20 7.9 Automatic Semicolon Insertion 21 7.9.1 Rules of Automatic Semicolon Insertion 21 7.9.2 Examples of Automatic Semicolon Insertion 22 8 Types 24 8.1 The Undefined Type 24 8.2 The Null Type 24 8.3 The Boolean Type 24 8.4 The String Type 24 8.5 The Number Type 24 8.6 The Object Type 25 8.6.1 Property Attributes 25 8.6.2 Internal Properties and Methods 26 8.7 The Reference Type 29 8.7.1 GetValue (V) 29 8.7.2 PutValue (V, W) 29 8.8 The List Type 30 8.9 The Completion Type 30 9 Type Conversion 30 9.1 ToPrimitive 30 9.2 ToBoolean 30 9.3 ToNumber 31 9.3.1 ToNumber Ap"
+                    }
+                },
+                "closeParenToken": {
+                    "kind": "CloseParenToken",
+                    "fullStart": 8536,
+                    "fullEnd": 8537,
+                    "start": 8536,
+                    "end": 8537,
+                    "fullWidth": 1,
+                    "width": 1,
+                    "text": ")",
+                    "value": ")",
+                    "valueText": ")"
+                },
+                "statement": {
+                    "kind": "Block",
+                    "fullStart": 8537,
+                    "fullEnd": 8582,
+                    "start": 8537,
+                    "end": 8581,
+                    "fullWidth": 45,
+                    "width": 44,
+                    "openBraceToken": {
+                        "kind": "OpenBraceToken",
+                        "fullStart": 8537,
+                        "fullEnd": 8539,
+                        "start": 8537,
+                        "end": 8538,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "{",
+                        "value": "{",
+                        "valueText": "{",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 8538,
+                                "fullEnd": 8539,
+                                "text": "\n"
+                            }
+                        ]
+                    },
+                    "statements": [
+                        {
+                            "kind": "ExpressionStatement",
+                            "fullStart": 8539,
+                            "fullEnd": 8580,
+                            "start": 8541,
+                            "end": 8579,
+                            "fullWidth": 41,
+                            "width": 38,
+                            "expression": {
+                                "kind": "InvocationExpression",
+                                "fullStart": 8539,
+                                "fullEnd": 8578,
+                                "start": 8541,
+                                "end": 8578,
+                                "fullWidth": 39,
+                                "width": 37,
+                                "expression": {
+                                    "kind": "IdentifierName",
+                                    "fullStart": 8539,
+                                    "fullEnd": 8547,
+                                    "start": 8541,
+                                    "end": 8547,
+                                    "fullWidth": 8,
+                                    "width": 6,
+                                    "text": "$ERROR",
+                                    "value": "$ERROR",
+                                    "valueText": "$ERROR",
+                                    "hasLeadingTrivia": true,
+                                    "leadingTrivia": [
+                                        {
+                                            "kind": "WhitespaceTrivia",
+                                            "fullStart": 8539,
+                                            "fullEnd": 8541,
+                                            "text": "  "
+                                        }
+                                    ]
+                                },
+                                "argumentList": {
+                                    "kind": "ArgumentList",
+                                    "fullStart": 8547,
+                                    "fullEnd": 8578,
+                                    "start": 8547,
+                                    "end": 8578,
+                                    "fullWidth": 31,
+                                    "width": 31,
+                                    "openParenToken": {
+                                        "kind": "OpenParenToken",
+                                        "fullStart": 8547,
+                                        "fullEnd": 8548,
+                                        "start": 8547,
+                                        "end": 8548,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": "(",
+                                        "value": "(",
+                                        "valueText": "("
+                                    },
+                                    "arguments": [
+                                        {
+                                            "kind": "StringLiteral",
+                                            "fullStart": 8548,
+                                            "fullEnd": 8577,
+                                            "start": 8548,
+                                            "end": 8577,
+                                            "fullWidth": 29,
+                                            "width": 29,
+                                            "text": "'#1: Large string 4096 bytes'",
+                                            "value": "#1: Large string 4096 bytes",
+                                            "valueText": "#1: Large string 4096 bytes"
+                                        }
+                                    ],
+                                    "closeParenToken": {
+                                        "kind": "CloseParenToken",
+                                        "fullStart": 8577,
+                                        "fullEnd": 8578,
+                                        "start": 8577,
+                                        "end": 8578,
+                                        "fullWidth": 1,
+                                        "width": 1,
+                                        "text": ")",
+                                        "value": ")",
+                                        "valueText": ")"
+                                    }
+                                }
+                            },
+                            "semicolonToken": {
+                                "kind": "SemicolonToken",
+                                "fullStart": 8578,
+                                "fullEnd": 8580,
+                                "start": 8578,
+                                "end": 8579,
+                                "fullWidth": 2,
+                                "width": 1,
+                                "text": ";",
+                                "value": ";",
+                                "valueText": ";",
+                                "hasTrailingTrivia": true,
+                                "hasTrailingNewLine": true,
+                                "trailingTrivia": [
+                                    {
+                                        "kind": "NewLineTrivia",
+                                        "fullStart": 8579,
+                                        "fullEnd": 8580,
+                                        "text": "\n"
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "closeBraceToken": {
+                        "kind": "CloseBraceToken",
+                        "fullStart": 8580,
+                        "fullEnd": 8582,
+                        "start": 8580,
+                        "end": 8581,
+                        "fullWidth": 2,
+                        "width": 1,
+                        "text": "}",
+                        "value": "}",
+                        "valueText": "}",
+                        "hasTrailingTrivia": true,
+                        "hasTrailingNewLine": true,
+                        "trailingTrivia": [
+                            {
+                                "kind": "NewLineTrivia",
+                                "fullStart": 8581,
+                                "fullEnd": 8582,
+                                "text": "\n"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "endOfFileToken": {
+            "kind": "EndOfFileToken",
+            "fullStart": 8582,
+            "fullEnd": 8639,
+            "start": 8639,
+            "end": 8639,
+            "fullWidth": 57,
+            "width": 0,
+            "text": "",
+            "hasLeadingTrivia": true,
+            "hasLeadingComment": true,
+            "hasLeadingNewLine": true,
+            "leadingTrivia": [
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 8582,
+                    "fullEnd": 8584,
+                    "text": "//"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 8584,
+                    "fullEnd": 8585,
+                    "text": "\n"
+                },
+                {
+                    "kind": "SingleLineCommentTrivia",
+                    "fullStart": 8585,
+                    "fullEnd": 8637,
+                    "text": "////////////////////////////////////////////////////"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 8637,
+                    "fullEnd": 8638,
+                    "text": "\n"
+                },
+                {
+                    "kind": "NewLineTrivia",
+                    "fullStart": 8638,
+                    "fullEnd": 8639,
+                    "text": "\n"
+                }
+            ]
+        }
+    },
+    "lineMap": {
+        "lineStarts": [
+            0,
+            61,
+            132,
+            133,
+            137,
+            164,
+            167,
+            198,
+            246,
+            250,
+            251,
+            304,
+            315,
+            4425,
+            8539,
+            8580,
+            8582,
+            8585,
+            8638,
+            8639
+        ],
+        "length": 8639
+    }
+}
