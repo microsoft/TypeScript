@@ -349,7 +349,7 @@ namespace ts {
     }
 
     function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
-        return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
+        return leftQuote + escapeString(text) + rightQuote;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
