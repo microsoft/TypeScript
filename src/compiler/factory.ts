@@ -3595,7 +3595,18 @@ namespace ts {
         return expression;
     }
 
-    function parenthesizeElementTypeMembers() {}
+    function parenthesizeElementTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return createParenthesizedType(member);
+        }
+    }
+    function parenthesizeElementTypeMembers(members: NodeArray<TypeNode>) {
+        return createNodeArray(members.map(parenthesizeElementTypeMember));
+    }
 
     /**
      * Clones a series of not-emitted expressions with a new inner expression.
