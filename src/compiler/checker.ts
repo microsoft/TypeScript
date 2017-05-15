@@ -10096,21 +10096,29 @@ namespace ts {
             inferTypes(context.signature.typeParameters, context.inferences, originalSource, originalTarget);
         }
 
+        function getSymbolForInference(type: Type) {
+            // Exclude the static side of classes since it shares its symbol with the instance side which leads
+            // to false positives.
+            return type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class) ? type.symbol : undefined;
+        }
+
         function inferTypes(typeVariables: TypeVariable[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
-            let sourceStack: Type[];
-            let targetStack: Type[];
+            let stack: Type[];
             let depth = 0;
             let inferiority = 0;
             const visited = createMap<boolean>();
             inferFromTypes(originalSource, originalTarget);
 
-            function isInProcess(source: Type, target: Type) {
-                for (let i = 0; i < depth; i++) {
-                    if (source === sourceStack[i] && target === targetStack[i]) {
-                        return true;
+            function isInstantiationInProcess(type: Type) {
+                const symbol = getSymbolForInference(type);
+                if (symbol) {
+                    for (let i = 0; i < depth; i++) {
+                        const t = stack[i];
+                        if (getSymbolForInference(t) === symbol) {
+                            return true;
+                        }
                     }
                 }
-                return false;
             }
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10240,10 +10248,10 @@ namespace ts {
                 else {
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.Object) {
-                        if (isInProcess(source, target)) {
-                            return;
-                        }
-                        if (isDeeplyNestedType(source, sourceStack, depth) && isDeeplyNestedType(target, targetStack, depth)) {
+                        // If we are already processing another target type with the same associated symbol (such as
+                        // an instantiation of the same generic type), we do not explore this target as it would yield
+                        // no further inferences.
+                        if (isInstantiationInProcess(target)) {
                             return;
                         }
                         const key = source.id + "," + target.id;
@@ -10251,12 +10259,7 @@ namespace ts {
                             return;
                         }
                         visited.set(key, true);
-                        if (depth === 0) {
-                            sourceStack = [];
-                            targetStack = [];
-                        }
-                        sourceStack[depth] = source;
-                        targetStack[depth] = target;
+                        (stack || (stack = []))[depth] = target;
                         depth++;
                         inferFromObjectTypes(source, target);
                         depth--;
