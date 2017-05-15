@@ -9598,10 +9598,6 @@ namespace ts {
             return signature.hasRestParameter && parameterIndex >= signature.parameters.length - 1;
         }
 
-        function areAllParametersOptionalAfter(signature: Signature, parameterIndex: number) {
-            return parameterIndex >= signature.minArgumentCount;
-        }
-
         function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
             for (const t of types) {
                 if (candidate !== t && !isTypeSubtypeOf(t, candidate)) return false;
@@ -14653,7 +14649,7 @@ namespace ts {
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
             if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex) || areAllParametersOptionalAfter(signature, spreadArgIndex);
+                return isRestParameterIndex(signature, spreadArgIndex) || spreadArgIndex >= signature.minArgumentCount;
             }
 
             // Too many arguments implies incorrect arity.
