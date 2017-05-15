@@ -67,7 +67,7 @@ namespace ts.FindAllReferences {
     }
 
     function getImplementationReferenceEntries(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFiles: SourceFile[], node: Node): Entry[] | undefined {
-        if (node.parent.kind === SyntaxKind.SourceFile) {
+        if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
         // If invoked directly on a shorthand property assignment, then return
