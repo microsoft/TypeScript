@@ -13350,11 +13350,11 @@ namespace ts {
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
-                    if (!isValidSpreadType(exprType)) {
-                        typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
+                    if (isValidSpreadType(exprType)) {
+                        spread = getSpreadType(spread, exprType);
                     }
                     else {
-                        spread = getSpreadType(spread, exprType);
+                        typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
                     }
                 }
             }
