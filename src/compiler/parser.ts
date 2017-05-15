@@ -463,6 +463,10 @@ namespace ts {
         return file.externalModuleIndicator !== undefined;
     }
 
+    export function isInternalModule(file: SourceFile): boolean {
+        return file.internalModuleIndicator !== undefined;
+    }
+
     // Produces a new SourceFile for the 'newText' provided. The 'textChangeRange' parameter
     // indicates what changed between the 'text' that this SourceFile has and the 'newText'.
     // The SourceFile will be created with the compiler attempting to reuse as many nodes from
@@ -675,7 +679,7 @@ namespace ts {
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
             sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
 
-            setExternalModuleIndicator(sourceFile);
+            setInternalExternalModuleIndicators(sourceFile)
 
             sourceFile.nodeCount = nodeCount;
             sourceFile.identifierCount = identifierCount;
@@ -5912,15 +5916,20 @@ namespace ts {
             sourceFile.checkJsDirective = checkJsDirective;
         }
 
-        function setExternalModuleIndicator(sourceFile: SourceFile) {
-            sourceFile.externalModuleIndicator = forEach(sourceFile.statements, node =>
-                hasModifier(node, ModifierFlags.Export)
+        function setInternalExternalModuleIndicators(sourceFile: SourceFile) {
+            forEach(sourceFile.statements, node => {
+                if (hasModifier(node, ModifierFlags.Export)
                     || node.kind === SyntaxKind.ImportEqualsDeclaration && (<ImportEqualsDeclaration>node).moduleReference.kind === SyntaxKind.ExternalModuleReference
                     || node.kind === SyntaxKind.ImportDeclaration
                     || node.kind === SyntaxKind.ExportAssignment
                     || node.kind === SyntaxKind.ExportDeclaration
-                    ? node
-                    : undefined);
+                ) {
+                    sourceFile.externalModuleIndicator = node
+                }
+                else if (node.kind === SyntaxKind.ModuleDeclaration || node.kind === SyntaxKind.NamespaceImport) {
+                    sourceFile.internalModuleIndicator = node
+                }
+            })
         }
 
         const enum ParsingContext {
