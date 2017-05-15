@@ -1280,7 +1280,7 @@ namespace ts {
                 else if (result.flags & SymbolFlags.Class) {
                     error(errorLocation, Diagnostics.Class_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
-                else if (result.flags & SymbolFlags.Enum) {
+                else if (result.flags & SymbolFlags.RegularEnum) {
                     error(errorLocation, Diagnostics.Enum_0_used_before_its_declaration, declarationNameToString(getNameOfDeclaration(declaration)));
                 }
             }
