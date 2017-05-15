@@ -24,6 +24,6 @@ verify.quickInfos({
     3: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
     4: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
     5: "function OverloadComponent(): any (+2 overloads)",
-    6: "function OverloadComponent<boolean, number>(attr: {\n    b: number;\n    a: boolean;\n}): any (+2 overloads)",
-    7: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)"
+    6: "function OverloadComponent(): any (+2 overloads)",
+    7: "function OverloadComponent(): any (+2 overloads)",
 });

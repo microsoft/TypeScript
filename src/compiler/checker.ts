@@ -13314,6 +13314,7 @@ namespace ts {
             let spread: Type = emptyObjectType;
             let attributesArray: Symbol[] = [];
             let hasSpreadAnyType = false;
+            let typeToIntersect: Type;
             let explicitlySpecifyChildrenAttribute = false;
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyname();
 
@@ -13345,11 +13346,16 @@ namespace ts {
                         attributesArray = [];
                         attributesTable = createMap<Symbol>();
                     }
-                    const exprType = getApparentType(checkExpression(attributeDecl.expression));
+                    const exprType = checkExpression(attributeDecl.expression);
                     if (isTypeAny(exprType)) {
                         hasSpreadAnyType = true;
                     }
-                    spread = getSpreadType(spread, exprType);
+                    if (isValidSpreadType(exprType)) {
+                        spread = getSpreadType(spread, exprType);
+                    }
+                    else {
+                        typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
+                    }
                 }
             }
 
@@ -13404,7 +13410,13 @@ namespace ts {
                 }
             }
 
-            return hasSpreadAnyType ? anyType : createJsxAttributesType(attributes.symbol, attributesTable);
+            if (hasSpreadAnyType) {
+                return anyType;
+            }
+
+            const attributeType = createJsxAttributesType(attributes.symbol, attributesTable);
+            return typeToIntersect && attributesTable.size ? getIntersectionType([typeToIntersect, attributeType]) :
+                typeToIntersect ? typeToIntersect : attributeType;
 
             /**
              * Create anonymous type from given attributes symbol table.
