@@ -1,0 +1,94 @@
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(40,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(41,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(42,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(43,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(44,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(45,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(46,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(46,11): error TS2461: Type '(a?: number, b?: number) => void' is not an array type.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(47,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(48,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (10 errors) ====
+    // Desired semantics: take type of array that is spread,
+    // allow it to be applied to a
+    // *trailing* set of optional parameters whose types match.
+    // Length is *not* checked, the parameters it's applied to just have to be optional.
+    
+    // that means that tuples are non-starters because their array element type
+    // is a union like string | number.
+    
+    // with exceptions for JS functions that use arguments, or maybe all JS functions
+    
+    declare function all(a?: number, b?: number): void;
+    declare function weird(a?: number | string, b?: number | string): void;
+    declare function prefix(s: string, a?: number, b?: number): void;
+    declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
+    declare function normal(s: string): void;
+    declare function thunk(): string;
+    
+    declare var ns: number[];
+    declare var mixed: (number | string)[];
+    declare var tuple: [number, string];
+    
+    // good
+    all(...ns)
+    weird(...ns)
+    weird(...mixed)
+    weird(...tuple)
+    prefix("a", ...ns)
+    rest("d", ...ns)
+    
+    
+    // this covers the arguments case
+    normal("g", ...ns)
+    normal("h", ...mixed)
+    normal("i", ...tuple)
+    thunk(...ns)
+    thunk(...mixed)
+    thunk(...tuple)
+    
+    // bad
+    all(...mixed)
+        ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    all(...tuple)
+        ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix("b", ...mixed)
+                ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix("c", ...tuple)
+                ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    rest("e", ...mixed)
+              ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    rest("f", ...tuple)
+              ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix(...all) // required parameters are required
+    ~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+              ~~~
+!!! error TS2461: Type '(a?: number, b?: number) => void' is not an array type.
+    prefix(...mixed)
+    ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    prefix(...tuple)
+    ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    
