@@ -733,6 +733,9 @@ namespace ts {
                 // Transformation nodes
                 case SyntaxKind.PartiallyEmittedExpression:
                     return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+
+                case SyntaxKind.CommaListExpression:
+                    return emitCommaList(<CommaListExpression>node);
             }
         }
 
@@ -2101,6 +2104,10 @@ namespace ts {
             emitExpression(node.expression);
         }
 
+        function emitCommaList(node: CommaListExpression) {
+            emitExpressionList(node, node.elements, ListFormat.CommaListElements);
+        }
+
         /**
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
@@ -2951,6 +2958,7 @@ namespace ts {
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
+        CommaListElements = CommaDelimited | SpaceBetweenSiblings | SingleLine,
         CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,
         TemplateExpressionSpans = SingleLine | NoInterveningComments,
