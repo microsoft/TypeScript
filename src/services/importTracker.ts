@@ -526,17 +526,18 @@ namespace ts.FindAllReferences {
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
 
-    function symbolName(symbol: Symbol): string {
+    function symbolName(symbol: Symbol): string | undefined {
         if (symbol.name !== "default") {
             return symbol.name;
         }
 
-        const name = forEach(symbol.declarations, decl => {
+        return forEach(symbol.declarations, decl => {
+            if (isExportAssignment(decl)) {
+                return isIdentifier(decl.expression) ? decl.expression.text : undefined;
+            }
             const name = getNameOfDeclaration(decl);
             return name && name.kind === SyntaxKind.Identifier && name.text;
         });
-        Debug.assert(!!name);
-        return name;
     }
 
     /** If at an export specifier, go to the symbol it refers to. */
