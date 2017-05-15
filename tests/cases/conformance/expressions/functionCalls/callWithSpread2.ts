@@ -33,6 +33,6 @@ prefix("b", ...mixed)
 prefix("c", ...tuple)
 rest("e", ...mixed)
 rest("f", ...tuple)
-prefix(...all) // required parameters are required
+prefix(...ns) // required parameters are required
 prefix(...mixed)
 prefix(...tuple)

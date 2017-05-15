@@ -11,12 +11,11 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,11): err
 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(35,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(36,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(36,11): error TS2461: Type '(a?: number, b?: number) => void' is not an array type.
 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(37,1): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(38,1): error TS2346: Supplied parameters do not match any signature of call target.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (10 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (9 errors) ====
     declare function all(a?: number, b?: number): void;
     declare function weird(a?: number | string, b?: number | string): void;
     declare function prefix(s: string, a?: number, b?: number): void;
@@ -70,11 +69,9 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(38,1): erro
               ~~~~~~~~
 !!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
 !!! error TS2345:   Type 'string' is not assignable to type 'number'.
-    prefix(...all) // required parameters are required
-    ~~~~~~~~~~~~~~
+    prefix(...ns) // required parameters are required
+    ~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.
-              ~~~
-!!! error TS2461: Type '(a?: number, b?: number) => void' is not an array type.
     prefix(...mixed)
     ~~~~~~~~~~~~~~~~
 !!! error TS2346: Supplied parameters do not match any signature of call target.

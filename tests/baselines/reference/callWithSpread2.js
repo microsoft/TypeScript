@@ -34,7 +34,7 @@ prefix("b", ...mixed)
 prefix("c", ...tuple)
 rest("e", ...mixed)
 rest("f", ...tuple)
-prefix(...all) // required parameters are required
+prefix(...ns) // required parameters are required
 prefix(...mixed)
 prefix(...tuple)
 
@@ -61,6 +61,6 @@ prefix.apply(void 0, ["b"].concat(mixed));
 prefix.apply(void 0, ["c"].concat(tuple));
 rest.apply(void 0, ["e"].concat(mixed));
 rest.apply(void 0, ["f"].concat(tuple));
-prefix.apply(void 0, all); // required parameters are required
+prefix.apply(void 0, ns); // required parameters are required
 prefix.apply(void 0, mixed);
 prefix.apply(void 0, tuple);
