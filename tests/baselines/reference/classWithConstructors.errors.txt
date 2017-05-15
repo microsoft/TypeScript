@@ -1,7 +1,7 @@
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(6,13): error TS2553: Expected 1 arguments, but got 0.
 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(15,14): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(21,13): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(31,13): error TS2553: Expected 1 arguments, but got 0.
 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(40,14): error TS2346: Supplied parameters do not match any signature of call target.
 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstructors.ts(46,13): error TS2346: Supplied parameters do not match any signature of call target.
 
@@ -14,7 +14,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c = new C(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2553: Expected 1 arguments, but got 0.
         var c2 = new C(''); // ok
     
         class C2 {
@@ -45,7 +45,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithConstr
     
         var c = new C(); // error
                 ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2553: Expected 1 arguments, but got 0.
         var c2 = new C(''); // ok
     
         class C2<T,U> {
