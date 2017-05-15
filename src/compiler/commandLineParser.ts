@@ -1526,7 +1526,7 @@ namespace ts {
         if (ownConfig.extendedConfigPath) {
             // copy the resolution stack so it is never reused between branches in potential diamond-problem scenarios.
             resolutionStack = resolutionStack.concat([resolvedPath]);
-            const extendedConfig = getExtendedConfig(ownConfig.extendedConfigPath, host, basePath, getCanonicalFileName,
+            const extendedConfig = getExtendedConfig(sourceFile, ownConfig.extendedConfigPath, host, basePath, getCanonicalFileName,
                 resolutionStack, errors);
             if (extendedConfig && isSuccessfulParsedTsconfig(extendedConfig)) {
                 const baseRaw = extendedConfig.raw;
@@ -1674,6 +1674,7 @@ namespace ts {
     }
 
     function getExtendedConfig(
+        sourceFile: JsonSourceFile,
         extendedConfigPath: Path,
         host: ts.ParseConfigHost,
         basePath: string,
@@ -1682,6 +1683,9 @@ namespace ts {
         errors: Diagnostic[],
     ): ParsedTsconfig | undefined {
         const extendedResult = readJsonConfigFile(extendedConfigPath, path => host.readFile(path));
+        if (sourceFile) {
+            (sourceFile.extendedSourceFiles || (sourceFile.extendedSourceFiles = [])).push(extendedResult.fileName);
+        }
         if (extendedResult.parseDiagnostics.length) {
             errors.push(...extendedResult.parseDiagnostics);
             return undefined;
@@ -1690,6 +1694,9 @@ namespace ts {
         const extendedDirname = getDirectoryPath(extendedConfigPath);
         const extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
             getBaseFileName(extendedConfigPath), resolutionStack, errors);
+        if (sourceFile) {
+            sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
+        }
 
         if (isSuccessfulParsedTsconfig(extendedConfig)) {
             // Update the paths to reflect base path

@@ -812,15 +812,15 @@ namespace ts.server {
         }
 
         private getProjectInfo(args: protocol.ProjectInfoRequestArgs): protocol.ProjectInfo {
-            return this.getProjectInfoWorker(args.file, args.projectFileName, args.needFileNameList);
+            return this.getProjectInfoWorker(args.file, args.projectFileName, args.needFileNameList, /*excludeConfigFiles*/ false);
         }
 
-        private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string, needFileNameList: boolean) {
+        private getProjectInfoWorker(uncheckedFileName: string, projectFileName: string, needFileNameList: boolean, excludeConfigFiles: boolean) {
             const { project } = this.getFileAndProjectWorker(uncheckedFileName, projectFileName, /*refreshInferredProjects*/ true, /*errorOnMissingProject*/ true);
             const projectInfo = {
                 configFileName: project.getProjectName(),
                 languageServiceDisabled: !project.languageServiceEnabled,
-                fileNames: needFileNameList ? project.getFileNames() : undefined
+                fileNames: needFileNameList ? project.getFileNames(/*excludeFilesFromExternalLibraries*/ false, excludeConfigFiles) : undefined
             };
             return projectInfo;
         }
@@ -1587,7 +1587,7 @@ namespace ts.server {
         }
 
         private getDiagnosticsForProject(next: NextStep, delay: number, fileName: string): void {
-            const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true);
+            const { fileNames, languageServiceDisabled } = this.getProjectInfoWorker(fileName, /*projectFileName*/ undefined, /*needFileNameList*/ true, /*excludeConfigFiles*/ true);
             if (languageServiceDisabled) {
                 return;
             }

@@ -362,7 +362,7 @@ namespace ts.server {
             return this.getLanguageService().getEmitOutput(info.fileName, emitOnlyDtsFiles);
         }
 
-        getFileNames(excludeFilesFromExternalLibraries?: boolean) {
+        getFileNames(excludeFilesFromExternalLibraries?: boolean, excludeConfigFiles?: boolean) {
             if (!this.program) {
                 return [];
             }
@@ -384,6 +384,17 @@ namespace ts.server {
                     continue;
                 }
                 result.push(asNormalizedPath(f.fileName));
+            }
+            if (!excludeConfigFiles) {
+                const configFile = this.program.getCompilerOptions().configFile;
+                if (configFile) {
+                    result.push(asNormalizedPath(configFile.fileName));
+                    if (configFile.extendedSourceFiles) {
+                        for (const f of configFile.extendedSourceFiles) {
+                            result.push(asNormalizedPath(f));
+                        }
+                    }
+                }
             }
             return result;
         }
