@@ -47,13 +47,11 @@ namespace ts {
         return resolved.path;
     }
 
-    /** Adds `isExernalLibraryImport` to a Resolved to get a ResolvedModule. */
-    function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModuleFull {
-        return { resolvedFileName: path, extension, isExternalLibraryImport };
-    }
-
     function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
-        return { resolvedModule: resolved && resolvedModuleFromResolved(resolved, isExternalLibraryImport), failedLookupLocations };
+        return {
+            resolvedModule: resolved && { resolvedFileName: resolved.path, extension: resolved.extension, isExternalLibraryImport },
+            failedLookupLocations
+        };
     }
 
     export function moduleHasNonRelativeName(moduleName: string): boolean {
