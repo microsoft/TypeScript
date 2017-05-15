@@ -189,7 +189,7 @@ namespace Utils {
             ts.forEachChild(node, child => { childNodesAndArrays.push(child); }, array => { childNodesAndArrays.push(array); });
 
             for (const childName in node) {
-                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
+                if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" || childName === "internalModuleIndicator" ||
                     // for now ignore jsdoc comments
                     childName === "jsDocComment" || childName === "checkJsDirective") {
                     continue;
