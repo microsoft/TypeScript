@@ -2135,6 +2135,10 @@
         "category": "Error",
         "code": 2710
     },
+    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
+        "category": "Error",
+        "code": 2711
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
