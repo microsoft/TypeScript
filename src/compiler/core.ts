@@ -491,6 +491,35 @@ namespace ts {
     }
 
     /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     * Avoids allocation if all elements map to themselves.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = mapfn(item, i);
+                if (result || item !== mapped || isArray(mapped)) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (isArray(mapped)) {
+                        addRange(result, mapped);
+                    }
+                    else {
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
+    }
+
+    /**
      * Computes the first matching span of elements and returns a tuple of the first span
      * and the remaining elements.
      */

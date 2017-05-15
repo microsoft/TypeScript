@@ -21,8 +21,8 @@ var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
 >MainMenu : React.StatelessComponent<{}>
 >React : any
 >StatelessComponent : React.StatelessComponent<P>
->(props) => (<div>    <h3>Main Menu</h3></div>) : (props: {}) => JSX.Element
->props : {}
+>(props) => (<div>    <h3>Main Menu</h3></div>) : (props: { children?: React.ReactNode; }) => JSX.Element
+>props : { children?: React.ReactNode; }
 >(<div>    <h3>Main Menu</h3></div>) : JSX.Element
 ><div>    <h3>Main Menu</h3></div> : JSX.Element
 >div : any
@@ -40,7 +40,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >React : any
 >StatelessComponent : React.StatelessComponent<P>
 >children : any
->({children}) => (    <div >        <MainMenu/>	</div>) : ({children}: { children: any; }) => JSX.Element
+>({children}) => (    <div >        <MainMenu/>	</div>) : ({children}: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >children : any
 >(    <div >        <MainMenu/>	</div>) : JSX.Element
 
