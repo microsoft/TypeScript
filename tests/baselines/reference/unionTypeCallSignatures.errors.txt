@@ -1,7 +1,7 @@
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(9,43): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(10,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(15,29): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
-tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures.ts(16,1): error TS2553: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(19,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(20,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
 tests/cases/conformance/types/union/unionTypeCallSignatures.ts(21,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((a: number) => number) | ((a: string) => Date)' has no compatible call signatures.
@@ -55,7 +55,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures.ts(73,12): error TS2
 !!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
     unionOfDifferentReturnType1(); // error missing parameter
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2553: Expected 1 arguments, but got 0.
     
     var unionOfDifferentParameterTypes: { (a: number): number; } | { (a: string): Date; };
     unionOfDifferentParameterTypes(10);// error - no call signatures
