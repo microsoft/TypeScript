@@ -506,7 +506,7 @@ namespace ts {
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         node.typeName = asName(typeName);
-        node.typeArguments = asNodeArray(typeArguments);
+        node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
         return node;
     }
 
@@ -559,7 +559,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = elementType;
+        node.elementType = parenthesizeElementTypeMember(elementType);
         return node;
     }
 
@@ -599,7 +599,7 @@ namespace ts {
 
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
         const node = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
-        node.types = createNodeArray(types);
+        node.types = parenthesizeElementTypeMembers(types);
         return node;
     }
 
@@ -628,7 +628,7 @@ namespace ts {
     export function createTypeOperatorNode(type: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = type;
+        node.type = parenthesizeElementTypeMember(type);
         return node;
     }
 
@@ -638,7 +638,7 @@ namespace ts {
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
-        node.objectType = objectType;
+        node.objectType = parenthesizeElementTypeMember(objectType);
         node.indexType = indexType;
         return node;
     }
@@ -3595,7 +3595,7 @@ namespace ts {
         return expression;
     }
 
-    function parenthesizeElementTypeMember(member: TypeNode) {
+    export function parenthesizeElementTypeMember(member: TypeNode) {
         switch (member.kind) {
             case SyntaxKind.UnionType:
             case SyntaxKind.IntersectionType:
@@ -3603,9 +3603,24 @@ namespace ts {
             case SyntaxKind.ConstructorType:
                 return createParenthesizedType(member);
         }
+        return member;
     }
-    function parenthesizeElementTypeMembers(members: NodeArray<TypeNode>) {
+
+    export function parenthesizeElementTypeMembers(members: TypeNode[]) {
+        // TODO: does this lose `originalNode` ptr?
         return createNodeArray(members.map(parenthesizeElementTypeMember));
+    }
+
+    export function parenthesizeTypeParameters(typeParameters: TypeNode[]) {
+        if (typeParameters && typeParameters.length > 0) {
+            const nodeArray = createNodeArray(typeParameters);
+            const firstEntry = nodeArray[0];
+            if (isFunctionOrConstructor(firstEntry) && firstEntry.typeParameters) {
+                nodeArray[0] = createParenthesizedType(firstEntry);
+            }
+
+            return nodeArray;
+        }
     }
 
     /**

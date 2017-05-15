@@ -2590,25 +2590,20 @@ namespace ts {
         WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
         UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
         SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
+        WriteTypeParametersInQualifiedName      = 1 << 9,
 
         // Error handling
         AllowThisInObjectLiteral                = 1 << 10,
         AllowQualifedNameInPlaceOfIdentifier    = 1 << 11,
-        AllowTypeParameterInQualifiedName       = 1 << 12,
         AllowAnonymousIdentifier                = 1 << 13,
         AllowEmptyUnionOrIntersection           = 1 << 14,
         AllowEmptyTuple                         = 1 << 15,
 
-        ignoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowTypeParameterInQualifiedName | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
+        ignoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
 
         // State
         inObjectTypeLiteral                     = 1 << 20,
-        InElementType                           = 1 << 21,   // Writing an array or union element type
-        InFirstTypeArgument                     = 1 << 22,   // Writing first type argument of the instantiated type
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
-
-        /** Flags that should not be passed on to sub-nodes of the current node being built. */
-        StateClearingFlags = InElementType | InFirstTypeArgument | InTypeAlias
     }
 
     export interface SymbolDisplayBuilder {
