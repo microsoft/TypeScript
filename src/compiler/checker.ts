@@ -13413,10 +13413,10 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            
-            const attributeType = createJsxAttributesType(attributes.symbol, attributesTable);
 
-            return typeToIntersect ? attributesTable.size ? getIntersectionType([typeToIntersect, attributeType]) : typeToIntersect : attributeType;
+            const attributeType = createJsxAttributesType(attributes.symbol, attributesTable);
+            return typeToIntersect && attributesTable.size ? getIntersectionType([typeToIntersect, attributeType]) :
+                typeToIntersect ? typeToIntersect : attributeType;
 
             /**
              * Create anonymous type from given attributes symbol table.
