@@ -1855,6 +1855,14 @@
         "category": "Error",
         "code": 2552
     },
+    "Expected {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2553
+    },
+    "Expected {0} type arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2554
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

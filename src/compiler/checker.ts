@@ -15370,7 +15370,27 @@ namespace ts {
                 }
             }
             else {
-                reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                if (signatures.length === 1) {
+                    if (typeArguments && typeArguments.length !== length(signatures[0].typeParameters)) {
+                        const minTypeArgumentCount = getMinTypeArgumentCount(signatures[0].typeParameters);
+                        const paramMessage = length(signatures[0].typeParameters) > minTypeArgumentCount ?
+                            `${minTypeArgumentCount}-${length(signatures[0].typeParameters)}` :
+                            minTypeArgumentCount.toString();
+                        reportError(Diagnostics.Expected_0_type_arguments_but_got_1, paramMessage, typeArguments.length.toString());
+                    }
+                    else {
+                        const argMessage = getSpreadArgumentIndex(args) > -1 ?
+                            "a minimum of " + (args.length - 1) :
+                            args.length.toString();
+                        const paramMessage = signatures[0].hasRestParameter ? "at least " + signatures[0].minArgumentCount :
+                            signatures[0].minArgumentCount < signatures[0].parameters.length ? `${signatures[0].minArgumentCount}-${signatures[0].parameters.length}` :
+                            signatures[0].minArgumentCount.toString();
+                        reportError(Diagnostics.Expected_0_arguments_but_got_1, paramMessage, argMessage);
+                    }
+                }
+                else {
+                    reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                }
             }
 
             // No signature was applicable. We have already reported the errors for the invalid signature.
