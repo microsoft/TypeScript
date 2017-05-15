@@ -1,13 +1,3 @@
-// Desired semantics: take type of array that is spread,
-// allow it to be applied to a
-// *trailing* set of optional parameters whose types match.
-// Length is *not* checked, the parameters it's applied to just have to be optional.
-
-// that means that tuples are non-starters because their array element type
-// is a union like string | number.
-
-// with exceptions for JS functions that use arguments, or maybe all JS functions
-
 declare function all(a?: number, b?: number): void;
 declare function weird(a?: number | string, b?: number | string): void;
 declare function prefix(s: string, a?: number, b?: number): void;
