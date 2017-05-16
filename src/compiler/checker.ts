@@ -2279,7 +2279,7 @@ namespace ts {
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
-            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.ignoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
+            const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const options = { removeComments: true };
             const writer = createTextWriter("");
@@ -2361,7 +2361,7 @@ namespace ts {
 
             function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
                 const inTypeAlias = context.flags & NodeBuilderFlags.InTypeAlias;
-                context.flags &= ~(NodeBuilderFlags.InTypeAlias);
+                context.flags &= ~NodeBuilderFlags.InTypeAlias;
 
                 if (!type) {
                     context.encounteredError = true;
@@ -2419,7 +2419,7 @@ namespace ts {
                     return createKeywordTypeNode(SyntaxKind.ObjectKeyword);
                 }
                 if (type.flags & TypeFlags.TypeParameter && (type as TypeParameter).isThisType) {
-                    if (context.flags & NodeBuilderFlags.inObjectTypeLiteral) {
+                    if (context.flags & NodeBuilderFlags.InObjectTypeLiteral) {
                         if (!context.encounteredError && !(context.flags & NodeBuilderFlags.AllowThisInObjectLiteral)) {
                             context.encounteredError = true;
                         }
@@ -2441,12 +2441,12 @@ namespace ts {
                 if (!inTypeAlias && type.aliasSymbol &&
                     isSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration, SymbolFlags.Type, /*shouldComputeAliasesToMakeVisible*/ false).accessibility === SymbolAccessibility.Accessible) {
                     const name = symbolToTypeReferenceName(type.aliasSymbol);
-                    const typeArgumentNodes = type.aliasTypeArguments && mapToTypeNodeArray(type.aliasTypeArguments, context);
+                    const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     return createTypeReferenceNode(name, typeArgumentNodes);
                 }
                 if (type.flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     const types = type.flags & TypeFlags.Union ? formatUnionTypes((<UnionType>type).types) : (<IntersectionType>type).types;
-                    const typeNodes = types && mapToTypeNodeArray(types, context);
+                    const typeNodes = mapToTypeNodes(types, context);
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
                         return unionOrIntersectionTypeNode;
@@ -2567,7 +2567,7 @@ namespace ts {
                     }
 
                     const savedFlags = context.flags;
-                    context.flags |= NodeBuilderFlags.inObjectTypeLiteral;
+                    context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
@@ -2598,8 +2598,7 @@ namespace ts {
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
-                            const slice = typeArguments.slice(0, getTypeReferenceArity(type));
-                            const tupleConstituentNodes = slice && mapToTypeNodeArray(slice, context);
+                            const tupleConstituentNodes = mapToTypeNodes(typeArguments.slice(0, getTypeReferenceArity(type)), context);
                             if (tupleConstituentNodes && tupleConstituentNodes.length > 0) {
                                 return createTupleTypeNode(tupleConstituentNodes);
                             }
@@ -2625,8 +2624,8 @@ namespace ts {
                                 // When type parameters are their own type arguments for the whole group (i.e. we have
                                 // the default outer type arguments), we don't show the group.
                                 if (!rangeEquals(outerTypeParameters, typeArguments, start, i)) {
-                                    const slice = typeArguments.slice(start, i);
-                                    const typeArgumentNodes = slice && createNodeArray(mapToTypeNodeArray(slice, context));
+                                    const typeArgumentSlice = mapToTypeNodes(typeArguments.slice(start, i), context);
+                                    const typeArgumentNodes = typeArgumentSlice && createNodeArray(typeArgumentSlice);
                                     const namePart = symbolToTypeReferenceName(parent);
                                     (namePart.kind === SyntaxKind.Identifier ? <Identifier>namePart : namePart.right).typeArguments = typeArgumentNodes;
 
@@ -2654,10 +2653,9 @@ namespace ts {
                         }
 
                         let typeArgumentNodes: TypeNode[] | undefined;
-                        if (some(typeArguments)) {
+                        if (typeArguments.length > 0) {
                             const typeParameterCount = (type.target.typeParameters || emptyArray).length;
-                            const slice = typeArguments && typeArguments.slice(i, typeParameterCount);
-                            typeArgumentNodes = slice && mapToTypeNodeArray(slice, context);
+                            typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                         }
 
                         if (typeArgumentNodes) {
@@ -2740,17 +2738,19 @@ namespace ts {
                 }
             }
 
-            function mapToTypeNodeArray(types: Type[], context: NodeBuilderContext): TypeNode[] {
-                const result = [];
-                for (let i = 0; i < types.length; ++i) {
-                    const type = types[i];
-                    const typeNode = typeToTypeNodeHelper(type, context);
-                    if (typeNode) {
-                        result.push(typeNode);
+            function mapToTypeNodes(types: Type[], context: NodeBuilderContext): TypeNode[] {
+                if (some(types)) {
+                    const result = [];
+                    for (let i = 0; i < types.length; ++i) {
+                        const type = types[i];
+                        const typeNode = typeToTypeNodeHelper(type, context);
+                        if (typeNode) {
+                            result.push(typeNode);
+                        }
                     }
-                }
 
-                return result;
+                    return result;
+                }
             }
 
             function indexInfoToIndexSignatureDeclarationHelper(indexInfo: IndexInfo, kind: IndexKind, context: NodeBuilderContext): IndexSignatureDeclaration {
@@ -2890,9 +2890,7 @@ namespace ts {
                             }
                         }
 
-                        if (typeParameters && typeParameters.length > 0) {
-                            typeParameterNodes = mapToTypeNodeArray(typeParameters, context);
-                        }
+                        typeParameterNodes = mapToTypeNodes(typeParameters, context);
                     }
 
                     const symbolName = getNameOfSymbol(symbol, context);

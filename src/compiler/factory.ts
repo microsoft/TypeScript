@@ -3607,16 +3607,17 @@ namespace ts {
     }
 
     export function parenthesizeElementTypeMembers(members: TypeNode[]) {
-        // TODO: does this lose `originalNode` ptr?
-        return createNodeArray(members.map(parenthesizeElementTypeMember));
+        return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
     }
 
     export function parenthesizeTypeParameters(typeParameters: TypeNode[]) {
-        if (typeParameters && typeParameters.length > 0) {
-            const nodeArray = createNodeArray(typeParameters);
-            const firstEntry = nodeArray[0];
-            if (isFunctionOrConstructor(firstEntry) && firstEntry.typeParameters) {
-                nodeArray[0] = createParenthesizedType(firstEntry);
+        if (some(typeParameters)) {
+            const nodeArray = createNodeArray() as NodeArray<TypeNode>;
+            for (let i = 0; i < typeParameters.length; ++i) {
+                const entry = typeParameters[i];
+                nodeArray.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
+                    createParenthesizedType(entry) :
+                    entry);
             }
 
             return nodeArray;

@@ -988,8 +988,6 @@ namespace ts {
                 result = reduceNode((<PropertyDeclaration>node).initializer, cbNode, result);
                 break;
 
-            case SyntaxKind.PropertySignature:
-
             case SyntaxKind.MethodDeclaration:
                 result = reduceNodes((<MethodDeclaration>node).decorators, cbNodes, result);
                 result = reduceNodes((<MethodDeclaration>node).modifiers, cbNodes, result);

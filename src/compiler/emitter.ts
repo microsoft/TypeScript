@@ -2655,7 +2655,7 @@ namespace ts {
                 if (isIdentifier(textSourceNode)) {
                     return getEmitFlags(node) & EmitFlags.NoAsciiEscaping ?
                         `"${escapeString(getTextOfNode(textSourceNode))}"` :
-                        `"${escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode)))}"`;
+                        `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode);

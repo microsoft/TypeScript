@@ -328,9 +328,8 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
-        const escapeText = getEmitFlags(node) & EmitFlags.NoAsciiEscaping ?
-            (text: string) => escapeString(text) :
-            (text: string) => escapeNonAsciiCharacters(escapeString(text));
+        const escapeText = getEmitFlags(node) & EmitFlags.NoAsciiEscaping ? escapeString : escapeNonAsciiString;
+
         // If we can't reach the original source text, use the canonical form if it's a number,
         // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
@@ -880,7 +879,7 @@ namespace ts {
         return false;
     }
 
-    export function isFunctionOrConstructor(node: Node): node is FunctionTypeNode | ConstructorTypeNode {
+    export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode {
         switch (node.kind) {
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
@@ -2468,7 +2467,8 @@ namespace ts {
     }
 
     const nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiCharacters(s: string): string {
+    export function escapeNonAsciiString(s: string): string {
+        s = escapeString(s);
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
         return nonAsciiCharacters.test(s) ?
