@@ -659,7 +659,7 @@ namespace ts {
 
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
                 if (start > position) {
-                    break;
+                    continue;
                 }
 
                 const end = child.getEnd();
