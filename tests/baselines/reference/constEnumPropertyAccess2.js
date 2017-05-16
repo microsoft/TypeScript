@@ -36,8 +36,8 @@ function foo(x) { }
 declare const enum G {
     A = 1,
     B = 2,
-    C = 3,
-    D = 2,
+    C = A + B, /* 3 */
+    D = A * 2, /* 2 */
 }
 declare var z: typeof G;
 declare var z1: any;

@@ -984,10 +984,21 @@ namespace ts {
             const enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
+                if (node.initializer && !isExpressionLiteralConstant(node.initializer)) {
+                    writeTextOfNode(currentSourceFile, node.initializer);
+                    write(", /* " + enumMemberValue.toString() + " */");
+                    writeLine();
+                    return;
+                }
                 write(enumMemberValue.toString());
             }
             write(",");
             writeLine();
+        }
+
+        function isExpressionLiteralConstant(expr: Node) {
+            return expr.kind === SyntaxKind.NumericLiteral || expr.kind === SyntaxKind.StringLiteral
+                || expr.kind === SyntaxKind.TrueKeyword || expr.kind === SyntaxKind.FalseKeyword;
         }
 
         function isPrivateMethodTypeParameter(node: TypeParameterDeclaration) {

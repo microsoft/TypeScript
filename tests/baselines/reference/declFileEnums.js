@@ -79,13 +79,13 @@ declare enum e1 {
 }
 declare enum e2 {
     a = 10,
-    b = 12,
+    b = a + 2, /* 12 */
     c = 10,
 }
 declare enum e3 {
     a = 10,
     b,
-    c = 13,
+    c = a + 3, /* 13 */
 }
 declare enum e4 {
     a = 0,
@@ -100,3 +100,46 @@ declare enum e5 {
     "Sunday" = 2,
     "Weekend days" = 3,
 }
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/declFileEnums.d.ts(8,5): error TS1066: Ambient enum elements can only have integer literal initializers.
+tests/cases/compiler/declFileEnums.d.ts(14,5): error TS1066: Ambient enum elements can only have integer literal initializers.
+
+
+==== tests/cases/compiler/declFileEnums.d.ts (2 errors) ====
+    declare enum e1 {
+        a = 0,
+        b = 1,
+        c = 2,
+    }
+    declare enum e2 {
+        a = 10,
+        b = a + 2, /* 12 */
+        ~
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
+        c = 10,
+    }
+    declare enum e3 {
+        a = 10,
+        b,
+        c = a + 3, /* 13 */
+        ~
+!!! error TS1066: Ambient enum elements can only have integer literal initializers.
+    }
+    declare enum e4 {
+        a = 0,
+        b = 1,
+        c = 2,
+        d = 10,
+        e = 11,
+    }
+    declare enum e5 {
+        "Friday" = 0,
+        "Saturday" = 1,
+        "Sunday" = 2,
+        "Weekend days" = 3,
+    }
+    
