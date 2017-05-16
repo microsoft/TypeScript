@@ -935,7 +935,7 @@ gulp.task(loggedIOJsPath, /*help*/ false, [], (done) => {
     const temp = path.join(builtLocalDirectory, "temp");
     mkdirP(temp, (err) => {
         if (err) { console.error(err); done(err); process.exit(1); }
-        exec(host, [LKGCompiler, "--types --outdir", temp, loggedIOpath], () => {
+        exec(host, [LKGCompiler, "--types", "--target es5", "--lib es5", "--outdir", temp, loggedIOpath], () => {
             fs.renameSync(path.join(temp, "/harness/loggedIO.js"), loggedIOJsPath);
             del(temp).then(() => done(), done);
         }, done);
@@ -946,7 +946,13 @@ const instrumenterPath = path.join(harnessDirectory, "instrumenter.ts");
 const instrumenterJsPath = path.join(builtLocalDirectory, "instrumenter.js");
 gulp.task(instrumenterJsPath, /*help*/ false, [servicesFile], () => {
     const settings: tsc.Settings = getCompilerSettings({
-        outFile: instrumenterJsPath
+        outFile: instrumenterJsPath,
+        target: "es5",
+        lib: [
+            "es6",
+            "dom",
+            "scripthost"
+        ]
     }, /*useBuiltCompiler*/ true);
     return gulp.src(instrumenterPath)
         .pipe(newer(instrumenterJsPath))
