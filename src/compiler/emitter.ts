@@ -2653,7 +2653,9 @@ namespace ts {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode;
                 if (isIdentifier(textSourceNode)) {
-                    return "\"" + escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode))) + "\"";
+                    return getEmitFlags(node) & EmitFlags.NoAsciiEscaping ?
+                        `"${escapeString(getTextOfNode(textSourceNode))}"` :
+                        `"${escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode)))}"`;
                 }
                 else {
                     return getLiteralTextOfNode(textSourceNode);

@@ -2385,7 +2385,7 @@ namespace ts {
                     return createTypeReferenceNode(name, /*typeArguments*/ undefined);
                 }
                 if (type.flags & (TypeFlags.StringLiteral)) {
-                    return createLiteralTypeNode((createLiteral((<LiteralType>type).text)));
+                    return createLiteralTypeNode(setEmitFlags(createLiteral((<LiteralType>type).text), EmitFlags.NoAsciiEscaping));
                 }
                 if (type.flags & (TypeFlags.NumberLiteral)) {
                     return createLiteralTypeNode((createNumericLiteral((<LiteralType>type).text)));
@@ -2783,7 +2783,9 @@ namespace ts {
                 let returnTypeNode: TypeNode;
                 if (signature.typePredicate) {
                     const typePredicate = signature.typePredicate;
-                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier ? createIdentifier((<IdentifierTypePredicate>typePredicate).parameterName) : createThisTypeNode();
+                    const parameterName = typePredicate.kind === TypePredicateKind.Identifier ?
+                        setEmitFlags(createIdentifier((<IdentifierTypePredicate>typePredicate).parameterName), EmitFlags.NoAsciiEscaping) :
+                        createThisTypeNode();
                     const typeNode = typeToTypeNodeHelper(typePredicate.type, context);
                     returnTypeNode = createTypePredicateNode(parameterName, typeNode);
                 }
@@ -2894,7 +2896,7 @@ namespace ts {
                     }
 
                     const symbolName = getNameOfSymbol(symbol, context);
-                    const identifier = createIdentifier(symbolName, typeParameterNodes);
+                    const identifier = setEmitFlags(createIdentifier(symbolName, typeParameterNodes), EmitFlags.NoAsciiEscaping);
 
                     return index > 0 ? createQualifiedName(createEntityNameFromSymbolChain(chain, index - 1), identifier) : identifier;
                 }
