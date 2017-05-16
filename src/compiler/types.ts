@@ -389,6 +389,7 @@ namespace ts {
         // Transformation nodes
         NotEmittedStatement,
         PartiallyEmittedExpression,
+        CommaListExpression,
         MergeDeclarationMarker,
         EndOfDeclarationMarker,
 
@@ -1605,6 +1606,14 @@ namespace ts {
     }
 
     /**
+     * A list of comma-seperated expressions. This node is only created by transformations.
+     */
+    export interface CommaListExpression extends Expression {
+        kind: SyntaxKind.CommaListExpression;
+        elements: NodeArray<Expression>;
+    }
+
+    /**
      * Marks the beginning of a merged transformed declaration.
      */
     /* @internal */
@@ -2519,11 +2528,11 @@ namespace ts {
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration;
 
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
-        getSymbolAtLocation(node: Node): Symbol;
+        getSymbolAtLocation(node: Node): Symbol | undefined;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
-        getShorthandAssignmentValueSymbol(location: Node): Symbol;
-        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
-        getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
+        getShorthandAssignmentValueSymbol(location: Node): Symbol | undefined;
+        getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol | undefined;
+        getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol | undefined;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;
@@ -2534,15 +2543,15 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
-        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature;
-        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature;
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+        getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature | undefined;
+        getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
         isArgumentsSymbol(symbol: Symbol): boolean;
         isUnknownSymbol(symbol: Symbol): boolean;
         /* @internal */ getMergedSymbol(symbol: Symbol): Symbol;
 
-        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number;
+        getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: string): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
@@ -2552,7 +2561,7 @@ namespace ts {
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
 
-        getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type;
+        getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
         getJsxIntrinsicTagNames(): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -2560,10 +2569,10 @@ namespace ts {
         tryGetMemberInModuleExports(memberName: string, moduleSymbol: Symbol): Symbol | undefined;
         getApparentType(type: Type): Type;
         getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined;
-        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string;
-        /* @internal */ getBaseConstraintOfType(type: Type): Type;
+        getSuggestionForNonexistentSymbol(location: Node, name: string, meaning: SymbolFlags): string | undefined;
+        /* @internal */ getBaseConstraintOfType(type: Type): Type | undefined;
 
-        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol;
+        /* @internal */ tryFindAmbientModuleWithoutAugmentations(moduleName: string): Symbol | undefined;
 
         // Should not be called directly.  Should only be accessed through the Program instance.
         /* @internal */ getDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
@@ -2759,7 +2768,7 @@ namespace ts {
         getNodeCheckFlags(node: Node): NodeCheckFlags;
         isDeclarationVisible(node: Declaration): boolean;
         collectLinkedAliases(node: Identifier): Node[];
-        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean;
+        isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         writeTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
         writeReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: TypeFormatFlags, writer: SymbolWriter): void;
@@ -3141,7 +3150,7 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments: Type[];  // Type reference type arguments (undefined if none)
+        typeArguments?: Type[];  // Type reference type arguments (undefined if none)
     }
 
     // Generic class and interface types
@@ -3271,7 +3280,7 @@ namespace ts {
 
     export interface Signature {
         declaration: SignatureDeclaration;  // Originating declaration
-        typeParameters: TypeParameter[];    // Type parameters (undefined if non-generic)
+        typeParameters?: TypeParameter[];    // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter

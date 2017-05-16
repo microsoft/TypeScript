@@ -11,12 +11,12 @@ namespace ts {
         isTypeReferenceDirective?: boolean;
     }
 
-    export function getDeclarationOfKind(symbol: Symbol, kind: SyntaxKind): Declaration {
+    export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T {
         const declarations = symbol.declarations;
         if (declarations) {
             for (const declaration of declarations) {
                 if (declaration.kind === kind) {
-                    return declaration;
+                    return declaration as T;
                 }
             }
         }
@@ -2335,6 +2335,9 @@ namespace ts {
             case SyntaxKind.SpreadElement:
                 return 1;
 
+            case SyntaxKind.CommaListExpression:
+                return 0;
+
             default:
                 return -1;
         }
@@ -3924,6 +3927,7 @@ namespace ts {
             || kind === SyntaxKind.SpreadElement
             || kind === SyntaxKind.AsExpression
             || kind === SyntaxKind.OmittedExpression
+            || kind === SyntaxKind.CommaListExpression
             || isUnaryExpressionKind(kind);
     }
 
@@ -4015,6 +4019,10 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration;
     }
 
+    export function isImportDeclaration(node: Node): node is ImportDeclaration {
+        return node.kind === SyntaxKind.ImportDeclaration;
+    }
+
     export function isImportClause(node: Node): node is ImportClause {
         return node.kind === SyntaxKind.ImportClause;
     }
@@ -4035,6 +4043,10 @@ namespace ts {
 
     export function isExportSpecifier(node: Node): node is ExportSpecifier {
         return node.kind === SyntaxKind.ExportSpecifier;
+    }
+
+    export function isExportAssignment(node: Node): node is ExportAssignment {
+        return node.kind === SyntaxKind.ExportAssignment;
     }
 
     export function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration | EnumDeclaration {
@@ -4242,6 +4254,29 @@ namespace ts {
     export function isWatchSet(options: CompilerOptions) {
         // Firefox has Object.prototype.watch
         return options.watch && options.hasOwnProperty("watch");
+    }
+
+    export function getCheckFlags(symbol: Symbol): CheckFlags {
+        return symbol.flags & SymbolFlags.Transient ? (<TransientSymbol>symbol).checkFlags : 0;
+    }
+
+    export function getDeclarationModifierFlagsFromSymbol(s: Symbol): ModifierFlags {
+        if (s.valueDeclaration) {
+            const flags = getCombinedModifierFlags(s.valueDeclaration);
+            return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
+        }
+        if (getCheckFlags(s) & CheckFlags.Synthetic) {
+            const checkFlags = (<TransientSymbol>s).checkFlags;
+            const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
+                checkFlags & CheckFlags.ContainsPublic ? ModifierFlags.Public :
+                    ModifierFlags.Protected;
+            const staticModifier = checkFlags & CheckFlags.ContainsStatic ? ModifierFlags.Static : 0;
+            return accessModifier | staticModifier;
+        }
+        if (s.flags & SymbolFlags.Prototype) {
+            return ModifierFlags.Public | ModifierFlags.Static;
+        }
+        return 0;
     }
 
     export function levenshtein(s1: string, s2: string): number {

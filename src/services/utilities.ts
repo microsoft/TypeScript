@@ -651,44 +651,26 @@ namespace ts {
                 return current;
             }
 
-            if (includeJsDocComment) {
-                const jsDocChildren = ts.filter(current.getChildren(), isJSDocNode);
-                for (const jsDocChild of jsDocChildren) {
-                    const start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
-                    if (start <= position) {
-                        const end = jsDocChild.getEnd();
-                        if (position < end || (position === end && jsDocChild.kind === SyntaxKind.EndOfFileToken)) {
-                            current = jsDocChild;
-                            continue outer;
-                        }
-                        else if (includeItemAtEndPosition && end === position) {
-                            const previousToken = findPrecedingToken(position, sourceFile, jsDocChild);
-                            if (previousToken && includeItemAtEndPosition(previousToken)) {
-                                return previousToken;
-                            }
-                        }
-                    }
-                }
-            }
-
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
-                // all jsDocComment nodes were already visited
-                if (isJSDocNode(child)) {
+                if (isJSDocNode(child) && !includeJsDocComment) {
                     continue;
                 }
+
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
-                if (start <= position) {
-                    const end = child.getEnd();
-                    if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
-                        current = child;
-                        continue outer;
-                    }
-                    else if (includeItemAtEndPosition && end === position) {
-                        const previousToken = findPrecedingToken(position, sourceFile, child);
-                        if (previousToken && includeItemAtEndPosition(previousToken)) {
-                            return previousToken;
-                        }
+                if (start > position) {
+                    continue;
+                }
+
+                const end = child.getEnd();
+                if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
+                    current = child;
+                    continue outer;
+                }
+                else if (includeItemAtEndPosition && end === position) {
+                    const previousToken = findPrecedingToken(position, sourceFile, child);
+                    if (previousToken && includeItemAtEndPosition(previousToken)) {
+                        return previousToken;
                     }
                 }
             }
