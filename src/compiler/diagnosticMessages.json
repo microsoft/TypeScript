@@ -2135,10 +2135,6 @@
         "category": "Error",
         "code": 2710
     },
-    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
-        "category": "Error",
-        "code": 2711
-    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3040,6 +3036,10 @@
     "The maximum dependency depth to search under node_modules and load JavaScript files.": {
         "category": "Message",
         "code": 6136
+    },
+    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
+        "category": "Error",
+        "code": 6137
     },
     "Property '{0}' is declared but never used.": {
         "category": "Error",

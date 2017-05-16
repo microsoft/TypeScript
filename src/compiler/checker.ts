@@ -1642,9 +1642,10 @@ namespace ts {
                 return;
             }
 
-            if (moduleReference.substr(0, 7) === "@types/") {
+            if (startsWith(moduleReference, "@types/")) {
                 const diag = Diagnostics.Cannot_import_type_declaration_files_Consider_importing_0_instead_of_1;
-                error(errorNode, diag, moduleReference.substr(7), moduleReference);
+                const withoutAtTypePrefix = removePrefix(moduleReference, "@types/");
+                error(errorNode, diag, withoutAtTypePrefix, moduleReference);
             }
 
             const ambientModule = tryFindAmbientModule(moduleName, /*withAugmentations*/ true);
