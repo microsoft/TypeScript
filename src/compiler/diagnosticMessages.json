@@ -1859,9 +1859,21 @@
         "category": "Error",
         "code": 2553
     },
-    "Expected {0} type arguments, but got {1}.": {
+    "Expected at least {0} arguments, but got {1}.": {
         "category": "Error",
         "code": 2554
+    },
+    "Expected {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2555
+    },
+    "Expected at least {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2556
+    },
+    "Expected {0} type arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2557
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

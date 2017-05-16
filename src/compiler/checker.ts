@@ -15380,19 +15380,24 @@ namespace ts {
                 reportError(Diagnostics.Expected_0_type_arguments_but_got_1, paramMessage, typeArguments.length.toString());
             }
             else if (args) {
-                const argMessage = getSpreadArgumentIndex(args) > -1 ?
-                    "a minimum of " + (args.length - 1) :
-                    args.length.toString();
                 let min = Number.POSITIVE_INFINITY;
                 let max = Number.NEGATIVE_INFINITY;
                 for (const sig of signatures) {
                     min = Math.min(min, sig.minArgumentCount);
                     max = Math.max(max, sig.parameters.length);
                 }
-                const paramMessage = some(signatures, sig => sig.hasRestParameter) ? "at least " + min :
+                ///////////
+                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+                const paramCount = hasRestParameter ? min :
                     min < max ? `${min}-${max}` :
-                    min.toString();
-                reportError(Diagnostics.Expected_0_arguments_but_got_1, paramMessage, argMessage);
+                    min;
+                const argCount = args.length - (hasSpreadArgument ? 1 : 0);
+                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
+                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                    hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_a_minimum_of_1 :
+                    Diagnostics.Expected_0_arguments_but_got_1;
+                reportError(error, paramCount.toString(), argCount.toString());
             }
             else {
                 reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
