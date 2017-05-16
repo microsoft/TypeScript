@@ -2731,7 +2731,7 @@ namespace ts {
             }
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol): ParameterDeclaration {
-                const parameterDeclaration = <ParameterDeclaration>getDeclarationOfKind(parameterSymbol, SyntaxKind.Parameter);
+                const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
                 const parameterType = getTypeOfSymbol(parameterSymbol);
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType);
                 // TODO(aozgaa): In the future, check initializer accessibility.
@@ -4100,7 +4100,7 @@ namespace ts {
                 const func = <FunctionLikeDeclaration>declaration.parent;
                 // For a parameter of a set accessor, use the type of the get accessor if one is present
                 if (func.kind === SyntaxKind.SetAccessor && !hasDynamicName(func)) {
-                    const getter = <AccessorDeclaration>getDeclarationOfKind(declaration.parent.symbol, SyntaxKind.GetAccessor);
+                    const getter = getDeclarationOfKind<AccessorDeclaration>(declaration.parent.symbol, SyntaxKind.GetAccessor);
                     if (getter) {
                         const getterSignature = getSignatureFromDeclaration(getter);
                         const thisParameter = getAccessorThisParameter(func as AccessorDeclaration);
@@ -4389,8 +4389,8 @@ namespace ts {
         function getTypeOfAccessors(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
             if (!links.type) {
-                const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
-                const setter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.SetAccessor);
+                const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
+                const setter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.SetAccessor);
 
                 if (getter && getter.flags & NodeFlags.JavaScriptFile) {
                     const jsDocType = getTypeForDeclarationFromJSDocComment(getter);
@@ -4439,7 +4439,7 @@ namespace ts {
                 if (!popTypeResolution()) {
                     type = anyType;
                     if (noImplicitAny) {
-                        const getter = <AccessorDeclaration>getDeclarationOfKind(symbol, SyntaxKind.GetAccessor);
+                        const getter = getDeclarationOfKind<AccessorDeclaration>(symbol, SyntaxKind.GetAccessor);
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
                 }
@@ -4916,7 +4916,7 @@ namespace ts {
                     return unknownType;
                 }
 
-                let declaration: JSDocTypedefTag | TypeAliasDeclaration = <JSDocTypedefTag>getDeclarationOfKind(symbol, SyntaxKind.JSDocTypedefTag);
+                let declaration: JSDocTypedefTag | TypeAliasDeclaration = getDeclarationOfKind<JSDocTypedefTag>(symbol, SyntaxKind.JSDocTypedefTag);
                 let type: Type;
                 if (declaration) {
                     if (declaration.jsDocTypeLiteral) {
@@ -4927,7 +4927,7 @@ namespace ts {
                     }
                 }
                 else {
-                    declaration = <TypeAliasDeclaration>getDeclarationOfKind(symbol, SyntaxKind.TypeAliasDeclaration);
+                    declaration = getDeclarationOfKind<TypeAliasDeclaration>(symbol, SyntaxKind.TypeAliasDeclaration);
                     type = getTypeFromTypeNode(declaration.type);
                 }
 
@@ -6220,7 +6220,7 @@ namespace ts {
                     !hasDynamicName(declaration) &&
                     (!hasThisParameter || !thisParameter)) {
                     const otherKind = declaration.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const other = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, otherKind);
+                    const other = getDeclarationOfKind<AccessorDeclaration>(declaration.symbol, otherKind);
                     if (other) {
                         thisParameter = getAnnotatedAccessorThisParameter(other);
                     }
@@ -6263,7 +6263,7 @@ namespace ts {
             // TypeScript 1.0 spec (April 2014):
             // If only one accessor includes a type annotation, the other behaves as if it had the same type annotation.
             if (declaration.kind === SyntaxKind.GetAccessor && !hasDynamicName(declaration)) {
-                const setter = <AccessorDeclaration>getDeclarationOfKind(declaration.symbol, SyntaxKind.SetAccessor);
+                const setter = getDeclarationOfKind<AccessorDeclaration>(declaration.symbol, SyntaxKind.SetAccessor);
                 return getAnnotatedAccessorType(setter);
             }
 
@@ -6476,7 +6476,7 @@ namespace ts {
         }
 
         function getConstraintDeclaration(type: TypeParameter) {
-            return (<TypeParameterDeclaration>getDeclarationOfKind(type.symbol, SyntaxKind.TypeParameter)).constraint;
+            return getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter).constraint;
         }
 
         function getConstraintFromTypeParameter(typeParameter: TypeParameter): Type {
@@ -12567,7 +12567,7 @@ namespace ts {
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             if (functionDecl.type ||
                 functionDecl.kind === SyntaxKind.Constructor ||
-                functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<SetAccessorDeclaration>getDeclarationOfKind(functionDecl.symbol, SyntaxKind.SetAccessor))) {
+                functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(functionDecl.symbol, SyntaxKind.SetAccessor))) {
                 return getReturnTypeOfSignature(getSignatureFromDeclaration(functionDecl));
             }
 
@@ -18110,7 +18110,7 @@ namespace ts {
                     // TypeScript 1.0 spec (April 2014): 8.4.3
                     // Accessors for the same member name must specify the same accessibility.
                     const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const otherAccessor = <AccessorDeclaration>getDeclarationOfKind(node.symbol, otherKind);
+                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(node.symbol, otherKind);
                     if (otherAccessor) {
                         if ((getModifierFlags(node) & ModifierFlags.AccessibilityModifier) !== (getModifierFlags(otherAccessor) & ModifierFlags.AccessibilityModifier)) {
                             error(node.name, Diagnostics.Getter_and_setter_accessors_do_not_agree_in_visibility);
@@ -20242,7 +20242,7 @@ namespace ts {
         }
 
         function isGetAccessorWithAnnotatedSetAccessor(node: FunctionLikeDeclaration) {
-            return !!(node.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(<SetAccessorDeclaration>getDeclarationOfKind(node.symbol, SyntaxKind.SetAccessor)));
+            return !!(node.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(node.symbol, SyntaxKind.SetAccessor)));
         }
 
         function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
@@ -20930,7 +20930,7 @@ namespace ts {
                 checkTypeParameterListsIdentical(symbol);
 
                 // Only check this symbol once
-                const firstInterfaceDecl = <InterfaceDeclaration>getDeclarationOfKind(symbol, SyntaxKind.InterfaceDeclaration);
+                const firstInterfaceDecl = getDeclarationOfKind<InterfaceDeclaration>(symbol, SyntaxKind.InterfaceDeclaration);
                 if (node === firstInterfaceDecl) {
                     const type = <InterfaceType>getDeclaredTypeOfSymbol(symbol);
                     const typeWithThis = getTypeWithThisArgument(type);
