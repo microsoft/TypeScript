@@ -2818,7 +2818,7 @@ namespace ts {
                 const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                    getSynthesizedClone(parameterDeclaration.name) :
+                    setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
                     cloneBindingName(parameterDeclaration.name);
                 const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
 
@@ -2846,7 +2846,7 @@ namespace ts {
                         if (clone.kind === SyntaxKind.BindingElement) {
                             (<BindingElement>clone).initializer = undefined;
                         }
-                        return setEmitFlags(clone, EmitFlags.SingleLine);
+                        return setEmitFlags(clone, EmitFlags.SingleLine | EmitFlags.NoAsciiEscaping);
                     }
                 }
             }
