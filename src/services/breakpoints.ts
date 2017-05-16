@@ -257,7 +257,7 @@ namespace ts.BreakpointResolver {
                         // Destructuring pattern in destructuring assignment
                         // [a, b, c] of
                         // [a, b, c] = expression
-                        if (isArrayLiteralOrObjectLiteralDestructuringPattern(node)) {
+                        if (isFromDestructuringAssignmentPatternTarget(node)) {
                             return spanInArrayLiteralOrObjectLiteralDestructuringPattern(<DestructuringPattern>node);
                         }
 
@@ -268,7 +268,7 @@ namespace ts.BreakpointResolver {
                             node.kind === SyntaxKind.SpreadElement ||
                             node.kind === SyntaxKind.PropertyAssignment ||
                             node.kind === SyntaxKind.ShorthandPropertyAssignment) &&
-                            isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                            isFromDestructuringAssignmentPatternTarget(node.parent)) {
                             return textSpan(node);
                         }
 
@@ -278,13 +278,13 @@ namespace ts.BreakpointResolver {
                             // [a, b, c] or {a, b, c} of
                             // [a, b, c] = expression or
                             // {a, b, c} = expression
-                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.left)) {
+                            if (isFromDestructuringAssignmentPatternTarget(binaryExpression.left)) {
                                 return spanInArrayLiteralOrObjectLiteralDestructuringPattern(
                                     <ArrayLiteralExpression | ObjectLiteralExpression>binaryExpression.left);
                             }
 
                             if (binaryExpression.operatorToken.kind === SyntaxKind.EqualsToken &&
-                                isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.parent)) {
+                                isFromDestructuringAssignmentPatternTarget(binaryExpression.parent)) {
                                 // Set breakpoint on assignment expression element of destructuring pattern
                                 // a = expression of
                                 // [a = expression, b, c] = someExpression or
@@ -330,7 +330,7 @@ namespace ts.BreakpointResolver {
                         // If this is name of property assignment, set breakpoint in the initializer
                         if (node.parent.kind === SyntaxKind.PropertyAssignment &&
                             (<PropertyDeclaration>node.parent).name === node &&
-                            !isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent.parent)) {
+                            !isFromDestructuringAssignmentPatternTarget(node.parent.parent)) {
                             return spanInNode((<PropertyDeclaration>node.parent).initializer);
                         }
 
@@ -357,7 +357,7 @@ namespace ts.BreakpointResolver {
 
                         if (node.parent.kind === SyntaxKind.BinaryExpression) {
                             const binaryExpression = <BinaryExpression>node.parent;
-                            if (isArrayLiteralOrObjectLiteralDestructuringPattern(binaryExpression.left) &&
+                            if (isFromDestructuringAssignmentPatternTarget(binaryExpression.left) &&
                                 (binaryExpression.right === node ||
                                     binaryExpression.operatorToken === node)) {
                                 // If initializer of destructuring assignment move to previous token
@@ -617,7 +617,7 @@ namespace ts.BreakpointResolver {
 
                     // Default to parent node
                     default:
-                        if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                        if (isFromDestructuringAssignmentPatternTarget(node.parent)) {
                             // Breakpoint in last binding element or binding pattern if it contains no elements
                             const objectLiteral = <ObjectLiteralExpression>node.parent;
                             return textSpan(lastOrUndefined(objectLiteral.properties) || objectLiteral);
@@ -634,7 +634,7 @@ namespace ts.BreakpointResolver {
                         return textSpan(lastOrUndefined(bindingPattern.elements) || bindingPattern);
 
                     default:
-                        if (isArrayLiteralOrObjectLiteralDestructuringPattern(node.parent)) {
+                        if (isFromDestructuringAssignmentPatternTarget(node.parent)) {
                             // Breakpoint in last binding element or binding pattern if it contains no elements
                             const arrayLiteral = <ArrayLiteralExpression>node.parent;
                             return textSpan(lastOrUndefined(arrayLiteral.elements) || arrayLiteral);

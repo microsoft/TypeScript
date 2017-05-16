@@ -22,7 +22,7 @@
 >i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
 
         (() => ({a:i} = {a:i + 1}))();
->a : Symbol(a, Decl(capturedLetConstInLoop12.ts, 12, 17))
+>a : Symbol(a, Decl(capturedLetConstInLoop12.ts, 12, 25))
 >i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))
 >a : Symbol(a, Decl(capturedLetConstInLoop12.ts, 12, 25))
 >i : Symbol(i, Decl(capturedLetConstInLoop12.ts, 11, 12))

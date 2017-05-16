@@ -93,7 +93,7 @@ let numberA3: number, robotAInfo: (number | string)[], multiRobotAInfo: (string 
 >multiRobotAInfo : (string | [string, string])[]
 
 for ([, nameA = "noName"] of robots) {
->[, nameA = "noName"] : [undefined, string]
+>[, nameA = "noName"] : [number, string, string]
 > : undefined
 >nameA = "noName" : "noName"
 >nameA : string
@@ -108,7 +108,7 @@ for ([, nameA = "noName"] of robots) {
 >nameA : string
 }
 for ([, nameA = "noName"] of getRobots()) {
->[, nameA = "noName"] : [undefined, string]
+>[, nameA = "noName"] : [number, string, string]
 > : undefined
 >nameA = "noName" : "noName"
 >nameA : string
@@ -124,7 +124,7 @@ for ([, nameA = "noName"] of getRobots()) {
 >nameA : string
 }
 for ([, nameA = "noName"] of [robotA, robotB]) {
->[, nameA = "noName"] : [undefined, string]
+>[, nameA = "noName"] : [number, string, string]
 > : undefined
 >nameA = "noName" : "noName"
 >nameA : string
@@ -141,7 +141,7 @@ for ([, nameA = "noName"] of [robotA, robotB]) {
 >nameA : string
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [undefined, [string, string]]
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [string, [string, string]]
 > : undefined
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"] : [string, string]
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
@@ -170,7 +170,7 @@ for ([, [
 >primarySkillA : string
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [undefined, [string, string]]
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [string, [string, string]]
 > : undefined
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"] : [string, string]
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
@@ -200,7 +200,7 @@ for ([, [
 >primarySkillA : string
 }
 for ([, [
->[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [undefined, [string, string]]
+>[, [    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"]] : [string, [string, string]]
 > : undefined
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] = ["skill1", "skill2"] : [string, string]
 >[    primarySkillA = "primary",    secondarySkillA = "secondary"] : [string, string]
@@ -232,7 +232,7 @@ for ([, [
 }
 
 for ([numberB = -1] of robots) {
->[numberB = -1] : [number]
+>[numberB = -1] : [number, string, string]
 >numberB = -1 : -1
 >numberB : number
 >-1 : -1
@@ -247,7 +247,7 @@ for ([numberB = -1] of robots) {
 >numberB : number
 }
 for ([numberB = -1] of getRobots()) {
->[numberB = -1] : [number]
+>[numberB = -1] : [number, string, string]
 >numberB = -1 : -1
 >numberB : number
 >-1 : -1
@@ -263,7 +263,7 @@ for ([numberB = -1] of getRobots()) {
 >numberB : number
 }
 for ([numberB = -1] of [robotA, robotB]) {
->[numberB = -1] : [number]
+>[numberB = -1] : [number, string, string]
 >numberB = -1 : -1
 >numberB : number
 >-1 : -1
@@ -280,7 +280,7 @@ for ([numberB = -1] of [robotA, robotB]) {
 >numberB : number
 }
 for ([nameB = "noName"] of multiRobots) {
->[nameB = "noName"] : [string]
+>[nameB = "noName"] : [string, [string, string]]
 >nameB = "noName" : "noName"
 >nameB : string
 >"noName" : "noName"
@@ -294,7 +294,7 @@ for ([nameB = "noName"] of multiRobots) {
 >nameB : string
 }
 for ([nameB = "noName"] of getMultiRobots()) {
->[nameB = "noName"] : [string]
+>[nameB = "noName"] : [string, [string, string]]
 >nameB = "noName" : "noName"
 >nameB : string
 >"noName" : "noName"
@@ -309,7 +309,7 @@ for ([nameB = "noName"] of getMultiRobots()) {
 >nameB : string
 }
 for ([nameB = "noName"] of [multiRobotA, multiRobotB]) {
->[nameB = "noName"] : [string]
+>[nameB = "noName"] : [string, [string, string]]
 >nameB = "noName" : "noName"
 >nameB : string
 >"noName" : "noName"
@@ -489,7 +489,7 @@ for ([nameMA = "noName", [
 }
 
 for ([numberA3 = -1, ...robotAInfo] of robots) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, string, string]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -506,7 +506,7 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, string, string]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1
@@ -524,7 +524,7 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 >numberA3 : number
 }
 for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
->[numberA3 = -1, ...robotAInfo] : (string | number)[]
+>[numberA3 = -1, ...robotAInfo] : [number, string, string]
 >numberA3 = -1 : -1
 >numberA3 : number
 >-1 : -1

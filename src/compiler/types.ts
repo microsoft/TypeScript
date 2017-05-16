@@ -2529,9 +2529,8 @@ namespace ts {
         getSymbolsInScope(location: Node, meaning: SymbolFlags): Symbol[];
         getSymbolAtLocation(node: Node): Symbol;
         getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: string): Symbol[];
-        getShorthandAssignmentValueSymbol(location: Node): Symbol;
+        getShorthandAssignmentValueSymbol(location: ShorthandPropertyAssignment): Symbol;
         getExportSpecifierLocalTargetSymbol(location: ExportSpecifier): Symbol;
-        getPropertySymbolOfDestructuringAssignment(location: Identifier): Symbol;
         getTypeAtLocation(node: Node): Type;
         getTypeFromTypeNode(node: TypeNode): Type;
         signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string;

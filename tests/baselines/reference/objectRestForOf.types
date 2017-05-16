@@ -22,8 +22,8 @@ let rrestOff: { y: string };
 >y : string
 
 for ({ x: xx, ...rrestOff } of array ) {
->{ x: xx, ...rrestOff } : { y: string; x: number; }
->x : { x: number; y: string; }
+>{ x: xx, ...rrestOff } : { x: number; y: string; }
+>x : number
 >xx : number
 >rrestOff : { y: string; }
 >array : { x: number; y: string; }[]

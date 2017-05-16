@@ -121,7 +121,7 @@ namespace ts {
                 return node ? getSymbolAtLocation(node) : undefined;
             },
             getShorthandAssignmentValueSymbol: node => {
-                node = getParseTreeNode(node);
+                node = getParseTreeNode(node, isShorthandPropertyAssignment);
                 return node ? getShorthandAssignmentValueSymbol(node) : undefined;
             },
             getExportSpecifierLocalTargetSymbol: node => {
@@ -131,10 +131,6 @@ namespace ts {
             getTypeAtLocation: node => {
                 node = getParseTreeNode(node);
                 return node ? getTypeOfNode(node) : unknownType;
-            },
-            getPropertySymbolOfDestructuringAssignment: location => {
-                location = getParseTreeNode(location, isIdentifier);
-                return location ? getPropertySymbolOfDestructuringAssignment(location) : undefined;
             },
             signatureToString: (signature, enclosingDeclaration?, flags?, kind?) => {
                 return signatureToString(signature, getParseTreeNode(enclosingDeclaration), flags, kind);
@@ -10725,11 +10721,6 @@ namespace ts {
                 getTypeOfExpression(node.right);
         }
 
-        function isDestructuringAssignmentTarget(parent: Node) {
-            return parent.parent.kind === SyntaxKind.BinaryExpression && (parent.parent as BinaryExpression).left === parent ||
-                parent.parent.kind === SyntaxKind.ForOfStatement && (parent.parent as ForOfStatement).initializer === parent;
-        }
-
         function getAssignedTypeOfArrayLiteralElement(node: ArrayLiteralExpression, element: Expression): Type {
             return getTypeOfDestructuredArrayElement(getAssignedType(node), indexOf(node.elements, element));
         }
@@ -16828,12 +16819,7 @@ namespace ts {
             if (exprOrAssignment.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const prop = <ShorthandPropertyAssignment>exprOrAssignment;
                 if (prop.objectAssignmentInitializer) {
-                    // In strict null checking mode, if a default value of a non-undefined type is specified, remove
-                    // undefined from the final type.
-                    if (strictNullChecks &&
-                        !(getFalsyFlags(checkExpression(prop.objectAssignmentInitializer)) & TypeFlags.Undefined)) {
-                        sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
-                    }
+                    sourceType = updateTypeFromShorthandAssignmentInitializer(prop.objectAssignmentInitializer, sourceType);
                     checkBinaryLikeExpression(prop.name, prop.equalsToken, prop.objectAssignmentInitializer, checkMode);
                 }
                 target = (<ShorthandPropertyAssignment>exprOrAssignment).name;
@@ -16853,6 +16839,16 @@ namespace ts {
                 return checkArrayLiteralAssignment(<ArrayLiteralExpression>target, sourceType, checkMode);
             }
             return checkReferenceAssignment(target, sourceType, checkMode);
+        }
+
+        function updateTypeFromShorthandAssignmentInitializer(objectAssignmentInitializer: Expression, sourceType: Type) {
+            // In strict null checking mode, if a default value of a non-undefined type is specified, remove
+            // undefined from the final type.
+            if (strictNullChecks &&
+                !(getFalsyFlags(checkExpression(objectAssignmentInitializer)) & TypeFlags.Undefined)) {
+                sourceType = getTypeWithFacts(sourceType, TypeFacts.NEUndefined);
+            }
+            return sourceType;
         }
 
         function checkReferenceAssignment(target: Expression, sourceType: Type, checkMode?: CheckMode): Type {
@@ -22271,6 +22267,25 @@ namespace ts {
             return undefined;
         }
 
+        function isDeclarationNameOfPropertyFromDestructuringAssignmentTarget(node: Node): node is PropertyName {
+            return (isShorthandPropertyAssignment(node.parent) || isPropertyAssignment(node.parent)) &&
+                isObjectLiteralExpression(node.parent.parent) &&
+                isFromDestructuringAssignmentPatternTarget(node.parent.parent);
+        }
+
+        function getSymbolOfNodeFromDeclarationName(node: Node) {
+            // If the location is name of property from object literal destructuring pattern
+            // Get the property symbol from the object literal's type
+            // In below eg. get 'property' from type of elems iterating type
+            // for ({ property: p2 } of elems) { }
+            if (isDeclarationNameOfPropertyFromDestructuringAssignmentTarget(node)) {
+                return getPropertySymbolOfDestructuringAssignment(node);
+            }
+
+            // This is a declaration, call getSymbolOfNode
+            return getSymbolOfNode(node.parent);
+        }
+
         function getSymbolAtLocation(node: Node) {
             if (node.kind === SyntaxKind.SourceFile) {
                 return isExternalModule(<SourceFile>node) ? getMergedSymbol(node.symbol) : undefined;
@@ -22283,10 +22298,10 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
-                return getSymbolOfNode(node.parent);
+                return getSymbolOfNodeFromDeclarationName(node);
             }
             else if (isLiteralComputedPropertyDeclarationName(node)) {
-                return getSymbolOfNode(node.parent.parent);
+                return getSymbolOfNodeFromDeclarationName(node.parent);
             }
 
             if (node.kind === SyntaxKind.Identifier) {
@@ -22363,14 +22378,11 @@ namespace ts {
             return undefined;
         }
 
-        function getShorthandAssignmentValueSymbol(location: Node): Symbol {
+        function getShorthandAssignmentValueSymbol(location: ShorthandPropertyAssignment): Symbol {
             // The function returns a value symbol of an identifier in the short-hand property assignment.
             // This is necessary as an identifier in short-hand property assignment can contains two meaning:
             // property name and property value.
-            if (location && location.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                return resolveEntityName((<ShorthandPropertyAssignment>location).name, SymbolFlags.Value | SymbolFlags.Alias);
-            }
-            return undefined;
+            return resolveEntityName(location.name, SymbolFlags.Value | SymbolFlags.Alias);
         }
 
         /** Returns the target of an export specifier without following aliases */
@@ -22399,6 +22411,9 @@ namespace ts {
             }
 
             if (isPartOfExpression(node)) {
+                if (isFromDestructuringAssignmentPatternTarget(node)) {
+                    return getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(node);
+                }
                 return getRegularTypeOfExpression(<Expression>node);
             }
 
@@ -22428,7 +22443,27 @@ namespace ts {
                 return getTypeOfSymbol(symbol);
             }
 
-            if (isDeclarationNameOrImportPropertyName(node)) {
+            if (isDeclarationNameOrImportPropertyName(node) || isLiteralComputedPropertyDeclarationName(node)) {
+                const propertyName = isDeclarationName(node) ? node : node.parent;
+                // If the location is name of property from object literal destructuring pattern
+                // Get the property symbol from the object literal's type and get the type from there
+                // In below eg. get type of 'property' from type of elems iterating type
+                // for ({ property: p2 } of elems) { }
+                if (isDeclarationNameOfPropertyFromDestructuringAssignmentTarget(propertyName)) {
+                    // Get the type of the object or array literal and then look for property of given name in the type
+                    const objectLiteralType = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>propertyName.parent.parent);
+                    const text = getTextOfPropertyName(propertyName);
+                    let type = isTypeAny(objectLiteralType)
+                        ? objectLiteralType
+                        : getTypeOfPropertyOfType(objectLiteralType, text) ||
+                        isNumericLiteralName(text) && getIndexTypeOfType(objectLiteralType, IndexKind.Number) ||
+                        getIndexTypeOfType(objectLiteralType, IndexKind.String);
+                    if (type && isShorthandPropertyAssignment(propertyName.parent) && propertyName.parent.objectAssignmentInitializer) {
+                        // Update the type with strict null check flags
+                        type = updateTypeFromShorthandAssignmentInitializer(propertyName.parent.objectAssignmentInitializer, type);
+                    }
+                    return type;
+                }
                 const symbol = getSymbolAtLocation(node);
                 return symbol && getTypeOfSymbol(symbol);
             }
@@ -22488,10 +22523,10 @@ namespace ts {
         //     }
         // 'property1' at location 'a' from:
         //     [a] = [ property1, property2 ]
-        function getPropertySymbolOfDestructuringAssignment(location: Identifier) {
+        function getPropertySymbolOfDestructuringAssignment(location: PropertyName) {
             // Get the type of the object or array literal and then look for property of given name in the type
             const typeOfObjectLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>location.parent.parent);
-            return typeOfObjectLiteral && getPropertyOfType(typeOfObjectLiteral, location.text);
+            return typeOfObjectLiteral && getPropertyOfType(typeOfObjectLiteral, getTextOfPropertyName(location));
         }
 
         function getRegularTypeOfExpression(expr: Expression): Type {

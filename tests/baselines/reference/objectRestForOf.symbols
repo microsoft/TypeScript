@@ -21,7 +21,7 @@ let rrestOff: { y: string };
 >y : Symbol(y, Decl(objectRestForOf.ts, 5, 15))
 
 for ({ x: xx, ...rrestOff } of array ) {
->x : Symbol(x, Decl(objectRestForOf.ts, 6, 6))
+>x : Symbol(x, Decl(objectRestForOf.ts, 0, 12))
 >xx : Symbol(xx, Decl(objectRestForOf.ts, 4, 3))
 >rrestOff : Symbol(rrestOff, Decl(objectRestForOf.ts, 5, 3))
 >array : Symbol(array, Decl(objectRestForOf.ts, 0, 3))

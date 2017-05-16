@@ -7,13 +7,14 @@
 //// obj.[|name|];
 
 const [r0, r1, r2, r3, r4] = test.ranges();
-verify.referenceGroups(r0, [{ definition: "var name: string", ranges: [r0, r1, r3] }]); //r3
-verify.referenceGroups(r1, [
-    { definition: "var name: string", ranges: [r0, r3] },
+const rangesForValueReference = [r0, r1, r3];
+verify.referenceGroups(rangesForValueReference, [
+    { definition: "var name: string", ranges: rangesForValueReference },
     { definition: "(property) name: string", ranges: [r1, r4] }
 ]);
 verify.singleReferenceGroup("(property) name: string", [r2]);
 verify.referenceGroups(r4, [
+    { definition: "var name: string", ranges: rangesForValueReference },
     { definition: "(property) name: string", ranges: [r1] },
     { definition: "(property) name: string", ranges: [r4] },
 ]);

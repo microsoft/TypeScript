@@ -86,7 +86,7 @@ class B extends A {
 
         // destructuring assign with property access
         ({ f: super.x } = { f });
->f : Symbol(f, Decl(asyncMethodWithSuper_es5.ts, 44, 10))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es5.ts, 44, 27))
 >super.x : Symbol(A.x, Decl(asyncMethodWithSuper_es5.ts, 0, 9))
 >super : Symbol(A, Decl(asyncMethodWithSuper_es5.ts, 0, 0))
 >x : Symbol(A.x, Decl(asyncMethodWithSuper_es5.ts, 0, 9))
@@ -94,7 +94,7 @@ class B extends A {
 
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
->f : Symbol(f, Decl(asyncMethodWithSuper_es5.ts, 47, 10))
+>f : Symbol(f, Decl(asyncMethodWithSuper_es5.ts, 47, 30))
 >super : Symbol(A, Decl(asyncMethodWithSuper_es5.ts, 0, 0))
 >"x" : Symbol(A.x, Decl(asyncMethodWithSuper_es5.ts, 0, 9))
 >f : Symbol(f, Decl(asyncMethodWithSuper_es5.ts, 47, 30))

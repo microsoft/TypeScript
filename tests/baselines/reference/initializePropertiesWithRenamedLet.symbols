@@ -35,11 +35,11 @@ if (true) {
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 11, 7))
 
     ({ z: z } = { z: 0 });
->z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 6))
+>z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 17))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 11, 7))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 12, 17))
 
     ({ z } = { z: 0 });
->z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 6))
+>z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 14))
 >z : Symbol(z, Decl(initializePropertiesWithRenamedLet.ts, 13, 14))
 }

@@ -78,7 +78,7 @@ let i: number;
 for ([, nameA] = robotA, i = 0; i < 1; i++) {
 >[, nameA] = robotA, i = 0 : 0
 >[, nameA] = robotA : [number, string, string]
->[, nameA] : [undefined, string]
+>[, nameA] : [number, string, string]
 > : undefined
 >nameA : string
 >robotA : [number, string, string]
@@ -101,7 +101,7 @@ for ([, nameA] = robotA, i = 0; i < 1; i++) {
 for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 >[, nameA] = getRobot(), i = 0 : 0
 >[, nameA] = getRobot() : [number, string, string]
->[, nameA] : [undefined, string]
+>[, nameA] : [number, string, string]
 > : undefined
 >nameA : string
 >getRobot() : [number, string, string]
@@ -125,7 +125,7 @@ for ([, nameA] = getRobot(), i = 0; i < 1; i++) {
 for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[, nameA] = [2, "trimmer", "trimming"], i = 0 : 0
 >[, nameA] = [2, "trimmer", "trimming"] : [number, string, string]
->[, nameA] : [undefined, string]
+>[, nameA] : [number, string, string]
 > : undefined
 >nameA : string
 >[2, "trimmer", "trimming"] : [number, string, string]
@@ -151,7 +151,7 @@ for ([, nameA] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 >[, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = multiRobotA : [string, [string, string]]
->[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
+>[, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 > : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
@@ -176,7 +176,7 @@ for ([, [primarySkillA, secondarySkillA]] = multiRobotA, i = 0; i < 1; i++) {
 for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) {
 >[, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = getMultiRobot() : [string, [string, string]]
->[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
+>[, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 > : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
@@ -202,7 +202,7 @@ for ([, [primarySkillA, secondarySkillA]] = getMultiRobot(), i = 0; i < 1; i++) 
 for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
 >[, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->[, [primarySkillA, secondarySkillA]] : [undefined, [string, string]]
+>[, [primarySkillA, secondarySkillA]] : [string, [string, string]]
 > : undefined
 >[primarySkillA, secondarySkillA] : [string, string]
 >primarySkillA : string
@@ -232,7 +232,7 @@ for ([, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edging"]],
 for ([numberB] = robotA, i = 0; i < 1; i++) {
 >[numberB] = robotA, i = 0 : 0
 >[numberB] = robotA : [number, string, string]
->[numberB] : [number]
+>[numberB] : [number, string, string]
 >numberB : number
 >robotA : [number, string, string]
 >i = 0 : 0
@@ -254,7 +254,7 @@ for ([numberB] = robotA, i = 0; i < 1; i++) {
 for ([numberB] = getRobot(), i = 0; i < 1; i++) {
 >[numberB] = getRobot(), i = 0 : 0
 >[numberB] = getRobot() : [number, string, string]
->[numberB] : [number]
+>[numberB] : [number, string, string]
 >numberB : number
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
@@ -277,7 +277,7 @@ for ([numberB] = getRobot(), i = 0; i < 1; i++) {
 for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberB] = [2, "trimmer", "trimming"], i = 0 : 0
 >[numberB] = [2, "trimmer", "trimming"] : [number, string, string]
->[numberB] : [number]
+>[numberB] : [number, string, string]
 >numberB : number
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
@@ -302,7 +302,7 @@ for ([numberB] = [2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
 >[nameB] = multiRobotA, i = 0 : 0
 >[nameB] = multiRobotA : [string, [string, string]]
->[nameB] : [string]
+>[nameB] : [string, [string, string]]
 >nameB : string
 >multiRobotA : [string, [string, string]]
 >i = 0 : 0
@@ -324,7 +324,7 @@ for ([nameB] = multiRobotA, i = 0; i < 1; i++) {
 for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
 >[nameB] = getMultiRobot(), i = 0 : 0
 >[nameB] = getMultiRobot() : [string, [string, string]]
->[nameB] : [string]
+>[nameB] : [string, [string, string]]
 >nameB : string
 >getMultiRobot() : [string, [string, string]]
 >getMultiRobot : () => [string, [string, string]]
@@ -347,7 +347,7 @@ for ([nameB] = getMultiRobot(), i = 0; i < 1; i++) {
 for ([nameB] = ["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[nameB] = ["trimmer", ["trimming", "edging"]], i = 0 : 0
 >[nameB] = ["trimmer", ["trimming", "edging"]] : [string, string[]]
->[nameB] : [string]
+>[nameB] : [string, string[]]
 >nameB : string
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
@@ -531,7 +531,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] = ["trimmer", ["trimming", "edgi
 for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = robotA, i = 0 : 0
 >[numberA3, ...robotAInfo] = robotA : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, string, string]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]
@@ -555,7 +555,7 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = getRobot(), i = 0 : 0
 >[numberA3, ...robotAInfo] = getRobot() : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, string, string]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]
@@ -580,7 +580,7 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0 : 0
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
->[numberA3, ...robotAInfo] : (string | number)[]
+>[numberA3, ...robotAInfo] : [number, string, string]
 >numberA3 : number
 >...robotAInfo : string | number
 >robotAInfo : (string | number)[]
@@ -609,7 +609,7 @@ for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1
 for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 >[...multiRobotAInfo] = multiRobotA, i = 0 : 0
 >[...multiRobotAInfo] = multiRobotA : [string, [string, string]]
->[...multiRobotAInfo] : (string | [string, string])[]
+>[...multiRobotAInfo] : [string, [string, string]]
 >...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >multiRobotA : [string, [string, string]]
@@ -632,7 +632,7 @@ for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 >[...multiRobotAInfo] = getMultiRobot(), i = 0 : 0
 >[...multiRobotAInfo] = getMultiRobot() : [string, [string, string]]
->[...multiRobotAInfo] : (string | [string, string])[]
+>[...multiRobotAInfo] : [string, [string, string]]
 >...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >getMultiRobot() : [string, [string, string]]
@@ -656,7 +656,7 @@ for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0; i < 1; i++) {
 >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0 : 0
 >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
->[...multiRobotAInfo] : (string | [string, string])[]
+>[...multiRobotAInfo] : [string, [string, string]]
 >...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 ><MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
