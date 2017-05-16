@@ -1067,7 +1067,7 @@
         "category": "Error",
         "code": 2345
     },
-    "Supplied parameters do not match any signature of call target.": {
+    "Call target does not contain any signatures.": {
         "category": "Error",
         "code": 2346
     },
