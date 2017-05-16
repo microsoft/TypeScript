@@ -10096,30 +10096,11 @@ namespace ts {
             inferTypes(context.signature.typeParameters, context.inferences, originalSource, originalTarget);
         }
 
-        function getSymbolForInference(type: Type) {
-            // Exclude the static side of classes since it shares its symbol with the instance side which leads
-            // to false positives.
-            return type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.Anonymous && type.symbol && type.symbol.flags & SymbolFlags.Class) ? type.symbol : undefined;
-        }
-
         function inferTypes(typeVariables: TypeVariable[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
-            let stack: Type[];
-            let depth = 0;
+            let symbolStack: Symbol[];
+            let visited: Map<boolean>;
             let inferiority = 0;
-            const visited = createMap<boolean>();
             inferFromTypes(originalSource, originalTarget);
-
-            function isInstantiationInProcess(type: Type) {
-                const symbol = getSymbolForInference(type);
-                if (symbol) {
-                    for (let i = 0; i < depth; i++) {
-                        const t = stack[i];
-                        if (getSymbolForInference(t) === symbol) {
-                            return true;
-                        }
-                    }
-                }
-            }
 
             function inferFromTypes(source: Type, target: Type) {
                 if (!couldContainTypeVariables(target)) {
@@ -10248,21 +10229,29 @@ namespace ts {
                 else {
                     source = getApparentType(source);
                     if (source.flags & TypeFlags.Object) {
+                        const key = source.id + "," + target.id;
+                        if (visited && visited.get(key)) {
+                            return;
+                        }
+                        (visited || (visited = createMap<boolean>())).set(key, true);
                         // If we are already processing another target type with the same associated symbol (such as
                         // an instantiation of the same generic type), we do not explore this target as it would yield
-                        // no further inferences.
-                        if (isInstantiationInProcess(target)) {
-                            return;
+                        // no further inferences. We exclude the static side of classes from this check since it shares
+                        // its symbol with the instance side which would lead to false positives.
+                        const isNonConstructorObject = target.flags & TypeFlags.Object &&
+                            !(getObjectFlags(target) & ObjectFlags.Anonymous && target.symbol && target.symbol.flags & SymbolFlags.Class);
+                        const symbol = isNonConstructorObject ? target.symbol : undefined;
+                        if (symbol) {
+                            if (contains(symbolStack, symbol)) {
+                                return;
+                            }
+                            (symbolStack || (symbolStack = [])).push(symbol);
+                            inferFromObjectTypes(source, target);
+                            symbolStack.pop();
                         }
-                        const key = source.id + "," + target.id;
-                        if (visited.get(key)) {
-                            return;
+                        else {
+                            inferFromObjectTypes(source, target);
                         }
-                        visited.set(key, true);
-                        (stack || (stack = []))[depth] = target;
-                        depth++;
-                        inferFromObjectTypes(source, target);
-                        depth--;
                     }
                 }
             }
