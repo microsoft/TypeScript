@@ -4010,6 +4010,10 @@ namespace ts {
         return node.kind === SyntaxKind.ImportEqualsDeclaration;
     }
 
+    export function isImportDeclaration(node: Node): node is ImportDeclaration {
+        return node.kind === SyntaxKind.ImportDeclaration;
+    }
+
     export function isImportClause(node: Node): node is ImportClause {
         return node.kind === SyntaxKind.ImportClause;
     }

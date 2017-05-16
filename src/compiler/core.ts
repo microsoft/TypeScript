@@ -230,6 +230,8 @@ namespace ts {
      * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
      * At that point findAncestor returns undefined.
      */
+    export function findAncestor<T extends Node>(node: Node, callback: (element: Node) => element is T): T | undefined;
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined;
     export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node {
         while (node) {
             const result = callback(node);
