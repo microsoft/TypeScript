@@ -1,4 +1,4 @@
-tests/cases/compiler/restParamsWithNonRestParams.ts(4,1): error TS2553: Expected at least 1 arguments, but got 0.
+tests/cases/compiler/restParamsWithNonRestParams.ts(4,1): error TS2554: Expected at least 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/restParamsWithNonRestParams.ts (1 errors) ====
@@ -7,6 +7,6 @@ tests/cases/compiler/restParamsWithNonRestParams.ts(4,1): error TS2553: Expected
     function foo2(a:string, ...b:number[]){}
     foo2(); // should be an error
     ~~~~~~
-!!! error TS2553: Expected at least 1 arguments, but got 0.
+!!! error TS2554: Expected at least 1 arguments, but got 0.
     function foo3(a?:string, ...b:number[]){}
     foo3(); // error but shouldn't be
