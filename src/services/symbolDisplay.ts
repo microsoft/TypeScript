@@ -296,9 +296,9 @@ namespace ts.SymbolDisplay {
             }
             else {
                 // Method/function type parameter
-                let declaration: Node = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
-                Debug.assert(declaration !== undefined);
-                declaration = declaration.parent;
+                const decl = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
+                Debug.assert(decl !== undefined);
+                const declaration = decl.parent;
 
                 if (declaration) {
                     if (isFunctionLikeKind(declaration.kind)) {
