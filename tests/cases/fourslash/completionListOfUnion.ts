@@ -2,8 +2,8 @@
 
 // @strictNullChecks: true
 
-// Non-objects should be skipped, so `| number | null` should have no effect on completions.
-////const x: { a: number, b: number } | { a: string, c: string } | { b: boolean } | number | null = { /*x*/ };
+// Primitives should be skipped, so `| number | null | undefined` should have no effect on completions.
+////const x: { a: number, b: number } | { a: string, c: string } | { b: boolean } | number | null | undefined = { /*x*/ };
 
 ////interface I { a: number; }
 ////function f(...args: Array<I | I[]>) {}
