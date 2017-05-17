@@ -10,9 +10,11 @@
 ////f({ /*f*/ });
 
 goTo.marker("x");
+verify.completionListCount(3);
 verify.completionListContains("a", "(property) a: string | number");
 verify.completionListContains("b", "(property) b: number | boolean");
 verify.completionListContains("c", "(property) c: string");
 
 goTo.marker("f");
 verify.completionListContains("a", "(property) a: number");
+// Also contains array members
