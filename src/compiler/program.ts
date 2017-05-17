@@ -918,7 +918,13 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+                // Allow only emitting of declarations
+                if (options.declaration) {
+                    emitOnlyDtsFiles = true;
+                }
+                else {
+                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+                }
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
@@ -1913,10 +1919,6 @@ namespace ts {
                 if (options.outDir && dir === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
                 }
-            }
-
-            if (!options.noEmit && options.allowJs && options.declaration) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
             }
 
             if (options.checkJs && !options.allowJs) {
