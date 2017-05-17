@@ -7,10 +7,10 @@ tests/cases/conformance/enums/enumErrors.ts(26,9): error TS2322: Type 'true' is 
 tests/cases/conformance/enums/enumErrors.ts(27,9): error TS2322: Type 'Date' is not assignable to type 'E11'.
 tests/cases/conformance/enums/enumErrors.ts(28,9): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/enums/enumErrors.ts(29,9): error TS2322: Type '{}' is not assignable to type 'E11'.
-tests/cases/conformance/enums/enumErrors.ts(35,9): error TS2551: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumErrors.ts(36,9): error TS2551: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumErrors.ts(37,9): error TS2551: Computed values are not permitted in an enum with string valued members.
-tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2551: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(35,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(36,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(37,9): error TS2553: Computed values are not permitted in an enum with string valued members.
+tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values are not permitted in an enum with string valued members.
 
 
 ==== tests/cases/conformance/enums/enumErrors.ts (13 errors) ====
@@ -68,15 +68,15 @@ tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2551: Computed values
         A = '',
         B = new Date(),
             ~~~~~~~~~~
-!!! error TS2551: Computed values are not permitted in an enum with string valued members.
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
         C = window,
             ~~~~~~
-!!! error TS2551: Computed values are not permitted in an enum with string valued members.
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
         D = {},
             ~~
-!!! error TS2551: Computed values are not permitted in an enum with string valued members.
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
         E = 1 + 1,
             ~~~~~
-!!! error TS2551: Computed values are not permitted in an enum with string valued members.
+!!! error TS2553: Computed values are not permitted in an enum with string valued members.
     }
     
