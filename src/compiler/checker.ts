@@ -6028,7 +6028,7 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: string): Symbol {
+        function getPropertyOfType(type: Type, name: string): Symbol | undefined {
             type = getApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -6066,14 +6066,14 @@ namespace ts {
             return getSignaturesOfStructuredType(getApparentType(type), kind);
         }
 
-        function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo {
+        function getIndexInfoOfStructuredType(type: Type, kind: IndexKind): IndexInfo | undefined {
             if (type.flags & TypeFlags.StructuredType) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 return kind === IndexKind.String ? resolved.stringIndexInfo : resolved.numberIndexInfo;
             }
         }
 
-        function getIndexTypeOfStructuredType(type: Type, kind: IndexKind): Type {
+        function getIndexTypeOfStructuredType(type: Type, kind: IndexKind): Type | undefined {
             const info = getIndexInfoOfStructuredType(type, kind);
             return info && info.type;
         }
