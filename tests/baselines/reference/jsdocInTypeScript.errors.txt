@@ -1,0 +1,49 @@
+tests/cases/compiler/jsdocInTypeScript.ts(16,23): error TS2304: Cannot find name 'MyType'.
+tests/cases/compiler/jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/jsdocInTypeScript.ts(25,3): error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
+tests/cases/compiler/jsdocInTypeScript.ts(25,15): error TS2339: Property 'length' does not exist on type 'number'.
+tests/cases/compiler/jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does not exist on type '{}'.
+
+
+==== tests/cases/compiler/jsdocInTypeScript.ts (5 errors) ====
+    // JSDoc typedef tags are not bound TypeScript files.
+    /** @typedef {function} T */
+    declare const x: T;
+    
+    class T {
+        prop: number;
+    }
+    
+    x.prop;
+    
+    // Just to be sure that @property has no impact either.
+    /**
+     * @typedef {Object} MyType
+     * @property {string} yes
+     */
+    declare const myType: MyType; // should error, no such type
+                          ~~~~~~
+!!! error TS2304: Cannot find name 'MyType'.
+    
+    // @param type has no effect.
+    /**
+     * @param {number} x
+     * @returns string
+     */
+    function f(x: boolean) { return x * 2; } // Should error
+                                    ~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    // Should fail, because it takes a boolean and returns a number
+    f(1); f(true).length;
+      ~
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
+                  ~~~~~~
+!!! error TS2339: Property 'length' does not exist on type 'number'.
+    
+    // @type has no effect either.
+    /** @type {{ x?: number }} */
+    const z = {};
+    z.x = 1;
+      ~
+!!! error TS2339: Property 'x' does not exist on type '{}'.
+    
