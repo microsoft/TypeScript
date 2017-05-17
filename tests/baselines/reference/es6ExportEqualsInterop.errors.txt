@@ -14,11 +14,20 @@ tests/cases/compiler/main.ts(36,8): error TS1192: Module '"class-module"' has no
 tests/cases/compiler/main.ts(39,21): error TS2497: Module '"interface"' resolves to a non-module entity and cannot be imported using this construct.
 tests/cases/compiler/main.ts(45,21): error TS2497: Module '"function"' resolves to a non-module entity and cannot be imported using this construct.
 tests/cases/compiler/main.ts(47,21): error TS2497: Module '"class"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(50,1): error TS2693: 'y1' only refers to a type, but is being used as a value here.
+tests/cases/compiler/main.ts(56,4): error TS2339: Property 'a' does not exist on type '() => any'.
+tests/cases/compiler/main.ts(58,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.
+tests/cases/compiler/main.ts(62,10): error TS2305: Module '"interface"' has no exported member 'a'.
 tests/cases/compiler/main.ts(62,25): error TS2497: Module '"interface"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(68,10): error TS2305: Module '"function"' has no exported member 'a'.
 tests/cases/compiler/main.ts(68,25): error TS2497: Module '"function"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(70,10): error TS2305: Module '"class"' has no exported member 'a'.
 tests/cases/compiler/main.ts(70,25): error TS2497: Module '"class"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(85,10): error TS2305: Module '"interface"' has no exported member 'a'.
 tests/cases/compiler/main.ts(85,25): error TS2497: Module '"interface"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(91,10): error TS2305: Module '"function"' has no exported member 'a'.
 tests/cases/compiler/main.ts(91,25): error TS2497: Module '"function"' resolves to a non-module entity and cannot be imported using this construct.
+tests/cases/compiler/main.ts(93,10): error TS2305: Module '"class"' has no exported member 'a'.
 tests/cases/compiler/main.ts(93,25): error TS2497: Module '"class"' resolves to a non-module entity and cannot be imported using this construct.
 tests/cases/compiler/main.ts(97,15): error TS2498: Module '"interface"' uses 'export =' and cannot be used with 'export *'.
 tests/cases/compiler/main.ts(98,15): error TS2498: Module '"variable"' uses 'export =' and cannot be used with 'export *'.
@@ -32,7 +41,7 @@ tests/cases/compiler/main.ts(105,15): error TS2498: Module '"class"' uses 'expor
 tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses 'export =' and cannot be used with 'export *'.
 
 
-==== tests/cases/compiler/main.ts (32 errors) ====
+==== tests/cases/compiler/main.ts (41 errors) ====
     /// <reference path="modules.d.ts"/>
     
     // import-equals
@@ -115,18 +124,26 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
     import * as y0 from "class-module";
     
     y1.a;
+    ~~
+!!! error TS2693: 'y1' only refers to a type, but is being used as a value here.
     y2.a;
     y3.a;
     y4.a;
     y5.a;
     y6.a;
     y7.a;
+       ~
+!!! error TS2339: Property 'a' does not exist on type '() => any'.
     y8.a;
     y9.a;
+       ~
+!!! error TS2339: Property 'a' does not exist on type 'typeof Foo'.
     y0.a;
     
     // named import
     import { a as a1 } from "interface";
+             ~
+!!! error TS2305: Module '"interface"' has no exported member 'a'.
                             ~~~~~~~~~~~
 !!! error TS2497: Module '"interface"' resolves to a non-module entity and cannot be imported using this construct.
     import { a as a2 } from "variable";
@@ -135,10 +152,14 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
     import { a as a5 } from "interface-module";
     import { a as a6 } from "variable-module";
     import { a as a7 } from "function";
+             ~
+!!! error TS2305: Module '"function"' has no exported member 'a'.
                             ~~~~~~~~~~
 !!! error TS2497: Module '"function"' resolves to a non-module entity and cannot be imported using this construct.
     import { a as a8 } from "function-module";
     import { a as a9 } from "class";
+             ~
+!!! error TS2305: Module '"class"' has no exported member 'a'.
                             ~~~~~~~
 !!! error TS2497: Module '"class"' resolves to a non-module entity and cannot be imported using this construct.
     import { a as a0 } from "class-module";
@@ -156,6 +177,8 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
     
     // named export
     export { a as a1 } from "interface";
+             ~
+!!! error TS2305: Module '"interface"' has no exported member 'a'.
                             ~~~~~~~~~~~
 !!! error TS2497: Module '"interface"' resolves to a non-module entity and cannot be imported using this construct.
     export { a as a2 } from "variable";
@@ -164,10 +187,14 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
     export { a as a5 } from "interface-module";
     export { a as a6 } from "variable-module";
     export { a as a7 } from "function";
+             ~
+!!! error TS2305: Module '"function"' has no exported member 'a'.
                             ~~~~~~~~~~
 !!! error TS2497: Module '"function"' resolves to a non-module entity and cannot be imported using this construct.
     export { a as a8 } from "function-module";
     export { a as a9 } from "class";
+             ~
+!!! error TS2305: Module '"class"' has no exported member 'a'.
                             ~~~~~~~
 !!! error TS2497: Module '"class"' resolves to a non-module entity and cannot be imported using this construct.
     export { a as a0 } from "class-module";

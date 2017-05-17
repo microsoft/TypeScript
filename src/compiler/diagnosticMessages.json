@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -1843,9 +1847,17 @@
         "category": "Error",
         "code": 2550
     },
-    "Computed values are not permitted in an enum with string valued members.": {
+    "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
         "category": "Error",
         "code": 2551
+    },
+    "Cannot find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2552
+    },
+    "Computed values are not permitted in an enum with string valued members.": {
+        "category": "Error",
+        "code": 2553
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -3207,9 +3219,16 @@
     },
     "Scoped package detected, looking in '{0}'": {
         "category": "Message",
-        "code": "6182"
+        "code": 6182
     },
-
+    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+        "category": "Message",
+        "code": 6183
+    },
+    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+        "category": "Message",
+        "code": 6184
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3536,7 +3555,10 @@
         "category": "Message",
         "code": 90021
     },
-
+    "Change spelling to '{0}'.": {
+        "category": "Message",
+        "code": 90022
+    },
 
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",

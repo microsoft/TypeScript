@@ -22,3 +22,5 @@ const obj = {};
 let p = <Poisoned {...obj} />;
 let y = <Poisoned />;
 let z = <Poisoned x y/>;
+let w = <Poisoned {...{x: 5, y: "2"}}/>;
+let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;

@@ -231,6 +231,39 @@
 ////    x: /*objectLiteral*/
 ////}
 
+goTo.marker('extendedClass');
+
+verify.not.completionListContains('mod1');
+verify.not.completionListContains('mod2');
+verify.not.completionListContains('mod3');
+verify.not.completionListContains('shwvar', 'var shwvar: number');
+verify.not.completionListContains('shwfn', 'function shwfn(): void');
+verify.not.completionListContains('shwcls', 'class shwcls');
+verify.not.completionListContains('shwint', 'interface shwint');
+
+verify.not.completionListContains('mod2var');
+verify.not.completionListContains('mod2fn');
+verify.not.completionListContains('mod2cls');
+verify.not.completionListContains('mod2int');
+verify.not.completionListContains('mod2mod');
+verify.not.completionListContains('mod2evar');
+verify.not.completionListContains('mod2efn');
+verify.not.completionListContains('mod2ecls');
+verify.not.completionListContains('mod2eint');
+verify.not.completionListContains('mod2emod');
+verify.not.completionListContains('sfvar');
+verify.not.completionListContains('sffn');
+verify.not.completionListContains('scvar');
+verify.not.completionListContains('scfn');
+verify.completionListContains('scpfn');
+verify.completionListContains('scpvar');
+verify.not.completionListContains('scsvar');
+verify.not.completionListContains('scsfn');
+verify.not.completionListContains('sivar');
+verify.not.completionListContains('sifn');
+verify.not.completionListContains('mod1exvar');
+verify.not.completionListContains('mod2eexvar');
+
 function goToMarkerAndVerify(marker: string)
 {
     goTo.marker(marker);
@@ -266,8 +299,6 @@ function goToMarkerAndVerify(marker: string)
     verify.not.completionListContains('mod1exvar');
     verify.not.completionListContains('mod2eexvar');
 }
-
-goToMarkerAndVerify('extendedClass');
 
 goToMarkerAndVerify('objectLiteral');
 

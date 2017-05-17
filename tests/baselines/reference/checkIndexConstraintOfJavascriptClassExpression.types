@@ -1,0 +1,22 @@
+=== tests/cases/compiler/weird.js ===
+someFunction(function(BaseClass) {
+>someFunction(function(BaseClass) {	class Hello extends BaseClass {		constructor() {			this.foo = "bar";		}	}}) : any
+>someFunction : any
+>function(BaseClass) {	class Hello extends BaseClass {		constructor() {			this.foo = "bar";		}	}} : (BaseClass: any) => void
+>BaseClass : any
+
+	class Hello extends BaseClass {
+>Hello : Hello
+>BaseClass : any
+
+		constructor() {
+			this.foo = "bar";
+>this.foo = "bar" : "bar"
+>this.foo : string
+>this : this
+>foo : string
+>"bar" : "bar"
+		}
+	}
+});
+
