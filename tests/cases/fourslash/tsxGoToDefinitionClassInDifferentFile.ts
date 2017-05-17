@@ -3,10 +3,10 @@
 // @jsx: preserve
 
 // @Filename: C.tsx
-////export default class C {}
+////export default class /*def*/C {}
 
 // @Filename: a.tsx
-////import /*def*/C from "./C";
+////import C from "./C";
 ////const foo = </*use*/C />;
 
 verify.noErrors();

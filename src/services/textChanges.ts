@@ -497,8 +497,8 @@ namespace ts.textChanges {
         readonly node: Node;
     }
 
-    export function getNonformattedText(node: Node, sourceFile: SourceFile, newLine: NewLineKind): NonFormattedText {
-        const options = { newLine, target: sourceFile.languageVersion };
+    export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLine: NewLineKind): NonFormattedText {
+        const options = { newLine, target: sourceFile && sourceFile.languageVersion };
         const writer = new Writer(getNewLineCharacter(options));
         const printer = createPrinter(options, writer);
         printer.writeNode(EmitHint.Unspecified, node, sourceFile, writer);
@@ -527,26 +527,6 @@ namespace ts.textChanges {
     function isTrivia(s: string) {
         return skipTrivia(s, 0) === s.length;
     }
-
-    const nullTransformationContext: TransformationContext = {
-        enableEmitNotification: noop,
-        enableSubstitution: noop,
-        endLexicalEnvironment: () => undefined,
-        getCompilerOptions: notImplemented,
-        getEmitHost: notImplemented,
-        getEmitResolver: notImplemented,
-        hoistFunctionDeclaration: noop,
-        hoistVariableDeclaration: noop,
-        isEmitNotificationEnabled: notImplemented,
-        isSubstitutionEnabled: notImplemented,
-        onEmitNode: noop,
-        onSubstituteNode: notImplemented,
-        readEmitHelpers: notImplemented,
-        requestEmitHelper: noop,
-        resumeLexicalEnvironment: noop,
-        startLexicalEnvironment: noop,
-        suspendLexicalEnvironment: noop
-    };
 
     function assignPositionsToNode(node: Node): Node {
         const visited = visitEachChild(node, assignPositionsToNode, nullTransformationContext, assignPositionsToNodeArray, assignPositionsToNode);

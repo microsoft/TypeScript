@@ -23,19 +23,19 @@ namespace ts {
         }
     }
 
-    function visitNode<T>(cbNode: (node: Node) => T, node: Node): T {
+    function visitNode<T>(cbNode: (node: Node) => T, node: Node): T | undefined {
         if (node) {
             return cbNode(node);
         }
     }
 
-    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]) {
+    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]): T | undefined {
         if (nodes) {
             return cbNodes(nodes);
         }
     }
 
-    function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]) {
+    function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]): T | undefined {
         if (nodes) {
             for (const node of nodes) {
                 const result = cbNode(node);
@@ -50,7 +50,7 @@ namespace ts {
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
     // a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
-    export function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T {
+    export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         if (!node) {
             return;
         }
@@ -362,6 +362,8 @@ namespace ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNodes, node.decorators);
+            case SyntaxKind.CommaListExpression:
+                return visitNodes(cbNodes, (<CommaListExpression>node).elements);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (<JsxElement>node).openingElement) ||

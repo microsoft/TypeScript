@@ -220,6 +220,10 @@ namespace ts {
 
         switch (kind) {
             // Names
+
+            case SyntaxKind.Identifier:
+                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNode));
+
             case SyntaxKind.QualifiedName:
                 return updateQualifiedName(<QualifiedName>node,
                     visitNode((<QualifiedName>node).left, visitor, isEntityName),
@@ -255,6 +259,7 @@ namespace ts {
 
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
+                    nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
                     visitNode((<PropertySignature>node).name, visitor, isPropertyName),
                     visitNode((<PropertySignature>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertySignature>node).type, visitor, isTypeNode),
@@ -876,6 +881,10 @@ namespace ts {
                 return updatePartiallyEmittedExpression(<PartiallyEmittedExpression>node,
                     visitNode((<PartiallyEmittedExpression>node).expression, visitor, isExpression));
 
+            case SyntaxKind.CommaListExpression:
+                return updateCommaList(<CommaListExpression>node,
+                    nodesVisitor((<CommaListExpression>node).elements, visitor, isExpression));
+
             default:
                 // No need to visit nodes with no children.
                 return node;
@@ -966,6 +975,15 @@ namespace ts {
                 break;
 
             // Type member
+
+            case SyntaxKind.PropertySignature:
+                result = reduceNodes((<PropertySignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<PropertySignature>node).name, cbNode, result);
+                result = reduceNode((<PropertySignature>node).questionToken, cbNode, result);
+                result = reduceNode((<PropertySignature>node).type, cbNode, result);
+                result = reduceNode((<PropertySignature>node).initializer, cbNode, result);
+                break;
+
             case SyntaxKind.PropertyDeclaration:
                 result = reduceNodes((<PropertyDeclaration>node).decorators, cbNodes, result);
                 result = reduceNodes((<PropertyDeclaration>node).modifiers, cbNodes, result);
@@ -1387,6 +1405,10 @@ namespace ts {
             // Transformation nodes
             case SyntaxKind.PartiallyEmittedExpression:
                 result = reduceNode((<PartiallyEmittedExpression>node).expression, cbNode, result);
+                break;
+
+            case SyntaxKind.CommaListExpression:
+                result = reduceNodes((<CommaListExpression>node).elements, cbNodes, result);
                 break;
 
             default:
