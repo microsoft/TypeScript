@@ -3858,7 +3858,7 @@ namespace ts {
         if (file.moduleName) {
             return createLiteral(file.moduleName);
         }
-        if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+        if (!file.isDeclarationFile && (options.out || options.outFile)) {
             return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
         }
         return undefined;

@@ -50,9 +50,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)
-                || !(isExternalModule(node)
-                    || compilerOptions.isolatedModules)) {
+            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
                 return node;
             }
 
