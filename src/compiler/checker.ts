@@ -14760,7 +14760,7 @@ namespace ts {
             // If spread arguments are present, check that they correspond to a rest parameter. If so, no
             // further checking is necessary.
             if (spreadArgIndex >= 0) {
-                return isRestParameterIndex(signature, spreadArgIndex);
+                return isRestParameterIndex(signature, spreadArgIndex) || spreadArgIndex >= signature.minArgumentCount;
             }
 
             // Too many arguments implies incorrect arity.

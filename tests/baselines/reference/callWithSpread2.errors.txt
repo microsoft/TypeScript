@@ -1,0 +1,81 @@
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(30,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(31,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(32,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(33,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(35,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(36,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(37,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(38,1): error TS2346: Supplied parameters do not match any signature of call target.
+
+
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (9 errors) ====
+    declare function all(a?: number, b?: number): void;
+    declare function weird(a?: number | string, b?: number | string): void;
+    declare function prefix(s: string, a?: number, b?: number): void;
+    declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
+    declare function normal(s: string): void;
+    declare function thunk(): string;
+    
+    declare var ns: number[];
+    declare var mixed: (number | string)[];
+    declare var tuple: [number, string];
+    
+    // good
+    all(...ns)
+    weird(...ns)
+    weird(...mixed)
+    weird(...tuple)
+    prefix("a", ...ns)
+    rest("d", ...ns)
+    
+    
+    // this covers the arguments case
+    normal("g", ...ns)
+    normal("h", ...mixed)
+    normal("i", ...tuple)
+    thunk(...ns)
+    thunk(...mixed)
+    thunk(...tuple)
+    
+    // bad
+    all(...mixed)
+        ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    all(...tuple)
+        ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix("b", ...mixed)
+                ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix("c", ...tuple)
+                ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    rest("e", ...mixed)
+              ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    rest("f", ...tuple)
+              ~~~~~~~~
+!!! error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+!!! error TS2345:   Type 'string' is not assignable to type 'number'.
+    prefix(...ns) // required parameters are required
+    ~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    prefix(...mixed)
+    ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    prefix(...tuple)
+    ~~~~~~~~~~~~~~~~
+!!! error TS2346: Supplied parameters do not match any signature of call target.
+    
