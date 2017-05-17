@@ -2371,7 +2371,7 @@ namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;

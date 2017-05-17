@@ -1855,6 +1855,10 @@
         "category": "Error",
         "code": 2552
     },
+    "Computed values are not permitted in an enum with string valued members.": {
+        "category": "Error",
+        "code": 2553
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
