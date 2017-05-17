@@ -1854,8 +1854,8 @@ namespace ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-                    const token = getTokenAtPosition(sourceFile, matchPosition);
-                    if (!isInsideComment(sourceFile, token, matchPosition)) {
+
+                    if (!isInComment(sourceFile, matchPosition)) {
                         continue;
                     }
 

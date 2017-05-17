@@ -256,37 +256,6 @@ namespace ts {
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
     }
 
-    /** Returns true if the position is within a comment */
-    export function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
-        // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
-        return position <= token.getStart(sourceFile) &&
-            (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-                isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
-
-        function isInsideCommentRange(comments: CommentRange[]): boolean {
-            return forEach(comments, comment => {
-                // either we are 1. completely inside the comment, or 2. at the end of the comment
-                if (comment.pos < position && position < comment.end) {
-                    return true;
-                }
-                else if (position === comment.end) {
-                    const text = sourceFile.text;
-                    const width = comment.end - comment.pos;
-                    // is single line comment or just /*
-                    if (width <= 2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
-                        return true;
-                    }
-                    else {
-                        // is unterminated multi-line comment
-                        return !(text.charCodeAt(comment.end - 1) === CharacterCodes.slash &&
-                            text.charCodeAt(comment.end - 2) === CharacterCodes.asterisk);
-                    }
-                }
-                return false;
-            });
-        }
-    }
-
     export function getContainerNode(node: Node): Declaration {
         while (true) {
             node = node.parent;
@@ -816,10 +785,6 @@ namespace ts {
         return false;
     }
 
-    export function isInComment(sourceFile: SourceFile, position: number) {
-        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
-    }
-
     /**
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
@@ -865,15 +830,26 @@ namespace ts {
     }
 
     /**
-     * Returns true if the cursor at position in sourceFile is within a comment that additionally
-     * satisfies predicate, and false otherwise.
+     * Returns true if the cursor at position in sourceFile is within a comment.
+     *
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param predicate Additional predicate to test on the comment range.
      */
-    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
-        const token = getTokenAtPosition(sourceFile, position);
+    export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition = getTokenAtPosition(sourceFile, position), predicate?: (c: CommentRange) => boolean): boolean {
+        return position <= tokenAtPosition.getStart(sourceFile) &&
+            (isInCommentRange(getLeadingCommentRanges(sourceFile.text, tokenAtPosition.pos)) ||
+                isInCommentRange(getTrailingCommentRanges(sourceFile.text, tokenAtPosition.pos)));
 
-        if (token && position <= token.getStart(sourceFile)) {
-            const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+        function isInCommentRange(commentRanges: CommentRange[]): boolean {
+            return forEach(commentRanges, c => isPositionInCommentRange(c, position, sourceFile.text) && (!predicate || predicate(c)));
+        }
+    }
 
+    function isPositionInCommentRange({ pos, end, kind }: ts.CommentRange, position: number, text: string): boolean {
+        if (pos < position && position < end) {
+            return true;
+        }
+        else if (position === end) {
             // The end marker of a single-line comment does not include the newline character.
             // In the following case, we are inside a comment (^ denotes the cursor position):
             //
@@ -884,15 +860,13 @@ namespace ts {
             //    /* asdf */^
             //
             // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-            return predicate ?
-                forEach(commentRanges, c => c.pos < position &&
-                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
-                    predicate(c)) :
-                forEach(commentRanges, c => c.pos < position &&
-                    (c.kind === SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+            return kind === SyntaxKind.SingleLineCommentTrivia ||
+                // true for unterminated multi-line comment
+                !(text.charCodeAt(end - 1) === CharacterCodes.slash && text.charCodeAt(end - 2) === CharacterCodes.asterisk);
         }
-
-        return false;
+        else {
+            return false;
+        }
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
@@ -1075,21 +1049,17 @@ namespace ts {
     }
 
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInCommentHelper(sourceFile, position, isReferenceComment);
-
-        function isReferenceComment(c: CommentRange): boolean {
+        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
             return tripleSlashDirectivePrefixRegex.test(commentText);
-        }
+        });
     }
 
     export function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInCommentHelper(sourceFile, position, isNonReferenceComment);
-
-        function isNonReferenceComment(c: CommentRange): boolean {
+        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
             return !tripleSlashDirectivePrefixRegex.test(commentText);
-        }
+        });
     }
 
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
