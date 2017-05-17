@@ -5794,6 +5794,10 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const props = createMap<Symbol>();
                 for (const memberType of (type as UnionType).types) {
+                    if (memberType.flags & TypeFlags.Primitive) {
+                        continue;
+                    }
+
                     for (const { name } of getPropertiesOfType(memberType)) {
                         if (!props.has(name)) {
                             props.set(name, createUnionOrIntersectionProperty(type as UnionType, name));
