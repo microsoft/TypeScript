@@ -577,10 +577,11 @@ namespace ts {
          * If the identifier begins with two underscores, this will begin with three.
          */
         text: string;
-        originalKeywordKind?: SyntaxKind;              // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
-        /*@internal*/ autoGenerateId?: number;         // Ensures unique generated identifiers get unique names, but clones get the same name.
-        isInJSDocNamespace?: boolean;                  // if the node is a member in a JSDoc namespace
+        /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
+        isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
+        /*@internal*/ typeArguments?: NodeArray<TypeNode>;        // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics.
     }
 
     // Transient identifier node (marked by id === -1)
@@ -2592,18 +2593,32 @@ namespace ts {
 
     export enum NodeBuilderFlags {
         None                                    = 0,
-        allowThisInObjectLiteral                = 1 << 0,
-        allowQualifedNameInPlaceOfIdentifier    = 1 << 1,
-        allowTypeParameterInQualifiedName       = 1 << 2,
-        allowAnonymousIdentifier                = 1 << 3,
-        allowEmptyUnionOrIntersection           = 1 << 4,
-        allowEmptyTuple                         = 1 << 5
+        // Options
+        NoTruncation                            = 1 << 0,   // Don't truncate result
+        WriteArrayAsGenericType                 = 1 << 1,   // Write Array<T> instead T[]
+        WriteTypeArgumentsOfSignature           = 1 << 5,   // Write the type arguments instead of type parameters of the signature
+        UseFullyQualifiedType                   = 1 << 6,   // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        SuppressAnyReturnType                   = 1 << 8,   // If the return type is any-like, don't offer a return type.
+        WriteTypeParametersInQualifiedName      = 1 << 9,
+
+        // Error handling
+        AllowThisInObjectLiteral                = 1 << 10,
+        AllowQualifedNameInPlaceOfIdentifier    = 1 << 11,
+        AllowAnonymousIdentifier                = 1 << 13,
+        AllowEmptyUnionOrIntersection           = 1 << 14,
+        AllowEmptyTuple                         = 1 << 15,
+
+        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple,
+
+        // State
+        InObjectTypeLiteral                     = 1 << 20,
+        InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
     }
 
     export interface SymbolDisplayBuilder {
         buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildSymbolDisplay(symbol: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, meaning?: SymbolFlags, flags?: SymbolFormatFlags): void;
-        buildSignatureDisplay(signatures: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
+        buildSignatureDisplay(signature: Signature, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): void;
         buildIndexSignatureDisplay(info: IndexInfo, writer: SymbolWriter, kind: IndexKind, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]): void;
         buildParameterDisplay(parameter: Symbol, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
         buildTypeParameterDisplay(tp: TypeParameter, writer: SymbolWriter, enclosingDeclaration?: Node, flags?: TypeFormatFlags): void;
@@ -3527,7 +3542,7 @@ namespace ts {
 
     export const enum NewLineKind {
         CarriageReturnLineFeed = 0,
-        LineFeed = 1,
+        LineFeed = 1
     }
 
     export interface LineAndCharacter {
@@ -3979,6 +3994,7 @@ namespace ts {
         NoHoisting = 1 << 21,                    // Do not hoist this declaration in --module system
         HasEndOfDeclarationMarker = 1 << 22,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
         Iterator = 1 << 23,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        NoAsciiEscaping = 1 << 24,               // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
     }
 
     export interface EmitHelper {
@@ -4191,7 +4207,7 @@ namespace ts {
          * Prints a bundle of source files as-is, without any emit transformations.
          */
         printBundle(bundle: Bundle): string;
-        /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, writer: EmitTextWriter): void;
+        /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
         /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter): void;
     }

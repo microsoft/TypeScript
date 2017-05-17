@@ -328,28 +328,26 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
+        const escapeText = getEmitFlags(node) & EmitFlags.NoAsciiEscaping ? escapeString : escapeNonAsciiString;
+
         // If we can't reach the original source text, use the canonical form if it's a number,
-        // or an escaped quoted form of the original text if it's string-like.
+        // or a (possibly escaped) quoted form of the original text if it's string-like.
         switch (node.kind) {
             case SyntaxKind.StringLiteral:
-                return getQuotedEscapedLiteralText('"', node.text, '"');
+                return '"' + escapeText(node.text) + '"';
             case SyntaxKind.NoSubstitutionTemplateLiteral:
-                return getQuotedEscapedLiteralText("`", node.text, "`");
+                return "`" + escapeText(node.text) + "`";
             case SyntaxKind.TemplateHead:
-                return getQuotedEscapedLiteralText("`", node.text, "${");
+                return "`" + escapeText(node.text) + "${";
             case SyntaxKind.TemplateMiddle:
-                return getQuotedEscapedLiteralText("}", node.text, "${");
+                return "}" + escapeText(node.text) + "${";
             case SyntaxKind.TemplateTail:
-                return getQuotedEscapedLiteralText("}", node.text, "`");
+                return "}" + escapeText(node.text) + "`";
             case SyntaxKind.NumericLiteral:
                 return node.text;
         }
 
         Debug.fail(`Literal kind '${node.kind}' not accounted for.`);
-    }
-
-    function getQuotedEscapedLiteralText(leftQuote: string, text: string, rightQuote: string) {
-        return leftQuote + escapeNonAsciiCharacters(escapeString(text)) + rightQuote;
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
@@ -465,7 +463,7 @@ namespace ts {
         return getFullWidth(name) === 0 ? "(Missing)" : getTextOfNode(name);
     }
 
-    export function getNameFromIndexInfo(info: IndexInfo) {
+    export function getNameFromIndexInfo(info: IndexInfo): string | undefined {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
@@ -873,6 +871,16 @@ namespace ts {
             case SyntaxKind.CallSignature:
             case SyntaxKind.ConstructSignature:
             case SyntaxKind.IndexSignature:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return true;
+        }
+
+        return false;
+    }
+
+    export function isFunctionOrConstructorTypeNode(node: Node): node is FunctionTypeNode | ConstructorTypeNode {
+        switch (node.kind) {
             case SyntaxKind.FunctionType:
             case SyntaxKind.ConstructorType:
                 return true;
@@ -2462,7 +2470,8 @@ namespace ts {
     }
 
     const nonAsciiCharacters = /[^\u0000-\u007F]/g;
-    export function escapeNonAsciiCharacters(s: string): string {
+    export function escapeNonAsciiString(s: string): string {
+        s = escapeString(s);
         // Replace non-ASCII characters with '\uNNNN' escapes if any exist.
         // Otherwise just return the original string.
         return nonAsciiCharacters.test(s) ?
@@ -3255,13 +3264,13 @@ namespace ts {
     const carriageReturnLineFeed = "\r\n";
     const lineFeed = "\n";
     export function getNewLineCharacter(options: CompilerOptions | PrinterOptions): string {
-        if (options.newLine === NewLineKind.CarriageReturnLineFeed) {
-            return carriageReturnLineFeed;
+        switch (options.newLine) {
+            case NewLineKind.CarriageReturnLineFeed:
+                return carriageReturnLineFeed;
+            case NewLineKind.LineFeed:
+                return lineFeed;
         }
-        else if (options.newLine === NewLineKind.LineFeed) {
-            return lineFeed;
-        }
-        else if (sys) {
+        if (sys) {
             return sys.newLine;
         }
         return carriageReturnLineFeed;
