@@ -439,7 +439,7 @@ namespace ts {
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.
-                const isJSDocTypedefInJSDocNamespace = node.kind === SyntaxKind.JSDocTypedefTag &&
+                const isJSDocTypedefInJSDocNamespace = isInJavaScriptFile(node) && node.kind === SyntaxKind.JSDocTypedefTag &&
                     (node as JSDocTypedefTag).name &&
                     (node as JSDocTypedefTag).name.kind === SyntaxKind.Identifier &&
                     ((node as JSDocTypedefTag).name as Identifier).isInJSDocNamespace;
@@ -1913,9 +1913,7 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            if (isInJavaScriptFile(node)) {
-                bindJSDocTypedefTagIfAny(node);
-            }
+            bindJSDocTypedefTagIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -2003,7 +2001,7 @@ namespace ts {
                     // for typedef type names with namespaces, bind the new jsdoc type symbol here
                     // because it requires all containing namespaces to be in effect, namely the
                     // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                    if ((<Identifier>node).isInJSDocNamespace) {
+                    if (isInJavaScriptFile(node) && (<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
                         while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
                             parentNode = parentNode.parent;
@@ -2149,7 +2147,7 @@ namespace ts {
                 case SyntaxKind.InterfaceDeclaration:
                     return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.Interface, SymbolFlags.InterfaceExcludes);
                 case SyntaxKind.JSDocTypedefTag:
-                    if (!(<JSDocTypedefTag>node).fullName || (<JSDocTypedefTag>node).fullName.kind === SyntaxKind.Identifier) {
+                    if (isInJavaScriptFile(node) && (!(<JSDocTypedefTag>node).fullName || (<JSDocTypedefTag>node).fullName.kind === SyntaxKind.Identifier)) {
                         return bindBlockScopedDeclaration(<Declaration>node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
                     }
                     break;
