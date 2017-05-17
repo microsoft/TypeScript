@@ -97,14 +97,14 @@ var c = (function (_super) {
     }
     Object.defineProperty(c.prototype, "prop2", {
         get: function () {
-            var x = function () {
+            var x = function x() {
                 function _super() {
                 }
             };
             return 10;
         },
         set: function (val) {
-            var x = function () {
+            var x = function x() {
                 function _super() {
                 }
             };

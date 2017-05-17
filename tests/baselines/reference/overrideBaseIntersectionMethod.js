@@ -43,7 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var WithLocation = function (Base) { return (function (_super) {
+var WithLocation = function WithLocation(Base) { return (function (_super) {
     __extends(class_1, _super);
     function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;

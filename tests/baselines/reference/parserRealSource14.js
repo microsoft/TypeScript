@@ -975,7 +975,7 @@ var TypeScript;
     ///
     function getAstPathToPosition(script, pos, options) {
         if (options === void 0) { options = GetAstPathOptions.Default; }
-        var lookInComments = function (comments) {
+        var lookInComments = function lookInComments(comments) {
             if (comments && comments.length > 0) {
                 for (var i = 0; i < comments.length; i++) {
                     var minChar = comments[i].minChar;
@@ -1039,7 +1039,7 @@ var TypeScript;
     //
     function getTokenizationOffset(script, position) {
         var bestOffset = 0;
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             if (TypeScript.isValidAstNode(cur)) {
                 // Did we find a closer offset?
                 if (cur.minChar <= position) {

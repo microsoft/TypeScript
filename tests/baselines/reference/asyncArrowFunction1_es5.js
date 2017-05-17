@@ -4,7 +4,7 @@ var foo = async (): Promise<void> => {
 
 //// [asyncArrowFunction1_es5.js]
 var _this = this;
-var foo = function () { return __awaiter(_this, void 0, void 0, function () {
+var foo = function foo() { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         return [2 /*return*/];
     });

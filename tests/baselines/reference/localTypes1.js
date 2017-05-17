@@ -231,7 +231,7 @@ function f5() {
         }());
         return new C();
     };
-    var z2 = function () {
+    var z2 = function z2() {
         var E;
         (function (E) {
             E[E["A"] = 0] = "A";

@@ -27,11 +27,11 @@ var CCC = (function () {
     };
     return CCC;
 }());
-var a = function (x) {
+var a = function a(x) {
     if (x === void 0) { x = 0; }
     return 1;
 };
-var b = function (x, y) {
+var b = function b(x, y) {
     if (y === void 0) { y = 2; }
     x;
 };

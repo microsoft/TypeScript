@@ -54,7 +54,7 @@ var c = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     c.prototype.foo = function () {
-        var x = function () {
+        var x = function x() {
             var _super = 10; // Should be error
         };
     };

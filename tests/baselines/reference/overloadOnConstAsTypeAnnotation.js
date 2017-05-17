@@ -2,4 +2,4 @@
 var f: (x: 'hi') => number = (x: 'hi') => { return 1; };
 
 //// [overloadOnConstAsTypeAnnotation.js]
-var f = function (x) { return 1; };
+var f = function f(x) { return 1; };

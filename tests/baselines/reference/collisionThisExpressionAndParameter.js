@@ -106,13 +106,13 @@ var Foo = (function () {
     };
     Foo.prototype.y = function () {
         var _this = this;
-        var lamda = function (_this) {
+        var lamda = function lamda(_this) {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
     Foo.prototype.z = function (_this) {
         var _this = this;
-        var lambda = function () {
+        var lambda = function lambda() {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };
@@ -122,11 +122,11 @@ var Foo = (function () {
         }
     };
     Foo.prototype.y1 = function () {
-        var lamda = function (_this) {
+        var lamda = function lamda(_this) {
         };
     };
     Foo.prototype.z1 = function (_this) {
-        var lambda = function () {
+        var lambda = function lambda() {
         };
     };
     return Foo;
@@ -157,7 +157,7 @@ var Foo3 = (function () {
     }
     Foo3.prototype.z = function (_this) {
         var _this = this;
-        var lambda = function () {
+        var lambda = function lambda() {
             return function (x) { return _this; }; // New scope.  So should inject new _this capture
         };
     };

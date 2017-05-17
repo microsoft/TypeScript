@@ -109,7 +109,7 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 // Arrow function used in with statement
 with (window) {
-    var p = function () { return _this; };
+    var p = function p() { return _this; };
 }
 // Arrow function as argument to super call
 var Base = (function () {
@@ -128,7 +128,7 @@ var Derived = (function (_super) {
 // Arrow function as function argument
 window.setTimeout(function () { return null; }, 100);
 // Arrow function as value in array literal
-var obj = function (n) { return ''; };
+var obj = function obj(n) { return ''; };
 var obj; // OK
 var arr = [function (n) { return ''; }];
 var arr; // Incorrect error here (bug 829597)
@@ -143,7 +143,7 @@ var E;
 var M;
 (function (M) {
     M.a = function (s) { return ''; };
-    var b = function (s) { return s; };
+    var b = function b(s) { return s; };
 })(M || (M = {}));
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
@@ -151,7 +151,7 @@ var M2;
     var _this = this;
     // Arrow function used in with statement
     with (window) {
-        var p = function () { return _this; };
+        var p = function p() { return _this; };
     }
     // Arrow function as argument to super call
     var Base = (function () {
@@ -170,7 +170,7 @@ var M2;
     // Arrow function as function argument
     window.setTimeout(function () { return null; }, 100);
     // Arrow function as value in array literal
-    var obj = function (n) { return ''; };
+    var obj = function obj(n) { return ''; };
     var obj; // OK
     var arr = [function (n) { return ''; }];
     var arr; // Incorrect error here (bug 829597)
@@ -185,13 +185,13 @@ var M2;
     var M;
     (function (M) {
         M.a = function (s) { return ''; };
-        var b = function (s) { return s; };
+        var b = function b(s) { return s; };
     })(M || (M = {}));
 })(M2 || (M2 = {}));
 // <Identifier>(ParamList) => { ... } is a generic arrow function
-var generic1 = function (n) { return [n]; };
+var generic1 = function generic1(n) { return [n]; };
 var generic1; // Incorrect error, Bug 829597
-var generic2 = function (n) { return [n]; };
+var generic2 = function generic2(n) { return [n]; };
 var generic2;
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = (function (n) { return [n]; });

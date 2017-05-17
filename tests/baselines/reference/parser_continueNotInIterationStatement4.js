@@ -9,7 +9,7 @@ while (true){
 
 //// [parser_continueNotInIterationStatement4.js]
 TWO: while (true) {
-    var x = function () {
+    var x = function x() {
         continue TWO;
     };
 }

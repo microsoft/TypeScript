@@ -9,10 +9,10 @@ var incrGreetings = () => greetings++;
 
 //// [sourceMapValidationFunctionExpressions.js]
 var greetings = 0;
-var greet = function (greeting) {
+var greet = function greet(greeting) {
     greetings++;
     return greetings;
 };
 greet("Hello");
-var incrGreetings = function () { return greetings++; };
+var incrGreetings = function incrGreetings() { return greetings++; };
 //# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map

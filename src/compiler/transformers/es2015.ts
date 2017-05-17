@@ -1679,17 +1679,18 @@ namespace ts {
          *
          * @param node An ArrowFunction node.
          */
-        function visitArrowFunction(node: ArrowFunction) {
+        function visitArrowFunction(node: ArrowFunction, functionName?: Identifier) {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
                 enableSubstitutionsForCapturedThis();
             }
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.ArrowFunctionExcludes, HierarchyFacts.ArrowFunctionIncludes);
+
             const func = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                /*name*/ undefined,
+                /*name*/ functionName,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -2164,7 +2165,16 @@ namespace ts {
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             const ancestorFacts = enterSubtree(HierarchyFacts.ExportedVariableStatement, HierarchyFacts.None);
             let updated: VisitResult<VariableDeclaration>;
-            if (isBindingPattern(node.name)) {
+
+            if (isArrowFunction(node.initializer)) {
+                const clonedNode = getMutableClone(node);
+                const name = (clonedNode.name && (<Identifier>clonedNode.name).text) ? createIdentifier((<Identifier>clonedNode.name).text) : undefined;
+                if (name) {
+                    name.parent = clonedNode.initializer;
+                }
+                clonedNode.initializer = visitArrowFunction((<ArrowFunction>node.initializer), name);
+                updated = clonedNode;
+            } else if (isBindingPattern(node.name)) {
                 updated = flattenDestructuringBinding(
                     node,
                     visitor,
@@ -2173,8 +2183,7 @@ namespace ts {
                     /*value*/ undefined,
                     (ancestorFacts & HierarchyFacts.ExportedVariableStatement) !== 0
                 );
-            }
-            else {
+            } else {
                 updated = visitEachChild(node, visitor, context);
             }
 

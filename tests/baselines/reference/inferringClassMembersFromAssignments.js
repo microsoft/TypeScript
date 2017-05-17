@@ -153,7 +153,7 @@ var C = (function () {
             this.inMethod = "string";
         }
         this.inMultiple = "string";
-        var action = function () {
+        var action = function action() {
             if (Math.random()) {
                 _this.inNestedArrowFunction = 0;
             }
@@ -187,7 +187,7 @@ var C = (function () {
         else {
             this.inStaticMethod = "string";
         }
-        var action = function () {
+        var action = function action() {
             if (Math.random()) {
                 _this.inStaticNestedArrowFunction = 0;
             }

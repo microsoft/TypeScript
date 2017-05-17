@@ -49,11 +49,11 @@ var f2 = function (x, y) {
     x = y;
     return y;
 };
-var f3 = function (x, y) {
+var f3 = function f3(x, y) {
     x = y;
     return y;
 };
-var f4 = function (x, y) {
+var f4 = function f4(x, y) {
     x = y;
     return y;
 };

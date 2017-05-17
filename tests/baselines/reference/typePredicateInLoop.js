@@ -25,8 +25,8 @@ export function y(arg: Type): void {
 "use strict";
 // Repro from #12101
 exports.__esModule = true;
-var guard = function (arg) { return arg.type === 1; };
-var otherFunc = function (arg1, arg2) { };
+var guard = function guard(arg) { return arg.type === 1; };
+var otherFunc = function otherFunc(arg1, arg2) { };
 function y(arg) {
     if (guard(arg)) {
         for (var _i = 0, _a = arg.arr; _i < _a.length; _i++) {

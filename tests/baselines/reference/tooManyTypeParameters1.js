@@ -14,7 +14,7 @@ var i: I<number,number>;
 //// [tooManyTypeParameters1.js]
 function f() { }
 f();
-var x = function () { };
+var x = function x() { };
 x();
 var C = (function () {
     function C() {

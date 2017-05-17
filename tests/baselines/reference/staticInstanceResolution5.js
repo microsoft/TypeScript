@@ -35,7 +35,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     // these 3 should be errors
-    var x = function (w1) { };
+    var x = function x(w1) { };
     var y = function (w2) { };
     function z(w3) { }
 });

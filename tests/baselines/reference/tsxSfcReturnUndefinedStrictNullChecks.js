@@ -14,7 +14,7 @@ const G = <Greet />;
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     exports.__esModule = true;
-    var Foo = function (props) { return undefined; };
+    var Foo = function Foo(props) { return undefined; };
     function Greet(x) {
         return undefined;
     }

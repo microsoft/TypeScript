@@ -15,4 +15,4 @@ var _this;
         return c;
     }());
 })(_this || (_this = {}));
-var f = function () { return _this; };
+var f = function f() { return _this; };

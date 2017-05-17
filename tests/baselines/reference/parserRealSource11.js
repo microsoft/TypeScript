@@ -3374,7 +3374,7 @@ var TypeScript;
             var entry = new BasicBlock();
             var exit = new BasicBlock();
             var context = new ControlFlowContext(entry, exit);
-            var controlFlowPrefix = function (ast, parent, walker) {
+            var controlFlowPrefix = function controlFlowPrefix(ast, parent, walker) {
                 ast.addToControlFlow(walker.state);
                 return ast;
             };

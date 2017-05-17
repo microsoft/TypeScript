@@ -31,7 +31,7 @@ var Foo2 = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Foo2.prototype.x = function () {
-        var lambda = function (_super) {
+        var lambda = function lambda(_super) {
         };
     };
     return Foo2;

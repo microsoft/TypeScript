@@ -58,7 +58,7 @@ var c = (function (_super) {
     __extends(c, _super);
     function c() {
         var _this = _super.call(this) || this;
-        var x = function () {
+        var x = function x() {
             function _super() {
             }
         };

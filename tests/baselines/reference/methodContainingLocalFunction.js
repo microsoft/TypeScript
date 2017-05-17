@@ -91,7 +91,7 @@ var C = (function () {
     function C() {
     }
     C.prototype.exhibit = function () {
-        var funcExpr = function (u) { };
+        var funcExpr = function funcExpr(u) { };
         var x;
         x = funcExpr;
     };

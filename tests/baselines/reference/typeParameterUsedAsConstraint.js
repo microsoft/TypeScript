@@ -72,12 +72,12 @@ function f3() { }
 function f4() { }
 function f5() { }
 function f6() { }
-var e = function () { };
-var e2 = function () { };
-var e3 = function () { };
-var e4 = function () { };
-var e5 = function () { };
-var e6 = function () { };
+var e = function e() { };
+var e2 = function e2() { };
+var e3 = function e3() { };
+var e4 = function e4() { };
+var e5 = function e5() { };
+var e6 = function e6() { };
 var a;
 var a2;
 var a3;

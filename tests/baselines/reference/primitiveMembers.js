@@ -52,7 +52,7 @@ var N;
 n = N; // should not work, as 'number' has a different brand
 N = n; // should work
 var o = {};
-var f = function (x) { return x.length; };
+var f = function f(x) { return x.length; };
 var r2 = /./g;
 var n2 = 34;
 var s = "yo";

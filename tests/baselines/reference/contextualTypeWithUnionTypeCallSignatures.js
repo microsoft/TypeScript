@@ -40,11 +40,11 @@ var x4: IWithCallSignatures | IWithCallSignatures4 = a => /*here a should be any
 //When used as a contextual type, a union type U has those members that are present in any of 
 // its constituent types, with types that are unions of the respective members in the constituent types. 
 // With no call signature | callSignatures
-var x = function (a) { return a.toString(); };
+var x = function x(a) { return a.toString(); };
 // With call signatures with different return type
-var x2 = function (a) { return a.toString(); }; // Like iWithCallSignatures
-var x2 = function (a) { return a; }; // Like iWithCallSignatures2
+var x2 = function x2(a) { return a.toString(); }; // Like iWithCallSignatures
+var x2 = function x2(a) { return a; }; // Like iWithCallSignatures2
 // With call signatures of mismatching parameter type
-var x3 = function (a) { /*here a should be any*/ return a.toString(); };
+var x3 = function x3(a) { /*here a should be any*/ return a.toString(); };
 // With call signature count mismatch
-var x4 = function (a) { /*here a should be any*/ return a.toString(); };
+var x4 = function x4(a) { /*here a should be any*/ return a.toString(); };

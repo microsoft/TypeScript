@@ -385,17 +385,17 @@ var Derived2 = (function (_super) {
     return Derived2;
 }(Base));
 var b = new Base(), d1 = new Derived1(), d2 = new Derived2();
-var x1 = function () { return [d1, d2]; };
+var x1 = function x1() { return [d1, d2]; };
 var x2 = function () { return [d1, d2]; };
 var x3 = function named() { return [d1, d2]; };
-var x4 = function () { return [d1, d2]; };
+var x4 = function x4() { return [d1, d2]; };
 var x5 = function () { return [d1, d2]; };
 var x6 = function named() { return [d1, d2]; };
 var x7 = [d1, d2];
 var x8 = [d1, d2];
 var x9 = [d1, d2];
 var x10 = { n: [d1, d2] };
-var x11 = function (n) { var n; return null; };
+var x11 = function x11(n) { var n; return null; };
 var x12 = { func: function (n) { return [d1, d2]; } };
 var x13 = (function () {
     function x13() {
@@ -1129,18 +1129,18 @@ function x153() { return [d1, d2]; return [d1, d2]; }
 function x154() { return { n: [d1, d2] }; return { n: [d1, d2] }; }
 function x155() { return function (n) { var n; return null; }; return function (n) { var n; return null; }; }
 function x156() { return { func: function (n) { return [d1, d2]; } }; return { func: function (n) { return [d1, d2]; } }; }
-var x157 = function () { return function () { return [d1, d2]; }; };
-var x158 = function () { return function () { return [d1, d2]; }; };
-var x159 = function () { return function named() { return [d1, d2]; }; };
-var x160 = function () { return function () { return [d1, d2]; }; };
-var x161 = function () { return function () { return [d1, d2]; }; };
-var x162 = function () { return function named() { return [d1, d2]; }; };
-var x163 = function () { return [d1, d2]; };
-var x164 = function () { return [d1, d2]; };
-var x165 = function () { return [d1, d2]; };
-var x166 = function () { return { n: [d1, d2] }; };
-var x167 = function () { return function (n) { var n; return null; }; };
-var x168 = function () { return { func: function (n) { return [d1, d2]; } }; };
+var x157 = function x157() { return function () { return [d1, d2]; }; };
+var x158 = function x158() { return function () { return [d1, d2]; }; };
+var x159 = function x159() { return function named() { return [d1, d2]; }; };
+var x160 = function x160() { return function () { return [d1, d2]; }; };
+var x161 = function x161() { return function () { return [d1, d2]; }; };
+var x162 = function x162() { return function named() { return [d1, d2]; }; };
+var x163 = function x163() { return [d1, d2]; };
+var x164 = function x164() { return [d1, d2]; };
+var x165 = function x165() { return [d1, d2]; };
+var x166 = function x166() { return { n: [d1, d2] }; };
+var x167 = function x167() { return function (n) { var n; return null; }; };
+var x168 = function x168() { return { func: function (n) { return [d1, d2]; } }; };
 var x169 = function () { return function () { return [d1, d2]; }; };
 var x170 = function () { return function () { return [d1, d2]; }; };
 var x171 = function () { return function named() { return [d1, d2]; }; };
@@ -1155,7 +1155,7 @@ var x179 = function () { return function (n) { var n; return null; }; };
 var x180 = function () { return { func: function (n) { return [d1, d2]; } }; };
 var x181;
 (function (x181) {
-    var t = function () { return [d1, d2]; };
+    var t = function t() { return [d1, d2]; };
 })(x181 || (x181 = {}));
 var x182;
 (function (x182) {
@@ -1167,7 +1167,7 @@ var x183;
 })(x183 || (x183 = {}));
 var x184;
 (function (x184) {
-    var t = function () { return [d1, d2]; };
+    var t = function t() { return [d1, d2]; };
 })(x184 || (x184 = {}));
 var x185;
 (function (x185) {
@@ -1195,7 +1195,7 @@ var x190;
 })(x190 || (x190 = {}));
 var x191;
 (function (x191) {
-    var t = function (n) { var n; return null; };
+    var t = function t(n) { var n; return null; };
 })(x191 || (x191 = {}));
 var x192;
 (function (x192) {
@@ -1406,29 +1406,29 @@ x331(function (n) { var n; return null; });
 function x332(n) { }
 ;
 x332({ func: function (n) { return [d1, d2]; } });
-var x333 = function (n) { return n; };
+var x333 = function x333(n) { return n; };
 x333(function () { return [d1, d2]; });
-var x334 = function (n) { return n; };
+var x334 = function x334(n) { return n; };
 x334(function () { return [d1, d2]; });
-var x335 = function (n) { return n; };
+var x335 = function x335(n) { return n; };
 x335(function named() { return [d1, d2]; });
-var x336 = function (n) { return n; };
+var x336 = function x336(n) { return n; };
 x336(function () { return [d1, d2]; });
-var x337 = function (n) { return n; };
+var x337 = function x337(n) { return n; };
 x337(function () { return [d1, d2]; });
-var x338 = function (n) { return n; };
+var x338 = function x338(n) { return n; };
 x338(function named() { return [d1, d2]; });
-var x339 = function (n) { return n; };
+var x339 = function x339(n) { return n; };
 x339([d1, d2]);
-var x340 = function (n) { return n; };
+var x340 = function x340(n) { return n; };
 x340([d1, d2]);
-var x341 = function (n) { return n; };
+var x341 = function x341(n) { return n; };
 x341([d1, d2]);
-var x342 = function (n) { return n; };
+var x342 = function x342(n) { return n; };
 x342({ n: [d1, d2] });
-var x343 = function (n) { return n; };
+var x343 = function x343(n) { return n; };
 x343(function (n) { var n; return null; });
-var x344 = function (n) { return n; };
+var x344 = function x344(n) { return n; };
 x344({ func: function (n) { return [d1, d2]; } });
 var x345 = function (n) { };
 x345(function () { return [d1, d2]; });

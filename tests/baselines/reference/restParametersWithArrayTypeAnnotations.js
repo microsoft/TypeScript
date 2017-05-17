@@ -66,7 +66,7 @@ var f = function foo() {
         x[_i] = arguments[_i];
     }
 };
-var f2 = function () {
+var f2 = function f2() {
     var y = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         y[_i - 1] = arguments[_i];
@@ -116,7 +116,7 @@ var f3 = function foo() {
         x[_i] = arguments[_i];
     }
 };
-var f4 = function () {
+var f4 = function f4() {
     var y = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         y[_i - 1] = arguments[_i];

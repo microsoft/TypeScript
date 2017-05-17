@@ -43,13 +43,13 @@ var b = {
 function foo(x, y) { }
 var f = function foo(x, y) { };
 var f2 = function (x, y) { };
-var f3 = function (x, y) { };
-var f4 = function (x, y) { };
+var f3 = function f3(x, y) { };
+var f4 = function f4(x, y) { };
 function foo2(x, y) { }
 var f5 = function foo(x, y) { };
 var f6 = function (x, y) { };
-var f7 = function (x, y) { };
-var f8 = function (x, y) { };
+var f7 = function f7(x, y) { };
+var f8 = function f8(x, y) { };
 var C = (function () {
     function C() {
     }
