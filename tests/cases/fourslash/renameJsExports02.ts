@@ -10,7 +10,7 @@
 const [r0, r1] = test.ranges();
 verify.referenceGroups(r0, [
     { definition: "(local class) A", ranges: [r0] },
-    { definition: "const A: typeof A", ranges: [r1] }
+    { definition: "const A: {\n    new (): {};\n    prototype: {};\n}", ranges: [r1] }
 ]);
 
-verify.singleReferenceGroup("const A: typeof A", [r1]);
+verify.singleReferenceGroup("const A: {\n    new (): {};\n    prototype: {};\n}", [r1]);

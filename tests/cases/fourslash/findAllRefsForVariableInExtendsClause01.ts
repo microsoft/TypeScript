@@ -3,4 +3,4 @@
 ////var [|{| "isWriteAccess": true, "isDefinition": true |}Base|] = class { };
 ////class C extends [|Base|] { }
 
-verify.singleReferenceGroup("var Base: typeof Base");
+verify.singleReferenceGroup("var Base: {\n    new (): {};\n    prototype: {};\n}");
