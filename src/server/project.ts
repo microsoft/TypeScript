@@ -873,6 +873,12 @@ namespace ts.server {
             // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
             const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
 
+            if (this.projectService.allowLocalPluginLoads) {
+                const local = getDirectoryPath(this.canonicalConfigFilePath);
+                this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);
+                searchPaths.unshift(local);
+            }
+
             // Enable tsconfig-specified plugins
             if (options.plugins) {
                 for (const pluginConfigEntry of options.plugins) {

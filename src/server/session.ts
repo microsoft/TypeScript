@@ -348,6 +348,7 @@ namespace ts.server {
 
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
+        allowLocalPluginLoads?: boolean;
     }
 
     export class Session implements EventSender {
@@ -401,7 +402,8 @@ namespace ts.server {
                 throttleWaitMilliseconds,
                 eventHandler: this.eventHandler,
                 globalPlugins: opts.globalPlugins,
-                pluginProbeLocations: opts.pluginProbeLocations
+                pluginProbeLocations: opts.pluginProbeLocations,
+                allowLocalPluginLoads: opts.allowLocalPluginLoads
             };
             this.projectService = new ProjectService(settings);
             this.gcTimer = new GcTimer(this.host, /*delay*/ 7000, this.logger);
