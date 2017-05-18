@@ -1,4 +1,4 @@
-tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts(13,1): error TS2553: Expected 1 arguments, but got 0.
+tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts(13,1): error TS2554: Expected 1 arguments, but got 0.
 
 
 ==== tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts (1 errors) ====
@@ -16,4 +16,4 @@ tests/cases/compiler/derivedTypeCallingBaseImplWithOptionalParams.ts(13,1): erro
     var y: MyClass = new MyClass();
     y.myMethod(); // error
     ~~~~~~~~~~~~
-!!! error TS2553: Expected 1 arguments, but got 0.
+!!! error TS2554: Expected 1 arguments, but got 0.

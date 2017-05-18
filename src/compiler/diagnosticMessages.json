@@ -1869,7 +1869,7 @@
     },
     "Expected {0} arguments, but got a minimum of {1}.": {
         "category": "Error",
-        "code": 2555
+        "code": 2556
     },
     "Expected at least {0} arguments, but got a minimum of {1}.": {
         "category": "Error",

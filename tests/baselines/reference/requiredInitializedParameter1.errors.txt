@@ -1,5 +1,5 @@
-tests/cases/compiler/requiredInitializedParameter1.ts(11,1): error TS2553: Expected 3 arguments, but got 2.
-tests/cases/compiler/requiredInitializedParameter1.ts(16,1): error TS2553: Expected 3 arguments, but got 1.
+tests/cases/compiler/requiredInitializedParameter1.ts(11,1): error TS2554: Expected 3 arguments, but got 2.
+tests/cases/compiler/requiredInitializedParameter1.ts(16,1): error TS2554: Expected 3 arguments, but got 1.
 
 
 ==== tests/cases/compiler/requiredInitializedParameter1.ts (2 errors) ====
@@ -15,14 +15,14 @@ tests/cases/compiler/requiredInitializedParameter1.ts(16,1): error TS2553: Expec
     
     f1(0, 1);
     ~~~~~~~~
-!!! error TS2553: Expected 3 arguments, but got 2.
+!!! error TS2554: Expected 3 arguments, but got 2.
     f2(0, 1);
     f3(0, 1);
     f4(0, 1);
     
     f1(0);
     ~~~~~
-!!! error TS2553: Expected 3 arguments, but got 1.
+!!! error TS2554: Expected 3 arguments, but got 1.
     f2(0);
     f3(0);
     f4(0);
