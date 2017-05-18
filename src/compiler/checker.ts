@@ -3266,6 +3266,9 @@ namespace ts {
                         writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
+                    else if (type.symbol.valueDeclaration && type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
+                    }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
                         // for outer type parameters, and f and g are the respective declaring containers of those
@@ -3313,7 +3316,7 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
+                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && symbol.valueDeclaration.kind !== SyntaxKind.ClassExpression ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                             writeTypeOfSymbol(type, flags);
                         }
@@ -3335,12 +3338,23 @@ namespace ts {
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
+                            // However, in case of class expressions, we want to write both the static side and the instance side.
+                            // We skip adding the static side so that the instance side has a chance to be written
+                            // before checking for circular references.
                             if (!symbolStack) {
                                 symbolStack = [];
                             }
-                            symbolStack.push(symbol);
-                            writeLiteralType(type, flags);
-                            symbolStack.pop();
+                            const isConstructorObject = type.flags & TypeFlags.Object &&
+                                getObjectFlags(type) & ObjectFlags.Anonymous &&
+                                type.symbol && type.symbol.flags & SymbolFlags.Class;
+                            if (isConstructorObject) {
+                                writeLiteralType(type, flags);
+                            }
+                            else {
+                                symbolStack.push(symbol);
+                                writeLiteralType(type, flags);
+                                symbolStack.pop();
+                            }
                         }
                     }
                     else {
