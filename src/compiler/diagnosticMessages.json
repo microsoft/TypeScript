@@ -1067,7 +1067,7 @@
         "category": "Error",
         "code": 2345
     },
-    "Supplied parameters do not match any signature of call target.": {
+    "Call target does not contain any signatures.": {
         "category": "Error",
         "code": 2346
     },
@@ -1858,6 +1858,26 @@
     "Computed values are not permitted in an enum with string valued members.": {
         "category": "Error",
         "code": 2553
+    },
+    "Expected {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2554
+    },
+    "Expected at least {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2555
+    },
+    "Expected {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2556
+    },
+    "Expected at least {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2557
+    },
+    "Expected {0} type arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2558
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

@@ -1,5 +1,5 @@
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(7,10): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(15,10): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(7,10): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts(15,10): error TS2554: Expected 0 arguments, but got 1.
 
 
 ==== tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/classWithoutExplicitConstructor.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/cl
     var c = new C();
     var c2 = new C(null); // error
              ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.
     
     class D<T extends Date> {
         x = 2
@@ -21,4 +21,4 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/cl
     var d = new D();
     var d2 = new D(null); // error
              ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.

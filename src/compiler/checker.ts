@@ -15336,7 +15336,7 @@ namespace ts {
             }
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], headMessage?: DiagnosticMessage): Signature {
+        function resolveCall(node: CallLikeExpression, signatures: Signature[], candidatesOutArray: Signature[], fallbackError?: DiagnosticMessage): Signature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -15371,7 +15371,7 @@ namespace ts {
             // reorderCandidates fills up the candidates array directly
             reorderCandidates(signatures, candidates);
             if (!candidates.length) {
-                reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+                diagnostics.add(createDiagnosticForNode(node, Diagnostics.Call_target_does_not_contain_any_signatures));
                 return resolveErrorCall(node);
             }
 
@@ -15479,7 +15479,7 @@ namespace ts {
             else if (candidateForTypeArgumentError) {
                 if (!isTaggedTemplate && !isDecorator && typeArguments) {
                     const typeArguments = (<CallExpression>node).typeArguments;
-                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, headMessage);
+                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
                 }
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
@@ -15490,15 +15490,44 @@ namespace ts {
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
                         typeToString(failedTypeParameter));
 
-                    if (headMessage) {
-                        diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, headMessage);
+                    if (fallbackError) {
+                        diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, fallbackError);
                     }
 
                     reportNoCommonSupertypeError(inferenceCandidates, (<JsxOpeningLikeElement>node).tagName || (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
                 }
             }
-            else {
-                reportError(Diagnostics.Supplied_parameters_do_not_match_any_signature_of_call_target);
+            else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
+                let min = Number.POSITIVE_INFINITY;
+                let max = Number.NEGATIVE_INFINITY;
+                for (const sig of signatures) {
+                    min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
+                    max = Math.max(max, length(sig.typeParameters));
+                }
+                const paramCount = min < max ? `${min}-${max}` : min;
+                diagnostics.add(createDiagnosticForNode(node, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length));
+            }
+            else if (args) {
+                let min = Number.POSITIVE_INFINITY;
+                let max = Number.NEGATIVE_INFINITY;
+                for (const sig of signatures) {
+                    min = Math.min(min, sig.minArgumentCount);
+                    max = Math.max(max, sig.parameters.length);
+                }
+                const hasRestParameter = some(signatures, sig => sig.hasRestParameter);
+                const hasSpreadArgument = getSpreadArgumentIndex(args) > -1;
+                const paramCount = hasRestParameter ? min :
+                    min < max ? `${min}-${max}` :
+                    min;
+                const argCount = args.length - (hasSpreadArgument ? 1 : 0);
+                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_a_minimum_of_1 :
+                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                    hasSpreadArgument ? Diagnostics.Expected_0_arguments_but_got_a_minimum_of_1 :
+                    Diagnostics.Expected_0_arguments_but_got_1;
+                diagnostics.add(createDiagnosticForNode(node, error, paramCount, argCount));
+            }
+            else if (fallbackError) {
+                diagnostics.add(createDiagnosticForNode(node, fallbackError));
             }
 
             // No signature was applicable. We have already reported the errors for the invalid signature.
@@ -15518,16 +15547,6 @@ namespace ts {
             }
 
             return resolveErrorCall(node);
-
-            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
-                let errorInfo: DiagnosticMessageChain;
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
-                if (headMessage) {
-                    errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
-                }
-
-                diagnostics.add(createDiagnosticForNodeFromMessageChain(node, errorInfo));
-            }
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 for (const originalCandidate of candidates) {

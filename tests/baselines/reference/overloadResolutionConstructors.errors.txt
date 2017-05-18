@@ -1,6 +1,6 @@
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(27,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(43,15): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(67,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(67,1): error TS2558: Expected 1-3 type arguments, but got 4.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(77,25): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(78,25): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors.ts(88,9): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
@@ -83,7 +83,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionConstructors
     // Generic overloads with differing arity called with type argument count that doesn't match any overload
     new fn3<number, number, number, number>(); // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1-3 type arguments, but got 4.
     
     // Generic overloads with constraints called with type arguments that satisfy the constraints
     interface fn4 {
