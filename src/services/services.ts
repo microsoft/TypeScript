@@ -732,6 +732,15 @@ namespace ts {
         }
     }
 
+    class SourceMapSourceObject implements SourceMapSource {
+        lineMap: number[];
+        constructor (public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+
+        public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
+            return ts.getLineAndCharacterOfPosition(this, pos);
+        }
+    }
+
     function getServicesObjectAllocator(): ObjectAllocator {
         return {
             getNodeConstructor: () => NodeObject,
@@ -742,6 +751,7 @@ namespace ts {
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
+            getSourceMapSourceConstructor: () => SourceMapSourceObject,
         };
     }
 

@@ -363,7 +363,7 @@ namespace ts {
         };
     }
 
-    export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
+    export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 

@@ -2249,6 +2249,7 @@ namespace ts {
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
+        getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
@@ -2279,6 +2280,12 @@ namespace ts {
         this.original = undefined;
     }
 
+    function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+        this.fileName = fileName;
+        this.text = text;
+        this.skipTrivia = skipTrivia || (pos => pos);
+    }
+
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
         getTokenConstructor: () => <any>Node,
@@ -2286,7 +2293,8 @@ namespace ts {
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
-        getSignatureConstructor: () => <any>Signature
+        getSignatureConstructor: () => <any>Signature,
+        getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
     export const enum AssertionLevel {
