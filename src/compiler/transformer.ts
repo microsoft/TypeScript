@@ -165,7 +165,7 @@ namespace ts {
         };
 
         function transformRoot(node: T) {
-            return node && (!isSourceFile(node) || !isDeclarationFile(node)) ? transformation(node) : node;
+            return node && (!isSourceFile(node) || !node.isDeclarationFile) ? transformation(node) : node;
         }
 
         /**

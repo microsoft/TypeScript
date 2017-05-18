@@ -275,7 +275,7 @@ namespace ts.Completions {
             }
         }
         else if (type.flags & TypeFlags.StringLiteral) {
-            const name = (<LiteralType>type).text;
+            const name = (<StringLiteralType>type).value;
             if (!uniques.has(name)) {
                 uniques.set(name, true);
                 result.push({
@@ -359,7 +359,7 @@ namespace ts.Completions {
 
         start = timestamp();
         // Completion not allowed inside comments, bail out if this is the case
-        const insideComment = isInsideComment(sourceFile, currentToken, position);
+        const insideComment = isInComment(sourceFile, position, currentToken);
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         if (insideComment) {

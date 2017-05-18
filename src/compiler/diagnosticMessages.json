@@ -1855,13 +1855,17 @@
         "category": "Error",
         "code": 2552
     },
-    "Expected {0} arguments, but got {1}.": {
+    "Computed values are not permitted in an enum with string valued members.": {
         "category": "Error",
         "code": 2553
     },
-    "Expected at least {0} arguments, but got {1}.": {
+    "Expected {0} arguments, but got {1}.": {
         "category": "Error",
         "code": 2554
+    },
+    "Expected at least {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2555
     },
     "Expected {0} arguments, but got a minimum of {1}.": {
         "category": "Error",
@@ -1869,11 +1873,11 @@
     },
     "Expected at least {0} arguments, but got a minimum of {1}.": {
         "category": "Error",
-        "code": 2556
+        "code": 2557
     },
     "Expected {0} type arguments, but got {1}.": {
         "category": "Error",
-        "code": 2557
+        "code": 2558
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",

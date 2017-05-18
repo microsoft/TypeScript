@@ -107,13 +107,25 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
+    export function createIdentifier(text: string): Identifier;
+    /* @internal */
+    export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
+    export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.text = escapeIdentifier(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
+        if (typeArguments) {
+            node.typeArguments = createNodeArray(typeArguments);
+        }
         return node;
+    }
+
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
+        return node.typeArguments !== typeArguments
+        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -271,8 +283,9 @@ namespace ts {
 
     // Type Elements
 
-    export function createPropertySignature(name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
+    export function createPropertySignature(modifiers: Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
         const node = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
+        node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
         node.questionToken = questionToken;
         node.type = type;
@@ -280,12 +293,13 @@ namespace ts {
         return node;
     }
 
-    export function updatePropertySignature(node: PropertySignature, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
-        return node.name !== name
+    export function updatePropertySignature(node: PropertySignature, modifiers: Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+        return node.modifiers !== modifiers
+            || node.name !== name
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createPropertySignature(name, questionToken, type, initializer), node)
+            ? updateNode(createPropertySignature(modifiers, name, questionToken, type, initializer), node)
             : node;
     }
 
@@ -492,7 +506,7 @@ namespace ts {
     export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
         const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
         node.typeName = asName(typeName);
-        node.typeArguments = asNodeArray(typeArguments);
+        node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
         return node;
     }
 
@@ -545,7 +559,7 @@ namespace ts {
 
     export function createArrayTypeNode(elementType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        node.elementType = elementType;
+        node.elementType = parenthesizeElementTypeMember(elementType);
         return node;
     }
 
@@ -585,7 +599,7 @@ namespace ts {
 
     export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
         const node = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
-        node.types = createNodeArray(types);
+        node.types = parenthesizeElementTypeMembers(types);
         return node;
     }
 
@@ -614,7 +628,7 @@ namespace ts {
     export function createTypeOperatorNode(type: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = SyntaxKind.KeyOfKeyword;
-        node.type = type;
+        node.type = parenthesizeElementTypeMember(type);
         return node;
     }
 
@@ -624,7 +638,7 @@ namespace ts {
 
     export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
-        node.objectType = objectType;
+        node.objectType = parenthesizeElementTypeMember(objectType);
         node.indexType = indexType;
         return node;
     }
@@ -2357,7 +2371,7 @@ namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;
@@ -2489,6 +2503,25 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
 
     // Compound nodes
 
@@ -3289,16 +3322,6 @@ namespace ts {
         return statements;
     }
 
-    export function parenthesizeConditionalHead(condition: Expression) {
-        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
-        const emittedCondition = skipPartiallyEmittedExpressions(condition);
-        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
-            return createParen(condition);
-        }
-        return condition;
-    }
-
     /**
      * Wraps the operand to a BinaryExpression in parentheses if they are needed to preserve the intended
      * order of operations.
@@ -3600,6 +3623,35 @@ namespace ts {
         return expression;
     }
 
+    export function parenthesizeElementTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return createParenthesizedType(member);
+        }
+        return member;
+    }
+
+    export function parenthesizeElementTypeMembers(members: TypeNode[]) {
+        return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
+    }
+
+    export function parenthesizeTypeParameters(typeParameters: TypeNode[]) {
+        if (some(typeParameters)) {
+            const nodeArray = createNodeArray() as NodeArray<TypeNode>;
+            for (let i = 0; i < typeParameters.length; ++i) {
+                const entry = typeParameters[i];
+                nodeArray.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
+                    createParenthesizedType(entry) :
+                    entry);
+            }
+
+            return nodeArray;
+        }
+    }
+
     /**
      * Clones a series of not-emitted expressions with a new inner expression.
      *
@@ -3806,7 +3858,7 @@ namespace ts {
         if (file.moduleName) {
             return createLiteral(file.moduleName);
         }
-        if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+        if (!file.isDeclarationFile && (options.out || options.outFile)) {
             return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
         }
         return undefined;

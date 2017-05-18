@@ -28,17 +28,20 @@ var e = E1;
 var e: {
 >e : Symbol(e, Decl(enumBasics.ts, 11, 3), Decl(enumBasics.ts, 12, 3), Decl(enumBasics.ts, 18, 3))
 
-    readonly A: E1;
+    readonly A: E1.A;
 >A : Symbol(A, Decl(enumBasics.ts, 12, 8))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>A : Symbol(E1.A, Decl(enumBasics.ts, 1, 9))
 
-    readonly B: E1;
->B : Symbol(B, Decl(enumBasics.ts, 13, 19))
+    readonly B: E1.B;
+>B : Symbol(B, Decl(enumBasics.ts, 13, 21))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>B : Symbol(E1.B, Decl(enumBasics.ts, 2, 6))
 
-    readonly C: E1;
->C : Symbol(C, Decl(enumBasics.ts, 14, 19))
+    readonly C: E1.C;
+>C : Symbol(C, Decl(enumBasics.ts, 14, 21))
 >E1 : Symbol(E1, Decl(enumBasics.ts, 0, 0))
+>C : Symbol(E1.C, Decl(enumBasics.ts, 3, 6))
 
     readonly [n: number]: string;
 >n : Symbol(n, Decl(enumBasics.ts, 16, 14))

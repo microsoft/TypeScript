@@ -550,7 +550,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function isObjectBindingPatternElementWithoutPropertyName(symbol: Symbol): boolean {
-        const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+        const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
         return bindingElement &&
             bindingElement.parent.kind === SyntaxKind.ObjectBindingPattern &&
             !bindingElement.propertyName;
@@ -558,7 +558,7 @@ namespace ts.FindAllReferences.Core {
 
     function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
         if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
-            const bindingElement = <BindingElement>getDeclarationOfKind(symbol, SyntaxKind.BindingElement);
+            const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
             const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
             return typeOfPattern && checker.getPropertyOfType(typeOfPattern, (<Identifier>bindingElement.name).text);
         }
