@@ -212,6 +212,10 @@ namespace ts.FindAllReferences {
                 return;
             }
 
+            if (!decl.importClause) {
+                return;
+            }
+
             const { importClause } = decl;
 
             const { namedBindings } = importClause;
@@ -533,7 +537,10 @@ namespace ts.FindAllReferences {
             return symbol.name;
         }
 
-        const name = forEach(symbol.declarations, ({ name }) => name && name.kind === SyntaxKind.Identifier && name.text);
+        const name = forEach(symbol.declarations, decl => {
+            const name = getNameOfDeclaration(decl);
+            return name && name.kind === SyntaxKind.Identifier && name.text;
+        });
         Debug.assert(!!name);
         return name;
     }

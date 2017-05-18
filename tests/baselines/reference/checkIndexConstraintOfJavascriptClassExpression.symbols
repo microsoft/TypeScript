@@ -1,0 +1,17 @@
+=== tests/cases/compiler/weird.js ===
+someFunction(function(BaseClass) {
+>BaseClass : Symbol(BaseClass, Decl(weird.js, 0, 22))
+
+	class Hello extends BaseClass {
+>Hello : Symbol(Hello, Decl(weird.js, 0, 34))
+>BaseClass : Symbol(BaseClass, Decl(weird.js, 0, 22))
+
+		constructor() {
+			this.foo = "bar";
+>this.foo : Symbol(Hello.foo, Decl(weird.js, 2, 17))
+>this : Symbol(Hello, Decl(weird.js, 0, 34))
+>foo : Symbol(Hello.foo, Decl(weird.js, 2, 17))
+		}
+	}
+});
+

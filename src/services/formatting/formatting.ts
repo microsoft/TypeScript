@@ -487,7 +487,7 @@ namespace ts.formatting {
                     // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    return (<Declaration>node).name.kind;
+                    return getNameOfDeclaration(<Declaration>node).kind;
             }
         }
 

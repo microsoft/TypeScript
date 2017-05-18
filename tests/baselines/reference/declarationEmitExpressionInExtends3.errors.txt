@@ -1,5 +1,5 @@
 tests/cases/compiler/declarationEmitExpressionInExtends3.ts(28,30): error TS4020: 'extends' clause of exported class 'MyClass' has or is using private name 'LocalClass'.
-tests/cases/compiler/declarationEmitExpressionInExtends3.ts(36,31): error TS4020: 'extends' clause of exported class 'MyClass3' has or is using private name 'LocalInterface'.
+tests/cases/compiler/declarationEmitExpressionInExtends3.ts(36,75): error TS4020: 'extends' clause of exported class 'MyClass3' has or is using private name 'LocalInterface'.
 
 
 ==== tests/cases/compiler/declarationEmitExpressionInExtends3.ts (2 errors) ====
@@ -41,7 +41,7 @@ tests/cases/compiler/declarationEmitExpressionInExtends3.ts(36,31): error TS4020
     
     
     export class MyClass3 extends getExportedClass<LocalInterface>(undefined)<LocalInterface> { // Error LocalInterface is inaccisble
-                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                                              ~~~~~~~~~~~~~~
 !!! error TS4020: 'extends' clause of exported class 'MyClass3' has or is using private name 'LocalInterface'.
     }
     

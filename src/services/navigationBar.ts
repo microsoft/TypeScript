@@ -279,8 +279,8 @@ namespace ts.NavigationBar {
     function mergeChildren(children: NavigationBarNode[]): void {
         const nameToItems = createMap<NavigationBarNode | NavigationBarNode[]>();
         filterMutate(children, child => {
-            const decl = <Declaration>child.node;
-            const name = decl.name && nodeText(decl.name);
+            const declName = getNameOfDeclaration(<Declaration>child.node);
+            const name = declName && nodeText(declName);
             if (!name) {
                 // Anonymous items are never merged.
                 return true;
@@ -378,9 +378,9 @@ namespace ts.NavigationBar {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const decl = <Declaration>node;
-        if (decl.name) {
-            return getPropertyNameForPropertyNameNode(decl.name);
+        const declName = getNameOfDeclaration(<Declaration>node);
+        if (declName) {
+            return getPropertyNameForPropertyNameNode(declName);
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -399,7 +399,7 @@ namespace ts.NavigationBar {
             return getModuleName(<ModuleDeclaration>node);
         }
 
-        const name = (<Declaration>node).name;
+        const name = getNameOfDeclaration(<Declaration>node);
         if (name) {
             const text = nodeText(name);
             if (text.length > 0) {

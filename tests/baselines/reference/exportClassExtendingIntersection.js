@@ -111,4 +111,11 @@ export interface MyMixin {
     mixinProperty: string;
 }
 export declare function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin>;
+//// [FinalClass.d.ts]
+import { MyBaseClass } from './BaseClass';
+import { MyMixin } from './MixinClass';
+declare const MyExtendedClass_base: typeof MyBaseClass & (new (...args: any[]) => MyMixin);
+export declare class MyExtendedClass extends MyExtendedClass_base<string> {
+    extendedClassProperty: number;
+}
 //// [Main.d.ts]

@@ -2938,6 +2938,28 @@ namespace ts {
     }
 
     /**
+     * Gets the internal name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the body of an ES5 class function body. An internal name will *never*
+     * be prefixed with an module or namespace export modifier like "exports." when emitted as an
+     * expression. An internal name will also *never* be renamed due to a collision with a block
+     * scoped variable.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its internal name.
+     */
+    export function isInternalName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
+    }
+
+    /**
      * Gets the local name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
      * local name will *never* be prefixed with an module or namespace export modifier like
@@ -2992,9 +3014,10 @@ namespace ts {
     }
 
     function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
-        if (node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name)) {
-            const name = getMutableClone(node.name);
-            emitFlags |= getEmitFlags(node.name);
+        const nodeName = getNameOfDeclaration(node);
+        if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
+            const name = getMutableClone(nodeName);
+            emitFlags |= getEmitFlags(nodeName);
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
             if (!allowComments) emitFlags |= EmitFlags.NoComments;
             if (emitFlags) setEmitFlags(name, emitFlags);

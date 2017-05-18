@@ -491,9 +491,11 @@ declare namespace ts {
     type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
+    }
+    interface NamedDeclaration extends Declaration {
         name?: DeclarationName;
     }
-    interface DeclarationStatement extends Declaration, Statement {
+    interface DeclarationStatement extends NamedDeclaration, Statement {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
@@ -504,7 +506,7 @@ declare namespace ts {
         kind: SyntaxKind.Decorator;
         expression: LeftHandSideExpression;
     }
-    interface TypeParameterDeclaration extends Declaration {
+    interface TypeParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.TypeParameter;
         parent?: DeclarationWithTypeParameters;
         name: Identifier;
@@ -512,7 +514,7 @@ declare namespace ts {
         default?: TypeNode;
         expression?: Expression;
     }
-    interface SignatureDeclaration extends Declaration {
+    interface SignatureDeclaration extends NamedDeclaration {
         name?: PropertyName;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ParameterDeclaration>;
@@ -525,7 +527,7 @@ declare namespace ts {
         kind: SyntaxKind.ConstructSignature;
     }
     type BindingName = Identifier | BindingPattern;
-    interface VariableDeclaration extends Declaration {
+    interface VariableDeclaration extends NamedDeclaration {
         kind: SyntaxKind.VariableDeclaration;
         parent?: VariableDeclarationList | CatchClause;
         name: BindingName;
@@ -537,7 +539,7 @@ declare namespace ts {
         parent?: VariableStatement | ForStatement | ForOfStatement | ForInStatement;
         declarations: NodeArray<VariableDeclaration>;
     }
-    interface ParameterDeclaration extends Declaration {
+    interface ParameterDeclaration extends NamedDeclaration {
         kind: SyntaxKind.Parameter;
         parent?: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken;
@@ -546,7 +548,7 @@ declare namespace ts {
         type?: TypeNode;
         initializer?: Expression;
     }
-    interface BindingElement extends Declaration {
+    interface BindingElement extends NamedDeclaration {
         kind: SyntaxKind.BindingElement;
         parent?: BindingPattern;
         propertyName?: PropertyName;
@@ -568,7 +570,7 @@ declare namespace ts {
         type?: TypeNode;
         initializer?: Expression;
     }
-    interface ObjectLiteralElement extends Declaration {
+    interface ObjectLiteralElement extends NamedDeclaration {
         _objectLiteralBrandBrand: any;
         name?: PropertyName;
     }
@@ -590,7 +592,7 @@ declare namespace ts {
         kind: SyntaxKind.SpreadAssignment;
         expression: Expression;
     }
-    interface VariableLikeDeclaration extends Declaration {
+    interface VariableLikeDeclaration extends NamedDeclaration {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
         name: DeclarationName;
@@ -598,7 +600,7 @@ declare namespace ts {
         type?: TypeNode;
         initializer?: Expression;
     }
-    interface PropertyLikeDeclaration extends Declaration {
+    interface PropertyLikeDeclaration extends NamedDeclaration {
         name: PropertyName;
     }
     interface ObjectBindingPattern extends Node {
@@ -950,7 +952,7 @@ declare namespace ts {
     }
     type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression | ParenthesizedExpression;
     type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
-    interface PropertyAccessExpression extends MemberExpression, Declaration {
+    interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         name: Identifier;
@@ -1197,7 +1199,7 @@ declare namespace ts {
         block: Block;
     }
     type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
-    interface ClassLikeDeclaration extends Declaration {
+    interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         heritageClauses?: NodeArray<HeritageClause>;
@@ -1210,11 +1212,11 @@ declare namespace ts {
     interface ClassExpression extends ClassLikeDeclaration, PrimaryExpression {
         kind: SyntaxKind.ClassExpression;
     }
-    interface ClassElement extends Declaration {
+    interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
         name?: PropertyName;
     }
-    interface TypeElement extends Declaration {
+    interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
         questionToken?: QuestionToken;
@@ -1238,7 +1240,7 @@ declare namespace ts {
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         type: TypeNode;
     }
-    interface EnumMember extends Declaration {
+    interface EnumMember extends NamedDeclaration {
         kind: SyntaxKind.EnumMember;
         parent?: EnumDeclaration;
         name: PropertyName;
@@ -1297,13 +1299,13 @@ declare namespace ts {
         moduleSpecifier: Expression;
     }
     type NamedImportBindings = NamespaceImport | NamedImports;
-    interface ImportClause extends Declaration {
+    interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent?: ImportDeclaration;
         name?: Identifier;
         namedBindings?: NamedImportBindings;
     }
-    interface NamespaceImport extends Declaration {
+    interface NamespaceImport extends NamedDeclaration {
         kind: SyntaxKind.NamespaceImport;
         parent?: ImportClause;
         name: Identifier;
@@ -1330,13 +1332,13 @@ declare namespace ts {
         elements: NodeArray<ExportSpecifier>;
     }
     type NamedImportsOrExports = NamedImports | NamedExports;
-    interface ImportSpecifier extends Declaration {
+    interface ImportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ImportSpecifier;
         parent?: NamedImports;
         propertyName?: Identifier;
         name: Identifier;
     }
-    interface ExportSpecifier extends Declaration {
+    interface ExportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ExportSpecifier;
         parent?: NamedExports;
         propertyName?: Identifier;
@@ -1467,7 +1469,7 @@ declare namespace ts {
         kind: SyntaxKind.JSDocTypeTag;
         typeExpression: JSDocTypeExpression;
     }
-    interface JSDocTypedefTag extends JSDocTag, Declaration {
+    interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2320,14 +2322,15 @@ declare namespace ts {
         HelperName = 4096,
         ExportName = 8192,
         LocalName = 16384,
-        Indented = 32768,
-        NoIndentation = 65536,
-        AsyncFunctionBody = 131072,
-        ReuseTempVariableScope = 262144,
-        CustomPrologue = 524288,
-        NoHoisting = 1048576,
-        HasEndOfDeclarationMarker = 2097152,
-        Iterator = 4194304,
+        InternalName = 32768,
+        Indented = 65536,
+        NoIndentation = 131072,
+        AsyncFunctionBody = 262144,
+        ReuseTempVariableScope = 524288,
+        CustomPrologue = 1048576,
+        NoHoisting = 2097152,
+        HasEndOfDeclarationMarker = 4194304,
+        Iterator = 8388608,
     }
     interface EmitHelper {
         readonly name: string;
@@ -2515,7 +2518,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the TypeScript compiler release */
-    const version = "2.3.1";
+    const version = "2.3.3";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
