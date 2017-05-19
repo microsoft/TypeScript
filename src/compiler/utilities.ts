@@ -4700,7 +4700,7 @@ namespace ts {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
     }
 
-    export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
+    export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
         if (!declaration) {
             return undefined;
         }
