@@ -2354,7 +2354,8 @@ namespace FourSlash {
         private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
+                    const actionText = (actions && actions.length) ? JSON.stringify(actions) : "none";
+                    this.raiseError(`Should find exactly one codefix, but found ${actionText}`);
                 }
                 index = 0;
             }
@@ -2705,6 +2706,60 @@ namespace FourSlash {
 
             if (!(negative || codeFix)) {
                 this.raiseError(`verifyCodeFixAvailable failed - expected code fixes but none found.`);
+            }
+        }
+
+        public verifyApplicableRefactorAvailableAtMarker(negative: boolean, markerName: string) {
+            const marker = this.getMarkerByName(markerName);
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, marker.position);
+            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            if (negative && isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected no refactor at marker ${markerName} but found some.`);
+            }
+            if (!negative && !isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableAtMarker failed - expected a refactor at marker ${markerName} but found none.`);
+            }
+        }
+
+        public verifyApplicableRefactorAvailableForRange(negative: boolean) {
+            const ranges = this.getRanges();
+            if (!(ranges && ranges.length === 1)) {
+                throw new Error("Exactly one refactor range is allowed per test.");
+            }
+
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, { pos: ranges[0].start, end: ranges[0].end });
+            const isAvailable = applicableRefactors && applicableRefactors.length > 0;
+            if (negative && isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
+            }
+            if (!negative && !isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
+            }
+        }
+
+        public verifyFileAfterApplyingRefactorAtMarker(
+            markerName: string,
+            expectedContent: string,
+            refactorNameToApply: string,
+            formattingOptions?: ts.FormatCodeSettings) {
+
+            formattingOptions = formattingOptions || this.formatCodeSettings;
+            const markerPos = this.getMarkerByName(markerName).position;
+
+            const applicableRefactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, markerPos);
+            const applicableRefactorToApply = ts.find(applicableRefactors, refactor => refactor.name === refactorNameToApply);
+
+            if (!applicableRefactorToApply) {
+                this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
+            }
+
+            const codeActions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply);
+
+            this.applyCodeAction(this.activeFile.fileName, codeActions);
+            const actualContent = this.getFileContent(this.activeFile.fileName);
+
+            if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
+                this.raiseError(`verifyFileAfterApplyingRefactors failed: expected:\n${expectedContent}\nactual:\n${actualContent}`);
             }
         }
 
@@ -3521,6 +3576,14 @@ namespace FourSlashInterface {
         public codeFixAvailable() {
             this.state.verifyCodeFixAvailable(this.negative);
         }
+
+        public applicableRefactorAvailableAtMarker(markerName: string) {
+            this.state.verifyApplicableRefactorAvailableAtMarker(this.negative, markerName);
+        }
+
+        public applicableRefactorAvailableForRange() {
+            this.state.verifyApplicableRefactorAvailableForRange(this.negative);
+        }
     }
 
     export class Verify extends VerifyNegatable {
@@ -3733,6 +3796,10 @@ namespace FourSlashInterface {
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
+        }
+
+        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: ts.FormatCodeSettings): void {
+            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, formattingOptions);
         }
 
         public importFixAtPosition(expectedTextArray: string[], errorCode?: number): void {
