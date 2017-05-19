@@ -1066,6 +1066,10 @@ namespace ts {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
     }
 
+    export function createTextSpanFromRange(range: TextRange): TextSpan {
+        return createTextSpanFromBounds(range.pos, range.end);
+    }
+
     export function isTypeKeyword(kind: SyntaxKind): boolean {
         switch (kind) {
             case SyntaxKind.AnyKeyword:

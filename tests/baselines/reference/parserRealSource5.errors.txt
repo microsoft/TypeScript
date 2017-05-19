@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(14,38): error TS2304: Cannot find name 'ITextWriter'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(14,66): error TS2304: Cannot find name 'Parser'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(27,17): error TS2304: Cannot find name 'CompilerDiagnostics'.
@@ -15,7 +15,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource5.ts(61,65): error TS
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

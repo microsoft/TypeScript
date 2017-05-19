@@ -995,8 +995,7 @@ namespace FourSlash {
 
         public verifyReferenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void {
             interface ReferenceJson { definition: string; ranges: ts.ReferenceEntry[]; }
-            type ReferencesJson = ReferenceJson[];
-            const fullExpected = parts.map<ReferenceJson>(({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
+            const fullExpected = ts.map(parts, ({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
@@ -1004,7 +1003,7 @@ namespace FourSlash {
                     definition: definition.displayParts.map(d => d.text).join(""),
                     ranges: references
                 }));
-                this.assertObjectsEqual<ReferencesJson>(fullActual, fullExpected);
+                this.assertObjectsEqual(fullActual, fullExpected);
             }
 
             function rangeToReferenceEntry(r: Range): ts.ReferenceEntry {
@@ -1062,6 +1061,14 @@ namespace FourSlash {
                     }
                 }
             };
+            if (fullActual === undefined || fullExpected === undefined) {
+                if (fullActual === fullExpected) {
+                    return;
+                }
+                console.log("Expected:", stringify(fullExpected));
+                console.log("Actual: ", stringify(fullActual));
+                this.raiseError(msgPrefix);
+            }
             recur(fullActual, fullExpected, "");
 
         }
