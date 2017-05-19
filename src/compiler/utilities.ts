@@ -4712,12 +4712,6 @@ namespace ts {
                 case SpecialPropertyAssignmentKind.ModuleExports:
                     return undefined;
                 case SpecialPropertyAssignmentKind.ExportsProperty:
-                    if (lhs.kind === SyntaxKind.Identifier) {
-                        return (lhs as PropertyAccessExpression).name;
-                    }
-                    else {
-                        return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
-                    }
                 case SpecialPropertyAssignmentKind.ThisProperty:
                 case SpecialPropertyAssignmentKind.Property:
                     return (lhs as PropertyAccessExpression).name;
