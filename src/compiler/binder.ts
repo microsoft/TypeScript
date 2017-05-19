@@ -149,7 +149,7 @@ namespace ts {
             inStrictMode = bindInStrictMode(file, opts);
             classifiableNames = createMap<string>();
             symbolCount = 0;
-            skipTransformFlagAggregation = isDeclarationFile(file);
+            skipTransformFlagAggregation = file.isDeclarationFile;
 
             Symbol = objectAllocator.getSymbolConstructor();
 
@@ -182,7 +182,7 @@ namespace ts {
         return bindSourceFile;
 
         function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-            if ((opts.alwaysStrict === undefined ? opts.strict : opts.alwaysStrict) && !isDeclarationFile(file)) {
+            if ((opts.alwaysStrict === undefined ? opts.strict : opts.alwaysStrict) && !file.isDeclarationFile) {
                 // bind in strict mode source files with alwaysStrict option
                 return true;
             }
@@ -2545,7 +2545,7 @@ namespace ts {
         }
 
         function bindFunctionDeclaration(node: FunctionDeclaration) {
-            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2562,7 +2562,7 @@ namespace ts {
         }
 
         function bindFunctionExpression(node: FunctionExpression) {
-            if (!isDeclarationFile(file) && !isInAmbientContext(node)) {
+            if (!file.isDeclarationFile && !isInAmbientContext(node)) {
                 if (isAsyncFunction(node)) {
                     emitFlags |= NodeFlags.HasAsyncFunctions;
                 }
@@ -2576,7 +2576,7 @@ namespace ts {
         }
 
         function bindPropertyOrMethodOrAccessor(node: Declaration, symbolFlags: SymbolFlags, symbolExcludes: SymbolFlags) {
-            if (!isDeclarationFile(file) && !isInAmbientContext(node) && isAsyncFunction(node)) {
+            if (!file.isDeclarationFile && !isInAmbientContext(node) && isAsyncFunction(node)) {
                 emitFlags |= NodeFlags.HasAsyncFunctions;
             }
 

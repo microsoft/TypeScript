@@ -984,7 +984,7 @@ namespace ts {
             const enumMemberValue = resolver.getConstantValue(node);
             if (enumMemberValue !== undefined) {
                 write(" = ");
-                write(enumMemberValue.toString());
+                write(getTextOfConstantValue(enumMemberValue));
             }
             write(",");
             writeLine();
@@ -1840,7 +1840,7 @@ namespace ts {
         function writeReferencePath(referencedFile: SourceFile, addBundledFileReference: boolean, emitOnlyDtsFiles: boolean): boolean {
             let declFileName: string;
             let addedBundledEmitReference = false;
-            if (isDeclarationFile(referencedFile)) {
+            if (referencedFile.isDeclarationFile) {
                 // Declaration file, use declaration file name
                 declFileName = referencedFile.fileName;
             }

@@ -1309,7 +1309,7 @@ namespace ts {
         }
 
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            return isDeclarationFile(sourceFile) ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
+            return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
         function getOptionsDiagnostics(): Diagnostic[] {
@@ -1348,7 +1348,6 @@ namespace ts {
 
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
-            const isDtsFile = isDeclarationFile(file);
 
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
@@ -1401,7 +1400,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
@@ -1412,7 +1411,7 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
-                                if (isDtsFile) {
+                                if (file.isDeclarationFile) {
                                     // for global .d.ts files record name of ambient module
                                     (ambientModules || (ambientModules = [])).push(moduleName.text);
                                 }
@@ -1730,7 +1729,7 @@ namespace ts {
                 const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
                 for (const sourceFile of sourceFiles) {
-                    if (!isDeclarationFile(sourceFile)) {
+                    if (!sourceFile.isDeclarationFile) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
                             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
@@ -1843,13 +1842,13 @@ namespace ts {
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
-            const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
+            const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
                 }
 
-                const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
+                const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
                     programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));

@@ -275,7 +275,7 @@ namespace ts.Completions {
             }
         }
         else if (type.flags & TypeFlags.StringLiteral) {
-            const name = (<LiteralType>type).text;
+            const name = (<StringLiteralType>type).value;
             if (!uniques.has(name)) {
                 uniques.set(name, true);
                 result.push({
