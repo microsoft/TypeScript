@@ -1064,6 +1064,14 @@ namespace FourSlash {
                     }
                 }
             };
+            if (fullActual === undefined || fullExpected === undefined) {
+                if (fullActual === fullExpected) {
+                    return;
+                }
+                console.log("Expected:", stringify(fullExpected));
+                console.log("Actual: ", stringify(fullActual));
+                this.raiseError(msgPrefix);
+            }
             recur(fullActual, fullExpected, "");
 
         }

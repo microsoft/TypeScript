@@ -263,7 +263,7 @@ namespace ts.GoToDefinition {
 
     function findReferenceInPosition(refs: FileReference[], pos: number): FileReference {
         for (const ref of refs) {
-            if (ref.pos <= pos && pos < ref.end) {
+            if (ref.pos <= pos && pos <= ref.end) {
                 return ref;
             }
         }
