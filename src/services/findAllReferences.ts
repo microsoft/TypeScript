@@ -334,7 +334,7 @@ namespace ts.FindAllReferences.Core {
                     references.push({ type: "node", node: (decl as ts.ModuleDeclaration).name });
                     break;
                 default:
-                    Debug.assert(false);
+                    Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
             }
         }
 

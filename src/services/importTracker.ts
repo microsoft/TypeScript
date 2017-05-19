@@ -405,7 +405,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ExternalModuleReference:
                 return (decl as ExternalModuleReference).parent;
             default:
-                Debug.assert(false);
+                Debug.fail(`Unexpected module specifier parent: ${decl.kind}`);
         }
     }
 
