@@ -4705,18 +4705,15 @@ namespace ts {
             return undefined;
         }
         if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
-            const lhs = (declaration as BinaryExpression).left;
-            switch (kind) {
-                case SpecialPropertyAssignmentKind.None:
-                case SpecialPropertyAssignmentKind.ModuleExports:
-                    return undefined;
+            const expr = declaration as BinaryExpression;
+            switch (getSpecialPropertyAssignmentKind(expr)) {
                 case SpecialPropertyAssignmentKind.ExportsProperty:
                 case SpecialPropertyAssignmentKind.ThisProperty:
                 case SpecialPropertyAssignmentKind.Property:
-                    return (lhs as PropertyAccessExpression).name;
                 case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
+                    return (expr.left as PropertyAccessExpression).name;
+                default:
+                    return undefined;
             }
         }
         else {
