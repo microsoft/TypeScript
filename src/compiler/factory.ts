@@ -1502,19 +1502,23 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function createTypeAliasDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
         node.type = type;
         return node;
     }
 
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
-        return node.name !== name
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
             || node.typeParameters !== typeParameters
             || node.type !== type
-            ? updateNode(createTypeAliasDeclaration(name, typeParameters, type), node)
+            ? updateNode(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
             : node;
     }
 
