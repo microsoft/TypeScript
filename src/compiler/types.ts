@@ -605,6 +605,7 @@ namespace ts {
 
     export interface Declaration extends Node {
         _declarationBrand: any;
+        name?: DeclarationName;
     }
 
     export interface NamedDeclaration extends Declaration {
