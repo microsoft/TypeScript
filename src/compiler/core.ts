@@ -1765,6 +1765,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function removePrefix(str: string, prefix: string): string {
+        return startsWith(str, prefix) ? str.substr(prefix.length) : str;
+    }
+
+    /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;

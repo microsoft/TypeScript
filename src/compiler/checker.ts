@@ -1642,6 +1642,12 @@ namespace ts {
                 return;
             }
 
+            if (startsWith(moduleReference, "@types/")) {
+                const diag = Diagnostics.Cannot_import_type_declaration_files_Consider_importing_0_instead_of_1;
+                const withoutAtTypePrefix = removePrefix(moduleReference, "@types/");
+                error(errorNode, diag, withoutAtTypePrefix, moduleReference);
+            }
+
             const ambientModule = tryFindAmbientModule(moduleName, /*withAugmentations*/ true);
             if (ambientModule) {
                 return ambientModule;

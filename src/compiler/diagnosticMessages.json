@@ -3061,6 +3061,10 @@
         "category": "Message",
         "code": 6136
     },
+    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
+        "category": "Error",
+        "code": 6137
+    },
     "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6138
