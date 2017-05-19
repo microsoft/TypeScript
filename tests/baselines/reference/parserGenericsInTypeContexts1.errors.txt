@@ -1,4 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(1,17): error TS2304: Cannot find name 'A'.
+tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(1,19): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(1,33): error TS2304: Cannot find name 'B'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(1,35): error TS2304: Cannot find name 'T'.
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(4,9): error TS2315: Type 'C' is not generic.
@@ -17,10 +18,12 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts
 tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts(14,18): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts (17 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/Generics/parserGenericsInTypeContexts1.ts (18 errors) ====
     class C extends A<T> implements B<T> {
                     ~
 !!! error TS2304: Cannot find name 'A'.
+                      ~
+!!! error TS2304: Cannot find name 'T'.
                                     ~
 !!! error TS2304: Cannot find name 'B'.
                                       ~
