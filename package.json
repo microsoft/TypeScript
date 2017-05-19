@@ -28,6 +28,9 @@
     "engines": {
         "node": ">=4.2.0"
     },
+    "dependencies": {
+        "resolve": "^1.1.6"
+    },
     "devDependencies": {
         "@types/browserify": "latest",
         "@types/chai": "latest",
