@@ -3584,6 +3584,15 @@
         "code": 90022
     },
 
+    "Convert function to an ES2015 class": {
+        "category": "Message",
+        "code": 95001
+    },
+    "Convert function '{0}' to class": {
+        "category": "Message",
+        "code": 95002
+    },
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
