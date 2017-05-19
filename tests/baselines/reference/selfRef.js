@@ -34,6 +34,6 @@ var M;
             };
         }
         return Test;
-    })();
+    }());
     M.Test = Test;
 })(M || (M = {}));

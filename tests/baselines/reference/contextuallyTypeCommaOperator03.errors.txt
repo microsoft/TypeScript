@@ -1,0 +1,9 @@
+tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts(3,6): error TS7006: Parameter 'a' implicitly has an 'any' type.
+
+
+==== tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator03.ts (1 errors) ====
+    let x: (a: string) => string;
+    
+    x = (a => a, b => b);
+         ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.

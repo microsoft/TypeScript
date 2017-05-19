@@ -44,16 +44,18 @@ class privateClassWithPublicTypeParametersWithoutExtends<T> {
 
 
 //// [privacyTypeParametersOfClass.js]
+"use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }
     return privateClass;
-})();
+}());
 var publicClass = (function () {
     function publicClass() {
     }
     return publicClass;
-})();
+}());
 exports.publicClass = publicClass;
 // TypeParameter_0_of_exported_class_1_has_or_is_using_private_type_2
 var publicClassWithPrivateTypeParameters = (function () {
@@ -63,7 +65,7 @@ var publicClassWithPrivateTypeParameters = (function () {
         return val;
     };
     return publicClassWithPrivateTypeParameters;
-})();
+}());
 exports.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParameters;
 var publicClassWithPublicTypeParameters = (function () {
     function publicClassWithPublicTypeParameters() {
@@ -72,7 +74,7 @@ var publicClassWithPublicTypeParameters = (function () {
         return val;
     };
     return publicClassWithPublicTypeParameters;
-})();
+}());
 exports.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameters;
 var privateClassWithPrivateTypeParameters = (function () {
     function privateClassWithPrivateTypeParameters() {
@@ -81,7 +83,7 @@ var privateClassWithPrivateTypeParameters = (function () {
         return val;
     };
     return privateClassWithPrivateTypeParameters;
-})();
+}());
 var privateClassWithPublicTypeParameters = (function () {
     function privateClassWithPublicTypeParameters() {
     }
@@ -89,7 +91,7 @@ var privateClassWithPublicTypeParameters = (function () {
         return val;
     };
     return privateClassWithPublicTypeParameters;
-})();
+}());
 var publicClassWithPublicTypeParametersWithoutExtends = (function () {
     function publicClassWithPublicTypeParametersWithoutExtends() {
     }
@@ -97,7 +99,7 @@ var publicClassWithPublicTypeParametersWithoutExtends = (function () {
         return val;
     };
     return publicClassWithPublicTypeParametersWithoutExtends;
-})();
+}());
 exports.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPublicTypeParametersWithoutExtends;
 var privateClassWithPublicTypeParametersWithoutExtends = (function () {
     function privateClassWithPublicTypeParametersWithoutExtends() {
@@ -106,4 +108,4 @@ var privateClassWithPublicTypeParametersWithoutExtends = (function () {
         return val;
     };
     return privateClassWithPublicTypeParametersWithoutExtends;
-})();
+}());

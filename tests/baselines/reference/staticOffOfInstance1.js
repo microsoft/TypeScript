@@ -15,4 +15,4 @@ var List = (function () {
     };
     List.Foo = function () { };
     return List;
-})();
+}());

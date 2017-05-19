@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileForTypeParameters.ts ===
-
 class C<T> {
 >C : C<T>
 >T : T
@@ -16,7 +15,7 @@ class C<T> {
 
         return this.x;
 >this.x : T
->this : C<T>
+>this : this
 >x : T
     }
 }

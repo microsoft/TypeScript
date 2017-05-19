@@ -14,7 +14,7 @@ var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 //// [cloduleSplitAcrossFiles_module.js]
 var D;
 (function (D) {

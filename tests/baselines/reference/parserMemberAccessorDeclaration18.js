@@ -11,11 +11,11 @@ var C = (function () {
         set: function () {
             var a = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                a[_i - 0] = arguments[_i];
+                a[_i] = arguments[_i];
             }
         },
         enumerable: true,
         configurable: true
     });
     return C;
-})();
+}());

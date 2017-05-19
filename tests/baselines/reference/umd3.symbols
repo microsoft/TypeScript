@@ -1,0 +1,35 @@
+=== tests/cases/conformance/externalModules/a.ts ===
+import * as Foo from './foo';
+>Foo : Symbol(Foo, Decl(a.ts, 0, 6))
+
+Foo.fn();
+>Foo.fn : Symbol(Foo.fn, Decl(foo.d.ts, 0, 21))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 6))
+>fn : Symbol(Foo.fn, Decl(foo.d.ts, 0, 21))
+
+let x: Foo.Thing;
+>x : Symbol(x, Decl(a.ts, 2, 3))
+>Foo : Symbol(Foo, Decl(a.ts, 0, 6))
+>Thing : Symbol(Foo.Thing, Decl(foo.d.ts, 1, 27))
+
+let y: number = x.n;
+>y : Symbol(y, Decl(a.ts, 3, 3))
+>x.n : Symbol(Foo.Thing.n, Decl(foo.d.ts, 2, 24))
+>x : Symbol(x, Decl(a.ts, 2, 3))
+>n : Symbol(Foo.Thing.n, Decl(foo.d.ts, 2, 24))
+
+=== tests/cases/conformance/externalModules/foo.d.ts ===
+export var x: number;
+>x : Symbol(x, Decl(foo.d.ts, 0, 10))
+
+export function fn(): void;
+>fn : Symbol(fn, Decl(foo.d.ts, 0, 21))
+
+export interface Thing { n: typeof x }
+>Thing : Symbol(Thing, Decl(foo.d.ts, 1, 27))
+>n : Symbol(Thing.n, Decl(foo.d.ts, 2, 24))
+>x : Symbol(x, Decl(foo.d.ts, 0, 10))
+
+export as namespace Foo;
+>Foo : Symbol(Foo, Decl(foo.d.ts, 2, 38))
+

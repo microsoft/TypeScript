@@ -24,7 +24,7 @@ x = null;
 
 class C { foo: string }
 >C : Symbol(C, Decl(invalidUndefinedValues.ts, 7, 9))
->foo : Symbol(foo, Decl(invalidUndefinedValues.ts, 9, 9))
+>foo : Symbol(C.foo, Decl(invalidUndefinedValues.ts, 9, 9))
 
 var b: C;
 >b : Symbol(b, Decl(invalidUndefinedValues.ts, 10, 3))
@@ -40,7 +40,7 @@ x = b;
 
 interface I { foo: string }
 >I : Symbol(I, Decl(invalidUndefinedValues.ts, 12, 6))
->foo : Symbol(foo, Decl(invalidUndefinedValues.ts, 14, 13))
+>foo : Symbol(I.foo, Decl(invalidUndefinedValues.ts, 14, 13))
 
 var c: I;
 >c : Symbol(c, Decl(invalidUndefinedValues.ts, 15, 3))

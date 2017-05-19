@@ -7,4 +7,4 @@ var foo = (function () {
         this.bar = {};
     }
     return foo;
-})();
+}());

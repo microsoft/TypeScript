@@ -479,7 +479,7 @@ var TypeScript;
             this.modDeclChain = modDeclChain;
         }
         return AssignScopeContext;
-    })();
+    }());
     TypeScript.AssignScopeContext = AssignScopeContext;
     function pushAssignScope(scope, context, type, classType, fnc) {
         var chain = new ScopeChain(null, context.scopeChain, scope);
@@ -525,7 +525,7 @@ var TypeScript;
             }
         };
         return ScopeSearchFilter;
-    })();
+    }());
     TypeScript.ScopeSearchFilter = ScopeSearchFilter;
     TypeScript.instanceFilter = new ScopeSearchFilter(instanceCompare, instanceFilterStop);
     function preAssignModuleScopes(ast, context) {

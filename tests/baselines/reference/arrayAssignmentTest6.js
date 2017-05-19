@@ -30,6 +30,6 @@ var Test;
             return null;
         };
         return Bug;
-    })();
+    }());
     Test.Bug = Bug;
 })(Test || (Test = {}));

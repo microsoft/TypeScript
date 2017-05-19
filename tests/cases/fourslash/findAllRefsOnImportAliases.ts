@@ -1,29 +1,26 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////export class /*1*/Class{
+////export class [|{| "isWriteAccess": true, "isDefinition": true |}Class|] {
 ////}
 
 //@Filename: b.ts
-////import { /*2*/Class } from "a";
+////import { [|{| "isWriteAccess": true, "isDefinition": true |}Class|] } from "./a";
 ////
-////var c = new /*3*/Class();
+////var c = new [|Class|]();
 
 //@Filename: c.ts
-////export { /*4*/Class } from "a";
+////export { [|{| "isWriteAccess": true, "isDefinition": true |}Class|] } from "./a";
 
-goTo.file("a.ts");
-goTo.marker("1");
-verify.referencesCountIs(4);
-
-goTo.file("b.ts");
-goTo.marker("2");
-verify.referencesCountIs(4);
-
-goTo.marker("3");
-verify.referencesCountIs(4);
-
-goTo.file("c.ts");
-goTo.marker("4");
-verify.referencesCountIs(4);
-
+const ranges = test.ranges();
+const [r0, r1, r2, r3] = ranges;
+const classes = { definition: "class Class", ranges: [r0] };
+const imports = { definition: "import Class", ranges: [r1, r2] };
+const reExports = { definition: "import Class", ranges: [r3] };
+verify.referenceGroups(r0, [classes, imports, reExports]);
+verify.referenceGroups(r1, [imports, classes, reExports]);
+verify.referenceGroups(r2, [
+    { definition: "(alias) new Class(): Class\nimport Class", ranges: [r1, r2] },
+    classes,
+    reExports
+]);

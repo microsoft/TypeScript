@@ -107,23 +107,28 @@ function f2<T, U>(x: T, y: U) {
 
 //// [subtypesOfTypeParameter.js]
 // checking whether other types are subtypes of type parameters
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var C3 = (function () {
     function C3() {
     }
     return C3;
-})();
+}());
 var D1 = (function (_super) {
     __extends(D1, _super);
     function D1() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D1;
-})(C3);
+}(C3));
 function f1(x, y) {
     var r = true ? x : y; // error
     var r = true ? y : x; // error
@@ -132,18 +137,17 @@ var C1 = (function () {
     function C1() {
     }
     return C1;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
     return C2;
-})();
+}());
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 function f() { }
-var f;
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
@@ -151,8 +155,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
-var c;
+}());
 (function (c) {
     c.bar = 1;
 })(c || (c = {}));

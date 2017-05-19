@@ -35,12 +35,12 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 // Below 2 should compile without error 
 var x;
 var y;

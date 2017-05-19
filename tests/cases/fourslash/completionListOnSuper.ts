@@ -17,6 +17,6 @@
 ////}
 
 goTo.marker();
-verify.memberListContains('foo');
-verify.memberListContains('bar');
-verify.memberListCount(2);
+verify.completionListContains('foo');
+verify.completionListContains('bar');
+verify.completionListCount(2);

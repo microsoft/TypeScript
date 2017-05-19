@@ -230,7 +230,7 @@ var Editor;
             return this.insertEntryBefore(entry);
         };
         return List;
-    })();
+    }());
     Editor.List = List;
     var ListFactory = (function () {
         function ListFactory() {
@@ -262,6 +262,6 @@ var Editor;
             }
         };
         return ListFactory;
-    })();
+    }());
     Editor.ListFactory = ListFactory;
 })(Editor || (Editor = {}));

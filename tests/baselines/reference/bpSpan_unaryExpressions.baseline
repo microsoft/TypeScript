@@ -32,14 +32,7 @@
     >:=> (line 5, col 0) to (line 7, col 4)
 5  >typeof (function foo() {
 
-          ~~                                      => Pos: (40 to 41)  SpanInfo: {"start":41,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 5, col 7) to (line 7, col 4)
-5  >typeof (function foo() {
-
-            ~~~~~~~~~~~~~~~~~                     => Pos: (42 to 58)  SpanInfo: {"start":63,"length":8}
+          ~~~~~~~~~~~~~~~~~~~                     => Pos: (40 to 58)  SpanInfo: {"start":63,"length":8}
     >return y
     >:=> (line 6, col 4) to (line 6, col 12)
 --------------------------------
@@ -51,16 +44,9 @@
 --------------------------------
 7  >})();
 
-    ~                                             => Pos: (73 to 73)  SpanInfo: {"start":73,"length":1}
+    ~~~~~~                                        => Pos: (73 to 78)  SpanInfo: {"start":73,"length":1}
     >}
     >:=> (line 7, col 0) to (line 7, col 1)
-7  >})();
-
-     ~~~~~                                        => Pos: (74 to 78)  SpanInfo: {"start":41,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 5, col 7) to (line 7, col 4)
 --------------------------------
 8  >++x;
 

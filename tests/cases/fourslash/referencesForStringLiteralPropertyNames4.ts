@@ -1,8 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-////var x = { "[|someProperty|]": 0 }
+////var x = { "[|{| "isDefinition": true |}someProperty|]": 0 }
 ////x["[|someProperty|]"] = 3;
-////x./*1*/[|someProperty|] = 5;
+////x.[|someProperty|] = 5;
 
-goTo.marker("1");
-test.ranges().forEach(r => verify.referencesAtPositionContains(r));
+const ranges = test.ranges();
+const [r0, r1, r2] = ranges;
+verify.referenceGroups(r0, [{ definition: '(property) "someProperty": number', ranges }]);
+verify.referenceGroups([r1, r2], [
+    { definition: '(property) "someProperty": number', ranges: [r0] },
+    { definition: '(property) "someProperty": number', ranges: [r1, r2] },
+]);

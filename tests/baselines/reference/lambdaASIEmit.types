@@ -1,5 +1,4 @@
 === tests/cases/compiler/lambdaASIEmit.ts ===
-
 function Foo(x: any)
 >Foo : (x: any) => void
 >x : any
@@ -13,5 +12,5 @@ Foo(() =>
 
     // do something
     127);
->127 : number
+>127 : 127
 

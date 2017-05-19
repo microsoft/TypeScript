@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
-
 declare var React: any;
 >React : any
 
@@ -116,45 +115,45 @@ var x =
 >div : any
 
     attr1={
->attr1 : any
+>attr1 : string
 
       "foo" + "bar"
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
     }
     attr2={
->attr2 : any
+>attr2 : string
 
       "foo" + "bar" +
 >"foo" + "bar" +            "baz" + "bug" : string
 >"foo" + "bar" +            "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
       
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
     }
     attr3={
->attr3 : any
+>attr3 : string
 
       "foo" + "bar" +
 >"foo" + "bar" +      "baz" + "bug" : string
 >"foo" + "bar" +      "baz" : string
 >"foo" + "bar" : string
->"foo" : string
->"bar" : string
+>"foo" : "foo"
+>"bar" : "bar"
 
       "baz" + "bug"
->"baz" : string
->"bug" : string
+>"baz" : "baz"
+>"bug" : "bug"
 
       // Extra line here.
     }
     attr4="baz">
->attr4 : any
+>attr4 : string
 
   </div>;
 >div : any
@@ -198,14 +197,14 @@ var x =
     /* a multi-line
        comment */
     attr1="foo">
->attr1 : any
+>attr1 : string
 
     <span // a double-slash comment
 ><span // a double-slash comment      attr2="bar"    /> : any
 >span : any
 
       attr2="bar"
->attr2 : any
+>attr2 : string
 
     />
   </div>
@@ -231,15 +230,18 @@ var x =
 <Component constructor="foo" />;
 ><Component constructor="foo" /> : any
 >Component : any
->constructor : any
+>constructor : string
 
 <Namespace.Component />;
 ><Namespace.Component /> : any
+>Namespace.Component : any
 >Namespace : any
 >Component : any
 
 <Namespace.DeepNamespace.Component />;
 ><Namespace.DeepNamespace.Component /> : any
+>Namespace.DeepNamespace.Component : any
+>Namespace.DeepNamespace : any
 >Namespace : any
 >DeepNamespace : any
 >Component : any
@@ -248,10 +250,11 @@ var x =
 ><Component { ... x } y={2 } z /> : any
 >Component : any
 >x : any
->y : any
+>y : number
 
 ={2 } z />;
->z : any
+>2 : 2
+>z : true
 
 <Component
 ><Component    {...this.props} sound="moo" /> : any
@@ -261,7 +264,7 @@ var x =
 >this.props : any
 >this : any
 >props : any
->sound : any
+>sound : string
 
 <font-face />;
 ><font-face /> : any
@@ -286,27 +289,31 @@ var x =
 ><Component { ...x } y={2} /> : any
 >Component : any
 >x : any
->y : any
+>y : number
+>2 : 2
 
 <Component { ... x } y={2} z />;
 ><Component { ... x } y={2} z /> : any
 >Component : any
 >x : any
->y : any
->z : any
+>y : number
+>2 : 2
+>z : true
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any
 >Component : any
->x : any
+>x : number
+>1 : 1
 >y : any
 
 
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
 ><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
 >Component : any
->x : any
->y : any
+>x : number
+>1 : 1
+>y : string
 >z : any
 >z : any
 ><Child /> : any
@@ -316,16 +323,17 @@ var x =
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
 ><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
 >Component : any
->x : any
+>x : string
 >(z = { y: 2 }, z) : any
 >z = { y: 2 }, z : any
 >z = { y: 2 } : { y: number; }
 >z : any
 >{ y: 2 } : { y: number; }
 >y : number
->2 : number
+>2 : 2
 >z : any
->z : any
+>z : number
+>3 : 3
 >Component : any
 
 

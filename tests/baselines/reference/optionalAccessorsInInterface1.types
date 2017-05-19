@@ -21,11 +21,11 @@ defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
 >{} : {}
->"name" : string
+>"name" : "name"
 >{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number
 >function () { return 5; } : () => number
->5 : number
+>5 : 5
 
 interface MyPropertyDescriptor2 {
 >MyPropertyDescriptor2 : MyPropertyDescriptor2
@@ -49,9 +49,9 @@ defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
 >{} : {}
->"name" : string
+>"name" : "name"
 >{ get: function () { return 5; } } : { get: () => number; }
 >get : () => number
 >function () { return 5; } : () => number
->5 : number
+>5 : 5
 

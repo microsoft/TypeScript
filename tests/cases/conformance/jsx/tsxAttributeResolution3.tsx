@@ -32,10 +32,10 @@ var obj4 = { x: 32, y: 32 };
 var obj5 = { x: 32, y: 32 };
 <test1 x="ok" {...obj5} />
 
-// OK
+// Ok
 var obj6 = { x: 'ok', y: 32, extra: 100 };
 <test1 {...obj6} />
 
-// Error
+// OK (spread override)
 var obj7 = { x: 'foo' };
 <test1 x={32} {...obj7} />

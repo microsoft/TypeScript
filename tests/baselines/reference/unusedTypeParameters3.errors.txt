@@ -1,0 +1,16 @@
+tests/cases/compiler/unusedTypeParameters3.ts(1,15): error TS6133: 'typeparameter1' is declared but never used.
+tests/cases/compiler/unusedTypeParameters3.ts(1,47): error TS6133: 'typeparameter3' is declared but never used.
+
+
+==== tests/cases/compiler/unusedTypeParameters3.ts (2 errors) ====
+    class greeter<typeparameter1, typeparameter2, typeparameter3> {
+                  ~~~~~~~~~~~~~~
+!!! error TS6133: 'typeparameter1' is declared but never used.
+                                                  ~~~~~~~~~~~~~~
+!!! error TS6133: 'typeparameter3' is declared but never used.
+        private x: typeparameter2;
+    
+        public function1() {
+            this.x;
+        }
+    }

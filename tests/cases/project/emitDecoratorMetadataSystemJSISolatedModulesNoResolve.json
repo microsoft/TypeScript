@@ -1,0 +1,6 @@
+{
+    "scenario": "Emit decorator metadata when commonJS and isolatedModules are on",
+    "projectRoot": "tests/cases/projects/decoratorMetadata/emitDecoratorMetadataSystemJSIsolatedModuleNoResolve",
+    "baselineCheck": true,
+    "runTest": true
+}

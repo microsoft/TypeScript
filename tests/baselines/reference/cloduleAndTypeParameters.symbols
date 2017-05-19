@@ -16,7 +16,7 @@ module Foo {
 >Bar : Symbol(Bar, Decl(cloduleAndTypeParameters.ts, 5, 12))
 
     bar(): void;
->bar : Symbol(bar, Decl(cloduleAndTypeParameters.ts, 6, 24))
+>bar : Symbol(Bar.bar, Decl(cloduleAndTypeParameters.ts, 6, 24))
   }
 
   export class Baz {

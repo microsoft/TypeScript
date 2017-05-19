@@ -41,14 +41,14 @@ var MsPortal;
                     this._templateStorage.templateSources[this._name] = value;
                 };
                 return StringTemplate;
-            })();
+            }());
             var TemplateStorage = (function () {
                 function TemplateStorage() {
                     this.templateSources = {};
                     this.templateData = {};
                 }
                 return TemplateStorage;
-            })();
+            }());
             TemplateEngine.TemplateStorage = TemplateStorage;
         })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));
     })(Util = MsPortal.Util || (MsPortal.Util = {}));

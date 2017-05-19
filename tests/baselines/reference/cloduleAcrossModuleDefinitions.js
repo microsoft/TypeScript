@@ -24,10 +24,9 @@ var A;
         B.prototype.foo = function () { };
         B.bar = function () { };
         return B;
-    })();
+    }());
     A.B = B;
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {

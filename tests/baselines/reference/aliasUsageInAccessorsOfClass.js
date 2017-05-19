@@ -6,14 +6,14 @@ export class Model {
 }
 
 //// [aliasUsage1_moduleA.ts]
-import Backbone = require("aliasUsage1_backbone");
+import Backbone = require("./aliasUsage1_backbone");
 export class VisualizationModel extends Backbone.Model {
     // interesting stuff here
 }
 
 //// [aliasUsage1_main.ts]
-import Backbone = require("aliasUsage1_backbone");
-import moduleA = require("aliasUsage1_moduleA");
+import Backbone = require("./aliasUsage1_backbone");
+import moduleA = require("./aliasUsage1_moduleA");
 interface IHasVisualizationModel {
     VisualizationModel: typeof Backbone.Model;
 }
@@ -28,29 +28,40 @@ class C2 {
 }
 
 //// [aliasUsage1_backbone.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var Model = (function () {
     function Model() {
     }
     return Model;
-})();
+}());
 exports.Model = Model;
 //// [aliasUsage1_moduleA.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Backbone = require("aliasUsage1_backbone");
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var Backbone = require("./aliasUsage1_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
-})(Backbone.Model);
+}(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsage1_main.js]
-var moduleA = require("aliasUsage1_moduleA");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var moduleA = require("./aliasUsage1_moduleA");
 var C2 = (function () {
     function C2() {
     }
@@ -65,4 +76,4 @@ var C2 = (function () {
         configurable: true
     });
     return C2;
-})();
+}());

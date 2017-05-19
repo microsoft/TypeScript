@@ -46,11 +46,11 @@ module Bugs {
 >push : (...items: IToken[]) => number
 >{ startIndex: 1, type: '', bracket: 3 } : { startIndex: number; type: string; bracket: number; }
 >startIndex : number
->1 : number
+>1 : 1
 >type : string
->'' : string
+>'' : ""
 >bracket : number
->3 : number
+>3 : 3
 
                                 tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }));
 >tokens.push(<IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 })) : number
@@ -62,14 +62,14 @@ module Bugs {
 >({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : { startIndex: number; type: string; bracket: number; state: null; length: number; }
 >{ startIndex: 1, type: '', bracket: 3, state: null, length: 10 } : { startIndex: number; type: string; bracket: number; state: null; length: number; }
 >startIndex : number
->1 : number
+>1 : 1
 >type : string
->'' : string
+>'' : ""
 >bracket : number
->3 : number
+>3 : 3
 >state : null
 >null : null
 >length : number
->10 : number
+>10 : 10
                 }
 }

@@ -20,4 +20,4 @@ var DebugClass = (function () {
         return true;
     };
     return DebugClass;
-})();
+}());

@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedGetterInClass.ts ===
+class Employee {
+>Employee : Employee
+
+    private _fullName: string;
+>_fullName : string
+
+    get fullName(): string {
+>fullName : string
+
+        return this._fullName;
+>this._fullName : string
+>this : this
+>_fullName : string
+    }
+}

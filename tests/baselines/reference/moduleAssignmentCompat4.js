@@ -25,7 +25,7 @@ var A;
             function C() {
             }
             return C;
-        })();
+        }());
     })(M = A.M || (A.M = {}));
 })(A || (A = {}));
 var B;
@@ -36,7 +36,7 @@ var B;
             function D() {
             }
             return D;
-        })();
+        }());
         M.D = D;
     })(M = B.M || (B.M = {}));
 })(B || (B = {}));

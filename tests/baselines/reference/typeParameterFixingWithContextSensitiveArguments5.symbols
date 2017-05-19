@@ -23,13 +23,13 @@ function f<T, U>(t1: T, u1: U, pf1: (u2: U) => T, pf2: (t2: T) => U): [T, U] { r
 
 interface A { a: A; }
 >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 0, 102))
->a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 1, 13))
+>a : Symbol(A.a, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 1, 13))
 >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 0, 102))
 
 interface B extends A { b: any; }
 >B : Symbol(B, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 1, 21))
 >A : Symbol(A, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 0, 102))
->b : Symbol(b, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 2, 23))
+>b : Symbol(B.b, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 2, 23))
 
 var a: A, b: B;
 >a : Symbol(a, Decl(typeParameterFixingWithContextSensitiveArguments5.ts, 4, 3))

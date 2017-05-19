@@ -1,13 +1,16 @@
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(10,1): error TS2511: Cannot create an instance of the abstract class 'B'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(13,5): error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+  Cannot assign an abstract constructor type to a non-abstract constructor type.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(17,5): error TS2511: Cannot create an instance of the abstract class 'B'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(21,1): error TS2511: Cannot create an instance of the abstract class 'B'.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(23,15): error TS2449: Class 'C' used before its declaration.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(26,7): error TS2515: Non-abstract class 'C' does not implement inherited abstract member 'bar' from class 'B'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2512: Overload signatures must all be abstract or not abstract.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(46,5): error TS2512: Overload signatures must all be abstract or non-abstract.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts(50,5): error TS1244: Abstract methods can only appear within an abstract class.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts (7 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts (9 errors) ====
     class A {
         // ...
     }
@@ -23,6 +26,9 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     
     var BB: typeof B = B;
     var AA: typeof A = BB; // error, AA is not of abstract type.
+        ~~
+!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
     new AA;
     
     function constructB(Factory : typeof B) {
@@ -37,6 +43,8 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 !!! error TS2511: Cannot create an instance of the abstract class 'B'.
     
     var x : any = C;
+                  ~
+!!! error TS2449: Class 'C' used before its declaration.
     new x; // okay -- undefined behavior at runtime
     
     class C extends B { } // error -- not declared abstract
@@ -65,7 +73,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
         ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
         ~~~
-!!! error TS2512: Overload signatures must all be abstract or not abstract.
+!!! error TS2512: Overload signatures must all be abstract or non-abstract.
     }
     
     class H { // error -- not declared abstract

@@ -1,0 +1,34 @@
+tests/cases/conformance/jsx/file.tsx(9,33): error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
+  Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
+    Property 'b' is missing in type '{ a: number; }'.
+tests/cases/conformance/jsx/file.tsx(10,33): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { b: number; a: {}; }'.
+  Type '{ b: number; }' is not assignable to type 'IntrinsicAttributes & { b: number; a: {}; }'.
+    Type '{ b: number; }' is not assignable to type '{ b: number; a: {}; }'.
+      Type 'T' is not assignable to type '{ b: number; a: {}; }'.
+        Type '{ b: number; }' is not assignable to type '{ b: number; a: {}; }'.
+          Property 'a' is missing in type '{ b: number; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react')
+    
+    declare function OverloadComponent<U>(): JSX.Element;
+    declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
+    declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+    
+    // Error
+    function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
+        let a0 = <OverloadComponent a={arg1.b}/>
+                                    ~~~~~~~~~~
+!!! error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
+!!! error TS2322:   Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
+!!! error TS2322:     Property 'b' is missing in type '{ a: number; }'.
+        let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
+                                    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { b: number; a: {}; }'.
+!!! error TS2322:   Type '{ b: number; }' is not assignable to type 'IntrinsicAttributes & { b: number; a: {}; }'.
+!!! error TS2322:     Type '{ b: number; }' is not assignable to type '{ b: number; a: {}; }'.
+!!! error TS2322:       Type 'T' is not assignable to type '{ b: number; a: {}; }'.
+!!! error TS2322:         Type '{ b: number; }' is not assignable to type '{ b: number; a: {}; }'.
+!!! error TS2322:           Property 'a' is missing in type '{ b: number; }'.
+    }

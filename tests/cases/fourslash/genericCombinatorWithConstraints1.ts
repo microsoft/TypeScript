@@ -5,9 +5,7 @@
 ////    var /*2*/xs2 = source.map((x: T, a, b): U => { return null }); // any[] 
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('(local var) xs: U[]');
-
-goTo.marker('2');
-verify.quickInfoIs('(local var) xs2: U[]');
-
+verify.quickInfos({
+    1: "(local var) xs: U[]",
+    2: "(local var) xs2: U[]"
+});

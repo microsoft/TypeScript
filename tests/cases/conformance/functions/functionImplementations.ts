@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // FunctionExpression with no return type annotation and no return statement returns void
 var v: void = function () { } ();
 

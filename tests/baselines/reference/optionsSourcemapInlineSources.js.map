@@ -1,0 +1,2 @@
+//// [optionsSourcemapInlineSources.js.map]
+{"version":3,"file":"optionsSourcemapInlineSources.js","sourceRoot":"","sources":["optionsSourcemapInlineSources.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,EAAE,CAAC","sourcesContent":["var a = 10;"]}

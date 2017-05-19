@@ -1,12 +1,4 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of18.ts ===
-var v: string;
->v : string
-
-for (v of new StringIterator) { } // Should succeed
->v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
-
 class StringIterator {
 >StringIterator : StringIterator
 
@@ -18,11 +10,11 @@ class StringIterator {
 
             value: "",
 >value : string
->"" : string
+>"" : ""
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -32,6 +24,15 @@ class StringIterator {
 >iterator : symbol
 
         return this;
->this : StringIterator
+>this : this
     }
 }
+
+var v: string;
+>v : string
+
+for (v of new StringIterator) { } // Should succeed
+>v : string
+>new StringIterator : StringIterator
+>StringIterator : typeof StringIterator
+

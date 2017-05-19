@@ -97,13 +97,13 @@ var m1;
         C1_public.prototype.f1 = function () {
         };
         return C1_public;
-    })();
+    }());
     m1.C1_public = C1_public;
     var C2_private = (function () {
         function C2_private() {
         }
         return C2_private;
-    })();
+    }());
     var C3_public = (function () {
         function C3_public() {
         }
@@ -144,7 +144,7 @@ var m1;
             configurable: true
         });
         return C3_public;
-    })();
+    }());
     m1.C3_public = C3_public;
     var C4_private = (function () {
         function C4_private() {
@@ -186,13 +186,13 @@ var m1;
             configurable: true
         });
         return C4_private;
-    })();
+    }());
 })(m1 || (m1 = {}));
 var C6_public = (function () {
     function C6_public() {
     }
     return C6_public;
-})();
+}());
 var C7_public = (function () {
     function C7_public() {
     }
@@ -215,4 +215,4 @@ var C7_public = (function () {
         configurable: true
     });
     return C7_public;
-})();
+}());

@@ -5,10 +5,10 @@ import Drawing = require('./Drawing');
 var addr = new Drawing.Math.Adder();
 
 // @Filename: Drawing.ts
-export import Math = require('Math/Math')
+export import Math = require('./Math/Math')
 
 // @Filename: Math/Math.ts
-import Adder = require('Math/Adder');
+import Adder = require('./Adder');
 
 var Math = {
     Adder:Adder

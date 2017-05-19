@@ -58,7 +58,6 @@ var B;
 (function (B) {
     var A = 12;
 })(B || (B = {}));
-var B;
 (function (B_1) {
     // re-opened module with colliding name
     // this should add an underscore.
@@ -66,7 +65,7 @@ var B;
         function B() {
         }
         return B;
-    })();
+    }());
 })(B || (B = {}));
 var X;
 (function (X_1) {
@@ -86,11 +85,11 @@ var Y;
 (function (Y_2) {
     var Y;
     (function (Y_3) {
+        var Y;
         (function (Y) {
             Y[Y["Red"] = 0] = "Red";
             Y[Y["Blue"] = 1] = "Blue";
-        })(Y_3.Y || (Y_3.Y = {}));
-        var Y = Y_3.Y;
+        })(Y = Y_3.Y || (Y_3.Y = {}));
     })(Y = Y_2.Y || (Y_2.Y = {}));
 })(Y || (Y = {}));
 // no collision, since interface doesn't

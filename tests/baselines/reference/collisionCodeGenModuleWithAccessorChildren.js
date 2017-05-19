@@ -60,9 +60,8 @@ var M;
             configurable: true
         });
         return c;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_2) {
     var d = (function () {
         function d() {
@@ -76,9 +75,8 @@ var M;
             configurable: true
         });
         return d;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M) {
     var e = (function () {
         function e() {
@@ -91,9 +89,8 @@ var M;
             configurable: true
         });
         return e;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_3) {
     var f = (function () {
         function f() {
@@ -107,9 +104,8 @@ var M;
             configurable: true
         });
         return f;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M) {
     var e = (function () {
         function e() {
@@ -122,5 +118,5 @@ var M;
             configurable: true
         });
         return e;
-    })();
+    }());
 })(M || (M = {}));

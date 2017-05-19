@@ -1,5 +1,4 @@
 //// [objectTypeWithStringNamedNumericProperty.ts]
-
 // string named numeric properties are legal and distinct when indexed by string values
 // indexed numerically the value is converted to a number
 // no errors expected below
@@ -135,7 +134,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var r1 = c['0.1'];
 var r2 = c['.1'];

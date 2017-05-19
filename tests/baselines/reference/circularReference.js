@@ -34,7 +34,9 @@ export module M1 {
 
 
 //// [foo1.js]
-var foo2 = require('./foo2');
+"use strict";
+exports.__esModule = true;
+var foo2 = require("./foo2");
 var M1;
 (function (M1) {
     var C1 = (function () {
@@ -44,11 +46,13 @@ var M1;
             this.m1.x = 20; // Error
         }
         return C1;
-    })();
+    }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));
 //// [foo2.js]
-var foo1 = require('./foo1');
+"use strict";
+exports.__esModule = true;
+var foo1 = require("./foo1");
 var M1;
 (function (M1) {
     var C1 = (function () {
@@ -61,6 +65,6 @@ var M1;
             tmp.x = 20; // Error			
         }
         return C1;
-    })();
+    }());
     M1.C1 = C1;
 })(M1 = exports.M1 || (exports.M1 = {}));

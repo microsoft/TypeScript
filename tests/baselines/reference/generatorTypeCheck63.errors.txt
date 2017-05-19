@@ -1,0 +1,62 @@
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,14): error TS2322: Type '(a: State | 1) => IterableIterator<State | 1>' is not assignable to type 'Strategy<State>'.
+  Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<State>'.
+    Type 'State | 1' is not assignable to type 'State'.
+      Type '1' is not assignable to type 'State'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(29,70): error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,42): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'State' is not a valid type argument because it is not a supertype of candidate '1'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,14): error TS2322: Type '(a: State | 1) => IterableIterator<State | 1>' is not assignable to type 'Strategy<State>'.
+
+
+==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts (4 errors) ====
+    export interface StrategicState {
+        lastStrategyApplied?: string;
+    }
+    
+    export function strategy<T extends StrategicState>(stratName: string, gen: (a: T) => IterableIterator<T | undefined>): (a: T) => IterableIterator<T | undefined> {
+        return function*(state) {
+            for (const next of gen(state)) {
+                if (next) {
+                    next.lastStrategyApplied = stratName;
+                }
+                yield next;
+            }
+        }
+    }
+    
+    export interface Strategy<T> {
+        (a: T): IterableIterator<T | undefined>;
+    }
+    
+    export interface State extends StrategicState {
+        foo: number;
+    }
+    
+    export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
+                 ~~~~~~~
+!!! error TS2322: Type '(a: State | 1) => IterableIterator<State | 1>' is not assignable to type 'Strategy<State>'.
+!!! error TS2322:   Type 'IterableIterator<State | 1>' is not assignable to type 'IterableIterator<State>'.
+!!! error TS2322:     Type 'State | 1' is not assignable to type 'State'.
+!!! error TS2322:       Type '1' is not assignable to type 'State'.
+        yield 1;
+        return state;
+    });
+    
+    export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
+                                                                         ~
+!!! error TS7025: Generator implicitly has type 'IterableIterator<any>' because it does not yield any values. Consider supplying a return type.
+    });
+    
+    export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
+                                             ~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'State' is not a valid type argument because it is not a supertype of candidate '1'.
+        return 1;
+    });
+    
+    export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
+                 ~~~~~~~~
+!!! error TS2322: Type '(a: State | 1) => IterableIterator<State | 1>' is not assignable to type 'Strategy<State>'.
+        yield state;
+        return 1;
+    });

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/recursiveUnionTypeInference.ts ===
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(recursiveUnionTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
+
+    x: T;
+>x : Symbol(Foo.x, Decl(recursiveUnionTypeInference.ts, 0, 18))
+>T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 0, 14))
+}
+
+function bar<T>(x: Foo<T> | string): T {
+>bar : Symbol(bar, Decl(recursiveUnionTypeInference.ts, 2, 1))
+>T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 4, 13))
+>x : Symbol(x, Decl(recursiveUnionTypeInference.ts, 4, 16))
+>Foo : Symbol(Foo, Decl(recursiveUnionTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 4, 13))
+>T : Symbol(T, Decl(recursiveUnionTypeInference.ts, 4, 13))
+
+    return bar(x);
+>bar : Symbol(bar, Decl(recursiveUnionTypeInference.ts, 2, 1))
+>x : Symbol(x, Decl(recursiveUnionTypeInference.ts, 4, 16))
+}
+

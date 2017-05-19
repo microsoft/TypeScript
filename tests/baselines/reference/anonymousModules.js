@@ -16,10 +16,10 @@ module {
 //// [anonymousModules.js]
 module;
 {
-    exports.foo = 1;
+    export var foo = 1;
     module;
     {
-        exports.bar = 1;
+        export var bar = 1;
     }
     var bar = 2;
     module;

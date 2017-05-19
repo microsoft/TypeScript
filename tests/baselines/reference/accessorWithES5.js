@@ -1,5 +1,4 @@
 //// [accessorWithES5.ts]
-
 class C {
     get x() {
         return 1;
@@ -31,7 +30,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -42,7 +41,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 var x = {
     get a() { return 1; }
 };

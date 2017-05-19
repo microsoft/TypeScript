@@ -11,43 +11,37 @@ function foo(x: number | string) {
         : x++; // number
 }
 function foo2(x: number | string) {
-    // x is assigned in the if true branch, the type is not narrowed
     return typeof x === "string"
-        ? (x = 10 && x)// string | number
-        : x; // string | number
+        ? ((x = "hello") && x) // string
+        : x; // number
 }
 function foo3(x: number | string) {
-    // x is assigned in the if false branch, the type is not narrowed
-    // even though assigned using same type as narrowed expression
     return typeof x === "string"
-        ? (x = "Hello" && x) // string | number
-        : x; // string | number
+        ? ((x = 10) && x) // number
+        : x; // number
 }
 function foo4(x: number | string) {
-    // false branch updates the variable - so here it is not number
-    // even though assigned using same type as narrowed expression
     return typeof x === "string"
-        ? x // string | number
-        : (x = 10 && x); // string | number
+        ? x // string
+        : ((x = 10) && x); // number
 }
 function foo5(x: number | string) {
-    // false branch updates the variable - so here it is not number
     return typeof x === "string"
-        ? x // string | number
-        : (x = "hello" && x); // string | number
+        ? x // string
+        : ((x = "hello") && x); // string
 }
 function foo6(x: number | string) {
     // Modify in both branches
     return typeof x === "string"
-        ? (x = 10 && x) // string | number
-        : (x = "hello" && x); // string | number
+        ? ((x = 10) && x) // number
+        : ((x = "hello") && x); // string
 }
 function foo7(x: number | string | boolean) {
     return typeof x === "string"
-        ? x === "hello" // string
+        ? x === "hello" // boolean
         : typeof x === "boolean"
         ? x // boolean
-        : x == 10; // number
+        : x == 10; // boolean
 }
 function foo8(x: number | string | boolean) {
     var b: number | boolean;
@@ -56,14 +50,14 @@ function foo8(x: number | string | boolean) {
         : ((b = x) && //  number | boolean
         (typeof x === "boolean"
         ? x // boolean
-        : x == 10)); // number
+        : x == 10)); // boolean
 }
 function foo9(x: number | string) {
     var y = 10;
     // usage of x or assignment to separate variable shouldn't cause narrowing of type to stop
     return typeof x === "string"
-        ? ((y = x.length) && x === "hello") // string
-        : x === 10; // number
+        ? ((y = x.length) && x === "hello") // boolean
+        : x === 10; // boolean
 }
 function foo10(x: number | string | boolean) {
     // Mixing typeguards
@@ -76,22 +70,20 @@ function foo10(x: number | string | boolean) {
 }
 function foo11(x: number | string | boolean) {
     // Mixing typeguards
-    // Assigning value to x deep inside another guard stops narrowing of type too
     var b: number | boolean | string;
     return typeof x === "string"
-        ? x // number | boolean | string - changed in the false branch
-        : ((b = x) // x is number | boolean | string - because the assignment changed it
+        ? x // string
+        : ((b = x) // x is number | boolean
         && typeof x === "number"
         && (x = 10) // assignment to x
-        && x); // x is number | boolean | string
+        && x); // x is number
 }
 function foo12(x: number | string | boolean) {
     // Mixing typeguards
-    // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     var b: number | boolean | string;
     return typeof x === "string"
-        ? (x = 10 && x.toString().length) // number | boolean | string - changed here
-        : ((b = x) // x is number | boolean | string  - changed in true branch
+        ? ((x = 10) && x.toString().length) // number
+        : ((b = x) // x is number | boolean
         && typeof x === "number"
         && x); // x is number
 }

@@ -1,5 +1,5 @@
-//@module: commonjs
-//@declaration: true
+// @module: commonjs
+// @declaration: true
 // @Filename: unusedImportDeclaration_testerB.ts
 class TesterB {
     me: string;
@@ -7,7 +7,7 @@ class TesterB {
 export = TesterB;
 
 // @Filename: unusedImportDeclaration_testerA.ts
-import B = require("unusedImportDeclaration_testerB");
+import B = require("./unusedImportDeclaration_testerB");
 var thingy: B = {
     me: "A"
 };

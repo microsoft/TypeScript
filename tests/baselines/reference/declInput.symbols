@@ -1,0 +1,28 @@
+=== tests/cases/compiler/declInput.ts ===
+interface bar {
+>bar : Symbol(bar, Decl(declInput.ts, 0, 0), Decl(declInput.ts, 2, 1))
+
+}
+
+class bar {
+>bar : Symbol(bar, Decl(declInput.ts, 0, 0), Decl(declInput.ts, 2, 1))
+
+  public f() { return ''; }
+>f : Symbol(bar.f, Decl(declInput.ts, 4, 11))
+
+  public g() { return {a: <bar>null, b: undefined, c: void 4 }; }
+>g : Symbol(bar.g, Decl(declInput.ts, 5, 27))
+>a : Symbol(a, Decl(declInput.ts, 6, 23))
+>bar : Symbol(bar, Decl(declInput.ts, 0, 0), Decl(declInput.ts, 2, 1))
+>b : Symbol(b, Decl(declInput.ts, 6, 36))
+>undefined : Symbol(undefined)
+>c : Symbol(c, Decl(declInput.ts, 6, 50))
+
+  public h(x = 4, y = null, z = '') { x++; }
+>h : Symbol(bar.h, Decl(declInput.ts, 6, 65))
+>x : Symbol(x, Decl(declInput.ts, 7, 11))
+>y : Symbol(y, Decl(declInput.ts, 7, 17))
+>z : Symbol(z, Decl(declInput.ts, 7, 27))
+>x : Symbol(x, Decl(declInput.ts, 7, 11))
+}
+

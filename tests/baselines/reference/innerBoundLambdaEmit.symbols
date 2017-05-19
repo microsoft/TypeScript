@@ -9,11 +9,11 @@ module M {
 >bar : Symbol(bar, Decl(innerBoundLambdaEmit.ts, 3, 7))
 }
 interface Array<T> {
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11), Decl(innerBoundLambdaEmit.ts, 4, 1))
->T : Symbol(T, Decl(lib.d.ts, 1007, 16), Decl(innerBoundLambdaEmit.ts, 5, 16))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(innerBoundLambdaEmit.ts, 4, 1))
+>T : Symbol(T, Decl(lib.d.ts, --, --), Decl(innerBoundLambdaEmit.ts, 5, 16))
 
     toFoo(): M.Foo
->toFoo : Symbol(toFoo, Decl(innerBoundLambdaEmit.ts, 5, 20))
+>toFoo : Symbol(Array.toFoo, Decl(innerBoundLambdaEmit.ts, 5, 20))
 >M : Symbol(M, Decl(innerBoundLambdaEmit.ts, 0, 0))
 >Foo : Symbol(M.Foo, Decl(innerBoundLambdaEmit.ts, 0, 10))
 }

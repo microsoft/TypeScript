@@ -1,0 +1,123 @@
+=== tests/cases/compiler/file1.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+import * as MyModule from "./mymodule";
+>MyModule : typeof MyModule
+
+export class BrokenClass {
+>BrokenClass : BrokenClass
+
+  constructor() {}
+
+  public brokenMethod(field: string, value: string) {
+>brokenMethod : (field: string, value: string) => Promise<MyModule.MyModel[]>
+>field : string
+>value : string
+
+  return new Promise<Array<MyModule.MyModel>>((resolve, reject) => {
+>new Promise<Array<MyModule.MyModel>>((resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    }) : Promise<MyModule.MyModel[]>
+>Promise : PromiseConstructor
+>Array : T[]
+>MyModule : any
+>MyModel : MyModule.MyModel
+>(resolve, reject) => {    let result: Array<MyModule.MyModel> = [];    let populateItems = (order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    };    return Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      });    } : (resolve: (value?: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void, reject: (reason?: any) => void) => Promise<void>
+>resolve : (value?: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
+>reject : (reason?: any) => void
+
+    let result: Array<MyModule.MyModel> = [];
+>result : MyModule.MyModel[]
+>Array : T[]
+>MyModule : any
+>MyModel : MyModule.MyModel
+>[] : undefined[]
+
+    let populateItems = (order) => {
+>populateItems : (order: any) => Promise<{}>
+>(order) => {      return new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      });    } : (order: any) => Promise<{}>
+>order : any
+
+      return new Promise((resolve, reject) => {
+>new Promise((resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      }) : Promise<{}>
+>Promise : PromiseConstructor
+>(resolve, reject) => {        this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          });      } : (resolve: (value?: {} | PromiseLike<{}>) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: {} | PromiseLike<{}>) => void
+>reject : (reason?: any) => void
+
+        this.doStuff(order.id)
+>this.doStuff(order.id)          .then((items) => {            order.items = items;            resolve(order);          }) : Promise<void>
+>this.doStuff(order.id)          .then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>this.doStuff(order.id) : Promise<void>
+>this.doStuff : (id: number) => Promise<void>
+>this : this
+>doStuff : (id: number) => Promise<void>
+>order.id : any
+>order : any
+>id : any
+
+          .then((items) => {
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>(items) => {            order.items = items;            resolve(order);          } : (items: void) => void
+>items : void
+
+            order.items = items;
+>order.items = items : void
+>order.items : any
+>order : any
+>items : any
+>items : void
+
+            resolve(order);
+>resolve(order) : void
+>resolve : (value?: {} | PromiseLike<{}>) => void
+>order : any
+
+          });
+      });
+    };
+
+    return Promise.all(result.map(populateItems))
+>Promise.all(result.map(populateItems))      .then((orders: Array<MyModule.MyModel>) => {        resolve(orders);      }) : Promise<void>
+>Promise.all(result.map(populateItems))      .then : <TResult1 = {}[], TResult2 = never>(onfulfilled?: (value: {}[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>Promise.all(result.map(populateItems)) : Promise<{}[]>
+>Promise.all : { <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>; <T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>; <T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>; <T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>; <T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>; <T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<[T1, T2, T3, T4]>; <T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>; <T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>; <T>(values: (T | PromiseLike<T>)[]): Promise<T[]>; <TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>; }
+>Promise : PromiseConstructor
+>all : { <T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>, T10 | PromiseLike<T10>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]>; <T1, T2, T3, T4, T5, T6, T7, T8, T9>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>, T9 | PromiseLike<T9>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8, T9]>; <T1, T2, T3, T4, T5, T6, T7, T8>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>, T8 | PromiseLike<T8>]): Promise<[T1, T2, T3, T4, T5, T6, T7, T8]>; <T1, T2, T3, T4, T5, T6, T7>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>, T7 | PromiseLike<T7>]): Promise<[T1, T2, T3, T4, T5, T6, T7]>; <T1, T2, T3, T4, T5, T6>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>, T6 | PromiseLike<T6>]): Promise<[T1, T2, T3, T4, T5, T6]>; <T1, T2, T3, T4, T5>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>, T5 | PromiseLike<T5>]): Promise<[T1, T2, T3, T4, T5]>; <T1, T2, T3, T4>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>, T4 | PromiseLike<T4>]): Promise<[T1, T2, T3, T4]>; <T1, T2, T3>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>, T3 | PromiseLike<T3>]): Promise<[T1, T2, T3]>; <T1, T2>(values: [T1 | PromiseLike<T1>, T2 | PromiseLike<T2>]): Promise<[T1, T2]>; <T>(values: (T | PromiseLike<T>)[]): Promise<T[]>; <TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>; }
+>result.map(populateItems) : Promise<{}>[]
+>result.map : { <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): U[]; <U>(callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): U[]; }
+>result : MyModule.MyModel[]
+>map : { <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): [U, U]; <U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [MyModule.MyModel, MyModule.MyModel], callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U): U[]; <U>(callbackfn: (this: void, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: MyModule.MyModel, index: number, array: MyModule.MyModel[]) => U, thisArg: Z): U[]; }
+>populateItems : (order: any) => Promise<{}>
+
+      .then((orders: Array<MyModule.MyModel>) => {
+>then : <TResult1 = {}[], TResult2 = never>(onfulfilled?: (value: {}[]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>(orders: Array<MyModule.MyModel>) => {        resolve(orders);      } : (orders: MyModule.MyModel[]) => void
+>orders : MyModule.MyModel[]
+>Array : T[]
+>MyModule : any
+>MyModel : MyModule.MyModel
+
+        resolve(orders);
+>resolve(orders) : void
+>resolve : (value?: MyModule.MyModel[] | PromiseLike<MyModule.MyModel[]>) => void
+>orders : MyModule.MyModel[]
+
+      });
+    });
+  }
+
+  public async doStuff(id: number) {
+>doStuff : (id: number) => Promise<void>
+>id : number
+
+    return;
+  }
+}
+
+=== tests/cases/compiler/mymodule.ts ===
+export interface MyModel {
+>MyModel : MyModel
+
+    id: number;
+>id : number
+}

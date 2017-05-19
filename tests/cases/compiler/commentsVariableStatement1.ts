@@ -1,5 +1,5 @@
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 /** Comment */
 var v = 1;

@@ -6,7 +6,7 @@ class C {
 >C : Symbol(C, Decl(additionOperatorWithAnyAndEveryType.ts, 0, 18))
 
     public a: string;
->a : Symbol(a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
+>a : Symbol(C.a, Decl(additionOperatorWithAnyAndEveryType.ts, 1, 9))
 
     static foo() { }
 >foo : Symbol(C.foo, Decl(additionOperatorWithAnyAndEveryType.ts, 2, 21))
@@ -35,7 +35,7 @@ var d: string;
 
 var e: Object;
 >e : Symbol(e, Decl(additionOperatorWithAnyAndEveryType.ts, 12, 3))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 // any as left operand, result is type Any except plusing string
 var r1 = a + a;

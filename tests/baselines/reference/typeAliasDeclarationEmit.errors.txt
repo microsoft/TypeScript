@@ -1,0 +1,9 @@
+tests/cases/compiler/typeAliasDeclarationEmit.ts(3,37): error TS2314: Generic type 'callback' requires 1 type argument(s).
+
+
+==== tests/cases/compiler/typeAliasDeclarationEmit.ts (1 errors) ====
+    export type callback<T> = () => T;
+    
+    export type CallbackArray<T extends callback> = () => T;
+                                        ~~~~~~~~
+!!! error TS2314: Generic type 'callback' requires 1 type argument(s).

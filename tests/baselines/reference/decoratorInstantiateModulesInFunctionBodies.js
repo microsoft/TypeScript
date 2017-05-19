@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
 
 //// [a.ts]
-
 // from #3108
 export var test = 'abc';
 
@@ -22,18 +21,20 @@ class Wat {
 }
 
 //// [a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 // from #3108
 exports.test = 'abc';
 //// [b.js]
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
-    switch (arguments.length) {
-        case 2: return decorators.reduceRight(function(o, d) { return (d && d(o)) || o; }, target);
-        case 3: return decorators.reduceRight(function(o, d) { return (d && d(target, key)), void 0; }, void 0);
-        case 4: return decorators.reduceRight(function(o, d) { return (d && d(target, key, o)) || o; }, desc);
-    }
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var a_1 = require('./a');
+Object.defineProperty(exports, "__esModule", { value: true });
+var a_1 = require("./a");
 function filter(handler) {
     return function (target, propertyKey) {
         // ...
@@ -45,9 +46,8 @@ var Wat = (function () {
     Wat.whatever = function () {
         // ...
     };
-    Object.defineProperty(Wat, "whatever",
-        __decorate([
-            filter(function () { return a_1.test == 'abc'; })
-        ], Wat, "whatever", Object.getOwnPropertyDescriptor(Wat, "whatever")));
     return Wat;
-})();
+}());
+__decorate([
+    filter(function () { return a_1.test == 'abc'; })
+], Wat, "whatever", null);

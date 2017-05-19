@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,3): error TS1031: 'declare' modifier cannot appear on a class element.
-tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,25): error TS1184: An implementation cannot be declared in ambient contexts.
+tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts(2,25): error TS1183: An implementation cannot be declared in ambient contexts.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstructorDeclaration4.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/parser/ecmascript5/ConstructorDeclarations/parserConstru
       ~~~~~~~
 !!! error TS1031: 'declare' modifier cannot appear on a class element.
                             ~
-!!! error TS1184: An implementation cannot be declared in ambient contexts.
+!!! error TS1183: An implementation cannot be declared in ambient contexts.
     }

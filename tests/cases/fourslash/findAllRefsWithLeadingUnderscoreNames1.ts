@@ -1,18 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public [|_bar|]() { return 0; }
+////    public [|{| "isWriteAccess": true, "isDefinition": true |}_bar|]() { return 0; }
 ////}
 ////
 ////var x: Foo;
 ////x.[|_bar|];
 
-
-test.ranges().forEach(r1 => {
-    goTo.position(r1.start);
-    verify.referencesCountIs(2);
-
-    test.ranges().forEach(r2 => {
-        verify.referencesAtPositionContains(r2);
-    });
-});
+const ranges = test.ranges();
+const [r0, r1] = ranges;
+verify.referenceGroups(r0, [{ definition: "(method) Foo._bar(): number", ranges }]);
+verify.referenceGroups(r1, [
+    { definition: "(method) Foo._bar(): number", ranges: [r0] },
+    { definition: "(method) Foo._bar(): number", ranges: [r1] }
+]);

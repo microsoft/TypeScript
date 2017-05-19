@@ -1,0 +1,31 @@
+=== tests/cases/compiler/commentsArgumentsOfCallExpression1.ts ===
+function foo(/*c1*/ x: any) { }
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+>x : Symbol(x, Decl(commentsArgumentsOfCallExpression1.ts, 0, 13))
+
+foo(/*c2*/ 1);
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+foo(/*c3*/ function () { });
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+foo(
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+    /*c4*/
+    () => { });
+foo(
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+    /*c5*/
+    /*c6*/
+    () => { });
+foo(/*c7*/
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+    () => { });
+foo(
+>foo : Symbol(foo, Decl(commentsArgumentsOfCallExpression1.ts, 0, 0))
+
+    /*c7*/
+    /*c8*/() => { });

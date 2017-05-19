@@ -1,14 +1,14 @@
 /// <reference path='fourslash.ts' />
 
-/////*interfaceDefinition*/interface IFoo { method1(): number; }
+////interface /*interfaceDefinition*/IFoo { method1(): number; }
 ////
-/////*classDefinition*/class Foo implements IFoo {
+////class /*classDefinition*/Foo implements IFoo {
 ////    public method1(): number { return 0; }
 ////}
 ////
-/////*enumDefinition*/enum Enum { value1, value2 };
+////enum /*enumDefinition*/Enum { value1, value2 };
 ////
-/////*selfDefinition*/class Bar {
+////class /*selfDefinition*/Bar {
 ////    public _interface: IFo/*interfaceReference*/o = new Fo/*classReferenceInInitializer*/o();
 ////    public _class: Fo/*classReference*/o = new Foo();
 ////    public _list: IF/*interfaceReferenceInList*/oo[]=[];
@@ -19,35 +19,9 @@
 ////    }
 ////}
 
-
-goTo.marker("interfaceReference");
-goTo.definition();
-verify.caretAtMarker("interfaceDefinition");
-
-goTo.marker("interfaceReferenceInList");
-goTo.definition();
-verify.caretAtMarker("interfaceDefinition");
-
-goTo.marker("interfaceReferenceInConstructor");
-goTo.definition();
-verify.caretAtMarker("interfaceDefinition");
-
-goTo.marker("classReference");
-goTo.definition();
-verify.caretAtMarker("classDefinition");
-
-goTo.marker("classReferenceInInitializer");
-goTo.definition();
-verify.caretAtMarker("classDefinition");
-
-goTo.marker("enumReference");
-goTo.definition();
-verify.caretAtMarker("enumDefinition");
-
-goTo.marker("enumReferenceInInitializer");
-goTo.definition();
-verify.caretAtMarker("enumDefinition");
-
-goTo.marker("selfReference");
-goTo.definition();
-verify.caretAtMarker("selfDefinition");
+verify.goToDefinition([
+    [["interfaceReference", "interfaceReferenceInList", "interfaceReferenceInConstructor"], "interfaceDefinition"],
+    [["classReference", "classReferenceInInitializer"], "classDefinition"],
+    [["enumReference", "enumReferenceInInitializer"], "enumDefinition"],
+    ["selfReference", "selfDefinition"]
+]);

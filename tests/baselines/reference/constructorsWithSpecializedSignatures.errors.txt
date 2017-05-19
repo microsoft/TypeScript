@@ -1,22 +1,12 @@
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(3,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(4,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(17,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(18,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(20,5): error TS2381: A signature with an implementation cannot use a string literal type.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(28,5): error TS2381: A signature with an implementation cannot use a string literal type.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(33,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
-tests/cases/compiler/constructorsWithSpecializedSignatures.ts(34,5): error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+tests/cases/compiler/constructorsWithSpecializedSignatures.ts(18,5): error TS2394: Overload signature is not compatible with function implementation.
+tests/cases/compiler/constructorsWithSpecializedSignatures.ts(26,5): error TS2394: Overload signature is not compatible with function implementation.
 
 
-==== tests/cases/compiler/constructorsWithSpecializedSignatures.ts (8 errors) ====
+==== tests/cases/compiler/constructorsWithSpecializedSignatures.ts (2 errors) ====
     // errors
     declare class C {
         constructor(x: "hi");
-        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         constructor(x: "foo");
-        ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         constructor(x: number);
     }
     
@@ -30,35 +20,27 @@ tests/cases/compiler/constructorsWithSpecializedSignatures.ts(34,5): error TS238
     // errors
     class D {
         constructor(x: "hi");
-        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         constructor(x: "foo");
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
+!!! error TS2394: Overload signature is not compatible with function implementation.
         constructor(x: number);
         constructor(x: "hi") { }
-        ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
     // overloads are ok
     class D2 {
         constructor(x: "hi");
         constructor(x: "foo");
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2394: Overload signature is not compatible with function implementation.
         constructor(x: string);
         constructor(x: "hi") { } // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2381: A signature with an implementation cannot use a string literal type.
     }
     
     // errors
     interface I {
         new (x: "hi");
-        ~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         new (x: "foo");
-        ~~~~~~~~~~~~~~~
-!!! error TS2382: Specialized overload signature is not assignable to any non-specialized signature.
         new (x: number);
     }
     

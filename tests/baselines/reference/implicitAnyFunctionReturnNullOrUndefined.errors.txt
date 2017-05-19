@@ -15,20 +15,16 @@ tests/cases/compiler/implicitAnyFunctionReturnNullOrUndefined.ts(10,5): error TS
     
     class C {
         nullWidenFuncOfC() {  // error at "nullWidenFuncOfC"
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            return null;
-    ~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+        ~~~~~~~~~~~~~~~~
 !!! error TS7010: 'nullWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+            return null;
+        }
     
         underfinedWidenFuncOfC() {  // error at "underfinedWidenFuncOfC"
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            return undefined;
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
-        }
-    ~~~~~
+        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS7010: 'underfinedWidenFuncOfC', which lacks return-type annotation, implicitly has an 'any' return type.
+            return undefined;
+        }
     }
     
     // this should not be an error

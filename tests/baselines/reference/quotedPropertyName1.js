@@ -9,4 +9,4 @@ var Test1 = (function () {
         this["prop1"] = 0;
     }
     return Test1;
-})();
+}());

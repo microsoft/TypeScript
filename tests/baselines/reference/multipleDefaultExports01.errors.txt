@@ -1,0 +1,30 @@
+tests/cases/conformance/es6/modules/m1.ts(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m1.ts(5,25): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m1.ts(10,1): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/m2.ts(3,1): error TS2348: Value of type 'typeof foo' is not callable. Did you mean to include 'new'?
+
+
+==== tests/cases/conformance/es6/modules/m1.ts (3 errors) ====
+    export default class foo {
+                         ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+    export default function bar() {
+                            ~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+    }
+    
+    var x = 10;
+    export default x;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2528: A module cannot have multiple default exports.
+    
+==== tests/cases/conformance/es6/modules/m2.ts (1 errors) ====
+    import Entity from "./m1"
+    
+    Entity();
+    ~~~~~~~~
+!!! error TS2348: Value of type 'typeof foo' is not callable. Did you mean to include 'new'?

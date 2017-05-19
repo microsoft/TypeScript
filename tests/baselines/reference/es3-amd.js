@@ -1,5 +1,4 @@
 //// [es3-amd.ts]
-
 class A
 {
     constructor ()
@@ -21,4 +20,4 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());

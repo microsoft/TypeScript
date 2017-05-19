@@ -26,12 +26,12 @@ function foo() {
                     function Y() {
                     }
                     return Y;
-                })();
+                }());
                 return new Y();
             })();
         };
         return X;
-    })();
+    }());
     var x = new X();
     return x.m();
 }

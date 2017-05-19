@@ -1,0 +1,15 @@
+=== tests/cases/compiler/contextuallyTypingOrOperator3.ts ===
+function foo<T, U extends T>(u: U) {
+>foo : Symbol(foo, Decl(contextuallyTypingOrOperator3.ts, 0, 0))
+>T : Symbol(T, Decl(contextuallyTypingOrOperator3.ts, 0, 13))
+>U : Symbol(U, Decl(contextuallyTypingOrOperator3.ts, 0, 15))
+>T : Symbol(T, Decl(contextuallyTypingOrOperator3.ts, 0, 13))
+>u : Symbol(u, Decl(contextuallyTypingOrOperator3.ts, 0, 29))
+>U : Symbol(U, Decl(contextuallyTypingOrOperator3.ts, 0, 15))
+
+    var x3: U = u || u;
+>x3 : Symbol(x3, Decl(contextuallyTypingOrOperator3.ts, 1, 7))
+>U : Symbol(U, Decl(contextuallyTypingOrOperator3.ts, 0, 15))
+>u : Symbol(u, Decl(contextuallyTypingOrOperator3.ts, 0, 29))
+>u : Symbol(u, Decl(contextuallyTypingOrOperator3.ts, 0, 29))
+}

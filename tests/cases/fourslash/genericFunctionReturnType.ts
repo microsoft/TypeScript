@@ -11,11 +11,9 @@
 // goTo.marker('1');
 // verify.currentSignatureHelpIs('foo(x: number, y: string): (a: string) => number');
 
-goTo.marker('2');
-verify.quickInfoIs('var r: (a: string) => number');
+verify.quickInfoAt("2", "var r: (a: string) => number");
 
 goTo.marker('3');
 verify.currentSignatureHelpIs('r(a: string): number');
 
-goTo.marker('4');
-verify.quickInfoIs('var r2: number');
+verify.quickInfoAt("4", "var r2: number");

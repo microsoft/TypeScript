@@ -3,5 +3,5 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 //# sourceMappingURL=fileB.js.map

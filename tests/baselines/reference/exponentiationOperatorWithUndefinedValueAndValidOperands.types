@@ -1,0 +1,73 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndValidOperands.ts ===
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
+
+enum E {
+>E : E
+
+    a,
+>a : E.a
+
+    b
+>b : E.b
+}
+
+var a: any;
+>a : any
+
+var b: number;
+>b : number
+
+// operator *
+var rk1 = undefined ** a;
+>rk1 : number
+>undefined ** a : number
+>undefined : undefined
+>a : any
+
+var rk2 = undefined ** b;
+>rk2 : number
+>undefined ** b : number
+>undefined : undefined
+>b : number
+
+var rk3 = undefined ** 1;
+>rk3 : number
+>undefined ** 1 : number
+>undefined : undefined
+>1 : 1
+
+var rk4 = undefined ** E.a;
+>rk4 : number
+>undefined ** E.a : number
+>undefined : undefined
+>E.a : E.a
+>E : typeof E
+>a : E.a
+
+var rk5 = a ** undefined;
+>rk5 : number
+>a ** undefined : number
+>a : any
+>undefined : undefined
+
+var rk6 = b ** undefined;
+>rk6 : number
+>b ** undefined : number
+>b : number
+>undefined : undefined
+
+var rk7 = 0 ** undefined;
+>rk7 : number
+>0 ** undefined : number
+>0 : 0
+>undefined : undefined
+
+var rk8 = E.b ** undefined;
+>rk8 : number
+>E.b ** undefined : number
+>E.b : E.b
+>E : typeof E
+>b : E.b
+>undefined : undefined
+

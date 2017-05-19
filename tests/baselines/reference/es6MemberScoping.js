@@ -1,6 +1,4 @@
 //// [es6MemberScoping.ts]
-
-
 class Foo {
     constructor(store: string) { }
 
@@ -26,10 +24,10 @@ var Foo = (function () {
         return this._store.length;
     };
     return Foo;
-})();
+}());
 var Foo2 = (function () {
     function Foo2() {
     }
     Foo2.Foo2 = function () { return 0; }; // should not be an error
     return Foo2;
-})();
+}());

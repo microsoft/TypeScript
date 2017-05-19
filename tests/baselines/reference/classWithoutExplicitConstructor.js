@@ -22,7 +22,7 @@ var C = (function () {
         this.y = 'hello';
     }
     return C;
-})();
+}());
 var c = new C();
 var c2 = new C(null); // error
 var D = (function () {
@@ -31,6 +31,6 @@ var D = (function () {
         this.y = null;
     }
     return D;
-})();
+}());
 var d = new D();
 var d2 = new D(null); // error

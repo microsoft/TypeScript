@@ -1,0 +1,44 @@
+=== tests/cases/compiler/file1.d.ts ===
+declare module "file1" {
+    class foo {}
+>foo : foo
+
+    namespace foo {
+>foo : typeof foo
+
+        class A {}
+>A : A
+    }
+    export = foo;
+>foo : foo
+}
+
+
+=== tests/cases/compiler/file2.ts ===
+/// <reference path="file1.d.ts"/>
+import x = require("file1"); 
+>x : typeof x
+
+// OK - './file1' is a namespace
+declare module "file1" {
+    interface A { a: number }
+>A : A
+>a : number
+}
+
+=== tests/cases/compiler/file3.ts ===
+import * as x from "file1";
+>x : typeof x
+
+import "file2";
+let a: x.A;
+>a : x.A
+>x : any
+>A : x.A
+
+let b = a.a;
+>b : number
+>a.a : number
+>a : x.A
+>a : number
+

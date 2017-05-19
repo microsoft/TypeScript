@@ -28,14 +28,14 @@ var r2 = a(1);
 >r2 : number
 >a(1) : number
 >a : A
->1 : number
+>1 : 1
 
 var r3 = a(1, 2);
 >r3 : boolean
 >a(1, 2) : boolean
 >a : A
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 module G {
 >G : typeof G
@@ -83,19 +83,19 @@ module G {
 >r2 : boolean
 >a(true) : boolean
 >a : A<boolean>
->true : boolean
+>true : true
 
     var r3 = a(true, 2);
 >r3 : boolean
 >a(true, 2) : boolean
 >a : A<boolean>
->true : boolean
->2 : number
+>true : true
+>2 : 2
 
     var r4 = a(1, true);
 >r4 : number
->a(1, true) : number
+>a(1, true) : 1
 >a : A<boolean>
->1 : number
->true : boolean
+>1 : 1
+>true : true
 }

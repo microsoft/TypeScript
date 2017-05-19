@@ -8,11 +8,11 @@ class Rule {
 >RegExp : RegExp
 >new RegExp('') : RegExp
 >RegExp : RegExpConstructor
->'' : string
+>'' : ""
 
     public name: string = '';
 >name : string
->'' : string
+>'' : ""
 
     constructor(name: string) {
 >name : string
@@ -20,7 +20,7 @@ class Rule {
         this.name = name;
 >this.name = name : string
 >this.name : string
->this : Rule
+>this : this
 >name : string
 >name : string
     }

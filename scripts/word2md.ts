@@ -72,6 +72,9 @@ module Word {
         listFormat: ListFormat;
         tables: Tables;
         text: string;
+        textRetrievalMode: {
+            includeHiddenText: boolean;
+        }
         words: Ranges;
     }
 
@@ -100,9 +103,19 @@ module Word {
         toggleShowCodes(): void;
     }
 
+    export interface Hyperlink {
+        address: string;
+        textToDisplay: string;
+        range: Range;
+    }
+
+    export interface Hyperlinks extends Collection<Hyperlink> {
+    }
+
     export interface Document {
         fields: Fields;
         paragraphs: Paragraphs;
+        hyperlinks: Hyperlinks;
         builtInDocumentProperties: Collection<any>;
         close(saveChanges: boolean): void;
         range(): Range;
@@ -195,6 +208,18 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
         find.execute(findText, false, false, false, false, false, true, 0, true, replaceText, 2);
     }
 
+    function fixHyperlinks() {
+        var count = doc.hyperlinks.count;
+        for (var i = 0; i < count; i++) {
+            var hyperlink = doc.hyperlinks.item(i + 1);
+            var address = hyperlink.address;
+            if (address && address.length > 0) {
+                var textToDisplay = hyperlink.textToDisplay;
+                hyperlink.textToDisplay = "[" + textToDisplay + "](" + address + ")";
+            }
+        }
+    }
+
     function write(s: string) {
         result += s;
     }
@@ -236,13 +261,27 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
     function writeParagraph(p: Word.Paragraph) {
 
-        var text = p.range.text;
+        var range = p.range;
+        var text = range.text;
         var style = p.style.nameLocal;
-        var inTable = p.range.tables.count > 0;
+        var inTable = range.tables.count > 0;
         var level = 1;
         var sectionBreak = text.indexOf("\x0C") >= 0;
 
         text = trimEndFormattingMarks(text);
+        if (text === "/") {
+            // An inline image shows up in the text as a "/". When we see a paragraph
+            // consisting of nothing but "/", we check to see if the paragraph contains
+            // hidden text and, if so, emit that instead. The hidden text is assumed to
+            // contain an appropriate markdown image link.
+            range.textRetrievalMode.includeHiddenText = true;
+            var fullText = range.text;
+            range.textRetrievalMode.includeHiddenText = false;
+            if (text !== fullText) {
+                text = "&emsp;&emsp;" + fullText.substr(1);
+            }
+        }
+
         if (inTable) {
             style = "Table";
         }
@@ -258,7 +297,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
             case "Heading":
             case "Appendix":
-                var section = p.range.listFormat.listString;
+                var section = range.listFormat.listString;
                 write("####".substr(0, level) + ' <a name="' + section + '"/>' + section + " " + text + "\n\n");
                 break;
 
@@ -269,7 +308,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
                 break;
 
             case "List Paragraph":
-                write("        ".substr(0, p.range.listFormat.listLevelNumber * 2 - 2) + "* " + text + "\n");
+                write("        ".substr(0, range.listFormat.listLevelNumber * 2 - 2) + "* " + text + "\n");
                 break;
 
             case "Grammar":
@@ -288,7 +327,7 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
 
             case "Table":
                 if (!lastInTable) {
-                    tableColumnCount = p.range.tables.item(1).columns.count + 1;
+                    tableColumnCount = range.tables.item(1).columns.count + 1;
                     tableCellIndex = 0;
                 }
                 if (tableCellIndex < tableColumnCount) {
@@ -346,6 +385,8 @@ function convertDocumentToMarkdown(doc: Word.Document): string {
     doc.fields.toggleShowCodes();
     findReplace("^19 REF", {}, "[^&](#^&)", {});
     doc.fields.toggleShowCodes();
+
+    fixHyperlinks();
 
     writeDocument();
 

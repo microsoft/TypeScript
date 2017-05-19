@@ -10,9 +10,6 @@
 ////    }
 ////}
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('superCall');
 verify.signatureHelpCountIs(1);
 verify.currentSignatureHelpIs("SuperCallBase(b: boolean): SuperCallBase");

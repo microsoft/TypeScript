@@ -5,5 +5,5 @@
 export class a { }
 
 // @filename: client.ts
-import defaultBinding, * as nameSpaceBinding  from "server";
+import defaultBinding, * as nameSpaceBinding  from "./server";
 export var x = new nameSpaceBinding.a();

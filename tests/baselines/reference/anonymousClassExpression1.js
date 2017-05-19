@@ -9,5 +9,5 @@ function f() {
         function class_1() {
         }
         return class_1;
-    })() === "function";
+    }()) === "function";
 }

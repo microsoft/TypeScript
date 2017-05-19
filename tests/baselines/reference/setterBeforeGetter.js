@@ -28,4 +28,4 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());

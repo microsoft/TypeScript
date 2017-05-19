@@ -14,17 +14,17 @@ var b: { x: number; z?: number };
 
 class Base { foo: string; }
 >Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->foo : Symbol(foo, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 12))
+>foo : Symbol(Base.foo, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 12))
 
 class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(bestCommonTypeOfConditionalExpressions.ts, 6, 27))
 >Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->bar : Symbol(bar, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 28))
+>bar : Symbol(Derived.bar, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 28))
 
 class Derived2 extends Base { baz: string; }
 >Derived2 : Symbol(Derived2, Decl(bestCommonTypeOfConditionalExpressions.ts, 7, 43))
 >Base : Symbol(Base, Decl(bestCommonTypeOfConditionalExpressions.ts, 4, 33))
->baz : Symbol(baz, Decl(bestCommonTypeOfConditionalExpressions.ts, 8, 29))
+>baz : Symbol(Derived2.baz, Decl(bestCommonTypeOfConditionalExpressions.ts, 8, 29))
 
 var base: Base;
 >base : Symbol(base, Decl(bestCommonTypeOfConditionalExpressions.ts, 9, 3))
@@ -58,20 +58,20 @@ var r6 = true ? (x: number) => { } : (x: Object) => { }; // returns number => vo
 >r6 : Symbol(r6, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 3))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 17))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 17, 38))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r7: (x: Object) => void = true ? (x: number) => { } : (x: Object) => { }; 
 >r7 : Symbol(r7, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 3))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 9))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 38))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 18, 59))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 var r8 = true ? (x: Object) => { } : (x: number) => { }; // returns Object => void
 >r8 : Symbol(r8, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 3))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 17))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(bestCommonTypeOfConditionalExpressions.ts, 19, 38))
 
 var r10: Base = true ? derived : derived2; // no error since we use the contextual type in BCT
@@ -93,7 +93,7 @@ function foo5<T, U>(t: T, u: U): Object {
 >T : Symbol(T, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 14))
 >u : Symbol(u, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 25))
 >U : Symbol(U, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 16))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
     return true ? t : u; // BCT is Object
 >t : Symbol(t, Decl(bestCommonTypeOfConditionalExpressions.ts, 23, 20))

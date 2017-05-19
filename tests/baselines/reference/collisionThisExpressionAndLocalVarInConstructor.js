@@ -33,7 +33,7 @@ var class1 = (function () {
         };
     }
     return class1;
-})();
+}());
 var class2 = (function () {
     function class2() {
         var _this = this;
@@ -45,4 +45,4 @@ var class2 = (function () {
         };
     }
     return class2;
-})();
+}());

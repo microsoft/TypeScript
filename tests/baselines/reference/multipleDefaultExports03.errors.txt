@@ -1,0 +1,14 @@
+tests/cases/conformance/es6/modules/multipleDefaultExports03.ts(1,22): error TS2528: A module cannot have multiple default exports.
+tests/cases/conformance/es6/modules/multipleDefaultExports03.ts(4,22): error TS2528: A module cannot have multiple default exports.
+
+
+==== tests/cases/conformance/es6/modules/multipleDefaultExports03.ts (2 errors) ====
+    export default class C {
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.
+    }
+    
+    export default class C {
+                         ~
+!!! error TS2528: A module cannot have multiple default exports.
+    }

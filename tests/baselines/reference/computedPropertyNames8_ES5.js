@@ -15,7 +15,6 @@ function f() {
     var v = (_a = {},
         _a[t] = 0,
         _a[u] = 1,
-        _a
-    );
+        _a);
     var _a;
 }

@@ -4,8 +4,8 @@ module M {
 
     export interface Point { x: number; y: number }
 >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 0, 10))
->x : Symbol(x, Decl(nonInstantiatedModule.ts, 1, 28))
->y : Symbol(y, Decl(nonInstantiatedModule.ts, 1, 39))
+>x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 1, 28))
+>y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 1, 39))
 
     export var a = 1;
 >a : Symbol(a, Decl(nonInstantiatedModule.ts, 2, 14))
@@ -58,10 +58,10 @@ module M2 {
 >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
         x: number;
->x : Symbol(x, Decl(nonInstantiatedModule.ts, 22, 28))
+>x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 22, 28))
 
         y: number;
->y : Symbol(y, Decl(nonInstantiatedModule.ts, 23, 18))
+>y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 23, 18))
     }
 }
 
@@ -97,8 +97,8 @@ module M3 {
 >Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 35, 25))
 
             x: number; y: number;
->x : Symbol(x, Decl(nonInstantiatedModule.ts, 36, 32))
->y : Symbol(y, Decl(nonInstantiatedModule.ts, 37, 22))
+>x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 36, 32))
+>y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 37, 22))
         }
     }
 
@@ -106,6 +106,6 @@ module M3 {
 >Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
 
         name: string;
->name : Symbol(name, Decl(nonInstantiatedModule.ts, 41, 24))
+>name : Symbol(Utils.name, Decl(nonInstantiatedModule.ts, 41, 24))
     }
 }

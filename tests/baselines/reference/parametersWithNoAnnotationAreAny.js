@@ -41,7 +41,7 @@ var C = (function () {
         return x;
     };
     return C;
-})();
+}());
 var a;
 var b = {
     foo: function (x) {

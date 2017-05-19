@@ -6,7 +6,7 @@ class a {
 >a : Symbol(a, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 0, 14))
 
     method1() {
->method1 : Symbol(method1, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 1, 9))
+>method1 : Symbol(a.method1, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 1, 9))
 
         return {
             doStuff: (callback) => () => {
@@ -23,7 +23,7 @@ class a {
         }
     }
     method2() {
->method2 : Symbol(method2, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 9, 5))
+>method2 : Symbol(a.method2, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 9, 5))
 
         var _this = 2;
 >_this : Symbol(_this, Decl(noCollisionThisExpressionAndLocalVarInMethod.ts, 11, 11))

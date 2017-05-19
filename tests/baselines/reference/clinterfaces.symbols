@@ -1,0 +1,52 @@
+=== tests/cases/compiler/clinterfaces.ts ===
+module M {
+>M : Symbol(M, Decl(clinterfaces.ts, 0, 0))
+
+    class C { }
+>C : Symbol(C, Decl(clinterfaces.ts, 0, 10), Decl(clinterfaces.ts, 1, 15))
+
+    interface C { }
+>C : Symbol(C, Decl(clinterfaces.ts, 0, 10), Decl(clinterfaces.ts, 1, 15))
+
+    interface D { }
+>D : Symbol(D, Decl(clinterfaces.ts, 2, 19), Decl(clinterfaces.ts, 3, 19))
+
+    class D { }
+>D : Symbol(D, Decl(clinterfaces.ts, 2, 19), Decl(clinterfaces.ts, 3, 19))
+}
+
+interface Foo<T> {
+>Foo : Symbol(Foo, Decl(clinterfaces.ts, 5, 1), Decl(clinterfaces.ts, 9, 1))
+>T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(clinterfaces.ts, 7, 18))
+}
+
+class Foo<T>{
+>Foo : Symbol(Foo, Decl(clinterfaces.ts, 5, 1), Decl(clinterfaces.ts, 9, 1))
+>T : Symbol(T, Decl(clinterfaces.ts, 7, 14), Decl(clinterfaces.ts, 11, 10))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(clinterfaces.ts, 11, 13))
+}
+
+class Bar<T>{
+>Bar : Symbol(Bar, Decl(clinterfaces.ts, 13, 1), Decl(clinterfaces.ts, 17, 1))
+>T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
+
+    b: number;
+>b : Symbol(Bar.b, Decl(clinterfaces.ts, 15, 13))
+}
+
+interface Bar<T> {
+>Bar : Symbol(Bar, Decl(clinterfaces.ts, 13, 1), Decl(clinterfaces.ts, 17, 1))
+>T : Symbol(T, Decl(clinterfaces.ts, 15, 10), Decl(clinterfaces.ts, 19, 14))
+
+    a: string;
+>a : Symbol(Bar.a, Decl(clinterfaces.ts, 19, 18))
+}
+
+export = Foo;
+>Foo : Symbol(Foo, Decl(clinterfaces.ts, 5, 1), Decl(clinterfaces.ts, 9, 1))
+

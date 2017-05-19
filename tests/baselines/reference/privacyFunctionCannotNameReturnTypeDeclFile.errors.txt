@@ -13,7 +13,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
 
 
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts (12 errors) ====
-    import exporter = require("privacyFunctionReturnTypeDeclFile_exporter");
+    import exporter = require("./privacyFunctionReturnTypeDeclFile_exporter");
     export class publicClassWithWithPrivateParmeterTypes {
         static myPublicStaticMethod() { // Error
                ~~~~~~~~~~~~~~~~~~~~
@@ -148,8 +148,6 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     }
     
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts (0 errors) ====
-    
-    
     declare module "GlobalWidgets" {
         export class Widget3 {
             name: string;
@@ -183,7 +181,7 @@ tests/cases/compiler/privacyFunctionReturnTypeDeclFile_consumer.ts(86,17): error
     
 ==== tests/cases/compiler/privacyFunctionReturnTypeDeclFile_exporter.ts (0 errors) ====
     ///<reference path='privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts'/>
-    import Widgets = require("privacyFunctionReturnTypeDeclFile_Widgets");
+    import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
     import Widgets1 = require("GlobalWidgets");
     export function createExportedWidget1() {
         return Widgets.createWidget1();

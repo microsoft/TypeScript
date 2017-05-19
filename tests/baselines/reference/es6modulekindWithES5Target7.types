@@ -1,0 +1,16 @@
+=== tests/cases/compiler/es6modulekindWithES5Target7.ts ===
+export namespace N {
+>N : typeof N
+
+    var x = 0;
+>x : number
+>0 : 0
+}
+
+export namespace N2 {
+>N2 : any
+
+    export interface I { }
+>I : I
+}
+

@@ -1,4 +1,4 @@
-//// [tsxElementResolution10.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface ElementClass {
@@ -20,7 +20,7 @@ var Obj2: Obj2type;
 <Obj2 x={32} render={100} />; // OK
 
 
-//// [tsxElementResolution10.jsx]
+//// [file.jsx]
 var Obj1;
 <Obj1 x={10}/>; // Error, no render member
 var Obj2;

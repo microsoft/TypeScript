@@ -7,8 +7,7 @@
 ////}
 
 // @Filename: verifySingleFileEmitOutput1_file1.ts
-////import f = require("verifySingleFileEmitOutput1_file0");
+////import f = require("./verifySingleFileEmitOutput1_file0");
 ////var /**/b = new f.A();
 
-goTo.marker();
-verify.quickInfoIs('var b: f.A');
+verify.quickInfoAt("", "var b: f.A");

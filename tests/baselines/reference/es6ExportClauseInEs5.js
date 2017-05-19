@@ -1,5 +1,4 @@
-//// [es6ExportClauseInEs5.ts]
-
+//// [server.ts]
 class c {
 }
 interface i {
@@ -16,12 +15,14 @@ export { i, m as instantiatedModule };
 export { uninstantiated };
 export { x };
 
-//// [es6ExportClauseInEs5.js]
+//// [server.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 exports.c = c;
 exports.c2 = c;
 var m;
@@ -33,7 +34,7 @@ var x = 10;
 exports.x = x;
 
 
-//// [es6ExportClauseInEs5.d.ts]
+//// [server.d.ts]
 declare class c {
 }
 interface i {

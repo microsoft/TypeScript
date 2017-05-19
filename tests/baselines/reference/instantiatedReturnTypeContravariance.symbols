@@ -4,10 +4,10 @@ interface B<T> {
 >T : Symbol(T, Decl(instantiatedReturnTypeContravariance.ts, 0, 12))
 
 name: string;
->name : Symbol(name, Decl(instantiatedReturnTypeContravariance.ts, 0, 16))
+>name : Symbol(B.name, Decl(instantiatedReturnTypeContravariance.ts, 0, 16))
 
 x(): T;
->x : Symbol(x, Decl(instantiatedReturnTypeContravariance.ts, 2, 13))
+>x : Symbol(B.x, Decl(instantiatedReturnTypeContravariance.ts, 2, 13))
 >T : Symbol(T, Decl(instantiatedReturnTypeContravariance.ts, 0, 12))
 
 }
@@ -16,7 +16,7 @@ class c {
 >c : Symbol(c, Decl(instantiatedReturnTypeContravariance.ts, 6, 1))
 
 foo(): B<void> {
->foo : Symbol(foo, Decl(instantiatedReturnTypeContravariance.ts, 8, 9))
+>foo : Symbol(c.foo, Decl(instantiatedReturnTypeContravariance.ts, 8, 9))
 >B : Symbol(B, Decl(instantiatedReturnTypeContravariance.ts, 0, 0))
 
 return null;
@@ -30,7 +30,7 @@ class d extends c {
 >c : Symbol(c, Decl(instantiatedReturnTypeContravariance.ts, 6, 1))
 
 foo(): B<number> {
->foo : Symbol(foo, Decl(instantiatedReturnTypeContravariance.ts, 18, 19))
+>foo : Symbol(d.foo, Decl(instantiatedReturnTypeContravariance.ts, 18, 19))
 >B : Symbol(B, Decl(instantiatedReturnTypeContravariance.ts, 0, 0))
 
 return null;

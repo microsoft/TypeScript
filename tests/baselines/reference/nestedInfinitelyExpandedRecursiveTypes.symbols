@@ -4,7 +4,7 @@ interface F<T> {
 >T : Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
 
       t: G<F<() => T>>;
->t : Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 16))
+>t : Symbol(F.t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 16))
 >G : Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
 >F : Symbol(F, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 0))
 >T : Symbol(T, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 0, 12))
@@ -14,7 +14,7 @@ interface G<U> {
 >U : Symbol(U, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 12))
 
       t: G<G<() => U>>;
->t : Symbol(t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 16))
+>t : Symbol(G.t, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 16))
 >G : Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
 >G : Symbol(G, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 2, 1))
 >U : Symbol(U, Decl(nestedInfinitelyExpandedRecursiveTypes.ts, 3, 12))

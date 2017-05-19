@@ -130,7 +130,7 @@ var Foo = (function () {
         };
     };
     return Foo;
-})();
+}());
 var Foo1 = (function () {
     function Foo1(_this) {
         var _this = this;
@@ -141,7 +141,7 @@ var Foo1 = (function () {
         };
     }
     return Foo1;
-})();
+}());
 function f1(_this) {
     var _this = this;
     (function (x) { console.log(_this.x); });
@@ -162,7 +162,7 @@ var Foo3 = (function () {
         };
     };
     return Foo3;
-})();
+}());
 function f3(_this) {
     var _this = this;
     (function (x) { console.log(_this.x); });

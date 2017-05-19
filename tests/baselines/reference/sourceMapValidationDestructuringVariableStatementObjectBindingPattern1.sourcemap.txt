@@ -1,0 +1,26 @@
+===================================================================
+JsFile: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
+mapUrl: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map
+sourceRoot: 
+sources: sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js
+sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.ts
+-------------------------------------------------------------------
+>>>var x = { x: 20 }.x;
+1 >
+2 >^^^^
+3 >    ^^^^^^^^^^^^^^^
+4 >                   ^
+5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >var {
+2 >
+3 >    x
+4 >                   } = { x: 20 };
+1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 20) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map

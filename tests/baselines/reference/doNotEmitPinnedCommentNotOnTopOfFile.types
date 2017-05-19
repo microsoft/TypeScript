@@ -1,0 +1,15 @@
+=== tests/cases/compiler/doNotEmitPinnedCommentNotOnTopOfFile.ts ===
+var x = 10;
+>x : number
+>10 : 10
+
+/*!
+
+    multi line
+    comment
+*/
+
+var x = 10;
+>x : number
+>10 : 10
+

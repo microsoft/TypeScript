@@ -11,9 +11,9 @@ x;
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : symbol | E
->"number" : string
+>"number" : "number"
 
     x;
 >x : E

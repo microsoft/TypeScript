@@ -64,18 +64,18 @@ module TypeScript {
 >findToken : (position: number, includeSkippedTokens?: boolean) => PositionedToken
 >position : number
 >includeSkippedTokens : boolean
->false : boolean
+>false : false
 >PositionedToken : PositionedToken
 
             var positionedToken = this.findTokenInternal(null, position, 0);
 >positionedToken : any
 >this.findTokenInternal(null, position, 0) : any
 >this.findTokenInternal : (x: any, y: any, z: any) => any
->this : SyntaxNode
+>this : this
 >findTokenInternal : (x: any, y: any, z: any) => any
 >null : null
 >position : number
->0 : number
+>0 : 0
 
             return null;
 >null : null
@@ -114,7 +114,7 @@ module TypeScript.Syntax {
 >new PositionedToken(parent, this, fullStart) : PositionedToken
 >PositionedToken : typeof PositionedToken
 >parent : PositionedElement
->this : VariableWidthTokenWithTrailingTrivia
+>this : this
 >fullStart : number
         }
     }

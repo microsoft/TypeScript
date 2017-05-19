@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesSystem.ts]
-
 var;
 let;
 const;
@@ -35,17 +34,19 @@ export let h1: D = new D;
 
 
 //// [exportNonInitializedVariablesSystem.js]
-System.register([], function(exports_1) {
+System.register([], function (exports_1, context_1) {
+    "use strict";
+    var __moduleName = context_1 && context_1.id;
     var a, b, c, d, A, e, f, B, C, a1, b1, c1, d1, D, e1, f1, g1, h1;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             let;
             A = (function () {
                 function A() {
                 }
                 return A;
-            })();
+            }());
             (function (B) {
                 B.a = 1, B.c = 2;
             })(B || (B = {}));
@@ -61,11 +62,11 @@ System.register([], function(exports_1) {
                 function D() {
                 }
                 return D;
-            })();
+            }());
             exports_1("e1", e1 = new D);
             exports_1("f1", f1 = new D);
             exports_1("g1", g1 = new D);
             exports_1("h1", h1 = new D);
         }
-    }
+    };
 });

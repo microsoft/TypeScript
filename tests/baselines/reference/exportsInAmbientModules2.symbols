@@ -1,0 +1,9 @@
+=== tests/cases/compiler/external.d.ts ===
+export default class C {}
+>C : Symbol(C, Decl(external.d.ts, 0, 0))
+
+=== tests/cases/compiler/main.ts ===
+declare module "M" {
+No type information for this code.    export * from "external"
+No type information for this code.}
+No type information for this code.

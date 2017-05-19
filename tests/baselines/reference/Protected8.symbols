@@ -3,8 +3,8 @@ interface I {
 >I : Symbol(I, Decl(Protected8.ts, 0, 0))
 
    protected
->protected : Symbol(protected, Decl(Protected8.ts, 0, 13))
+>protected : Symbol(I.protected, Decl(Protected8.ts, 0, 13))
 
    p
->p : Symbol(p, Decl(Protected8.ts, 1, 12))
+>p : Symbol(I.p, Decl(Protected8.ts, 1, 12))
 }

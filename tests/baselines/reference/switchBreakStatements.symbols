@@ -1,4 +1,5 @@
 === tests/cases/conformance/statements/breakStatements/switchBreakStatements.ts ===
+
 switch ('') {
     case 'a':
         break;
@@ -48,7 +49,7 @@ switch ('') {
                         switch ('') {
                             case 'a':
                                 var fn = function () { }
->fn : Symbol(fn, Decl(switchBreakStatements.ts, 48, 35))
+>fn : Symbol(fn, Decl(switchBreakStatements.ts, 49, 35))
 
                                 break EIGHT;
                         }

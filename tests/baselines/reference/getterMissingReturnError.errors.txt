@@ -1,5 +1,5 @@
 tests/cases/compiler/getterMissingReturnError.ts(2,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/getterMissingReturnError.ts(2,16): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/compiler/getterMissingReturnError.ts(2,16): error TS2378: A 'get' accessor must return a value.
 
 
 ==== tests/cases/compiler/getterMissingReturnError.ts (2 errors) ====
@@ -8,7 +8,7 @@ tests/cases/compiler/getterMissingReturnError.ts(2,16): error TS2378: A 'get' ac
                    ~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                    ~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
     
         }
     }

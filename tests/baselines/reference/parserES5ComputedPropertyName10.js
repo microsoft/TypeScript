@@ -9,4 +9,4 @@ var C = (function () {
         this[e] = 1;
     }
     return C;
-})();
+}());

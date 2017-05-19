@@ -1,7 +1,7 @@
-//@module: amd
+// @module: amd
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 
 // @Filename: commentsMultiModuleMultiFile_0.ts
 /** this is multi declare module*/

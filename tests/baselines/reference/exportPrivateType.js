@@ -37,12 +37,12 @@ var foo;
         function C1() {
         }
         return C1;
-    })();
+    }());
     var C2 = (function () {
         function C2() {
         }
         C2.prototype.test = function () { return true; };
         return C2;
-    })();
+    }());
 })(foo || (foo = {}));
 var y = foo.g; // Exported variable 'y' has or is using private type 'foo.C2'.

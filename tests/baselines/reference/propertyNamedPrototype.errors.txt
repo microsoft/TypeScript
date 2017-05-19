@@ -1,4 +1,4 @@
-tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts(3,12): error TS2300: Duplicate identifier 'prototype'.
+tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts(3,12): error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
 
 
 ==== tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototype.ts (1 errors) ====
@@ -6,5 +6,5 @@ tests/cases/conformance/classes/propertyMemberDeclarations/propertyNamedPrototyp
         prototype: number; // ok
         static prototype: C; // error
                ~~~~~~~~~
-!!! error TS2300: Duplicate identifier 'prototype'.
+!!! error TS2699: Static property 'prototype' conflicts with built-in property 'Function.prototype' of constructor function 'C'.
     }

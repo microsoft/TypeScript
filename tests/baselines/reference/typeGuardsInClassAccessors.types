@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardsInClassAccessors.ts ===
-
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
@@ -26,9 +25,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -42,9 +41,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -63,9 +62,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -76,9 +75,9 @@ class ClassWithAccessors {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -92,9 +91,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -109,9 +108,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -125,9 +124,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -146,9 +145,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -159,9 +158,9 @@ class ClassWithAccessors {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -175,9 +174,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -192,9 +191,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -208,9 +207,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -229,9 +228,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -242,9 +241,9 @@ class ClassWithAccessors {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -258,9 +257,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -275,9 +274,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -291,9 +290,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
@@ -312,9 +311,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -325,9 +324,9 @@ class ClassWithAccessors {
 >num : number
 >typeof param === "string" && param.length : number
 >typeof param === "string" : boolean
->typeof param : string
+>typeof param : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >param : string | number
->"string" : string
+>"string" : "string"
 >param.length : number
 >param : string
 >length : number
@@ -341,9 +340,9 @@ class ClassWithAccessors {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number

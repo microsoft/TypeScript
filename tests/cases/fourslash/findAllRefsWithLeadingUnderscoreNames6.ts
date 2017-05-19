@@ -2,7 +2,7 @@
 
 ////class Foo {
 ////    public _bar;
-////    public [|__bar|];
+////    public [|{| "isWriteAccess": true, "isDefinition": true |}__bar|];
 ////    public ___bar;
 ////    public ____bar;
 ////}
@@ -13,12 +13,4 @@
 ////x.___bar;
 ////x.____bar;
 
-
-test.ranges().forEach(r1 => {
-    goTo.position(r1.start);
-    verify.referencesCountIs(2);
-
-    test.ranges().forEach(r2 => {
-        verify.referencesAtPositionContains(r2);
-    });
-});
+verify.singleReferenceGroup("(property) Foo.__bar: any");

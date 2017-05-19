@@ -1,19 +1,19 @@
 /// <reference path='fourslash.ts'/>
 
-//// var /*1*/name = "Foo";
+//// var [|{| "isWriteAccess": true, "isDefinition": true |}name|] = "Foo";
 ////
-//// var obj = { /*2*/name };
-//// var obj1 = { /*3*/name:name };
-//// obj./*4*/name;
+//// var obj = { [|{| "isWriteAccess": true, "isDefinition": true |}name|] };
+//// var obj1 = { [|{| "isWriteAccess": true, "isDefinition": true |}name|]:[|name|] };
+//// obj.[|name|];
 
-goTo.marker('1');
-verify.referencesCountIs(3);
-
-goTo.marker('2');
-verify.referencesCountIs(4);
-
-goTo.marker('3');
-verify.referencesCountIs(1);
-
-goTo.marker('4');
-verify.referencesCountIs(2);
+const [r0, r1, r2, r3, r4] = test.ranges();
+verify.referenceGroups(r0, [{ definition: "var name: string", ranges: [r0, r1, r3] }]); //r3
+verify.referenceGroups(r1, [
+    { definition: "var name: string", ranges: [r0, r3] },
+    { definition: "(property) name: string", ranges: [r1, r4] }
+]);
+verify.singleReferenceGroup("(property) name: string", [r2]);
+verify.referenceGroups(r4, [
+    { definition: "(property) name: string", ranges: [r1] },
+    { definition: "(property) name: string", ranges: [r4] },
+]);

@@ -1,4 +1,4 @@
-tests/cases/compiler/genericFunduleInModule2.ts(11,10): error TS2305: Module 'A' has no exported member 'B'.
+tests/cases/compiler/genericFunduleInModule2.ts(11,10): error TS2694: Namespace 'A' has no exported member 'B'.
 
 
 ==== tests/cases/compiler/genericFunduleInModule2.ts (1 errors) ====
@@ -14,5 +14,5 @@ tests/cases/compiler/genericFunduleInModule2.ts(11,10): error TS2305: Module 'A'
     
     var b: A.B;
              ~
-!!! error TS2305: Module 'A' has no exported member 'B'.
+!!! error TS2694: Namespace 'A' has no exported member 'B'.
     A.B(1);

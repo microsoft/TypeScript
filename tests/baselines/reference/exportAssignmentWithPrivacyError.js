@@ -19,6 +19,7 @@ export = server;
 
 //// [exportAssignmentWithPrivacyError.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     var server;
     return server;
 });

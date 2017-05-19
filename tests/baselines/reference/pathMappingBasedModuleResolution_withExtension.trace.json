@@ -1,0 +1,18 @@
+[
+    "======== Resolving module 'foo' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'foo'.",
+    "'paths' option is specified, looking for a pattern to match module name 'foo'.",
+    "Module name 'foo', matched pattern 'foo'.",
+    "Trying substitution 'foo/foo.ts', candidate module location: 'foo/foo.ts'.",
+    "File '/foo/foo.ts' exist - use it as a name resolution result.",
+    "======== Module name 'foo' was successfully resolved to '/foo/foo.ts'. ========",
+    "======== Resolving module 'bar' from '/a.ts'. ========",
+    "Module resolution kind is not specified, using 'NodeJs'.",
+    "'baseUrl' option is set to '/', using this value to resolve non-relative module name 'bar'.",
+    "'paths' option is specified, looking for a pattern to match module name 'bar'.",
+    "Module name 'bar', matched pattern 'bar'.",
+    "Trying substitution 'bar/bar.js', candidate module location: 'bar/bar.js'.",
+    "File '/bar/bar.js' exist - use it as a name resolution result.",
+    "======== Module name 'bar' was successfully resolved to '/bar/bar.js'. ========"
+]

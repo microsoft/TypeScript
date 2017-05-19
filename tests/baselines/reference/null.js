@@ -29,7 +29,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 function f() {
     return null;
     return new C();

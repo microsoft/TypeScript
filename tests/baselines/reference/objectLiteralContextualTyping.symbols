@@ -8,10 +8,10 @@ interface Item {
 >Item : Symbol(Item, Decl(objectLiteralContextualTyping.ts, 0, 0))
 
     name: string;
->name : Symbol(name, Decl(objectLiteralContextualTyping.ts, 5, 16))
+>name : Symbol(Item.name, Decl(objectLiteralContextualTyping.ts, 5, 16))
 
     description?: string;
->description : Symbol(description, Decl(objectLiteralContextualTyping.ts, 6, 17))
+>description : Symbol(Item.description, Decl(objectLiteralContextualTyping.ts, 6, 17))
 }
 
 declare function foo(item: Item): string;

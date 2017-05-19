@@ -17,5 +17,5 @@ var directChildrenMap = <IDirectChildrenMap>{};
 >directChildrenMap : IDirectChildrenMap
 ><IDirectChildrenMap>{} : IDirectChildrenMap
 >IDirectChildrenMap : IDirectChildrenMap
->{} : { [x: number]: undefined; }
+>{} : {}
 

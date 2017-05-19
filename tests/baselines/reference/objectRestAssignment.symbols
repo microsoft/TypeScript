@@ -1,0 +1,64 @@
+=== tests/cases/conformance/types/rest/objectRestAssignment.ts ===
+let ka: any;
+>ka : Symbol(ka, Decl(objectRestAssignment.ts, 0, 3))
+
+let nested: { ki };
+>nested : Symbol(nested, Decl(objectRestAssignment.ts, 1, 3))
+>ki : Symbol(ki, Decl(objectRestAssignment.ts, 1, 13))
+
+let other: number;
+>other : Symbol(other, Decl(objectRestAssignment.ts, 2, 3))
+
+let rest: { };
+>rest : Symbol(rest, Decl(objectRestAssignment.ts, 3, 3))
+
+let complex: { x: { ka, ki }, y: number };
+>complex : Symbol(complex, Decl(objectRestAssignment.ts, 4, 3))
+>x : Symbol(x, Decl(objectRestAssignment.ts, 4, 14))
+>ka : Symbol(ka, Decl(objectRestAssignment.ts, 4, 19))
+>ki : Symbol(ki, Decl(objectRestAssignment.ts, 4, 23))
+>y : Symbol(y, Decl(objectRestAssignment.ts, 4, 29))
+
+({x: { ka, ...nested }, y: other, ...rest} = complex);
+>x : Symbol(x, Decl(objectRestAssignment.ts, 5, 2))
+>ka : Symbol(ka, Decl(objectRestAssignment.ts, 5, 6))
+>nested : Symbol(nested, Decl(objectRestAssignment.ts, 1, 3))
+>y : Symbol(y, Decl(objectRestAssignment.ts, 5, 23))
+>other : Symbol(other, Decl(objectRestAssignment.ts, 2, 3))
+>rest : Symbol(rest, Decl(objectRestAssignment.ts, 3, 3))
+>complex : Symbol(complex, Decl(objectRestAssignment.ts, 4, 3))
+
+// should be:
+let overEmit: { a: { ka: string, x: string }[], b: { z: string, ki: string, ku: string }, ke: string, ko: string };
+>overEmit : Symbol(overEmit, Decl(objectRestAssignment.ts, 8, 3))
+>a : Symbol(a, Decl(objectRestAssignment.ts, 8, 15))
+>ka : Symbol(ka, Decl(objectRestAssignment.ts, 8, 20))
+>x : Symbol(x, Decl(objectRestAssignment.ts, 8, 32))
+>b : Symbol(b, Decl(objectRestAssignment.ts, 8, 47))
+>z : Symbol(z, Decl(objectRestAssignment.ts, 8, 52))
+>ki : Symbol(ki, Decl(objectRestAssignment.ts, 8, 63))
+>ku : Symbol(ku, Decl(objectRestAssignment.ts, 8, 75))
+>ke : Symbol(ke, Decl(objectRestAssignment.ts, 8, 89))
+>ko : Symbol(ko, Decl(objectRestAssignment.ts, 8, 101))
+
+// var _g = overEmit.a, [_h, ...y] = _g, nested2 = __rest(_h, []), _j = overEmit.b, { z } = _j, c = __rest(_j, ["z"]), rest2 = __rest(overEmit, ["a", "b"]);
+var { a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit;
+>a : Symbol(a, Decl(objectRestAssignment.ts, 8, 15))
+>nested2 : Symbol(nested2, Decl(objectRestAssignment.ts, 11, 11))
+>y : Symbol(y, Decl(objectRestAssignment.ts, 11, 25))
+>b : Symbol(b, Decl(objectRestAssignment.ts, 8, 47))
+>z : Symbol(z, Decl(objectRestAssignment.ts, 11, 37))
+>c : Symbol(c, Decl(objectRestAssignment.ts, 11, 40))
+>rest2 : Symbol(rest2, Decl(objectRestAssignment.ts, 11, 48))
+>overEmit : Symbol(overEmit, Decl(objectRestAssignment.ts, 8, 3))
+
+({ a: [{ ...nested2 }, ...y], b: { z, ...c }, ...rest2 } = overEmit);
+>a : Symbol(a, Decl(objectRestAssignment.ts, 12, 2))
+>nested2 : Symbol(nested2, Decl(objectRestAssignment.ts, 11, 11))
+>y : Symbol(y, Decl(objectRestAssignment.ts, 11, 25))
+>b : Symbol(b, Decl(objectRestAssignment.ts, 12, 29))
+>z : Symbol(z, Decl(objectRestAssignment.ts, 12, 34))
+>c : Symbol(c, Decl(objectRestAssignment.ts, 11, 40))
+>rest2 : Symbol(rest2, Decl(objectRestAssignment.ts, 11, 48))
+>overEmit : Symbol(overEmit, Decl(objectRestAssignment.ts, 8, 3))
+

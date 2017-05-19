@@ -79,7 +79,7 @@ var Others;
         function C() {
         }
         return C;
-    })();
+    }());
     var ac;
     var ai;
     var b = e; // ok

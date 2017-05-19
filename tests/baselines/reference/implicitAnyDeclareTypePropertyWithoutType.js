@@ -22,7 +22,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 // this should be an error
 var x; // error at "y,z"
 var x1; // error at "z1" 

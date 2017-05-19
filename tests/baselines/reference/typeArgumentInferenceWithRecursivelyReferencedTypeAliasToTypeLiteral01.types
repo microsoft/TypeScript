@@ -1,0 +1,27 @@
+=== tests/cases/compiler/typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral01.ts ===
+type TreeNode = {
+>TreeNode : TreeNode
+
+    name: string;
+>name : string
+
+    parent: TreeNode;
+>parent : TreeNode
+>TreeNode : TreeNode
+}
+
+var nodes: TreeNode[];
+>nodes : TreeNode[]
+>TreeNode : TreeNode
+
+nodes.map(n => n.name);
+>nodes.map(n => n.name) : string[]
+>nodes.map : { <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): U[]; <U>(callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): U[]; }
+>nodes : TreeNode[]
+>map : { <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): [U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [TreeNode, TreeNode], callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U): U[]; <U>(callbackfn: (this: void, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg: Z): U[]; }
+>n => n.name : (this: void, n: TreeNode) => string
+>n : TreeNode
+>n.name : string
+>n : TreeNode
+>name : string
+

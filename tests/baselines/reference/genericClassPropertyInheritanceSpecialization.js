@@ -76,11 +76,16 @@ class ViewModel<TValue> implements Contract<TValue> {
 
 
 //// [genericClassPropertyInheritanceSpecialization.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Portal;
 (function (Portal) {
     var Controls;
@@ -93,7 +98,7 @@ var Portal;
                 Validator.prototype.destroy = function () { };
                 Validator.prototype._validate = function (value) { return 0; };
                 return Validator;
-            })();
+            }());
             Validators.Validator = Validator;
         })(Validators = Controls.Validators || (Controls.Validators = {}));
     })(Controls = Portal.Controls || (Portal.Controls = {}));
@@ -109,10 +114,10 @@ var PortalFx;
                 var Validator = (function (_super) {
                     __extends(Validator, _super);
                     function Validator(message) {
-                        _super.call(this, message);
+                        return _super.call(this, message) || this;
                     }
                     return Validator;
-                })(Portal.Controls.Validators.Validator);
+                }(Portal.Controls.Validators.Validator));
                 Validators.Validator = Validator;
             })(Validators = Controls.Validators || (Controls.Validators = {}));
         })(Controls = ViewModels.Controls || (ViewModels.Controls = {}));
@@ -123,4 +128,4 @@ var ViewModel = (function () {
         this.validators = ko.observableArray();
     }
     return ViewModel;
-})();
+}());

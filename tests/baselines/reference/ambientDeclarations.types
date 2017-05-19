@@ -103,14 +103,14 @@ declare enum E2 {
 
     a = 1,
 >a : E2
->1 : number
+>1 : 1
 
     b,
 >b : E2
 
     c = 2,
 >c : E2
->2 : number
+>2 : 2
 
     d
 >d : E2

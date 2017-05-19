@@ -1,17 +1,4 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInArray7.ts ===
-var array: symbol[];
->array : symbol[]
-
-array.concat([...new SymbolIterator]);
->array.concat([...new SymbolIterator]) : symbol[]
->array.concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }
->array : symbol[]
->concat : { <U extends symbol[]>(...items: U[]): symbol[]; (...items: symbol[]): symbol[]; }
->[...new SymbolIterator] : symbol[]
->...new SymbolIterator : symbol
->new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator
-
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
 
@@ -28,7 +15,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -39,6 +26,20 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }
+
+var array: symbol[];
+>array : symbol[]
+
+array.concat([...new SymbolIterator]);
+>array.concat([...new SymbolIterator]) : symbol[]
+>array.concat : { (...items: symbol[][]): symbol[]; (...items: (symbol | symbol[])[]): symbol[]; }
+>array : symbol[]
+>concat : { (...items: symbol[][]): symbol[]; (...items: (symbol | symbol[])[]): symbol[]; }
+>[...new SymbolIterator] : symbol[]
+>...new SymbolIterator : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

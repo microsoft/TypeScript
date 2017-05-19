@@ -1,0 +1,2 @@
+//// [all.js.map]
+{"version":3,"file":"all.js","sourceRoot":"","sources":["tests/cases/compiler/ref/a.ts","tests/cases/compiler/b.ts"],"names":[],"mappings":";;;;;;;;;;;;;IAAA;QAAA;QAAiB,CAAC;QAAD,QAAC;IAAD,CAAC,AAAlB,IAAkB;IAAL,cAAC;;;;;ICCd;QAAuB,qBAAC;QAAxB;;QAA2B,CAAC;QAAD,QAAC;IAAD,CAAC,AAA5B,CAAuB,KAAC,GAAI;IAAf,cAAC"}

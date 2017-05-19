@@ -13,8 +13,8 @@ module Variables{
     x(1, 2, 3);
 >x(1, 2, 3) : void
 >x : (a: any, b: any, c: any) => void
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 }
 

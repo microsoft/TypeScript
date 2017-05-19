@@ -1,0 +1,154 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/recursiveTypesUsedAsFunctionParameters.ts ===
+class List<T> {
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+
+    data: T;
+>data : Symbol(List.data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 15))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+
+    next: List<List<T>>;
+>next : Symbol(List.next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 1, 12))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 11))
+}
+
+class MyList<T> {
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))
+
+    data: T;
+>data : Symbol(MyList.data, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 17))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))
+
+    next: MyList<MyList<T>>;
+>next : Symbol(MyList.next, Decl(recursiveTypesUsedAsFunctionParameters.ts, 6, 12))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 5, 13))
+}
+
+function foo<T>(x: List<T>);
+>foo : Symbol(foo, Decl(recursiveTypesUsedAsFunctionParameters.ts, 8, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 28), Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 28))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 13))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 16))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 13))
+
+function foo<U>(x: List<U>); // error, duplicate
+>foo : Symbol(foo, Decl(recursiveTypesUsedAsFunctionParameters.ts, 8, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 28), Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 28))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 13))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 16))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 13))
+
+function foo<T>(x: List<T>) {
+>foo : Symbol(foo, Decl(recursiveTypesUsedAsFunctionParameters.ts, 8, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 10, 28), Decl(recursiveTypesUsedAsFunctionParameters.ts, 11, 28))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 12, 13))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 12, 16))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 12, 13))
+}
+
+function foo2<T>(x: List<T>);
+>foo2 : Symbol(foo2, Decl(recursiveTypesUsedAsFunctionParameters.ts, 13, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 29), Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 31))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 14))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 17))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 14))
+
+function foo2<U>(x: MyList<U>); // ok, nominally compared with first overload
+>foo2 : Symbol(foo2, Decl(recursiveTypesUsedAsFunctionParameters.ts, 13, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 29), Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 31))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 14))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 17))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 14))
+
+function foo2<T>(x: any) {
+>foo2 : Symbol(foo2, Decl(recursiveTypesUsedAsFunctionParameters.ts, 13, 1), Decl(recursiveTypesUsedAsFunctionParameters.ts, 15, 29), Decl(recursiveTypesUsedAsFunctionParameters.ts, 16, 31))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 17, 14))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 17, 17))
+}
+
+function other<T extends List<U>, U>() {
+>other : Symbol(other, Decl(recursiveTypesUsedAsFunctionParameters.ts, 18, 1))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 15))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 33))
+>U : Symbol(U, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 33))
+
+    // error but wrong error
+    // BUG 838247
+    function foo3<V>(x: T);
+>foo3 : Symbol(foo3, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 40), Decl(recursiveTypesUsedAsFunctionParameters.ts, 23, 27))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 23, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 23, 21))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 15))
+
+    function foo3<V>(x: MyList<V>) { }
+>foo3 : Symbol(foo3, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 40), Decl(recursiveTypesUsedAsFunctionParameters.ts, 23, 27))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 24, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 24, 21))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 24, 18))
+
+    // should be error
+    // BUG 838247
+    function foo4<V>(x: T);
+>foo4 : Symbol(foo4, Decl(recursiveTypesUsedAsFunctionParameters.ts, 24, 38), Decl(recursiveTypesUsedAsFunctionParameters.ts, 28, 27))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 28, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 28, 21))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 15))
+
+    function foo4<V>(x: List<V>) { }
+>foo4 : Symbol(foo4, Decl(recursiveTypesUsedAsFunctionParameters.ts, 24, 38), Decl(recursiveTypesUsedAsFunctionParameters.ts, 28, 27))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 21))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 18))
+
+    // ok
+    function foo5<V>(x: T): string;
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 21))
+>T : Symbol(T, Decl(recursiveTypesUsedAsFunctionParameters.ts, 20, 15))
+
+    function foo5<V>(x: List<V>): number;
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 21))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 18))
+
+    function foo5<V>(x: MyList<V>): boolean;
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 21))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 18))
+
+    function foo5<V>(x: any): any { return null; }
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>V : Symbol(V, Decl(recursiveTypesUsedAsFunctionParameters.ts, 35, 18))
+>x : Symbol(x, Decl(recursiveTypesUsedAsFunctionParameters.ts, 35, 21))
+
+    var list: List<string>;
+>list : Symbol(list, Decl(recursiveTypesUsedAsFunctionParameters.ts, 37, 7))
+>List : Symbol(List, Decl(recursiveTypesUsedAsFunctionParameters.ts, 0, 0))
+
+    var myList: MyList<string>;
+>myList : Symbol(myList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 38, 7))
+>MyList : Symbol(MyList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 3, 1))
+
+    var r = foo5(list);
+>r : Symbol(r, Decl(recursiveTypesUsedAsFunctionParameters.ts, 40, 7))
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>list : Symbol(list, Decl(recursiveTypesUsedAsFunctionParameters.ts, 37, 7))
+
+    var r2 = foo5(myList);
+>r2 : Symbol(r2, Decl(recursiveTypesUsedAsFunctionParameters.ts, 41, 7))
+>foo5 : Symbol(foo5, Decl(recursiveTypesUsedAsFunctionParameters.ts, 29, 36), Decl(recursiveTypesUsedAsFunctionParameters.ts, 32, 35), Decl(recursiveTypesUsedAsFunctionParameters.ts, 33, 41), Decl(recursiveTypesUsedAsFunctionParameters.ts, 34, 44))
+>myList : Symbol(myList, Decl(recursiveTypesUsedAsFunctionParameters.ts, 38, 7))
+}

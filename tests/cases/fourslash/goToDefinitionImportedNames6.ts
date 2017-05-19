@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import /*moduleAliasDefinition*/alias = require("a");
+////import /*moduleAliasDefinition*/alias = require("./a");
 
 
 // @Filename: a.ts
@@ -14,8 +14,4 @@
 ////    x;
 ////}
 
-goTo.file("b.ts");
-
-goTo.marker('moduleAliasDefinition');
-goTo.definition();
-verify.caretAtMarker('moduleDefinition');
+verify.goToDefinition("moduleAliasDefinition", "moduleDefinition");

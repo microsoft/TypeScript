@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/missingImportAfterModuleImport.ts] ////
 
 //// [missingImportAfterModuleImport_0.ts]
-
 declare module "SubModule" {
     class SubModule {
         public static StaticVar: number;
@@ -25,11 +24,12 @@ export = MainModule;
 
 //// [missingImportAfterModuleImport_0.js]
 //// [missingImportAfterModuleImport_1.js]
+"use strict";
 var MainModule = (function () {
     function MainModule() {
     }
     return MainModule;
-})();
+}());
 module.exports = MainModule;
 
 

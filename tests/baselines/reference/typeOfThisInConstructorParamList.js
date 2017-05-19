@@ -14,4 +14,4 @@ var ErrClass = (function () {
         if (f === void 0) { f = this; }
     }
     return ErrClass;
-})();
+}());

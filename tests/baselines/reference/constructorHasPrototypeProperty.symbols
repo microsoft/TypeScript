@@ -6,7 +6,7 @@ module NonGeneric {
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         foo: string;
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 1, 13))
     }
 
     class D extends C {
@@ -14,7 +14,7 @@ module NonGeneric {
 >C : Symbol(C, Decl(constructorHasPrototypeProperty.ts, 0, 19))
 
         bar: string;
->bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
+>bar : Symbol(D.bar, Decl(constructorHasPrototypeProperty.ts, 5, 23))
     }
 
     var r = C.prototype;
@@ -49,11 +49,11 @@ module Generic {
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
 
         foo: T;
->foo : Symbol(foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
+>foo : Symbol(C.foo, Decl(constructorHasPrototypeProperty.ts, 16, 18))
 >T : Symbol(T, Decl(constructorHasPrototypeProperty.ts, 16, 12))
 
         bar: U;
->bar : Symbol(bar, Decl(constructorHasPrototypeProperty.ts, 17, 15))
+>bar : Symbol(C.bar, Decl(constructorHasPrototypeProperty.ts, 17, 15))
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 16, 14))
     }
 
@@ -66,11 +66,11 @@ module Generic {
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
 
         baz: T;
->baz : Symbol(baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
+>baz : Symbol(D.baz, Decl(constructorHasPrototypeProperty.ts, 21, 33))
 >T : Symbol(T, Decl(constructorHasPrototypeProperty.ts, 21, 12))
 
         bing: U;
->bing : Symbol(bing, Decl(constructorHasPrototypeProperty.ts, 22, 15))
+>bing : Symbol(D.bing, Decl(constructorHasPrototypeProperty.ts, 22, 15))
 >U : Symbol(U, Decl(constructorHasPrototypeProperty.ts, 21, 14))
     }
 

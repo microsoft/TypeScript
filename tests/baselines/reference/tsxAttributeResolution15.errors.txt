@@ -1,0 +1,21 @@
+tests/cases/conformance/jsx/file.tsx(11,21): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    class BigGreeter extends React.Component<{ }, {}> {
+        render() {
+            return <div>Default hi</div>;
+        }
+        greeting: string;
+    }
+    
+    // Error
+    let a = <BigGreeter prop1="hello" />
+                        ~~~~~~~~~~~~~
+!!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+    
+    // OK
+    let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
+    let c = <BigGreeter data-extra="hi" />

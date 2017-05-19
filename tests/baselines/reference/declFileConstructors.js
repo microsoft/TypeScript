@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileConstructors.ts] ////
 
 //// [declFileConstructors_0.ts]
-
 export class SimpleConstructor {
     /** This comment should appear for foo*/
     constructor() {
@@ -98,12 +97,14 @@ class GlobalConstructorWithParameterInitializer {
 }
 
 //// [declFileConstructors_0.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var SimpleConstructor = (function () {
     /** This comment should appear for foo*/
     function SimpleConstructor() {
     }
     return SimpleConstructor;
-})();
+}());
 exports.SimpleConstructor = SimpleConstructor;
 var ConstructorWithParameters = (function () {
     /** This is comment for function signature*/
@@ -113,7 +114,7 @@ var ConstructorWithParameters = (function () {
         var d = a;
     }
     return ConstructorWithParameters;
-})();
+}());
 exports.ConstructorWithParameters = ConstructorWithParameters;
 var ConstructorWithRestParamters = (function () {
     function ConstructorWithRestParamters(a) {
@@ -124,34 +125,34 @@ var ConstructorWithRestParamters = (function () {
         return a + rests.join("");
     }
     return ConstructorWithRestParamters;
-})();
+}());
 exports.ConstructorWithRestParamters = ConstructorWithRestParamters;
 var ConstructorWithOverloads = (function () {
     function ConstructorWithOverloads(a) {
     }
     return ConstructorWithOverloads;
-})();
+}());
 exports.ConstructorWithOverloads = ConstructorWithOverloads;
 var ConstructorWithPublicParameterProperty = (function () {
     function ConstructorWithPublicParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithPublicParameterProperty;
-})();
+}());
 exports.ConstructorWithPublicParameterProperty = ConstructorWithPublicParameterProperty;
 var ConstructorWithPrivateParameterProperty = (function () {
     function ConstructorWithPrivateParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithPrivateParameterProperty;
-})();
+}());
 exports.ConstructorWithPrivateParameterProperty = ConstructorWithPrivateParameterProperty;
 var ConstructorWithOptionalParameterProperty = (function () {
     function ConstructorWithOptionalParameterProperty(x) {
         this.x = x;
     }
     return ConstructorWithOptionalParameterProperty;
-})();
+}());
 exports.ConstructorWithOptionalParameterProperty = ConstructorWithOptionalParameterProperty;
 var ConstructorWithParameterInitializer = (function () {
     function ConstructorWithParameterInitializer(x) {
@@ -159,7 +160,7 @@ var ConstructorWithParameterInitializer = (function () {
         this.x = x;
     }
     return ConstructorWithParameterInitializer;
-})();
+}());
 exports.ConstructorWithParameterInitializer = ConstructorWithParameterInitializer;
 //// [declFileConstructors_1.js]
 var GlobalSimpleConstructor = (function () {
@@ -167,7 +168,7 @@ var GlobalSimpleConstructor = (function () {
     function GlobalSimpleConstructor() {
     }
     return GlobalSimpleConstructor;
-})();
+}());
 var GlobalConstructorWithParameters = (function () {
     /** This is comment for function signature*/
     function GlobalConstructorWithParameters(/** this is comment about a*/ a, 
@@ -176,7 +177,7 @@ var GlobalConstructorWithParameters = (function () {
         var d = a;
     }
     return GlobalConstructorWithParameters;
-})();
+}());
 var GlobalConstructorWithRestParamters = (function () {
     function GlobalConstructorWithRestParamters(a) {
         var rests = [];
@@ -186,37 +187,37 @@ var GlobalConstructorWithRestParamters = (function () {
         return a + rests.join("");
     }
     return GlobalConstructorWithRestParamters;
-})();
+}());
 var GlobalConstructorWithOverloads = (function () {
     function GlobalConstructorWithOverloads(a) {
     }
     return GlobalConstructorWithOverloads;
-})();
+}());
 var GlobalConstructorWithPublicParameterProperty = (function () {
     function GlobalConstructorWithPublicParameterProperty(x) {
         this.x = x;
     }
     return GlobalConstructorWithPublicParameterProperty;
-})();
+}());
 var GlobalConstructorWithPrivateParameterProperty = (function () {
     function GlobalConstructorWithPrivateParameterProperty(x) {
         this.x = x;
     }
     return GlobalConstructorWithPrivateParameterProperty;
-})();
+}());
 var GlobalConstructorWithOptionalParameterProperty = (function () {
     function GlobalConstructorWithOptionalParameterProperty(x) {
         this.x = x;
     }
     return GlobalConstructorWithOptionalParameterProperty;
-})();
+}());
 var GlobalConstructorWithParameterInitializer = (function () {
     function GlobalConstructorWithParameterInitializer(x) {
         if (x === void 0) { x = "hello"; }
         this.x = x;
     }
     return GlobalConstructorWithParameterInitializer;
-})();
+}());
 
 
 //// [declFileConstructors_0.d.ts]

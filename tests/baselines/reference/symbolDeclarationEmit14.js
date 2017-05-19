@@ -13,6 +13,6 @@ class C {
 
 //// [symbolDeclarationEmit14.d.ts]
 declare class C {
-    [Symbol.toPrimitive]: string;
-    [Symbol.toStringTag]: string;
+    readonly [Symbol.toPrimitive]: string;
+    readonly [Symbol.toStringTag]: string;
 }

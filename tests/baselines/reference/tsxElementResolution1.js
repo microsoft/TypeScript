@@ -1,4 +1,4 @@
-//// [tsxElementResolution1.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -12,7 +12,7 @@ declare module JSX {
 // Fail
 <span />;
 
-//// [tsxElementResolution1.jsx]
+//// [file.jsx]
 // OK
 <div />;
 // Fail

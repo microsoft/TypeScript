@@ -38,11 +38,16 @@ var context4: Base[] = [new Derived1(), new Derived1()];
 
 //// [arrayLiterals.js]
 // Empty array literal with no contextual type has type Undefined[]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var arr1 = [[], [1], ['']];
 var arr2 = [[null], [1], ['']];
 // Array literal with elements of only EveryType E has type E[]
@@ -54,7 +59,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var classArr = [new C(), new C()];
 var classTypeArray = [C, C, C];
 var classTypeArray; // Should OK, not be a parse error
@@ -66,22 +71,22 @@ var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
-})(Base);
+}(Base));
 ;
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
-})(Base);
+}(Base));
 ;
 var context3 = [new Derived1(), new Derived2()];
 // Contextual type C with numeric index signature of type Base makes array literal of Derived1 and Derived2 have type Base[]

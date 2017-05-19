@@ -1,3 +1,6 @@
+// @allowUnusedLabels: true
+// @allowUnreachableCode: true
+
 switch ('') {
     case 'a':
         break;

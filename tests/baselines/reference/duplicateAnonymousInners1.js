@@ -32,21 +32,22 @@ var Foo;
         function Helper() {
         }
         return Helper;
-    })();
+    }());
     var Inner = (function () {
         function Inner() {
         }
         return Inner;
-    })();
+    }());
     // Inner should show up in intellisense
     Foo.Outer = 0;
 })(Foo || (Foo = {}));
-var Foo;
 (function (Foo) {
     // Should not be an error
     var Helper = (function () {
         function Helper() {
         }
         return Helper;
-    })();
+    }());
+    // Inner should not show up in intellisense
+    // Outer should show up in intellisense
 })(Foo || (Foo = {}));

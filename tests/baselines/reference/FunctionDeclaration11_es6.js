@@ -3,5 +3,5 @@ function * yield() {
 }
 
 //// [FunctionDeclaration11_es6.js]
-function yield() {
+function* yield() {
 }

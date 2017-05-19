@@ -3,7 +3,7 @@ class C {
 >C : Symbol(C, Decl(thisInInstanceMemberInitializer.ts, 0, 0))
 
     x = this;
->x : Symbol(x, Decl(thisInInstanceMemberInitializer.ts, 0, 9))
+>x : Symbol(C.x, Decl(thisInInstanceMemberInitializer.ts, 0, 9))
 >this : Symbol(C, Decl(thisInInstanceMemberInitializer.ts, 0, 0))
 }
 
@@ -12,10 +12,10 @@ class D<T> {
 >T : Symbol(T, Decl(thisInInstanceMemberInitializer.ts, 4, 8))
 
     x = this;
->x : Symbol(x, Decl(thisInInstanceMemberInitializer.ts, 4, 12))
+>x : Symbol(D.x, Decl(thisInInstanceMemberInitializer.ts, 4, 12))
 >this : Symbol(D, Decl(thisInInstanceMemberInitializer.ts, 2, 1))
 
     y: T;
->y : Symbol(y, Decl(thisInInstanceMemberInitializer.ts, 5, 13))
+>y : Symbol(D.y, Decl(thisInInstanceMemberInitializer.ts, 5, 13))
 >T : Symbol(T, Decl(thisInInstanceMemberInitializer.ts, 4, 8))
 }

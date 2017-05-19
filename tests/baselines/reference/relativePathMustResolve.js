@@ -9,5 +9,7 @@ var z = foo.x + 10;
 
 
 //// [foo_1.js]
-var foo = require('./test/foo');
+"use strict";
+exports.__esModule = true;
+var foo = require("./test/foo");
 var z = foo.x + 10;

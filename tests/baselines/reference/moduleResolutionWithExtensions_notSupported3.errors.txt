@@ -1,0 +1,12 @@
+/a.ts(1,17): error TS6143: Module './jsx' was resolved to '/jsx.jsx', but '--allowJs' is not set.
+
+
+==== /a.ts (1 errors) ====
+    import jsx from "./jsx";
+                    ~~~~~~~
+!!! error TS6143: Module './jsx' was resolved to '/jsx.jsx', but '--allowJs' is not set.
+    
+==== /jsx.jsx (0 errors) ====
+    // Test the error message if we have `--jsx` but not `--allowJw`.
+    
+    

@@ -7,13 +7,13 @@ class MyClass
 {
     // my function comments
     public Count(): number
->Count : Symbol(Count, Decl(out-flag.ts, 4, 1))
+>Count : Symbol(MyClass.Count, Decl(out-flag.ts, 4, 1))
     {
         return 42;
     }
 
     public SetCount(value: number)
->SetCount : Symbol(SetCount, Decl(out-flag.ts, 9, 5))
+>SetCount : Symbol(MyClass.SetCount, Decl(out-flag.ts, 9, 5))
 >value : Symbol(value, Decl(out-flag.ts, 11, 20))
     {
         //

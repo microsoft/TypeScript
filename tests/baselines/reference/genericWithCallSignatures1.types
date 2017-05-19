@@ -15,7 +15,7 @@ class MyClass {
 ><string> this.callableThing() : string
 >this.callableThing() : string
 >this.callableThing : CallableExtention<string>
->this : MyClass
+>this : this
 >callableThing : CallableExtention<string>
     }
 }

@@ -63,7 +63,7 @@ var C = (function () {
         return null;
     };
     return C;
-})();
+}());
 var r4 = (new C()).f(1, '');
 var r4b = (new C()).f(1, '');
 var i;
@@ -76,7 +76,7 @@ var C2 = (function () {
         return null;
     };
     return C2;
-})();
+}());
 var r6 = (new C2()).f(1, '');
 var r6b = (new C2()).f(1, '');
 var i2;

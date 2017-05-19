@@ -35,7 +35,7 @@ var Generics;
         function A() {
         }
         return A;
-    })();
+    }());
     function foo() {
         var a;
         var b;

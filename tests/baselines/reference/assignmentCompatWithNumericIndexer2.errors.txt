@@ -12,12 +12,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(33,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived'.
+      Type 'Base' is not assignable to type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(36,9): error TS2322: Type '{ [x: number]: Derived2; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived2' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts(37,9): error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }'.
   Index signatures are incompatible.
     Type 'T' is not assignable to type 'Derived2'.
+      Type 'Base' is not assignable to type 'Derived2'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer2.ts (6 errors) ====
@@ -72,6 +74,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived'.
+!!! error TS2322:       Type 'Base' is not assignable to type 'Derived'.
     
             var b2: { [x: number]: Derived2; }
             a = b2; // error
@@ -84,6 +87,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: number]: Derived2; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2'.
+!!! error TS2322:       Type 'Base' is not assignable to type 'Derived2'.
     
             var b3: { [x: number]: T; }
             a = b3; // ok

@@ -6,7 +6,7 @@ export module x {
 >c : Symbol(c, Decl(internalAliasClassInsideLocalModuleWithExport.ts, 0, 17))
 
         foo(a: number) {
->foo : Symbol(foo, Decl(internalAliasClassInsideLocalModuleWithExport.ts, 1, 20))
+>foo : Symbol(c.foo, Decl(internalAliasClassInsideLocalModuleWithExport.ts, 1, 20))
 >a : Symbol(a, Decl(internalAliasClassInsideLocalModuleWithExport.ts, 2, 12))
 
             return a;

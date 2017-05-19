@@ -1,0 +1,29 @@
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,20): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,30): error TS1109: Expression expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,33): error TS1138: Parameter declaration expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,33): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,38): error TS1005: ';' expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,39): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,49): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts(1,53): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration10_es5.ts (8 errors) ====
+    async function foo(a = await => await): Promise<void> {
+                       ~~~~~~~~~
+!!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+                                 ~~
+!!! error TS1109: Expression expected.
+                                    ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                                    ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+                                         ~
+!!! error TS1005: ';' expected.
+                                          ~
+!!! error TS1128: Declaration or statement expected.
+                                                    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                                        ~
+!!! error TS1109: Expression expected.
+    }

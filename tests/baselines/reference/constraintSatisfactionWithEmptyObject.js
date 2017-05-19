@@ -49,7 +49,7 @@ var C = (function () {
         this.x = x;
     }
     return C;
-})();
+}());
 var r2 = new C({});
 var i;
 // {} constraint
@@ -62,6 +62,6 @@ var C2 = (function () {
         this.x = x;
     }
     return C2;
-})();
+}());
 var r2 = new C2({});
 var i2;

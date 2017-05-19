@@ -1,5 +1,4 @@
 === tests/cases/compiler/server.ts ===
-
 export class c {
 >c : c
 }
@@ -11,11 +10,11 @@ export module m {
 
     export var x = 10;
 >x : number
->10 : number
+>10 : 10
 }
 export var x = 10;
 >x : number
->10 : number
+>10 : 10
 
 export module uninstantiated {
 >uninstantiated : any

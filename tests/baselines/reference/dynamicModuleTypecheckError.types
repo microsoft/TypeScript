@@ -1,14 +1,14 @@
 === tests/cases/compiler/dynamicModuleTypecheckError.ts ===
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
  
 for(var i = 0; i < 30; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 30 : boolean
 >i : number
->30 : number
+>30 : 30
 >i++ : number
 >i : number
  
@@ -17,7 +17,7 @@ for(var i = 0; i < 30; i++) {
 >x : number
 >i * 1000 : number
 >i : number
->1000 : number
+>1000 : 1000
  
 }
 

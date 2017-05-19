@@ -9,4 +9,4 @@ var C = (function () {
     }
     C.prototype[Symbol.toStringTag] = function () { };
     return C;
-})();
+}());

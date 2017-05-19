@@ -1,0 +1,98 @@
+tests/cases/compiler/reachabilityChecks1.ts(2,1): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(6,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(18,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(30,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(47,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(60,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks1.ts(69,5): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/reachabilityChecks1.ts (7 errors) ====
+    while (true);
+    var x = 1;
+    ~~~
+!!! error TS7027: Unreachable code detected.
+    
+    module A {
+        while (true);
+        let x;
+        ~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    module A1 {
+        do {} while(true);
+        module A {
+            interface F {}
+        }
+    }
+    
+    module A2 {
+        while (true);
+        module A {
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
+            var x = 1;
+        }
+    }
+    
+    module A3 {
+        while (true);
+        type T = string;
+    }
+    
+    module A4 {
+        while (true);
+        module A {
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
+            const enum E { X }
+        }
+    }
+    
+    function f1(x) {
+        if (x) {
+            return;
+        }
+        else {
+            throw new Error("123");
+        }
+        var x;
+    }
+    
+    function f2() {
+        return;
+        class A {
+        ~~~~~
+!!! error TS7027: Unreachable code detected.
+        }
+    }
+    
+    module B {
+        for (; ;);
+        module C {
+        }
+    }
+    
+    function f3() {
+        do {
+        } while (true);
+        enum E {
+        ~~~~
+!!! error TS7027: Unreachable code detected.
+            X = 1
+        }
+    }
+    
+    function f4() {
+        if (true) {
+            throw new Error();
+        }
+        const enum E {
+        ~~~~~
+!!! error TS7027: Unreachable code detected.
+            X = 1
+        }
+    }
+    
+    

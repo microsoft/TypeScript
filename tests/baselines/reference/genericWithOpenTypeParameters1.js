@@ -17,7 +17,7 @@ var B = (function () {
     }
     B.prototype.foo = function (x) { return null; };
     return B;
-})();
+}());
 var x;
 x.foo(1); // no error
 var f = function (x) { return x.foo(1); }; // error

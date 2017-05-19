@@ -1,4 +1,4 @@
-// @errortruncation: true
+// @noErrorTruncation: false
 
 var x: {
     propertyWithAnExceedinglyLongName1: string;

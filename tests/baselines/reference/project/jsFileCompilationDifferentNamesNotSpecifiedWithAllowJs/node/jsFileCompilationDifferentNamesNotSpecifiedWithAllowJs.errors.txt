@@ -1,0 +1,10 @@
+error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
+error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+
+
+!!! error TS5053: Option 'allowJs' cannot be specified with option 'declaration'.
+!!! error TS6082: Only 'amd' and 'system' modules are supported alongside --out.
+==== DifferentNamesNotSpecifiedWithAllowJs/a.ts (0 errors) ====
+    var test = 10;
+==== DifferentNamesNotSpecifiedWithAllowJs/b.js (0 errors) ====
+    var test2 = 10; // Should get compiled

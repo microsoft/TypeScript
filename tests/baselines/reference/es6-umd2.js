@@ -1,5 +1,4 @@
 //// [es6-umd2.ts]
-
 export class A
 {
     constructor ()
@@ -14,10 +13,23 @@ export class A
 }
 
 //// [es6-umd2.js]
-export class A {
-    constructor() {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    B() {
-        return 42;
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports"], factory);
     }
-}
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class A {
+        constructor() {
+        }
+        B() {
+            return 42;
+        }
+    }
+    exports.A = A;
+});

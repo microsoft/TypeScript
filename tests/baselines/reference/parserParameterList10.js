@@ -10,8 +10,8 @@ var C = (function () {
     C.prototype.foo = function () {
         var bar = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            bar[_i - 0] = arguments[_i];
+            bar[_i] = arguments[_i];
         }
     };
     return C;
-})();
+}());

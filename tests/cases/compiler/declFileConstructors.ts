@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 // @module: commonjs
 
 // @Filename: declFileConstructors_0.ts

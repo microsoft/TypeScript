@@ -37,7 +37,7 @@ var C = (function () {
         return temp(null);
     };
     return C;
-})();
+}());
 var c = new C();
 c.data = c.x(null);
 c.data = c.foo();

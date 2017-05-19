@@ -1,15 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    /*1*/"blah"() { return 0; }
+////    "[|{| "isDefinition": true |}blah|]"() { return 0; }
 ////}
 ////
 ////var x: Foo;
-////x./*2*/blah;
+////x.[|blah|];
 
-
-goTo.marker("1");
-verify.referencesCountIs(2);
-
-goTo.marker("2");
-verify.referencesCountIs(2);
+//verify.singleReferenceGroup('(method) Foo["blah"](): number');
+const ranges = test.ranges();
+const [r0, r1] = ranges;
+verify.referenceGroups(r0, [{ definition: '(method) Foo["blah"](): number', ranges }]);
+verify.referenceGroups(r1, [
+    { definition: '(method) Foo["blah"](): number', ranges: [r0] },
+    { definition: '(method) Foo["blah"](): number', ranges: [r1] }
+]);

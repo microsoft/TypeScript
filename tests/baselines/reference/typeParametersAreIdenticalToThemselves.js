@@ -92,7 +92,7 @@ var C = (function () {
     C.prototype.foo3 = function (x) { };
     C.prototype.foo4 = function (x) { };
     return C;
-})();
+}());
 var C2 = (function () {
     function C2() {
     }
@@ -100,4 +100,4 @@ var C2 = (function () {
     C2.prototype.foo2 = function (a, x) { };
     C2.prototype.foo3 = function (x) { };
     return C2;
-})();
+}());

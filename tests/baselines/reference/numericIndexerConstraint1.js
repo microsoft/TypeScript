@@ -10,6 +10,6 @@ var Foo = (function () {
     }
     Foo.prototype.foo = function () { };
     return Foo;
-})();
+}());
 var x;
 var result = x["one"]; // error

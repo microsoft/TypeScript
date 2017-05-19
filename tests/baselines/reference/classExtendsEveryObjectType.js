@@ -17,33 +17,38 @@ class C5 extends foo { } // error
 class C6 extends []{ } // error
 
 //// [classExtendsEveryObjectType.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
-})(I); // error
+}(I)); // error
 var C2 = (function (_super) {
     __extends(C2, _super);
     function C2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C2;
-})({ foo: string }); // error
+}({ foo: string })); // error
 var x;
 var C3 = (function (_super) {
     __extends(C3, _super);
     function C3() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C3;
-})(x); // error
+}(x)); // error
 var M;
 (function (M) {
     M.x = 1;
@@ -51,22 +56,22 @@ var M;
 var C4 = (function (_super) {
     __extends(C4, _super);
     function C4() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
-})(M); // error
+}(M)); // error
 function foo() { }
 var C5 = (function (_super) {
     __extends(C5, _super);
     function C5() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
-})(foo); // error
+}(foo)); // error
 var C6 = (function (_super) {
     __extends(C6, _super);
     function C6() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C6;
-})([]); // error
+}([])); // error

@@ -26,7 +26,7 @@ var CCC = (function () {
         if (z === void 0) { z = 0; }
     };
     return CCC;
-})();
+}());
 var a = function (x) {
     if (x === void 0) { x = 0; }
     return 1;

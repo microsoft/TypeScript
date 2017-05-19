@@ -31,13 +31,13 @@ var ra3 = a2 in x;
 var ra4 = '' in x;
 >ra4 : boolean
 >'' in x : boolean
->'' : string
+>'' : ""
 >x : any
 
 var ra5 = 0 in x;
 >ra5 : boolean
 >0 in x : boolean
->0 : number
+>0 : 0
 >x : any
 
 // valid right operands

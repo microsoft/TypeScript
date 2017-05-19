@@ -1,6 +1,4 @@
 //// [moduleVisibilityTest2.ts]
-
-
 module OuterMod {
 	export function someExportedOuterFunc() { return -1; }
 
@@ -100,7 +98,7 @@ var M;
             this.b = 0;
         }
         return B;
-    })();
+    }());
     var C = (function () {
         function C() {
             this.someProp = 1;
@@ -112,12 +110,11 @@ var M;
         C.prototype.someMethodThatCallsAnOuterInnerMethod = function () { return OuterMod.someExportedOuterFunc(); };
         C.prototype.someMethod = function () { return 0; };
         return C;
-    })();
+    }());
     M.C = C;
     var someModuleVar = 4;
     function someModuleFunction() { return 5; }
 })(M || (M = {}));
-var M;
 (function (M) {
     M.c = x;
     M.meb = M.E.B;

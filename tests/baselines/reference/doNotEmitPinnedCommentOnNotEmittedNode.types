@@ -1,0 +1,24 @@
+=== tests/cases/compiler/file1.ts ===
+class C {
+>C : C
+
+    /*! remove pinned comment anywhere else */
+    public foo(x: string, y: any)
+>foo : (x: string, y: any) => any
+>x : string
+>y : any
+
+    public foo(x: string, y: number) { }
+>foo : (x: string, y: any) => any
+>x : string
+>y : number
+}
+
+var x = 10;
+>x : number
+>10 : 10
+
+/*! remove pinned comment anywhere else */
+declare var OData: any;
+>OData : any
+

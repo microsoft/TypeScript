@@ -15,13 +15,13 @@ declare module 'connect' {
 >connectExport : Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
 
         use: (mod: connectModule) => connectExport;
->use : Symbol(use, Decl(declaredExternalModule.ts, 8, 29))
+>use : Symbol(connectExport.use, Decl(declaredExternalModule.ts, 8, 29))
 >mod : Symbol(mod, Decl(declaredExternalModule.ts, 10, 14))
 >connectModule : Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))
 >connectExport : Symbol(connectExport, Decl(declaredExternalModule.ts, 6, 5))
 
         listen: (port: number) => void;
->listen : Symbol(listen, Decl(declaredExternalModule.ts, 10, 51))
+>listen : Symbol(connectExport.listen, Decl(declaredExternalModule.ts, 10, 51))
 >port : Symbol(port, Decl(declaredExternalModule.ts, 12, 17))
 
     }

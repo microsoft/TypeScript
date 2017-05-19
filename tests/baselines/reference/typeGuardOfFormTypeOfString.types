@@ -46,9 +46,9 @@ var c: C;
 //  - when false, removes the primitive type from the type of x.
 if (typeof strOrNum === "string") {
 >typeof strOrNum === "string" : boolean
->typeof strOrNum : string
+>typeof strOrNum : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNum : string | number
->"string" : string
+>"string" : "string"
 
     str = strOrNum; // string
 >str = strOrNum : string
@@ -63,9 +63,9 @@ else {
 }
 if (typeof strOrBool === "string") {
 >typeof strOrBool === "string" : boolean
->typeof strOrBool : string
+>typeof strOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrBool : string | boolean
->"string" : string
+>"string" : "string"
 
     str = strOrBool; // string
 >str = strOrBool : string
@@ -80,9 +80,9 @@ else {
 }
 if (typeof strOrNumOrBool === "string") {
 >typeof strOrNumOrBool === "string" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
->"string" : string
+>"string" : "string"
 
     str = strOrNumOrBool; // string
 >str = strOrNumOrBool : string
@@ -97,9 +97,9 @@ else {
 }
 if (typeof strOrC === "string") {
 >typeof strOrC === "string" : boolean
->typeof strOrC : string
+>typeof strOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrC : string | C
->"string" : string
+>"string" : "string"
 
     str = strOrC; // string
 >str = strOrC : string
@@ -113,19 +113,18 @@ else {
 >strOrC : C
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool === "string") {
 >typeof numOrBool === "string" : boolean
->typeof numOrBool : string
+>typeof numOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrBool : number | boolean
->"string" : string
+>"string" : "string"
 
-    var x1: number | boolean = numOrBool; // number | boolean
->x1 : number | boolean
->numOrBool : number | boolean
+    let x1: {} = numOrBool; // {}
+>x1 : {}
+>numOrBool : never
 }
 else {
-    var x2: number | boolean = numOrBool; // number | boolean
+    let x2: number | boolean = numOrBool; // number | boolean
 >x2 : number | boolean
 >numOrBool : number | boolean
 }
@@ -135,9 +134,9 @@ else {
 //  - when false, narrows the type of x by typeof x === s when true.
 if (typeof strOrNum !== "string") {
 >typeof strOrNum !== "string" : boolean
->typeof strOrNum : string
+>typeof strOrNum : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNum : string | number
->"string" : string
+>"string" : "string"
 
     num === strOrNum; // number
 >num === strOrNum : boolean
@@ -152,9 +151,9 @@ else {
 }
 if (typeof strOrBool !== "string") {
 >typeof strOrBool !== "string" : boolean
->typeof strOrBool : string
+>typeof strOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrBool : string | boolean
->"string" : string
+>"string" : "string"
 
     bool = strOrBool; // boolean
 >bool = strOrBool : boolean
@@ -169,9 +168,9 @@ else {
 }
 if (typeof strOrNumOrBool !== "string") {
 >typeof strOrNumOrBool !== "string" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
->"string" : string
+>"string" : "string"
 
     numOrBool = strOrNumOrBool; // number | boolean
 >numOrBool = strOrNumOrBool : number | boolean
@@ -186,9 +185,9 @@ else {
 }
 if (typeof strOrC !== "string") {
 >typeof strOrC !== "string" : boolean
->typeof strOrC : string
+>typeof strOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrC : string | C
->"string" : string
+>"string" : "string"
 
     c = strOrC; // C
 >c = strOrC : C
@@ -202,20 +201,19 @@ else {
 >strOrC : string
 }
 
-// Narrowing occurs only if target type is a subtype of variable type
 if (typeof numOrBool !== "string") {
 >typeof numOrBool !== "string" : boolean
->typeof numOrBool : string
+>typeof numOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrBool : number | boolean
->"string" : string
+>"string" : "string"
 
-    var x1: number | boolean = numOrBool; // number | boolean
+    let x1: number | boolean = numOrBool; // number | boolean
 >x1 : number | boolean
 >numOrBool : number | boolean
 }
 else {
-    var x2: number | boolean = numOrBool; // number | boolean
->x2 : number | boolean
->numOrBool : number | boolean
+    let x2: {} = numOrBool; // {}
+>x2 : {}
+>numOrBool : never
 }
 

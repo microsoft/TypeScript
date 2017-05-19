@@ -220,12 +220,7 @@
 --------------------------------
 32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
 
-    ~~~~~                                         => Pos: (351 to 355)  SpanInfo: {"start":356,"length":13}
-    >i = 0, j = 20
-    >:=> (line 32, col 5) to (line 32, col 18)
-32 >for (i = 0, j = 20; j < 20, i < 20; j++) {
-
-         ~~~~~~                                   => Pos: (356 to 361)  SpanInfo: {"start":356,"length":5}
+    ~~~~~~~~~~~                                   => Pos: (351 to 361)  SpanInfo: {"start":356,"length":5}
     >i = 0
     >:=> (line 32, col 5) to (line 32, col 10)
 32 >for (i = 0, j = 20; j < 20, i < 20; j++) {

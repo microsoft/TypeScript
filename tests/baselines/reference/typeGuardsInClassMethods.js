@@ -125,4 +125,4 @@ var C1 = (function () {
         num = typeof param === "string" && param.length; // string
     };
     return C1;
-})();
+}());

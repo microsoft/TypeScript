@@ -15,4 +15,4 @@ var foo = (function () {
         configurable: true
     });
     return foo;
-})();
+}());

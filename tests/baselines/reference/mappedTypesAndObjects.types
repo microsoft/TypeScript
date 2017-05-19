@@ -1,0 +1,130 @@
+=== tests/cases/conformance/types/mapped/mappedTypesAndObjects.ts ===
+function f1<T>(x: Partial<T>, y: Readonly<T>) {
+>f1 : <T>(x: Partial<T>, y: Readonly<T>) => void
+>T : T
+>x : Partial<T>
+>Partial : Partial<T>
+>T : T
+>y : Readonly<T>
+>Readonly : Readonly<T>
+>T : T
+
+    let obj: {};
+>obj : {}
+
+    obj = x;
+>obj = x : Partial<T>
+>obj : {}
+>x : Partial<T>
+
+    obj = y;
+>obj = y : Readonly<T>
+>obj : {}
+>y : Readonly<T>
+}
+
+function f2<T>(x: Partial<T>, y: Readonly<T>) {
+>f2 : <T>(x: Partial<T>, y: Readonly<T>) => void
+>T : T
+>x : Partial<T>
+>Partial : Partial<T>
+>T : T
+>y : Readonly<T>
+>Readonly : Readonly<T>
+>T : T
+
+    let obj: { [x: string]: any };
+>obj : { [x: string]: any; }
+>x : string
+
+    obj = x;
+>obj = x : Partial<T>
+>obj : { [x: string]: any; }
+>x : Partial<T>
+
+    obj = y;
+>obj = y : Readonly<T>
+>obj : { [x: string]: any; }
+>y : Readonly<T>
+}
+
+function f3<T>(x: Partial<T>) {
+>f3 : <T>(x: Partial<T>) => void
+>T : T
+>x : Partial<T>
+>Partial : Partial<T>
+>T : T
+
+    x = {};
+>x = {} : {}
+>x : Partial<T>
+>{} : {}
+}
+
+// Repro from #12900
+
+interface Base {
+>Base : Base
+
+    foo: { [key: string]: any };
+>foo : { [key: string]: any; }
+>key : string
+
+    bar: any;
+>bar : any
+
+    baz: any;
+>baz : any
+}
+
+interface E1<T> extends Base {
+>E1 : E1<T>
+>T : T
+>Base : Base
+
+    foo: T;
+>foo : T
+>T : T
+}
+
+interface Something { name: string, value: string };
+>Something : Something
+>name : string
+>value : string
+
+interface E2 extends Base {
+>E2 : E2
+>Base : Base
+
+    foo: Partial<Something>;  // or other mapped type
+>foo : Partial<Something>
+>Partial : Partial<T>
+>Something : Something
+}
+
+interface E3<T> extends Base {
+>E3 : E3<T>
+>T : T
+>Base : Base
+
+    foo: Partial<T>; // or other mapped type
+>foo : Partial<T>
+>Partial : Partial<T>
+>T : T
+}
+
+// Repro from #13747
+
+class Form<T> {
+>Form : Form<T>
+>T : T
+
+    private values: {[P in keyof T]?: T[P]} = {}
+>values : { [P in keyof T]?: T[P] | undefined; }
+>P : P
+>T : T
+>T : T
+>P : P
+>{} : {}
+}
+

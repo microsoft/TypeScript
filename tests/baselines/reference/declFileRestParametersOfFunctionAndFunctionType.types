@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileRestParametersOfFunctionAndFunctionType.ts ===
-
 function f1(...args) { }
 >f1 : (...args: any[]) => void
 >args : any[]
@@ -29,7 +28,7 @@ var f6 = () => { return [<any>10]; }
 >() => { return [<any>10]; } : () => any[]
 >[<any>10] : any[]
 ><any>10 : any
->10 : number
+>10 : 10
 
 
 

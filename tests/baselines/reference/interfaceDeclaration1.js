@@ -61,4 +61,4 @@ var C1 = (function () {
         var prototype = 3;
     }
     return C1;
-})();
+}());

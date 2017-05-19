@@ -18,4 +18,4 @@ var Foo = (function () {
         return this.y;
     };
     return Foo;
-})();
+}());

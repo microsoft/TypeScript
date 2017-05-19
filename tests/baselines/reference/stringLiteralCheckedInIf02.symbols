@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf02.ts ===
+type S = "a" | "b";
+>S : Symbol(S, Decl(stringLiteralCheckedInIf02.ts, 0, 0))
+
+type T = S[] | S;
+>T : Symbol(T, Decl(stringLiteralCheckedInIf02.ts, 0, 19))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf02.ts, 0, 0))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf02.ts, 0, 0))
+
+function isS(t: T): t is S {
+>isS : Symbol(isS, Decl(stringLiteralCheckedInIf02.ts, 1, 17))
+>t : Symbol(t, Decl(stringLiteralCheckedInIf02.ts, 3, 13))
+>T : Symbol(T, Decl(stringLiteralCheckedInIf02.ts, 0, 19))
+>t : Symbol(t, Decl(stringLiteralCheckedInIf02.ts, 3, 13))
+>S : Symbol(S, Decl(stringLiteralCheckedInIf02.ts, 0, 0))
+
+    return t === "a" || t === "b";
+>t : Symbol(t, Decl(stringLiteralCheckedInIf02.ts, 3, 13))
+>t : Symbol(t, Decl(stringLiteralCheckedInIf02.ts, 3, 13))
+}
+
+function f(foo: T) {
+>f : Symbol(f, Decl(stringLiteralCheckedInIf02.ts, 5, 1))
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf02.ts, 7, 11))
+>T : Symbol(T, Decl(stringLiteralCheckedInIf02.ts, 0, 19))
+
+    if (isS(foo)) {
+>isS : Symbol(isS, Decl(stringLiteralCheckedInIf02.ts, 1, 17))
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf02.ts, 7, 11))
+
+        return foo;
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf02.ts, 7, 11))
+    }
+    else { 
+        return foo[0];
+>foo : Symbol(foo, Decl(stringLiteralCheckedInIf02.ts, 7, 11))
+    }
+}

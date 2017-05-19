@@ -14,9 +14,9 @@ var Foo = (function () {
     }
     Foo.prototype.banana = function (x) { };
     return Foo;
-})();
+}());
 var Bar = (function () {
     function Bar(c) {
     }
     return Bar;
-})();
+}());

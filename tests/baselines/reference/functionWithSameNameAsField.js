@@ -17,4 +17,4 @@ var TestProgressBar = (function () {
         return this;
     };
     return TestProgressBar;
-})();
+}());

@@ -49,7 +49,7 @@ var b = { new(x: string) { return ''; } }; // not a construct signature, functio
 >{ new(x: string) { return ''; } } : { new(x: string): string; }
 >new : (x: string) => string
 >x : string
->'' : string
+>'' : ""
 
 function foo1b(x: B);
 >foo1b : { (x: B): any; (x: B): any; }

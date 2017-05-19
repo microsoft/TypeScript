@@ -1,4 +1,3 @@
-/// <reference no-default-lib="true"/>
 
 var f: <T extends UNKNOWN>() => void;
 

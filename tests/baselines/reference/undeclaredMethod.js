@@ -1,5 +1,4 @@
 //// [undeclaredMethod.ts]
-
 module M {
     export class C {
         public salt() {}
@@ -21,7 +20,7 @@ var M;
         }
         C.prototype.salt = function () { };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var c = new M.C();

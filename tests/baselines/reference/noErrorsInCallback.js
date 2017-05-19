@@ -14,7 +14,7 @@ var Bar = (function () {
         this.foo = foo;
     }
     return Bar;
-})();
+}());
 var one = new Bar({}); // Error
 [].forEach(function () {
     var two = new Bar({}); // No error?

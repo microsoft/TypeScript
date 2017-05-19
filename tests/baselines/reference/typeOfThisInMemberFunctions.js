@@ -42,7 +42,7 @@ var C = (function () {
         var r2 = this;
     };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -53,7 +53,7 @@ var D = (function () {
         var r2 = this;
     };
     return D;
-})();
+}());
 var E = (function () {
     function E() {
     }
@@ -64,4 +64,4 @@ var E = (function () {
         var r2 = this;
     };
     return E;
-})();
+}());

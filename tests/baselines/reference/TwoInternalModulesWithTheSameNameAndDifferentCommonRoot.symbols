@@ -9,10 +9,10 @@ module Root {
 >Point : Symbol(Point, Decl(part1.ts, 1, 21))
 
             x: number;
->x : Symbol(x, Decl(part1.ts, 2, 32))
+>x : Symbol(Point.x, Decl(part1.ts, 2, 32))
 
             y: number;
->y : Symbol(y, Decl(part1.ts, 3, 22))
+>y : Symbol(Point.y, Decl(part1.ts, 3, 22))
         }
 
         export module Utils {
@@ -62,11 +62,11 @@ module otherRoot {
 >Plane : Symbol(Plane, Decl(part2.ts, 5, 29))
 
                 constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
->tl : Symbol(tl, Decl(part2.ts, 7, 28))
+>tl : Symbol(Plane.tl, Decl(part2.ts, 7, 28))
 >Root : Symbol(Root, Decl(part1.ts, 0, 0))
 >A : Symbol(Root.A, Decl(part1.ts, 0, 13))
 >Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))
->br : Symbol(br, Decl(part2.ts, 7, 52))
+>br : Symbol(Plane.br, Decl(part2.ts, 7, 52))
 >Root : Symbol(Root, Decl(part1.ts, 0, 0))
 >A : Symbol(Root.A, Decl(part1.ts, 0, 13))
 >Point : Symbol(Root.A.Point, Decl(part1.ts, 1, 21))

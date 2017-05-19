@@ -1,0 +1,110 @@
+=== tests/cases/compiler/blockScopedBindingsReassignedInLoop6.ts ===
+function f1() {
+>f1 : () => void
+
+    for (let [x, y] = [1, 2]; x < y; ++x, --y) {
+>x : number
+>y : number
+>[1, 2] : [number, number]
+>1 : 1
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+        let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+        if (x == 1)
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+            break;
+        else if (y == 2)
+>y == 2 : boolean
+>y : number
+>2 : 2
+
+            y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+
+        else
+            return;
+    }
+}
+
+function f2() {
+>f2 : () => void
+
+    for (let [{a: x, b: {c: y}}] = [{a: 1, b: {c: 2}}]; x < y; ++x, --y) {
+>a : any
+>x : number
+>b : any
+>c : any
+>y : number
+>[{a: 1, b: {c: 2}}] : [{ a: number; b: { c: number; }; }]
+>{a: 1, b: {c: 2}} : { a: number; b: { c: number; }; }
+>a : number
+>1 : 1
+>b : { c: number; }
+>{c: 2} : { c: number; }
+>c : number
+>2 : 2
+>x < y : boolean
+>x : number
+>y : number
+>++x, --y : number
+>++x : number
+>x : number
+>--y : number
+>y : number
+
+        let a = () => x++ + y++;
+>a : () => number
+>() => x++ + y++ : () => number
+>x++ + y++ : number
+>x++ : number
+>x : number
+>y++ : number
+>y : number
+
+        if (x == 1)
+>x == 1 : boolean
+>x : number
+>1 : 1
+
+            break;
+        else if (y == 2)
+>y == 2 : boolean
+>y : number
+>2 : 2
+
+            y = 5;
+>y = 5 : 5
+>y : number
+>5 : 5
+
+        else
+            return;
+    }
+}
+
+
+
+
+
+

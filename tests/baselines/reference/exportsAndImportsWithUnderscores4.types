@@ -1,0 +1,108 @@
+=== tests/cases/conformance/es6/modules/m1.ts ===
+declare var console: any;
+>console : any
+
+export function _() {
+>_ : () => void
+
+    console.log("_");
+>console.log("_") : any
+>console.log : any
+>console : any
+>log : any
+>"_" : "_"
+}
+export function __() {
+>__ : () => void
+
+    console.log("__");
+>console.log("__") : any
+>console.log : any
+>console : any
+>log : any
+>"__" : "__"
+}
+export function ___() {
+>___ : () => void
+
+    console.log("___");
+>console.log("___") : any
+>console.log : any
+>console : any
+>log : any
+>"___" : "___"
+}
+export function _hi() {
+>_hi : () => void
+
+    console.log("_hi");
+>console.log("_hi") : any
+>console.log : any
+>console : any
+>log : any
+>"_hi" : "_hi"
+}
+export function __proto() {
+>__proto : () => void
+
+    console.log("__proto");
+>console.log("__proto") : any
+>console.log : any
+>console : any
+>log : any
+>"__proto" : "__proto"
+}
+export function __esmodule() {
+>__esmodule : () => void
+
+    console.log("__esmodule");
+>console.log("__esmodule") : any
+>console.log : any
+>console : any
+>log : any
+>"__esmodule" : "__esmodule"
+}
+export function ___hello(){
+>___hello : () => void
+
+    console.log("___hello");
+>console.log("___hello") : any
+>console.log : any
+>console : any
+>log : any
+>"___hello" : "___hello"
+}
+
+=== tests/cases/conformance/es6/modules/m2.ts ===
+import {_, __, ___hello, __esmodule, __proto, _hi}  from "./m1";
+>_ : () => void
+>__ : () => void
+>___hello : () => void
+>__esmodule : () => void
+>__proto : () => void
+>_hi : () => void
+
+_();
+>_() : void
+>_ : () => void
+
+__();
+>__() : void
+>__ : () => void
+
+___hello();
+>___hello() : void
+>___hello : () => void
+
+__esmodule();
+>__esmodule() : void
+>__esmodule : () => void
+
+__proto();
+>__proto() : void
+>__proto : () => void
+
+_hi();
+>_hi() : void
+>_hi : () => void
+

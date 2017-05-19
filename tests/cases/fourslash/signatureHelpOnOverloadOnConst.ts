@@ -18,9 +18,9 @@ verify.currentParameterSpanIs("z: string");
 goTo.marker('2');
 verify.signatureHelpCountIs(3);
 verify.currentParameterHelpArgumentNameIs("x");
-verify.currentParameterSpanIs("x: 'hi'");
+verify.currentParameterSpanIs("x: \"hi\"");
 
 goTo.marker('3');
 verify.signatureHelpCountIs(3);
 verify.currentParameterHelpArgumentNameIs("y");
-verify.currentParameterSpanIs("y: 'bye'");
+verify.currentParameterSpanIs("y: \"bye\"");

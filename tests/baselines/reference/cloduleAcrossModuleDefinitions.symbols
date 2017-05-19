@@ -6,7 +6,7 @@ module A {
 >B : Symbol(B, Decl(cloduleAcrossModuleDefinitions.ts, 0, 10), Decl(cloduleAcrossModuleDefinitions.ts, 7, 10))
 
         foo() { }
->foo : Symbol(foo, Decl(cloduleAcrossModuleDefinitions.ts, 1, 20))
+>foo : Symbol(B.foo, Decl(cloduleAcrossModuleDefinitions.ts, 1, 20))
 
         static bar() { }
 >bar : Symbol(B.bar, Decl(cloduleAcrossModuleDefinitions.ts, 2, 17))

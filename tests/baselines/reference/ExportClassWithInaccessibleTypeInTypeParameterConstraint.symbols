@@ -6,10 +6,10 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 2, 17))
+>x : Symbol(Point.x, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 2, 17))
 
         y: number;
->y : Symbol(y, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 3, 18))
+>y : Symbol(Point.y, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 3, 18))
     }
 
     export var Origin: Point = { x: 0, y: 0 };
@@ -23,7 +23,7 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
 
         z: number;
->z : Symbol(z, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 9, 40))
+>z : Symbol(Point3d.z, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 9, 40))
     }
 
     export var Origin3d: Point3d = { x: 0, y: 0, z: 0 };
@@ -39,9 +39,9 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 0, 10))
 
         constructor(public start: TPoint, public end: TPoint) { }
->start : Symbol(start, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 20))
+>start : Symbol(Line.start, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 20))
 >TPoint : Symbol(TPoint, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 22))
->end : Symbol(end, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 41))
+>end : Symbol(Line.end, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 16, 41))
 >TPoint : Symbol(TPoint, Decl(ExportClassWithInaccessibleTypeInTypeParameterConstraint.ts, 15, 22))
 
         static fromorigin2d(p: Point): Line<Point>{

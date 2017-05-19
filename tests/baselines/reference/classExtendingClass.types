@@ -102,7 +102,7 @@ var r7 = d2.thing('');
 >d2.thing : (x: string) => void
 >d2 : D2<string>
 >thing : (x: string) => void
->'' : string
+>'' : ""
 
 var r8 = D2.other(1);
 >r8 : void
@@ -110,5 +110,5 @@ var r8 = D2.other(1);
 >D2.other : <T>(x: T) => void
 >D2 : typeof D2
 >other : <T>(x: T) => void
->1 : number
+>1 : 1
 

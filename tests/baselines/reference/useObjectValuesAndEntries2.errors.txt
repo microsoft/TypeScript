@@ -1,0 +1,16 @@
+tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(3,22): error TS2339: Property 'values' does not exist on type 'ObjectConstructor'.
+tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts(7,22): error TS2339: Property 'entries' does not exist on type 'ObjectConstructor'.
+
+
+==== tests/cases/conformance/es2017/useObjectValuesAndEntries2.ts (2 errors) ====
+    var o = { a: 1, b: 2 };
+    
+    for (var x of Object.values(o)) {
+                         ~~~~~~
+!!! error TS2339: Property 'values' does not exist on type 'ObjectConstructor'.
+        let y = x;
+    }
+    
+    var entries = Object.entries(o);
+                         ~~~~~~~
+!!! error TS2339: Property 'entries' does not exist on type 'ObjectConstructor'.

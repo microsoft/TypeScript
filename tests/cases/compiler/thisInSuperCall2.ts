@@ -5,7 +5,7 @@ class Base {
 class Foo extends Base {
     public x: number;
     constructor() {
-        super(this); // no error
+        super(this); // error: "super" has to be called before "this" accessing
     }
 }
 

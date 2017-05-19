@@ -1,0 +1,162 @@
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(10,18): error TS2304: Cannot find name 'K0'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(20,18): error TS2339: Property 'foo' does not exist on type 'Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(21,18): error TS2339: Property 'foo' does not exist on type 'Shape'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(22,18): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(23,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(24,18): error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(25,18): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(26,18): error TS2538: Type 'void' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(27,18): error TS2538: Type 'undefined' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(28,18): error TS2538: Type '{ x: string; }' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(30,18): error TS2538: Type 'string & number' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(35,21): error TS2537: Type 'string[]' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(46,16): error TS2538: Type 'boolean' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(63,33): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(64,33): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+  Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(66,24): error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(67,24): error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+  Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(72,5): error TS2536: Type 'keyof (T & U)' cannot be used to index type 'T | U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(76,5): error TS2322: Type 'T | U' is not assignable to type 'T & U'.
+  Type 'T' is not assignable to type 'T & U'.
+    Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(77,5): error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
+
+
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (24 errors) ====
+    class Shape {
+        name: string;
+        width: number;
+        height: number;
+        visible: boolean;
+    }
+    
+    type Dictionary<T> = { [x: string]: T };
+    
+    type T00 = keyof K0;  // Error
+                     ~~
+!!! error TS2304: Cannot find name 'K0'.
+    
+    type T01 = keyof Object;
+    type T02 = keyof keyof Object;
+    type T03 = keyof keyof keyof Object;
+    type T04 = keyof keyof keyof keyof Object;
+    type T05 = keyof keyof keyof keyof keyof Object;
+    type T06 = keyof keyof keyof keyof keyof keyof Object;
+    
+    type T10 = Shape["name"];
+    type T11 = Shape["foo"];  // Error
+                     ~~~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Shape'.
+    type T12 = Shape["name" | "foo"];  // Error
+                     ~~~~~~~~~~~~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Shape'.
+    type T13 = Shape[any];  // Error
+                     ~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
+    type T14 = Shape[string];  // Error
+                     ~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+    type T15 = Shape[number];  // Error
+                     ~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+    type T16 = Shape[boolean];  // Error
+                     ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    type T17 = Shape[void];  // Error
+                     ~~~~
+!!! error TS2538: Type 'void' cannot be used as an index type.
+    type T18 = Shape[undefined];  // Error
+                     ~~~~~~~~~
+!!! error TS2538: Type 'undefined' cannot be used as an index type.
+    type T19 = Shape[{ x: string }];  // Error
+                     ~~~~~~~~~~~~~
+!!! error TS2538: Type '{ x: string; }' cannot be used as an index type.
+    type T20 = Shape[string | number];  // Error
+                     ~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+    type T21 = Shape[string & number];  // Error
+                     ~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'string & number' cannot be used as an index type.
+    type T22 = Shape[string | boolean];  // Error
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+    
+    type T30 = string[]["length"];
+    type T31 = string[][number];
+    type T32 = string[][string];  // Error
+                        ~~~~~~
+!!! error TS2537: Type 'string[]' has no matching index signature for type 'string'.
+    type T33 = string[][boolean];  // Error
+                        ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T40 = Dictionary<string>[any];
+    type T41 = Dictionary<string>[number];
+    type T42 = Dictionary<string>[string];
+    type T43 = Dictionary<string>[boolean];  // Error
+                                  ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T50 = any[any];
+    type T51 = any[number];
+    type T52 = any[string];
+    type T53 = any[boolean];  // Error
+                   ~~~~~~~
+!!! error TS2538: Type 'boolean' cannot be used as an index type.
+    
+    type T60 = {}["toString"];
+    type T61 = []["toString"];
+    
+    declare let cond: boolean;
+    
+    function getProperty<T, K extends keyof T>(obj: T, key: K) {
+        return obj[key];
+    }
+    
+    function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+        obj[key] = value;
+    }
+    
+    function f10(shape: Shape) {
+        let x1 = getProperty(shape, "name");
+        let x2 = getProperty(shape, "size");  // Error
+                                    ~~~~~~
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+        let x3 = getProperty(shape, cond ? "name" : "size");  // Error
+                                    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345:   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+        setProperty(shape, "name", "rectangle");
+        setProperty(shape, "size", 10);  // Error
+                           ~~~~~~
+!!! error TS2345: Argument of type '"size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+        setProperty(shape, cond ? "name" : "size", 10);  // Error
+                           ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '"name" | "size"' is not assignable to parameter of type '"name" | "width" | "height" | "visible"'.
+!!! error TS2345:   Type '"size"' is not assignable to type '"name" | "width" | "height" | "visible"'.
+    }
+    
+    function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
+        o1[k1];
+        o1[k2];   // Error
+        ~~~~~~
+!!! error TS2536: Type 'keyof (T & U)' cannot be used to index type 'T | U'.
+        o2[k1];
+        o2[k2];
+        o1 = o2;
+        o2 = o1;  // Error
+        ~~
+!!! error TS2322: Type 'T | U' is not assignable to type 'T & U'.
+!!! error TS2322:   Type 'T' is not assignable to type 'T & U'.
+!!! error TS2322:     Type 'T' is not assignable to type 'U'.
+        k1 = k2;  // Error
+        ~~
+!!! error TS2322: Type 'keyof (T & U)' is not assignable to type 'keyof (T | U)'.
+        k2 = k1;
+    }

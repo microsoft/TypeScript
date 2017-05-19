@@ -28,7 +28,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var r1 = c["a b"];
 var r1b = C['c d'];

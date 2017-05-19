@@ -79,7 +79,7 @@ var A;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
 })(A || (A = {}));
 var C;
@@ -96,7 +96,6 @@ var X;
         return 42;
     }
     X.Y = Y;
-    var Y;
     (function (Y) {
         var Point = (function () {
             function Point(x, y) {
@@ -104,7 +103,7 @@ var X;
                 this.y = y;
             }
             return Point;
-        })();
+        }());
         Y.Point = Point;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
@@ -122,9 +121,8 @@ var K;
             this.name = name;
         }
         return L;
-    })();
+    }());
     K.L = L;
-    var L;
     (function (L) {
         L.y = 12;
     })(L = K.L || (K.L = {}));

@@ -1,0 +1,15 @@
+=== /src/consumer.ts ===
+/// <reference types="jquery" />
+$.foo();
+>$.foo() : void
+>$.foo : () => void
+>$ : { foo(): void; }
+>foo : () => void
+
+=== /src/node_modules/jquery/index.d.ts ===
+// Secondary references are possible
+
+declare var $: { foo(): void };
+>$ : { foo(): void; }
+>foo : () => void
+

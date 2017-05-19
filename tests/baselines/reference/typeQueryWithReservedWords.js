@@ -21,9 +21,9 @@ var Controller = (function () {
     }
     Controller.prototype.create = function () {
     };
-    Controller.prototype.delete = function () {
+    Controller.prototype["delete"] = function () {
     };
-    Controller.prototype.var = function () {
+    Controller.prototype["var"] = function () {
     };
     return Controller;
-})();
+}());

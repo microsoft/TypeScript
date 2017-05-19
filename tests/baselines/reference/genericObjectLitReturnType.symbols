@@ -4,7 +4,7 @@ class X<T>
 >T : Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
 {
     f(t: T) { return { a: t }; }
->f : Symbol(f, Decl(genericObjectLitReturnType.ts, 1, 1))
+>f : Symbol(X.f, Decl(genericObjectLitReturnType.ts, 1, 1))
 >t : Symbol(t, Decl(genericObjectLitReturnType.ts, 2, 6))
 >T : Symbol(T, Decl(genericObjectLitReturnType.ts, 0, 8))
 >a : Symbol(a, Decl(genericObjectLitReturnType.ts, 2, 22))

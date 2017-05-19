@@ -1,0 +1,16 @@
+tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing6.ts(7,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+
+
+==== tests/cases/conformance/es6/classDeclaration/superCallBeforeThisAccessing6.ts (1 errors) ====
+    class Base {
+        constructor(c) { }
+    }
+    class D extends Base {
+        private _t;
+        constructor() {
+            super(this); 
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+        }
+    }
+    

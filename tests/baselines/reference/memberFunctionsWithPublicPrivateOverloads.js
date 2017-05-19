@@ -73,7 +73,7 @@ var C = (function () {
     C.bar = function (x, y) { };
     C.baz = function (x, y) { };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -84,7 +84,7 @@ var D = (function () {
     D.bar = function (x, y) { };
     D.baz = function (x, y) { };
     return D;
-})();
+}());
 var c;
 var r = c.foo(1); // error
 var d;

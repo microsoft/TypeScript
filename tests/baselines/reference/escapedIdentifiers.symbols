@@ -69,13 +69,13 @@ class classType1 {
 >classType1 : Symbol(classType1, Decl(escapedIdentifiers.ts, 31, 26))
 
     public foo1: number;
->foo1 : Symbol(foo1, Decl(escapedIdentifiers.ts, 35, 18))
+>foo1 : Symbol(classType1.foo1, Decl(escapedIdentifiers.ts, 35, 18))
 }
 class classType\u0032 { 
 >classType\u0032 : Symbol(classType\u0032, Decl(escapedIdentifiers.ts, 37, 1))
 
     public foo2: number;
->foo2 : Symbol(foo2, Decl(escapedIdentifiers.ts, 38, 23))
+>foo2 : Symbol(classType\u0032.foo2, Decl(escapedIdentifiers.ts, 38, 23))
 }
 
 var classType1Object1 = new classType1();
@@ -119,13 +119,13 @@ interface interfaceType1 {
 >interfaceType1 : Symbol(interfaceType1, Decl(escapedIdentifiers.ts, 49, 27))
 
     bar1: number;
->bar1 : Symbol(bar1, Decl(escapedIdentifiers.ts, 52, 26))
+>bar1 : Symbol(interfaceType1.bar1, Decl(escapedIdentifiers.ts, 52, 26))
 }
 interface interfaceType\u0032 { 
 >interfaceType\u0032 : Symbol(interfaceType\u0032, Decl(escapedIdentifiers.ts, 54, 1))
 
     bar2: number;
->bar2 : Symbol(bar2, Decl(escapedIdentifiers.ts, 55, 31))
+>bar2 : Symbol(interfaceType\u0032.bar2, Decl(escapedIdentifiers.ts, 55, 31))
 }
 
 var interfaceType1Object1 = <interfaceType1>{ bar1: 0 };
@@ -174,7 +174,7 @@ class testClass {
 >testClass : Symbol(testClass, Decl(escapedIdentifiers.ts, 66, 31))
 
     public func(arg1: number, arg\u0032: string, arg\u0033: boolean, arg4: number) { 
->func : Symbol(func, Decl(escapedIdentifiers.ts, 70, 17))
+>func : Symbol(testClass.func, Decl(escapedIdentifiers.ts, 70, 17))
 >arg1 : Symbol(arg1, Decl(escapedIdentifiers.ts, 71, 16))
 >arg\u0032 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 71, 29))
 >arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 71, 48))
@@ -199,10 +199,10 @@ class constructorTestClass {
 >constructorTestClass : Symbol(constructorTestClass, Decl(escapedIdentifiers.ts, 77, 1))
 
     constructor (public arg1: number,public arg\u0032: string,public arg\u0033: boolean,public arg4: number) { 
->arg1 : Symbol(arg1, Decl(escapedIdentifiers.ts, 81, 17))
->arg\u0032 : Symbol(arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
->arg\u0033 : Symbol(arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
->arg4 : Symbol(arg4, Decl(escapedIdentifiers.ts, 81, 88))
+>arg1 : Symbol(constructorTestClass.arg1, Decl(escapedIdentifiers.ts, 81, 17))
+>arg\u0032 : Symbol(constructorTestClass.arg\u0032, Decl(escapedIdentifiers.ts, 81, 37))
+>arg\u0033 : Symbol(constructorTestClass.arg\u0033, Decl(escapedIdentifiers.ts, 81, 62))
+>arg4 : Symbol(constructorTestClass.arg4, Decl(escapedIdentifiers.ts, 81, 88))
     }
 }
 var constructorTestObject = new constructorTestClass(1, 'string', true, 2);

@@ -5,10 +5,10 @@
         "FolderA/FolderB/fileB.ts"
     ],
     "outDir": "outdir/simple",
+    "rootDir": "FolderA",
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "rootDir": "FolderA",
     "resolvedInputFiles": [
         "lib.d.ts",
         "FolderA/FolderB/FolderC/fileC.ts",

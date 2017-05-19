@@ -1,6 +1,4 @@
 //// [typeCheckTypeArgument.ts]
-/// <reference no-default-lib="true"/>
-
 var f: <T extends UNKNOWN>() => void;
 
 interface IFoo<T extends UNKNOWN> { }
@@ -16,18 +14,17 @@ class Foo2 {
 (<T extends UNKNOWN>(a) => { });
 
 //// [typeCheckTypeArgument.js]
-/// <reference no-default-lib="true"/>
 var f;
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 function bar() { }
 var Foo2 = (function () {
     function Foo2() {
     }
     Foo2.prototype.method = function () { };
     return Foo2;
-})();
+}());
 (function (a) { });

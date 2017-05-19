@@ -1,0 +1,62 @@
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(10,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+  Type '"baz"' is not comparable to type '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(12,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(14,10): error TS2678: Type '"baz"' is not comparable to type '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(20,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+  Type '"baz"' is not comparable to type '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(22,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+  Type '"baz"' is not comparable to type '"foo"'.
+tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+  Type '"baz"' is not comparable to type '"foo"'.
+
+
+==== tests/cases/conformance/types/literal/stringLiteralsWithSwitchStatements03.ts (8 errors) ====
+    let x: "foo";
+    let y: "foo" | "bar"; 
+    let z: "bar";
+    
+    declare function randBool(): boolean;
+    
+    switch (x) {
+        case randBool() ? "foo" : "baz":
+            break;
+        case (randBool() ? ("bar") : "baz" ? "bar" : "baz"):
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+            break;
+        case (("bar")):
+             ~~~~~~~~~
+!!! error TS2678: Type '"bar"' is not comparable to type '"foo"'.
+            break;
+        case (x, y, ("baz")):
+             ~~~~~~~~~~~~~~~
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo"'.
+              ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+              ~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+            x;
+            y;
+            break;
+        case (("foo" || ("bar"))):
+            break;
+        case (("bar" || ("baz"))):
+             ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+            break;
+        case z || "baz":
+             ~~~~~~~~~~
+!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+        case "baz" || z:
+             ~~~~~~~~~~
+!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
+!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+            z;
+            break;
+    }
+    

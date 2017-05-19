@@ -1,0 +1,15 @@
+=== tests/cases/compiler/module_augmentUninstantiatedModule.ts ===
+declare module "foo" {
+   namespace M {}
+>M : any
+
+   var M;
+>M : any
+
+   export = M;
+>M : any
+}
+
+declare module "bar" {
+    module "foo" {}
+}

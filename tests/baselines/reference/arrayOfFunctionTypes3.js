@@ -34,7 +34,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var y = [C, C];
 var r3 = new y[0]();
 var a;

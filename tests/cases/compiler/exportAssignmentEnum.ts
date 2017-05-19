@@ -1,4 +1,4 @@
-//@module: commonjs
+// @module: commonjs
 // @Filename: exportAssignmentEnum_A.ts
 enum E {
 	A,
@@ -9,7 +9,7 @@ enum E {
 export = E;
 
 // @Filename: exportAssignmentEnum_B.ts
-import EnumE = require("exportAssignmentEnum_A");
+import EnumE = require("./exportAssignmentEnum_A");
 
 var a = EnumE.A;
 var b = EnumE.B;

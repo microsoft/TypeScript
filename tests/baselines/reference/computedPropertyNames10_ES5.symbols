@@ -29,7 +29,11 @@ var v = {
 >s : Symbol(s, Decl(computedPropertyNames10_ES5.ts, 0, 3))
 
     [""]() { },
+>"" : Symbol([""], Decl(computedPropertyNames10_ES5.ts, 8, 15))
+
     [0]() { },
+>0 : Symbol([0], Decl(computedPropertyNames10_ES5.ts, 9, 15))
+
     [a]() { },
 >a : Symbol(a, Decl(computedPropertyNames10_ES5.ts, 2, 3))
 

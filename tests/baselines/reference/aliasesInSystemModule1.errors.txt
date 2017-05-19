@@ -1,0 +1,21 @@
+tests/cases/compiler/aliasesInSystemModule1.ts(1,24): error TS2307: Cannot find module 'foo'.
+
+
+==== tests/cases/compiler/aliasesInSystemModule1.ts (1 errors) ====
+    import alias = require('foo');
+                           ~~~~~
+!!! error TS2307: Cannot find module 'foo'.
+    import cls = alias.Class;
+    export import cls2 = alias.Class;
+    
+    let x = new alias.Class();
+    let y = new cls();
+    let z = new cls2();
+    
+    module M {
+      export import cls = alias.Class;
+      let x = new alias.Class();
+      let y = new cls(); 
+      let z = new cls2();
+    }
+      

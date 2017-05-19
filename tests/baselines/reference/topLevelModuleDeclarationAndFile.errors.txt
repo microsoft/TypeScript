@@ -9,7 +9,7 @@ tests/cases/conformance/externalModules/foo_2.ts(3,14): error TS2339: Property '
 !!! error TS2339: Property 'x' does not exist on type 'typeof "vs/foo_0"'.
     var z2 = foo.y() + 10; // Should resolve
     
-==== tests/cases/conformance/externalModules/vs/foo_0.ts (0 errors) ====
+==== tests/cases/conformance/externalModules/vs/foo_0/index.ts (0 errors) ====
     export var x: number = 42;
     
 ==== tests/cases/conformance/externalModules/foo_1.ts (0 errors) ====

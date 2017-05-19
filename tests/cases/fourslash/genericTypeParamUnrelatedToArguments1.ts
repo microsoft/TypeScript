@@ -10,20 +10,11 @@
 ////var f/*5*/5 = new Foo<number>(3);
 ////var f/*6*/6: Foo<number> = new Foo<number>(3);
 
-goTo.marker('1');
-verify.quickInfoIs('var f1: Foo<number>', null);
-
-goTo.marker('2');
-verify.quickInfoIs('var f2: Foo<number>', null);
-
-goTo.marker('3');
-verify.quickInfoIs('var f3: any', null);
-
-goTo.marker('4');
-verify.quickInfoIs('var f4: Foo<number>', null);
-
-goTo.marker('5');
-verify.quickInfoIs('var f5: any', null);
-
-goTo.marker('6');
-verify.quickInfoIs('var f6: Foo<number>', null);
+verify.quickInfos({
+    1: "var f1: Foo<number>",
+    2: "var f2: Foo<number>",
+    3: "var f3: any",
+    4: "var f4: Foo<number>",
+    5: "var f5: any",
+    6: "var f6: Foo<number>"
+});

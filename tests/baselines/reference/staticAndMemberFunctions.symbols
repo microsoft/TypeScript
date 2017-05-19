@@ -6,5 +6,5 @@ class T {
 >x : Symbol(T.x, Decl(staticAndMemberFunctions.ts, 0, 9))
 
     public y() { }
->y : Symbol(y, Decl(staticAndMemberFunctions.ts, 1, 18))
+>y : Symbol(T.y, Decl(staticAndMemberFunctions.ts, 1, 18))
 }

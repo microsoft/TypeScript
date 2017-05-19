@@ -1,0 +1,8 @@
+error TS5061: Pattern '*1*' can have at most one '*' character.
+error TS5062: Substitution '*2*' in pattern '*1*' in can have at most one '*' character.
+
+
+!!! error TS5061: Pattern '*1*' can have at most one '*' character.
+!!! error TS5062: Substitution '*2*' in pattern '*1*' in can have at most one '*' character.
+==== tests/cases/compiler/root/src/folder1/file1.ts (0 errors) ====
+    export var x = 1;

@@ -1,12 +1,12 @@
 class C { foo: string; }
-interface C { foo: string; } // error
+interface C { foo: string; }
 
 module M {
     class D {
         bar: string;
     }
 
-    interface D { // error
+    interface D {
         bar: string;
     }
 }

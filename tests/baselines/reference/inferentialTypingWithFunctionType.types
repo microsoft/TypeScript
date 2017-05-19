@@ -22,6 +22,6 @@ var s = map("", identity);
 >s : string
 >map("", identity) : string
 >map : <T, U>(x: T, f: (s: T) => U) => U
->"" : string
+>"" : ""
 >identity : <V>(y: V) => V
 

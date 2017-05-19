@@ -1,5 +1,4 @@
-//// [es6ExportClause.ts]
-
+//// [server.ts]
 class c {
 }
 interface i {
@@ -16,7 +15,7 @@ export { i, m as instantiatedModule };
 export { uninstantiated };
 export { x };
 
-//// [es6ExportClause.js]
+//// [server.js]
 class c {
 }
 var m;
@@ -30,7 +29,7 @@ export { m as instantiatedModule };
 export { x };
 
 
-//// [es6ExportClause.d.ts]
+//// [server.d.ts]
 declare class c {
 }
 interface i {

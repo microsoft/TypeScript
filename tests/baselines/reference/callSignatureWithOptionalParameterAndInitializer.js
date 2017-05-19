@@ -79,7 +79,7 @@ var C = (function () {
         if (x === void 0) { x = 1; }
     };
     return C;
-})();
+}());
 var c;
 c.foo();
 c.foo(1);

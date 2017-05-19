@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5-umd4.ts ===
-
 class A
 >A : A
 {
@@ -12,7 +11,7 @@ class A
 >B : () => number
     {
         return 42;
->42 : number
+>42 : 42
     }
 }
 

@@ -1,5 +1,4 @@
 //// [stripInternal1.ts]
-
 class C {
   foo(): void { }
   // @internal
@@ -14,7 +13,7 @@ var C = (function () {
     // @internal
     C.prototype.bar = function () { };
     return C;
-})();
+}());
 
 
 //// [stripInternal1.d.ts]

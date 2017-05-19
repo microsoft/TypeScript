@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportWithoutFromClauseNonInstantiatedModule.ts] ////
 
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_0.ts]
-
 export interface i {
 }
 
@@ -17,3 +16,4 @@ import "es6ImportWithoutFromClauseNonInstantiatedModule_0";
 export interface i {
 }
 //// [es6ImportWithoutFromClauseNonInstantiatedModule_1.d.ts]
+import "es6ImportWithoutFromClauseNonInstantiatedModule_0";

@@ -1,0 +1,20 @@
+tests/cases/conformance/es6/Symbols/symbolProperty21.ts(10,5): error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
+  Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+
+
+==== tests/cases/conformance/es6/Symbols/symbolProperty21.ts (1 errors) ====
+    interface I<T, U> {
+        [Symbol.unscopables]: T;
+        [Symbol.isConcatSpreadable]: U;
+    }
+    
+    declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
+    
+    foo({
+        [Symbol.isConcatSpreadable]: "",
+        [Symbol.toPrimitive]: 0,
+        ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ [Symbol.isConcatSpreadable]: string; [Symbol.toPrimitive]: number; [Symbol.unscopables]: true; }' is not assignable to parameter of type 'I<boolean, string>'.
+!!! error TS2345:   Object literal may only specify known properties, and '[Symbol.toPrimitive]' does not exist in type 'I<boolean, string>'.
+        [Symbol.unscopables]: true
+    });

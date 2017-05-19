@@ -1,0 +1,44 @@
+tests/cases/compiler/systemModule16.ts(1,20): error TS2307: Cannot find module 'foo'.
+tests/cases/compiler/systemModule16.ts(2,20): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/systemModule16.ts(3,15): error TS2307: Cannot find module 'foo'.
+tests/cases/compiler/systemModule16.ts(4,15): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/systemModule16.ts(7,32): error TS2307: Cannot find module 'foo'.
+tests/cases/compiler/systemModule16.ts(8,32): error TS2307: Cannot find module 'bar'.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+tests/cases/compiler/systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
+
+
+==== tests/cases/compiler/systemModule16.ts (10 errors) ====
+    import * as x from "foo";
+                       ~~~~~
+!!! error TS2307: Cannot find module 'foo'.
+    import * as y from "bar";
+                       ~~~~~
+!!! error TS2307: Cannot find module 'bar'.
+    export * from "foo";
+                  ~~~~~
+!!! error TS2307: Cannot find module 'foo'.
+    export * from "bar"
+                  ~~~~~
+!!! error TS2307: Cannot find module 'bar'.
+    export {x}
+    export {y}
+    import {a1, b1, c1 as d1} from "foo";
+                                   ~~~~~
+!!! error TS2307: Cannot find module 'foo'.
+    export {a2, b2, c2 as d2} from "bar";
+                                   ~~~~~
+!!! error TS2307: Cannot find module 'bar'.
+    
+    x,y,a1,b1,d1;
+    ~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    ~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
+    

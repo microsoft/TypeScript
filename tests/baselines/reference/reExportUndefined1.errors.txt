@@ -1,0 +1,7 @@
+tests/cases/compiler/a.ts(1,10): error TS2661: Cannot export 'undefined'. Only local declarations can be exported from a module.
+
+
+==== tests/cases/compiler/a.ts (1 errors) ====
+    export { undefined };
+             ~~~~~~~~~
+!!! error TS2661: Cannot export 'undefined'. Only local declarations can be exported from a module.

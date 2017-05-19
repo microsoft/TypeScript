@@ -21,6 +21,6 @@ var mod1;
         }
         C.prototype.moo = function () { };
         return C;
-    })();
+    }());
 })(mod1 || (mod1 = {}));
 var c; // ERROR: C should not be visible

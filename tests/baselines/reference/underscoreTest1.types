@@ -1,0 +1,5662 @@
+=== tests/cases/compiler/underscoreTest1_underscoreTests.ts ===
+/// <reference path="underscoreTest1_underscore.ts" />
+
+declare var $;
+>$ : any
+
+declare function alert(x: string): void;
+>alert : (x: string) => void
+>x : string
+
+_.each([1, 2, 3], (num) => alert(num.toString()));
+>_.each([1, 2, 3], (num) => alert(num.toString())) : void
+>_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>_ : Underscore.Static
+>each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>(num) => alert(num.toString()) : (num: number) => void
+>num : number
+>alert(num.toString()) : void
+>alert : (x: string) => void
+>num.toString() : string
+>num.toString : (radix?: number) => string
+>num : number
+>toString : (radix?: number) => string
+
+_.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(value.toString()));
+>_.each({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => alert(value.toString())) : void
+>_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>_ : Underscore.Static
+>each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+>(value: number, key?: string) => alert(value.toString()) : (value: number, key?: string) => void
+>value : number
+>key : string
+>alert(value.toString()) : void
+>alert : (x: string) => void
+>value.toString() : string
+>value.toString : (radix?: number) => string
+>value : number
+>toString : (radix?: number) => string
+
+_.map([1, 2, 3], (num) => num * 3);
+>_.map([1, 2, 3], (num) => num * 3) : number[]
+>_.map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>_ : Underscore.Static
+>map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>(num) => num * 3 : (num: number) => number
+>num : number
+>num * 3 : number
+>num : number
+>3 : 3
+
+_.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3);
+>_.map({ one: 1, two: 2, three: 3 }, (value: number, key?: string) => value * 3) : number[]
+>_.map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>_ : Underscore.Static
+>map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+>(value: number, key?: string) => value * 3 : (value: number, key?: string) => number
+>value : number
+>key : string
+>value * 3 : number
+>value : number
+>3 : 3
+
+var sum = _.reduce([1, 2, 3], (memo, num) => memo + num, 0);
+>sum : number
+>_.reduce([1, 2, 3], (memo, num) => memo + num, 0) : number
+>_.reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>_ : Underscore.Static
+>reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>(memo, num) => memo + num : (memo: number, num: number) => number
+>memo : number
+>num : number
+>memo + num : number
+>memo : number
+>num : number
+>0 : 0
+
+var list = [[0, 1], [2, 3], [4, 5]];
+>list : number[][]
+>[[0, 1], [2, 3], [4, 5]] : number[][]
+>[0, 1] : number[]
+>0 : 0
+>1 : 1
+>[2, 3] : number[]
+>2 : 2
+>3 : 3
+>[4, 5] : number[]
+>4 : 4
+>5 : 5
+
+var flat = _.reduceRight(list, (a, b) => a.concat(b), []);
+>flat : number[]
+>_.reduceRight(list, (a, b) => a.concat(b), []) : number[]
+>_.reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>_ : Underscore.Static
+>reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>list : number[][]
+>(a, b) => a.concat(b) : (a: number[], b: number[]) => number[]
+>a : number[]
+>b : number[]
+>a.concat(b) : number[]
+>a.concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>a : number[]
+>concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>b : number[]
+>[] : undefined[]
+
+var even = _.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
+>even : number
+>_.find([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0) : number
+>_.find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>_ : Underscore.Static
+>find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>[1, 2, 3, 4, 5, 6] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+>(num) => num % 2 == 0 : (num: number) => boolean
+>num : number
+>num % 2 == 0 : boolean
+>num % 2 : number
+>num : number
+>2 : 2
+>0 : 0
+
+var evens = _.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
+>evens : number[]
+>_.filter([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0) : number[]
+>_.filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>_ : Underscore.Static
+>filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>[1, 2, 3, 4, 5, 6] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+>(num) => num % 2 == 0 : (num: number) => boolean
+>num : number
+>num % 2 == 0 : boolean
+>num % 2 : number
+>num : number
+>2 : 2
+>0 : 0
+
+var listOfPlays = [{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }];
+>listOfPlays : { title: string; author: string; year: number; }[]
+>[{ title: "Cymbeline", author: "Shakespeare", year: 1611 }, { title: "The Tempest", author: "Shakespeare", year: 1611 }, { title: "Other", author: "Not Shakespeare", year: 2012 }] : { title: string; author: string; year: number; }[]
+>{ title: "Cymbeline", author: "Shakespeare", year: 1611 } : { title: string; author: string; year: number; }
+>title : string
+>"Cymbeline" : "Cymbeline"
+>author : string
+>"Shakespeare" : "Shakespeare"
+>year : number
+>1611 : 1611
+>{ title: "The Tempest", author: "Shakespeare", year: 1611 } : { title: string; author: string; year: number; }
+>title : string
+>"The Tempest" : "The Tempest"
+>author : string
+>"Shakespeare" : "Shakespeare"
+>year : number
+>1611 : 1611
+>{ title: "Other", author: "Not Shakespeare", year: 2012 } : { title: string; author: string; year: number; }
+>title : string
+>"Other" : "Other"
+>author : string
+>"Not Shakespeare" : "Not Shakespeare"
+>year : number
+>2012 : 2012
+
+_.where(listOfPlays, { author: "Shakespeare", year: 1611 });
+>_.where(listOfPlays, { author: "Shakespeare", year: 1611 }) : { title: string; author: string; year: number; }[]
+>_.where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
+>_ : Underscore.Static
+>where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
+>listOfPlays : { title: string; author: string; year: number; }[]
+>{ author: "Shakespeare", year: 1611 } : { author: string; year: number; }
+>author : string
+>"Shakespeare" : "Shakespeare"
+>year : number
+>1611 : 1611
+
+var odds = _.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0);
+>odds : number[]
+>_.reject([1, 2, 3, 4, 5, 6], (num) => num % 2 == 0) : number[]
+>_.reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>_ : Underscore.Static
+>reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>[1, 2, 3, 4, 5, 6] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+>(num) => num % 2 == 0 : (num: number) => boolean
+>num : number
+>num % 2 == 0 : boolean
+>num % 2 : number
+>num : number
+>2 : 2
+>0 : 0
+
+_.all([true, 1, null, 'yes'], _.identity);
+>_.all([true, 1, null, 'yes'], _.identity) : boolean
+>_.all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>_ : Underscore.Static
+>all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>[true, 1, null, 'yes'] : (true | 1 | "yes")[]
+>true : true
+>1 : 1
+>null : null
+>'yes' : "yes"
+>_.identity : <T>(value: T) => T
+>_ : Underscore.Static
+>identity : <T>(value: T) => T
+
+_.any([null, 0, 'yes', false]);
+>_.any([null, 0, 'yes', false]) : boolean
+>_.any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>_ : Underscore.Static
+>any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>[null, 0, 'yes', false] : (false | 0 | "yes")[]
+>null : null
+>0 : 0
+>'yes' : "yes"
+>false : false
+
+_.contains([1, 2, 3], 3);
+>_.contains([1, 2, 3], 3) : boolean
+>_.contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>_ : Underscore.Static
+>contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>3 : 3
+
+_.invoke([[5, 1, 7], [3, 2, 1]], 'sort');
+>_.invoke([[5, 1, 7], [3, 2, 1]], 'sort') : any[]
+>_.invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
+>_ : Underscore.Static
+>invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
+>[[5, 1, 7], [3, 2, 1]] : number[][]
+>[5, 1, 7] : number[]
+>5 : 5
+>1 : 1
+>7 : 7
+>[3, 2, 1] : number[]
+>3 : 3
+>2 : 2
+>1 : 1
+>'sort' : "sort"
+
+var stooges = [{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }];
+>stooges : { name: string; age: number; }[]
+>[{ name: 'moe', age: 40 }, { name: 'larry', age: 50 }, { name: 'curly', age: 60 }] : { name: string; age: number; }[]
+>{ name: 'moe', age: 40 } : { name: string; age: number; }
+>name : string
+>'moe' : "moe"
+>age : number
+>40 : 40
+>{ name: 'larry', age: 50 } : { name: string; age: number; }
+>name : string
+>'larry' : "larry"
+>age : number
+>50 : 50
+>{ name: 'curly', age: 60 } : { name: string; age: number; }
+>name : string
+>'curly' : "curly"
+>age : number
+>60 : 60
+
+_.pluck(stooges, 'name');
+>_.pluck(stooges, 'name') : any[]
+>_.pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
+>_ : Underscore.Static
+>pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
+>stooges : { name: string; age: number; }[]
+>'name' : "name"
+
+_.max(stooges, (stooge) => stooge.age);
+>_.max(stooges, (stooge) => stooge.age) : { name: string; age: number; }
+>_.max : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>_ : Underscore.Static
+>max : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>stooges : { name: string; age: number; }[]
+>(stooge) => stooge.age : (stooge: { name: string; age: number; }) => number
+>stooge : { name: string; age: number; }
+>stooge.age : number
+>stooge : { name: string; age: number; }
+>age : number
+
+var numbers = [10, 5, 100, 2, 1000];
+>numbers : number[]
+>[10, 5, 100, 2, 1000] : number[]
+>10 : 10
+>5 : 5
+>100 : 100
+>2 : 2
+>1000 : 1000
+
+_.min(numbers);
+>_.min(numbers) : number
+>_.min : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>_ : Underscore.Static
+>min : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>numbers : number[]
+
+_.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num));
+>_.sortBy([1, 2, 3, 4, 5, 6], (num) => Math.sin(num)) : number[]
+>_.sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>_ : Underscore.Static
+>sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>[1, 2, 3, 4, 5, 6] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+>(num) => Math.sin(num) : (num: number) => number
+>num : number
+>Math.sin(num) : number
+>Math.sin : (x: number) => number
+>Math : Math
+>sin : (x: number) => number
+>num : number
+
+
+// not sure how this is typechecking at all.. Math.floor(e) is number not string..?
+_([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floor(e));
+>_([1.3, 2.1, 2.4]).groupBy((e: number, i?: number, list?: number[]) => Math.floor(e)) : Dictionary<number[]>
+>_([1.3, 2.1, 2.4]).groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
+>_([1.3, 2.1, 2.4]) : Underscore.WrappedArray<number>
+>_ : Underscore.Static
+>[1.3, 2.1, 2.4] : number[]
+>1.3 : 1.3
+>2.1 : 2.1
+>2.4 : 2.4
+>groupBy : { (iterator?: Iterator_<number, any>, context?: any): Dictionary<number[]>; (propertyName: string): Dictionary<number[]>; }
+>(e: number, i?: number, list?: number[]) => Math.floor(e) : (e: number, i?: number, list?: number[]) => number
+>e : number
+>i : number
+>list : number[]
+>Math.floor(e) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>e : number
+
+_.groupBy([1.3, 2.1, 2.4], (num: number) => Math.floor(num));
+>_.groupBy([1.3, 2.1, 2.4], (num: number) => Math.floor(num)) : Dictionary<number[]>
+>_.groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>_ : Underscore.Static
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>[1.3, 2.1, 2.4] : number[]
+>1.3 : 1.3
+>2.1 : 2.1
+>2.4 : 2.4
+>(num: number) => Math.floor(num) : (num: number) => number
+>num : number
+>Math.floor(num) : number
+>Math.floor : (x: number) => number
+>Math : Math
+>floor : (x: number) => number
+>num : number
+
+_.groupBy(['one', 'two', 'three'], 'length');
+>_.groupBy(['one', 'two', 'three'], 'length') : Dictionary<string[]>
+>_.groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>_ : Underscore.Static
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>['one', 'two', 'three'] : string[]
+>'one' : "one"
+>'two' : "two"
+>'three' : "three"
+>'length' : "length"
+
+_.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd');
+>_.countBy([1, 2, 3, 4, 5], (num) => num % 2 == 0 ? 'even' : 'odd') : Dictionary<number>
+>_.countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>_ : Underscore.Static
+>countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>[1, 2, 3, 4, 5] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>(num) => num % 2 == 0 ? 'even' : 'odd' : (num: number) => "even" | "odd"
+>num : number
+>num % 2 == 0 ? 'even' : 'odd' : "even" | "odd"
+>num % 2 == 0 : boolean
+>num % 2 : number
+>num : number
+>2 : 2
+>0 : 0
+>'even' : "even"
+>'odd' : "odd"
+
+_.shuffle([1, 2, 3, 4, 5, 6]);
+>_.shuffle([1, 2, 3, 4, 5, 6]) : number[]
+>_.shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>_ : Underscore.Static
+>shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>[1, 2, 3, 4, 5, 6] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>6 : 6
+
+// (function(){ return _.toArray(arguments).slice(1); })(1, 2, 3, 4);
+
+_.size({ one: 1, two: 2, three: 3 });
+>_.size({ one: 1, two: 2, three: 3 }) : number
+>_.size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
+>_ : Underscore.Static
+>size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+_.first([5, 4, 3, 2, 1]);
+>_.first([5, 4, 3, 2, 1]) : number
+>_.first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>_ : Underscore.Static
+>first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>[5, 4, 3, 2, 1] : number[]
+>5 : 5
+>4 : 4
+>3 : 3
+>2 : 2
+>1 : 1
+
+_.initial([5, 4, 3, 2, 1]);
+>_.initial([5, 4, 3, 2, 1]) : number
+>_.initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>_ : Underscore.Static
+>initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>[5, 4, 3, 2, 1] : number[]
+>5 : 5
+>4 : 4
+>3 : 3
+>2 : 2
+>1 : 1
+
+_.last([5, 4, 3, 2, 1]);
+>_.last([5, 4, 3, 2, 1]) : number
+>_.last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>_ : Underscore.Static
+>last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>[5, 4, 3, 2, 1] : number[]
+>5 : 5
+>4 : 4
+>3 : 3
+>2 : 2
+>1 : 1
+
+_.rest([5, 4, 3, 2, 1]);
+>_.rest([5, 4, 3, 2, 1]) : number[]
+>_.rest : <T>(list: T[], index?: number) => T[]
+>_ : Underscore.Static
+>rest : <T>(list: T[], index?: number) => T[]
+>[5, 4, 3, 2, 1] : number[]
+>5 : 5
+>4 : 4
+>3 : 3
+>2 : 2
+>1 : 1
+
+_.compact([0, 1, false, 2, '', 3]);
+>_.compact([0, 1, false, 2, '', 3]) : (string | number | boolean)[]
+>_.compact : <T>(list: T[]) => T[]
+>_ : Underscore.Static
+>compact : <T>(list: T[]) => T[]
+>[0, 1, false, 2, '', 3] : (false | 1 | 2 | 3 | 0 | "")[]
+>0 : 0
+>1 : 1
+>false : false
+>2 : 2
+>'' : ""
+>3 : 3
+
+_.flatten([1, 2, 3, 4]);
+>_.flatten([1, 2, 3, 4]) : {}[]
+>_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>_ : Underscore.Static
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>[1, 2, 3, 4] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+
+_.flatten([1, [2]]);
+>_.flatten([1, [2]]) : {}[]
+>_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>_ : Underscore.Static
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>[1, [2]] : (number | number[])[]
+>1 : 1
+>[2] : number[]
+>2 : 2
+
+// typescript doesn't like the elements being different
+_.flatten([1, [2], [3, [[4]]]]);
+>_.flatten([1, [2], [3, [[4]]]]) : {}[]
+>_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>_ : Underscore.Static
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
+>1 : 1
+>[2] : number[]
+>2 : 2
+>[3, [[4]]] : (number | number[][])[]
+>3 : 3
+>[[4]] : number[][]
+>[4] : number[]
+>4 : 4
+
+_.flatten([1, [2], [3, [[4]]]], true);
+>_.flatten([1, [2], [3, [[4]]]], true) : {}[]
+>_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>_ : Underscore.Static
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>[1, [2], [3, [[4]]]] : (number | (number | number[][])[])[]
+>1 : 1
+>[2] : number[]
+>2 : 2
+>[3, [[4]]] : (number | number[][])[]
+>3 : 3
+>[[4]] : number[][]
+>[4] : number[]
+>4 : 4
+>true : true
+
+_.without([1, 2, 1, 0, 3, 1, 4], 0, 1);
+>_.without([1, 2, 1, 0, 3, 1, 4], 0, 1) : number[]
+>_.without : <T>(list: T[], ...values: T[]) => T[]
+>_ : Underscore.Static
+>without : <T>(list: T[], ...values: T[]) => T[]
+>[1, 2, 1, 0, 3, 1, 4] : number[]
+>1 : 1
+>2 : 2
+>1 : 1
+>0 : 0
+>3 : 3
+>1 : 1
+>4 : 4
+>0 : 0
+>1 : 1
+
+_.union([1, 2, 3], [101, 2, 1, 10], [2, 1]);
+>_.union([1, 2, 3], [101, 2, 1, 10], [2, 1]) : number[]
+>_.union : <T>(...arrays: T[][]) => T[]
+>_ : Underscore.Static
+>union : <T>(...arrays: T[][]) => T[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>[101, 2, 1, 10] : number[]
+>101 : 101
+>2 : 2
+>1 : 1
+>10 : 10
+>[2, 1] : number[]
+>2 : 2
+>1 : 1
+
+_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]);
+>_.intersection([1, 2, 3], [101, 2, 1, 10], [2, 1]) : number[]
+>_.intersection : <T>(...arrays: T[][]) => T[]
+>_ : Underscore.Static
+>intersection : <T>(...arrays: T[][]) => T[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>[101, 2, 1, 10] : number[]
+>101 : 101
+>2 : 2
+>1 : 1
+>10 : 10
+>[2, 1] : number[]
+>2 : 2
+>1 : 1
+
+_.difference([1, 2, 3, 4, 5], [5, 2, 10]);
+>_.difference([1, 2, 3, 4, 5], [5, 2, 10]) : number[]
+>_.difference : <T>(list: T[], ...others: T[][]) => T[]
+>_ : Underscore.Static
+>difference : <T>(list: T[], ...others: T[][]) => T[]
+>[1, 2, 3, 4, 5] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>[5, 2, 10] : number[]
+>5 : 5
+>2 : 2
+>10 : 10
+
+_.uniq([1, 2, 1, 3, 1, 4]);
+>_.uniq([1, 2, 1, 3, 1, 4]) : number[]
+>_.uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>_ : Underscore.Static
+>uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>[1, 2, 1, 3, 1, 4] : number[]
+>1 : 1
+>2 : 2
+>1 : 1
+>3 : 3
+>1 : 1
+>4 : 4
+
+_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]);
+>_.zip(['moe', 'larry', 'curly'], [30, 40, 50], [true, false, false]) : Tuple3<string, number, boolean>[]
+>_.zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>_ : Underscore.Static
+>zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>['moe', 'larry', 'curly'] : string[]
+>'moe' : "moe"
+>'larry' : "larry"
+>'curly' : "curly"
+>[30, 40, 50] : number[]
+>30 : 30
+>40 : 40
+>50 : 50
+>[true, false, false] : boolean[]
+>true : true
+>false : false
+>false : false
+
+_.object(['moe', 'larry', 'curly'], [30, 40, 50]);
+>_.object(['moe', 'larry', 'curly'], [30, 40, 50]) : any
+>_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>_ : Underscore.Static
+>object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>['moe', 'larry', 'curly'] : string[]
+>'moe' : "moe"
+>'larry' : "larry"
+>'curly' : "curly"
+>[30, 40, 50] : number[]
+>30 : 30
+>40 : 40
+>50 : 50
+
+_.object([['moe', 30], ['larry', 40], ['curly', 50]]);
+>_.object([['moe', 30], ['larry', 40], ['curly', 50]]) : any
+>_.object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>_ : Underscore.Static
+>object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>[['moe', 30], ['larry', 40], ['curly', 50]] : (string | number)[][]
+>['moe', 30] : (string | number)[]
+>'moe' : "moe"
+>30 : 30
+>['larry', 40] : (string | number)[]
+>'larry' : "larry"
+>40 : 40
+>['curly', 50] : (string | number)[]
+>'curly' : "curly"
+>50 : 50
+
+_.indexOf([1, 2, 3], 2);
+>_.indexOf([1, 2, 3], 2) : number
+>_.indexOf : <T>(list: T[], value: T, isSorted?: boolean) => number
+>_ : Underscore.Static
+>indexOf : <T>(list: T[], value: T, isSorted?: boolean) => number
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>2 : 2
+
+_.lastIndexOf([1, 2, 3, 1, 2, 3], 2);
+>_.lastIndexOf([1, 2, 3, 1, 2, 3], 2) : number
+>_.lastIndexOf : <T>(list: T[], value: T, fromIndex?: number) => number
+>_ : Underscore.Static
+>lastIndexOf : <T>(list: T[], value: T, fromIndex?: number) => number
+>[1, 2, 3, 1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>1 : 1
+>2 : 2
+>3 : 3
+>2 : 2
+
+_.sortedIndex([10, 20, 30, 40, 50], 35);
+>_.sortedIndex([10, 20, 30, 40, 50], 35) : number
+>_.sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>_ : Underscore.Static
+>sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>[10, 20, 30, 40, 50] : number[]
+>10 : 10
+>20 : 20
+>30 : 30
+>40 : 40
+>50 : 50
+>35 : 35
+
+_.range(10);
+>_.range(10) : number[]
+>_.range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>_ : Underscore.Static
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>10 : 10
+
+_.range(1, 11);
+>_.range(1, 11) : number[]
+>_.range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>_ : Underscore.Static
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>1 : 1
+>11 : 11
+
+_.range(0, 30, 5);
+>_.range(0, 30, 5) : number[]
+>_.range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>_ : Underscore.Static
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>0 : 0
+>30 : 30
+>5 : 5
+
+_.range(0, 30, 5);
+>_.range(0, 30, 5) : number[]
+>_.range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>_ : Underscore.Static
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>0 : 0
+>30 : 30
+>5 : 5
+
+_.range(0);
+>_.range(0) : number[]
+>_.range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>_ : Underscore.Static
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>0 : 0
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+var func = function (greeting) { return greeting + ': ' + this.name };
+>func : (greeting: any) => string
+>function (greeting) { return greeting + ': ' + this.name } : (greeting: any) => string
+>greeting : any
+>greeting + ': ' + this.name : string
+>greeting + ': ' : string
+>greeting : any
+>': ' : ": "
+>this.name : any
+>this : any
+>name : any
+
+// need a second var otherwise typescript thinks func signature is the above func type,
+// instead of the newly returned _bind => func type.
+var func2 = _.bind(func, { name: 'moe' }, 'hi');
+>func2 : Function
+>_.bind(func, { name: 'moe' }, 'hi') : Function
+>_.bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>_ : Underscore.Static
+>bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>func : (greeting: any) => string
+>{ name: 'moe' } : { name: string; }
+>name : string
+>'moe' : "moe"
+>'hi' : "hi"
+
+func2();
+>func2() : any
+>func2 : Function
+
+var buttonView = {
+>buttonView : { label: string; onClick: () => void; onHover: () => void; }
+>{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : { label: string; onClick: () => void; onHover: () => void; }
+
+    label: 'underscore',
+>label : string
+>'underscore' : "underscore"
+
+    onClick: function () { alert('clicked: ' + this.label); },
+>onClick : () => void
+>function () { alert('clicked: ' + this.label); } : () => void
+>alert('clicked: ' + this.label) : void
+>alert : (x: string) => void
+>'clicked: ' + this.label : string
+>'clicked: ' : "clicked: "
+>this.label : any
+>this : any
+>label : any
+
+    onHover: function () { alert('hovering: ' + this.label); }
+>onHover : () => void
+>function () { alert('hovering: ' + this.label); } : () => void
+>alert('hovering: ' + this.label) : void
+>alert : (x: string) => void
+>'hovering: ' + this.label : string
+>'hovering: ' : "hovering: "
+>this.label : any
+>this : any
+>label : any
+
+};
+_.bindAll(buttonView);
+>_.bindAll(buttonView) : { label: string; onClick: () => void; onHover: () => void; }
+>_.bindAll : <T>(object: T, ...methodNames: string[]) => T
+>_ : Underscore.Static
+>bindAll : <T>(object: T, ...methodNames: string[]) => T
+>buttonView : { label: string; onClick: () => void; onHover: () => void; }
+
+$('#underscore_button').bind('click', buttonView.onClick);
+>$('#underscore_button').bind('click', buttonView.onClick) : any
+>$('#underscore_button').bind : any
+>$('#underscore_button') : any
+>$ : any
+>'#underscore_button' : "#underscore_button"
+>bind : any
+>'click' : "click"
+>buttonView.onClick : () => void
+>buttonView : { label: string; onClick: () => void; onHover: () => void; }
+>onClick : () => void
+
+var fibonacci = _.memoize(function (n) {
+>fibonacci : (n: any) => any
+>_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
+>_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
+>_ : Underscore.Static
+>memoize : <T extends Function>(func: T, hashFunction?: Function) => T
+>function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);} : (n: any) => any
+>n : any
+
+    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);
+>n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2) : any
+>n < 2 : boolean
+>n : any
+>2 : 2
+>n : any
+>fibonacci(n - 1) + fibonacci(n - 2) : any
+>fibonacci(n - 1) : any
+>fibonacci : (n: any) => any
+>n - 1 : number
+>n : any
+>1 : 1
+>fibonacci(n - 2) : any
+>fibonacci : (n: any) => any
+>n - 2 : number
+>n : any
+>2 : 2
+
+});
+
+var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
+>log : (message?: string, ...rest: string[]) => void
+>_.bind((message?: string, ...rest: string[]) => { }, Date) : (message?: string, ...rest: string[]) => void
+>_.bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>_ : Underscore.Static
+>bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>(message?: string, ...rest: string[]) => { } : (message?: string, ...rest: string[]) => void
+>message : string
+>rest : string[]
+>Date : DateConstructor
+
+_.delay(log, 1000, 'logged later');
+>_.delay(log, 1000, 'logged later') : number
+>_.delay : (func: Function, wait: number, ...args: any[]) => number
+>_ : Underscore.Static
+>delay : (func: Function, wait: number, ...args: any[]) => number
+>log : (message?: string, ...rest: string[]) => void
+>1000 : 1000
+>'logged later' : "logged later"
+
+_.defer(function () { alert('deferred'); });
+>_.defer(function () { alert('deferred'); }) : number
+>_.defer : (func: Function, ...args: any[]) => number
+>_ : Underscore.Static
+>defer : (func: Function, ...args: any[]) => number
+>function () { alert('deferred'); } : () => void
+>alert('deferred') : void
+>alert : (x: string) => void
+>'deferred' : "deferred"
+
+var updatePosition = () => alert('updating position...');
+>updatePosition : () => void
+>() => alert('updating position...') : () => void
+>alert('updating position...') : void
+>alert : (x: string) => void
+>'updating position...' : "updating position..."
+
+var throttled = _.throttle(updatePosition, 100);
+>throttled : () => void
+>_.throttle(updatePosition, 100) : () => void
+>_.throttle : <T extends Function>(func: T, wait: number) => T
+>_ : Underscore.Static
+>throttle : <T extends Function>(func: T, wait: number) => T
+>updatePosition : () => void
+>100 : 100
+
+$(null).scroll(throttled);
+>$(null).scroll(throttled) : any
+>$(null).scroll : any
+>$(null) : any
+>$ : any
+>null : null
+>scroll : any
+>throttled : () => void
+
+var calculateLayout = () => alert('calculating layout...');
+>calculateLayout : () => void
+>() => alert('calculating layout...') : () => void
+>alert('calculating layout...') : void
+>alert : (x: string) => void
+>'calculating layout...' : "calculating layout..."
+
+var lazyLayout = _.debounce(calculateLayout, 300);
+>lazyLayout : () => void
+>_.debounce(calculateLayout, 300) : () => void
+>_.debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
+>_ : Underscore.Static
+>debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
+>calculateLayout : () => void
+>300 : 300
+
+$(null).resize(lazyLayout);
+>$(null).resize(lazyLayout) : any
+>$(null).resize : any
+>$(null) : any
+>$ : any
+>null : null
+>resize : any
+>lazyLayout : () => void
+
+var createApplication = () => alert('creating application...');
+>createApplication : () => void
+>() => alert('creating application...') : () => void
+>alert('creating application...') : void
+>alert : (x: string) => void
+>'creating application...' : "creating application..."
+
+var initialize = _.once(createApplication);
+>initialize : () => void
+>_.once(createApplication) : () => void
+>_.once : <T extends Function>(func: T) => T
+>_ : Underscore.Static
+>once : <T extends Function>(func: T) => T
+>createApplication : () => void
+
+initialize();
+>initialize() : void
+>initialize : () => void
+
+initialize();
+>initialize() : void
+>initialize : () => void
+
+var notes: any[];
+>notes : any[]
+
+var render = () => alert("rendering...");
+>render : () => void
+>() => alert("rendering...") : () => void
+>alert("rendering...") : void
+>alert : (x: string) => void
+>"rendering..." : "rendering..."
+
+var renderNotes = _.after(notes.length, render);
+>renderNotes : () => void
+>_.after(notes.length, render) : () => void
+>_.after : <T extends Function>(count: number, func: T) => T
+>_ : Underscore.Static
+>after : <T extends Function>(count: number, func: T) => T
+>notes.length : number
+>notes : any[]
+>length : number
+>render : () => void
+
+_.each(notes, (note) => note.asyncSave({ success: renderNotes }));
+>_.each(notes, (note) => note.asyncSave({ success: renderNotes })) : void
+>_.each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>_ : Underscore.Static
+>each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>notes : any[]
+>(note) => note.asyncSave({ success: renderNotes }) : (note: any) => any
+>note : any
+>note.asyncSave({ success: renderNotes }) : any
+>note.asyncSave : any
+>note : any
+>asyncSave : any
+>{ success: renderNotes } : { success: () => void; }
+>success : () => void
+>renderNotes : () => void
+
+var hello = function (name) { return "hello: " + name; };
+>hello : (name: any) => string
+>function (name) { return "hello: " + name; } : (name: any) => string
+>name : any
+>"hello: " + name : string
+>"hello: " : "hello: "
+>name : any
+
+hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; });
+>hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; }) : (name: any) => string
+>hello : (name: any) => string
+>_.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; }) : (name: any) => string
+>_.wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
+>_ : Underscore.Static
+>wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
+>hello : (name: any) => string
+>(func, arg) => { return "before, " + func(arg) + ", after"; } : (func: (name: any) => string, arg: any) => string
+>func : (name: any) => string
+>arg : any
+>"before, " + func(arg) + ", after" : string
+>"before, " + func(arg) : string
+>"before, " : "before, "
+>func(arg) : string
+>func : (name: any) => string
+>arg : any
+>", after" : ", after"
+
+hello("moe");
+>hello("moe") : string
+>hello : (name: any) => string
+>"moe" : "moe"
+
+var greet = function (name) { return "hi: " + name; };
+>greet : (name: any) => string
+>function (name) { return "hi: " + name; } : (name: any) => string
+>name : any
+>"hi: " + name : string
+>"hi: " : "hi: "
+>name : any
+
+var exclaim = function (statement) { return statement + "!"; };
+>exclaim : (statement: any) => string
+>function (statement) { return statement + "!"; } : (statement: any) => string
+>statement : any
+>statement + "!" : string
+>statement : any
+>"!" : "!"
+
+var welcome = _.compose(exclaim, greet);
+>welcome : Function
+>_.compose(exclaim, greet) : Function
+>_.compose : (...funcs: Function[]) => Function
+>_ : Underscore.Static
+>compose : (...funcs: Function[]) => Function
+>exclaim : (statement: any) => string
+>greet : (name: any) => string
+
+welcome('moe');
+>welcome('moe') : any
+>welcome : Function
+>'moe' : "moe"
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+_.keys({ one: 1, two: 2, three: 3 });
+>_.keys({ one: 1, two: 2, three: 3 }) : string[]
+>_.keys : (object: any) => string[]
+>_ : Underscore.Static
+>keys : (object: any) => string[]
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+
+_.values({ one: 1, two: 2, three: 3 });
+>_.values({ one: 1, two: 2, three: 3 }) : any[]
+>_.values : (object: any) => any[]
+>_ : Underscore.Static
+>values : (object: any) => any[]
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+
+_.pairs({ one: 1, two: 2, three: 3 });
+>_.pairs({ one: 1, two: 2, three: 3 }) : any[][]
+>_.pairs : (object: any) => any[][]
+>_ : Underscore.Static
+>pairs : (object: any) => any[][]
+>{ one: 1, two: 2, three: 3 } : { one: number; two: number; three: number; }
+>one : number
+>1 : 1
+>two : number
+>2 : 2
+>three : number
+>3 : 3
+
+_.invert({ Moe: "Moses", Larry: "Louis", Curly: "Jerome" });
+>_.invert({ Moe: "Moses", Larry: "Louis", Curly: "Jerome" }) : any
+>_.invert : (object: any) => any
+>_ : Underscore.Static
+>invert : (object: any) => any
+>{ Moe: "Moses", Larry: "Louis", Curly: "Jerome" } : { Moe: string; Larry: string; Curly: string; }
+>Moe : string
+>"Moses" : "Moses"
+>Larry : string
+>"Louis" : "Louis"
+>Curly : string
+>"Jerome" : "Jerome"
+
+_.functions(_);
+>_.functions(_) : string[]
+>_.functions : (object: any) => string[]
+>_ : Underscore.Static
+>functions : (object: any) => string[]
+>_ : Underscore.Static
+
+_.extend({ name: 'moe' }, { age: 50 });
+>_.extend({ name: 'moe' }, { age: 50 }) : { name: string; }
+>_.extend : <T>(destination: T, ...sources: any[]) => T
+>_ : Underscore.Static
+>extend : <T>(destination: T, ...sources: any[]) => T
+>{ name: 'moe' } : { name: string; }
+>name : string
+>'moe' : "moe"
+>{ age: 50 } : { age: number; }
+>age : number
+>50 : 50
+
+_.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age');
+>_.pick({ name: 'moe', age: 50, userid: 'moe1' }, 'name', 'age') : { name: string; age: number; userid: string; }
+>_.pick : <T>(object: T, ...keys: string[]) => T
+>_ : Underscore.Static
+>pick : <T>(object: T, ...keys: string[]) => T
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
+>name : string
+>'moe' : "moe"
+>age : number
+>50 : 50
+>userid : string
+>'moe1' : "moe1"
+>'name' : "name"
+>'age' : "age"
+
+_.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid');
+>_.omit({ name: 'moe', age: 50, userid: 'moe1' }, 'userid') : { name: string; age: number; userid: string; }
+>_.omit : <T>(object: T, ...keys: string[]) => T
+>_ : Underscore.Static
+>omit : <T>(object: T, ...keys: string[]) => T
+>{ name: 'moe', age: 50, userid: 'moe1' } : { name: string; age: number; userid: string; }
+>name : string
+>'moe' : "moe"
+>age : number
+>50 : 50
+>userid : string
+>'moe1' : "moe1"
+>'userid' : "userid"
+
+var iceCream = { flavor: "chocolate" };
+>iceCream : { flavor: string; }
+>{ flavor: "chocolate" } : { flavor: string; }
+>flavor : string
+>"chocolate" : "chocolate"
+
+_.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" });
+>_.defaults(iceCream, { flavor: "vanilla", sprinkles: "lots" }) : { flavor: string; }
+>_.defaults : <T>(object: T, ...defaults: any[]) => T
+>_ : Underscore.Static
+>defaults : <T>(object: T, ...defaults: any[]) => T
+>iceCream : { flavor: string; }
+>{ flavor: "vanilla", sprinkles: "lots" } : { flavor: string; sprinkles: string; }
+>flavor : string
+>"vanilla" : "vanilla"
+>sprinkles : string
+>"lots" : "lots"
+
+_.clone({ name: 'moe' });
+>_.clone({ name: 'moe' }) : { name: string; }
+>_.clone : <T>(object: T) => T
+>_ : Underscore.Static
+>clone : <T>(object: T) => T
+>{ name: 'moe' } : { name: string; }
+>name : string
+>'moe' : "moe"
+
+_.chain([1, 2, 3, 200])
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value() : number[]
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num })    .value : () => number[]
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map(function (num) { return num * num }) : Underscore.ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert)    .map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap(<any>alert) : Underscore.ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; })    .tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter(function (num) { return num % 2 == 0; }) : Underscore.ChainedArray<number>
+>_.chain([1, 2, 3, 200])    .filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
+>_.chain([1, 2, 3, 200]) : Underscore.ChainedArray<number>
+>_.chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
+>_ : Underscore.Static
+>chain : { <T>(list: T[]): Underscore.ChainedArray<T>; <T>(list: Dictionary<T>): Underscore.ChainedDictionary<T>; <T>(obj: T): Underscore.ChainedObject<T>; }
+>[1, 2, 3, 200] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>200 : 200
+
+    .filter(function (num) { return num % 2 == 0; })
+>filter : (iterator: Iterator_<number, boolean>, context?: any) => Underscore.ChainedArray<number>
+>function (num) { return num % 2 == 0; } : (num: number) => boolean
+>num : number
+>num % 2 == 0 : boolean
+>num % 2 : number
+>num : number
+>2 : 2
+>0 : 0
+
+    .tap(<any>alert)
+>tap : (interceptor: (object: number[]) => void) => Underscore.ChainedArray<number>
+><any>alert : any
+>alert : (x: string) => void
+
+    .map(function (num) { return num * num })
+>map : <U>(iterator: Iterator_<number, U>, context?: any) => Underscore.ChainedArray<U>
+>function (num) { return num * num } : (num: number) => number
+>num : number
+>num * num : number
+>num : number
+>num : number
+
+    .value();
+>value : () => number[]
+
+_.has({ a: 1, b: 2, c: 3 }, "b");
+>_.has({ a: 1, b: 2, c: 3 }, "b") : boolean
+>_.has : (object: any, key: string) => boolean
+>_ : Underscore.Static
+>has : (object: any, key: string) => boolean
+>{ a: 1, b: 2, c: 3 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>2 : 2
+>c : number
+>3 : 3
+>"b" : "b"
+
+var moe = { name: 'moe', luckyNumbers: [13, 27, 34] };
+>moe : { name: string; luckyNumbers: number[]; }
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: string; luckyNumbers: number[]; }
+>name : string
+>'moe' : "moe"
+>luckyNumbers : number[]
+>[13, 27, 34] : number[]
+>13 : 13
+>27 : 27
+>34 : 34
+
+var clone = { name: 'moe', luckyNumbers: [13, 27, 34] };
+>clone : { name: string; luckyNumbers: number[]; }
+>{ name: 'moe', luckyNumbers: [13, 27, 34] } : { name: string; luckyNumbers: number[]; }
+>name : string
+>'moe' : "moe"
+>luckyNumbers : number[]
+>[13, 27, 34] : number[]
+>13 : 13
+>27 : 27
+>34 : 34
+
+moe == clone;
+>moe == clone : boolean
+>moe : { name: string; luckyNumbers: number[]; }
+>clone : { name: string; luckyNumbers: number[]; }
+
+_.isEqual(moe, clone);
+>_.isEqual(moe, clone) : boolean
+>_.isEqual : <T>(object: T, other: T) => boolean
+>_ : Underscore.Static
+>isEqual : <T>(object: T, other: T) => boolean
+>moe : { name: string; luckyNumbers: number[]; }
+>clone : { name: string; luckyNumbers: number[]; }
+
+_.isEmpty([1, 2, 3]);
+>_.isEmpty([1, 2, 3]) : boolean
+>_.isEmpty : (object: any) => boolean
+>_ : Underscore.Static
+>isEmpty : (object: any) => boolean
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+_.isEmpty({});
+>_.isEmpty({}) : boolean
+>_.isEmpty : (object: any) => boolean
+>_ : Underscore.Static
+>isEmpty : (object: any) => boolean
+>{} : {}
+
+_.isElement($('body')[0]);
+>_.isElement($('body')[0]) : boolean
+>_.isElement : (object: any) => boolean
+>_ : Underscore.Static
+>isElement : (object: any) => boolean
+>$('body')[0] : any
+>$('body') : any
+>$ : any
+>'body' : "body"
+>0 : 0
+
+(function () { return _.isArray(arguments); })();
+>(function () { return _.isArray(arguments); })() : boolean
+>(function () { return _.isArray(arguments); }) : () => boolean
+>function () { return _.isArray(arguments); } : () => boolean
+>_.isArray(arguments) : boolean
+>_.isArray : (object: any) => boolean
+>_ : Underscore.Static
+>isArray : (object: any) => boolean
+>arguments : IArguments
+
+_.isArray([1, 2, 3]);
+>_.isArray([1, 2, 3]) : boolean
+>_.isArray : (object: any) => boolean
+>_ : Underscore.Static
+>isArray : (object: any) => boolean
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+_.isObject({});
+>_.isObject({}) : boolean
+>_.isObject : (value: any) => boolean
+>_ : Underscore.Static
+>isObject : (value: any) => boolean
+>{} : {}
+
+_.isObject(1);
+>_.isObject(1) : boolean
+>_.isObject : (value: any) => boolean
+>_ : Underscore.Static
+>isObject : (value: any) => boolean
+>1 : 1
+
+
+// (() => { return _.isArguments(arguments); })(1, 2, 3);
+_.isArguments([1, 2, 3]);
+>_.isArguments([1, 2, 3]) : boolean
+>_.isArguments : (object: any) => boolean
+>_ : Underscore.Static
+>isArguments : (object: any) => boolean
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+_.isFunction(alert);
+>_.isFunction(alert) : boolean
+>_.isFunction : (object: any) => boolean
+>_ : Underscore.Static
+>isFunction : (object: any) => boolean
+>alert : (x: string) => void
+
+_.isString("moe");
+>_.isString("moe") : boolean
+>_.isString : (object: any) => boolean
+>_ : Underscore.Static
+>isString : (object: any) => boolean
+>"moe" : "moe"
+
+_.isNumber(8.4 * 5);
+>_.isNumber(8.4 * 5) : boolean
+>_.isNumber : (object: any) => boolean
+>_ : Underscore.Static
+>isNumber : (object: any) => boolean
+>8.4 * 5 : number
+>8.4 : 8.4
+>5 : 5
+
+_.isFinite(-101);
+>_.isFinite(-101) : boolean
+>_.isFinite : (object: any) => boolean
+>_ : Underscore.Static
+>isFinite : (object: any) => boolean
+>-101 : -101
+>101 : 101
+
+_.isFinite(-Infinity);
+>_.isFinite(-Infinity) : boolean
+>_.isFinite : (object: any) => boolean
+>_ : Underscore.Static
+>isFinite : (object: any) => boolean
+>-Infinity : number
+>Infinity : number
+
+_.isBoolean(null);
+>_.isBoolean(null) : boolean
+>_.isBoolean : (object: any) => boolean
+>_ : Underscore.Static
+>isBoolean : (object: any) => boolean
+>null : null
+
+_.isDate(new Date());
+>_.isDate(new Date()) : boolean
+>_.isDate : (object: any) => boolean
+>_ : Underscore.Static
+>isDate : (object: any) => boolean
+>new Date() : Date
+>Date : DateConstructor
+
+_.isRegExp(/moe/);
+>_.isRegExp(/moe/) : boolean
+>_.isRegExp : (object: any) => boolean
+>_ : Underscore.Static
+>isRegExp : (object: any) => boolean
+>/moe/ : RegExp
+
+_.isNaN(NaN);
+>_.isNaN(NaN) : boolean
+>_.isNaN : (object: any) => boolean
+>_ : Underscore.Static
+>isNaN : (object: any) => boolean
+>NaN : number
+
+isNaN(undefined);
+>isNaN(undefined) : boolean
+>isNaN : (number: number) => boolean
+>undefined : undefined
+
+_.isNaN(undefined);
+>_.isNaN(undefined) : boolean
+>_.isNaN : (object: any) => boolean
+>_ : Underscore.Static
+>isNaN : (object: any) => boolean
+>undefined : undefined
+
+_.isNull(null);
+>_.isNull(null) : boolean
+>_.isNull : (object: any) => boolean
+>_ : Underscore.Static
+>isNull : (object: any) => boolean
+>null : null
+
+_.isNull(undefined);
+>_.isNull(undefined) : boolean
+>_.isNull : (object: any) => boolean
+>_ : Underscore.Static
+>isNull : (object: any) => boolean
+>undefined : undefined
+
+_.isUndefined((<any>null).missingVariable);
+>_.isUndefined((<any>null).missingVariable) : boolean
+>_.isUndefined : (value: any) => boolean
+>_ : Underscore.Static
+>isUndefined : (value: any) => boolean
+>(<any>null).missingVariable : any
+>(<any>null) : any
+><any>null : any
+>null : null
+>missingVariable : any
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+var underscore = _.noConflict();
+>underscore : Underscore.Static
+>_.noConflict() : Underscore.Static
+>_.noConflict : () => Underscore.Static
+>_ : Underscore.Static
+>noConflict : () => Underscore.Static
+
+var moe2 = { name: 'moe' };
+>moe2 : { name: string; }
+>{ name: 'moe' } : { name: string; }
+>name : string
+>'moe' : "moe"
+
+moe2 === _.identity(moe);
+>moe2 === _.identity(moe) : boolean
+>moe2 : { name: string; }
+>_.identity(moe) : { name: string; luckyNumbers: number[]; }
+>_.identity : <T>(value: T) => T
+>_ : Underscore.Static
+>identity : <T>(value: T) => T
+>moe : { name: string; luckyNumbers: number[]; }
+
+var genie;
+>genie : any
+
+_.times(3, function (n) { genie.grantWishNumber(n); });
+>_.times(3, function (n) { genie.grantWishNumber(n); }) : void[]
+>_.times : <U>(n: number, iterator: Iterator_<number, U>, context?: any) => U[]
+>_ : Underscore.Static
+>times : <U>(n: number, iterator: Iterator_<number, U>, context?: any) => U[]
+>3 : 3
+>function (n) { genie.grantWishNumber(n); } : (n: number) => void
+>n : number
+>genie.grantWishNumber(n) : any
+>genie.grantWishNumber : any
+>genie : any
+>grantWishNumber : any
+>n : number
+
+_.random(0, 100);
+>_.random(0, 100) : number
+>_.random : { (max: number): number; (min: number, max: number): number; }
+>_ : Underscore.Static
+>random : { (max: number): number; (min: number, max: number): number; }
+>0 : 0
+>100 : 100
+
+_.mixin({
+>_.mixin({    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }}) : void
+>_.mixin : (object: any) => void
+>_ : Underscore.Static
+>mixin : (object: any) => void
+>{    capitalize: function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    }} : { capitalize: (string: any) => any; }
+
+    capitalize: function (string) {
+>capitalize : (string: any) => any
+>function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    } : (string: any) => any
+>string : any
+
+        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();
+>string.charAt(0).toUpperCase() + string.substring(1).toLowerCase() : any
+>string.charAt(0).toUpperCase() : any
+>string.charAt(0).toUpperCase : any
+>string.charAt(0) : any
+>string.charAt : any
+>string : any
+>charAt : any
+>0 : 0
+>toUpperCase : any
+>string.substring(1).toLowerCase() : any
+>string.substring(1).toLowerCase : any
+>string.substring(1) : any
+>string.substring : any
+>string : any
+>substring : any
+>1 : 1
+>toLowerCase : any
+    }
+});
+(<any>_("fabio")).capitalize();
+>(<any>_("fabio")).capitalize() : any
+>(<any>_("fabio")).capitalize : any
+>(<any>_("fabio")) : any
+><any>_("fabio") : any
+>_("fabio") : Underscore.WrappedObject<string>
+>_ : Underscore.Static
+>"fabio" : "fabio"
+>capitalize : any
+
+_.uniqueId('contact_');
+>_.uniqueId('contact_') : string
+>_.uniqueId : { (): number; (prefix: string): string; }
+>_ : Underscore.Static
+>uniqueId : { (): number; (prefix: string): string; }
+>'contact_' : "contact_"
+
+_.escape('Curly, Larry & Moe');
+>_.escape('Curly, Larry & Moe') : string
+>_.escape : (s: string) => string
+>_ : Underscore.Static
+>escape : (s: string) => string
+>'Curly, Larry & Moe' : "Curly, Larry & Moe"
+
+var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
+>object : { cheese: string; stuff: () => string; }
+>{ cheese: 'crumpets', stuff: function () { return 'nonsense'; } } : { cheese: string; stuff: () => string; }
+>cheese : string
+>'crumpets' : "crumpets"
+>stuff : () => string
+>function () { return 'nonsense'; } : () => string
+>'nonsense' : "nonsense"
+
+_.result(object, 'cheese');
+>_.result(object, 'cheese') : any
+>_.result : (object: any, property: string) => any
+>_ : Underscore.Static
+>result : (object: any, property: string) => any
+>object : { cheese: string; stuff: () => string; }
+>'cheese' : "cheese"
+
+_.result(object, 'stuff');
+>_.result(object, 'stuff') : any
+>_.result : (object: any, property: string) => any
+>_ : Underscore.Static
+>result : (object: any, property: string) => any
+>object : { cheese: string; stuff: () => string; }
+>'stuff' : "stuff"
+
+var compiled = _.template("hello: <%= name %>");
+>compiled : (data: any) => string
+>_.template("hello: <%= name %>") : (data: any) => string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>"hello: <%= name %>" : "hello: <%= name %>"
+
+compiled({ name: 'moe' });
+>compiled({ name: 'moe' }) : string
+>compiled : (data: any) => string
+>{ name: 'moe' } : { name: string; }
+>name : string
+>'moe' : "moe"
+
+var list2 = "<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>";
+>list2 : string
+>"<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>" : "<% _.each(people, function(name) { %> <li><%= name %></li> <% }); %>"
+
+_.template(list2, { people: ['moe', 'curly', 'larry'] });
+>_.template(list2, { people: ['moe', 'curly', 'larry'] }) : string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>list2 : string
+>{ people: ['moe', 'curly', 'larry'] } : { people: string[]; }
+>people : string[]
+>['moe', 'curly', 'larry'] : string[]
+>'moe' : "moe"
+>'curly' : "curly"
+>'larry' : "larry"
+
+var template = _.template("<b><%- value %></b>");
+>template : (data: any) => string
+>_.template("<b><%- value %></b>") : (data: any) => string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>"<b><%- value %></b>" : "<b><%- value %></b>"
+
+template({ value: '<script>' });
+>template({ value: '<script>' }) : string
+>template : (data: any) => string
+>{ value: '<script>' } : { value: string; }
+>value : string
+>'<script>' : "<script>"
+
+var compiled2 = _.template("<% print('Hello ' + epithet); %>");
+>compiled2 : (data: any) => string
+>_.template("<% print('Hello ' + epithet); %>") : (data: any) => string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>"<% print('Hello ' + epithet); %>" : "<% print('Hello ' + epithet); %>"
+
+compiled2({ epithet: "stooge" });
+>compiled2({ epithet: "stooge" }) : string
+>compiled2 : (data: any) => string
+>{ epithet: "stooge" } : { epithet: string; }
+>epithet : string
+>"stooge" : "stooge"
+
+_.templateSettings = {
+>_.templateSettings = {    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
+>_.templateSettings : Underscore.TemplateSettings
+>_ : Underscore.Static
+>templateSettings : Underscore.TemplateSettings
+>{    interpolate: /\{\{(.+?)\}\}/g} : { interpolate: RegExp; }
+
+    interpolate: /\{\{(.+?)\}\}/g
+>interpolate : RegExp
+>/\{\{(.+?)\}\}/g : RegExp
+
+};
+var template2 = _.template("Hello {{ name }}!");
+>template2 : (data: any) => string
+>_.template("Hello {{ name }}!") : (data: any) => string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>"Hello {{ name }}!" : "Hello {{ name }}!"
+
+template2({ name: "Mustache" });
+>template2({ name: "Mustache" }) : string
+>template2 : (data: any) => string
+>{ name: "Mustache" } : { name: string; }
+>name : string
+>"Mustache" : "Mustache"
+
+_.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' });
+>_.template("Using 'with': <%= data.answer %>", { answer: 'no' }, { variable: 'data' }) : string
+>_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>_ : Underscore.Static
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: Underscore.TemplateSettings): string; }
+>"Using 'with': <%= data.answer %>" : "Using 'with': <%= data.answer %>"
+>{ answer: 'no' } : { answer: string; }
+>answer : string
+>'no' : "no"
+>{ variable: 'data' } : { variable: string; }
+>variable : string
+>'data' : "data"
+
+=== tests/cases/compiler/underscoreTest1_underscore.ts ===
+interface Dictionary<T> {
+>Dictionary : Dictionary<T>
+>T : T
+
+    [x: string]: T;
+>x : string
+>T : T
+}
+
+interface Iterator_<T, U> {
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+
+    (value: T, index: any, list: any): U;
+>value : T
+>T : T
+>index : any
+>list : any
+>U : U
+}
+
+interface Reducer<T, U> {
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+
+    (accumulator: U, value: T, index: any, list: any): U;
+>accumulator : U
+>U : U
+>value : T
+>T : T
+>index : any
+>list : any
+>U : U
+}
+
+interface Tuple2<T0, T1> extends Array<any> {
+>Tuple2 : Tuple2<T0, T1>
+>T0 : T0
+>T1 : T1
+>Array : T[]
+
+    0: T0;
+>T0 : T0
+
+    1: T1;
+>T1 : T1
+}
+
+interface Tuple3<T0, T1, T2> extends Array<any> {
+>Tuple3 : Tuple3<T0, T1, T2>
+>T0 : T0
+>T1 : T1
+>T2 : T2
+>Array : T[]
+
+    0: T0;
+>T0 : T0
+
+    1: T1;
+>T1 : T1
+
+    2: T2;
+>T2 : T2
+}
+
+interface Tuple4<T0, T1, T2, T3> extends Array<any> {
+>Tuple4 : Tuple4<T0, T1, T2, T3>
+>T0 : T0
+>T1 : T1
+>T2 : T2
+>T3 : T3
+>Array : T[]
+
+    0: T0;
+>T0 : T0
+
+    1: T1;
+>T1 : T1
+
+    2: T2;
+>T2 : T2
+
+    3: T3;
+>T3 : T3
+}
+
+module Underscore {
+>Underscore : any
+
+    export interface WrappedObject<T> {
+>WrappedObject : WrappedObject<T>
+>T : T
+
+        keys(): string[];
+>keys : () => string[]
+
+        values(): any[];
+>values : () => any[]
+
+        pairs(): any[][];
+>pairs : () => any[][]
+
+        invert(): any;
+>invert : () => any
+
+        functions(): string[];
+>functions : () => string[]
+
+        methods(): string[];
+>methods : () => string[]
+
+        extend(...sources: any[]): T;
+>extend : (...sources: any[]) => T
+>sources : any[]
+>T : T
+
+        pick(...keys: string[]): T;
+>pick : (...keys: string[]) => T
+>keys : string[]
+>T : T
+
+        omit(...keys: string[]): T;
+>omit : (...keys: string[]) => T
+>keys : string[]
+>T : T
+
+        defaults(...defaults: any[]): T;
+>defaults : (...defaults: any[]) => T
+>defaults : any[]
+>T : T
+
+        clone(): T;
+>clone : () => T
+>T : T
+
+        tap(interceptor: (object: T) => void): T;
+>tap : (interceptor: (object: T) => void) => T
+>interceptor : (object: T) => void
+>object : T
+>T : T
+>T : T
+
+        has(key: string): boolean;
+>has : (key: string) => boolean
+>key : string
+
+        isEqual(other: T): boolean;
+>isEqual : (other: T) => boolean
+>other : T
+>T : T
+
+        isEmpty(): boolean;
+>isEmpty : () => boolean
+
+        isElement(): boolean;
+>isElement : () => boolean
+
+        isArray(): boolean;
+>isArray : () => boolean
+
+        isObject(): boolean;
+>isObject : () => boolean
+
+        isArguments(): boolean;
+>isArguments : () => boolean
+
+        isFunction(): boolean;
+>isFunction : () => boolean
+
+        isString(): boolean;
+>isString : () => boolean
+
+        isNumber(): boolean;
+>isNumber : () => boolean
+
+        isFinite(): boolean;
+>isFinite : () => boolean
+
+        isBoolean(): boolean;
+>isBoolean : () => boolean
+
+        isDate(): boolean;
+>isDate : () => boolean
+
+        isRegExp(): boolean;
+>isRegExp : () => boolean
+
+        isNaN(): boolean;
+>isNaN : () => boolean
+
+        isNull(): boolean;
+>isNull : () => boolean
+
+        isUndefined(): boolean;
+>isUndefined : () => boolean
+
+        value(): T;
+>value : () => T
+>T : T
+    }
+
+    export interface WrappedFunction<T extends Function> extends WrappedObject<T> {
+>WrappedFunction : WrappedFunction<T>
+>T : T
+>Function : Function
+>WrappedObject : WrappedObject<T>
+>T : T
+
+        bind(object: any): T;
+>bind : { (object: any): T; (object: any, ...args: any[]): Function; }
+>object : any
+>T : T
+
+        bind(object: any, ...args: any[]): Function;
+>bind : { (object: any): T; (object: any, ...args: any[]): Function; }
+>object : any
+>args : any[]
+>Function : Function
+
+        bindAll(...methodNames: string[]): T;
+>bindAll : (...methodNames: string[]) => T
+>methodNames : string[]
+>T : T
+
+        partial(...args: any[]): Function;
+>partial : (...args: any[]) => Function
+>args : any[]
+>Function : Function
+
+        memoize(hashFunction?: Function): T;
+>memoize : (hashFunction?: Function) => T
+>hashFunction : Function
+>Function : Function
+>T : T
+
+        delay(wait: number, ...args: any[]): number;
+>delay : (wait: number, ...args: any[]) => number
+>wait : number
+>args : any[]
+
+        defer(...args: any[]): number;
+>defer : (...args: any[]) => number
+>args : any[]
+
+        throttle(wait: number): T;
+>throttle : (wait: number) => T
+>wait : number
+>T : T
+
+        debounce(wait: number, immediate?: boolean): T;
+>debounce : (wait: number, immediate?: boolean) => T
+>wait : number
+>immediate : boolean
+>T : T
+
+        once(): T;
+>once : () => T
+>T : T
+
+        wrap(wrapper: (func: T, ...args: any[]) => any): T;
+>wrap : (wrapper: (func: T, ...args: any[]) => any) => T
+>wrapper : (func: T, ...args: any[]) => any
+>func : T
+>T : T
+>args : any[]
+>T : T
+
+        compose(...funcs: Function[]): Function;
+>compose : (...funcs: Function[]) => Function
+>funcs : Function[]
+>Function : Function
+>Function : Function
+    }
+
+    export interface WrappedArray<T> extends WrappedObject<Array<T>> {
+>WrappedArray : WrappedArray<T>
+>T : T
+>WrappedObject : WrappedObject<T>
+>Array : T[]
+>T : T
+
+        each(iterator: Iterator_<T, void>, context?: any): void;
+>each : (iterator: Iterator_<T, void>, context?: any) => void
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        forEach(iterator: Iterator_<T, void>, context?: any): void;
+>forEach : (iterator: Iterator_<T, void>, context?: any) => void
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        map<U>(iterator: Iterator_<T, U>, context?: any): U[];
+>map : <U>(iterator: Iterator_<T, U>, context?: any) => U[]
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        collect<U>(iterator: Iterator_<T, U>, context?: any): U[];
+>collect : <U>(iterator: Iterator_<T, U>, context?: any) => U[]
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        find(iterator: Iterator_<T, boolean>, context?: any): T;
+>find : (iterator: Iterator_<T, boolean>, context?: any) => T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        detect(iterator: Iterator_<T, boolean>, context?: any): T;
+>detect : (iterator: Iterator_<T, boolean>, context?: any) => T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        filter(iterator: Iterator_<T, boolean>, context?: any): T[];
+>filter : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        select(iterator: Iterator_<T, boolean>, context?: any): T[];
+>select : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        where(properties: Object): T[];
+>where : (properties: Object) => T[]
+>properties : Object
+>Object : Object
+>T : T
+
+        findWhere(properties: Object): T;
+>findWhere : (properties: Object) => T
+>properties : Object
+>Object : Object
+>T : T
+
+        reject(iterator: Iterator_<T, boolean>, context?: any): T[];
+>reject : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        every(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>every : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        all(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>all : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        some(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>some : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        any(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>any : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        contains(value: T): boolean;
+>contains : (value: T) => boolean
+>value : T
+>T : T
+
+        include(value: T): boolean;
+>include : (value: T) => boolean
+>value : T
+>T : T
+
+        invoke(methodName: string, ...args: any[]): any[];
+>invoke : (methodName: string, ...args: any[]) => any[]
+>methodName : string
+>args : any[]
+
+        pluck(propertyName: string): any[];
+>pluck : (propertyName: string) => any[]
+>propertyName : string
+
+        max(iterator?: Iterator_<T, any>, context?: any): T;
+>max : (iterator?: Iterator_<T, any>, context?: any) => T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        min(iterator?: Iterator_<T, any>, context?: any): T;
+>min : (iterator?: Iterator_<T, any>, context?: any) => T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy(iterator: Iterator_<T, any>, context?: any): T[];
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): T[]; (propertyName: string): T[]; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy(propertyName: string): T[];
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): T[]; (propertyName: string): T[]; }
+>propertyName : string
+>T : T
+
+        groupBy(iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; (propertyName: string): Dictionary<T[]>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+>T : T
+
+        groupBy(propertyName: string): Dictionary<T[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; (propertyName: string): Dictionary<T[]>; }
+>propertyName : string
+>Dictionary : Dictionary<T>
+>T : T
+
+        countBy(iterator?: Iterator_<T, any>, context?: any): Dictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; (propertyName: string): Dictionary<number>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+
+        countBy(propertyName: string): Dictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; (propertyName: string): Dictionary<number>; }
+>propertyName : string
+>Dictionary : Dictionary<T>
+
+        shuffle(): T[];
+>shuffle : () => T[]
+>T : T
+
+        toArray(): T[];
+>toArray : () => T[]
+>T : T
+
+        size(): number;
+>size : () => number
+
+        first(): T;
+>first : { (): T; (count: number): T[]; }
+>T : T
+
+        first(count: number): T[];
+>first : { (): T; (count: number): T[]; }
+>count : number
+>T : T
+
+        head(): T;
+>head : { (): T; (count: number): T[]; }
+>T : T
+
+        head(count: number): T[];
+>head : { (): T; (count: number): T[]; }
+>count : number
+>T : T
+
+        take(): T;
+>take : { (): T; (count: number): T[]; }
+>T : T
+
+        take(count: number): T[];
+>take : { (): T; (count: number): T[]; }
+>count : number
+>T : T
+
+        initial(): T;
+>initial : { (): T; (count: number): T[]; }
+>T : T
+
+        initial(count: number): T[];
+>initial : { (): T; (count: number): T[]; }
+>count : number
+>T : T
+
+        last(): T;
+>last : { (): T; (count: number): T[]; }
+>T : T
+
+        last(count: number): T[];
+>last : { (): T; (count: number): T[]; }
+>count : number
+>T : T
+
+        rest(index?: number): T[];
+>rest : (index?: number) => T[]
+>index : number
+>T : T
+
+        compact(): T[];
+>compact : () => T[]
+>T : T
+
+        flatten<U>(shallow?: boolean): U[];
+>flatten : <U>(shallow?: boolean) => U[]
+>U : U
+>shallow : boolean
+>U : U
+
+        without(...values: T[]): T[];
+>without : (...values: T[]) => T[]
+>values : T[]
+>T : T
+>T : T
+
+        union(...arrays: T[][]): T[];
+>union : (...arrays: T[][]) => T[]
+>arrays : T[][]
+>T : T
+>T : T
+
+        intersection(...arrays: T[][]): T[];
+>intersection : (...arrays: T[][]) => T[]
+>arrays : T[][]
+>T : T
+>T : T
+
+        difference(...others: T[][]): T[];
+>difference : (...others: T[][]) => T[]
+>others : T[][]
+>T : T
+>T : T
+
+        uniq(isSorted?: boolean): T[];
+>uniq : { (isSorted?: boolean): T[]; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>isSorted : boolean
+>T : T
+
+        uniq<U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
+>uniq : { (isSorted?: boolean): T[]; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>U : U
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        unique(isSorted?: boolean): T[];
+>unique : { (isSorted?: boolean): T[]; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>isSorted : boolean
+>T : T
+
+        unique<U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
+>unique : { (isSorted?: boolean): T[]; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>U : U
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        zip(...arrays: any[][]): any[][];
+>zip : (...arrays: any[][]) => any[][]
+>arrays : any[][]
+
+        object(): any;
+>object : { (): any; (values: any[]): any; }
+
+        object(values: any[]): any;
+>object : { (): any; (values: any[]): any; }
+>values : any[]
+
+        indexOf(value: T, isSorted?: boolean): number;
+>indexOf : (value: T, isSorted?: boolean) => number
+>value : T
+>T : T
+>isSorted : boolean
+
+        lastIndexOf(value: T, fromIndex?: number): number;
+>lastIndexOf : (value: T, fromIndex?: number) => number
+>value : T
+>T : T
+>fromIndex : number
+
+        sortedIndex(obj: T, propertyName: string): number;
+>sortedIndex : { (obj: T, propertyName: string): number; (obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>obj : T
+>T : T
+>propertyName : string
+
+        sortedIndex(obj: T, iterator?: Iterator_<T, any>, context?: any): number;
+>sortedIndex : { (obj: T, propertyName: string): number; (obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>obj : T
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        // Methods from Array
+        concat(...items: T[]): T[];
+>concat : (...items: T[]) => T[]
+>items : T[]
+>T : T
+>T : T
+
+        join(separator?: string): string;
+>join : (separator?: string) => string
+>separator : string
+
+        pop(): T;
+>pop : () => T
+>T : T
+
+        push(...items: T[]): number;
+>push : (...items: T[]) => number
+>items : T[]
+>T : T
+
+        reverse(): T[];
+>reverse : () => T[]
+>T : T
+
+        shift(): T;
+>shift : () => T
+>T : T
+
+        slice(start: number, end?: number): T[];
+>slice : (start: number, end?: number) => T[]
+>start : number
+>end : number
+>T : T
+
+        sort(compareFn?: (a: T, b: T) => number): T[];
+>sort : (compareFn?: (a: T, b: T) => number) => T[]
+>compareFn : (a: T, b: T) => number
+>a : T
+>T : T
+>b : T
+>T : T
+>T : T
+
+        splice(start: number): T[];
+>splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>start : number
+>T : T
+
+        splice(start: number, deleteCount: number, ...items: T[]): T[];
+>splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>start : number
+>deleteCount : number
+>items : T[]
+>T : T
+>T : T
+
+        unshift(...items: T[]): number;
+>unshift : (...items: T[]) => number
+>items : T[]
+>T : T
+    }
+
+    export interface WrappedDictionary<T> extends WrappedObject<Dictionary<T>> {
+>WrappedDictionary : WrappedDictionary<T>
+>T : T
+>WrappedObject : WrappedObject<T>
+>Dictionary : Dictionary<T>
+>T : T
+
+        each(iterator: Iterator_<T, void>, context?: any): void;
+>each : (iterator: Iterator_<T, void>, context?: any) => void
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        forEach(iterator: Iterator_<T, void>, context?: any): void;
+>forEach : (iterator: Iterator_<T, void>, context?: any) => void
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        map<U>(iterator: Iterator_<T, U>, context?: any): U[];
+>map : <U>(iterator: Iterator_<T, U>, context?: any) => U[]
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        collect<U>(iterator: Iterator_<T, U>, context?: any): U[];
+>collect : <U>(iterator: Iterator_<T, U>, context?: any) => U[]
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        find(iterator: Iterator_<T, boolean>, context?: any): T;
+>find : (iterator: Iterator_<T, boolean>, context?: any) => T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        detect(iterator: Iterator_<T, boolean>, context?: any): T;
+>detect : (iterator: Iterator_<T, boolean>, context?: any) => T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        filter(iterator: Iterator_<T, boolean>, context?: any): T[];
+>filter : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        select(iterator: Iterator_<T, boolean>, context?: any): T[];
+>select : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        where(properties: Object): T[];
+>where : (properties: Object) => T[]
+>properties : Object
+>Object : Object
+>T : T
+
+        findWhere(properties: Object): T;
+>findWhere : (properties: Object) => T
+>properties : Object
+>Object : Object
+>T : T
+
+        reject(iterator: Iterator_<T, boolean>, context?: any): T[];
+>reject : (iterator: Iterator_<T, boolean>, context?: any) => T[]
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        every(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>every : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        all(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>all : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        some(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>some : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        any(iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>any : (iterator?: Iterator_<T, boolean>, context?: any) => boolean
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        contains(value: T): boolean;
+>contains : (value: T) => boolean
+>value : T
+>T : T
+
+        include(value: T): boolean;
+>include : (value: T) => boolean
+>value : T
+>T : T
+
+        invoke(methodName: string, ...args: any[]): any[];
+>invoke : (methodName: string, ...args: any[]) => any[]
+>methodName : string
+>args : any[]
+
+        pluck(propertyName: string): any[];
+>pluck : (propertyName: string) => any[]
+>propertyName : string
+
+        max(iterator?: Iterator_<T, any>, context?: any): T;
+>max : (iterator?: Iterator_<T, any>, context?: any) => T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        min(iterator?: Iterator_<T, any>, context?: any): T;
+>min : (iterator?: Iterator_<T, any>, context?: any) => T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy(iterator: Iterator_<T, any>, context?: any): T[];
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): T[]; (propertyName: string): T[]; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy(propertyName: string): T[];
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): T[]; (propertyName: string): T[]; }
+>propertyName : string
+>T : T
+
+        groupBy(iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; (propertyName: string): Dictionary<T[]>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+>T : T
+
+        groupBy(propertyName: string): Dictionary<T[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; (propertyName: string): Dictionary<T[]>; }
+>propertyName : string
+>Dictionary : Dictionary<T>
+>T : T
+
+        countBy(iterator?: Iterator_<T, any>, context?: any): Dictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; (propertyName: string): Dictionary<number>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+
+        countBy(propertyName: string): Dictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; (propertyName: string): Dictionary<number>; }
+>propertyName : string
+>Dictionary : Dictionary<T>
+
+        shuffle(): T[];
+>shuffle : () => T[]
+>T : T
+
+        toArray(): T[];
+>toArray : () => T[]
+>T : T
+
+        size(): number;
+>size : () => number
+    }
+
+    export interface ChainedObject<T> {
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        keys(): ChainedArray<string>;
+>keys : () => ChainedArray<string>
+>ChainedArray : ChainedArray<T>
+
+        values(): ChainedArray<any>;
+>values : () => ChainedArray<any>
+>ChainedArray : ChainedArray<T>
+
+        pairs(): ChainedArray<any[]>;
+>pairs : () => ChainedArray<any[]>
+>ChainedArray : ChainedArray<T>
+
+        invert(): ChainedObject<any>;
+>invert : () => ChainedObject<any>
+>ChainedObject : ChainedObject<T>
+
+        functions(): ChainedArray<string>;
+>functions : () => ChainedArray<string>
+>ChainedArray : ChainedArray<T>
+
+        methods(): ChainedArray<string>;
+>methods : () => ChainedArray<string>
+>ChainedArray : ChainedArray<T>
+
+        extend(...sources: any[]): ChainedObject<T>;
+>extend : (...sources: any[]) => ChainedObject<T>
+>sources : any[]
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        pick(...keys: string[]): ChainedObject<T>;
+>pick : (...keys: string[]) => ChainedObject<T>
+>keys : string[]
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        omit(...keys: string[]): ChainedObject<T>;
+>omit : (...keys: string[]) => ChainedObject<T>
+>keys : string[]
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        defaults(...defaults: any[]): ChainedObject<T>;
+>defaults : (...defaults: any[]) => ChainedObject<T>
+>defaults : any[]
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        clone(): ChainedObject<T>;
+>clone : () => ChainedObject<T>
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        tap(interceptor: (object: T) => void): ChainedObject<T>;
+>tap : (interceptor: (object: T) => void) => ChainedObject<T>
+>interceptor : (object: T) => void
+>object : T
+>T : T
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        has(key: string): ChainedObject<boolean>;
+>has : (key: string) => ChainedObject<boolean>
+>key : string
+>ChainedObject : ChainedObject<T>
+
+        isEqual(other: T): ChainedObject<boolean>;
+>isEqual : (other: T) => ChainedObject<boolean>
+>other : T
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        isEmpty(): ChainedObject<boolean>;
+>isEmpty : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isElement(): ChainedObject<boolean>;
+>isElement : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isArray(): ChainedObject<boolean>;
+>isArray : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isObject(): ChainedObject<boolean>;
+>isObject : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isArguments(): ChainedObject<boolean>;
+>isArguments : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isFunction(): ChainedObject<boolean>;
+>isFunction : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isString(): ChainedObject<boolean>;
+>isString : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isNumber(): ChainedObject<boolean>;
+>isNumber : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isFinite(): ChainedObject<boolean>;
+>isFinite : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isBoolean(): ChainedObject<boolean>;
+>isBoolean : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isDate(): ChainedObject<boolean>;
+>isDate : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isRegExp(): ChainedObject<boolean>;
+>isRegExp : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isNaN(): ChainedObject<boolean>;
+>isNaN : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isNull(): ChainedObject<boolean>;
+>isNull : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        isUndefined(): ChainedObject<boolean>;
+>isUndefined : () => ChainedObject<boolean>
+>ChainedObject : ChainedObject<T>
+
+        value(): T;
+>value : () => T
+>T : T
+    }
+
+    export interface ChainedArray<T> extends ChainedObject<Array<T>> {
+>ChainedArray : ChainedArray<T>
+>T : T
+>ChainedObject : ChainedObject<T>
+>Array : T[]
+>T : T
+
+        each(iterator: Iterator_<T, void>, context?: any): ChainedObject<void>;
+>each : (iterator: Iterator_<T, void>, context?: any) => ChainedObject<void>
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        forEach(iterator: Iterator_<T, void>, context?: any): ChainedObject<void>;
+>forEach : (iterator: Iterator_<T, void>, context?: any) => ChainedObject<void>
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        map<U>(iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>map : <U>(iterator: Iterator_<T, U>, context?: any) => ChainedArray<U>
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        collect<U>(iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>collect : <U>(iterator: Iterator_<T, U>, context?: any) => ChainedArray<U>
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        find(iterator: Iterator_<T, boolean>, context?: any): ChainedObject<T>;
+>find : (iterator: Iterator_<T, boolean>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        detect(iterator: Iterator_<T, boolean>, context?: any): ChainedObject<T>;
+>detect : (iterator: Iterator_<T, boolean>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        filter(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>filter : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        select(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>select : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        where(properties: Object): ChainedArray<T>;
+>where : (properties: Object) => ChainedArray<T>
+>properties : Object
+>Object : Object
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        findWhere(properties: Object): ChainedObject<T>;
+>findWhere : (properties: Object) => ChainedObject<T>
+>properties : Object
+>Object : Object
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reject(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>reject : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        every(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>every : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        all(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>all : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        some(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>some : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        any(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>any : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        contains(value: T): ChainedObject<boolean>;
+>contains : (value: T) => ChainedObject<boolean>
+>value : T
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        include(value: T): ChainedObject<boolean>;
+>include : (value: T) => ChainedObject<boolean>
+>value : T
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        invoke(methodName: string, ...args: any[]): ChainedArray<any>;
+>invoke : (methodName: string, ...args: any[]) => ChainedArray<any>
+>methodName : string
+>args : any[]
+>ChainedArray : ChainedArray<T>
+
+        pluck(propertyName: string): ChainedArray<any>;
+>pluck : (propertyName: string) => ChainedArray<any>
+>propertyName : string
+>ChainedArray : ChainedArray<T>
+
+        max(iterator?: Iterator_<T, any>, context?: any): ChainedObject<T>;
+>max : (iterator?: Iterator_<T, any>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        min(iterator?: Iterator_<T, any>, context?: any): ChainedObject<T>;
+>min : (iterator?: Iterator_<T, any>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        sortBy(iterator: Iterator_<T, any>, context?: any): ChainedArray<T>;
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): ChainedArray<T>; (propertyName: string): ChainedArray<T>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        sortBy(propertyName: string): ChainedArray<T>;
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): ChainedArray<T>; (propertyName: string): ChainedArray<T>; }
+>propertyName : string
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        // Should return ChainedDictionary<T[]>, but expansive recursion not allowed
+        groupBy(iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>; (propertyName: string): ChainedDictionary<any[]>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedDictionary : ChainedDictionary<T>
+
+        groupBy(propertyName: string): ChainedDictionary<any[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>; (propertyName: string): ChainedDictionary<any[]>; }
+>propertyName : string
+>ChainedDictionary : ChainedDictionary<T>
+
+        countBy(iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>; (propertyName: string): ChainedDictionary<number>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedDictionary : ChainedDictionary<T>
+
+        countBy(propertyName: string): ChainedDictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>; (propertyName: string): ChainedDictionary<number>; }
+>propertyName : string
+>ChainedDictionary : ChainedDictionary<T>
+
+        shuffle(): ChainedArray<T>;
+>shuffle : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        toArray(): ChainedArray<T>;
+>toArray : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        size(): ChainedObject<number>;
+>size : () => ChainedObject<number>
+>ChainedObject : ChainedObject<T>
+
+        first(): ChainedObject<T>;
+>first : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        first(count: number): ChainedArray<T>;
+>first : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>count : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        head(): ChainedObject<T>;
+>head : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        head(count: number): ChainedArray<T>;
+>head : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>count : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        take(): ChainedObject<T>;
+>take : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        take(count: number): ChainedArray<T>;
+>take : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>count : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        initial(): ChainedObject<T>;
+>initial : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        initial(count: number): ChainedArray<T>;
+>initial : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>count : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        last(): ChainedObject<T>;
+>last : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        last(count: number): ChainedArray<T>;
+>last : { (): ChainedObject<T>; (count: number): ChainedArray<T>; }
+>count : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        rest(index?: number): ChainedArray<T>;
+>rest : (index?: number) => ChainedArray<T>
+>index : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        compact(): ChainedArray<T>;
+>compact : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        flatten<U>(shallow?: boolean): ChainedArray<U>;
+>flatten : <U>(shallow?: boolean) => ChainedArray<U>
+>U : U
+>shallow : boolean
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        without(...values: T[]): ChainedArray<T>;
+>without : (...values: T[]) => ChainedArray<T>
+>values : T[]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        union(...arrays: T[][]): ChainedArray<T>;
+>union : (...arrays: T[][]) => ChainedArray<T>
+>arrays : T[][]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        intersection(...arrays: T[][]): ChainedArray<T>;
+>intersection : (...arrays: T[][]) => ChainedArray<T>
+>arrays : T[][]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        difference(...others: T[][]): ChainedArray<T>;
+>difference : (...others: T[][]) => ChainedArray<T>
+>others : T[][]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        uniq(isSorted?: boolean): ChainedArray<T>;
+>uniq : { (isSorted?: boolean): ChainedArray<T>; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>; }
+>isSorted : boolean
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        uniq<U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>uniq : { (isSorted?: boolean): ChainedArray<T>; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>; }
+>U : U
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        unique(isSorted?: boolean): ChainedArray<T>;
+>unique : { (isSorted?: boolean): ChainedArray<T>; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>; }
+>isSorted : boolean
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        unique<U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>unique : { (isSorted?: boolean): ChainedArray<T>; <U>(isSorted: boolean, iterator: Iterator_<T, U>, context?: any): ChainedArray<U>; }
+>U : U
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        zip(...arrays: any[][]): ChainedArray<any[]>;
+>zip : (...arrays: any[][]) => ChainedArray<any[]>
+>arrays : any[][]
+>ChainedArray : ChainedArray<T>
+
+        object(): ChainedObject<any>;
+>object : { (): ChainedObject<any>; (values: any[]): ChainedObject<any>; }
+>ChainedObject : ChainedObject<T>
+
+        object(values: any[]): ChainedObject<any>;
+>object : { (): ChainedObject<any>; (values: any[]): ChainedObject<any>; }
+>values : any[]
+>ChainedObject : ChainedObject<T>
+
+        indexOf(value: T, isSorted?: boolean): ChainedObject<number>;
+>indexOf : (value: T, isSorted?: boolean) => ChainedObject<number>
+>value : T
+>T : T
+>isSorted : boolean
+>ChainedObject : ChainedObject<T>
+
+        lastIndexOf(value: T, fromIndex?: number): ChainedObject<number>;
+>lastIndexOf : (value: T, fromIndex?: number) => ChainedObject<number>
+>value : T
+>T : T
+>fromIndex : number
+>ChainedObject : ChainedObject<T>
+
+        sortedIndex(obj: T, propertyName: string): ChainedObject<number>;
+>sortedIndex : { (obj: T, propertyName: string): ChainedObject<number>; (obj: T, iterator?: Iterator_<T, any>, context?: any): ChainedObject<number>; }
+>obj : T
+>T : T
+>propertyName : string
+>ChainedObject : ChainedObject<T>
+
+        sortedIndex(obj: T, iterator?: Iterator_<T, any>, context?: any): ChainedObject<number>;
+>sortedIndex : { (obj: T, propertyName: string): ChainedObject<number>; (obj: T, iterator?: Iterator_<T, any>, context?: any): ChainedObject<number>; }
+>obj : T
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        // Methods from Array
+        concat(...items: T[]): ChainedArray<T>;
+>concat : (...items: T[]) => ChainedArray<T>
+>items : T[]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        join(separator?: string): ChainedObject<string>;
+>join : (separator?: string) => ChainedObject<string>
+>separator : string
+>ChainedObject : ChainedObject<T>
+
+        pop(): ChainedObject<T>;
+>pop : () => ChainedObject<T>
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        push(...items: T[]): ChainedObject<number>;
+>push : (...items: T[]) => ChainedObject<number>
+>items : T[]
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        reverse(): ChainedArray<T>;
+>reverse : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        shift(): ChainedObject<T>;
+>shift : () => ChainedObject<T>
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        slice(start: number, end?: number): ChainedArray<T>;
+>slice : (start: number, end?: number) => ChainedArray<T>
+>start : number
+>end : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        sort(compareFn?: (a: T, b: T) => number): ChainedArray<T>;
+>sort : (compareFn?: (a: T, b: T) => number) => ChainedArray<T>
+>compareFn : (a: T, b: T) => number
+>a : T
+>T : T
+>b : T
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        splice(start: number): ChainedArray<T>;
+>splice : { (start: number): ChainedArray<T>; (start: number, deleteCount: number, ...items: T[]): ChainedArray<T>; }
+>start : number
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        splice(start: number, deleteCount: number, ...items: T[]): ChainedArray<T>;
+>splice : { (start: number): ChainedArray<T>; (start: number, deleteCount: number, ...items: T[]): ChainedArray<T>; }
+>start : number
+>deleteCount : number
+>items : T[]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        unshift(...items: T[]): ChainedObject<number>;
+>unshift : (...items: T[]) => ChainedObject<number>
+>items : T[]
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        // Methods from ChainedObject with promoted return types
+        extend(...sources: any[]): ChainedArray<T>;
+>extend : (...sources: any[]) => ChainedArray<T>
+>sources : any[]
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        pick(...keys: string[]): ChainedArray<T>;
+>pick : (...keys: string[]) => ChainedArray<T>
+>keys : string[]
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        omit(...keys: string[]): ChainedArray<T>;
+>omit : (...keys: string[]) => ChainedArray<T>
+>keys : string[]
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        defaults(...defaults: any[]): ChainedArray<T>;
+>defaults : (...defaults: any[]) => ChainedArray<T>
+>defaults : any[]
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        clone(): ChainedArray<T>;
+>clone : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        tap(interceptor: (object: T[]) => void): ChainedArray<T>;
+>tap : (interceptor: (object: T[]) => void) => ChainedArray<T>
+>interceptor : (object: T[]) => void
+>object : T[]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+    }
+
+    export interface ChainedDictionary<T> extends ChainedObject<Dictionary<T>> {
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+>ChainedObject : ChainedObject<T>
+>Dictionary : Dictionary<T>
+>T : T
+
+        each(iterator: Iterator_<T, void>, context?: any): ChainedObject<void>;
+>each : (iterator: Iterator_<T, void>, context?: any) => ChainedObject<void>
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        forEach(iterator: Iterator_<T, void>, context?: any): ChainedObject<void>;
+>forEach : (iterator: Iterator_<T, void>, context?: any) => ChainedObject<void>
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        map<U>(iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>map : <U>(iterator: Iterator_<T, U>, context?: any) => ChainedArray<U>
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        collect<U>(iterator: Iterator_<T, U>, context?: any): ChainedArray<U>;
+>collect : <U>(iterator: Iterator_<T, U>, context?: any) => ChainedArray<U>
+>U : U
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>ChainedArray : ChainedArray<T>
+>U : U
+
+        reduce(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reduce<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>reduce : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        foldl(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        foldl<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>foldl : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        inject(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        inject<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>inject : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        reduceRight(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reduceRight<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>reduceRight : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        foldr(iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        foldr<U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>;
+>foldr : { (iterator: Reducer<T, T>, initialValue?: T, context?: any): ChainedObject<T>; <U>(iterator: Reducer<T, U>, initialValue: U, context?: any): ChainedObject<U>; }
+>U : U
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>ChainedObject : ChainedObject<T>
+>U : U
+
+        find(iterator: Iterator_<T, boolean>, context?: any): ChainedObject<T>;
+>find : (iterator: Iterator_<T, boolean>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        detect(iterator: Iterator_<T, boolean>, context?: any): ChainedObject<T>;
+>detect : (iterator: Iterator_<T, boolean>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        filter(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>filter : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        select(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>select : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        where(properties: Object): ChainedArray<T>;
+>where : (properties: Object) => ChainedArray<T>
+>properties : Object
+>Object : Object
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        findWhere(properties: Object): ChainedObject<T>;
+>findWhere : (properties: Object) => ChainedObject<T>
+>properties : Object
+>Object : Object
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        reject(iterator: Iterator_<T, boolean>, context?: any): ChainedArray<T>;
+>reject : (iterator: Iterator_<T, boolean>, context?: any) => ChainedArray<T>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        every(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>every : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        all(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>all : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        some(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>some : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        any(iterator?: Iterator_<T, boolean>, context?: any): ChainedObject<boolean>;
+>any : (iterator?: Iterator_<T, boolean>, context?: any) => ChainedObject<boolean>
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+
+        contains(value: T): ChainedObject<boolean>;
+>contains : (value: T) => ChainedObject<boolean>
+>value : T
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        include(value: T): ChainedObject<boolean>;
+>include : (value: T) => ChainedObject<boolean>
+>value : T
+>T : T
+>ChainedObject : ChainedObject<T>
+
+        invoke(methodName: string, ...args: any[]): ChainedArray<any>;
+>invoke : (methodName: string, ...args: any[]) => ChainedArray<any>
+>methodName : string
+>args : any[]
+>ChainedArray : ChainedArray<T>
+
+        pluck(propertyName: string): ChainedArray<any>;
+>pluck : (propertyName: string) => ChainedArray<any>
+>propertyName : string
+>ChainedArray : ChainedArray<T>
+
+        max(iterator?: Iterator_<T, any>, context?: any): ChainedObject<T>;
+>max : (iterator?: Iterator_<T, any>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        min(iterator?: Iterator_<T, any>, context?: any): ChainedObject<T>;
+>min : (iterator?: Iterator_<T, any>, context?: any) => ChainedObject<T>
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        sortBy(iterator: Iterator_<T, any>, context?: any): ChainedArray<T>;
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): ChainedArray<T>; (propertyName: string): ChainedArray<T>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        sortBy(propertyName: string): ChainedArray<T>;
+>sortBy : { (iterator: Iterator_<T, any>, context?: any): ChainedArray<T>; (propertyName: string): ChainedArray<T>; }
+>propertyName : string
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        // Should return ChainedDictionary<T[]>, but expansive recursion not allowed
+        groupBy(iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>; (propertyName: string): ChainedDictionary<any[]>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedDictionary : ChainedDictionary<T>
+
+        groupBy(propertyName: string): ChainedDictionary<any[]>;
+>groupBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<any[]>; (propertyName: string): ChainedDictionary<any[]>; }
+>propertyName : string
+>ChainedDictionary : ChainedDictionary<T>
+
+        countBy(iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>; (propertyName: string): ChainedDictionary<number>; }
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>ChainedDictionary : ChainedDictionary<T>
+
+        countBy(propertyName: string): ChainedDictionary<number>;
+>countBy : { (iterator?: Iterator_<T, any>, context?: any): ChainedDictionary<number>; (propertyName: string): ChainedDictionary<number>; }
+>propertyName : string
+>ChainedDictionary : ChainedDictionary<T>
+
+        shuffle(): ChainedArray<T>;
+>shuffle : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        toArray(): ChainedArray<T>;
+>toArray : () => ChainedArray<T>
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        size(): ChainedObject<number>;
+>size : () => ChainedObject<number>
+>ChainedObject : ChainedObject<T>
+
+        // Methods from ChainedObject with promoted return types
+        extend(...sources: any[]): ChainedDictionary<T>;
+>extend : (...sources: any[]) => ChainedDictionary<T>
+>sources : any[]
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        pick(...keys: string[]): ChainedDictionary<T>;
+>pick : (...keys: string[]) => ChainedDictionary<T>
+>keys : string[]
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        omit(...keys: string[]): ChainedDictionary<T>;
+>omit : (...keys: string[]) => ChainedDictionary<T>
+>keys : string[]
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        defaults(...defaults: any[]): ChainedDictionary<T>;
+>defaults : (...defaults: any[]) => ChainedDictionary<T>
+>defaults : any[]
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        clone(): ChainedDictionary<T>;
+>clone : () => ChainedDictionary<T>
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        tap(interceptor: (object: Dictionary<T>) => void): ChainedDictionary<T>;
+>tap : (interceptor: (object: Dictionary<T>) => void) => ChainedDictionary<T>
+>interceptor : (object: Dictionary<T>) => void
+>object : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+    }
+
+    export interface TemplateSettings {
+>TemplateSettings : TemplateSettings
+
+        evaluate?: RegExp;
+>evaluate : RegExp
+>RegExp : RegExp
+
+        interpolate?: RegExp;
+>interpolate : RegExp
+>RegExp : RegExp
+
+        escape?: RegExp;
+>escape : RegExp
+>RegExp : RegExp
+
+        variable?: string;
+>variable : string
+    }
+
+    export interface Static {
+>Static : Static
+
+        <T>(list: T[]): WrappedArray<T>;
+>T : T
+>list : T[]
+>T : T
+>WrappedArray : WrappedArray<T>
+>T : T
+
+        <T>(list: Dictionary<T>): WrappedDictionary<T>;
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>WrappedDictionary : WrappedDictionary<T>
+>T : T
+
+        <T extends Function>(func: T): WrappedFunction<T>;
+>T : T
+>Function : Function
+>func : T
+>T : T
+>WrappedFunction : WrappedFunction<T>
+>T : T
+
+        <T>(obj: T): WrappedObject<T>;
+>T : T
+>obj : T
+>T : T
+>WrappedObject : WrappedObject<T>
+>T : T
+
+        chain<T>(list: T[]): ChainedArray<T>;
+>chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
+>T : T
+>list : T[]
+>T : T
+>ChainedArray : ChainedArray<T>
+>T : T
+
+        chain<T>(list: Dictionary<T>): ChainedDictionary<T>;
+>chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>ChainedDictionary : ChainedDictionary<T>
+>T : T
+
+        chain<T>(obj: T): ChainedObject<T>;
+>chain : { <T>(list: T[]): ChainedArray<T>; <T>(list: Dictionary<T>): ChainedDictionary<T>; <T>(obj: T): ChainedObject<T>; }
+>T : T
+>obj : T
+>T : T
+>ChainedObject : ChainedObject<T>
+>T : T
+
+        each<T>(list: T[], iterator: Iterator_<T, void>, context?: any): void;
+>each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        each<T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void;
+>each : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        forEach<T>(list: T[], iterator: Iterator_<T, void>, context?: any): void;
+>forEach : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        forEach<T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void;
+>forEach : { <T>(list: T[], iterator: Iterator_<T, void>, context?: any): void; <T>(list: Dictionary<T>, iterator: Iterator_<T, void>, context?: any): void; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, void>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        map<T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[];
+>map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        map<T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[];
+>map : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        collect<T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[];
+>collect : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        collect<T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[];
+>collect : { <T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[]; <T, U>(list: Dictionary<T>, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        reduce<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduce<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        reduce<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduce<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduce : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldl<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldl : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldl<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldl : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldl<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldl : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldl<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldl : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        inject<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>inject : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        inject<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>inject : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        inject<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>inject : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        inject<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>inject : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        reduceRight<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduceRight<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        reduceRight<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        reduceRight<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>reduceRight : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldr<T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldr : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldr<T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldr : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        foldr<T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T;
+>foldr : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, T>
+>Reducer : Reducer<T, U>
+>T : T
+>T : T
+>initialValue : T
+>T : T
+>context : any
+>T : T
+
+        foldr<T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U;
+>foldr : { <T>(list: T[], iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: T[], iterator: Reducer<T, U>, initialValue: U, context?: any): U; <T>(list: Dictionary<T>, iterator: Reducer<T, T>, initialValue?: T, context?: any): T; <T, U>(list: Dictionary<T>, iterator: Reducer<T, U>, initialValue: U, context?: any): U; }
+>T : T
+>U : U
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Reducer<T, U>
+>Reducer : Reducer<T, U>
+>T : T
+>U : U
+>initialValue : U
+>U : U
+>context : any
+>U : U
+
+        find<T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T;
+>find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        find<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T;
+>find : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        detect<T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T;
+>detect : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        detect<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T;
+>detect : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        filter<T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[];
+>filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        filter<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
+>filter : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        select<T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[];
+>select : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        select<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
+>select : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        where<T>(list: T[], properties: Object): T[];
+>where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
+>T : T
+>list : T[]
+>T : T
+>properties : Object
+>Object : Object
+>T : T
+
+        where<T>(list: Dictionary<T>, properties: Object): T[];
+>where : { <T>(list: T[], properties: Object): T[]; <T>(list: Dictionary<T>, properties: Object): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>properties : Object
+>Object : Object
+>T : T
+
+        findWhere<T>(list: T[], properties: Object): T;
+>findWhere : { <T>(list: T[], properties: Object): T; <T>(list: Dictionary<T>, properties: Object): T; }
+>T : T
+>list : T[]
+>T : T
+>properties : Object
+>Object : Object
+>T : T
+
+        findWhere<T>(list: Dictionary<T>, properties: Object): T;
+>findWhere : { <T>(list: T[], properties: Object): T; <T>(list: Dictionary<T>, properties: Object): T; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>properties : Object
+>Object : Object
+>T : T
+
+        reject<T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[];
+>reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        reject<T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[];
+>reject : { <T>(list: T[], iterator: Iterator_<T, boolean>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, boolean>, context?: any): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        every<T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>every : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        every<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>every : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        all<T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        all<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        some<T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>some : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        some<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>some : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        any<T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        any<T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean;
+>any : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, boolean>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        contains<T>(list: T[], value: T): boolean;
+>contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>T : T
+>list : T[]
+>T : T
+>value : T
+>T : T
+
+        contains<T>(list: Dictionary<T>, value: T): boolean;
+>contains : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>value : T
+>T : T
+
+        include<T>(list: T[], value: T): boolean;
+>include : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>T : T
+>list : T[]
+>T : T
+>value : T
+>T : T
+
+        include<T>(list: Dictionary<T>, value: T): boolean;
+>include : { <T>(list: T[], value: T): boolean; <T>(list: Dictionary<T>, value: T): boolean; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>value : T
+>T : T
+
+        invoke(list: any[], methodName: string, ...args: any[]): any[];
+>invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
+>list : any[]
+>methodName : string
+>args : any[]
+
+        invoke(list: Dictionary<any>, methodName: string, ...args: any[]): any[];
+>invoke : { (list: any[], methodName: string, ...args: any[]): any[]; (list: Dictionary<any>, methodName: string, ...args: any[]): any[]; }
+>list : Dictionary<any>
+>Dictionary : Dictionary<T>
+>methodName : string
+>args : any[]
+
+        pluck(list: any[], propertyName: string): any[];
+>pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
+>list : any[]
+>propertyName : string
+
+        pluck(list: Dictionary<any>, propertyName: string): any[];
+>pluck : { (list: any[], propertyName: string): any[]; (list: Dictionary<any>, propertyName: string): any[]; }
+>list : Dictionary<any>
+>Dictionary : Dictionary<T>
+>propertyName : string
+
+        max<T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T;
+>max : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        max<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T;
+>max : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        min<T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T;
+>min : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        min<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T;
+>min : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): T; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): T; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy<T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[];
+>sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy<T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[];
+>sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>T : T
+
+        sortBy<T>(list: T[], propertyName: string): T[];
+>sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>T : T
+>list : T[]
+>T : T
+>propertyName : string
+>T : T
+
+        sortBy<T>(list: Dictionary<T>, propertyName: string): T[];
+>sortBy : { <T>(list: T[], iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: Dictionary<T>, iterator: Iterator_<T, any>, context?: any): T[]; <T>(list: T[], propertyName: string): T[]; <T>(list: Dictionary<T>, propertyName: string): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>propertyName : string
+>T : T
+
+        groupBy<T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>;
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+>T : T
+
+        groupBy<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>;
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+>T : T
+
+        groupBy<T>(list: T[], propertyName: string): Dictionary<T[]>;
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>T : T
+>list : T[]
+>T : T
+>propertyName : string
+>Dictionary : Dictionary<T>
+>T : T
+
+        groupBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>;
+>groupBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<T[]>; <T>(list: T[], propertyName: string): Dictionary<T[]>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<T[]>; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>propertyName : string
+>Dictionary : Dictionary<T>
+>T : T
+
+        countBy<T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>;
+>countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>T : T
+>list : T[]
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+
+        countBy<T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>;
+>countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+>Dictionary : Dictionary<T>
+
+        countBy<T>(list: T[], propertyName: string): Dictionary<number>;
+>countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>T : T
+>list : T[]
+>T : T
+>propertyName : string
+>Dictionary : Dictionary<T>
+
+        countBy<T>(list: Dictionary<T>, propertyName: string): Dictionary<number>;
+>countBy : { <T>(list: T[], iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: Dictionary<T>, iterator?: Iterator_<T, any>, context?: any): Dictionary<number>; <T>(list: T[], propertyName: string): Dictionary<number>; <T>(list: Dictionary<T>, propertyName: string): Dictionary<number>; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>propertyName : string
+>Dictionary : Dictionary<T>
+
+        shuffle<T>(list: T[]): T[];
+>shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        shuffle<T>(list: Dictionary<T>): T[];
+>shuffle : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>T : T
+
+        toArray<T>(list: T[]): T[];
+>toArray : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        toArray<T>(list: Dictionary<T>): T[];
+>toArray : { <T>(list: T[]): T[]; <T>(list: Dictionary<T>): T[]; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+>T : T
+
+        size<T>(list: T[]): number;
+>size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
+>T : T
+>list : T[]
+>T : T
+
+        size<T>(list: Dictionary<T>): number;
+>size : { <T>(list: T[]): number; <T>(list: Dictionary<T>): number; }
+>T : T
+>list : Dictionary<T>
+>Dictionary : Dictionary<T>
+>T : T
+
+        first<T>(list: T[]): T;
+>first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        first<T>(list: T[], count: number): T[];
+>first : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>count : number
+>T : T
+
+        head<T>(list: T[]): T;
+>head : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        head<T>(list: T[], count: number): T[];
+>head : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>count : number
+>T : T
+
+        take<T>(list: T[]): T;
+>take : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        take<T>(list: T[], count: number): T[];
+>take : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>count : number
+>T : T
+
+        initial<T>(list: T[]): T;
+>initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        initial<T>(list: T[], count: number): T[];
+>initial : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>count : number
+>T : T
+
+        last<T>(list: T[]): T;
+>last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        last<T>(list: T[], count: number): T[];
+>last : { <T>(list: T[]): T; <T>(list: T[], count: number): T[]; }
+>T : T
+>list : T[]
+>T : T
+>count : number
+>T : T
+
+        rest<T>(list: T[], index?: number): T[];
+>rest : <T>(list: T[], index?: number) => T[]
+>T : T
+>list : T[]
+>T : T
+>index : number
+>T : T
+
+        compact<T>(list: T[]): T[];
+>compact : <T>(list: T[]) => T[]
+>T : T
+>list : T[]
+>T : T
+>T : T
+
+        flatten<T>(list: T[][]): T[];
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>T : T
+>list : T[][]
+>T : T
+>T : T
+
+        flatten<T>(array: any[], shallow?: boolean): T[];
+>flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
+>T : T
+>array : any[]
+>shallow : boolean
+>T : T
+
+        without<T>(list: T[], ...values: T[]): T[];
+>without : <T>(list: T[], ...values: T[]) => T[]
+>T : T
+>list : T[]
+>T : T
+>values : T[]
+>T : T
+>T : T
+
+        union<T>(...arrays: T[][]): T[];
+>union : <T>(...arrays: T[][]) => T[]
+>T : T
+>arrays : T[][]
+>T : T
+>T : T
+
+        intersection<T>(...arrays: T[][]): T[];
+>intersection : <T>(...arrays: T[][]) => T[]
+>T : T
+>arrays : T[][]
+>T : T
+>T : T
+
+        difference<T>(list: T[], ...others: T[][]): T[];
+>difference : <T>(list: T[], ...others: T[][]) => T[]
+>T : T
+>list : T[]
+>T : T
+>others : T[][]
+>T : T
+>T : T
+
+        uniq<T>(list: T[], isSorted?: boolean): T[];
+>uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>list : T[]
+>T : T
+>isSorted : boolean
+>T : T
+
+        uniq<T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
+>uniq : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        unique<T>(list: T[], isSorted?: boolean): T[];
+>unique : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>list : T[]
+>T : T
+>isSorted : boolean
+>T : T
+
+        unique<T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[];
+>unique : { <T>(list: T[], isSorted?: boolean): T[]; <T, U>(list: T[], isSorted: boolean, iterator: Iterator_<T, U>, context?: any): U[]; }
+>T : T
+>U : U
+>list : T[]
+>T : T
+>isSorted : boolean
+>iterator : Iterator_<T, U>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>U : U
+>context : any
+>U : U
+
+        zip<T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[];
+>zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>T0 : T0
+>T1 : T1
+>a0 : T0[]
+>T0 : T0
+>a1 : T1[]
+>T1 : T1
+>Tuple2 : Tuple2<T0, T1>
+>T0 : T0
+>T1 : T1
+
+        zip<T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[];
+>zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>T0 : T0
+>T1 : T1
+>T2 : T2
+>a0 : T0[]
+>T0 : T0
+>a1 : T1[]
+>T1 : T1
+>a2 : T2[]
+>T2 : T2
+>Tuple3 : Tuple3<T0, T1, T2>
+>T0 : T0
+>T1 : T1
+>T2 : T2
+
+        zip<T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[];
+>zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>T0 : T0
+>T1 : T1
+>T2 : T2
+>T3 : T3
+>a0 : T0[]
+>T0 : T0
+>a1 : T1[]
+>T1 : T1
+>a2 : T2[]
+>T2 : T2
+>a3 : T3[]
+>T3 : T3
+>Tuple4 : Tuple4<T0, T1, T2, T3>
+>T0 : T0
+>T1 : T1
+>T2 : T2
+>T3 : T3
+
+        zip(...arrays: any[][]): any[][];
+>zip : { <T0, T1>(a0: T0[], a1: T1[]): Tuple2<T0, T1>[]; <T0, T1, T2>(a0: T0[], a1: T1[], a2: T2[]): Tuple3<T0, T1, T2>[]; <T0, T1, T2, T3>(a0: T0[], a1: T1[], a2: T2[], a3: T3[]): Tuple4<T0, T1, T2, T3>[]; (...arrays: any[][]): any[][]; }
+>arrays : any[][]
+
+        object(list: any[][]): any;
+>object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>list : any[][]
+
+        object(keys: string[], values: any[]): any;
+>object : { (list: any[][]): any; (keys: string[], values: any[]): any; }
+>keys : string[]
+>values : any[]
+
+        indexOf<T>(list: T[], value: T, isSorted?: boolean): number;
+>indexOf : <T>(list: T[], value: T, isSorted?: boolean) => number
+>T : T
+>list : T[]
+>T : T
+>value : T
+>T : T
+>isSorted : boolean
+
+        lastIndexOf<T>(list: T[], value: T, fromIndex?: number): number;
+>lastIndexOf : <T>(list: T[], value: T, fromIndex?: number) => number
+>T : T
+>list : T[]
+>T : T
+>value : T
+>T : T
+>fromIndex : number
+
+        sortedIndex<T>(list: T[], obj: T, propertyName: string): number;
+>sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>T : T
+>list : T[]
+>T : T
+>obj : T
+>T : T
+>propertyName : string
+
+        sortedIndex<T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number;
+>sortedIndex : { <T>(list: T[], obj: T, propertyName: string): number; <T>(list: T[], obj: T, iterator?: Iterator_<T, any>, context?: any): number; }
+>T : T
+>list : T[]
+>T : T
+>obj : T
+>T : T
+>iterator : Iterator_<T, any>
+>Iterator_ : Iterator_<T, U>
+>T : T
+>context : any
+
+        range(stop: number): number[];
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>stop : number
+
+        range(start: number, stop: number, step?: number): number[];
+>range : { (stop: number): number[]; (start: number, stop: number, step?: number): number[]; }
+>start : number
+>stop : number
+>step : number
+
+        bind<T extends Function>(func: T, object: any): T;
+>bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>T : T
+>Function : Function
+>func : T
+>T : T
+>object : any
+>T : T
+
+        bind(func: Function, object: any, ...args: any[]): Function;
+>bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
+>func : Function
+>Function : Function
+>object : any
+>args : any[]
+>Function : Function
+
+        bindAll<T>(object: T, ...methodNames: string[]): T;
+>bindAll : <T>(object: T, ...methodNames: string[]) => T
+>T : T
+>object : T
+>T : T
+>methodNames : string[]
+>T : T
+
+        partial(func: Function, ...args: any[]): Function;
+>partial : (func: Function, ...args: any[]) => Function
+>func : Function
+>Function : Function
+>args : any[]
+>Function : Function
+
+        memoize<T extends Function>(func: T, hashFunction?: Function): T;
+>memoize : <T extends Function>(func: T, hashFunction?: Function) => T
+>T : T
+>Function : Function
+>func : T
+>T : T
+>hashFunction : Function
+>Function : Function
+>T : T
+
+        delay(func: Function, wait: number, ...args: any[]): number;
+>delay : (func: Function, wait: number, ...args: any[]) => number
+>func : Function
+>Function : Function
+>wait : number
+>args : any[]
+
+        defer(func: Function, ...args: any[]): number;
+>defer : (func: Function, ...args: any[]) => number
+>func : Function
+>Function : Function
+>args : any[]
+
+        throttle<T extends Function>(func: T, wait: number): T;
+>throttle : <T extends Function>(func: T, wait: number) => T
+>T : T
+>Function : Function
+>func : T
+>T : T
+>wait : number
+>T : T
+
+        debounce<T extends Function>(func: T, wait: number, immediate?: boolean): T;
+>debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
+>T : T
+>Function : Function
+>func : T
+>T : T
+>wait : number
+>immediate : boolean
+>T : T
+
+        once<T extends Function>(func: T): T;
+>once : <T extends Function>(func: T) => T
+>T : T
+>Function : Function
+>func : T
+>T : T
+>T : T
+
+        after<T extends Function>(count: number, func: T): T;
+>after : <T extends Function>(count: number, func: T) => T
+>T : T
+>Function : Function
+>count : number
+>func : T
+>T : T
+>T : T
+
+        wrap<T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any): T;
+>wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
+>T : T
+>Function : Function
+>func : T
+>T : T
+>wrapper : (func: T, ...args: any[]) => any
+>func : T
+>T : T
+>args : any[]
+>T : T
+
+        compose(...funcs: Function[]): Function;
+>compose : (...funcs: Function[]) => Function
+>funcs : Function[]
+>Function : Function
+>Function : Function
+
+        keys(object: any): string[];
+>keys : (object: any) => string[]
+>object : any
+
+        values(object: any): any[];
+>values : (object: any) => any[]
+>object : any
+
+        pairs(object: any): any[][];
+>pairs : (object: any) => any[][]
+>object : any
+
+        invert(object: any): any;
+>invert : (object: any) => any
+>object : any
+
+        functions(object: any): string[];
+>functions : (object: any) => string[]
+>object : any
+
+        methods(object: any): string[];
+>methods : (object: any) => string[]
+>object : any
+
+        extend<T>(destination: T, ...sources: any[]): T;
+>extend : <T>(destination: T, ...sources: any[]) => T
+>T : T
+>destination : T
+>T : T
+>sources : any[]
+>T : T
+
+        pick<T>(object: T, ...keys: string[]): T;
+>pick : <T>(object: T, ...keys: string[]) => T
+>T : T
+>object : T
+>T : T
+>keys : string[]
+>T : T
+
+        omit<T>(object: T, ...keys: string[]): T;
+>omit : <T>(object: T, ...keys: string[]) => T
+>T : T
+>object : T
+>T : T
+>keys : string[]
+>T : T
+
+        defaults<T>(object: T, ...defaults: any[]): T;
+>defaults : <T>(object: T, ...defaults: any[]) => T
+>T : T
+>object : T
+>T : T
+>defaults : any[]
+>T : T
+
+        clone<T>(object: T): T;
+>clone : <T>(object: T) => T
+>T : T
+>object : T
+>T : T
+>T : T
+
+        tap<T>(object: T, interceptor: (object: T) => void): T;
+>tap : <T>(object: T, interceptor: (object: T) => void) => T
+>T : T
+>object : T
+>T : T
+>interceptor : (object: T) => void
+>object : T
+>T : T
+>T : T
+
+        has(object: any, key: string): boolean;
+>has : (object: any, key: string) => boolean
+>object : any
+>key : string
+
+        isEqual<T>(object: T, other: T): boolean;
+>isEqual : <T>(object: T, other: T) => boolean
+>T : T
+>object : T
+>T : T
+>other : T
+>T : T
+
+        isEmpty(object: any): boolean;
+>isEmpty : (object: any) => boolean
+>object : any
+
+        isElement(object: any): boolean;
+>isElement : (object: any) => boolean
+>object : any
+
+        isArray(object: any): boolean;
+>isArray : (object: any) => boolean
+>object : any
+
+        isObject(value: any): boolean;
+>isObject : (value: any) => boolean
+>value : any
+
+        isArguments(object: any): boolean;
+>isArguments : (object: any) => boolean
+>object : any
+
+        isFunction(object: any): boolean;
+>isFunction : (object: any) => boolean
+>object : any
+
+        isString(object: any): boolean;
+>isString : (object: any) => boolean
+>object : any
+
+        isNumber(object: any): boolean;
+>isNumber : (object: any) => boolean
+>object : any
+
+        isFinite(object: any): boolean;
+>isFinite : (object: any) => boolean
+>object : any
+
+        isBoolean(object: any): boolean;
+>isBoolean : (object: any) => boolean
+>object : any
+
+        isDate(object: any): boolean;
+>isDate : (object: any) => boolean
+>object : any
+
+        isRegExp(object: any): boolean;
+>isRegExp : (object: any) => boolean
+>object : any
+
+        isNaN(object: any): boolean;
+>isNaN : (object: any) => boolean
+>object : any
+
+        isNull(object: any): boolean;
+>isNull : (object: any) => boolean
+>object : any
+
+        isUndefined(value: any): boolean;
+>isUndefined : (value: any) => boolean
+>value : any
+
+        noConflict(): Static;
+>noConflict : () => Static
+>Static : Static
+
+        identity<T>(value: T): T;
+>identity : <T>(value: T) => T
+>T : T
+>value : T
+>T : T
+>T : T
+
+        times<U>(n: number, iterator: Iterator_<number, U>, context?: any): U[];
+>times : <U>(n: number, iterator: Iterator_<number, U>, context?: any) => U[]
+>U : U
+>n : number
+>iterator : Iterator_<number, U>
+>Iterator_ : Iterator_<T, U>
+>U : U
+>context : any
+>U : U
+
+        random(max: number): number;
+>random : { (max: number): number; (min: number, max: number): number; }
+>max : number
+
+        random(min: number, max: number): number;
+>random : { (max: number): number; (min: number, max: number): number; }
+>min : number
+>max : number
+
+        mixin(object: any): void;
+>mixin : (object: any) => void
+>object : any
+
+        uniqueId(): number;
+>uniqueId : { (): number; (prefix: string): string; }
+
+        uniqueId(prefix: string): string;
+>uniqueId : { (): number; (prefix: string): string; }
+>prefix : string
+
+        escape(s: string): string;
+>escape : (s: string) => string
+>s : string
+
+        unescape(s: string): string;
+>unescape : (s: string) => string
+>s : string
+
+        result(object: any, property: string): any;
+>result : (object: any, property: string) => any
+>object : any
+>property : string
+
+        templateSettings: TemplateSettings;
+>templateSettings : TemplateSettings
+>TemplateSettings : TemplateSettings
+
+        template(templateString: string): (data: any) => string;
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
+>templateString : string
+>data : any
+
+        template(templateString: string, data: any, settings?: TemplateSettings): string;
+>template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
+>templateString : string
+>data : any
+>settings : TemplateSettings
+>TemplateSettings : TemplateSettings
+    }
+}
+
+declare var _: Underscore.Static;
+>_ : Underscore.Static
+>Underscore : any
+>Static : Underscore.Static
+

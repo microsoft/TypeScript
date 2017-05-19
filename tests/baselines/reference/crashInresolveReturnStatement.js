@@ -26,7 +26,7 @@ var WorkItemToolbar = (function () {
         WITDialogs.createCopyOfWorkItem();
     };
     return WorkItemToolbar;
-})();
+}());
 var CreateCopyOfWorkItemDialog = (function () {
     function CreateCopyOfWorkItemDialog() {
     }
@@ -34,7 +34,7 @@ var CreateCopyOfWorkItemDialog = (function () {
         return null;
     };
     return CreateCopyOfWorkItemDialog;
-})();
+}());
 function createWorkItemDialog(dialogType) {
 }
 var WITDialogs = (function () {
@@ -44,4 +44,4 @@ var WITDialogs = (function () {
         createWorkItemDialog(CreateCopyOfWorkItemDialog);
     };
     return WITDialogs;
-})();
+}());

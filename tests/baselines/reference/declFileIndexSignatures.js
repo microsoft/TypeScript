@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileIndexSignatures.ts] ////
 
 //// [declFileIndexSignatures_0.ts]
-
 export interface IStringIndexSignature {
     [s: string]: string;
 }
@@ -36,6 +35,8 @@ interface IGlobalIndexSignatureWithTypeParameter<T> {
 }
 
 //// [declFileIndexSignatures_0.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileIndexSignatures_1.js]
 
 

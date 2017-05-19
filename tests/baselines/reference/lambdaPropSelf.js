@@ -32,7 +32,7 @@ var Person = (function () {
         this.children = ko.observableArray(children);
     }
     return Person;
-})();
+}());
 var T = (function () {
     function T() {
     }
@@ -40,7 +40,7 @@ var T = (function () {
         var x = this;
     };
     return T;
-})();
+}());
 var M;
 (function (M) {
     var x = this;

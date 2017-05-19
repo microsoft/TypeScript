@@ -1,0 +1,41 @@
+=== tests/cases/compiler/doNotEmitPinnedDetachedComments.ts ===
+var x = 10;
+>x : number
+>10 : 10
+
+/*! Single Line comment */
+
+function baz() { }
+>baz : () => void
+
+
+/*!
+    multi-line comment
+
+*/
+
+
+//========================
+
+
+function bar() {
+>bar : () => void
+
+    /*!
+        Remove this comment
+    */
+
+}
+
+function foo() {
+>foo : () => number
+
+    /*! Remove this */
+
+    return 0;
+>0 : 0
+}
+
+
+//========================
+

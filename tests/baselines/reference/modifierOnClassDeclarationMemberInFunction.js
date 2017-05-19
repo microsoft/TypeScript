@@ -1,5 +1,4 @@
 //// [modifierOnClassDeclarationMemberInFunction.ts]
-
 function f() {
     class C {
         public baz = 1;
@@ -17,7 +16,7 @@ function f() {
         C.foo = function () { };
         C.prototype.bar = function () { };
         return C;
-    })();
+    }());
 }
 
 

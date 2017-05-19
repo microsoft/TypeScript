@@ -3,7 +3,7 @@ class Message {
 >Message : Symbol(Message, Decl(TypeGuardWithArrayUnion.ts, 0, 0))
 
     value: string;
->value : Symbol(value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
+>value : Symbol(Message.value, Decl(TypeGuardWithArrayUnion.ts, 0, 15))
 }
 
 function saySize(message: Message | Message[]) {
@@ -14,12 +14,12 @@ function saySize(message: Message | Message[]) {
 
     if (message instanceof Array) {
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         return message.length;  // Should have type Message[] here
->message.length : Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>message.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
 >message : Symbol(message, Decl(TypeGuardWithArrayUnion.ts, 4, 17))
->length : Symbol(Array.length, Decl(lib.d.ts, 1007, 20))
+>length : Symbol(Array.length, Decl(lib.d.ts, --, --))
     }
 }
 

@@ -14,5 +14,5 @@ var C = (function () {
     }
     C.prototype[Symbol.iterator] = function () { };
     return C;
-})();
+}());
 (new C)[Symbol.iterator](0); // Should error

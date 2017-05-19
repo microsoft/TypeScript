@@ -3,10 +3,10 @@ class TestFile {
 >TestFile : Symbol(TestFile, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 0))
 
     public message: string;
->message : Symbol(message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
+>message : Symbol(TestFile.message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
 
     public name;
->name : Symbol(name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
+>name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
 
     constructor(message: string) {
 >message : Symbol(message, Decl(detachedCommentAtStartOfConstructor1.ts, 3, 16))
@@ -16,14 +16,14 @@ class TestFile {
         var getMessage = () => message + this.name;
 >getMessage : Symbol(getMessage, Decl(detachedCommentAtStartOfConstructor1.ts, 6, 11))
 >message : Symbol(message, Decl(detachedCommentAtStartOfConstructor1.ts, 3, 16))
->this.name : Symbol(name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
+>this.name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
 >this : Symbol(TestFile, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 0))
->name : Symbol(name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
+>name : Symbol(TestFile.name, Decl(detachedCommentAtStartOfConstructor1.ts, 1, 27))
 
         this.message = getMessage();
->this.message : Symbol(message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
+>this.message : Symbol(TestFile.message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
 >this : Symbol(TestFile, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 0))
->message : Symbol(message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
+>message : Symbol(TestFile.message, Decl(detachedCommentAtStartOfConstructor1.ts, 0, 16))
 >getMessage : Symbol(getMessage, Decl(detachedCommentAtStartOfConstructor1.ts, 6, 11))
     }
 }

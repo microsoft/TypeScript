@@ -8,7 +8,7 @@ module A
 >B : Symbol(B, Decl(moduleMerge.ts, 3, 1))
     {
         public Hello(): string
->Hello : Symbol(Hello, Decl(moduleMerge.ts, 5, 5))
+>Hello : Symbol(B.Hello, Decl(moduleMerge.ts, 5, 5))
         {
             return "from private B";
         }
@@ -22,7 +22,7 @@ module A
 >B : Symbol(B, Decl(moduleMerge.ts, 14, 1))
     {
         public Hello(): string
->Hello : Symbol(Hello, Decl(moduleMerge.ts, 16, 5))
+>Hello : Symbol(B.Hello, Decl(moduleMerge.ts, 16, 5))
         {
             return "from export B";
         }

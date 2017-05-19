@@ -65,7 +65,7 @@ var M;
         C.prototype.fonly = function () {
             var rest = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                rest[_i - 0] = arguments[_i];
+                rest[_i] = arguments[_i];
             }
             builder = "";
             for (var i = 0; i < rest.length; i++) {
@@ -74,7 +74,7 @@ var M;
             return builder;
         };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var x = new M.C();

@@ -6,5 +6,5 @@ declare function parseInt(s:string):number;
 parseInt("2");
 >parseInt("2") : number
 >parseInt : { (s: string, radix?: number): number; (s: string): number; }
->"2" : string
+>"2" : "2"
 

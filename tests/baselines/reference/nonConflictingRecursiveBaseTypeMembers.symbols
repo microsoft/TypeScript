@@ -4,7 +4,7 @@ interface A<T> {
 >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 12))
 
     x: C<T>
->x : Symbol(x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 16))
+>x : Symbol(A.x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 16))
 >C : Symbol(C, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 6, 1))
 >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 0, 12))
 }
@@ -14,7 +14,7 @@ interface B<T> {
 >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 12))
 
     x: C<T>
->x : Symbol(x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 16))
+>x : Symbol(B.x, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 16))
 >C : Symbol(C, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 6, 1))
 >T : Symbol(T, Decl(nonConflictingRecursiveBaseTypeMembers.ts, 4, 12))
 }

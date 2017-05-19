@@ -10,7 +10,7 @@ var Foo = (function () {
     }
     Foo.prototype.foo = function () { };
     return Foo;
-})();
+}());
 var x;
 var a;
 x = a;

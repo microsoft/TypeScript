@@ -1,0 +1,19 @@
+tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(2,6): error TS6133: 'handler1' is declared but never used.
+tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts(6,10): error TS6133: 'handler2' is declared but never used.
+
+
+==== tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts (2 errors) ====
+    // unused
+    type handler1 = () => void;
+         ~~~~~~~~
+!!! error TS6133: 'handler1' is declared but never used.
+    
+    
+    function foo() {
+        type handler2 = () => void;
+             ~~~~~~~~
+!!! error TS6133: 'handler2' is declared but never used.
+        foo();
+    }
+    
+    export {}

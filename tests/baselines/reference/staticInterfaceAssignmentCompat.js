@@ -20,5 +20,5 @@ var Shape = (function () {
         return new Shape();
     };
     return Shape;
-})();
+}());
 var x = Shape;

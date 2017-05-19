@@ -46,7 +46,7 @@ var C = (function () {
         return a + x.getDate();
     };
     return C;
-})();
+}());
 var r = (new C()).f();
 var i;
 var r2 = i.foo.getDate();

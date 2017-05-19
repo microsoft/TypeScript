@@ -13,7 +13,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var C = (function () {
     function C() {
     }
@@ -25,4 +25,4 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());

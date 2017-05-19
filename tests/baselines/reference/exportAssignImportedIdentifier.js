@@ -15,14 +15,19 @@ import foo2 = require('./foo2');
 var x = foo2(); // should be boolean
 
 //// [foo1.js]
+"use strict";
+exports.__esModule = true;
 function x() {
     return true;
 }
 exports.x = x;
 //// [foo2.js]
-var foo1 = require('./foo1');
+"use strict";
+var foo1 = require("./foo1");
 var x = foo1.x;
 module.exports = x;
 //// [foo3.js]
-var foo2 = require('./foo2');
+"use strict";
+exports.__esModule = true;
+var foo2 = require("./foo2");
 var x = foo2(); // should be boolean

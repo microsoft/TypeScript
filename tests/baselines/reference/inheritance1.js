@@ -62,58 +62,63 @@ l1 = sc;
 l1 = c;
 
 //// [inheritance1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Control = (function () {
     function Control() {
     }
     return Control;
-})();
+}());
 var Button = (function (_super) {
     __extends(Button, _super);
     function Button() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Button.prototype.select = function () { };
     return Button;
-})(Control);
+}(Control));
 var TextBox = (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     TextBox.prototype.select = function () { };
     return TextBox;
-})(Control);
+}(Control));
 var ImageBase = (function (_super) {
     __extends(ImageBase, _super);
     function ImageBase() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ImageBase;
-})(Control);
+}(Control));
 var Image1 = (function (_super) {
     __extends(Image1, _super);
     function Image1() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image1;
-})(Control);
+}(Control));
 var Locations = (function () {
     function Locations() {
     }
     Locations.prototype.select = function () { };
     return Locations;
-})();
+}());
 var Locations1 = (function () {
     function Locations1() {
     }
     Locations1.prototype.select = function () { };
     return Locations1;
-})();
+}());
 var sc;
 var c;
 var b;

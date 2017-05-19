@@ -57,14 +57,14 @@ class C<T, U> {
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
 
     constructor(public t: T, public u: U) {
->t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 21, 16))
+>t : Symbol(C.t, Decl(genericCallTypeArgumentInference.ts, 21, 16))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
->u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 21, 28))
+>u : Symbol(C.u, Decl(genericCallTypeArgumentInference.ts, 21, 28))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 20, 10))
     }
 
     foo(t: T, u: U) {
->foo : Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 22, 5))
+>foo : Symbol(C.foo, Decl(genericCallTypeArgumentInference.ts, 22, 5))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 24, 8))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 24, 13))
@@ -75,7 +75,7 @@ class C<T, U> {
     }
 
     foo2(t: T, u: U) {
->foo2 : Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 26, 5))
+>foo2 : Symbol(C.foo2, Decl(genericCallTypeArgumentInference.ts, 26, 5))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 28, 9))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 28, 14))
@@ -86,7 +86,7 @@ class C<T, U> {
     }
 
     foo3<T>(t: T, u: U) {
->foo3 : Symbol(foo3, Decl(genericCallTypeArgumentInference.ts, 30, 5))
+>foo3 : Symbol(C.foo3, Decl(genericCallTypeArgumentInference.ts, 30, 5))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 32, 9))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 32, 12))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 32, 9))
@@ -98,7 +98,7 @@ class C<T, U> {
     }
 
     foo4<U>(t: T, u: U) {
->foo4 : Symbol(foo4, Decl(genericCallTypeArgumentInference.ts, 34, 5))
+>foo4 : Symbol(C.foo4, Decl(genericCallTypeArgumentInference.ts, 34, 5))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 36, 9))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 36, 12))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 20, 8))
@@ -110,7 +110,7 @@ class C<T, U> {
     }
 
     foo5<T,U>(t: T, u: U) {
->foo5 : Symbol(foo5, Decl(genericCallTypeArgumentInference.ts, 38, 5))
+>foo5 : Symbol(C.foo5, Decl(genericCallTypeArgumentInference.ts, 38, 5))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 40, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 40, 11))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 40, 14))
@@ -123,7 +123,7 @@ class C<T, U> {
     }
 
     foo6<T, U>() {
->foo6 : Symbol(foo6, Decl(genericCallTypeArgumentInference.ts, 42, 5))
+>foo6 : Symbol(C.foo6, Decl(genericCallTypeArgumentInference.ts, 42, 5))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 44, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 44, 11))
 
@@ -136,7 +136,7 @@ class C<T, U> {
     }
 
     foo7<T, U>(u: U) {
->foo7 : Symbol(foo7, Decl(genericCallTypeArgumentInference.ts, 47, 5))
+>foo7 : Symbol(C.foo7, Decl(genericCallTypeArgumentInference.ts, 47, 5))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 49, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 49, 11))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 49, 15))
@@ -151,7 +151,7 @@ class C<T, U> {
     }
 
     foo8<T, U>() {
->foo8 : Symbol(foo8, Decl(genericCallTypeArgumentInference.ts, 52, 5))
+>foo8 : Symbol(C.foo8, Decl(genericCallTypeArgumentInference.ts, 52, 5))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 54, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 54, 11))
 
@@ -228,7 +228,7 @@ interface I<T, U> {
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
 
     foo(t: T, u: U): T;
->foo : Symbol(foo, Decl(genericCallTypeArgumentInference.ts, 71, 21))
+>foo : Symbol(I.foo, Decl(genericCallTypeArgumentInference.ts, 71, 21))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 72, 8))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 72, 13))
@@ -236,7 +236,7 @@ interface I<T, U> {
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 
     foo2(t: T, u: U): U;
->foo2 : Symbol(foo2, Decl(genericCallTypeArgumentInference.ts, 72, 23))
+>foo2 : Symbol(I.foo2, Decl(genericCallTypeArgumentInference.ts, 72, 23))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 73, 9))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 73, 14))
@@ -244,7 +244,7 @@ interface I<T, U> {
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 70, 14))
 
     foo3<T>(t: T, u: U): T;
->foo3 : Symbol(foo3, Decl(genericCallTypeArgumentInference.ts, 73, 24))
+>foo3 : Symbol(I.foo3, Decl(genericCallTypeArgumentInference.ts, 73, 24))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 74, 12))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
@@ -253,7 +253,7 @@ interface I<T, U> {
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 74, 9))
 
     foo4<U>(t: T, u: U): T;
->foo4 : Symbol(foo4, Decl(genericCallTypeArgumentInference.ts, 74, 27))
+>foo4 : Symbol(I.foo4, Decl(genericCallTypeArgumentInference.ts, 74, 27))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 75, 9))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 75, 12))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
@@ -262,7 +262,7 @@ interface I<T, U> {
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 70, 12))
 
     foo5<T, U>(t: T, u: U): T;
->foo5 : Symbol(foo5, Decl(genericCallTypeArgumentInference.ts, 75, 27))
+>foo5 : Symbol(I.foo5, Decl(genericCallTypeArgumentInference.ts, 75, 27))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 76, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 76, 11))
 >t : Symbol(t, Decl(genericCallTypeArgumentInference.ts, 76, 15))
@@ -272,13 +272,13 @@ interface I<T, U> {
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 76, 9))
 
     foo6<T, U>(): T;
->foo6 : Symbol(foo6, Decl(genericCallTypeArgumentInference.ts, 76, 30))
+>foo6 : Symbol(I.foo6, Decl(genericCallTypeArgumentInference.ts, 76, 30))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 77, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 77, 11))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 77, 9))
 
     foo7<T, U>(u: U): T;
->foo7 : Symbol(foo7, Decl(genericCallTypeArgumentInference.ts, 77, 20))
+>foo7 : Symbol(I.foo7, Decl(genericCallTypeArgumentInference.ts, 77, 20))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 78, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 78, 11))
 >u : Symbol(u, Decl(genericCallTypeArgumentInference.ts, 78, 15))
@@ -286,7 +286,7 @@ interface I<T, U> {
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 78, 9))
 
     foo8<T, U>(): T;    
->foo8 : Symbol(foo8, Decl(genericCallTypeArgumentInference.ts, 78, 24))
+>foo8 : Symbol(I.foo8, Decl(genericCallTypeArgumentInference.ts, 78, 24))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 79, 9))
 >U : Symbol(U, Decl(genericCallTypeArgumentInference.ts, 79, 11))
 >T : Symbol(T, Decl(genericCallTypeArgumentInference.ts, 79, 9))

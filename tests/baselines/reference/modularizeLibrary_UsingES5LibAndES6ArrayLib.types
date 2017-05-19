@@ -1,0 +1,23 @@
+=== tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6ArrayLib.ts ===
+// No error
+function f(x: number, y: number, z: number) {
+>f : (x: number, y: number, z: number) => any[]
+>x : number
+>y : number
+>z : number
+
+    return Array.from(arguments);
+>Array.from(arguments) : any[]
+>Array.from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>Array : ArrayConstructor
+>from : { <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U): U[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (this: void, v: T, k: number) => U, thisArg: undefined): U[]; <Z, T, U>(arrayLike: ArrayLike<T>, mapfn: (this: Z, v: T, k: number) => U, thisArg: Z): U[]; <T>(arrayLike: ArrayLike<T>): T[]; }
+>arguments : IArguments
+}
+
+f(1, 2, 3);
+>f(1, 2, 3) : any[]
+>f : (x: number, y: number, z: number) => any[]
+>1 : 1
+>2 : 2
+>3 : 3
+

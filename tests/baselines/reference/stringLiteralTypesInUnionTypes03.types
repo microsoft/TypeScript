@@ -1,0 +1,60 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes03.ts ===
+type T = number | "foo" | "bar";
+>T : number | "foo" | "bar"
+
+var x: "foo" | "bar" | number;
+>x : number | "foo" | "bar"
+
+var y: T = undefined;
+>y : number | "foo" | "bar"
+>T : number | "foo" | "bar"
+>undefined : undefined
+
+if (x === "foo") {
+>x === "foo" : boolean
+>x : number | "foo" | "bar"
+>"foo" : "foo"
+
+    let a = x;
+>a : "foo"
+>x : "foo"
+}
+else if (x !== "bar") {
+>x !== "bar" : boolean
+>x : number | "bar"
+>"bar" : "bar"
+
+    let b = x || y;
+>b : number | "foo" | "bar"
+>x || y : number | "foo" | "bar"
+>x : number
+>y : number | "foo" | "bar"
+}
+else {
+    let c = x;
+>c : "bar"
+>x : "bar"
+
+    let d = y;
+>d : number | "foo" | "bar"
+>y : number | "foo" | "bar"
+
+    let e: (typeof x) | (typeof y) = c || d;
+>e : number | "foo" | "bar"
+>x : "bar"
+>y : number | "foo" | "bar"
+>c || d : number | "foo" | "bar"
+>c : "bar"
+>d : number | "foo" | "bar"
+}
+
+x = y;
+>x = y : number | "foo" | "bar"
+>x : number | "foo" | "bar"
+>y : number | "foo" | "bar"
+
+y = x;
+>y = x : number | "foo" | "bar"
+>y : number | "foo" | "bar"
+>x : number | "foo" | "bar"
+

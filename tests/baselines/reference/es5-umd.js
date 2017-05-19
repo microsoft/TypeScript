@@ -1,5 +1,4 @@
 //// [es5-umd.ts]
-
 class A
 {
     constructor ()
@@ -22,4 +21,4 @@ var A = (function () {
         return 42;
     };
     return A;
-})();
+}());

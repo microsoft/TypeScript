@@ -33,11 +33,16 @@ class c extends Foo {
 }
 
 //// [collisionSuperAndLocalVarInAccessors.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var _super = 10; // No Error
 var Foo = (function () {
     function Foo() {
@@ -54,11 +59,11 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var b = (function (_super) {
     __extends(b, _super);
     function b() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(b.prototype, "prop2", {
         get: function () {
@@ -72,11 +77,11 @@ var b = (function (_super) {
         configurable: true
     });
     return b;
-})(Foo);
+}(Foo));
 var c = (function (_super) {
     __extends(c, _super);
     function c() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Object.defineProperty(c.prototype, "prop2", {
         get: function () {
@@ -94,4 +99,4 @@ var c = (function (_super) {
         configurable: true
     });
     return c;
-})(Foo);
+}(Foo));

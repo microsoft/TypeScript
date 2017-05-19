@@ -50,7 +50,7 @@ var C = (function () {
         var b = f1(f1(bar));
     }
     return C;
-})();
+}());
 var Vector = (function () {
     function Vector(x, y, z) {
         this.x = x;
@@ -63,7 +63,7 @@ var Vector = (function () {
     Vector.cross = function (v1, v2) { return null; };
     Vector.dot = function (v1, v2) { return null; };
     return Vector;
-})();
+}());
 var Camera = (function () {
     function Camera(pos, lookAt) {
         this.pos = pos;
@@ -73,4 +73,4 @@ var Camera = (function () {
         this.up = Vector.times(down, Vector.norm(Vector.cross(this.forward, this.right)));
     }
     return Camera;
-})();
+}());

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "ES5",
+        "noImplicitAny": true,
+        "outDir": "./",
+        "rootDir": ".",
+        "sourceMap": false
+    },
+    "files": [
+        "../typings/node/node.d.ts",
+        "importDefinitelyTypedTests.ts"
+    ],
+    "exclude": [
+    ]
+}

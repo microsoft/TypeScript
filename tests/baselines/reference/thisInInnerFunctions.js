@@ -30,7 +30,7 @@ var Foo = (function () {
         }
     };
     return Foo;
-})();
+}());
 function test() {
     var _this = this;
     var x = function () {

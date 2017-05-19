@@ -16,7 +16,7 @@ var i: I<string>;
 
 var y = i(""); // y should be string
 >y : string
->i("") : string
+>i("") : ""
 >i : I<string>
->"" : string
+>"" : ""
 

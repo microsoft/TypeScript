@@ -9,7 +9,7 @@ declare module EM {
 >EC : Symbol(EC, Decl(externModuleClobber.ts, 1, 26))
 
 		public getPosition() : EM.Position;
->getPosition : Symbol(getPosition, Decl(externModuleClobber.ts, 3, 18))
+>getPosition : Symbol(EC.getPosition, Decl(externModuleClobber.ts, 3, 18))
 >EM : Symbol(EM, Decl(externModuleClobber.ts, 0, 0))
 >Position : Symbol(Position, Decl(externModuleClobber.ts, 0, 19))
 	}

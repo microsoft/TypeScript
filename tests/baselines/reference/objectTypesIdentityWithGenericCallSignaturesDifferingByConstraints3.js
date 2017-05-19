@@ -131,36 +131,36 @@ var One = (function () {
     function One() {
     }
     return One;
-})();
+}());
 var Two = (function () {
     function Two() {
     }
     return Two;
-})();
+}());
 var A = (function () {
     function A() {
     }
     A.prototype.foo = function (x, y) { return null; };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     B.prototype.foo = function (x, y) { return null; };
     return B;
-})();
+}());
 var C = (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { return null; };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     D.prototype.foo = function (x, y) { return null; };
     return D;
-})();
+}());
 var a;
 var b = { foo: function (x, y) { return ''; } };
 function foo1(x) { }

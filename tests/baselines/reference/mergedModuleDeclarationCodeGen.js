@@ -16,6 +16,8 @@ export module X {
 }
 
 //// [mergedModuleDeclarationCodeGen.js]
+"use strict";
+exports.__esModule = true;
 var X;
 (function (X) {
     var Y;
@@ -25,10 +27,9 @@ var X;
                 new Y_1.B();
             }
             return A;
-        })();
+        }());
     })(Y = X.Y || (X.Y = {}));
 })(X = exports.X || (exports.X = {}));
-var X;
 (function (X) {
     var Y;
     (function (Y) {
@@ -36,7 +37,7 @@ var X;
             function B() {
             }
             return B;
-        })();
+        }());
         Y.B = B;
     })(Y = X.Y || (X.Y = {}));
 })(X = exports.X || (exports.X = {}));

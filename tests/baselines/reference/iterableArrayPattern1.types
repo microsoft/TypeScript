@@ -1,10 +1,4 @@
 === tests/cases/conformance/es6/destructuring/iterableArrayPattern1.ts ===
-var [a, b] = new SymbolIterator;
->a : symbol
->b : symbol
->new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator
-
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
 
@@ -21,7 +15,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -32,6 +26,13 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }
+
+var [a, b] = new SymbolIterator;
+>a : symbol
+>b : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

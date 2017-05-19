@@ -1,0 +1,19 @@
+tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess3.ts(11,22): error TS2538: Type 'typeof Bar' cannot be used as an index type.
+
+
+==== tests/cases/conformance/expressions/superPropertyAccess/superSymbolIndexedAccess3.ts (1 errors) ====
+    var symbol = Symbol.for('myThing');
+    
+    class Foo {
+        [symbol]() {
+            return 0;
+        }
+    }
+    
+    class Bar extends Foo {
+        [symbol]() {
+            return super[Bar]();
+                         ~~~
+!!! error TS2538: Type 'typeof Bar' cannot be used as an index type.
+        }
+    }

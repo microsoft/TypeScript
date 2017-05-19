@@ -16,7 +16,7 @@ class EventBase {
 >this._listeners.push(listener) : number
 >this._listeners.push : (...items: ((...args: any[]) => void)[]) => number
 >this._listeners : ((...args: any[]) => void)[]
->this : EventBase
+>this : this
 >_listeners : ((...args: any[]) => void)[]
 >push : (...items: ((...args: any[]) => void)[]) => number
 >listener : (...args: any[]) => void

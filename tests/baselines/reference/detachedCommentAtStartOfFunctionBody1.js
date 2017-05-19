@@ -20,4 +20,4 @@ var TestFile = (function () {
         return function () { return message + _this.name; };
     };
     return TestFile;
-})();
+}());

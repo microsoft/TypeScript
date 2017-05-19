@@ -9,7 +9,7 @@ class C {
         this.x = (() => {
 >this.x = (() => {   var x = 1;   return this.x;  })() : number
 >this.x : number
->this : C
+>this : this
 >x : number
 >(() => {   var x = 1;   return this.x;  })() : number
 >(() => {   var x = 1;   return this.x;  }) : () => number
@@ -17,25 +17,25 @@ class C {
 
    var x = 1;
 >x : number
->1 : number
+>1 : 1
 
    return this.x;
 >this.x : number
->this : C
+>this : this
 >x : number
 
   })();
   this.x = function() {
 >this.x = function() {   var x = 1;   return this.x;  }() : any
 >this.x : number
->this : C
+>this : this
 >x : number
 >function() {   var x = 1;   return this.x;  }() : any
 >function() {   var x = 1;   return this.x;  } : () => any
 
    var x = 1;
 >x : number
->1 : number
+>1 : 1
 
    return this.x;
 >this.x : any
@@ -57,7 +57,7 @@ var messenger = {
 
     message: "Hello World",
 >message : string
->"Hello World" : string
+>"Hello World" : "Hello World"
 
     start: function () {
 >start : () => number
@@ -67,11 +67,11 @@ var messenger = {
 >setTimeout(() => { var x = this.message; }, 3000) : number
 >setTimeout : (expression: any, msec?: number, language?: any) => number
 >() => { var x = this.message; } : () => void
->x : any
->this.message : any
->this : any
->message : any
->3000 : number
+>x : string
+>this.message : string
+>this : { message: string; start: () => number; }
+>message : string
+>3000 : 3000
     }
 };
 

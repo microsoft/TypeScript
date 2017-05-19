@@ -26,4 +26,4 @@ var Bar = (function () {
         return this._store.length;
     };
     return Bar;
-})();
+}());

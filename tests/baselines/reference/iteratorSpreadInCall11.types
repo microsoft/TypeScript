@@ -1,11 +1,4 @@
 === tests/cases/conformance/es6/spread/iteratorSpreadInCall11.ts ===
-foo(...new SymbolIterator);
->foo(...new SymbolIterator) : symbol
->foo : <T>(...s: T[]) => T
->...new SymbolIterator : symbol
->new SymbolIterator : SymbolIterator
->SymbolIterator : typeof SymbolIterator
-
 function foo<T>(...s: T[]) { return s[0] }
 >foo : <T>(...s: T[]) => T
 >T : T
@@ -13,7 +6,7 @@ function foo<T>(...s: T[]) { return s[0] }
 >T : T
 >s[0] : T
 >s : T[]
->0 : number
+>0 : 0
 
 class SymbolIterator {
 >SymbolIterator : SymbolIterator
@@ -31,7 +24,7 @@ class SymbolIterator {
 
             done: false
 >done : boolean
->false : boolean
+>false : false
 
         };
     }
@@ -42,6 +35,14 @@ class SymbolIterator {
 >iterator : symbol
 
         return this;
->this : SymbolIterator
+>this : this
     }
 }
+
+foo(...new SymbolIterator);
+>foo(...new SymbolIterator) : symbol
+>foo : <T>(...s: T[]) => T
+>...new SymbolIterator : symbol
+>new SymbolIterator : SymbolIterator
+>SymbolIterator : typeof SymbolIterator
+

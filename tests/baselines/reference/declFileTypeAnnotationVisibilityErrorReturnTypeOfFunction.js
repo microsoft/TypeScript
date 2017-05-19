@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts]
-
 module m {
     class private1 {
     }
@@ -64,12 +63,12 @@ var m;
         function private1() {
         }
         return private1;
-    })();
+    }());
     var public1 = (function () {
         function public1() {
         }
         return public1;
-    })();
+    }());
     m.public1 = public1;
     // Directly using names from this module
     function foo1() {
@@ -106,7 +105,7 @@ var m;
             function public2() {
             }
             return public2;
-        })();
+        }());
         m2.public2 = public2;
     })(m2 || (m2 = {}));
     function foo111() {

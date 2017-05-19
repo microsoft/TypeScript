@@ -13,11 +13,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(95,5): error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof f'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(105,5): error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'typeof c'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(111,5): error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(115,18): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts(117,5): error TS2411: Property 'foo' of type 'E' is not assignable to string index type 'U'.
 
 
-==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts (17 errors) ====
+==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotASubtypeOfAnythingButNumber.ts (16 errors) ====
     // enums are only subtypes of number, any and no other types
     
     enum E { A }
@@ -163,8 +162,6 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/enumIsNotA
     
     
     interface I18<T, U extends T> {
-                     ~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         [x: string]: U;
         foo: E;
         ~~~~~~~

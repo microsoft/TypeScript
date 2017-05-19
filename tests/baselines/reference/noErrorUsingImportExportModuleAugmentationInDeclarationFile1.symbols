@@ -1,0 +1,7 @@
+=== tests/cases/compiler/0.d.ts ===
+export = a;
+>a : Symbol(a, Decl(0.d.ts, 1, 11))
+
+declare var a: number;
+>a : Symbol(a, Decl(0.d.ts, 1, 11))
+

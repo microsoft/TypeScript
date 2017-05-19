@@ -44,18 +44,18 @@ var C = (function () {
         this.y = y;
     }
     return C;
-})();
+}());
 var C2 = (function () {
     function C2(x) {
         this.x = x;
     }
     return C2;
-})();
+}());
 var C3 = (function () {
     function C3(y) {
         this.y = y;
     }
     return C3;
-})();
+}());
 var a;
 var b;

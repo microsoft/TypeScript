@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 class A {
 	constructor(str1:string, str2:string) {}
 }

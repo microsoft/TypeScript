@@ -1,0 +1,26 @@
+tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(10,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
+tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts(11,9): error TS2682: 'get' and 'set' accessor must have the same 'this' type.
+
+
+==== tests/cases/conformance/types/thisType/thisTypeInAccessorsNegative.ts (2 errors) ====
+    interface Foo {
+        n: number;
+        x: number;
+    }
+    interface Bar {
+        wrong: "place" | "time" | "method" | "technique";
+    }
+    const mismatch = {
+        n: 13,
+        get x(this: Foo) { return this.n; },
+            ~
+!!! error TS2682: 'get' and 'set' accessor must have the same 'this' type.
+        set x(this: Bar, n) { this.wrong = "method"; }
+            ~
+!!! error TS2682: 'get' and 'set' accessor must have the same 'this' type.
+    }
+    const contextual: Foo = {
+        n: 16,
+        get x() { return this.n; }
+    }
+    

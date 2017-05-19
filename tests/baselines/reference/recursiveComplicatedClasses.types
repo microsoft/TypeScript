@@ -14,7 +14,7 @@ function aEnclosesB(a: Symbol) {
 >Symbol : Symbol
 
     return true;
->true : boolean
+>true : true
 }
 
 class Symbol {
@@ -24,7 +24,7 @@ class Symbol {
 >bound : boolean
 
     public visible() {
->visible : () => boolean
+>visible : () => any
 
         var b: TypeSymbol;
 >b : TypeSymbol

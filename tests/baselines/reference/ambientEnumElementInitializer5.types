@@ -4,6 +4,6 @@ declare enum E {
 
  e = -0xA
 >e : E
->-0xA : number
->0xA : number
+>-0xA : -10
+>0xA : 10
 }

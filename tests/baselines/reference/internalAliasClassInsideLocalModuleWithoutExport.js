@@ -16,6 +16,8 @@ export module m2 {
 }
 
 //// [internalAliasClassInsideLocalModuleWithoutExport.js]
+"use strict";
+exports.__esModule = true;
 var x;
 (function (x) {
     var c = (function () {
@@ -25,7 +27,7 @@ var x;
             return a;
         };
         return c;
-    })();
+    }());
     x.c = c;
 })(x = exports.x || (exports.x = {}));
 var m2;

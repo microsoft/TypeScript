@@ -3,5 +3,5 @@ do {
   continue;
 }
 while (true);
->true : boolean
+>true : true
 

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/jsx/tsxDynamicTagName1.tsx ===
+var CustomTag = "h1";
+>CustomTag : Symbol(CustomTag, Decl(tsxDynamicTagName1.tsx, 0, 3))
+
+<CustomTag> Hello World </CustomTag>  // No error
+>CustomTag : Symbol(CustomTag, Decl(tsxDynamicTagName1.tsx, 0, 3))
+>CustomTag : Symbol(CustomTag, Decl(tsxDynamicTagName1.tsx, 0, 3))
+

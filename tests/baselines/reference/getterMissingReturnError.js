@@ -17,4 +17,4 @@ var test = (function () {
         configurable: true
     });
     return test;
-})();
+}());

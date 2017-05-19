@@ -23,7 +23,7 @@ var A;
                 this.x = BB.Elephant.X;
             }
             return C;
-        })();
+        }());
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

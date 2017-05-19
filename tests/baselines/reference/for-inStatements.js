@@ -15,7 +15,7 @@ for (var x in fn()) { }
 for (var x in /[a-z]/) { }
 for (var x in new Date()) { }
 
-var c, d, e;
+var c: any, d: any, e: any;
 
 for (var x in c || d) { }
 for (var x in e ? c : d) { }
@@ -81,11 +81,16 @@ for (var x in Color.Blue) { }
 
 
 //// [for-inStatements.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var aString;
 for (aString in {}) { }
 var anAny;
@@ -122,11 +127,11 @@ var A = (function () {
         return null;
     };
     return A;
-})();
+}());
 var B = (function (_super) {
     __extends(B, _super);
     function B() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     B.prototype.boz = function () {
         for (var x in this.biz()) { }
@@ -137,7 +142,7 @@ var B = (function (_super) {
         return null;
     };
     return B;
-})(A);
+}(A));
 var i;
 for (var x in i[42]) { }
 var M;
@@ -146,7 +151,7 @@ var M;
         function X() {
         }
         return X;
-    })();
+    }());
     M.X = X;
 })(M || (M = {}));
 for (var x in M) { }

@@ -1,11 +1,11 @@
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,1): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,17): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,23): error TS1005: '}' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,29): error TS1005: '{' expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,57): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(39,58): error TS1109: Expression expected.
 tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,1): error TS1003: Identifier expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,6): error TS1109: Expression expected.
-tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS1109: Expression expected.
+tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS2657: JSX expressions must have one parent element.
 
 
 ==== tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx (8 errors) ====
@@ -48,6 +48,8 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS1109: Expr
     <div><br />7x invalid-js-identifier</div>;
     
     <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
                     ~
 !!! error TS1005: '{' expected.
                           ~~~~~
@@ -62,10 +64,8 @@ tests/cases/conformance/jsx/jsxEsprimaFbTestSuite.tsx(41,12): error TS1109: Expr
     <a.b></a.b>;
     ~
 !!! error TS1003: Identifier expected.
-         ~~
-!!! error TS1109: Expression expected.
                ~
-!!! error TS1109: Expression expected.
+!!! error TS2657: JSX expressions must have one parent element.
     
     <a.b.c></a.b.c>;
     

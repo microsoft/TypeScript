@@ -12,7 +12,7 @@ var A = (function () {
         this.a1 = a1;
     }
     return A;
-})();
+}());
 function foo(x) {
     if (x === void 0) { x = new A(123); }
 }

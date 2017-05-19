@@ -1,5 +1,4 @@
 //// [declFileObjectLiteralWithAccessors.ts]
-
 function /*1*/makePoint(x: number) { 
     return {
         b: 10,
@@ -20,8 +19,8 @@ function makePoint(x) {
     };
 }
 ;
-var point = makePoint(2);
-var x = point.x;
+var /*4*/ point = makePoint(2);
+var /*2*/ x = point.x;
 point.x = 30;
 
 

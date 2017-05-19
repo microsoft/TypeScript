@@ -11,7 +11,7 @@ class ClassWithNoInitializer extends BaseErrClass {
     t;
     //'this' in optional super call
     constructor() {
-        super(this); // OK
+        super(this); // Error
     }
 }
 

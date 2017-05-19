@@ -71,7 +71,7 @@ var C = (function () {
     }
     C.prototype.foo = function (x) { };
     return C;
-})();
+}());
 var c;
 c.foo();
 c.foo(1);

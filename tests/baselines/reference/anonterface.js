@@ -24,7 +24,7 @@ var M;
             return fn(n2);
         };
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var c = new M.C();

@@ -14,7 +14,7 @@ interface I {
 
     ();
     f();
->f : Symbol(f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
+>f : Symbol(I.f, Decl(callSignatureWithoutAnnotationsOrBody.ts, 6, 7))
 }
 var i: I;
 >i : Symbol(i, Decl(callSignatureWithoutAnnotationsOrBody.ts, 9, 3))

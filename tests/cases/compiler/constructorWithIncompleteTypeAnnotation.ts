@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 declare module "fs" {
     export class File {
         constructor(filename: string);

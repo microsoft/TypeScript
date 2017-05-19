@@ -1,5 +1,4 @@
 //// [errorSupression1.ts]
-
 class Foo { static bar() { return "x"; } }
 
 var baz = Foo.b;
@@ -14,7 +13,7 @@ var Foo = (function () {
     }
     Foo.bar = function () { return "x"; };
     return Foo;
-})();
+}());
 var baz = Foo.b;
 // Foo.b won't bind. 
 baz.concat("y");

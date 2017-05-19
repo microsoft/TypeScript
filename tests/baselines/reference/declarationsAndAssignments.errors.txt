@@ -1,32 +1,39 @@
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2493: Tuple type '[number, string]' with length '2' cannot be assigned to tuple with length '3'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(56,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2459: Type '{}' has no property 'a' and no string index signature.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2459: Type '{}' has no property 'b' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(5,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,17): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(22,23): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(23,25): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(24,19): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(28,28): error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(29,22): error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(58,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | 1', but here has type 'string'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,10): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(62,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,13): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(63,16): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): error TS2461: Type '{}' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,5): error TS2345: Argument of type '[number, [string, { y: boolean; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
-  Types of property '1' are incompatible.
-    Type '[string, { y: boolean; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
-      Types of property '1' are incompatible.
-        Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
-          Property 'x' is missing in type '{ y: boolean; }'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,5): error TS2345: Argument of type '[number, [string, { y: false; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
+  Type '[string, { y: false; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
+    Type '{ y: false; }' is not assignable to type '{ x: any; y?: boolean; }'.
+      Property 'x' is missing in type '{ y: false; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (13 errors) ====
+==== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts (22 errors) ====
     function f0() {
         var [] = [1, "hello"];
         var [x] = [1, "hello"];
         var [x, y] = [1, "hello"];
-        var [x, y, z] = [1, "hello"];  // Error
+        var [x, y, z] = [1, "hello"];
                    ~
-!!! error TS2493: Tuple type '[number, string]' with length '2' cannot be assigned to tuple with length '3'.
-        var [,, z] = [0, 1, 2];
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+        var [,, x] = [0, 1, 2];
         var x: number;
         var y: string;
     }
@@ -42,14 +49,26 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     }
     
     function f2() {
-        var { } = { x: 5, y: "hello" };
-        var { x } = { x: 5, y: "hello" };
-        var { y } = { x: 5, y: "hello" };
+        var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+                    ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{}'.
+                          ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{}'.
+        var { x } = { x: 5, y: "hello" };     // Error, no y in target
+                            ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+        var { y } = { x: 5, y: "hello" };     // Error, no x in target
+                      ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
         var { x, y } = { x: 5, y: "hello" };
         var x: number;
         var y: string;
-        var { x: a } = { x: 5, y: "hello" };
-        var { y: b } = { x: 5, y: "hello" };
+        var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+                               ~
+!!! error TS2353: Object literal may only specify known properties, and 'y' does not exist in type '{ x: any; }'.
+        var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
+                         ~
+!!! error TS2353: Object literal may only specify known properties, and 'x' does not exist in type '{ y: any; }'.
         var { x: a, y: b } = { x: 5, y: "hello" };
         var a: number;
         var b: string;
@@ -77,37 +96,43 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     
     function f7() {
         var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
-                    ~
-!!! error TS2322: Type 'number' is not assignable to type 'string'.
         var x: number;
         var y: string;
+            ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'y' must be of type 'string | 1', but here has type 'string'.
     }
     
     function f8() {
         var [a, b, c] = [];   // Ok, [] is an array
+             ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+                ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+                   ~
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
         var [d, e, f] = [1];  // Error, [1] is a tuple
                 ~
-!!! error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
                    ~
-!!! error TS2493: Tuple type '[number]' with length '1' cannot be assigned to tuple with length '3'.
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
     }
     
     function f9() {
         var [a, b] = {};                // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ [x: number]: undefined; }' is not an array type.
+!!! error TS2461: Type '{}' is not an array type.
         var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
             ~~~~~~
-!!! error TS2461: Type '{ [x: number]: number; 0: number; 1: number; }' is not an array type.
+!!! error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
         var [e, f] = [10, 20];
     }
     
     function f10() {
         var { a, b } = {};  // Error
               ~
-!!! error TS2459: Type '{}' has no property 'a' and no string index signature.
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
                  ~
-!!! error TS2459: Type '{}' has no property 'b' and no string index signature.
+!!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
         var { a, b } = [];  // Error
               ~
 !!! error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
@@ -146,12 +171,10 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
     f14([2, ["abc", { x: 0 }]]);
     f14([2, ["abc", { y: false }]]);  // Error, no x
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '[number, [string, { y: boolean; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
-!!! error TS2345:   Types of property '1' are incompatible.
-!!! error TS2345:     Type '[string, { y: boolean; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
-!!! error TS2345:       Types of property '1' are incompatible.
-!!! error TS2345:         Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
-!!! error TS2345:           Property 'x' is missing in type '{ y: boolean; }'.
+!!! error TS2345: Argument of type '[number, [string, { y: false; }]]' is not assignable to parameter of type '[number, [string, { x: any; y?: boolean; }]]'.
+!!! error TS2345:   Type '[string, { y: false; }]' is not assignable to type '[string, { x: any; y?: boolean; }]'.
+!!! error TS2345:     Type '{ y: false; }' is not assignable to type '{ x: any; y?: boolean; }'.
+!!! error TS2345:       Property 'x' is missing in type '{ y: false; }'.
     
     module M {
         export var [a, b] = [1, 2];

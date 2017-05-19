@@ -1,0 +1,19 @@
+=== tests/cases/compiler/functionOverloads22.ts ===
+function foo(bar:number):{a:number;}[];
+>foo : Symbol(foo, Decl(functionOverloads22.ts, 0, 0), Decl(functionOverloads22.ts, 0, 39), Decl(functionOverloads22.ts, 1, 49))
+>bar : Symbol(bar, Decl(functionOverloads22.ts, 0, 13))
+>a : Symbol(a, Decl(functionOverloads22.ts, 0, 26))
+
+function foo(bar:string):{a:number; b:string;}[];
+>foo : Symbol(foo, Decl(functionOverloads22.ts, 0, 0), Decl(functionOverloads22.ts, 0, 39), Decl(functionOverloads22.ts, 1, 49))
+>bar : Symbol(bar, Decl(functionOverloads22.ts, 1, 13))
+>a : Symbol(a, Decl(functionOverloads22.ts, 1, 26))
+>b : Symbol(b, Decl(functionOverloads22.ts, 1, 35))
+
+function foo(bar:any):{a:any;b?:any;}[] { return [{a:""}] }
+>foo : Symbol(foo, Decl(functionOverloads22.ts, 0, 0), Decl(functionOverloads22.ts, 0, 39), Decl(functionOverloads22.ts, 1, 49))
+>bar : Symbol(bar, Decl(functionOverloads22.ts, 2, 13))
+>a : Symbol(a, Decl(functionOverloads22.ts, 2, 23))
+>b : Symbol(b, Decl(functionOverloads22.ts, 2, 29))
+>a : Symbol(a, Decl(functionOverloads22.ts, 2, 51))
+

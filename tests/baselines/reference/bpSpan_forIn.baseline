@@ -104,14 +104,9 @@
 --------------------------------
 17 >    return new String();
 
-    ~~~~~~~~~~                                    => Pos: (221 to 230)  SpanInfo: {"start":225,"length":19}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (221 to 245)  SpanInfo: {"start":225,"length":19}
     >return new String()
     >:=> (line 17, col 4) to (line 17, col 23)
-17 >    return new String();
-
-              ~~~~~~~~~~~~~~~                     => Pos: (231 to 245)  SpanInfo: {"start":232,"length":12}
-    >new String()
-    >:=> (line 17, col 11) to (line 17, col 23)
 --------------------------------
 18 >}) {
 

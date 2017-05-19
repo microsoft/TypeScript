@@ -49,7 +49,7 @@ var X;
         function Y() {
         }
         return Y;
-    })();
+    }());
     X.Y = Y;
 })(X || (X = {}));
 var Z;

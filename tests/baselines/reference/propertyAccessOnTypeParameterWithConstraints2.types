@@ -6,7 +6,7 @@ class A {
 
     foo(): string { return ''; }
 >foo : () => string
->'' : string
+>'' : ""
 }
 
 class B extends A {
@@ -17,7 +17,7 @@ class B extends A {
 >bar : () => string
 
         return '';
->'' : string
+>'' : ""
     }
 }
 
@@ -40,7 +40,7 @@ class C<U extends A, T extends A> {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : U
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string
@@ -61,7 +61,7 @@ class C<U extends A, T extends A> {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : U
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string
@@ -145,7 +145,7 @@ var r2b = i.foo['foo']();
 >i.foo : B
 >i : I<B, A>
 >foo : B
->'foo' : string
+>'foo' : "foo"
 
 var a: {
 >a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
@@ -198,7 +198,7 @@ var r3b = a()['foo']();
 >a()['foo'] : () => string
 >a() : A
 >a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
->'foo' : string
+>'foo' : "foo"
 
 // parameter supplied for type argument inference to succeed
 var aB = new B();
@@ -224,7 +224,7 @@ var r3d = a(aB, aB)['foo']();
 >a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
 >aB : B
 >aB : B
->'foo' : string
+>'foo' : "foo"
 
 var b = {
 >b : { foo: <U extends A, T extends A>(x: U, y: T) => string; }
@@ -247,7 +247,7 @@ var b = {
 >x['foo']() : string
 >x['foo'] : () => string
 >x : U
->'foo' : string
+>'foo' : "foo"
 
         return a + x.foo();
 >a + x.foo() : string

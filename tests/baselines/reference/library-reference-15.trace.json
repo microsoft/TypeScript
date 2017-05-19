@@ -1,0 +1,8 @@
+[
+    "======== Resolving type reference directive 'jquery', containing file '/a/__inferred type names__.ts', root directory 'types'. ========",
+    "Resolving with primary search path 'types'.",
+    "File 'types/jquery/package.json' does not exist.",
+    "File 'types/jquery/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'types/jquery/index.d.ts', result '/a/types/jquery/index.d.ts'.",
+    "======== Type reference directive 'jquery' was successfully resolved to '/a/types/jquery/index.d.ts', primary: true. ========"
+]

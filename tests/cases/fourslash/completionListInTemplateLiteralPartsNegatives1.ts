@@ -4,8 +4,4 @@
 ////
 ////`asdasd$/*7*/{ 2 + 1.1 }/*8*/ 12312 /*9*/{/*10*/
 
-test.markers().forEach(marker => {
-    goTo.position(marker.position);
-
-    verify.completionListIsEmpty()
-});
+goTo.eachMarker(() => verify.completionListIsEmpty());

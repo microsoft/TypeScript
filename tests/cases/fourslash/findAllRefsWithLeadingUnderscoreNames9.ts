@@ -1,14 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-////(function [|___foo|]() {
+////(function [|{| "isWriteAccess": true, "isDefinition": true |}___foo|]() {
 ////    [|___foo|]();
 ////})
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-    verify.referencesCountIs(2);
-
-    test.ranges().forEach(range => {
-        verify.referencesAtPositionContains(range);
-    });
-});
+verify.singleReferenceGroup("(local function) ___foo(): void");

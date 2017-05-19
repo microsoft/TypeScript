@@ -1,0 +1,142 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 102,
+    "tags": {
+        "0": {
+            "kind": "JSDocTypedefTag",
+            "pos": 8,
+            "end": 98,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 8,
+                "end": 9
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 16,
+                "text": "typedef"
+            },
+            "fullName": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "text": "People"
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 17,
+                "end": 23,
+                "text": "People"
+            },
+            "jsDocTypeLiteral": {
+                "kind": "JSDocTypeLiteral",
+                "pos": 26,
+                "end": 98,
+                "jsDocTypeTag": {
+                    "kind": "JSDocTypeTag",
+                    "pos": 28,
+                    "end": 42,
+                    "atToken": {
+                        "kind": "AtToken",
+                        "pos": 28,
+                        "end": 29
+                    },
+                    "tagName": {
+                        "kind": "Identifier",
+                        "pos": 29,
+                        "end": 33,
+                        "text": "type"
+                    },
+                    "typeExpression": {
+                        "kind": "JSDocTypeExpression",
+                        "pos": 34,
+                        "end": 42,
+                        "type": {
+                            "kind": "JSDocTypeReference",
+                            "pos": 35,
+                            "end": 41,
+                            "name": {
+                                "kind": "Identifier",
+                                "pos": 35,
+                                "end": 41,
+                                "text": "Object"
+                            }
+                        }
+                    }
+                },
+                "jsDocPropertyTags": [
+                    {
+                        "kind": "JSDocPropertyTag",
+                        "pos": 47,
+                        "end": 72,
+                        "atToken": {
+                            "kind": "AtToken",
+                            "pos": 47,
+                            "end": 48
+                        },
+                        "tagName": {
+                            "kind": "Identifier",
+                            "pos": 48,
+                            "end": 56,
+                            "text": "property"
+                        },
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 66,
+                            "end": 69,
+                            "text": "age"
+                        },
+                        "typeExpression": {
+                            "kind": "JSDocTypeExpression",
+                            "pos": 57,
+                            "end": 65,
+                            "type": {
+                                "kind": "NumberKeyword",
+                                "pos": 58,
+                                "end": 64
+                            }
+                        }
+                    },
+                    {
+                        "kind": "JSDocPropertyTag",
+                        "pos": 74,
+                        "end": 98,
+                        "atToken": {
+                            "kind": "AtToken",
+                            "pos": 74,
+                            "end": 75
+                        },
+                        "tagName": {
+                            "kind": "Identifier",
+                            "pos": 75,
+                            "end": 83,
+                            "text": "property"
+                        },
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 93,
+                            "end": 97,
+                            "text": "name"
+                        },
+                        "typeExpression": {
+                            "kind": "JSDocTypeExpression",
+                            "pos": 84,
+                            "end": 92,
+                            "type": {
+                                "kind": "StringKeyword",
+                                "pos": 85,
+                                "end": 91
+                            }
+                        }
+                    }
+                ]
+            },
+            "comment": ""
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 98
+    }
+}

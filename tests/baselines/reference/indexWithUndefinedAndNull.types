@@ -1,0 +1,47 @@
+=== tests/cases/compiler/indexWithUndefinedAndNull.ts ===
+interface N {
+>N : N
+
+    [n: number]: string;
+>n : number
+}
+interface S {
+>S : S
+
+    [s: string]: number;
+>s : string
+}
+let n: N;
+>n : N
+>N : N
+
+let s: S;
+>s : S
+>S : S
+
+let str: string = n[undefined];
+>str : string
+>n[undefined] : string
+>n : N
+>undefined : undefined
+
+str = n[null];
+>str = n[null] : string
+>str : string
+>n[null] : string
+>n : N
+>null : null
+
+let num: number = s[undefined];
+>num : number
+>s[undefined] : number
+>s : S
+>undefined : undefined
+
+num = s[null];
+>num = s[null] : number
+>num : number
+>s[null] : number
+>s : S
+>null : null
+

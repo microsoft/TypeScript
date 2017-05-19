@@ -24,4 +24,4 @@ var Greeter = (function () {
         });
     }
     return Greeter;
-})();
+}());

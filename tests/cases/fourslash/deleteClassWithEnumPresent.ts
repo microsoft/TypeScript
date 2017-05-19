@@ -5,4 +5,60 @@
 
 goTo.marker();
 edit.deleteAtCaret('class Bar { }'.length);
-verify.getScriptLexicalStructureListContains('Foo', 'enum', 'tests/cases/fourslash/deleteClassWithEnumPresent.ts', '');
+
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "Foo",
+            "kind": "enum",
+            "childItems": [
+                {
+                    "text": "a",
+                    "kind": "enum member"
+                },
+                {
+                    "text": "b",
+                    "kind": "enum member"
+                },
+                {
+                    "text": "c",
+                    "kind": "enum member"
+                }
+            ]
+        }
+    ]
+});
+
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "script",
+        "childItems": [
+            {
+                "text": "Foo",
+                "kind": "enum"
+            }
+        ]
+    },
+    {
+        "text": "Foo",
+        "kind": "enum",
+        "childItems": [
+            {
+                "text": "a",
+                "kind": "enum member"
+            },
+            {
+                "text": "b",
+                "kind": "enum member"
+            },
+            {
+                "text": "c",
+                "kind": "enum member"
+            }
+        ],
+        "indent": 1
+    }
+]);

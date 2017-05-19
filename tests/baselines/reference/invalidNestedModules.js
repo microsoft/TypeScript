@@ -40,12 +40,11 @@ var A;
                 function Point() {
                 }
                 return Point;
-            })();
+            }());
             C.Point = Point;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {
@@ -53,7 +52,7 @@ var A;
             function C() {
             }
             return C;
-        })();
+        }());
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
@@ -65,11 +64,10 @@ var M2;
             function Point() {
             }
             return Point;
-        })();
+        }());
         X.Point = Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
-var M2;
 (function (M2) {
     var X;
     (function (X) {

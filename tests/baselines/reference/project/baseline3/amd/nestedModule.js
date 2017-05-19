@@ -1,4 +1,6 @@
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
     var outer;
     (function (outer) {
         var inner;

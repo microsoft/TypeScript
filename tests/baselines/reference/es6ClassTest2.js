@@ -159,11 +159,16 @@ var ccwc = new ChildClassWithoutConstructor(1, "s");
 
 
 //// [es6ClassTest2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var BasicMonster = (function () {
     function BasicMonster(name, health) {
         this.name = name;
@@ -174,7 +179,7 @@ var BasicMonster = (function () {
         // WScript.Echo("Attacks " + target);
     };
     return BasicMonster;
-})();
+}());
 var m1 = new BasicMonster("1", 100);
 var m2 = new BasicMonster("2", 100);
 m1.attack(m2);
@@ -210,7 +215,7 @@ var GetSetMonster = (function () {
         configurable: true
     });
     return GetSetMonster;
-})();
+}());
 var m3 = new BasicMonster("1", 100);
 var m4 = new BasicMonster("2", 100);
 m3.attack(m4);
@@ -226,7 +231,7 @@ var OverloadedMonster = (function () {
         //WScript.Echo("Attacks " + target);
     };
     return OverloadedMonster;
-})();
+}());
 var m5 = new OverloadedMonster("1");
 var m6 = new OverloadedMonster("2");
 m5.attack(m6);
@@ -236,7 +241,7 @@ var SplatMonster = (function () {
     function SplatMonster() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     SplatMonster.prototype.roar = function (name) {
@@ -246,7 +251,7 @@ var SplatMonster = (function () {
         }
     };
     return SplatMonster;
-})();
+}());
 function foo() { return true; }
 var PrototypeMonster = (function () {
     function PrototypeMonster() {
@@ -254,7 +259,7 @@ var PrototypeMonster = (function () {
         this.b = foo();
     }
     return PrototypeMonster;
-})();
+}());
 var SuperParent = (function () {
     function SuperParent(a) {
     }
@@ -263,11 +268,11 @@ var SuperParent = (function () {
     SuperParent.prototype.c = function () {
     };
     return SuperParent;
-})();
+}());
 var SuperChild = (function (_super) {
     __extends(SuperChild, _super);
     function SuperChild() {
-        _super.call(this, 1);
+        return _super.call(this, 1) || this;
     }
     SuperChild.prototype.b = function () {
         _super.prototype.b.call(this, 'str');
@@ -276,16 +281,16 @@ var SuperChild = (function (_super) {
         _super.prototype.c.call(this);
     };
     return SuperChild;
-})(SuperParent);
+}(SuperParent));
 var Statics = (function () {
     function Statics() {
     }
     Statics.baz = function () {
         return "";
     };
-    Statics.foo = 1;
     return Statics;
-})();
+}());
+Statics.foo = 1;
 var stat = new Statics();
 var ImplementsInterface = (function () {
     function ImplementsInterface() {
@@ -293,7 +298,7 @@ var ImplementsInterface = (function () {
         this.z = "foo";
     }
     return ImplementsInterface;
-})();
+}());
 var Visibility = (function () {
     function Visibility() {
         this.x = 1;
@@ -302,20 +307,20 @@ var Visibility = (function () {
     Visibility.prototype.foo = function () { };
     Visibility.prototype.bar = function () { };
     return Visibility;
-})();
+}());
 var BaseClassWithConstructor = (function () {
     function BaseClassWithConstructor(x, s) {
         this.x = x;
         this.s = s;
     }
     return BaseClassWithConstructor;
-})();
+}());
 // used to test codegen
 var ChildClassWithoutConstructor = (function (_super) {
     __extends(ChildClassWithoutConstructor, _super);
     function ChildClassWithoutConstructor() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ChildClassWithoutConstructor;
-})(BaseClassWithConstructor);
+}(BaseClassWithConstructor));
 var ccwc = new ChildClassWithoutConstructor(1, "s");

@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "allowJs": true },
+  "files": [ "a.ts" ]
+}

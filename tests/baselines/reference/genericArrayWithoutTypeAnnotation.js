@@ -14,4 +14,4 @@ var Bar = (function () {
     Bar.prototype.getBar = function (foo) {
     };
     return Bar;
-})();
+}());

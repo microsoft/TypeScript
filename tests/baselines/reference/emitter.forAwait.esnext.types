@@ -1,0 +1,50 @@
+=== tests/cases/conformance/emitter/esnext/forAwait/file1.ts ===
+async function f1() {
+>f1 : () => Promise<void>
+
+    let y: any;
+>y : any
+
+    for await (const x of y) {
+>x : any
+>y : any
+    }
+}
+=== tests/cases/conformance/emitter/esnext/forAwait/file2.ts ===
+async function f2() {
+>f2 : () => Promise<void>
+
+    let x: any, y: any;
+>x : any
+>y : any
+
+    for await (x of y) {
+>x : any
+>y : any
+    }
+}
+=== tests/cases/conformance/emitter/esnext/forAwait/file3.ts ===
+async function* f3() {
+>f3 : () => AsyncIterableIterator<any>
+
+    let y: any;
+>y : any
+
+    for await (const x of y) {
+>x : any
+>y : any
+    }
+}
+=== tests/cases/conformance/emitter/esnext/forAwait/file4.ts ===
+async function* f4() {
+>f4 : () => AsyncIterableIterator<any>
+
+    let x: any, y: any;
+>x : any
+>y : any
+
+    for await (x of y) {
+>x : any
+>y : any
+    }
+}

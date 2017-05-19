@@ -24,7 +24,7 @@ var __test2__;
             this.one = one;
         }
         return classWithPublic;
-    })();
+    }());
     __test2__.classWithPublic = classWithPublic;
     var x1 = new classWithPublic(1);
     ;

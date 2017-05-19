@@ -1,0 +1,10 @@
+=== tests/cases/compiler/b.ts ===
+import y = require("a"); 
+>y : typeof y
+
+=== tests/cases/compiler/node_modules/a.d.ts ===
+declare module "a" {
+    var x: number;
+>x : number
+}
+

@@ -28,6 +28,7 @@ var z0, z1, z2, z3;
 >z0 : Symbol(z0, Decl(downlevelLetConst15.ts, 9, 11))
 
     const [{a: z1}] = [{a: 1}]
+>a : Symbol(a, Decl(downlevelLetConst15.ts, 11, 24))
 >z1 : Symbol(z1, Decl(downlevelLetConst15.ts, 11, 12))
 >a : Symbol(a, Decl(downlevelLetConst15.ts, 11, 24))
 
@@ -36,6 +37,7 @@ var z0, z1, z2, z3;
 >z1 : Symbol(z1, Decl(downlevelLetConst15.ts, 11, 12))
 
     const {a: z2} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst15.ts, 13, 21))
 >z2 : Symbol(z2, Decl(downlevelLetConst15.ts, 13, 11))
 >a : Symbol(a, Decl(downlevelLetConst15.ts, 13, 21))
 
@@ -44,6 +46,8 @@ var z0, z1, z2, z3;
 >z2 : Symbol(z2, Decl(downlevelLetConst15.ts, 13, 11))
 
     const {a: {b: z3}} = { a: {b: 1} };
+>a : Symbol(a, Decl(downlevelLetConst15.ts, 15, 26))
+>b : Symbol(b, Decl(downlevelLetConst15.ts, 15, 31))
 >z3 : Symbol(z3, Decl(downlevelLetConst15.ts, 15, 15))
 >a : Symbol(a, Decl(downlevelLetConst15.ts, 15, 26))
 >b : Symbol(b, Decl(downlevelLetConst15.ts, 15, 31))
@@ -88,6 +92,7 @@ var y = true;
 >y : Symbol(y, Decl(downlevelLetConst15.ts, 29, 13))
 
         const {a: z6} = { a: 1 }
+>a : Symbol(a, Decl(downlevelLetConst15.ts, 30, 25))
 >z6 : Symbol(z6, Decl(downlevelLetConst15.ts, 30, 15))
 >a : Symbol(a, Decl(downlevelLetConst15.ts, 30, 25))
 
@@ -131,6 +136,7 @@ var z5 = 1;
 >_z : Symbol(_z, Decl(downlevelLetConst15.ts, 46, 13))
 
         const {a: _z5} = { a: 1 };
+>a : Symbol(a, Decl(downlevelLetConst15.ts, 47, 26))
 >_z5 : Symbol(_z5, Decl(downlevelLetConst15.ts, 47, 15))
 >a : Symbol(a, Decl(downlevelLetConst15.ts, 47, 26))
 

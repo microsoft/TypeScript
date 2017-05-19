@@ -1,0 +1,38 @@
+=== tests/cases/compiler/capturedParametersInInitializers1.ts ===
+// ok - usage is deferred
+function foo1(y = class {c = x}, x = 1) {
+>foo1 : Symbol(foo1, Decl(capturedParametersInInitializers1.ts, 0, 0))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 1, 14))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 1, 32))
+
+    new y().c;
+>new y().c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 1, 14))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers1.ts, 1, 25))
+}
+
+// ok - used in file
+function foo2(y = function(x: typeof z) {}, z = 1) {
+>foo2 : Symbol(foo2, Decl(capturedParametersInInitializers1.ts, 3, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 6, 14))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 6, 27))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 6, 43))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 6, 43))
+    
+}
+
+// ok -used in type
+let a;
+>a : Symbol(a, Decl(capturedParametersInInitializers1.ts, 11, 3))
+
+function foo3(y = { x: <typeof z>a }, z = 1) {
+>foo3 : Symbol(foo3, Decl(capturedParametersInInitializers1.ts, 11, 6))
+>y : Symbol(y, Decl(capturedParametersInInitializers1.ts, 12, 14))
+>x : Symbol(x, Decl(capturedParametersInInitializers1.ts, 12, 19))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 12, 37))
+>a : Symbol(a, Decl(capturedParametersInInitializers1.ts, 11, 3))
+>z : Symbol(z, Decl(capturedParametersInInitializers1.ts, 12, 37))
+    
+}

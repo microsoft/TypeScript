@@ -1,19 +1,15 @@
 /// <reference path="fourslash.ts" />
 
-// @allowNonTsExtensions: true
+// @allowJs: true
 // @Filename: a.js
-//// /**
-////  * @type {number}
-////  * @type {string}
-////  */
-////  var v;
+//// import a = b;
 
 verify.getSyntacticDiagnostics(`[
   {
-    "message": "\'type\' tag already specified.",
-    "start": 26,
-    "length": 4,
+    "message": "'import ... =' can only be used in a .ts file.",
+    "start": 0,
+    "length": 13,
     "category": "error",
-    "code": 1223
+    "code": 8002
   }
 ]`);

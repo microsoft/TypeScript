@@ -28,7 +28,7 @@ var _provider;
         UsefulClass.prototype.foo = function () {
         };
         return UsefulClass;
-    })();
+    }());
     _provider.UsefulClass = UsefulClass;
 })(_provider || (_provider = {}));
 var consumer;

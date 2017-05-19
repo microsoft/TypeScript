@@ -21,7 +21,7 @@ class TestFile {
 >message + this.name : string
 >message : string
 >this.name : string
->this : TestFile
+>this : this
 >name : string
     }
 }

@@ -41,7 +41,7 @@ var GetAndSet = (function () {
         configurable: true
     });
     return GetAndSet;
-})();
+}());
 var SetterOnly = (function () {
     function SetterOnly() {
     }
@@ -52,7 +52,7 @@ var SetterOnly = (function () {
         configurable: true
     });
     return SetterOnly;
-})();
+}());
 var GetterOnly = (function () {
     function GetterOnly() {
     }
@@ -64,4 +64,4 @@ var GetterOnly = (function () {
         configurable: true
     });
     return GetterOnly;
-})();
+}());

@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors1.ts(2,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors1.ts(2,9): error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors1.ts(2,9): error TS2378: A 'get' accessor must return a value.
 
 
 ==== tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors1.ts (2 errors) ====
@@ -8,5 +8,5 @@ tests/cases/conformance/parser/ecmascript3/Accessors/parserES3Accessors1.ts(2,9)
             ~~~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             ~~~
-!!! error TS2378: A 'get' accessor must return a value or consist of a single 'throw' statement.
+!!! error TS2378: A 'get' accessor must return a value.
     }

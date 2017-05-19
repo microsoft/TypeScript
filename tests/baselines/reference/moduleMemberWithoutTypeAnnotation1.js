@@ -58,10 +58,9 @@ var TypeScript;
                 return null;
             };
             return SyntaxCursor;
-        })();
+        }());
     })(Parser = TypeScript.Parser || (TypeScript.Parser = {}));
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     ;
     ;
@@ -72,16 +71,15 @@ var TypeScript;
             return TypeScript.Syntax.childIndex();
         };
         return PositionedElement;
-    })();
+    }());
     TypeScript.PositionedElement = PositionedElement;
     var PositionedToken = (function () {
         function PositionedToken(parent, token, fullStart) {
         }
         return PositionedToken;
-    })();
+    }());
     TypeScript.PositionedToken = PositionedToken;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var SyntaxNode = (function () {
         function SyntaxNode() {
@@ -95,10 +93,9 @@ var TypeScript;
             return null;
         };
         return SyntaxNode;
-    })();
+    }());
     TypeScript.SyntaxNode = SyntaxNode;
 })(TypeScript || (TypeScript = {}));
-var TypeScript;
 (function (TypeScript) {
     var Syntax;
     (function (Syntax) {
@@ -111,7 +108,7 @@ var TypeScript;
                 return new TypeScript.PositionedToken(parent, this, fullStart);
             };
             return VariableWidthTokenWithTrailingTrivia;
-        })();
+        }());
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;
     })(Syntax = TypeScript.Syntax || (TypeScript.Syntax = {}));
 })(TypeScript || (TypeScript = {}));

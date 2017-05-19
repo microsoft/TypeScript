@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInAmbientFunctions.ts]
-
 // No implicit-'any' errors.
 declare function d_f1(): void;
 

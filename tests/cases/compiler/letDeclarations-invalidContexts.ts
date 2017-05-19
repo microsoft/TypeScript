@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 // @target: ES6
 
 // Errors, let must be defined inside a block

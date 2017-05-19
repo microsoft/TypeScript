@@ -1,10 +1,7 @@
 tests/cases/compiler/unspecializedConstraints.ts(84,44): error TS2304: Cannot find name 'TypeParameter'.
-tests/cases/compiler/unspecializedConstraints.ts(127,28): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/unspecializedConstraints.ts(135,26): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
-tests/cases/compiler/unspecializedConstraints.ts(144,24): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/compiler/unspecializedConstraints.ts (4 errors) ====
+==== tests/cases/compiler/unspecializedConstraints.ts (1 errors) ====
     module ts {
         interface Map<T> {
             [index: string]: T;
@@ -134,8 +131,6 @@ tests/cases/compiler/unspecializedConstraints.ts(144,24): error TS2313: Constrai
         }
     
         function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
-                               ~~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var len = a.length;
             for (var i = 0; i < len; i++) {
                 if (item.equals(a[i])) return true;
@@ -144,8 +139,6 @@ tests/cases/compiler/unspecializedConstraints.ts(144,24): error TS2313: Constrai
         }
     
         function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
-                             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var len = a.length;
             if (b.length !== len) return false;
             for (var i = 0; i < len; i++) {
@@ -155,8 +148,6 @@ tests/cases/compiler/unspecializedConstraints.ts(144,24): error TS2313: Constrai
         }
     
         function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
-                           ~~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
             var len = a.length;
             if (b.length !== len) return false;
             for (var i = 0; i < len; i++) {

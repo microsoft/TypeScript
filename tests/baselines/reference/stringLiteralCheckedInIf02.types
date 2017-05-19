@@ -1,0 +1,46 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralCheckedInIf02.ts ===
+type S = "a" | "b";
+>S : S
+
+type T = S[] | S;
+>T : T
+>S : S
+>S : S
+
+function isS(t: T): t is S {
+>isS : (t: T) => t is S
+>t : T
+>T : T
+>t : any
+>S : S
+
+    return t === "a" || t === "b";
+>t === "a" || t === "b" : boolean
+>t === "a" : boolean
+>t : T
+>"a" : "a"
+>t === "b" : boolean
+>t : "b" | S[]
+>"b" : "b"
+}
+
+function f(foo: T) {
+>f : (foo: T) => S
+>foo : T
+>T : T
+
+    if (isS(foo)) {
+>isS(foo) : boolean
+>isS : (t: T) => t is S
+>foo : T
+
+        return foo;
+>foo : S
+    }
+    else { 
+        return foo[0];
+>foo[0] : S
+>foo : S[]
+>0 : 0
+    }
+}

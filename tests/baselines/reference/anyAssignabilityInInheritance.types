@@ -246,7 +246,7 @@ module f {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 declare function foo15(x: typeof f): typeof f;
 >foo15 : { (x: typeof f): typeof f; (x: any): any; }
@@ -273,7 +273,7 @@ module CC {
 
     export var bar = 1;
 >bar : number
->1 : number
+>1 : 1
 }
 declare function foo16(x: CC): CC;
 >foo16 : { (x: CC): CC; (x: any): any; }

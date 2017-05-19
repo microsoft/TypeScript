@@ -3,9 +3,9 @@ interface C {
 >C : Symbol(C, Decl(parser643728.ts, 0, 0))
 
     foo;
->foo : Symbol(foo, Decl(parser643728.ts, 0, 13))
+>foo : Symbol(C.foo, Decl(parser643728.ts, 0, 13))
 
     new;
->new : Symbol(new, Decl(parser643728.ts, 1, 8))
+>new : Symbol(C.new, Decl(parser643728.ts, 1, 8))
 }
 

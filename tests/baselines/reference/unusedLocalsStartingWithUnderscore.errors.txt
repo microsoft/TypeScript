@@ -1,0 +1,17 @@
+tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts(6,9): error TS6133: '_' is declared but never used.
+
+
+==== tests/cases/compiler/unusedLocalsStartingWithUnderscore.ts (1 errors) ====
+    for (const _ of []) { }
+    
+    for (const _ in []) { }
+    
+    namespace M {
+        let _;
+            ~
+!!! error TS6133: '_' is declared but never used.
+        for (const _ of []) { }
+    
+        for (const _ in []) { }
+    }
+        

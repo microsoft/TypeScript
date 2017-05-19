@@ -118,7 +118,7 @@ var TargetIsPublic;
         function Base() {
         }
         return Base;
-    })();
+    }());
     var a;
     var b;
     var i;
@@ -127,12 +127,12 @@ var TargetIsPublic;
         function D() {
         }
         return D;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     var d;
     var e;
     a = b;
@@ -157,14 +157,13 @@ var TargetIsPublic;
     e = d; // errror
     e = e;
 })(TargetIsPublic || (TargetIsPublic = {}));
-var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
     var Base = (function () {
         function Base() {
         }
         return Base;
-    })();
+    }());
     var a;
     var b;
     var i;
@@ -173,12 +172,12 @@ var TargetIsPublic;
         function D() {
         }
         return D;
-    })();
+    }());
     var E = (function () {
         function E() {
         }
         return E;
-    })();
+    }());
     var d;
     var e;
     a = b; // error

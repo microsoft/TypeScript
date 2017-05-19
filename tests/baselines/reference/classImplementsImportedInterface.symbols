@@ -6,7 +6,7 @@ module M1 {
 >I : Symbol(I, Decl(classImplementsImportedInterface.ts, 0, 11))
 
         foo();
->foo : Symbol(foo, Decl(classImplementsImportedInterface.ts, 1, 24))
+>foo : Symbol(I.foo, Decl(classImplementsImportedInterface.ts, 1, 24))
     }
 }
 
@@ -23,6 +23,6 @@ module M2 {
 >T : Symbol(T, Decl(classImplementsImportedInterface.ts, 6, 11))
 
         foo() {}
->foo : Symbol(foo, Decl(classImplementsImportedInterface.ts, 8, 26))
+>foo : Symbol(C.foo, Decl(classImplementsImportedInterface.ts, 8, 26))
     }
 }

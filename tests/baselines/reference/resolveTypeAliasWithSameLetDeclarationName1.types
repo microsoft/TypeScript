@@ -1,0 +1,12 @@
+=== tests/cases/compiler/resolveTypeAliasWithSameLetDeclarationName1.ts ===
+class C { }
+>C : C
+
+type baz = C;
+>baz : C
+>C : C
+
+let baz: baz;
+>baz : C
+>baz : C
+

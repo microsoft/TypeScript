@@ -29,7 +29,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var E;
 (function (E) {
 })(E || (E = {}));
@@ -42,7 +42,7 @@ function f() {
         function C() {
         }
         return C;
-    })();
+    }());
     var E;
     (function (E) {
     })(E || (E = {}));

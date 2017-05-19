@@ -1,0 +1,18 @@
+tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts(2,20): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts(2,53): error TS6133: 'person3' is declared but never used.
+tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts(3,13): error TS6133: 'unused' is declared but never used.
+
+
+==== tests/cases/compiler/unusedMultipleParameters2InMethodDeclaration.ts (3 errors) ====
+    class Dummy {
+        public greeter(person: string, person2: string, person3: string) {
+                       ~~~~~~
+!!! error TS6133: 'person' is declared but never used.
+                                                        ~~~~~~~
+!!! error TS6133: 'person3' is declared but never used.
+            var unused = 20;
+                ~~~~~~
+!!! error TS6133: 'unused' is declared but never used.
+            person2 = "dummy value";
+        }
+    }

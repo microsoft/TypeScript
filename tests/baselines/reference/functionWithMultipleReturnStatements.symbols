@@ -1,0 +1,102 @@
+=== tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts ===
+// return type of a function with multiple returns is the BCT of each return statement
+// it is an error if there is no single BCT, these are error cases
+
+function f1() {
+>f1 : Symbol(f1, Decl(functionWithMultipleReturnStatements.ts, 0, 0))
+
+    if (true) {
+        return 1;
+    } else {
+        return '';
+    }
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(functionWithMultipleReturnStatements.ts, 9, 1))
+
+    if (true) {
+        return 1;
+    } else if (false) {
+        return 2;
+    } else {
+        return '';
+    }
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(functionWithMultipleReturnStatements.ts, 19, 1))
+
+    try {
+        return 1;
+    }
+    catch (e) {
+>e : Symbol(e, Decl(functionWithMultipleReturnStatements.ts, 25, 11))
+
+        return '';
+    }
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(functionWithMultipleReturnStatements.ts, 28, 1))
+
+    try {
+        return 1;
+    }
+    catch (e) {
+>e : Symbol(e, Decl(functionWithMultipleReturnStatements.ts, 34, 11))
+
+    }
+    finally {
+        return '';
+    }
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(functionWithMultipleReturnStatements.ts, 40, 1))
+
+    return 1;
+    return '';
+}
+
+function f6<T, U>(x: T, y:U) {
+>f6 : Symbol(f6, Decl(functionWithMultipleReturnStatements.ts, 45, 1))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements.ts, 47, 12))
+>U : Symbol(U, Decl(functionWithMultipleReturnStatements.ts, 47, 14))
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements.ts, 47, 18))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements.ts, 47, 12))
+>y : Symbol(y, Decl(functionWithMultipleReturnStatements.ts, 47, 23))
+>U : Symbol(U, Decl(functionWithMultipleReturnStatements.ts, 47, 14))
+
+    if (true) {
+        return x;
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements.ts, 47, 18))
+
+    } else {
+        return y;
+>y : Symbol(y, Decl(functionWithMultipleReturnStatements.ts, 47, 23))
+    }
+}
+
+function f8<T extends U, U extends V, V>(x: T, y: U) {
+>f8 : Symbol(f8, Decl(functionWithMultipleReturnStatements.ts, 53, 1))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements.ts, 55, 12))
+>U : Symbol(U, Decl(functionWithMultipleReturnStatements.ts, 55, 24))
+>U : Symbol(U, Decl(functionWithMultipleReturnStatements.ts, 55, 24))
+>V : Symbol(V, Decl(functionWithMultipleReturnStatements.ts, 55, 37))
+>V : Symbol(V, Decl(functionWithMultipleReturnStatements.ts, 55, 37))
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements.ts, 55, 41))
+>T : Symbol(T, Decl(functionWithMultipleReturnStatements.ts, 55, 12))
+>y : Symbol(y, Decl(functionWithMultipleReturnStatements.ts, 55, 46))
+>U : Symbol(U, Decl(functionWithMultipleReturnStatements.ts, 55, 24))
+
+    if (true) {
+        return x;
+>x : Symbol(x, Decl(functionWithMultipleReturnStatements.ts, 55, 41))
+
+    } else {
+        return y;
+>y : Symbol(y, Decl(functionWithMultipleReturnStatements.ts, 55, 46))
+    }
+}
+

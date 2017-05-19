@@ -1,0 +1,22 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5for-of32.ts ===
+var array = [1,2,3];
+>array : Symbol(array, Decl(ES5for-of32.ts, 0, 3))
+
+var sum = 0;
+>sum : Symbol(sum, Decl(ES5for-of32.ts, 1, 3))
+
+for (let num of array) {
+>num : Symbol(num, Decl(ES5for-of32.ts, 3, 8))
+>array : Symbol(array, Decl(ES5for-of32.ts, 0, 3))
+
+    if (sum === 0) {
+>sum : Symbol(sum, Decl(ES5for-of32.ts, 1, 3))
+
+        array = [4,5,6]
+>array : Symbol(array, Decl(ES5for-of32.ts, 0, 3))
+    }
+    
+    sum += num;
+>sum : Symbol(sum, Decl(ES5for-of32.ts, 1, 3))
+>num : Symbol(num, Decl(ES5for-of32.ts, 3, 8))
+}

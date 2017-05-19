@@ -1,0 +1,20 @@
+=== tests/cases/compiler/modules.d.ts ===
+declare module "my-React-Lib" {
+    var a: any;
+>a : Symbol(a, Decl(modules.d.ts, 1, 7))
+
+    export = a;
+>a : Symbol(a, Decl(modules.d.ts, 1, 7))
+}
+
+=== tests/cases/compiler/test.tsx ===
+import * as myReactLib from "my-React-Lib"; // should not be elided
+>myReactLib : Symbol(myReactLib, Decl(test.tsx, 0, 6))
+
+declare var foo: any;
+>foo : Symbol(foo, Decl(test.tsx, 1, 11))
+
+<foo data/>;
+>foo : Symbol(unknown)
+>data : Symbol(data, Decl(test.tsx, 3, 4))
+

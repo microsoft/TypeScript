@@ -1,5 +1,4 @@
 //// [tsxTypeErrors.tsx]
-
 // A built-in element (OK)
 var a1 = <div id="foo" />;
 
@@ -49,7 +48,7 @@ var MyClass = (function () {
     function MyClass() {
     }
     return MyClass;
-})();
+}());
 // Let's use it
 // TODO: Error on missing 'reqd'
 var b1 = <MyClass reqd={true}/>;

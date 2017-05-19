@@ -71,17 +71,17 @@ var NotOptional;
         function B() {
         }
         return B;
-    })();
+    }());
     var B2 = (function () {
         function B2() {
         }
         return B2;
-    })();
+    }());
     var B3 = (function () {
         function B3() {
         }
         return B3;
-    })();
+    }());
 })(NotOptional || (NotOptional = {}));
 // same cases as above but with optional
 var Optional;
@@ -90,15 +90,15 @@ var Optional;
         function B() {
         }
         return B;
-    })();
+    }());
     var B2 = (function () {
         function B2() {
         }
         return B2;
-    })();
+    }());
     var B3 = (function () {
         function B3() {
         }
         return B3;
-    })();
+    }());
 })(Optional || (Optional = {}));

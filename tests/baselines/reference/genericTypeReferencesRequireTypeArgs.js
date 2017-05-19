@@ -17,7 +17,7 @@ var C = (function () {
     }
     C.prototype.foo = function () { return null; };
     return C;
-})();
+}());
 var c1; // error
 var i1; // error
 var c2; // should be an error

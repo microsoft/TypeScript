@@ -45,7 +45,6 @@ function m2b() { }
 ; // error since the module is instantiated
 function m2c() { }
 ;
-var m2c;
 (function (m2c) {
     m2c.y = 2;
 })(m2c || (m2c = {}));
@@ -59,13 +58,12 @@ function m2f() { }
 ;
 function m2g() { }
 ;
-var m2g;
 (function (m2g) {
     var C = (function () {
         function C() {
         }
         C.prototype.foo = function () { };
         return C;
-    })();
+    }());
     m2g.C = C;
 })(m2g || (m2g = {}));

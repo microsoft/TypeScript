@@ -1,7 +1,7 @@
 === tests/cases/compiler/globalThis.ts ===
 var __e = Math.E;  // should not generate 'this.Math.E'
 >__e : Symbol(__e, Decl(globalThis.ts, 0, 3))
->Math.E : Symbol(Math.E, Decl(lib.d.ts, 524, 16))
->Math : Symbol(Math, Decl(lib.d.ts, 522, 1), Decl(lib.d.ts, 633, 11))
->E : Symbol(Math.E, Decl(lib.d.ts, 524, 16))
+>Math.E : Symbol(Math.E, Decl(lib.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>E : Symbol(Math.E, Decl(lib.d.ts, --, --))
 

@@ -1,0 +1,9 @@
+error TS5009: Cannot find the common subdirectory path for the input files.
+
+
+!!! error TS5009: Cannot find the common subdirectory path for the input files.
+==== A:/foo/bar.ts (0 errors) ====
+    var x: number;
+    
+==== a:/foo/baz.ts (0 errors) ====
+    var y: number;

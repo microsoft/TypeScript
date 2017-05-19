@@ -1,5 +1,4 @@
 //// [commentsCommentParsing.ts]
-
 /// This is simple /// comments
 function simple() {
 }
@@ -288,7 +287,7 @@ var NoQuickInfoClass = (function () {
     function NoQuickInfoClass() {
     }
     return NoQuickInfoClass;
-})();
+}());
 
 
 //// [commentsCommentParsing.d.ts]

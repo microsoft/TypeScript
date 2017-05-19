@@ -1,4 +1,4 @@
-// @comments: true
+// @removeComments: false
 
 // This is pre comment
 var y = 10;

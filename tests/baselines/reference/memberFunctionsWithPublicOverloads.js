@@ -49,7 +49,7 @@ var C = (function () {
     C.foo = function (x, y) { };
     C.bar = function (x, y) { };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -58,4 +58,4 @@ var D = (function () {
     D.foo = function (x, y) { };
     D.bar = function (x, y) { };
     return D;
-})();
+}());

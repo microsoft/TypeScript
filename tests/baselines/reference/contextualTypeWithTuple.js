@@ -36,12 +36,12 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var unionTuple = [new C(), "foo"];
 var unionTuple1 = [new C(), "foo"];
 var unionTuple2 = [new C(), "foo", new D()];

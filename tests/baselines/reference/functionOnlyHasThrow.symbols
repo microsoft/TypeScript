@@ -3,5 +3,5 @@ function clone():number {
 >clone : Symbol(clone, Decl(functionOnlyHasThrow.ts, 0, 0))
 
 	throw new Error("To be implemented");
->Error : Symbol(Error, Decl(lib.d.ts, 876, 38), Decl(lib.d.ts, 889, 11))
+>Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 }

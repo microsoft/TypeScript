@@ -4,7 +4,7 @@ class Foo<T> {
 >T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
 
     t: T;
->t : Symbol(t, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 14))
+>t : Symbol(Foo.t, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 14))
 >T : Symbol(T, Decl(nonGenericClassExtendingGenericClassWithAny.ts, 0, 10))
 }
 

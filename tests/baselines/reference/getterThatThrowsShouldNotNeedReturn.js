@@ -24,4 +24,4 @@ var Greeter = (function () {
         throw ''; // should not raise an error
     };
     return Greeter;
-})();
+}());

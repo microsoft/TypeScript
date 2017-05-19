@@ -1,0 +1,66 @@
+=== tests/cases/compiler/instantiatedTypeAliasDisplay.ts ===
+// Repros from #12066
+
+interface X<A> {
+>X : X<A>
+>A : A
+
+    a: A;
+>a : A
+>A : A
+}
+interface Y<B> {
+>Y : Y<B>
+>B : B
+
+    b: B;
+>b : B
+>B : B
+}
+type Z<A, B> = X<A> | Y<B>;
+>Z : Z<A, B>
+>A : A
+>B : B
+>X : X<A>
+>A : A
+>Y : Y<B>
+>B : B
+
+declare function f1<A>(): Z<A, number>;
+>f1 : <A>() => Z<A, number>
+>A : A
+>Z : Z<A, B>
+>A : A
+
+declare function f2<A, B, C, D, E>(a: A, b: B, c: C, d: D): Z<A, string[]>;
+>f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
+>A : A
+>B : B
+>C : C
+>D : D
+>E : E
+>a : A
+>A : A
+>b : B
+>B : B
+>c : C
+>C : C
+>d : D
+>D : D
+>Z : Z<A, B>
+>A : A
+
+const x1 = f1<string>();  // Z<string, number>
+>x1 : Z<string, number>
+>f1<string>() : Z<string, number>
+>f1 : <A>() => Z<A, number>
+
+const x2 = f2({}, {}, {}, {});  // Z<{}, string[]>
+>x2 : Z<{}, string[]>
+>f2({}, {}, {}, {}) : Z<{}, string[]>
+>f2 : <A, B, C, D, E>(a: A, b: B, c: C, d: D) => Z<A, string[]>
+>{} : {}
+>{} : {}
+>{} : {}
+>{} : {}
+

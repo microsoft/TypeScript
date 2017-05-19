@@ -1,5 +1,4 @@
 //// [declFileClassWithIndexSignature.ts]
-
 class BlockIntrinsics {
     [s: string]: string;
 }
@@ -9,7 +8,7 @@ var BlockIntrinsics = (function () {
     function BlockIntrinsics() {
     }
     return BlockIntrinsics;
-})();
+}());
 
 
 //// [declFileClassWithIndexSignature.d.ts]

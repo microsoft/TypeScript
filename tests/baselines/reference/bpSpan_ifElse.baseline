@@ -131,16 +131,9 @@
 --------------------------------
 20 >} ()) {
 
-    ~                                             => Pos: (193 to 193)  SpanInfo: {"start":193,"length":1}
+    ~~~~                                          => Pos: (193 to 196)  SpanInfo: {"start":193,"length":1}
     >}
     >:=> (line 20, col 0) to (line 20, col 1)
-20 >} ()) {
-
-     ~~~                                          => Pos: (194 to 196)  SpanInfo: {"start":161,"length":36}
-    >function foo() {
-    >    return 30;
-    >} ()
-    >:=> (line 18, col 4) to (line 20, col 4)
 20 >} ()) {
 
         ~                                         => Pos: (197 to 197)  SpanInfo: {"start":157,"length":41}

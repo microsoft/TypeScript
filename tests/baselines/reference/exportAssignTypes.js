@@ -54,40 +54,49 @@ var v7: {<x>(p1: x): x} = iGeneric;
 
 
 //// [expString.js]
+"use strict";
 var x = "test";
 module.exports = x;
 //// [expNumber.js]
+"use strict";
 var x = 42;
 module.exports = x;
 //// [expBoolean.js]
+"use strict";
 var x = true;
 module.exports = x;
 //// [expArray.js]
+"use strict";
 var x = [1, 2];
 module.exports = x;
 //// [expObject.js]
+"use strict";
 var x = { answer: 42, when: 1776 };
 module.exports = x;
 //// [expAny.js]
+"use strict";
 var x;
 module.exports = x;
 //// [expGeneric.js]
+"use strict";
 function x(a) {
     return a;
 }
 module.exports = x;
 //// [consumer.js]
-var iString = require('./expString');
+"use strict";
+exports.__esModule = true;
+var iString = require("./expString");
 var v1 = iString;
-var iNumber = require('./expNumber');
+var iNumber = require("./expNumber");
 var v2 = iNumber;
-var iBoolean = require('./expBoolean');
+var iBoolean = require("./expBoolean");
 var v3 = iBoolean;
-var iArray = require('./expArray');
+var iArray = require("./expArray");
 var v4 = iArray;
-var iObject = require('./expObject');
+var iObject = require("./expObject");
 var v5 = iObject;
-var iAny = require('./expAny');
+var iAny = require("./expAny");
 var v6 = iAny;
-var iGeneric = require('./expGeneric');
+var iGeneric = require("./expGeneric");
 var v7 = iGeneric;

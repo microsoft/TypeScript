@@ -1,0 +1,76 @@
+=== tests/cases/compiler/interfaceClassMerging2.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
+
+    interfaceFooMethod(): this;
+>interfaceFooMethod : Symbol(Foo.interfaceFooMethod, Decl(interfaceClassMerging2.ts, 0, 15))
+
+    interfaceFooProperty: this;
+>interfaceFooProperty : Symbol(Foo.interfaceFooProperty, Decl(interfaceClassMerging2.ts, 1, 31))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
+
+    classFooProperty: this;
+>classFooProperty : Symbol(Foo.classFooProperty, Decl(interfaceClassMerging2.ts, 5, 11))
+
+    classFooMethod(): this {
+>classFooMethod : Symbol(Foo.classFooMethod, Decl(interfaceClassMerging2.ts, 6, 27))
+
+        return this;
+>this : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
+    }
+}
+
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(interfaceClassMerging2.ts, 11, 1), Decl(interfaceClassMerging2.ts, 17, 1))
+
+    interfaceBarMethod(): this;
+>interfaceBarMethod : Symbol(Bar.interfaceBarMethod, Decl(interfaceClassMerging2.ts, 14, 15))
+
+    interfaceBarProperty: this;
+>interfaceBarProperty : Symbol(Bar.interfaceBarProperty, Decl(interfaceClassMerging2.ts, 15, 31))
+}
+
+class Bar extends Foo {
+>Bar : Symbol(Bar, Decl(interfaceClassMerging2.ts, 11, 1), Decl(interfaceClassMerging2.ts, 17, 1))
+>Foo : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
+
+    classBarProperty: this;
+>classBarProperty : Symbol(Bar.classBarProperty, Decl(interfaceClassMerging2.ts, 19, 23))
+
+    classBarMethod(): this {
+>classBarMethod : Symbol(Bar.classBarMethod, Decl(interfaceClassMerging2.ts, 20, 27))
+
+        return this;
+>this : Symbol(Bar, Decl(interfaceClassMerging2.ts, 11, 1), Decl(interfaceClassMerging2.ts, 17, 1))
+    }
+}
+
+
+var bar = new Bar();
+>bar : Symbol(bar, Decl(interfaceClassMerging2.ts, 28, 3))
+>Bar : Symbol(Bar, Decl(interfaceClassMerging2.ts, 11, 1), Decl(interfaceClassMerging2.ts, 17, 1))
+
+bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod();
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod().classFooMethod : Symbol(Foo.classFooMethod, Decl(interfaceClassMerging2.ts, 6, 27))
+>bar.interfaceBarMethod().interfaceFooMethod().classBarMethod : Symbol(Bar.classBarMethod, Decl(interfaceClassMerging2.ts, 20, 27))
+>bar.interfaceBarMethod().interfaceFooMethod : Symbol(Foo.interfaceFooMethod, Decl(interfaceClassMerging2.ts, 0, 15))
+>bar.interfaceBarMethod : Symbol(Bar.interfaceBarMethod, Decl(interfaceClassMerging2.ts, 14, 15))
+>bar : Symbol(bar, Decl(interfaceClassMerging2.ts, 28, 3))
+>interfaceBarMethod : Symbol(Bar.interfaceBarMethod, Decl(interfaceClassMerging2.ts, 14, 15))
+>interfaceFooMethod : Symbol(Foo.interfaceFooMethod, Decl(interfaceClassMerging2.ts, 0, 15))
+>classBarMethod : Symbol(Bar.classBarMethod, Decl(interfaceClassMerging2.ts, 20, 27))
+>classFooMethod : Symbol(Foo.classFooMethod, Decl(interfaceClassMerging2.ts, 6, 27))
+
+
+var foo = new Foo();
+>foo : Symbol(foo, Decl(interfaceClassMerging2.ts, 32, 3))
+>Foo : Symbol(Foo, Decl(interfaceClassMerging2.ts, 0, 0), Decl(interfaceClassMerging2.ts, 3, 1))
+
+foo = bar;
+>foo : Symbol(foo, Decl(interfaceClassMerging2.ts, 32, 3))
+>bar : Symbol(bar, Decl(interfaceClassMerging2.ts, 28, 3))
+

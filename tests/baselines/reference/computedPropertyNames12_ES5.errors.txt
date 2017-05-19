@@ -3,15 +3,13 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(6,
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(7,12): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(8,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(9,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(10,12): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
-tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(11,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(12,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(13,12): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(14,5): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(15,12): error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
 
 
-==== tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts (11 errors) ====
+==== tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts (9 errors) ====
     var s: string;
     var n: number;
     var a: any;
@@ -32,11 +30,7 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames12_ES5.ts(15
         ~~~~
 !!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
         static [""]: number;
-               ~~~~
-!!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
         [0]: number;
-        ~~~
-!!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.
         [a]: number;
         ~~~
 !!! error TS1166: A computed property name in a class property declaration must directly refer to a built-in symbol.

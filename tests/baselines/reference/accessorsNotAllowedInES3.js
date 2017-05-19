@@ -1,5 +1,4 @@
 //// [accessorsNotAllowedInES3.ts]
-
 class C {
     get x(): number { return 1; }
 }
@@ -16,5 +15,5 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var y = { get foo() { return 3; } };

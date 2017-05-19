@@ -48,34 +48,39 @@ class FooBase {
 }
 
 //// [complexClassRelationships.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // There should be no errors in this file
 var Derived = (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived.createEmpty = function () {
         var item = new Derived();
         return item;
     };
     return Derived;
-})(Base);
+}(Base));
 var BaseCollection = (function () {
     function BaseCollection(f) {
         (function (item) { return [item.Components]; });
     }
     return BaseCollection;
-})();
+}());
 var Base = (function () {
     function Base() {
     }
     return Base;
-})();
+}());
 var Thing = (function () {
     function Thing() {
     }
@@ -85,7 +90,7 @@ var Thing = (function () {
         configurable: true
     });
     return Thing;
-})();
+}());
 var ComponentCollection = (function () {
     function ComponentCollection() {
     }
@@ -93,7 +98,7 @@ var ComponentCollection = (function () {
         return p.prop1;
     };
     return ComponentCollection;
-})();
+}());
 var Foo = (function () {
     function Foo() {
     }
@@ -115,16 +120,16 @@ var Foo = (function () {
         configurable: true
     });
     return Foo;
-})();
+}());
 var GenericType = (function () {
     function GenericType(parent) {
     }
     return GenericType;
-})();
+}());
 var FooBase = (function () {
     function FooBase() {
     }
     FooBase.prototype.populate = function () {
     };
     return FooBase;
-})();
+}());

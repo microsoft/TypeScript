@@ -63,7 +63,7 @@ var A = (function () {
     }
     A.foo = function () { return true; };
     return A;
-})();
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

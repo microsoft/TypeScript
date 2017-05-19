@@ -1,0 +1,40 @@
+=== tests/cases/compiler/reactNamespaceJSXEmit.tsx ===
+declare var myReactLib: any;
+>myReactLib : any
+
+declare var foo: any;
+>foo : any
+
+declare var Bar: any;
+>Bar : any
+
+declare var x: any;
+>x : any
+
+<foo data/>;
+><foo data/> : any
+>foo : any
+>data : true
+
+<Bar x={x} />;
+><Bar x={x} /> : any
+>Bar : any
+>x : any
+>x : any
+
+<x-component />;
+><x-component /> : any
+>x-component : any
+
+<Bar {...x} />;
+><Bar {...x} /> : any
+>Bar : any
+>x : any
+
+<Bar { ...x } y={2} />;
+><Bar { ...x } y={2} /> : any
+>Bar : any
+>x : any
+>y : number
+>2 : 2
+

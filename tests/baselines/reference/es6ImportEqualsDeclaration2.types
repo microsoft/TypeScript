@@ -1,0 +1,25 @@
+=== tests/cases/compiler/server.d.ts ===
+declare module "other" {
+    export class C { }
+>C : C
+}
+
+declare module "server" {
+    import events = require("other"); // Ambient declaration, no error expected.
+>events : typeof events
+
+    module S {
+>S : typeof S
+
+        export var a: number;
+>a : number
+    }
+
+    export = S; // Ambient declaration, no error expected.
+>S : typeof S
+}
+
+=== tests/cases/compiler/client.ts ===
+import {a} from "server";
+>a : number
+

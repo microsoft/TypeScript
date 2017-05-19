@@ -1,0 +1,243 @@
+=== tests/cases/conformance/types/mapped/mappedTypes4.ts ===
+type Box<T> = {
+>Box : Box<T>
+>T : T
+
+};
+
+type Boxified<T> = {
+>Boxified : Boxified<T>
+>T : T
+
+    [P in keyof T]: Box<T[P]>;
+>P : P
+>T : T
+>Box : Box<T>
+>T : T
+>P : P
+
+};
+
+function boxify<T>(obj: T): Boxified<T> {
+>boxify : <T>(obj: T) => Boxified<T>
+>T : T
+>obj : T
+>T : T
+>Boxified : Boxified<T>
+>T : T
+
+    if (typeof obj === "object") {
+>typeof obj === "object" : boolean
+>typeof obj : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>obj : T
+>"object" : "object"
+
+        let result = {} as Boxified<T>;
+>result : Boxified<T>
+>{} as Boxified<T> : Boxified<T>
+>{} : {}
+>Boxified : Boxified<T>
+>T : T
+
+        for (let k in obj) {
+>k : keyof T
+>obj : T
+
+            result[k] = { value: obj[k] };
+>result[k] = { value: obj[k] } : { value: T[keyof T]; }
+>result[k] : Box<T[keyof T]>
+>result : Boxified<T>
+>k : keyof T
+>{ value: obj[k] } : { value: T[keyof T]; }
+>value : T[keyof T]
+>obj[k] : T[keyof T]
+>obj : T
+>k : keyof T
+        }
+        return result;
+>result : Boxified<T>
+    }
+    return <any>obj;
+><any>obj : any
+>obj : never
+}
+
+type A = { a: string };
+>A : A
+>a : string
+
+type B = { b: string };
+>B : B
+>b : string
+
+type C = { c: string };
+>C : C
+>c : string
+
+function f1(x: A | B | C | undefined) {
+>f1 : (x: A | B | C | undefined) => Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>x : A | B | C | undefined
+>A : A
+>B : B
+>C : C
+
+    return boxify(x);
+>boxify(x) : Boxified<A> | Boxified<B> | Boxified<C> | undefined
+>boxify : <T>(obj: T) => Boxified<T>
+>x : A | B | C | undefined
+}
+
+type T00 = Partial<A | B | C>;
+>T00 : Partial<A> | Partial<B> | Partial<C>
+>Partial : Partial<T>
+>A : A
+>B : B
+>C : C
+
+type T01 = Readonly<A | B | C | null | undefined>;
+>T01 : Readonly<A> | Readonly<B> | Readonly<C> | null | undefined
+>Readonly : Readonly<T>
+>A : A
+>B : B
+>C : C
+>null : null
+
+type T02 = Boxified<A | B[] | C | string>
+>T02 : string | Boxified<A> | Boxified<C> | Boxified<B[]>
+>Boxified : Boxified<T>
+>A : A
+>B : B
+>C : C
+
+type T03 = Readonly<string | number | boolean | null | undefined | void>;
+>T03 : string | number | boolean | void | null | undefined
+>Readonly : Readonly<T>
+>null : null
+
+type T04 = Boxified<string | number | boolean | null | undefined | void>;
+>T04 : string | number | boolean | void | null | undefined
+>Boxified : Boxified<T>
+>null : null
+
+type T05 = Partial<"hello" | "world" | 42>;
+>T05 : "hello" | "world" | 42
+>Partial : Partial<T>
+
+type BoxifiedWithSentinel<T, U> = {
+>BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
+>T : T
+>U : U
+
+    [P in keyof T]: Box<T[P]> | U;
+>P : P
+>T : T
+>Box : Box<T>
+>T : T
+>P : P
+>U : U
+}
+
+type T10 = BoxifiedWithSentinel<A | B | C, null>;
+>T10 : BoxifiedWithSentinel<A, null> | BoxifiedWithSentinel<B, null> | BoxifiedWithSentinel<C, null>
+>BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
+>A : A
+>B : B
+>C : C
+>null : null
+
+type T11 = BoxifiedWithSentinel<A | B | C, undefined>;
+>T11 : BoxifiedWithSentinel<A, undefined> | BoxifiedWithSentinel<B, undefined> | BoxifiedWithSentinel<C, undefined>
+>BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
+>A : A
+>B : B
+>C : C
+
+type T12 = BoxifiedWithSentinel<string, undefined>;
+>T12 : string
+>BoxifiedWithSentinel : BoxifiedWithSentinel<T, U>
+
+type DeepReadonly<T> = {
+>DeepReadonly : DeepReadonly<T>
+>T : T
+
+    readonly [P in keyof T]: DeepReadonly<T[P]>;
+>P : P
+>T : T
+>DeepReadonly : DeepReadonly<T>
+>T : T
+>P : P
+
+};
+
+type Foo = {
+>Foo : Foo
+
+    x: number;
+>x : number
+
+    y: { a: string, b: number };
+>y : { a: string; b: number; }
+>a : string
+>b : number
+
+    z: boolean;
+>z : boolean
+
+};
+
+type DeepReadonlyFoo = {
+>DeepReadonlyFoo : DeepReadonlyFoo
+
+    readonly x: number;
+>x : number
+
+    readonly y: { readonly a: string, readonly b: number };
+>y : { readonly a: string; readonly b: number; }
+>a : string
+>b : number
+
+    readonly z: boolean;
+>z : boolean
+
+};
+
+var x1: DeepReadonly<Foo>;
+>x1 : DeepReadonly<Foo>
+>DeepReadonly : DeepReadonly<T>
+>Foo : Foo
+
+var x1: DeepReadonlyFoo;
+>x1 : DeepReadonly<Foo>
+>DeepReadonlyFoo : DeepReadonlyFoo
+
+// Repro from #13232
+
+type Z = { a: number };
+>Z : Z
+>a : number
+
+type Clone<T> = {
+>Clone : Clone<T>
+>T : T
+
+  [P in keyof (T & {})]: T[P];
+>P : P
+>T : T
+>T : T
+>P : P
+
+};
+type M = Clone<Z>; // M should be { a: number }
+>M : Clone<Z>
+>Clone : Clone<T>
+>Z : Z
+
+var z1: Z;
+>z1 : Z
+>Z : Z
+
+var z1: Clone<Z>;
+>z1 : Z
+>Clone : Clone<T>
+>Z : Z
+

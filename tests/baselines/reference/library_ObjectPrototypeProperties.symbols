@@ -2,52 +2,52 @@
 // Properties of the Object Prototype Object as per ES5 spec
 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.4
 Object.prototype.constructor;
->Object.prototype.constructor : Symbol(Object.constructor, Decl(lib.d.ts, 94, 18))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->constructor : Symbol(Object.constructor, Decl(lib.d.ts, 94, 18))
+>Object.prototype.constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>constructor : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
 
 Object.prototype.toString();
->Object.prototype.toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->toString : Symbol(Object.toString, Decl(lib.d.ts, 96, 26))
+>Object.prototype.toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.d.ts, --, --))
 
 Object.prototype.toLocaleString();
->Object.prototype.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.d.ts, 99, 23))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->toLocaleString : Symbol(Object.toLocaleString, Decl(lib.d.ts, 99, 23))
+>Object.prototype.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.d.ts, --, --))
 
 Object.prototype.valueOf();
->Object.prototype.valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, 102, 29))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, 102, 29))
+>Object.prototype.valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
 
 Object.prototype.hasOwnProperty("string");
->Object.prototype.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, 105, 22))
+>Object.prototype.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
 
 Object.prototype.isPrototypeOf(Object);
->Object.prototype.isPrototypeOf : Symbol(Object.isPrototypeOf, Decl(lib.d.ts, 111, 39))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->isPrototypeOf : Symbol(Object.isPrototypeOf, Decl(lib.d.ts, 111, 39))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object.prototype.isPrototypeOf : Symbol(Object.isPrototypeOf, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>isPrototypeOf : Symbol(Object.isPrototypeOf, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 Object.prototype.propertyIsEnumerable("string");
->Object.prototype.propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, 117, 38))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, 129, 22))
->propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, 117, 38))
+>Object.prototype.propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
+>propertyIsEnumerable : Symbol(Object.propertyIsEnumerable, Decl(lib.d.ts, --, --))
 

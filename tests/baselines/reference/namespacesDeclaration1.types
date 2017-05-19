@@ -1,0 +1,15 @@
+=== tests/cases/compiler/namespacesDeclaration1.ts ===
+module M {
+>M : any
+
+   export namespace N {
+>N : any
+
+      export module M2 {
+>M2 : any
+
+         export interface I {}
+>I : I
+      }
+   }
+}

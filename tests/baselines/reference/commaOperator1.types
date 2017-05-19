@@ -1,29 +1,29 @@
 === tests/cases/compiler/commaOperator1.ts ===
 var v1 = ((1, 2, 3), 4, 5, (6, 7));
 >v1 : number
->((1, 2, 3), 4, 5, (6, 7)) : number
->(1, 2, 3), 4, 5, (6, 7) : number
->(1, 2, 3), 4, 5 : number
->(1, 2, 3), 4 : number
->(1, 2, 3) : number
->1, 2, 3 : number
->1, 2 : number
->1 : number
->2 : number
->3 : number
->4 : number
->5 : number
->(6, 7) : number
->6, 7 : number
->6 : number
->7 : number
+>((1, 2, 3), 4, 5, (6, 7)) : 7
+>(1, 2, 3), 4, 5, (6, 7) : 7
+>(1, 2, 3), 4, 5 : 5
+>(1, 2, 3), 4 : 4
+>(1, 2, 3) : 3
+>1, 2, 3 : 3
+>1, 2 : 2
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+>5 : 5
+>(6, 7) : 7
+>6, 7 : 7
+>6 : 6
+>7 : 7
 
 function f1() {
 >f1 : () => number
 
     var a = 1;
 >a : number
->1 : number
+>1 : 1
 
     return a, v1, a;
 >a, v1, a : number

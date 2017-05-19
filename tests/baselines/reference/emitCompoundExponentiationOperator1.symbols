@@ -1,0 +1,82 @@
+=== tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationOperator1.ts ===
+var comp: number;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= 1;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp ** 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp + 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp - 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp * 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp / 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** comp % 2;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= (comp - 2) ** 5;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= (comp + 2) ** 5;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= (comp * 2) ** 5;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= (comp / 2) ** 5;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= (comp % 2) ** 5;
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** (5 + 2);
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** (5 - 2);
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** (5 * 2);
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** (5 / 2);
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+
+comp **= comp ** (5 % 2);
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+>comp : Symbol(comp, Decl(emitCompoundExponentiationOperator1.ts, 0, 3))
+

@@ -29,7 +29,7 @@ var Nil = (function () {
         return null;
     };
     return Nil;
-})();
+}());
 var Cons = (function () {
     function Cons() {
     }
@@ -42,4 +42,4 @@ var Cons = (function () {
         return null;
     };
     return Cons;
-})();
+}());

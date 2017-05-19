@@ -1,0 +1,14 @@
+tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts(1,17): error TS2449: Class 'B' used before its declaration.
+tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts(2,20): error TS2449: Class 'C' used before its declaration.
+
+
+==== tests/cases/compiler/genericClassInheritsConstructorFromNonGenericClass.ts (2 errors) ====
+    class A extends B<string> { }
+                    ~
+!!! error TS2449: Class 'B' used before its declaration.
+    class B<U> extends C { }
+                       ~
+!!! error TS2449: Class 'C' used before its declaration.
+    class C {
+        constructor(p: string) { }
+    }

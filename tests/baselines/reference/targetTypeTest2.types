@@ -5,9 +5,9 @@
 var a : any[] = [1,2,"3"];
 >a : any[]
 >[1,2,"3"] : (string | number)[]
->1 : number
->2 : number
->"3" : string
+>1 : 1
+>2 : 2
+>"3" : "3"
 
 
 function func1(stuff:any[]) { return stuff; }

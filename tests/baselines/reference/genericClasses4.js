@@ -37,4 +37,4 @@ var Vec2_T = (function () {
         return retval;
     };
     return Vec2_T;
-})();
+}());

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/systemModule1.ts ===
+export var x = 1;
+>x : Symbol(x, Decl(systemModule1.ts, 0, 10))
+

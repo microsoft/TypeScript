@@ -23,7 +23,7 @@ var m;
         function variable() {
         }
         return variable;
-    })();
+    }());
     m.variable = variable;
     function doSomething(v) {
     }
@@ -33,6 +33,6 @@ var variable = (function () {
     function variable() {
     }
     return variable;
-})();
+}());
 var v = new variable();
 m.doSomething(v);

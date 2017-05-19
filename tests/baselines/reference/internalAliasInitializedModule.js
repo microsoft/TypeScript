@@ -20,7 +20,7 @@ var a;
             function c() {
             }
             return c;
-        })();
+        }());
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (a = {}));

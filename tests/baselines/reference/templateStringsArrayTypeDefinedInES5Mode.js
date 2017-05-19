@@ -1,5 +1,4 @@
 //// [templateStringsArrayTypeDefinedInES5Mode.ts]
-
 class TemplateStringsArray {
 }
 
@@ -15,7 +14,7 @@ var TemplateStringsArray = (function () {
     function TemplateStringsArray() {
     }
     return TemplateStringsArray;
-})();
+}());
 function f(x, y, z) {
 }
 f({}, 10, 10);

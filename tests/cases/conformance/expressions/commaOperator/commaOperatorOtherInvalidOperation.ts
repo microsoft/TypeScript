@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 //Expect to have compiler errors
 //Comma operator in fuction arguments and return
 function foo(x: number, y: string) {

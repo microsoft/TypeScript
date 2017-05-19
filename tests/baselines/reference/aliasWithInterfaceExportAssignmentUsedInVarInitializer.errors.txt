@@ -2,7 +2,7 @@ tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts
 
 
 ==== tests/cases/compiler/aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts (1 errors) ====
-    import moduleA = require("aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
+    import moduleA = require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
     var d = b.q3;
             ~
 !!! error TS2304: Cannot find name 'b'.

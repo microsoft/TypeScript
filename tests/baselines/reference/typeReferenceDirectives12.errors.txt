@@ -1,0 +1,35 @@
+/main.ts(1,14): error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+
+
+==== /mod2.ts (0 errors) ====
+    import { Cls } from "./main";
+    import "./mod1";
+    
+    export const cls = Cls;
+    export const foo = new Cls().foo();
+    export const bar = Cls.bar();
+==== /types/lib/index.d.ts (0 errors) ====
+    interface Lib { x }
+    
+==== /main.ts (1 errors) ====
+    export class Cls {
+                 ~~~
+!!! error TS6131: Cannot compile modules using option 'out' unless the '--module' flag is 'amd' or 'system'.
+        x
+    }
+    
+==== /mod1.ts (0 errors) ====
+    /// <reference types="lib" />
+    
+    import {Cls} from "./main";
+    Cls.prototype.foo = function() { return undefined; }
+    
+    declare module "./main" {
+        interface Cls {
+            foo(): Lib;
+        }
+        namespace Cls {
+            function bar(): Lib;
+        }
+    }
+    

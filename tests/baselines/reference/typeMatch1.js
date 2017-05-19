@@ -35,12 +35,12 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var x6 = new C();
 var x7 = new D();
 x6 = x7;

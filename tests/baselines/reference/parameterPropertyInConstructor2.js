@@ -17,5 +17,5 @@ var mod;
             this.ages = ages;
         }
         return Customers;
-    })();
+    }());
 })(mod || (mod = {}));

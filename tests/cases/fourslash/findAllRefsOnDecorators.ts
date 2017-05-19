@@ -1,19 +1,16 @@
 /// <reference path="fourslash.ts" />
 
 // @Filename: a.ts
-////function decorator(target) {
+////function [|{| "isWriteAccess": true, "isDefinition": true |}decorator|](target) {
 ////    return target;
 ////}
-////decorator();
+////[|decorator|]();
 
 // @Filename: b.ts
-////@deco/*1*/rator @decorator("again")
+////@[|decorator|] @[|decorator|]("again")
 ////class C {
-////    @decorator
+////    @[|decorator|]
 ////    method() {}
 ////}
 
-goTo.file("b.ts");
-goTo.marker("1");
-
-verify.referencesCountIs(5);
+verify.singleReferenceGroup("function decorator(target: any): any");

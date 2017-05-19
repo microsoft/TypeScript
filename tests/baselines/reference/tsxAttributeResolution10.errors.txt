@@ -1,0 +1,38 @@
+tests/cases/conformance/jsx/file.tsx(11,14): error TS2322: Type '{ bar: "world"; }' is not assignable to type '{ [s: string]: boolean; }'.
+  Property 'bar' is incompatible with index signature.
+    Type '"world"' is not assignable to type 'boolean'.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    	}
+    	interface ElementAttributesProperty {
+    		props;
+    	}
+    }
+    
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    export class MyComponent {  
+      render() {
+      }
+    
+      props: {
+      	[s: string]: boolean;
+      }
+    }
+    
+    // Should be an error
+    <MyComponent bar='world' />;
+                 ~~~~~~~~~~~
+!!! error TS2322: Type '{ bar: "world"; }' is not assignable to type '{ [s: string]: boolean; }'.
+!!! error TS2322:   Property 'bar' is incompatible with index signature.
+!!! error TS2322:     Type '"world"' is not assignable to type 'boolean'.
+    
+    // Should be OK
+    <MyComponent bar={true} />;
+    
+    // Should be ok
+    <MyComponent data-bar='hello' />;
+    

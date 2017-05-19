@@ -1,17 +1,16 @@
 === tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts ===
-
 // string
 function foo(): string {
 >foo : () => string
 
     return "";
->"" : string
+>"" : ""
 }
 function foo2() {
 >foo2 : () => string
 
     return "";
->"" : string
+>"" : ""
 }
 
 // number
@@ -19,13 +18,13 @@ function foo3(): number {
 >foo3 : () => number
 
     return 10;
->10 : number
+>10 : 10
 }
 function foo4() {
 >foo4 : () => number
 
     return 10;
->10 : number
+>10 : 10
 }
 
 // boolean
@@ -33,13 +32,13 @@ function foo5(): boolean {
 >foo5 : () => boolean
 
     return true;
->true : boolean
+>true : true
 }
 function foo6() {
 >foo6 : () => boolean
 
     return false;
->false : boolean
+>false : false
 }
 
 // void

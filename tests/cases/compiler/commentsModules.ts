@@ -1,6 +1,6 @@
 // @target: ES5
 // @declaration: true
-// @comments: true
+// @removeComments: false
 /** Module comment*/
 module m1 {
     /** b's comment*/

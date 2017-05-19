@@ -8,6 +8,6 @@ panic([], 'one', 'two');
 >panic([], 'one', 'two') : void
 >panic : (val: string[], ...opt: string[]) => void
 >[] : undefined[]
->'one' : string
->'two' : string
+>'one' : "one"
+>'two' : "two"
 

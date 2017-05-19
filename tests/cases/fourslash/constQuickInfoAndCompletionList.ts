@@ -9,29 +9,27 @@
 ////    var z = /*6*/a;
 ////    /*7*/
 ////}
-goTo.marker('1');
-verify.quickInfoIs("const a: number");
+verify.quickInfoAt("1", "const a: 10");
 
 goTo.marker('2');
-verify.completionListContains("a", "const a: number");
-verify.quickInfoIs("const a: number");
+verify.completionListContains("a", "const a: 10");
+verify.quickInfoIs("const a: 10");
 
 goTo.marker('3');
-verify.completionListContains("a", "const a: number");
+verify.completionListContains("a", "const a: 10");
 
-goTo.marker('4');
-verify.quickInfoIs("const b: number");
+verify.quickInfoAt("4", "const b: 20");
 
 goTo.marker('5');
-verify.completionListContains("a", "const a: number");
-verify.completionListContains("b", "const b: number");
-verify.quickInfoIs("const b: number");
+verify.completionListContains("a", "const a: 10");
+verify.completionListContains("b", "const b: 20");
+verify.quickInfoIs("const b: 20");
 
 goTo.marker('6');
-verify.completionListContains("a", "const a: number");
-verify.completionListContains("b", "const b: number");
-verify.quickInfoIs("const a: number");
+verify.completionListContains("a", "const a: 10");
+verify.completionListContains("b", "const b: 20");
+verify.quickInfoIs("const a: 10");
 
 goTo.marker('7');
-verify.completionListContains("a", "const a: number");
-verify.completionListContains("b", "const b: number");
+verify.completionListContains("a", "const a: 10");
+verify.completionListContains("b", "const b: 20");

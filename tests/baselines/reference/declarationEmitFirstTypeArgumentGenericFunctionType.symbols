@@ -1,0 +1,80 @@
+=== tests/cases/compiler/declarationEmitFirstTypeArgumentGenericFunctionType.ts ===
+class X<A> {
+>X : Symbol(X, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 0))
+>A : Symbol(A, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 8))
+}
+var prop11: X< <Tany>() => Tany >; // spaces before the first type argument
+>prop11 : Symbol(prop11, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 2, 3))
+>X : Symbol(X, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 0))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 2, 16))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 2, 16))
+
+var prop12: X<(<Tany>() => Tany)>; // spaces before the first type argument
+>prop12 : Symbol(prop12, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 3))
+>X : Symbol(X, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 0))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 16))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 16))
+
+function f1() { // Inferred return type
+>f1 : Symbol(f1, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 34))
+
+    return prop11;
+>prop11 : Symbol(prop11, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 2, 3))
+}
+function f2() { // Inferred return type
+>f2 : Symbol(f2, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 6, 1))
+
+    return prop12;
+>prop12 : Symbol(prop12, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 3))
+}
+function f3(): X< <Tany>() => Tany> { // written with space before type argument
+>f3 : Symbol(f3, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 9, 1))
+>X : Symbol(X, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 0))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 10, 19))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 10, 19))
+
+    return prop11;
+>prop11 : Symbol(prop11, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 2, 3))
+}
+function f4(): X<(<Tany>() => Tany)> { // written type with parenthesis
+>f4 : Symbol(f4, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 12, 1))
+>X : Symbol(X, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 0, 0))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 13, 19))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 13, 19))
+
+    return prop12;
+>prop12 : Symbol(prop12, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 3, 3))
+}
+class Y<A, B> {
+>Y : Symbol(Y, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 15, 1))
+>A : Symbol(A, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 16, 8))
+>B : Symbol(B, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 16, 10))
+}
+var prop2: Y<string[], <Tany>() => Tany>; // No space after second type argument
+>prop2 : Symbol(prop2, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 18, 3), Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 19, 3))
+>Y : Symbol(Y, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 15, 1))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 18, 24))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 18, 24))
+
+var prop2: Y<string[], <Tany>() => Tany>; // space after second type argument
+>prop2 : Symbol(prop2, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 18, 3), Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 19, 3))
+>Y : Symbol(Y, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 15, 1))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 19, 24))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 19, 24))
+
+var prop3: Y< <Tany>() => Tany, <Tany>() => Tany>; // space before first type argument
+>prop3 : Symbol(prop3, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 20, 3))
+>Y : Symbol(Y, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 15, 1))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 20, 15))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 20, 15))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 20, 33))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 20, 33))
+
+var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type argument
+>prop4 : Symbol(prop4, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 21, 3))
+>Y : Symbol(Y, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 15, 1))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 21, 15))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 21, 15))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 21, 34))
+>Tany : Symbol(Tany, Decl(declarationEmitFirstTypeArgumentGenericFunctionType.ts, 21, 34))
+

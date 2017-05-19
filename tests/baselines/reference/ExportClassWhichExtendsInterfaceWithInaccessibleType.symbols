@@ -6,13 +6,13 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 2, 21))
+>x : Symbol(Point.x, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 2, 21))
 
         y: number;
->y : Symbol(y, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 3, 18))
+>y : Symbol(Point.y, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 3, 18))
 
         fromOrigin(p: Point): number;
->fromOrigin : Symbol(fromOrigin, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 4, 18))
+>fromOrigin : Symbol(Point.fromOrigin, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 4, 18))
 >p : Symbol(p, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 6, 19))
 >Point : Symbol(Point, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 0, 10))
     }
@@ -22,11 +22,11 @@ module A {
 >Point : Symbol(Point, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 0, 10))
 
         constructor(public x: number, public y: number) { }
->x : Symbol(x, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 20))
->y : Symbol(y, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 37))
+>x : Symbol(Point2d.x, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 20))
+>y : Symbol(Point2d.y, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 37))
 
         fromOrigin(p: Point) {
->fromOrigin : Symbol(fromOrigin, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 59))
+>fromOrigin : Symbol(Point2d.fromOrigin, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 10, 59))
 >p : Symbol(p, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 12, 19))
 >Point : Symbol(Point, Decl(ExportClassWhichExtendsInterfaceWithInaccessibleType.ts, 0, 10))
 

@@ -10,7 +10,7 @@ class Foo {
 
         done: false
 >done : boolean
->false : boolean
+>false : false
 
     }
 
@@ -20,7 +20,7 @@ class Foo {
 >bar : () => number
 
         return 3;
->3 : number
+>3 : 3
 
     }
 

@@ -1,0 +1,24 @@
+tests/cases/conformance/jsx/file.tsx(11,36): error TS1005: '}' expected.
+tests/cases/conformance/jsx/file.tsx(11,44): error TS1003: Identifier expected.
+tests/cases/conformance/jsx/file.tsx(11,46): error TS1161: Unterminated regular expression literal.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+    		[s: string]: any;
+    	}
+    }
+    
+    // This should be a parse error
+    const class1 = "foo";
+    const class2 = "bar";
+    const elem = <div className={class1, class2}/>;
+                                       ~
+!!! error TS1005: '}' expected.
+                                               ~
+!!! error TS1003: Identifier expected.
+                                                 
+!!! error TS1161: Unterminated regular expression literal.
+    

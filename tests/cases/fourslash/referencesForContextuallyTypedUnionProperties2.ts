@@ -6,35 +6,40 @@
 ////}
 ////
 ////interface B {
-////    /*1*/b: number;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}b|]: number;
 ////    common: number;
 ////}
 ////
 ////// Assignment
 ////var v1: A | B = { a: 0, common: "" };
-////var v2: A | B = { /*2*/b: 0, common: 3 };
+////var v2: A | B = { [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}b|]: 0, common: 3 };
 ////
 ////// Function call
 ////function consumer(f:  A | B) { }
-////consumer({ a: 0, /*3*/b: 0, common: 1 });
+////consumer({ a: 0, [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}b|]: 0, common: 1 });
 ////
-////// Type cast 
-////var c = <A | B> { common: 0, /*4*/b: 0 };
+////// Type cast
+////var c = <A | B> { common: 0, [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}b|]: 0 };
 ////
 ////// Array literal
-////var ar: Array<A|B> = [{ a: 0, common: "" }, { /*5*/b: 0, common: 0 }];
+////var ar: Array<A|B> = [{ a: 0, common: "" }, { [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}b|]: 0, common: 0 }];
 ////
 ////// Nested object literal
-////var ob: { aorb: A|B } = { aorb: { /*6*/b: 0, common: 0 } };
+////var ob: { aorb: A|B } = { aorb: { [|{| "isWriteAccess": true, "isDefinition": true, "type": "number" |}b|]: 0, common: 0 } };
 ////
 ////// Widened type
-////var w: A|B = { /*7*/b:undefined, common: undefined };
+////var w: A|B = { [|{| "isWriteAccess": true, "isDefinition": true, "type": "undefined" |}b|]:undefined, common: undefined };
 ////
 ////// Untped -- should not be included
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.referencesCountIs(7); 
-});
+const ranges = test.ranges();
+verify.referenceGroups(ranges[0], [{ definition: "(property) B.b: number", ranges }]);
+for (const reference of ranges.slice(1)) {
+    const type = reference.marker.data.type;
+    verify.referenceGroups(reference, [
+        { definition: "(property) B.b: number", ranges: ranges.filter(r => r !== reference) },
+        { definition: `(property) b: ${type}`, ranges: [reference] }
+    ]);
+}

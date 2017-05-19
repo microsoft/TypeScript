@@ -35,7 +35,7 @@ var Foo = (function () {
     Foo.prototype.pubMeth = function () { this.privMeth(); };
     Foo.prototype.privMeth = function () { };
     return Foo;
-})();
+}());
 var f = new Foo();
 f.privMeth(); // should not work
 f.privProp; // should not work
@@ -49,7 +49,7 @@ var M;
             this.priv = 1;
         }
         return C;
-    })();
+    }());
     M.C = C;
     M.V = 0;
 })(M || (M = {}));

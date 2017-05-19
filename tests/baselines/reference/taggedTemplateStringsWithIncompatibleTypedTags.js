@@ -1,6 +1,6 @@
 //// [taggedTemplateStringsWithIncompatibleTypedTags.ts]
 interface I {
-    (stringParts: string[], ...rest: boolean[]): I;
+    (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
     g: I;
     h: I;
     member: I;
@@ -46,4 +46,4 @@ var f;
 (_l = ["abc", "def", "ghi"], _l.raw = ["abc", "def", "ghi"], (_m = ["abc", "def", "ghi"], _m.raw = ["abc", "def", "ghi"], f(_m, true, true))["member"].member(_l, 1, 2));
 f.thisIsNotATag("abc");
 f.thisIsNotATag("abc" + 1 + "def" + 2 + "ghi");
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+var _a, _b, _c, _d, _e, _f, _h, _g, _k, _j, _m, _l;

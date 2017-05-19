@@ -1,0 +1,2296 @@
+=== tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts ===
+class Shape {
+>Shape : Shape
+
+    name: string;
+>name : string
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+
+    visible: boolean;
+>visible : boolean
+}
+
+class TaggedShape extends Shape {
+>TaggedShape : TaggedShape
+>Shape : Shape
+
+    tag: string;
+>tag : string
+}
+
+class Item {
+>Item : Item
+
+    name: string;
+>name : string
+
+    price: number;
+>price : number
+}
+
+class Options {
+>Options : Options
+
+    visible: "yes" | "no";
+>visible : "yes" | "no"
+}
+
+type Dictionary<T> = { [x: string]: T };
+>Dictionary : Dictionary<T>
+>T : T
+>x : string
+>T : T
+
+type NumericallyIndexed<T> = { [x: number]: T };
+>NumericallyIndexed : NumericallyIndexed<T>
+>T : T
+>x : number
+>T : T
+
+const enum E { A, B, C }
+>E : E
+>A : E.A
+>B : E.B
+>C : E.C
+
+type K00 = keyof any;  // string
+>K00 : string
+
+type K01 = keyof string;  // "toString" | "charAt" | ...
+>K01 : "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+
+type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
+>K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+
+type K03 = keyof boolean;  // "valueOf"
+>K03 : "valueOf"
+
+type K04 = keyof void;  // never
+>K04 : never
+
+type K05 = keyof undefined;  // never
+>K05 : never
+
+type K06 = keyof null;  // never
+>K06 : never
+>null : null
+
+type K07 = keyof never;  // never
+>K07 : never
+
+type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
+>K10 : "name" | "width" | "height" | "visible"
+>Shape : Shape
+
+type K11 = keyof Shape[];  // "length" | "toString" | ...
+>K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>Shape : Shape
+
+type K12 = keyof Dictionary<Shape>;  // string
+>K12 : string
+>Dictionary : Dictionary<T>
+>Shape : Shape
+
+type K13 = keyof {};  // never
+>K13 : never
+
+type K14 = keyof Object;  // "constructor" | "toString" | ...
+>K14 : "toString" | "toLocaleString" | "valueOf" | "constructor" | "hasOwnProperty" | "isPrototypeOf" | "propertyIsEnumerable"
+>Object : Object
+
+type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
+>K15 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
+>E : E
+
+type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
+>K16 : "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+
+type K17 = keyof (Shape | Item);  // "name"
+>K17 : "name"
+>Shape : Shape
+>Item : Item
+
+type K18 = keyof (Shape & Item);  // "name" | "width" | "height" | "visible" | "price"
+>K18 : "name" | "width" | "height" | "visible" | "price"
+>Shape : Shape
+>Item : Item
+
+type K19 = keyof NumericallyIndexed<Shape> // never
+>K19 : never
+>NumericallyIndexed : NumericallyIndexed<T>
+>Shape : Shape
+
+type KeyOf<T> = keyof T;
+>KeyOf : keyof T
+>T : T
+>T : T
+
+type K20 = KeyOf<Shape>;  // "name" | "width" | "height" | "visible"
+>K20 : "name" | "width" | "height" | "visible"
+>KeyOf : keyof T
+>Shape : Shape
+
+type K21 = KeyOf<Dictionary<Shape>>;  // string
+>K21 : string
+>KeyOf : keyof T
+>Dictionary : Dictionary<T>
+>Shape : Shape
+
+type NAME = "name";
+>NAME : "name"
+
+type WIDTH_OR_HEIGHT = "width" | "height";
+>WIDTH_OR_HEIGHT : "width" | "height"
+
+type Q10 = Shape["name"];  // string
+>Q10 : string
+>Shape : Shape
+
+type Q11 = Shape["width" | "height"];  // number
+>Q11 : number
+>Shape : Shape
+
+type Q12 = Shape["name" | "visible"];  // string | boolean
+>Q12 : string | boolean
+>Shape : Shape
+
+type Q20 = Shape[NAME];  // string
+>Q20 : string
+>Shape : Shape
+>NAME : "name"
+
+type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
+>Q21 : number
+>Shape : Shape
+>WIDTH_OR_HEIGHT : "width" | "height"
+
+type Q30 = [string, number][0];  // string
+>Q30 : string
+
+type Q31 = [string, number][1];  // number
+>Q31 : number
+
+type Q32 = [string, number][2];  // string | number
+>Q32 : string | number
+
+type Q33 = [string, number][E.A];  // string
+>Q33 : string
+>E : any
+>A : E.A
+
+type Q34 = [string, number][E.B];  // number
+>Q34 : number
+>E : any
+>B : E.B
+
+type Q35 = [string, number][E.C];  // string | number
+>Q35 : string | number
+>E : any
+>C : E.C
+
+type Q36 = [string, number]["0"];  // string
+>Q36 : string
+
+type Q37 = [string, number]["1"];  // string
+>Q37 : number
+
+type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
+>Q40 : boolean | "yes" | "no"
+>Shape : Shape
+>Options : Options
+
+type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
+>Q41 : (true & "yes") | (true & "no") | (false & "yes") | (false & "no")
+>Shape : Shape
+>Options : Options
+
+type Q50 = Dictionary<Shape>["howdy"];  // Shape
+>Q50 : Shape
+>Dictionary : Dictionary<T>
+>Shape : Shape
+
+type Q51 = Dictionary<Shape>[123];  // Shape
+>Q51 : Shape
+>Dictionary : Dictionary<T>
+>Shape : Shape
+
+type Q52 = Dictionary<Shape>[E.B];  // Shape
+>Q52 : Shape
+>Dictionary : Dictionary<T>
+>Shape : Shape
+>E : any
+>B : E.B
+
+declare let cond: boolean;
+>cond : boolean
+
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    return obj[key];
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+    obj[key] = value;
+>obj[key] = value : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+>value : T[K]
+}
+
+function f10(shape: Shape) {
+>f10 : (shape: Shape) => void
+>shape : Shape
+>Shape : Shape
+
+    let name = getProperty(shape, "name");  // string
+>name : string
+>getProperty(shape, "name") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>"name" : "name"
+
+    let widthOrHeight = getProperty(shape, cond ? "width" : "height");  // number
+>widthOrHeight : number
+>getProperty(shape, cond ? "width" : "height") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+
+    let nameOrVisible = getProperty(shape, cond ? "name" : "visible");  // string | boolean
+>nameOrVisible : string | boolean
+>getProperty(shape, cond ? "name" : "visible") : string | boolean
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : Shape
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+
+    setProperty(shape, "name", "rectangle");
+>setProperty(shape, "name", "rectangle") : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>"name" : "name"
+>"rectangle" : "rectangle"
+
+    setProperty(shape, cond ? "width" : "height", 10);
+>setProperty(shape, cond ? "width" : "height", 10) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+>10 : 10
+
+    setProperty(shape, cond ? "name" : "visible", true);  // Technically not safe
+>setProperty(shape, cond ? "name" : "visible", true) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>shape : Shape
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+>true : true
+}
+
+function f11(a: Shape[]) {
+>f11 : (a: Shape[]) => void
+>a : Shape[]
+>Shape : Shape
+
+    let len = getProperty(a, "length");  // number
+>len : number
+>getProperty(a, "length") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>a : Shape[]
+>"length" : "length"
+
+    setProperty(a, "length", len);
+>setProperty(a, "length", len) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>a : Shape[]
+>"length" : "length"
+>len : number
+}
+
+function f12(t: [Shape, boolean]) {
+>f12 : (t: [Shape, boolean]) => void
+>t : [Shape, boolean]
+>Shape : Shape
+
+    let len = getProperty(t, "length");
+>len : number
+>getProperty(t, "length") : number
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"length" : "length"
+
+    let s2 = getProperty(t, "0");  // Shape
+>s2 : Shape
+>getProperty(t, "0") : Shape
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"0" : "0"
+
+    let b2 = getProperty(t, "1");  // boolean
+>b2 : boolean
+>getProperty(t, "1") : boolean
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>t : [Shape, boolean]
+>"1" : "1"
+}
+
+function f13(foo: any, bar: any) {
+>f13 : (foo: any, bar: any) => void
+>foo : any
+>bar : any
+
+    let x = getProperty(foo, "x");  // any
+>x : any
+>getProperty(foo, "x") : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>"x" : "x"
+
+    let y = getProperty(foo, "100");  // any
+>y : any
+>getProperty(foo, "100") : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>"100" : "100"
+
+    let z = getProperty(foo, bar);  // any
+>z : any
+>getProperty(foo, bar) : any
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>foo : any
+>bar : any
+}
+
+class Component<PropType> {
+>Component : Component<PropType>
+>PropType : PropType
+
+    props: PropType;
+>props : PropType
+>PropType : PropType
+
+    getProperty<K extends keyof PropType>(key: K) {
+>getProperty : <K extends keyof PropType>(key: K) => PropType[K]
+>K : K
+>PropType : PropType
+>key : K
+>K : K
+
+        return this.props[key];
+>this.props[key] : PropType[K]
+>this.props : PropType
+>this : this
+>props : PropType
+>key : K
+    }
+    setProperty<K extends keyof PropType>(key: K, value: PropType[K]) {
+>setProperty : <K extends keyof PropType>(key: K, value: PropType[K]) => void
+>K : K
+>PropType : PropType
+>key : K
+>K : K
+>value : PropType[K]
+>PropType : PropType
+>K : K
+
+        this.props[key] = value;
+>this.props[key] = value : PropType[K]
+>this.props[key] : PropType[K]
+>this.props : PropType
+>this : this
+>props : PropType
+>key : K
+>value : PropType[K]
+    }
+}
+
+function f20(component: Component<Shape>) {
+>f20 : (component: Component<Shape>) => void
+>component : Component<Shape>
+>Component : Component<PropType>
+>Shape : Shape
+
+    let name = component.getProperty("name");  // string
+>name : string
+>component.getProperty("name") : string
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>"name" : "name"
+
+    let widthOrHeight = component.getProperty(cond ? "width" : "height");  // number
+>widthOrHeight : number
+>component.getProperty(cond ? "width" : "height") : number
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+
+    let nameOrVisible = component.getProperty(cond ? "name" : "visible");  // string | boolean
+>nameOrVisible : string | boolean
+>component.getProperty(cond ? "name" : "visible") : string | boolean
+>component.getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>component : Component<Shape>
+>getProperty : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+
+    component.setProperty("name", "rectangle");
+>component.setProperty("name", "rectangle") : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>"name" : "name"
+>"rectangle" : "rectangle"
+
+    component.setProperty(cond ? "width" : "height", 10)
+>component.setProperty(cond ? "width" : "height", 10) : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>cond ? "width" : "height" : "width" | "height"
+>cond : boolean
+>"width" : "width"
+>"height" : "height"
+>10 : 10
+
+    component.setProperty(cond ? "name" : "visible", true);  // Technically not safe
+>component.setProperty(cond ? "name" : "visible", true) : void
+>component.setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>component : Component<Shape>
+>setProperty : <K extends "name" | "width" | "height" | "visible">(key: K, value: Shape[K]) => void
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+>true : true
+}
+
+function pluck<T, K extends keyof T>(array: T[], key: K) {
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>T : T
+>K : K
+>T : T
+>array : T[]
+>T : T
+>key : K
+>K : K
+
+    return array.map(x => x[key]);
+>array.map(x => x[key]) : T[K][]
+>array.map : { <U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U, U]; <U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U]; <U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U]; <U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U]; <U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U): U[]; <U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[]; }
+>array : T[]
+>map : { <U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U, U]; <U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U]; <U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U]; <U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U]; <U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U): U[]; <U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[]; }
+>x => x[key] : (this: void, x: T) => T[K]
+>x : T
+>x[key] : T[K]
+>x : T
+>key : K
+}
+
+function f30(shapes: Shape[]) {
+>f30 : (shapes: Shape[]) => void
+>shapes : Shape[]
+>Shape : Shape
+
+    let names = pluck(shapes, "name");    // string[]
+>names : string[]
+>pluck(shapes, "name") : string[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>"name" : "name"
+
+    let widths = pluck(shapes, "width");  // number[]
+>widths : number[]
+>pluck(shapes, "width") : number[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>"width" : "width"
+
+    let nameOrVisibles = pluck(shapes, cond ? "name" : "visible");  // (string | boolean)[]
+>nameOrVisibles : (string | boolean)[]
+>pluck(shapes, cond ? "name" : "visible") : (string | boolean)[]
+>pluck : <T, K extends keyof T>(array: T[], key: K) => T[K][]
+>shapes : Shape[]
+>cond ? "name" : "visible" : "name" | "visible"
+>cond : boolean
+>"name" : "name"
+>"visible" : "visible"
+}
+
+function f31<K extends keyof Shape>(key: K) {
+>f31 : <K extends "name" | "width" | "height" | "visible">(key: K) => Shape[K]
+>K : K
+>Shape : Shape
+>key : K
+>K : K
+
+    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+>shape : Shape
+>Shape : Shape
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>name : string
+>"foo" : "foo"
+>width : number
+>5 : 5
+>height : number
+>10 : 10
+>visible : boolean
+>true : true
+
+    return shape[key];  // Shape[K]
+>shape[key] : Shape[K]
+>shape : Shape
+>key : K
+}
+
+function f32<K extends "width" | "height">(key: K) {
+>f32 : <K extends "width" | "height">(key: K) => Shape[K]
+>K : K
+>key : K
+>K : K
+
+    const shape: Shape = { name: "foo", width: 5, height: 10, visible: true };
+>shape : Shape
+>Shape : Shape
+>{ name: "foo", width: 5, height: 10, visible: true } : { name: string; width: number; height: number; visible: true; }
+>name : string
+>"foo" : "foo"
+>width : number
+>5 : 5
+>height : number
+>10 : 10
+>visible : boolean
+>true : true
+
+    return shape[key];  // Shape[K]
+>shape[key] : Shape[K]
+>shape : Shape
+>key : K
+}
+
+function f33<S extends Shape, K extends keyof S>(shape: S, key: K) {
+>f33 : <S extends Shape, K extends keyof S>(shape: S, key: K) => S[K]
+>S : S
+>Shape : Shape
+>K : K
+>S : S
+>shape : S
+>S : S
+>key : K
+>K : K
+
+    let name = getProperty(shape, "name");
+>name : S["name"]
+>getProperty(shape, "name") : S["name"]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : S
+>"name" : "name"
+
+    let prop = getProperty(shape, key);
+>prop : S[K]
+>getProperty(shape, key) : S[K]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>shape : S
+>key : K
+
+    return prop;
+>prop : S[K]
+}
+
+function f34(ts: TaggedShape) {
+>f34 : (ts: TaggedShape) => void
+>ts : TaggedShape
+>TaggedShape : TaggedShape
+
+    let tag1 = f33(ts, "tag");
+>tag1 : string
+>f33(ts, "tag") : string
+>f33 : <S extends Shape, K extends keyof S>(shape: S, key: K) => S[K]
+>ts : TaggedShape
+>"tag" : "tag"
+
+    let tag2 = getProperty(ts, "tag");
+>tag2 : string
+>getProperty(ts, "tag") : string
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>ts : TaggedShape
+>"tag" : "tag"
+}
+
+class C {
+>C : C
+
+    public x: string;
+>x : string
+
+    protected y: string;
+>y : string
+
+    private z: string;
+>z : string
+}
+
+// Indexed access expressions have always permitted access to private and protected members.
+// For consistency we also permit such access in indexed access types.
+function f40(c: C) {
+>f40 : (c: C) => void
+>c : C
+>C : C
+
+    type X = C["x"];
+>X : string
+>C : C
+
+    type Y = C["y"];
+>Y : string
+>C : C
+
+    type Z = C["z"];
+>Z : string
+>C : C
+
+    let x: X = c["x"];
+>x : string
+>X : string
+>c["x"] : string
+>c : C
+>"x" : "x"
+
+    let y: Y = c["y"];
+>y : string
+>Y : string
+>c["y"] : string
+>c : C
+>"y" : "y"
+
+    let z: Z = c["z"];
+>z : string
+>Z : string
+>c["z"] : string
+>c : C
+>"z" : "z"
+}
+
+function f50<T>(k: keyof T, s: string) {
+>f50 : <T>(k: keyof T, s: string) => void
+>T : T
+>k : keyof T
+>T : T
+>s : string
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = k as string;
+>x2 : string
+>k as string : string
+>k : keyof T
+}
+
+function f51<T, K extends keyof T>(k: K, s: string) {
+>f51 : <T, K extends keyof T>(k: K, s: string) => void
+>T : T
+>K : K
+>T : T
+>k : K
+>K : K
+>s : string
+
+    const x1 = s as keyof T;
+>x1 : keyof T
+>s as keyof T : keyof T
+>s : string
+>T : T
+
+    const x2 = k as string;
+>x2 : string
+>k as string : string
+>k : K
+}
+
+function f52<T>(obj: { [x: string]: boolean }, k: keyof T, s: string, n: number) {
+>f52 : <T>(obj: { [x: string]: boolean; }, k: keyof T, s: string, n: number) => void
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : keyof T
+>T : T
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : { [x: string]: boolean; }[keyof T]
+>obj[k] : { [x: string]: boolean; }[keyof T]
+>obj : { [x: string]: boolean; }
+>k : keyof T
+}
+
+function f53<T, K extends keyof T>(obj: { [x: string]: boolean }, k: K, s: string, n: number) {
+>f53 : <T, K extends keyof T>(obj: { [x: string]: boolean; }, k: K, s: string, n: number) => void
+>T : T
+>K : K
+>T : T
+>obj : { [x: string]: boolean; }
+>x : string
+>k : K
+>K : K
+>s : string
+>n : number
+
+    const x1 = obj[s];
+>x1 : boolean
+>obj[s] : boolean
+>obj : { [x: string]: boolean; }
+>s : string
+
+    const x2 = obj[n];
+>x2 : boolean
+>obj[n] : boolean
+>obj : { [x: string]: boolean; }
+>n : number
+
+    const x3 = obj[k];
+>x3 : { [x: string]: boolean; }[K]
+>obj[k] : { [x: string]: boolean; }[K]
+>obj : { [x: string]: boolean; }
+>k : K
+}
+
+function f54<T>(obj: T, key: keyof T) {
+>f54 : <T>(obj: T, key: keyof T) => void
+>T : T
+>obj : T
+>T : T
+>key : keyof T
+>T : T
+
+    for (let s in obj[key]) {
+>s : keyof T[keyof T]
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[keyof T]
+>obj : T
+>key : keyof T
+}
+
+function f55<T, K extends keyof T>(obj: T, key: K) {
+>f55 : <T, K extends keyof T>(obj: T, key: K) => void
+>T : T
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    for (let s in obj[key]) {
+>s : keyof T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+    }
+    const b = "foo" in obj[key];
+>b : boolean
+>"foo" in obj[key] : boolean
+>"foo" : "foo"
+>obj[key] : T[K]
+>obj : T
+>key : K
+}
+
+function f60<T>(source: T, target: T) {
+>f60 : <T>(source: T, target: T) => void
+>T : T
+>source : T
+>T : T
+>target : T
+>T : T
+
+    for (let k in source) {
+>k : keyof T
+>source : T
+
+        target[k] = source[k];
+>target[k] = source[k] : T[keyof T]
+>target[k] : T[keyof T]
+>target : T
+>k : keyof T
+>source[k] : T[keyof T]
+>source : T
+>k : keyof T
+    }
+}
+
+function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
+>f70 : (func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) => void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>T : T
+>U : U
+>k1 : keyof (T | U)
+>T : T
+>U : U
+>k2 : keyof (T & U)
+>T : T
+>U : U
+
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
+>func<{ a: any, b: any }, { a: any, c: any }>('a', 'a') : void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>a : any
+>b : any
+>a : any
+>c : any
+>'a' : "a"
+>'a' : "a"
+
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
+>func<{ a: any, b: any }, { a: any, c: any }>('a', 'b') : void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>a : any
+>b : any
+>a : any
+>c : any
+>'a' : "a"
+>'b' : "b"
+
+    func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
+>func<{ a: any, b: any }, { a: any, c: any }>('a', 'c') : void
+>func : <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void
+>a : any
+>b : any
+>a : any
+>c : any
+>'a' : "a"
+>'c' : "c"
+}
+
+function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
+>f71 : (func: <T, U>(x: T, y: U) => Partial<T & U>) => void
+>func : <T, U>(x: T, y: U) => Partial<T & U>
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>Partial : Partial<T>
+>T : T
+>U : U
+
+    let x = func({ a: 1, b: "hello" }, { c: true });
+>x : Partial<{ a: number; b: string; } & { c: boolean; }>
+>func({ a: 1, b: "hello" }, { c: true }) : Partial<{ a: number; b: string; } & { c: boolean; }>
+>func : <T, U>(x: T, y: U) => Partial<T & U>
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+
+    x.a;  // number | undefined
+>x.a : number | undefined
+>x : Partial<{ a: number; b: string; } & { c: boolean; }>
+>a : number | undefined
+
+    x.b;  // string | undefined
+>x.b : string | undefined
+>x : Partial<{ a: number; b: string; } & { c: boolean; }>
+>b : string | undefined
+
+    x.c;  // boolean | undefined
+>x.c : boolean | undefined
+>x : Partial<{ a: number; b: string; } & { c: boolean; }>
+>c : boolean | undefined
+}
+
+function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
+>f72 : (func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) => void
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
+>T : T
+>U : U
+>K : K
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>k : K
+>K : K
+>T : T
+>U : U
+>K : K
+
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+>a : number
+>func({ a: 1, b: "hello" }, { c: true }, 'a') : number
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'a' : "a"
+
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+>b : string
+>func({ a: 1, b: "hello" }, { c: true }, 'b') : string
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'b' : "b"
+
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+>c : boolean
+>func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
+>func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'c' : "c"
+}
+
+function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
+>f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>T : T
+>U : U
+>K : K
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>k : K
+>K : K
+>T : T
+>U : U
+>K : K
+
+    let a = func({ a: 1, b: "hello" }, { c: true }, 'a');  // number
+>a : number
+>func({ a: 1, b: "hello" }, { c: true }, 'a') : number
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'a' : "a"
+
+    let b = func({ a: 1, b: "hello" }, { c: true }, 'b');  // string
+>b : string
+>func({ a: 1, b: "hello" }, { c: true }, 'b') : string
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'b' : "b"
+
+    let c = func({ a: 1, b: "hello" }, { c: true }, 'c');  // boolean
+>c : boolean
+>func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ c: true } : { c: true; }
+>c : boolean
+>true : true
+>'c' : "c"
+}
+
+function f74(func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) {
+>f74 : (func: <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]) => void
+>func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>T : T
+>U : U
+>K : K
+>T : T
+>U : U
+>x : T
+>T : T
+>y : U
+>U : U
+>k : K
+>K : K
+>T : T
+>U : U
+>K : K
+
+    let a = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a');  // number
+>a : number
+>func({ a: 1, b: "hello" }, { a: 2, b: true }, 'a') : number
+>func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ a: 2, b: true } : { a: number; b: true; }
+>a : number
+>2 : 2
+>b : boolean
+>true : true
+>'a' : "a"
+
+    let b = func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b');  // string | boolean
+>b : string | boolean
+>func({ a: 1, b: "hello" }, { a: 2, b: true }, 'b') : string | boolean
+>func : <T, U, K extends keyof (T | U)>(x: T, y: U, k: K) => (T | U)[K]
+>{ a: 1, b: "hello" } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>"hello" : "hello"
+>{ a: 2, b: true } : { a: number; b: true; }
+>a : number
+>2 : 2
+>b : boolean
+>true : true
+>'b' : "b"
+}
+
+function f80<T extends { a: { x: any } }>(obj: T) {
+>f80 : <T extends { a: { x: any; }; }>(obj: T) => void
+>T : T
+>a : { x: any; }
+>x : any
+>obj : T
+>T : T
+
+    let a1 = obj.a;  // { x: any }
+>a1 : { x: any; }
+>obj.a : { x: any; }
+>obj : T
+>a : { x: any; }
+
+    let a2 = obj['a'];  // { x: any }
+>a2 : { x: any; }
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+
+    let a3 = obj['a'] as T['a'];  // T["a"]
+>a3 : T["a"]
+>obj['a'] as T['a'] : T["a"]
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>T : T
+
+    let x1 = obj.a.x;  // any
+>x1 : any
+>obj.a.x : any
+>obj.a : { x: any; }
+>obj : T
+>a : { x: any; }
+>x : any
+
+    let x2 = obj['a']['x'];  // any
+>x2 : any
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+
+    let x3 = obj['a']['x'] as T['a']['x'];  // T["a"]["x"]
+>x3 : T["a"]["x"]
+>obj['a']['x'] as T['a']['x'] : T["a"]["x"]
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+>T : T
+}
+
+function f81<T extends { a: { x: any } }>(obj: T) {
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>T : T
+>a : { x: any; }
+>x : any
+>obj : T
+>T : T
+
+    return obj['a']['x'] as T['a']['x'];
+>obj['a']['x'] as T['a']['x'] : T["a"]["x"]
+>obj['a']['x'] : any
+>obj['a'] : { x: any; }
+>obj : T
+>'a' : "a"
+>'x' : "x"
+>T : T
+}
+
+function f82() {
+>f82 : () => void
+
+    let x1 = f81({ a: { x: "hello" } });  // string
+>x1 : string
+>f81({ a: { x: "hello" } }) : string
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>{ a: { x: "hello" } } : { a: { x: string; }; }
+>a : { x: string; }
+>{ x: "hello" } : { x: string; }
+>x : string
+>"hello" : "hello"
+
+    let x2 = f81({ a: { x: 42 } });  // number
+>x2 : number
+>f81({ a: { x: 42 } }) : number
+>f81 : <T extends { a: { x: any; }; }>(obj: T) => T["a"]["x"]
+>{ a: { x: 42 } } : { a: { x: number; }; }
+>a : { x: number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+}
+
+function f83<T extends { [x: string]: { x: any } }, K extends keyof T>(obj: T, key: K) {
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>T : T
+>x : string
+>x : any
+>K : K
+>T : T
+>obj : T
+>T : T
+>key : K
+>K : K
+
+    return obj[key]['x'] as T[K]['x'];
+>obj[key]['x'] as T[K]['x'] : T[K]["x"]
+>obj[key]['x'] : any
+>obj[key] : T[K]
+>obj : T
+>key : K
+>'x' : "x"
+>T : T
+>K : K
+}
+
+function f84() {
+>f84 : () => void
+
+    let x1 = f83({ foo: { x: "hello" } }, "foo");  // string
+>x1 : string
+>f83({ foo: { x: "hello" } }, "foo") : string
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>{ foo: { x: "hello" } } : { foo: { x: string; }; }
+>foo : { x: string; }
+>{ x: "hello" } : { x: string; }
+>x : string
+>"hello" : "hello"
+>"foo" : "foo"
+
+    let x2 = f83({ bar: { x: 42 } }, "bar");  // number
+>x2 : number
+>f83({ bar: { x: 42 } }, "bar") : number
+>f83 : <T extends { [x: string]: { x: any; }; }, K extends keyof T>(obj: T, key: K) => T[K]["x"]
+>{ bar: { x: 42 } } : { bar: { x: number; }; }
+>bar : { x: number; }
+>{ x: 42 } : { x: number; }
+>x : number
+>42 : 42
+>"bar" : "bar"
+}
+
+class C1 {
+>C1 : C1
+
+    x: number;
+>x : number
+
+    get<K extends keyof this>(key: K) {
+>get : <K extends keyof this>(key: K) => this[K]
+>K : K
+>key : K
+>K : K
+
+        return this[key];
+>this[key] : this[K]
+>this : this
+>key : K
+    }
+    set<K extends keyof this>(key: K, value: this[K]) {
+>set : <K extends keyof this>(key: K, value: this[K]) => void
+>K : K
+>key : K
+>K : K
+>value : this[K]
+>K : K
+
+        this[key] = value;
+>this[key] = value : this[K]
+>this[key] : this[K]
+>this : this
+>key : K
+>value : this[K]
+    }
+    foo() {
+>foo : () => void
+
+        let x1 = this.x;  // number
+>x1 : number
+>this.x : number
+>this : this
+>x : number
+
+        let x2 = this["x"];  // number
+>x2 : number
+>this["x"] : number
+>this : this
+>"x" : "x"
+
+        let x3 = this.get("x");  // this["x"]
+>x3 : this["x"]
+>this.get("x") : this["x"]
+>this.get : <K extends keyof this>(key: K) => this[K]
+>this : this
+>get : <K extends keyof this>(key: K) => this[K]
+>"x" : "x"
+
+        let x4 = getProperty(this, "x"); // this["x"]
+>x4 : this["x"]
+>getProperty(this, "x") : this["x"]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>this : this
+>"x" : "x"
+
+        this.x = 42;
+>this.x = 42 : 42
+>this.x : number
+>this : this
+>x : number
+>42 : 42
+
+        this["x"] = 42;
+>this["x"] = 42 : 42
+>this["x"] : number
+>this : this
+>"x" : "x"
+>42 : 42
+
+        this.set("x", 42);
+>this.set("x", 42) : void
+>this.set : <K extends keyof this>(key: K, value: this[K]) => void
+>this : this
+>set : <K extends keyof this>(key: K, value: this[K]) => void
+>"x" : "x"
+>42 : 42
+
+        setProperty(this, "x", 42);
+>setProperty(this, "x", 42) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>this : this
+>"x" : "x"
+>42 : 42
+    }
+}
+
+type S2 = {
+>S2 : S2
+
+    a: string;
+>a : string
+
+    b: string;
+>b : string
+
+};
+
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+>f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K], x4: T[K]) => void
+>T : T
+>S2 : S2
+>K : K
+>S2 : S2
+>x1 : string
+>S2 : S2
+>S2 : S2
+>x2 : T["a" | "b"]
+>T : T
+>S2 : S2
+>x3 : S2[K]
+>S2 : S2
+>K : K
+>x4 : T[K]
+>T : T
+>K : K
+
+    x1 = x2;
+>x1 = x2 : T["a" | "b"]
+>x1 : string
+>x2 : T["a" | "b"]
+
+    x1 = x3;
+>x1 = x3 : S2[K]
+>x1 : string
+>x3 : S2[K]
+
+    x1 = x4;
+>x1 = x4 : T[K]
+>x1 : string
+>x4 : T[K]
+
+    x2 = x1;
+>x2 = x1 : string
+>x2 : T["a" | "b"]
+>x1 : string
+
+    x2 = x3;
+>x2 = x3 : S2[K]
+>x2 : T["a" | "b"]
+>x3 : S2[K]
+
+    x2 = x4;
+>x2 = x4 : T[K]
+>x2 : T["a" | "b"]
+>x4 : T[K]
+
+    x3 = x1;
+>x3 = x1 : string
+>x3 : S2[K]
+>x1 : string
+
+    x3 = x2;
+>x3 = x2 : T["a" | "b"]
+>x3 : S2[K]
+>x2 : T["a" | "b"]
+
+    x3 = x4;
+>x3 = x4 : T[K]
+>x3 : S2[K]
+>x4 : T[K]
+
+    x4 = x1;
+>x4 = x1 : string
+>x4 : T[K]
+>x1 : string
+
+    x4 = x2;
+>x4 = x2 : T["a" | "b"]
+>x4 : T[K]
+>x2 : T["a" | "b"]
+
+    x4 = x3;
+>x4 = x3 : S2[K]
+>x4 : T[K]
+>x3 : S2[K]
+
+    x1.length;
+>x1.length : number
+>x1 : string
+>length : number
+
+    x2.length;
+>x2.length : number
+>x2 : T["a" | "b"]
+>length : number
+
+    x3.length;
+>x3.length : number
+>x3 : S2[K]
+>length : number
+
+    x4.length;
+>x4.length : number
+>x4 : T[K]
+>length : number
+}
+
+// Repros from #12011
+
+class Base {
+>Base : Base
+
+    get<K extends keyof this>(prop: K) {
+>get : <K extends keyof this>(prop: K) => this[K]
+>K : K
+>prop : K
+>K : K
+
+        return this[prop];
+>this[prop] : this[K]
+>this : this
+>prop : K
+    }
+    set<K extends keyof this>(prop: K, value: this[K]) {
+>set : <K extends keyof this>(prop: K, value: this[K]) => void
+>K : K
+>prop : K
+>K : K
+>value : this[K]
+>K : K
+
+        this[prop] = value;
+>this[prop] = value : this[K]
+>this[prop] : this[K]
+>this : this
+>prop : K
+>value : this[K]
+    }
+}
+
+class Person extends Base {
+>Person : Person
+>Base : Base
+
+    parts: number;
+>parts : number
+
+    constructor(parts: number) {
+>parts : number
+
+        super();
+>super() : void
+>super : typeof Base
+
+        this.set("parts", parts);
+>this.set("parts", parts) : void
+>this.set : <K extends keyof this>(prop: K, value: this[K]) => void
+>this : this
+>set : <K extends keyof this>(prop: K, value: this[K]) => void
+>"parts" : "parts"
+>parts : number
+    }
+    getParts() {
+>getParts : () => this["parts"]
+
+        return this.get("parts")
+>this.get("parts") : this["parts"]
+>this.get : <K extends keyof this>(prop: K) => this[K]
+>this : this
+>get : <K extends keyof this>(prop: K) => this[K]
+>"parts" : "parts"
+    }
+}
+
+class OtherPerson {
+>OtherPerson : OtherPerson
+
+    parts: number;
+>parts : number
+
+    constructor(parts: number) {
+>parts : number
+
+        setProperty(this, "parts", parts);
+>setProperty(this, "parts", parts) : void
+>setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
+>this : this
+>"parts" : "parts"
+>parts : number
+    }
+    getParts() {
+>getParts : () => this["parts"]
+
+        return getProperty(this, "parts")
+>getProperty(this, "parts") : this["parts"]
+>getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
+>this : this
+>"parts" : "parts"
+    }
+}
+
+// Modified repro from #12544
+
+function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>T : T
+>K1 : K1
+
+function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+>T : T
+>K1 : K1
+>K2 : K2
+
+function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>K3 : K3
+>T : T
+>K1 : K1
+>K2 : K2
+>obj : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+>key3 : K3
+>K3 : K3
+>T : T
+>K1 : K1
+>K2 : K2
+>K3 : K3
+
+function path(obj: any, ...keys: (string | number)[]): any;
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>obj : any
+>keys : (string | number)[]
+
+function path(obj: any, ...keys: (string | number)[]): any {
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>obj : any
+>keys : (string | number)[]
+
+    let result = obj;
+>result : any
+>obj : any
+
+    for (let k of keys) {
+>k : string | number
+>keys : (string | number)[]
+
+        result = result[k];
+>result = result[k] : any
+>result : any
+>result[k] : any
+>result : any
+>k : string | number
+    }
+    return result;
+>result : any
+}
+
+type Thing = {
+>Thing : Thing
+
+    a: { x: number, y: string },
+>a : { x: number; y: string; }
+>x : number
+>y : string
+
+    b: boolean
+>b : boolean
+
+};
+
+
+function f1(thing: Thing) {
+>f1 : (thing: Thing) => void
+>thing : Thing
+>Thing : Thing
+
+    let x1 = path(thing, 'a');  // { x: number, y: string }
+>x1 : { x: number; y: string; }
+>path(thing, 'a') : { x: number; y: string; }
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'a' : "a"
+
+    let x2 = path(thing, 'a', 'y');  // string
+>x2 : string
+>path(thing, 'a', 'y') : string
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'a' : "a"
+>'y' : "y"
+
+    let x3 = path(thing, 'b');  // boolean
+>x3 : boolean
+>path(thing, 'b') : boolean
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>'b' : "b"
+
+    let x4 = path(thing, ...['a', 'x']);  // any
+>x4 : any
+>path(thing, ...['a', 'x']) : any
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>thing : Thing
+>...['a', 'x'] : string
+>['a', 'x'] : string[]
+>'a' : "a"
+>'x' : "x"
+}
+
+// Repro from comment in #12114
+
+const assignTo2 = <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>
+>assignTo2 : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
+><T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) =>    (value: T[K1][K2]) => object[key1][key2] = value : <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2]
+>T : T
+>K1 : K1
+>T : T
+>K2 : K2
+>T : T
+>K1 : K1
+>object : T
+>T : T
+>key1 : K1
+>K1 : K1
+>key2 : K2
+>K2 : K2
+
+    (value: T[K1][K2]) => object[key1][key2] = value;
+>(value: T[K1][K2]) => object[key1][key2] = value : (value: T[K1][K2]) => T[K1][K2]
+>value : T[K1][K2]
+>T : T
+>K1 : K1
+>K2 : K2
+>object[key1][key2] = value : T[K1][K2]
+>object[key1][key2] : T[K1][K2]
+>object[key1] : T[K1]
+>object : T
+>key1 : K1
+>key2 : K2
+>value : T[K1][K2]
+
+// Modified repro from #12573
+
+declare function one<T>(handler: (t: T) => void): T
+>one : <T>(handler: (t: T) => void) => T
+>T : T
+>handler : (t: T) => void
+>t : T
+>T : T
+>T : T
+
+var empty = one(() => {}) // inferred as {}, expected
+>empty : {}
+>one(() => {}) : {}
+>one : <T>(handler: (t: T) => void) => T
+>() => {} : () => void
+
+type Handlers<T> = { [K in keyof T]: (t: T[K]) => void }
+>Handlers : Handlers<T>
+>T : T
+>K : K
+>T : T
+>t : T[K]
+>T : T
+>K : K
+
+declare function on<T>(handlerHash: Handlers<T>): T
+>on : <T>(handlerHash: Handlers<T>) => T
+>T : T
+>handlerHash : Handlers<T>
+>Handlers : Handlers<T>
+>T : T
+>T : T
+
+var hashOfEmpty1 = on({ test: () => {} });  // {}
+>hashOfEmpty1 : {}
+>on({ test: () => {} }) : {}
+>on : <T>(handlerHash: Handlers<T>) => T
+>{ test: () => {} } : { test: () => void; }
+>test : () => void
+>() => {} : () => void
+
+var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
+>hashOfEmpty2 : { test: boolean; }
+>on({ test: (x: boolean) => {} }) : { test: boolean; }
+>on : <T>(handlerHash: Handlers<T>) => T
+>{ test: (x: boolean) => {} } : { test: (x: boolean) => void; }
+>test : (x: boolean) => void
+>(x: boolean) => {} : (x: boolean) => void
+>x : boolean
+
+// Repro from #12624
+
+interface Options1<Data, Computed> {
+>Options1 : Options1<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    data?: Data
+>data : Data | undefined
+>Data : Data
+
+    computed?: Computed;
+>computed : Computed | undefined
+>Computed : Computed
+}
+
+declare class Component1<Data, Computed> {
+>Component1 : Component1<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    constructor(options: Options1<Data, Computed>);
+>options : Options1<Data, Computed>
+>Options1 : Options1<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
+>get : <K extends keyof (Data & Computed)>(key: K) => (Data & Computed)[K]
+>K : K
+>Data : Data
+>Computed : Computed
+>key : K
+>K : K
+>Data : Data
+>Computed : Computed
+>K : K
+}
+
+let c1 = new Component1({
+>c1 : Component1<{ hello: string; }, {}>
+>new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, {}>
+>Component1 : typeof Component1
+>{    data: {        hello: ""    }} : { data: { hello: string; }; }
+
+    data: {
+>data : { hello: string; }
+>{        hello: ""    } : { hello: string; }
+
+        hello: ""
+>hello : string
+>"" : ""
+    }
+});
+
+c1.get("hello");
+>c1.get("hello") : string
+>c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
+>c1 : Component1<{ hello: string; }, {}>
+>get : <K extends "hello">(key: K) => { hello: string; }[K]
+>"hello" : "hello"
+
+// Repro from #12625
+
+interface Options2<Data, Computed> {
+>Options2 : Options2<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    data?: Data
+>data : Data | undefined
+>Data : Data
+
+    computed?: Computed;
+>computed : Computed | undefined
+>Computed : Computed
+}
+
+declare class Component2<Data, Computed> {
+>Component2 : Component2<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    constructor(options: Options2<Data, Computed>);
+>options : Options2<Data, Computed>
+>Options2 : Options2<Data, Computed>
+>Data : Data
+>Computed : Computed
+
+    get<K extends keyof Data | keyof Computed>(key: K): (Data & Computed)[K];
+>get : <K extends keyof Data | keyof Computed>(key: K) => (Data & Computed)[K]
+>K : K
+>Data : Data
+>Computed : Computed
+>key : K
+>K : K
+>Data : Data
+>Computed : Computed
+>K : K
+}
+
+// Repro from #12641
+
+interface R {
+>R : R
+
+    p: number;
+>p : number
+}
+
+function f<K extends keyof R>(p: K) {
+>f : <K extends "p">(p: K) => void
+>K : K
+>R : R
+>p : K
+>K : K
+
+    let a: any;
+>a : any
+
+    a[p].add;  // any
+>a[p].add : any
+>a[p] : any
+>a : any
+>p : K
+>add : any
+}
+
+// Repro from #12651
+
+type MethodDescriptor = {
+>MethodDescriptor : MethodDescriptor
+
+	name: string;
+>name : string
+
+	args: any[];
+>args : any[]
+
+	returnValue: any;
+>returnValue : any
+}
+
+declare function dispatchMethod<M extends MethodDescriptor>(name: M['name'], args: M['args']): M['returnValue'];
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>M : M
+>MethodDescriptor : MethodDescriptor
+>name : M["name"]
+>M : M
+>args : M["args"]
+>M : M
+>M : M
+
+type SomeMethodDescriptor = {
+>SomeMethodDescriptor : SomeMethodDescriptor
+
+	name: "someMethod";
+>name : "someMethod"
+
+	args: [string, number];
+>args : [string, number]
+
+	returnValue: string[];
+>returnValue : string[]
+}
+
+let result = dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]);
+>result : string[]
+>dispatchMethod<SomeMethodDescriptor>("someMethod", ["hello", 35]) : string[]
+>dispatchMethod : <M extends MethodDescriptor>(name: M["name"], args: M["args"]) => M["returnValue"]
+>SomeMethodDescriptor : SomeMethodDescriptor
+>"someMethod" : "someMethod"
+>["hello", 35] : [string, number]
+>"hello" : "hello"
+>35 : 35
+
+// Repro from #13073
+
+type KeyTypes = "a" | "b"
+>KeyTypes : "a" | "b"
+
+let MyThingy: { [key in KeyTypes]: string[] };
+>MyThingy : { a: string[]; b: string[]; }
+>key : key
+>KeyTypes : "a" | "b"
+
+function addToMyThingy<S extends KeyTypes>(key: S) {
+>addToMyThingy : <S extends "a" | "b">(key: S) => void
+>S : S
+>KeyTypes : "a" | "b"
+>key : S
+>S : S
+
+    MyThingy[key].push("a");
+>MyThingy[key].push("a") : number
+>MyThingy[key].push : (...items: string[]) => number
+>MyThingy[key] : { a: string[]; b: string[]; }[S]
+>MyThingy : { a: string[]; b: string[]; }
+>key : S
+>push : (...items: string[]) => number
+>"a" : "a"
+}
+
+// Repro from #13102
+
+type Handler<T> = {
+>Handler : Handler<T>
+>T : T
+
+    onChange: (name: keyof T) => void;
+>onChange : (name: keyof T) => void
+>name : keyof T
+>T : T
+
+};
+
+function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
+>onChangeGenericFunction : <T>(handler: Handler<T & { preset: number; }>) => void
+>T : T
+>handler : Handler<T & { preset: number; }>
+>Handler : Handler<T>
+>T : T
+>preset : number
+
+    handler.onChange('preset')
+>handler.onChange('preset') : void
+>handler.onChange : (name: keyof (T & { preset: number; })) => void
+>handler : Handler<T & { preset: number; }>
+>onChange : (name: keyof (T & { preset: number; })) => void
+>'preset' : "preset"
+}
+
+// Repro from #13285
+
+function updateIds<T extends Record<K, string>, K extends string>(
+>updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: { [oldId: string]: string; }) => Record<K, string>
+>T : T
+>Record : Record<K, T>
+>K : K
+>K : K
+
+    obj: T,
+>obj : T
+>T : T
+
+    idFields: K[],
+>idFields : K[]
+>K : K
+
+    idMapping: { [oldId: string]: string }
+>idMapping : { [oldId: string]: string; }
+>oldId : string
+
+): Record<K, string> {
+>Record : Record<K, T>
+>K : K
+
+    for (const idField of idFields) {
+>idField : K
+>idFields : K[]
+
+        const newId = idMapping[obj[idField]];
+>newId : { [oldId: string]: string; }[T[K]]
+>idMapping[obj[idField]] : { [oldId: string]: string; }[T[K]]
+>idMapping : { [oldId: string]: string; }
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+
+        if (newId) {
+>newId : { [oldId: string]: string; }[T[K]]
+
+            obj[idField] = newId;
+>obj[idField] = newId : { [oldId: string]: string; }[T[K]]
+>obj[idField] : T[K]
+>obj : T
+>idField : K
+>newId : { [oldId: string]: string; }[T[K]]
+        }
+    }
+    return obj;
+>obj : T
+}
+
+// Repro from #13285
+
+function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
+>updateIds2 : <T extends { [x: string]: string; }, K extends keyof T>(obj: T, key: K, stringMap: { [oldId: string]: string; }) => void
+>T : T
+>x : string
+>K : K
+>T : T
+
+    obj: T,
+>obj : T
+>T : T
+
+    key: K,
+>key : K
+>K : K
+
+    stringMap: { [oldId: string]: string }
+>stringMap : { [oldId: string]: string; }
+>oldId : string
+
+) {
+    var x = obj[key];
+>x : T[K]
+>obj[key] : T[K]
+>obj : T
+>key : K
+
+    stringMap[x]; // Should be OK.
+>stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap : { [oldId: string]: string; }
+>x : T[K]
+}
+
+// Repro from #13514
+
+declare function head<T extends Array<any>>(list: T): T[0];
+>head : <T extends any[]>(list: T) => T[0]
+>T : T
+>Array : T[]
+>list : T
+>T : T
+>T : T
+
+// Repro from #13604
+
+class A<T> {
+>A : A<T>
+>T : T
+
+	props: T & { foo: string };
+>props : T & { foo: string; }
+>T : T
+>foo : string
+}
+
+class B extends A<{ x: number}> {
+>B : B
+>A : A<{ x: number; }>
+>x : number
+
+	f(p: this["props"]) {
+>f : (p: this["props"]) => void
+>p : this["props"]
+
+		p.x;
+>p.x : number
+>p : this["props"]
+>x : number
+	}
+}
+
+// Repro from #13749
+
+class Form<T> {
+>Form : Form<T>
+>T : T
+
+    private childFormFactories: {[K in keyof T]: (v: T[K]) => Form<T[K]>}
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>K : K
+>T : T
+>v : T[K]
+>T : T
+>K : K
+>Form : Form<T>
+>T : T
+>K : K
+
+    public set<K extends keyof T>(prop: K, value: T[K]) {
+>set : <K extends keyof T>(prop: K, value: T[K]) => void
+>K : K
+>T : T
+>prop : K
+>K : K
+>value : T[K]
+>T : T
+>K : K
+
+        this.childFormFactories[prop](value)
+>this.childFormFactories[prop](value) : Form<T[K]>
+>this.childFormFactories[prop] : (v: T[K]) => Form<T[K]>
+>this.childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>this : this
+>childFormFactories : { [K in keyof T]: (v: T[K]) => Form<T[K]>; }
+>prop : K
+>value : T[K]
+    }
+}
+
+// Repro from #13787
+
+class SampleClass<P> {
+>SampleClass : SampleClass<P>
+>P : P
+
+    public props: Readonly<P>;
+>props : Readonly<P>
+>Readonly : Readonly<T>
+>P : P
+
+    constructor(props: P) {
+>props : P
+>P : P
+
+        this.props = Object.freeze(props);
+>this.props = Object.freeze(props) : Readonly<P>
+>this.props : Readonly<P>
+>this : this
+>props : Readonly<P>
+>Object.freeze(props) : Readonly<P>
+>Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object : ObjectConstructor
+>freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>props : P
+    }
+}
+
+interface Foo {
+>Foo : Foo
+
+    foo: string;
+>foo : string
+}
+
+declare function merge<T, U>(obj1: T, obj2: U): T & U;
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>T : T
+>U : U
+>obj1 : T
+>T : T
+>obj2 : U
+>U : U
+>T : T
+>U : U
+
+class AnotherSampleClass<T> extends SampleClass<T & Foo> {
+>AnotherSampleClass : AnotherSampleClass<T>
+>T : T
+>SampleClass : SampleClass<T & Foo>
+>T : T
+>Foo : Foo
+
+    constructor(props: T) {
+>props : T
+>T : T
+
+        const foo: Foo = { foo: "bar" };
+>foo : Foo
+>Foo : Foo
+>{ foo: "bar" } : { foo: string; }
+>foo : string
+>"bar" : "bar"
+
+        super(merge(props, foo));
+>super(merge(props, foo)) : void
+>super : typeof SampleClass
+>merge(props, foo) : T & Foo
+>merge : <T, U>(obj1: T, obj2: U) => T & U
+>props : T
+>foo : Foo
+    }
+
+    public brokenMethod() {
+>brokenMethod : () => void
+
+        this.props.foo.concat;
+>this.props.foo.concat : (...strings: string[]) => string
+>this.props.foo : (T & Foo)["foo"]
+>this.props : Readonly<T & Foo>
+>this : this
+>props : Readonly<T & Foo>
+>foo : (T & Foo)["foo"]
+>concat : (...strings: string[]) => string
+    }
+}
+new AnotherSampleClass({});
+>new AnotherSampleClass({}) : AnotherSampleClass<{}>
+>AnotherSampleClass : typeof AnotherSampleClass
+>{} : {}
+

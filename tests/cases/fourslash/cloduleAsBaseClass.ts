@@ -23,9 +23,6 @@
 ////d./*1*/
 ////D./*2*/
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker('1');
 verify.completionListContains('foo');
 verify.completionListContains('foo2');
@@ -45,4 +42,4 @@ verify.completionListContains('baz');
 verify.completionListContains('x');
 edit.insert('bar()');
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -34,7 +34,7 @@ var A;
                 function Class1() {
                 }
                 return Class1;
-            })();
+            }());
             C.Class1 = Class1;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
@@ -49,7 +49,7 @@ var D;
             function Class2() {
             }
             return Class2;
-        })();
+        }());
         E.Class2 = Class2;
     })(E = D.E || (D.E = {}));
 })(D || (D = {}));

@@ -6,9 +6,9 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "sourceRoot": "../src",
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "../src",
     "resolvedInputFiles": [
         "lib.d.ts",
         "m1.ts",

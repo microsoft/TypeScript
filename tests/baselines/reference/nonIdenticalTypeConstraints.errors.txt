@@ -1,0 +1,59 @@
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(7,7): error TS2428: All declarations of 'Foo' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(10,11): error TS2428: All declarations of 'Foo' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(13,11): error TS2428: All declarations of 'Qux' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(16,7): error TS2428: All declarations of 'Qux' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(33,7): error TS2428: All declarations of 'Quux' must have identical type parameters.
+tests/cases/compiler/nonIdenticalTypeConstraints.ts(36,11): error TS2428: All declarations of 'Quux' must have identical type parameters.
+
+
+==== tests/cases/compiler/nonIdenticalTypeConstraints.ts (6 errors) ====
+    class Different {
+        a: number;
+        b: string;
+        c: boolean;
+    }
+    
+    class Foo<T extends Function> {
+          ~~~
+!!! error TS2428: All declarations of 'Foo' must have identical type parameters.
+        n: T;
+    }
+    interface Foo<T extends Different> {
+              ~~~
+!!! error TS2428: All declarations of 'Foo' must have identical type parameters.
+        y: T;
+    }
+    interface Qux<T extends Different> {
+              ~~~
+!!! error TS2428: All declarations of 'Qux' must have identical type parameters.
+        y: T;
+    }
+    class Qux<T extends Function> {
+          ~~~
+!!! error TS2428: All declarations of 'Qux' must have identical type parameters.
+        n: T;
+    }
+    
+    class Bar<T extends Function> {
+        n: T;
+    }
+    interface Bar<T extends Function> {
+        y: T;
+    }
+    interface Baz<T extends Function> {
+        y: T;
+    }
+    class Baz<T extends Function> {
+        n: T;
+    }
+    
+    class Quux<T> {
+          ~~~~
+!!! error TS2428: All declarations of 'Quux' must have identical type parameters.
+        n: T;
+    }
+    interface Quux<U> {
+              ~~~~
+!!! error TS2428: All declarations of 'Quux' must have identical type parameters.
+        m: U;
+    }

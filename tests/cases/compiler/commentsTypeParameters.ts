@@ -1,5 +1,5 @@
 // @declaration: true
-// @comments: true
+// @removeComments: false
 class C</**docComment for type parameter*/ T> {
     method</**docComment of method type parameter */ U extends T>(a: U) {
     }

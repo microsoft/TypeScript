@@ -1,6 +1,5 @@
 // @target: ES6
 // @isolatedModules: true
-// @experimentalAsyncFunctions: true
 import { MyPromise } from "missing";
 
 declare var p: Promise<number>;

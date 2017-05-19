@@ -1,0 +1,93 @@
+=== tests/cases/conformance/jsx/tsxSpreadChildren.tsx ===
+declare module JSX {
+>JSX : any
+
+	interface Element { }
+>Element : Element
+
+	interface IntrinsicElements {
+>IntrinsicElements : IntrinsicElements
+
+		[s: string]: any;
+>s : string
+	}
+}
+declare var React: any;
+>React : any
+
+interface TodoProp {
+>TodoProp : TodoProp
+
+    id: number;
+>id : number
+
+    todo: string;
+>todo : string
+}
+interface TodoListProps {
+>TodoListProps : TodoListProps
+
+    todos: TodoProp[];
+>todos : TodoProp[]
+>TodoProp : TodoProp
+}
+function Todo(prop: { key: number, todo: string }) {
+>Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>prop : { key: number; todo: string; }
+>key : number
+>todo : string
+
+    return <div>{prop.key.toString() + prop.todo}</div>;
+><div>{prop.key.toString() + prop.todo}</div> : JSX.Element
+>div : any
+>prop.key.toString() + prop.todo : string
+>prop.key.toString() : string
+>prop.key.toString : (radix?: number) => string
+>prop.key : number
+>prop : { key: number; todo: string; }
+>key : number
+>toString : (radix?: number) => string
+>prop.todo : string
+>prop : { key: number; todo: string; }
+>todo : string
+>div : any
+}
+function TodoList({ todos }: TodoListProps) {
+>TodoList : ({todos}: TodoListProps) => JSX.Element
+>todos : TodoProp[]
+>TodoListProps : TodoListProps
+
+    return <div>
+><div>        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}    </div> : JSX.Element
+>div : any
+
+        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
+>todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
+>todos.map : { <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): U[]; <U>(callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): U[]; }
+>todos : TodoProp[]
+>map : { <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): [U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [TodoProp, TodoProp], callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U): U[]; <U>(callbackfn: (this: void, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg: Z): U[]; }
+>todo => <Todo key={todo.id} todo={todo.todo}/> : (this: void, todo: TodoProp) => JSX.Element
+>todo : TodoProp
+><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
+>Todo : (prop: { key: number; todo: string; }) => JSX.Element
+>key : number
+>todo.id : number
+>todo : TodoProp
+>id : number
+>todo : string
+>todo.todo : string
+>todo : TodoProp
+>todo : string
+
+    </div>;
+>div : any
+}
+let x: TodoListProps;
+>x : TodoListProps
+>TodoListProps : TodoListProps
+
+    <TodoList {...x}/>
+><TodoList {...x}/> : JSX.Element
+>TodoList : ({todos}: TodoListProps) => JSX.Element
+>x : TodoListProps
+

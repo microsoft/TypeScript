@@ -1,5 +1,4 @@
 === tests/cases/compiler/file1.d.ts ===
-
 declare function foo(): void;
 >foo : Symbol(foo, Decl(file1.d.ts, 0, 0))
 

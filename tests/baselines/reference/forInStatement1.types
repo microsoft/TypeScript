@@ -3,6 +3,6 @@ var expr: any;
 >expr : any
 
 for (var a in expr) {
->a : any
+>a : string
 >expr : any
 }

@@ -1,0 +1,10 @@
+=== tests/cases/compiler/typeAliasExport.ts ===
+declare module "a" {
+  export default 0
+  export var a;
+>a : any
+
+  export type a = typeof a;
+>a : any
+>a : any
+}

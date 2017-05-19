@@ -3,16 +3,14 @@
 // References a class property using string index access
 
 ////class Foo {
-////    property: number;
-////    method(): void { }
+////    [|{| "isWriteAccess": true, "isDefinition": true |}property|]: number;
+////    [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////}
 ////
 ////var f: Foo;
-////f[/*1*/"property"];
-////f[/*2*/"method"];
+////f["[|property|]"];
+////f["[|method|]"];
 
-goTo.marker("1");
-verify.referencesCountIs(2);
-
-goTo.marker("2");
-verify.referencesCountIs(2);
+const ranges = test.rangesByText();
+verify.singleReferenceGroup("(property) Foo.property: number", ranges.get("property"));
+verify.singleReferenceGroup("(method) Foo.method(): void", ranges.get("method"));

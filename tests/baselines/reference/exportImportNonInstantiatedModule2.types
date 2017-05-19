@@ -10,10 +10,9 @@ export function w(): e.w { // Should be OK
     return {name: 'value' };
 >{name: 'value' } : { name: string; }
 >name : string
->'value' : string
+>'value' : "value"
 }
 === tests/cases/compiler/w1.ts ===
-
 export = Widget1
 >Widget1 : Widget1
 

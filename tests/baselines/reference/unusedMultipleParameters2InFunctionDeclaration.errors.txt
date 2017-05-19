@@ -1,0 +1,16 @@
+tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts(1,18): error TS6133: 'person' is declared but never used.
+tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts(1,51): error TS6133: 'person3' is declared but never used.
+tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts(2,9): error TS6133: 'unused' is declared but never used.
+
+
+==== tests/cases/compiler/unusedMultipleParameters2InFunctionDeclaration.ts (3 errors) ====
+    function greeter(person: string, person2: string, person3: string) {
+                     ~~~~~~
+!!! error TS6133: 'person' is declared but never used.
+                                                      ~~~~~~~
+!!! error TS6133: 'person3' is declared but never used.
+        var unused = 20;
+            ~~~~~~
+!!! error TS6133: 'unused' is declared but never used.
+        person2 = "dummy value";
+    }

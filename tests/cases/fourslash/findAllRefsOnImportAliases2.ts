@@ -1,31 +1,30 @@
 /// <reference path="fourslash.ts" />
 
 //@Filename: a.ts
-////export class /*1*/Class{
-////}
+////export class [|{| "isWriteAccess": true, "isDefinition": true |}Class|] {}
 
 //@Filename: b.ts
-////import { /*2*/Class as /*3*/C2} from "a";
-////
-////var c = new C2();
+////import { [|Class|] as [|{| "isWriteAccess": true, "isDefinition": true |}C2|] } from "./a";
+////var c = new [|C2|]();
 
 //@Filename: c.ts
-////export { /*4*/Class as /*5*/C3 } from "a";
+////export { [|Class|] as [|{| "isWriteAccess": true, "isDefinition": true |}C3|] } from "./a";
 
-goTo.file("a.ts");
-goTo.marker("1");
-verify.referencesCountIs(3);
+const ranges = test.rangesByText();
+const classRanges = ranges.get("Class");
+const [class0, class1, class2] = classRanges;
+const c2Ranges = ranges.get("C2");
+const [c2_0, c2_1] = c2Ranges;
+const c3Ranges = ranges.get("C3");
+const classes = { definition: "class Class", ranges: classRanges };
+const c2s =  { definition: "import C2", ranges: c2Ranges };
+const c3s = { definition: "import C3", ranges: c3Ranges };
 
-goTo.file("b.ts");
-goTo.marker("2");
-verify.referencesCountIs(3);
+verify.referenceGroups(classRanges, [classes, c2s, c3s]);
 
-goTo.marker("3");
-verify.referencesCountIs(2);
+verify.referenceGroups(c2_0, [c2s])
+verify.referenceGroups(c2_1, [{ definition: "(alias) new C2(): C2\nimport C2", ranges: c2Ranges }]);
 
-goTo.file("c.ts");
-goTo.marker("4");
-verify.referencesCountIs(3);
+verify.referenceGroups(c3Ranges, [c3s]);
 
-goTo.marker("5");
-verify.referencesCountIs(1);
+verify.rangesWithSameTextAreRenameLocations();

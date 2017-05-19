@@ -396,6 +396,6 @@ var TypeScript;
             }, this);
         };
         return Binder;
-    })();
+    }());
     TypeScript.Binder = Binder;
 })(TypeScript || (TypeScript = {}));

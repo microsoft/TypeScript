@@ -11,5 +11,5 @@ var C = (function () {
         this.x = 0;
     }
     return C;
-})();
+}());
 var x = (new C).x;

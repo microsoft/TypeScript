@@ -8,12 +8,12 @@ var a: any = x;
 
 var b: Object = x;
 >b : Symbol(b, Decl(validBooleanAssignments.ts, 3, 3))
->Object : Symbol(Object, Decl(lib.d.ts, 92, 1), Decl(lib.d.ts, 223, 11))
+>Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(validBooleanAssignments.ts, 0, 3))
 
 var c: Boolean = x;
 >c : Symbol(c, Decl(validBooleanAssignments.ts, 4, 3))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, 443, 38), Decl(lib.d.ts, 456, 11))
+>Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(validBooleanAssignments.ts, 0, 3))
 
 var d: boolean = x;

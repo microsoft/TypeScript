@@ -1,9 +1,7 @@
-tests/cases/compiler/redefineArray.ts(1,1): error TS2322: Type '(n: number, s: string) => number' is not assignable to type 'ArrayConstructor'.
-  Property 'isArray' is missing in type '(n: number, s: string) => number'.
+tests/cases/compiler/redefineArray.ts(1,1): error TS2540: Cannot assign to 'Array' because it is a constant or a read-only property.
 
 
 ==== tests/cases/compiler/redefineArray.ts (1 errors) ====
     Array = function (n:number, s:string) {return n;};
     ~~~~~
-!!! error TS2322: Type '(n: number, s: string) => number' is not assignable to type 'ArrayConstructor'.
-!!! error TS2322:   Property 'isArray' is missing in type '(n: number, s: string) => number'.
+!!! error TS2540: Cannot assign to 'Array' because it is a constant or a read-only property.

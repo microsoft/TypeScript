@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 0, 0))
 
     foo(x: string): string { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 2, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 3, 8))
 }
 
@@ -13,7 +13,7 @@ class B {
 >B : Symbol(B, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 4, 1))
 
     foo(x: string, y: string): string { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 6, 9))
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 6, 9))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 7, 8))
 >y : Symbol(y, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 7, 18))
 }
@@ -23,7 +23,7 @@ class C<T> {
 >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 8))
 
     foo(x: T, y: T): T { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 12))
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 12))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 11, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 10, 8))
 >y : Symbol(y, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 11, 13))
@@ -35,7 +35,7 @@ interface I {
 >I : Symbol(I, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 12, 1))
 
     foo(x: string): string;
->foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 14, 13))
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 14, 13))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 15, 8))
 }
 
@@ -44,7 +44,7 @@ interface I2<T> {
 >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))
 
     foo(x: T): T;
->foo : Symbol(foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 17))
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 17))
 >x : Symbol(x, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 19, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))
 >T : Symbol(T, Decl(objectTypesIdentityWithCallSignaturesDifferingParamCounts.ts, 18, 13))

@@ -1,4 +1,4 @@
-=== tests/cases/conformance/jsx/tsxAttributeResolution8.tsx ===
+=== tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
 >JSX : any
 

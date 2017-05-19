@@ -1,0 +1,33 @@
+tests/cases/conformance/jsx/file.tsx(13,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+  Type '{}' is not assignable to type 'Prop'.
+    Property 'a' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(14,18): error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+  Type '{ a: "hi"; }' is not assignable to type 'Prop'.
+    Types of property 'a' are incompatible.
+      Type '"hi"' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    interface Prop {
+        a: number,
+        b: string
+    }
+    
+    declare class MyComp<P = Prop> extends React.Component<P, {}> {
+        internalProp: P;
+    }
+    
+    // Error
+    let x = <MyComp />
+            ~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{}' is not assignable to type 'Prop'.
+!!! error TS2322:     Property 'a' is missing in type '{}'.
+    let x1 = <MyComp a="hi"/>
+                     ~~~~~~
+!!! error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{ a: "hi"; }' is not assignable to type 'Prop'.
+!!! error TS2322:     Types of property 'a' are incompatible.
+!!! error TS2322:       Type '"hi"' is not assignable to type 'number'.

@@ -62,7 +62,7 @@ var _modes;
         function Mode() {
         }
         return Mode;
-    })();
+    }());
     _modes.Mode = Mode;
 })(_modes || (_modes = {}));
 // _modes. // produces an internal error - please implement in derived class
@@ -76,7 +76,7 @@ var editor;
         Bug.prototype.foo = function (p1) {
         };
         return Bug;
-    })();
+    }());
 })(editor || (editor = {}));
 var modesOuter = _modes;
 var editor2;
@@ -86,21 +86,21 @@ var editor2;
         function Bug(p1, p2) {
         } // no error here, since modesOuter is declared externally
         return Bug;
-    })();
+    }());
     var Foo;
     (function (Foo) {
         var Bar = (function () {
             function Bar() {
             }
             return Bar;
-        })();
+        }());
         Foo.Bar = Bar;
     })(Foo || (Foo = {}));
     var Bug2 = (function () {
         function Bug2(p1, p2) {
         }
         return Bug2;
-    })();
+    }());
 })(editor2 || (editor2 = {}));
 var A1;
 (function (A1) {
@@ -108,7 +108,7 @@ var A1;
         function A1C1() {
         }
         return A1C1;
-    })();
+    }());
     A1.A1C1 = A1C1;
 })(A1 || (A1 = {}));
 var B1;

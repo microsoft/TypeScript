@@ -3,6 +3,9 @@ class C {
     ["hello"]() {
         debugger;
     }
+    get ["goodbye"]() {
+		return 0;
+    }
 }
 
 //// [computedPropertyNamesSourceMap1_ES5.js]
@@ -12,6 +15,13 @@ var C = (function () {
     C.prototype["hello"] = function () {
         debugger;
     };
+    Object.defineProperty(C.prototype, "goodbye", {
+        get: function () {
+            return 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
     return C;
-})();
+}());
 //# sourceMappingURL=computedPropertyNamesSourceMap1_ES5.js.map

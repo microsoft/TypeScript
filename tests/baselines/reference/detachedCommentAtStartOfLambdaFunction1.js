@@ -19,7 +19,7 @@ var TestFile = (function () {
         return function () {
             var x = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                x[_i - 0] = arguments[_i];
+                x[_i] = arguments[_i];
             }
             /// <summary>Test summary</summary>
             /// <param name="message" type="String" />
@@ -28,4 +28,4 @@ var TestFile = (function () {
         };
     };
     return TestFile;
-})();
+}());

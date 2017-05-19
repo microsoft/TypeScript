@@ -16,7 +16,7 @@ export class publicClassWithWithPrivateTypeParameters {
 >privateClass : Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
     }
     private myPrivateMethod1<T extends privateClass>() { // do not emit extends clause
->myPrivateMethod1 : Symbol(myPrivateMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 8, 5))
+>myPrivateMethod1 : Symbol(publicClassWithWithPrivateTypeParameters.myPrivateMethod1, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 8, 5))
 >T : Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 9, 29))
 >privateClass : Symbol(privateClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 0, 0))
     }
@@ -26,7 +26,7 @@ export class publicClassWithWithPrivateTypeParameters {
 >publicClass : Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
     private myPrivateMethod2<T extends publicClass>() { // do not emit extends clause
->myPrivateMethod2 : Symbol(myPrivateMethod2, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 12, 5))
+>myPrivateMethod2 : Symbol(publicClassWithWithPrivateTypeParameters.myPrivateMethod2, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 12, 5))
 >T : Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 13, 29))
 >publicClass : Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
@@ -36,7 +36,7 @@ export class publicClassWithWithPrivateTypeParameters {
 >publicClass : Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }
     public myPublicMethod<T extends publicClass>() {
->myPublicMethod : Symbol(myPublicMethod, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 16, 5))
+>myPublicMethod : Symbol(publicClassWithWithPrivateTypeParameters.myPublicMethod, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 16, 5))
 >T : Symbol(T, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 17, 26))
 >publicClass : Symbol(publicClass, Decl(staticMethodWithTypeParameterExtendsClauseDeclFile.ts, 1, 1))
     }

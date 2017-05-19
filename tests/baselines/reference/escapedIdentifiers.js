@@ -142,7 +142,7 @@ var moduleType1;
 (function (moduleType1) {
 })(moduleType1 || (moduleType1 = {}));
 var moduleType\u0032;
-(function (moduleType2) {
+(function (moduleType\u0032) {
 })(moduleType\u0032 || (moduleType\u0032 = {}));
 moduleType1.baz1 = 3;
 moduleType\u0031.baz1 = 3;
@@ -153,12 +153,12 @@ var classType1 = (function () {
     function classType1() {
     }
     return classType1;
-})();
+}());
 var classType\u0032 = (function () {
     function classType\u0032() {
     }
     return classType\u0032;
-})();
+}());
 var classType1Object1 = new classType1();
 classType1Object1.foo1 = 2;
 var classType1Object2 = new classType\u0031();
@@ -186,7 +186,7 @@ var testClass = (function () {
         arg4 = 2;
     };
     return testClass;
-})();
+}());
 // constructors
 var constructorTestClass = (function () {
     function constructorTestClass(arg1, arg\u0032, arg\u0033, arg4) {
@@ -196,7 +196,7 @@ var constructorTestClass = (function () {
         this.arg4 = arg4;
     }
     return constructorTestClass;
-})();
+}());
 var constructorTestObject = new constructorTestClass(1, 'string', true, 2);
 constructorTestObject.arg\u0031 = 1;
 constructorTestObject.arg2 = 'string';

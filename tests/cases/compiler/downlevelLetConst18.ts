@@ -1,4 +1,6 @@
 // @target:es5
+// @allowUnreachableCode: true
+
 'use strict'
 
 for (let x; ;) {
@@ -6,7 +8,7 @@ for (let x; ;) {
 }
 
 for (let x; ;) {
-    function foo() { x };
+    function foo1() { x };
 }
 
 for (let x; ;) {

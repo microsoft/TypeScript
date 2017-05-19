@@ -7,36 +7,36 @@ function R1(index: number) {
 >index : number
 
         case 0:
->0 : number
+>0 : 0
 
         case 1:
->1 : number
+>1 : 1
 
         case 2:
->2 : number
+>2 : 2
 
             var a = 'a';
 >a : string
->'a' : string
+>'a' : "a"
 
             return a;
 >a : string
 
         case 3:
->3 : number
+>3 : 3
 
         case 4: {
->4 : number
+>4 : 4
 
             return 'b';
->'b' : string
+>'b' : "b"
         }
 		case 5:
->5 : number
+>5 : 5
 
 		default:
 			return 'c';
->'c' : string
+>'c' : "c"
     }
 }
 

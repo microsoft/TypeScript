@@ -27,18 +27,18 @@ var C = (function () {
         var y = x;
     }
     return C;
-})();
+}());
 var D = (function () {
     function D(x) {
         if (x === void 0) { x = null; }
         var y = x;
     }
     return D;
-})();
+}());
 var E = (function () {
     function E(x) {
         if (x === void 0) { x = null; }
         var y = x;
     }
     return E;
-})();
+}());

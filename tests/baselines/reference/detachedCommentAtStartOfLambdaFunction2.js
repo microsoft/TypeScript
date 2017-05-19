@@ -23,10 +23,10 @@ var TestFile = (function () {
             /// <returns type="Function" />
             var x = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                x[_i - 0] = arguments[_i];
+                x[_i] = arguments[_i];
             }
             return message + _this.name;
         };
     };
     return TestFile;
-})();
+}());

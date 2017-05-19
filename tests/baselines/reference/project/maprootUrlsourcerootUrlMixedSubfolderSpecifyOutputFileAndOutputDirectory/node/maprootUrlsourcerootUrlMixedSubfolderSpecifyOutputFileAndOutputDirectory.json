@@ -7,10 +7,10 @@
     "out": "bin/outAndOutDirFile.js",
     "outDir": "outdir/outAndOutDirFolder",
     "sourceMap": true,
-    "mapRoot": "http://www.typescriptlang.org/",
-    "sourceRoot": "http://typescript.codeplex.com/",
     "declaration": true,
     "baselineCheck": true,
+    "mapRoot": "http://www.typescriptlang.org/",
+    "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",
@@ -18,9 +18,6 @@
         "test.ts"
     ],
     "emittedFiles": [
-        "outdir/outAndOutDirFolder/ref/m2.js.map",
-        "outdir/outAndOutDirFolder/ref/m2.js",
-        "outdir/outAndOutDirFolder/ref/m2.d.ts",
         "bin/outAndOutDirFile.js.map",
         "bin/outAndOutDirFile.js",
         "bin/outAndOutDirFile.d.ts"

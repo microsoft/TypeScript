@@ -177,7 +177,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 function foo10(x) {
     var c;
     return c;
@@ -190,7 +190,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 function foo11() {
@@ -203,7 +203,6 @@ function foo12() {
 }
 var r12 = foo12();
 function m1() { return 1; }
-var m1;
 (function (m1) {
     m1.y = 2;
 })(m1 || (m1 = {}));
@@ -215,8 +214,7 @@ var c1 = (function () {
     function c1(x) {
     }
     return c1;
-})();
-var c1;
+}());
 (function (c1) {
     c1.x = 1;
 })(c1 || (c1 = {}));
@@ -228,7 +226,6 @@ var e1;
 (function (e1) {
     e1[e1["A"] = 0] = "A";
 })(e1 || (e1 = {}));
-var e1;
 (function (e1) {
     e1.y = 1;
 })(e1 || (e1 = {}));

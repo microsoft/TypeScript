@@ -13,7 +13,7 @@ function foo<T extends { m(p: string): number }>(x: T): T {
 }
 
 foo({ m(x) { return x.length } });
->foo({ m(x) { return x.length } }) : { }
+>foo({ m(x) { return x.length } }) : { m(x: string): number; }
 >foo : <T extends { m(p: string): number; }>(x: T) => T
 >{ m(x) { return x.length } } : { m(x: string): number; }
 >m : (x: string) => number

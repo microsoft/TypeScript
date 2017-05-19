@@ -1,0 +1,25 @@
+=== tests/cases/conformance/decorators/class/a.ts ===
+declare function forwardRef(x: any): any;
+>forwardRef : Symbol(forwardRef, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 0, 28))
+
+declare var Something: any;
+>Something : Symbol(Something, Decl(a.ts, 1, 11))
+
+@Something({ v: () => Testing123 })
+>Something : Symbol(Something, Decl(a.ts, 1, 11))
+>v : Symbol(v, Decl(a.ts, 2, 12))
+>Testing123 : Symbol(Testing123, Decl(a.ts, 1, 27))
+
+export class Testing123 {
+>Testing123 : Symbol(Testing123, Decl(a.ts, 1, 27))
+
+    static prop0: string;
+>prop0 : Symbol(Testing123.prop0, Decl(a.ts, 3, 25))
+
+    static prop1 = Testing123.prop0;
+>prop1 : Symbol(Testing123.prop1, Decl(a.ts, 4, 25))
+>Testing123.prop0 : Symbol(Testing123.prop0, Decl(a.ts, 3, 25))
+>Testing123 : Symbol(Testing123, Decl(a.ts, 1, 27))
+>prop0 : Symbol(Testing123.prop0, Decl(a.ts, 3, 25))
+}

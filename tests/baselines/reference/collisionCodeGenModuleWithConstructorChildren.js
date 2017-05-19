@@ -32,9 +32,8 @@ var M;
             if (p === void 0) { p = M_1.x; }
         }
         return c;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_2) {
     var d = (function () {
         function d(M, p) {
@@ -42,9 +41,8 @@ var M;
             this.M = M;
         }
         return d;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_3) {
     var d2 = (function () {
         function d2() {
@@ -52,5 +50,5 @@ var M;
             var p = M_3.x;
         }
         return d2;
-    })();
+    }());
 })(M || (M = {}));

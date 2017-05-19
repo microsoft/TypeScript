@@ -1,5 +1,4 @@
 // @target: ES6
-// @experimentalAsyncFunctions: true
 type MyPromise<T> = Promise<T>;
 declare var MyPromise: typeof Promise;
 declare var p: Promise<number>;

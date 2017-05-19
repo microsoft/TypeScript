@@ -1,5 +1,4 @@
 //// [commentsemitComments.ts]
-
 /** Variable comments*/
 var myVariable = 10;
 
@@ -126,7 +125,7 @@ var c = (function () {
         return aOrb.toString();
     };
     return c;
-})();
+}());
 /**instance comment*/
 var i = new c();
 /**interface instance comments*/
@@ -140,7 +139,7 @@ var m1;
             this.x = x;
         }
         return b;
-    })();
+    }());
     m1.b = b;
 })(m1 || (m1 = {}));
 

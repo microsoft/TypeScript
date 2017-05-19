@@ -60,7 +60,7 @@ var C = (function () {
     }
     C.g = function (t) { };
     return C;
-})();
+}());
 C.g(3); // error
 var f4;
 f4 = 3; // error

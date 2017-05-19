@@ -58,7 +58,7 @@ var C = (function () {
     C.prototype.bar = function (x) { };
     C.prototype.bar = function (x) { };
     return C;
-})();
+}());
 var a;
 var b = {
     foo: '',

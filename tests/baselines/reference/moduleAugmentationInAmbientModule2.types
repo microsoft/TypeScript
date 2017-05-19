@@ -1,0 +1,46 @@
+=== tests/cases/compiler/main.ts ===
+/// <reference path="O.d.ts" />
+
+import {Observable} from "Observable";
+>Observable : typeof Observable
+
+import "Map";
+let x: Observable;
+>x : Observable
+>Observable : Observable
+
+x.foo().x;
+>x.foo().x : number
+>x.foo() : Cls
+>x.foo : () => Cls
+>x : Observable
+>foo : () => Cls
+>x : number
+
+=== tests/cases/compiler/O.d.ts ===
+declare module "Observable" {
+    class Observable {}
+>Observable : Observable
+}
+
+declare module "M" {
+    class Cls { x: number }
+>Cls : Cls
+>x : number
+}
+
+declare module "Map" {
+    import { Cls } from "M";
+>Cls : typeof Cls
+
+    module "Observable" {
+        interface Observable {
+>Observable : Observable
+
+            foo(): Cls;
+>foo : () => Cls
+>Cls : Cls
+        }
+    }
+}
+

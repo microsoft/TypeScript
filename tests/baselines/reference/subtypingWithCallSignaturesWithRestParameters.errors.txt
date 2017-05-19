@@ -2,57 +2,57 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Types of property 'a' are incompatible.
     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
       Types of parameters 'args' and 'args' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(34,11): error TS2430: Interface 'I3B' incorrectly extends interface 'Base'.
   Types of property 'a' are incompatible.
     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
       Types of parameters 'x' and 'args' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(60,11): error TS2430: Interface 'I6C' incorrectly extends interface 'Base'.
   Types of property 'a2' are incompatible.
     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
       Types of parameters 'args' and 'z' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(90,11): error TS2430: Interface 'I10B' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(94,11): error TS2430: Interface 'I10C' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'z' and 'y' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(98,11): error TS2430: Interface 'I10D' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'x' and 'x' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(102,11): error TS2430: Interface 'I10E' incorrectly extends interface 'Base'.
   Types of property 'a3' are incompatible.
     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'z' and 'z' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(110,11): error TS2430: Interface 'I12' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(118,11): error TS2430: Interface 'I14' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'y' and 'y' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(126,11): error TS2430: Interface 'I16' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'args' and 'z' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+        Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts(130,11): error TS2430: Interface 'I17' incorrectly extends interface 'Base'.
   Types of property 'a4' are incompatible.
     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
       Types of parameters 'args' and 'y' are incompatible.
-        Type 'number' is not assignable to type 'string'.
+        Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithRestParameters.ts (11 errors) ====
@@ -79,7 +79,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a' are incompatible.
 !!! error TS2430:     Type '(...args: string[]) => number' is not assignable to type '(...args: number[]) => number'.
 !!! error TS2430:       Types of parameters 'args' and 'args' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a: (...args: string[]) => number; // error, type mismatch
     }
     
@@ -101,7 +101,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a' are incompatible.
 !!! error TS2430:     Type '(x?: string) => number' is not assignable to type '(...args: number[]) => number'.
 !!! error TS2430:       Types of parameters 'x' and 'args' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a: (x?: string) => number; // error, incompatible type
     }
     
@@ -133,7 +133,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a2' are incompatible.
 !!! error TS2430:     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x: number, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'args' and 'z' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a2: (x: number, ...args: string[]) => number; // error
     }
     
@@ -169,7 +169,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type '(x: number, y?: number, z?: number) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
         a3: (x: number, y?: number, z?: number) => number;  // error
     }
     
@@ -179,7 +179,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type '(x: number, ...z: number[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'z' and 'y' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
         a3: (x: number, ...z: number[]) => number;  // error
     }
     
@@ -189,7 +189,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type '(x: string, y?: string, z?: string) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a3: (x: string, y?: string, z?: string) => number;  // error, incompatible types
     }
     
@@ -199,7 +199,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type '(x: number, ...z: string[]) => number' is not assignable to type '(x: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'z' and 'z' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a3: (x: number, ...z: string[]) => number;  // error
     }
     
@@ -213,7 +213,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a4' are incompatible.
 !!! error TS2430:     Type '(x?: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
         a4: (x?: number, y?: number) => number; // error, type mismatch
     }
     
@@ -227,7 +227,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a4' are incompatible.
 !!! error TS2430:     Type '(x: number, y?: number) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
         a4: (x: number, y?: number) => number;  // error, second param has type mismatch
     }
     
@@ -241,7 +241,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a4' are incompatible.
 !!! error TS2430:     Type '(x: number, ...args: string[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'args' and 'z' are incompatible.
-!!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! error TS2430:         Type 'number' is not assignable to type 'string'.
         a4: (x: number, ...args: string[]) => number;  // error, rest param has type mismatch
     }
     
@@ -251,7 +251,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2430:   Types of property 'a4' are incompatible.
 !!! error TS2430:     Type '(...args: number[]) => number' is not assignable to type '(x?: number, y?: string, ...z: number[]) => number'.
 !!! error TS2430:       Types of parameters 'args' and 'y' are incompatible.
-!!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! error TS2430:         Type 'string' is not assignable to type 'number'.
         a4: (...args: number[]) => number; // error
     }
     

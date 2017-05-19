@@ -17,4 +17,4 @@ var WebControls = (function () {
     WebControls.prototype.createControl = function () {
     };
     return WebControls;
-})();
+}());

@@ -1,0 +1,12 @@
+error TS5056: Cannot write file 'tests/cases/compiler/a.js' because it would be overwritten by multiple input files.
+
+
+!!! error TS5056: Cannot write file 'tests/cases/compiler/a.js' because it would be overwritten by multiple input files.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class c {
+    }
+    
+==== tests/cases/compiler/a.tsx (0 errors) ====
+    function foo() {
+    }
+    

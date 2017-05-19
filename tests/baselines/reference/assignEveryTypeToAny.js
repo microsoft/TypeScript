@@ -86,7 +86,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var h;
 x = h;
 var i;

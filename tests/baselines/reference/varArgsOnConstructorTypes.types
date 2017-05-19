@@ -28,14 +28,14 @@ export class B extends A {
         this.p1 = element;
 >this.p1 = element : any
 >this.p1 : number
->this : B
+>this : this
 >p1 : number
 >element : any
 
         this.p2 = url;
 >this.p2 = url : string
 >this.p2 : string
->this : B
+>this : this
 >p2 : string
 >url : string
     }

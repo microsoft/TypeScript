@@ -1,3 +1,4 @@
+// @allowUnreachableCode: true
 // @target: ES6
 
 

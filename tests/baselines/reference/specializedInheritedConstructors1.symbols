@@ -4,7 +4,7 @@ interface ViewOptions<TModel> {
 >TModel : Symbol(TModel, Decl(specializedInheritedConstructors1.ts, 0, 22))
 
     model: TModel;
->model : Symbol(model, Decl(specializedInheritedConstructors1.ts, 0, 31))
+>model : Symbol(ViewOptions.model, Decl(specializedInheritedConstructors1.ts, 0, 31))
 >TModel : Symbol(TModel, Decl(specializedInheritedConstructors1.ts, 0, 22))
 }
 
@@ -18,7 +18,7 @@ class View<TModel> {
 >TModel : Symbol(TModel, Decl(specializedInheritedConstructors1.ts, 4, 11))
 
     model: TModel;
->model : Symbol(model, Decl(specializedInheritedConstructors1.ts, 5, 49))
+>model : Symbol(View.model, Decl(specializedInheritedConstructors1.ts, 5, 49))
 >TModel : Symbol(TModel, Decl(specializedInheritedConstructors1.ts, 4, 11))
 }
 

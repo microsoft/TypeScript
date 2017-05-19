@@ -5,13 +5,13 @@ var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 var x1 = "hello world";
 var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 FileName : declSingleFile.d.ts
 declare var x: number;
 declare class Bar {

@@ -16,6 +16,6 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
 })(M || (M = {}));
 var r;

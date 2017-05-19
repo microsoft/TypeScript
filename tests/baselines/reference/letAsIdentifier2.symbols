@@ -1,0 +1,4 @@
+=== tests/cases/compiler/letAsIdentifier2.ts ===
+function let() {}
+>let : Symbol(let, Decl(letAsIdentifier2.ts, 0, 0))
+

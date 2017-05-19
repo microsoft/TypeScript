@@ -1,0 +1,34 @@
+=== tests/cases/compiler/reactNamespaceJSXEmit.tsx ===
+declare var myReactLib: any;
+>myReactLib : Symbol(myReactLib, Decl(reactNamespaceJSXEmit.tsx, 0, 11))
+
+declare var foo: any;
+>foo : Symbol(foo, Decl(reactNamespaceJSXEmit.tsx, 1, 11))
+
+declare var Bar: any;
+>Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
+
+declare var x: any;
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+
+<foo data/>;
+>foo : Symbol(unknown)
+>data : Symbol(data, Decl(reactNamespaceJSXEmit.tsx, 5, 4))
+
+<Bar x={x} />;
+>Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 6, 4))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+
+<x-component />;
+>x-component : Symbol(unknown)
+
+<Bar {...x} />;
+>Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+
+<Bar { ...x } y={2} />;
+>Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+>y : Symbol(y, Decl(reactNamespaceJSXEmit.tsx, 9, 13))
+

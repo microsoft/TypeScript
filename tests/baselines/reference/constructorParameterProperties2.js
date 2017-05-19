@@ -37,7 +37,7 @@ var C = (function () {
     function C(y) {
     } // ok
     return C;
-})();
+}());
 var c;
 var r = c.y;
 var D = (function () {
@@ -45,7 +45,7 @@ var D = (function () {
         this.y = y;
     } // error
     return D;
-})();
+}());
 var d;
 var r2 = d.y;
 var E = (function () {
@@ -53,7 +53,7 @@ var E = (function () {
         this.y = y;
     } // error
     return E;
-})();
+}());
 var e;
 var r3 = e.y; // error
 var F = (function () {
@@ -61,6 +61,6 @@ var F = (function () {
         this.y = y;
     } // error
     return F;
-})();
+}());
 var f;
 var r4 = f.y; // error

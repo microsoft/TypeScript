@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
 
 //// [modules.d.ts]
-
 declare module "interface" {
     interface Foo {
         x: number;
@@ -208,10 +207,12 @@ export * from "class-module";
 
 
 //// [main.js]
+"use strict";
 /// <reference path="modules.d.ts"/>
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+exports.__esModule = true;
 var z2 = require("variable");
 var z3 = require("interface-variable");
 var z4 = require("module");
@@ -231,8 +232,6 @@ z7.a;
 z8.a;
 z9.a;
 z0.a;
-// namespace import
-var y1 = require("interface");
 var y2 = require("variable");
 var y3 = require("interface-variable");
 var y4 = require("module");
@@ -274,6 +273,8 @@ function_module_1.a;
 class_1.a;
 class_module_1.a;
 // named export
+var interface_2 = require("interface");
+exports.a1 = interface_2.a;
 var variable_2 = require("variable");
 exports.a2 = variable_2.a;
 var interface_variable_2 = require("interface-variable");
@@ -284,12 +285,14 @@ var interface_module_2 = require("interface-module");
 exports.a5 = interface_module_2.a;
 var variable_module_2 = require("variable-module");
 exports.a6 = variable_module_2.a;
+var function_2 = require("function");
+exports.a7 = function_2.a;
 var function_module_2 = require("function-module");
 exports.a8 = function_module_2.a;
+var class_2 = require("class");
+exports.a9 = class_2.a;
 var class_module_2 = require("class-module");
 exports.a0 = class_module_2.a;
-// export-star
-__export(require("interface"));
 __export(require("variable"));
 __export(require("interface-variable"));
 __export(require("module"));

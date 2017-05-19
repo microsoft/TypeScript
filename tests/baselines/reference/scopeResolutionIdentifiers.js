@@ -66,7 +66,7 @@ var C = (function () {
         var p;
     };
     return C;
-})();
+}());
 var M3;
 (function (M3) {
     var s;

@@ -99,10 +99,10 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    C.sa = 1;
-    C.sb = function () { return 1; };
     return C;
-})();
+}());
+C.sa = 1;
+C.sb = function () { return 1; };
 var c;
 // BUG 820454
 var r1;
@@ -113,7 +113,7 @@ var D = (function () {
     }
     D.prototype.foo = function () { };
     return D;
-})();
+}());
 var d;
 var r3;
 var r4;

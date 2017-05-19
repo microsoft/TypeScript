@@ -9,6 +9,7 @@ export = new Greeter();
 
 
 //// [exportAssignmentWithoutIdentifier1.js]
+"use strict";
 function Greeter() {
     //...
 }

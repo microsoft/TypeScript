@@ -1,0 +1,25 @@
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(3,6): error TS2456: Type alias 'Recurse' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(7,6): error TS2456: Type alias 'Recurse1' circularly references itself.
+tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(11,6): error TS2456: Type alias 'Recurse2' circularly references itself.
+
+
+==== tests/cases/conformance/types/mapped/recursiveMappedTypes.ts (3 errors) ====
+    // Recursive mapped types simply appear empty
+    
+    type Recurse = {
+         ~~~~~~~
+!!! error TS2456: Type alias 'Recurse' circularly references itself.
+        [K in keyof Recurse]: Recurse[K]
+    }
+    
+    type Recurse1 = {
+         ~~~~~~~~
+!!! error TS2456: Type alias 'Recurse1' circularly references itself.
+        [K in keyof Recurse2]: Recurse2[K]
+    }
+    
+    type Recurse2 = {
+         ~~~~~~~~
+!!! error TS2456: Type alias 'Recurse2' circularly references itself.
+        [K in keyof Recurse1]: Recurse1[K]
+    }

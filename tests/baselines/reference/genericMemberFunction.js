@@ -24,6 +24,8 @@ export class BuildResult<A, B, C>{
 
 //// [genericMemberFunction.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
     var BuildError = (function () {
         function BuildError() {
         }
@@ -31,7 +33,7 @@ define(["require", "exports"], function (require, exports) {
             return undefined;
         };
         return BuildError;
-    })();
+    }());
     exports.BuildError = BuildError;
     var FileWithErrors = (function () {
         function FileWithErrors() {
@@ -43,7 +45,7 @@ define(["require", "exports"], function (require, exports) {
             return undefined;
         };
         return FileWithErrors;
-    })();
+    }());
     exports.FileWithErrors = FileWithErrors;
     var BuildResult = (function () {
         function BuildResult() {
@@ -56,6 +58,6 @@ define(["require", "exports"], function (require, exports) {
             });
         };
         return BuildResult;
-    })();
+    }());
     exports.BuildResult = BuildResult;
 });

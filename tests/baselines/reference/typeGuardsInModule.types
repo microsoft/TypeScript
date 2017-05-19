@@ -22,9 +22,9 @@ module m1 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -35,9 +35,9 @@ module m1 {
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 
         num = var2.length; // string
 >num = var2.length : number
@@ -59,20 +59,20 @@ module m1 {
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
->typeof var3 : string
+>typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
->"string" : string
+>"string" : "string"
 
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : string
 >strOrNum : string | number
->var3 : string | number
+>var3 : string
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : number
 >strOrNum : string | number
->var3 : string | number
+>var3 : number
     }
 }
 // local module
@@ -94,9 +94,9 @@ module m2 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -107,23 +107,23 @@ module m2 {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 >var2.length : number
 >var2 : string
 >length : number
 
         // exported variable from outer the module
         strOrNum = typeof var3 === "string" && var3; // string | number
->strOrNum = typeof var3 === "string" && var3 : string | number
+>strOrNum = typeof var3 === "string" && var3 : string
 >strOrNum : string | number
->typeof var3 === "string" && var3 : string | number
+>typeof var3 === "string" && var3 : string
 >typeof var3 === "string" : boolean
->typeof var3 : string
+>typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
->"string" : string
->var3 : string | number
+>"string" : "string"
+>var3 : string
 
         // variables in module declaration
         var var4: string | number;
@@ -131,9 +131,9 @@ module m2 {
 
         if (typeof var4 === "string") {
 >typeof var4 === "string" : boolean
->typeof var4 : string
+>typeof var4 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var4 : string | number
->"string" : string
+>"string" : "string"
 
             num = var4.length; // string
 >num = var4.length : number
@@ -155,20 +155,20 @@ module m2 {
 
         if (typeof var5 === "string") {
 >typeof var5 === "string" : boolean
->typeof var5 : string
+>typeof var5 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var5 : string | number
->"string" : string
+>"string" : "string"
 
             strOrNum = var5; // string | number
->strOrNum = var5 : string | number
+>strOrNum = var5 : string
 >strOrNum : string | number
->var5 : string | number
+>var5 : string
         }
         else {
             strOrNum = var5; // string | number
->strOrNum = var5 : string | number
+>strOrNum = var5 : number
 >strOrNum : string | number
->var5 : string | number
+>var5 : number
         }
     }
 }
@@ -183,9 +183,9 @@ module m3.m4 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : string
+>typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
->"string" : string
+>"string" : "string"
 >var1.length : number
 >var1 : string
 >length : number
@@ -196,9 +196,9 @@ module m3.m4 {
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
->typeof var2 : string
+>typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
->"string" : string
+>"string" : "string"
 
         num = var2.length; // string
 >num = var2.length : number
@@ -220,20 +220,20 @@ module m3.m4 {
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
->typeof var3 : string
+>typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
->"string" : string
+>"string" : "string"
 
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : string
 >strOrNum : string | number
->var3 : string | number
+>var3 : string
     }
     else {
         strOrNum = var3; // string | number
->strOrNum = var3 : string | number
+>strOrNum = var3 : number
 >strOrNum : string | number
->var3 : string | number
+>var3 : number
     }
 }
 

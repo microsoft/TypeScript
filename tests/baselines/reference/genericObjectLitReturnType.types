@@ -23,13 +23,13 @@ var t1 = x.f(5);
 >x.f : (t: number) => { a: number; }
 >x : X<number>
 >f : (t: number) => { a: number; }
->5 : number
+>5 : 5
 
 t1.a = 5; // Should not error: t1 should have type {a: number}, instead has type {a: T}
->t1.a = 5 : number
+>t1.a = 5 : 5
 >t1.a : number
 >t1 : { a: number; }
 >a : number
->5 : number
+>5 : 5
  
 

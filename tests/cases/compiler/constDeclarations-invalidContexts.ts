@@ -1,3 +1,4 @@
+// @allowUnreachableCode: true
 // @target: ES6
 
 // Errors, const must be defined inside a block

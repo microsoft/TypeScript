@@ -7,7 +7,7 @@ function M() {
 >X : Symbol(X, Decl(classExpressionTest1.ts, 1, 12))
 
         f<T>() {
->f : Symbol(f, Decl(classExpressionTest1.ts, 1, 16))
+>f : Symbol(C.f, Decl(classExpressionTest1.ts, 1, 16))
 >T : Symbol(T, Decl(classExpressionTest1.ts, 2, 10))
 
             var t: T;

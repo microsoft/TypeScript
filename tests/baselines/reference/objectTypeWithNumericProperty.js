@@ -49,7 +49,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c;
 var r1 = c[1];
 var r2 = c[1.1];

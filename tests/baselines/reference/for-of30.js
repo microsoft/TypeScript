@@ -1,6 +1,4 @@
 //// [for-of30.ts]
-for (var v of new StringIterator) { }
-
 class StringIterator {
     next() {
         return {
@@ -16,8 +14,9 @@ class StringIterator {
     }
 }
 
-//// [for-of30.js]
 for (var v of new StringIterator) { }
+
+//// [for-of30.js]
 class StringIterator {
     constructor() {
         this.return = 0;
@@ -32,3 +31,4 @@ class StringIterator {
         return this;
     }
 }
+for (var v of new StringIterator) { }

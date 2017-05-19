@@ -23,4 +23,4 @@ var C = (function () {
         var x2 = new this.data2(); // was error, shouldn't be
     };
     return C;
-})();
+}());

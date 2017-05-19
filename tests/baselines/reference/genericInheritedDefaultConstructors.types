@@ -1,0 +1,35 @@
+=== tests/cases/compiler/genericInheritedDefaultConstructors.ts ===
+// repro from #8166
+interface Constructor<T> {
+>Constructor : Constructor<T>
+>T : T
+
+    new(...args: any[]): T;
+>args : any[]
+>T : T
+
+    prototype: T;
+>prototype : T
+>T : T
+}
+
+class A<U> { a: U; }
+>A : A<U>
+>U : U
+>a : U
+>U : U
+
+class B<V> extends A<V> { b: V; }
+>B : B<V>
+>V : V
+>A : A<V>
+>V : V
+>b : V
+>V : V
+
+var c:Constructor<B<boolean>> = B; // shouldn't error here
+>c : Constructor<B<boolean>>
+>Constructor : Constructor<T>
+>B : B<V>
+>B : typeof B
+

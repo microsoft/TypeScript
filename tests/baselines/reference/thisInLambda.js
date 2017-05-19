@@ -29,7 +29,7 @@ var Foo = (function () {
         var f = function () { return _this.x; }; // 'this' should be type 'Foo' as well
     };
     return Foo;
-})();
+}());
 function myFn(a) { }
 var myCls = (function () {
     function myCls() {
@@ -41,4 +41,4 @@ var myCls = (function () {
         });
     }
     return myCls;
-})();
+}());

@@ -1,10 +1,9 @@
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(18,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'Derived' is not a valid type argument because it is not a supertype of candidate 'Derived2'.
     Property 'y' is missing in type 'Derived2'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts(20,29): error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
 
 
-==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts (2 errors) ====
+==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints3.ts (1 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class Base {
@@ -29,8 +28,6 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
 !!! error TS2453:     Property 'y' is missing in type 'Derived2'.
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
-                                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2313: Constraint of a type parameter cannot reference any type parameter from the same type parameter list.
         var r: T;
         return r;
     }

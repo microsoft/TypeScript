@@ -1,8 +1,4 @@
 //// [witness.ts]
-
-
-
-
 // Initializers
 var varInit = varInit; // any
 var pInit: any;
@@ -157,7 +153,7 @@ var InitClass = (function () {
         var y;
     };
     return InitClass;
-})();
+}());
 // Return type
 function fnReturn1() {
     return fnReturn1();
@@ -231,7 +227,7 @@ var C = (function () {
         return new a(this.fn3);
     };
     return C;
-})();
+}());
 function fn5() {
     var a;
     return new a(fn5);
@@ -255,16 +251,16 @@ var C2 = (function () {
         this.n = this.n; // n: any
     }
     return C2;
-})();
+}());
 var c2inst = new C2().n;
 var c2inst;
 // Constructor function property access
 var C3 = (function () {
     function C3() {
     }
-    C3.q = C3.q;
     return C3;
-})();
+}());
+C3.q = C3.q;
 var qq = C3.q;
 var qq;
 // Parentheses - tested a bunch above

@@ -67,7 +67,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var h = x;
 var i = x;
 var j = x;

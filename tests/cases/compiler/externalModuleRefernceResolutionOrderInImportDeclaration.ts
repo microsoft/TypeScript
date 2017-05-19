@@ -1,4 +1,4 @@
-//@module: commonjs
+// @module: commonjs
 // @Filename: externalModuleRefernceResolutionOrderInImportDeclaration_file1.ts
 export function foo() { };
 
@@ -10,7 +10,7 @@ declare module "externalModuleRefernceResolutionOrderInImportDeclaration_file1" 
 
 // @Filename: externalModuleRefernceResolutionOrderInImportDeclaration_file3.ts
 ///<reference path='externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts'/>
-import file1 = require('externalModuleRefernceResolutionOrderInImportDeclaration_file1');
+import file1 = require('./externalModuleRefernceResolutionOrderInImportDeclaration_file1');
 file1.foo();
 file1.bar();
 

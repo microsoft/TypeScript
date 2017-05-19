@@ -1,0 +1,131 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringParametertArrayBindingPattern2.ts ===
+declare var console: {
+>console : { log(msg: any): void; }
+
+    log(msg: any): void;
+>log : (msg: any) => void
+>msg : any
+}
+type Robot = [string, [string, string]];
+>Robot : [string, [string, string]]
+
+var robotA: Robot = ["trimmer", ["trimming", "edging"]];
+>robotA : [string, [string, string]]
+>Robot : [string, [string, string]]
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : [string, string]
+>"trimming" : "trimming"
+>"edging" : "edging"
+
+function foo1([, skillA]: Robot) {
+>foo1 : ([, skillA]: [string, [string, string]]) => void
+> : undefined
+>skillA : [string, string]
+>Robot : [string, [string, string]]
+
+    console.log(skillA);
+>console.log(skillA) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>skillA : [string, string]
+}
+
+function foo2([nameMB]: Robot) {
+>foo2 : ([nameMB]: [string, [string, string]]) => void
+>nameMB : string
+>Robot : [string, [string, string]]
+
+    console.log(nameMB);
+>console.log(nameMB) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>nameMB : string
+}
+
+function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
+>nameMA : string
+>primarySkillA : string
+>secondarySkillA : string
+>Robot : [string, [string, string]]
+
+    console.log(nameMA);
+>console.log(nameMA) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>nameMA : string
+}
+
+function foo4([...multiRobotAInfo]: Robot) {
+>foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
+>multiRobotAInfo : (string | [string, string])[]
+>Robot : [string, [string, string]]
+
+    console.log(multiRobotAInfo);
+>console.log(multiRobotAInfo) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>multiRobotAInfo : (string | [string, string])[]
+}
+
+foo1(robotA);
+>foo1(robotA) : void
+>foo1 : ([, skillA]: [string, [string, string]]) => void
+>robotA : [string, [string, string]]
+
+foo1(["roomba", ["vaccum", "mopping"]]);
+>foo1(["roomba", ["vaccum", "mopping"]]) : void
+>foo1 : ([, skillA]: [string, [string, string]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+foo2(robotA);
+>foo2(robotA) : void
+>foo2 : ([nameMB]: [string, [string, string]]) => void
+>robotA : [string, [string, string]]
+
+foo2(["roomba", ["vaccum", "mopping"]]);
+>foo2(["roomba", ["vaccum", "mopping"]]) : void
+>foo2 : ([nameMB]: [string, [string, string]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+foo3(robotA);
+>foo3(robotA) : void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
+>robotA : [string, [string, string]]
+
+foo3(["roomba", ["vaccum", "mopping"]]);
+>foo3(["roomba", ["vaccum", "mopping"]]) : void
+>foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: [string, [string, string]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+foo4(robotA);
+>foo4(robotA) : void
+>foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
+>robotA : [string, [string, string]]
+
+foo4(["roomba", ["vaccum", "mopping"]]);
+>foo4(["roomba", ["vaccum", "mopping"]]) : void
+>foo4 : ([...multiRobotAInfo]: [string, [string, string]]) => void
+>["roomba", ["vaccum", "mopping"]] : [string, [string, string]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : [string, string]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+

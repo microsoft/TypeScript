@@ -80,25 +80,30 @@ module YYY4 {
 
 //// [invalidModuleWithStatementsOfEveryKind.js]
 // All of these should be an error
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Y;
 (function (Y) {
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
-    })(A);
+    }(A));
 })(Y || (Y = {}));
 var Y2;
 (function (Y2) {
@@ -106,14 +111,14 @@ var Y2;
         function AA() {
         }
         return AA;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
-    })(AA);
+    }(AA));
 })(Y2 || (Y2 = {}));
 var Y3;
 (function (Y3) {
@@ -123,7 +128,7 @@ var Y3;
             function A() {
             }
             return A;
-        })();
+        }());
     })(Module || (Module = {}));
 })(Y3 || (Y3 = {}));
 var Y4;
@@ -140,14 +145,14 @@ var YY;
         function A() {
         }
         return A;
-    })();
+    }());
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
-    })(A);
+    }(A));
 })(YY || (YY = {}));
 var YY2;
 (function (YY2) {
@@ -155,14 +160,14 @@ var YY2;
         function AA() {
         }
         return AA;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
-    })(AA);
+    }(AA));
 })(YY2 || (YY2 = {}));
 var YY3;
 (function (YY3) {
@@ -172,7 +177,7 @@ var YY3;
             function A() {
             }
             return A;
-        })();
+        }());
     })(Module || (Module = {}));
 })(YY3 || (YY3 = {}));
 var YY4;
@@ -189,14 +194,14 @@ var YYY;
         function A() {
         }
         return A;
-    })();
+    }());
     var BB = (function (_super) {
         __extends(BB, _super);
         function BB() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return BB;
-    })(A);
+    }(A));
 })(YYY || (YYY = {}));
 var YYY2;
 (function (YYY2) {
@@ -204,14 +209,14 @@ var YYY2;
         function AA() {
         }
         return AA;
-    })();
+    }());
     var B = (function (_super) {
         __extends(B, _super);
         function B() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
-    })(AA);
+    }(AA));
 })(YYY2 || (YYY2 = {}));
 var YYY3;
 (function (YYY3) {
@@ -221,7 +226,7 @@ var YYY3;
             function A() {
             }
             return A;
-        })();
+        }());
     })(Module || (Module = {}));
 })(YYY3 || (YYY3 = {}));
 var YYY4;

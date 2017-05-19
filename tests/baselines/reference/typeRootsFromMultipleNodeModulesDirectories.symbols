@@ -1,0 +1,33 @@
+=== /foo/bar/a.ts ===
+import { x } from "xyz";
+>x : Symbol(x, Decl(a.ts, 0, 8))
+
+import { y } from "pdq";
+>y : Symbol(y, Decl(a.ts, 1, 8))
+
+import { z } from "abc";
+>z : Symbol(z, Decl(a.ts, 2, 8))
+
+x + y + z;
+>x : Symbol(x, Decl(a.ts, 0, 8))
+>y : Symbol(y, Decl(a.ts, 1, 8))
+>z : Symbol(z, Decl(a.ts, 2, 8))
+
+=== /node_modules/@types/dopey/index.d.ts ===
+declare module "xyz" {
+    export const x: number;
+>x : Symbol(x, Decl(index.d.ts, 1, 16))
+}
+
+=== /foo/node_modules/@types/grumpy/index.d.ts ===
+declare module "pdq" {
+    export const y: number; 
+>y : Symbol(y, Decl(index.d.ts, 1, 16))
+}
+
+=== /foo/node_modules/@types/sneezy/index.d.ts ===
+declare module "abc" {
+    export const z: number;
+>z : Symbol(z, Decl(index.d.ts, 1, 16))
+}
+

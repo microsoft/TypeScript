@@ -16,4 +16,4 @@ var A1 = (function () {
         return null;
     };
     return A1;
-})();
+}());

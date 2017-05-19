@@ -22,6 +22,7 @@ import m = m3
 export = m;
 
 //// [declFileExportAssignmentImportInternalModule.js]
+"use strict";
 var m3;
 (function (m3) {
 })(m3 || (m3 = {}));

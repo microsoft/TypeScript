@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 class Foo {
     x: string;
     y() { }

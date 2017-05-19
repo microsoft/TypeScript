@@ -1,4 +1,6 @@
 // @declaration: true
+// @target: es5
+
 module a {
 }
 

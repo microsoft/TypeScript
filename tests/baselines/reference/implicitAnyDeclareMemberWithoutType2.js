@@ -17,4 +17,4 @@ var C = (function () {
     } // error at "c1, c2"
     C.prototype.funcOfC = function (f1, f2, f3) { }; // error at "f1,f2"
     return C;
-})();
+}());

@@ -1,8 +1,5 @@
 //// [iteratorSpreadInCall11.ts]
-foo(...new SymbolIterator);
-
 function foo<T>(...s: T[]) { return s[0] }
-
 class SymbolIterator {
     next() {
         return {
@@ -16,8 +13,9 @@ class SymbolIterator {
     }
 }
 
-//// [iteratorSpreadInCall11.js]
 foo(...new SymbolIterator);
+
+//// [iteratorSpreadInCall11.js]
 function foo(...s) { return s[0]; }
 class SymbolIterator {
     next() {
@@ -30,3 +28,4 @@ class SymbolIterator {
         return this;
     }
 }
+foo(...new SymbolIterator);

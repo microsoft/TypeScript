@@ -3,13 +3,13 @@ enum Foo {
 >Foo : Foo
 
     a = 1
->a : Foo
->1 : number
+>a : Foo.a
+>1 : 1
 }
 
 enum Foo {
 >Foo : Foo
 
     b // should work fine
->b : Foo
+>b : Foo.b
 }

@@ -24,7 +24,7 @@ var C = (function () {
     C.prototype.bar = function () {
         var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            rest[_i - 0] = arguments[_i];
+            rest[_i] = arguments[_i];
         }
     };
     C.prototype.foo = function (x) {
@@ -34,18 +34,18 @@ var C = (function () {
         }
     };
     return C;
-})();
+}());
 var D = (function () {
     function D() {
         var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            rest[_i - 0] = arguments[_i];
+            rest[_i] = arguments[_i];
         }
     }
     D.prototype.bar = function () {
         var rest = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            rest[_i - 0] = arguments[_i];
+            rest[_i] = arguments[_i];
         }
     };
     D.prototype.foo = function (x) {
@@ -55,4 +55,4 @@ var D = (function () {
         }
     };
     return D;
-})();
+}());

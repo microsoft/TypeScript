@@ -1,0 +1,20 @@
+=== tests/cases/conformance/parser/ecmascript5/EnumDeclarations/parserEnumDeclaration6.ts ===
+enum E {
+>E : E
+
+    A = 1,
+>A : E
+>1 : 1
+
+    B,
+>B : E
+
+    C = 1 << 1,
+>C : E
+>1 << 1 : number
+>1 : 1
+>1 : 1
+
+    D,
+>D : E
+}

@@ -41,5 +41,5 @@ var DebugClass = (function () {
         return true;
     };
     return DebugClass;
-})();
+}());
 //# sourceMappingURL=sourceMapValidationWithComments.js.map

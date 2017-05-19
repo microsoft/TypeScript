@@ -1,0 +1,56 @@
+=== tests/cases/compiler/checkSuperCallBeforeThisAccessing4.ts ===
+class Based { }
+>Based : Based
+
+class Derived extends Based {
+>Derived : Derived
+>Based : Based
+
+    public x: number;
+>x : number
+
+    constructor() {
+        (() => {
+>(() => {            this;  // No error        }) : () => void
+>() => {            this;  // No error        } : () => void
+
+            this;  // No error
+>this : this
+
+        });
+        () => {
+>() => {            this;  // No error        } : () => void
+
+            this;  // No error
+>this : this
+
+        };
+        (() => {
+>(() => {            this;  // No error        })() : void
+>(() => {            this;  // No error        }) : () => void
+>() => {            this;  // No error        } : () => void
+
+            this;  // No error
+>this : this
+
+        })();
+        super();
+>super() : void
+>super : typeof Based
+
+        super();
+>super() : void
+>super : typeof Based
+
+        this.x = 10;
+>this.x = 10 : 10
+>this.x : number
+>this : this
+>x : number
+>10 : 10
+
+        var that = this;
+>that : this
+>this : this
+    }
+}

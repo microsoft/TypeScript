@@ -6,7 +6,7 @@ var v = { * foo() {
 
 
 //// [YieldExpression10_es6.js]
-var v = { foo: function () {
+var v = { *foo() {
         yield (foo);
     }
 };

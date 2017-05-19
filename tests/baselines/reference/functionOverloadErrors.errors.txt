@@ -4,8 +4,8 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(50,25): error TS2304
 tests/cases/conformance/functions/functionOverloadErrors.ts(51,32): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/functions/functionOverloadErrors.ts(65,13): error TS2385: Overload signatures must all be public, private or protected.
 tests/cases/conformance/functions/functionOverloadErrors.ts(68,13): error TS2385: Overload signatures must all be public, private or protected.
-tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or not exported.
-tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or not exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(75,21): error TS2383: Overload signatures must all be exported or non-exported.
+tests/cases/conformance/functions/functionOverloadErrors.ts(79,14): error TS2383: Overload signatures must all be exported or non-exported.
 tests/cases/conformance/functions/functionOverloadErrors.ts(85,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/conformance/functions/functionOverloadErrors.ts(90,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/conformance/functions/functionOverloadErrors.ts(94,10): error TS2394: Overload signature is not compatible with function implementation.
@@ -103,13 +103,13 @@ tests/cases/conformance/functions/functionOverloadErrors.ts(116,19): error TS237
     module M {
         export function fn1();
                         ~~~
-!!! error TS2383: Overload signatures must all be exported or not exported.
+!!! error TS2383: Overload signatures must all be exported or non-exported.
         function fn1(n: string);
         function fn1() { } 
     
         function fn2(n: string);
                  ~~~
-!!! error TS2383: Overload signatures must all be exported or not exported.
+!!! error TS2383: Overload signatures must all be exported or non-exported.
         export function fn2();
         export function fn2() { } 
     }

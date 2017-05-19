@@ -9,4 +9,4 @@ var C = (function () {
     }
     C.prototype.Foo = function () { };
     return C;
-})();
+}());

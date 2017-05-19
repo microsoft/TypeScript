@@ -1,4 +1,4 @@
-//// [tsxElementResolution6.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -9,7 +9,7 @@ var div: any;
 <div n='x' />;
 
 
-//// [tsxElementResolution6.jsx]
+//// [file.jsx]
 var div;
 // Still an error
 <div n='x'/>;

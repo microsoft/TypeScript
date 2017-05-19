@@ -219,34 +219,34 @@ var c = (function () {
         return 10;
     };
     return c;
-})();
+}());
 var c1 = (function () {
     function c1(aorb) {
     }
     return c1;
-})();
+}());
 var c2 = (function () {
     function c2(aorb) {
     }
     return c2;
-})();
+}());
 var c3 = (function () {
     function c3(aorb) {
     }
     return c3;
-})();
+}());
 var c4 = (function () {
     /** c4 3 */
     function c4(aorb) {
     }
     return c4;
-})();
+}());
 var c5 = (function () {
     /** c5 implementation*/
     function c5(aorb) {
     }
     return c5;
-})();
+}());
 var c_i = new c();
 var c1_i_1 = new c1(10);
 var c1_i_2 = new c1("hello");

@@ -53,22 +53,22 @@ var Default = (function () {
     function Default() {
     }
     return Default;
-})();
+}());
 var Public = (function () {
     function Public() {
     }
     return Public;
-})();
+}());
 var Protected = (function () {
     function Protected() {
     }
     return Protected;
-})();
+}());
 var Private = (function () {
     function Private() {
     }
     return Private;
-})();
+}());
 var v1;
 var v2;
 var v3;

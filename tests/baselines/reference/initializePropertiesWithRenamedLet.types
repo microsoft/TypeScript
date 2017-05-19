@@ -1,10 +1,9 @@
 === tests/cases/compiler/initializePropertiesWithRenamedLet.ts ===
-
 var x0;
 >x0 : any
 
 if (true) {
->true : boolean
+>true : true
 
     let x0;
 >x0 : any
@@ -27,20 +26,20 @@ var x, y, z;
 >z : any
 
 if (true) {
->true : boolean
+>true : true
 
     let { x: x } = { x: 0 };
 >x : any
 >x : number
 >{ x: 0 } : { x: number; }
 >x : number
->0 : number
+>0 : 0
 
     let { y } = { y: 0 };
 >y : number
 >{ y: 0 } : { y: number; }
 >y : number
->0 : number
+>0 : 0
 
     let z;
 >z : any
@@ -53,7 +52,7 @@ if (true) {
 >z : any
 >{ z: 0 } : { z: number; }
 >z : number
->0 : number
+>0 : 0
 
     ({ z } = { z: 0 });
 >({ z } = { z: 0 }) : { z: number; }
@@ -62,5 +61,5 @@ if (true) {
 >z : any
 >{ z: 0 } : { z: number; }
 >z : number
->0 : number
+>0 : 0
 }

@@ -1,0 +1,28 @@
+=== tests/cases/compiler/t1.ts ===
+export var x = "x";
+>x : string
+>"x" : "x"
+
+=== tests/cases/compiler/t2.ts ===
+export { x } from
+>x : string
+
+    "./t1";
+
+=== tests/cases/compiler/t3.ts ===
+export { } from
+No type information for this code.    "./t1";
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/t4.ts ===
+export { x as a } from
+>x : string
+>a : string
+
+    "./t1";
+
+=== tests/cases/compiler/t5.ts ===
+export { x as a, } from
+>x : string
+>a : string
+
+    "./t1";

@@ -1,0 +1,11 @@
+=== tests/cases/compiler/singleLineCommentInConciseArrowFunctionES3.ts ===
+function test() {
+>test : () => () => number
+
+    return () =>
+>() =>        // some comments here;        123 : () => number
+
+        // some comments here;
+        123;
+>123 : 123
+}

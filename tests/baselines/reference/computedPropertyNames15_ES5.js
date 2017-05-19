@@ -19,4 +19,4 @@ var C = (function () {
     C.prototype[p2] = function () { };
     C.prototype[p3] = function () { };
     return C;
-})();
+}());

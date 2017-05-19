@@ -3,7 +3,7 @@ module M {
     export interface I { }
 }
 module M {
-    export class I { } // error
+    export class I { }
 }
 
 module M {
@@ -59,54 +59,46 @@ var M;
         function I() {
         }
         return I;
-    })();
-    M.I = I; // error
+    }());
+    M.I = I;
 })(M || (M = {}));
-var M;
 (function (M) {
     function f() { }
     M.f = f;
 })(M || (M = {}));
-var M;
 (function (M) {
     var f = (function () {
         function f() {
         }
         return f;
-    })();
-    M.f = f; // error
+    }()); // error
+    M.f = f;
 })(M || (M = {}));
-var M;
 (function (M) {
     function g() { }
 })(M || (M = {}));
-var M;
 (function (M) {
     var g = (function () {
         function g() {
         }
         return g;
-    })();
-    M.g = g; // no error
+    }()); // no error
+    M.g = g;
 })(M || (M = {}));
-var M;
 (function (M) {
     var C = (function () {
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
-var M;
 (function (M) {
     function C() { } // no error
 })(M || (M = {}));
-var M;
 (function (M) {
     M.v = 3;
 })(M || (M = {}));
-var M;
 (function (M) {
     M.v = 3; // error for redeclaring var in a different parent
 })(M || (M = {}));
@@ -114,8 +106,7 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
-var Foo;
+}());
 (function (Foo) {
 })(Foo || (Foo = {}));
 var N;

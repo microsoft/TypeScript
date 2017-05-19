@@ -1,0 +1,13 @@
+=== tests/cases/compiler/controlFlowPropertyInitializer.ts ===
+// Repro from #8967
+
+const LANG = "Turbo Pascal"
+>LANG : Symbol(LANG, Decl(controlFlowPropertyInitializer.ts, 2, 5))
+
+class BestLanguage {
+>BestLanguage : Symbol(BestLanguage, Decl(controlFlowPropertyInitializer.ts, 2, 27))
+
+    name = LANG;
+>name : Symbol(BestLanguage.name, Decl(controlFlowPropertyInitializer.ts, 4, 20))
+>LANG : Symbol(LANG, Decl(controlFlowPropertyInitializer.ts, 2, 5))
+}

@@ -79,15 +79,15 @@ var B = (function () {
         return null;
     }
     return B;
-})();
+}());
 var C = (function () {
     function C(x) {
         return null;
     }
     return C;
-})();
+}());
 var a;
-var b = { new: function (x) { return x; } };
+var b = { "new": function (x) { return x; } };
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

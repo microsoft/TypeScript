@@ -24,10 +24,19 @@ enum E10 {
 
 // Enum with computed member intializer of other types
 enum E11 {
-    A = '',
+    A = true,
     B = new Date(),
     C = window,
     D = {}
+}
+
+// Enum with string valued member and computed member initializers
+enum E12 {
+    A = '',
+    B = new Date(),
+    C = window,
+    D = {},
+    E = 1 + 1,
 }
 
 
@@ -65,8 +74,17 @@ var E10;
 // Enum with computed member intializer of other types
 var E11;
 (function (E11) {
-    E11[E11["A"] = ''] = "A";
+    E11[E11["A"] = true] = "A";
     E11[E11["B"] = new Date()] = "B";
     E11[E11["C"] = window] = "C";
     E11[E11["D"] = {}] = "D";
 })(E11 || (E11 = {}));
+// Enum with string valued member and computed member initializers
+var E12;
+(function (E12) {
+    E12["A"] = "";
+    E12[E12["B"] = 0] = "B";
+    E12[E12["C"] = 0] = "C";
+    E12[E12["D"] = 0] = "D";
+    E12[E12["E"] = 0] = "E";
+})(E12 || (E12 = {}));

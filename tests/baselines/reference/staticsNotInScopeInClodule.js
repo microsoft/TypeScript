@@ -11,10 +11,9 @@ module Clod {
 var Clod = (function () {
     function Clod() {
     }
-    Clod.x = 10;
     return Clod;
-})();
-var Clod;
+}());
+Clod.x = 10;
 (function (Clod) {
     var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

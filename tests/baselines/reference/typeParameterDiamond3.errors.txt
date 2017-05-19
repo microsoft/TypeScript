@@ -4,6 +4,9 @@ tests/cases/compiler/typeParameterDiamond3.ts(9,13): error TS2322: Type 'Bottom'
   Type 'Top | T | U' is not assignable to type 'T | U'.
     Type 'Top' is not assignable to type 'T | U'.
       Type 'Top' is not assignable to type 'U'.
+        Type 'Bottom' is not assignable to type 'U'.
+          Type 'Top | T | U' is not assignable to type 'U'.
+            Type 'Top' is not assignable to type 'U'.
 tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom' is not assignable to type 'Top'.
   Type 'Top | T | U' is not assignable to type 'Top'.
     Type 'T' is not assignable to type 'Top'.
@@ -27,6 +30,9 @@ tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom
 !!! error TS2322:   Type 'Top | T | U' is not assignable to type 'T | U'.
 !!! error TS2322:     Type 'Top' is not assignable to type 'T | U'.
 !!! error TS2322:       Type 'Top' is not assignable to type 'U'.
+!!! error TS2322:         Type 'Bottom' is not assignable to type 'U'.
+!!! error TS2322:           Type 'Top | T | U' is not assignable to type 'U'.
+!!! error TS2322:             Type 'Top' is not assignable to type 'U'.
                 top = bottom;
                 ~~~
 !!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.

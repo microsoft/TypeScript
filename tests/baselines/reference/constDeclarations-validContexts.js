@@ -1,6 +1,4 @@
 //// [constDeclarations-validContexts.ts]
-
-
 // Control flow statements with blocks
 if (true) { 
     const c1 = 0;

@@ -7,6 +7,6 @@ function f(x: any) {
 }
 
 //// [stringLiteralType.js]
-var x = 'hi';
+var x;
 function f(x) {
 }

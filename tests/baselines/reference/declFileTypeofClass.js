@@ -1,5 +1,4 @@
 //// [declFileTypeofClass.ts]
-
 class c {
     static x : string;
     private static y: number;
@@ -21,7 +20,7 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var x;
 var y = c;
 var z;
@@ -29,7 +28,7 @@ var genericC = (function () {
     function genericC() {
     }
     return genericC;
-})();
+}());
 var genericX = genericC;
 
 

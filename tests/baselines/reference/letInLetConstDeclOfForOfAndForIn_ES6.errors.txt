@@ -1,0 +1,47 @@
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(2,10): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(4,12): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(6,10): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(8,12): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(11,11): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(13,13): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(15,11): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts(17,13): error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+
+
+==== tests/cases/compiler/letInLetConstDeclOfForOfAndForIn_ES6.ts (8 errors) ====
+    // Should be an error
+    for (let let of [1,2,3]) {}
+             ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    for (const let of [1,2,3]) {}
+               ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    for (let let in [1,2,3]) {}
+             ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    for (const let in [1,2,3]) {}
+               ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    {
+    	for (let let of [1,2,3]) {}
+    	         ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    	for (const let of [1,2,3]) {}
+    	           ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    	
+    	for (let let in [1,2,3]) {}
+    	         ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    
+    	for (const let in [1,2,3]) {}
+    	           ~~~
+!!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
+    }
+    
+    

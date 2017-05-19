@@ -1,0 +1,42 @@
+=== c:/root/folder1/file1.ts ===
+// baseUrl set via command line
+
+import {x} from "folder2/file2"
+>x : number
+
+declare function use(a: any): void;
+>use : (a: any) => void
+>a : any
+
+use(x.toExponential());
+>use(x.toExponential()) : void
+>use : (a: any) => void
+>x.toExponential() : string
+>x.toExponential : (fractionDigits?: number) => string
+>x : number
+>toExponential : (fractionDigits?: number) => string
+
+=== c:/root/folder2/file2.ts ===
+import {x as a} from "./file3"  // found with baseurl
+>x : number
+>a : number
+
+import {y as b} from "file4"    // found with fallback
+>y : number
+>b : number
+
+export var x = a + b;
+>x : number
+>a + b : number
+>a : number
+>b : number
+
+=== c:/root/folder2/file3.ts ===
+export var x = 1;
+>x : number
+>1 : 1
+
+=== c:/node_modules/file4/index.d.ts ===
+export var y: number;
+>y : number
+

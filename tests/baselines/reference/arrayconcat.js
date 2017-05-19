@@ -48,4 +48,4 @@ var parser = (function () {
         });
     };
     return parser;
-})();
+}());

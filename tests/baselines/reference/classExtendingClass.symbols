@@ -3,10 +3,10 @@ class C {
 >C : Symbol(C, Decl(classExtendingClass.ts, 0, 0))
 
     foo: string;
->foo : Symbol(foo, Decl(classExtendingClass.ts, 0, 9))
+>foo : Symbol(C.foo, Decl(classExtendingClass.ts, 0, 9))
 
     thing() { }
->thing : Symbol(thing, Decl(classExtendingClass.ts, 1, 16))
+>thing : Symbol(C.thing, Decl(classExtendingClass.ts, 1, 16))
 
     static other() { }
 >other : Symbol(C.other, Decl(classExtendingClass.ts, 2, 15))
@@ -17,7 +17,7 @@ class D extends C {
 >C : Symbol(C, Decl(classExtendingClass.ts, 0, 0))
 
     bar: string;
->bar : Symbol(bar, Decl(classExtendingClass.ts, 6, 19))
+>bar : Symbol(D.bar, Decl(classExtendingClass.ts, 6, 19))
 }
 
 var d: D;
@@ -53,11 +53,11 @@ class C2<T> {
 >T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
 
     foo: T;
->foo : Symbol(foo, Decl(classExtendingClass.ts, 16, 13))
+>foo : Symbol(C2.foo, Decl(classExtendingClass.ts, 16, 13))
 >T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
 
     thing(x: T) { }
->thing : Symbol(thing, Decl(classExtendingClass.ts, 17, 11))
+>thing : Symbol(C2.thing, Decl(classExtendingClass.ts, 17, 11))
 >x : Symbol(x, Decl(classExtendingClass.ts, 18, 10))
 >T : Symbol(T, Decl(classExtendingClass.ts, 16, 9))
 
@@ -75,7 +75,7 @@ class D2<T> extends C2<T> {
 >T : Symbol(T, Decl(classExtendingClass.ts, 22, 9))
 
     bar: string;
->bar : Symbol(bar, Decl(classExtendingClass.ts, 22, 27))
+>bar : Symbol(D2.bar, Decl(classExtendingClass.ts, 22, 27))
 }
 
 var d2: D2<string>;

@@ -31,7 +31,7 @@ var A;
             this.y = y;
         }
         return Point;
-    })();
+    }());
     A.Point = Point;
 })(A || (A = {}));
 //// [test.js]

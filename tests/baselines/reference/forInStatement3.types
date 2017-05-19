@@ -8,7 +8,7 @@ function F<T>() {
 >T : T
 
   for (var a in expr) {
->a : any
+>a : keyof T
 >expr : T
   }
 }

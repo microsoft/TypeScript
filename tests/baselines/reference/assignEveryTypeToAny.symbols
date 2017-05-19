@@ -84,7 +84,7 @@ interface I {
 >I : Symbol(I, Decl(assignEveryTypeToAny.ts, 31, 6))
 
     foo: string;
->foo : Symbol(foo, Decl(assignEveryTypeToAny.ts, 33, 13))
+>foo : Symbol(I.foo, Decl(assignEveryTypeToAny.ts, 33, 13))
 }
 
 var g: I;
@@ -99,7 +99,7 @@ class C {
 >C : Symbol(C, Decl(assignEveryTypeToAny.ts, 38, 6))
 
     bar: string;
->bar : Symbol(bar, Decl(assignEveryTypeToAny.ts, 40, 9))
+>bar : Symbol(C.bar, Decl(assignEveryTypeToAny.ts, 40, 9))
 }
 
 var h: C;

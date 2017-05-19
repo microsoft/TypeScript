@@ -12,8 +12,7 @@ edit.insert('C.');
 verify.not.completionListContains('foo');
 edit.backspace(1);
 
-goTo.marker('2');
-verify.quickInfoIs("var r: typeof m2g");
+verify.quickInfoAt("2", "var r: typeof m2g");
 
 goTo.marker('3');
 edit.insert('(');

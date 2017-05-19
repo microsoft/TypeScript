@@ -1,5 +1,4 @@
 //// [declFileObjectLiteralWithOnlySetter.ts]
-
 function /*1*/makePoint(x: number) { 
     return {
         b: 10,
@@ -17,7 +16,7 @@ function makePoint(x) {
     };
 }
 ;
-var point = makePoint(2);
+var /*3*/ point = makePoint(2);
 point.x = 30;
 
 

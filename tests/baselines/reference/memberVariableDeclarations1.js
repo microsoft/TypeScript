@@ -36,7 +36,7 @@ var Employee = (function () {
         this.reports = [];
     }
     return Employee;
-})();
+}());
 var Employee2 = (function () {
     function Employee2() {
         this.retired = false;
@@ -44,7 +44,7 @@ var Employee2 = (function () {
         this.reports = [];
     }
     return Employee2;
-})();
+}());
 var e1;
 var e2;
 e1 = e2;

@@ -1,0 +1,4 @@
+=== tests/cases/compiler/es5-commonjs2.ts ===
+export default 1;
+No type information for this code.
+No type information for this code.

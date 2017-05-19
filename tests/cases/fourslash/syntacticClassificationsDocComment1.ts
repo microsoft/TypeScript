@@ -13,5 +13,5 @@ verify.syntacticClassificationsAre(
     c.punctuation("}"),
     c.comment(" */"),
     c.keyword("var"),
-    c.text("v"),
+    c.identifier("v"),
     c.punctuation(";"));

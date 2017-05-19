@@ -25,7 +25,7 @@ var __test2__;
             this.two = two;
         }
         return classWithPublicAndOptional;
-    })();
+    }());
     __test2__.classWithPublicAndOptional = classWithPublicAndOptional;
     var x4 = new classWithPublicAndOptional(1);
     ;

@@ -50,7 +50,7 @@ function f1() {
                 this.y = y;
             }
             return C;
-        })();
+        }());
         return C;
     }
     var C = f();
@@ -66,7 +66,7 @@ function f2() {
                 this.x = x;
             }
             return C;
-        })();
+        }());
         return C;
     }
     var C = f(10);
@@ -82,7 +82,7 @@ function f3() {
                 this.y = y;
             }
             return C;
-        })();
+        }());
         return C;
     }
     var C = f(10, "hello");

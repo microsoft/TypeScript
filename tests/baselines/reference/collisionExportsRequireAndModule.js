@@ -93,13 +93,15 @@ module m4 {
 
 //// [collisionExportsRequireAndModule_externalmodule.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
     var require;
     (function (require) {
         var C = (function () {
             function C() {
             }
             return C;
-        })();
+        }());
         require.C = C;
     })(require = exports.require || (exports.require = {}));
     function foo() {
@@ -112,7 +114,7 @@ define(["require", "exports"], function (require, exports) {
             function C() {
             }
             return C;
-        })();
+        }());
         exports.C = C;
     })(exports = exports.exports || (exports.exports = {}));
     function foo2() {
@@ -127,7 +129,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             require.C = C;
         })(require || (require = {}));
         var exports;
@@ -136,7 +138,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports.C = C;
         })(exports || (exports = {}));
     })(m1 || (m1 = {}));
@@ -148,7 +150,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             require.C = C;
         })(require = m2.require || (m2.require = {}));
         var exports;
@@ -157,7 +159,7 @@ define(["require", "exports"], function (require, exports) {
                 function C() {
                 }
                 return C;
-            })();
+            }());
             exports.C = C;
         })(exports = m2.exports || (m2.exports = {}));
     })(m2 || (m2 = {}));
@@ -169,7 +171,7 @@ var require;
         function C() {
         }
         return C;
-    })();
+    }());
     require.C = C;
 })(require || (require = {}));
 var exports;
@@ -178,7 +180,7 @@ var exports;
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
 })(exports || (exports = {}));
 var m3;
@@ -189,7 +191,7 @@ var m3;
             function C() {
             }
             return C;
-        })();
+        }());
         require.C = C;
     })(require || (require = {}));
     var exports;
@@ -198,7 +200,7 @@ var m3;
             function C() {
             }
             return C;
-        })();
+        }());
         exports.C = C;
     })(exports || (exports = {}));
 })(m3 || (m3 = {}));
@@ -210,7 +212,7 @@ var m4;
             function C() {
             }
             return C;
-        })();
+        }());
         require.C = C;
     })(require = m4.require || (m4.require = {}));
     var exports;
@@ -219,7 +221,7 @@ var m4;
             function C() {
             }
             return C;
-        })();
+        }());
         exports.C = C;
     })(exports = m4.exports || (m4.exports = {}));
 })(m4 || (m4 = {}));

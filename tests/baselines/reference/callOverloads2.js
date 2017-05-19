@@ -1,6 +1,4 @@
 //// [callOverloads2.ts]
-
-
 class Foo { // error
     bar1() { /*WScript.Echo("bar1");*/ }
 
@@ -32,7 +30,7 @@ var Foo = (function () {
     }
     Foo.prototype.bar1 = function () { };
     return Foo;
-})();
+}());
 function F1(s) { return s; } // error
 function F1(a) { return a; } // error
 var f1 = new Foo("hey");

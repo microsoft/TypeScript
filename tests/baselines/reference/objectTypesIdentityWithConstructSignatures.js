@@ -93,17 +93,17 @@ var A = (function () {
     function A(x) {
     }
     return A;
-})();
+}());
 var B = (function () {
     function B(x) {
     }
     return B;
-})();
+}());
 var C = (function () {
     function C(x) {
     }
     return C;
-})();
+}());
 var a;
 function foo1(x) { }
 function foo1b(x) { }

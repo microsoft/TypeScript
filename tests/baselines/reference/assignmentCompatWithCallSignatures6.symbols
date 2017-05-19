@@ -3,47 +3,47 @@
 
 class Base { foo: string; }
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
->foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 2, 12))
+>foo : Symbol(Base.foo, Decl(assignmentCompatWithCallSignatures6.ts, 2, 12))
 
 class Derived extends Base { bar: string; }
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures6.ts, 2, 27))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
->bar : Symbol(bar, Decl(assignmentCompatWithCallSignatures6.ts, 3, 28))
+>bar : Symbol(Derived.bar, Decl(assignmentCompatWithCallSignatures6.ts, 3, 28))
 
 class Derived2 extends Derived { baz: string; }
 >Derived2 : Symbol(Derived2, Decl(assignmentCompatWithCallSignatures6.ts, 3, 43))
 >Derived : Symbol(Derived, Decl(assignmentCompatWithCallSignatures6.ts, 2, 27))
->baz : Symbol(baz, Decl(assignmentCompatWithCallSignatures6.ts, 4, 32))
+>baz : Symbol(Derived2.baz, Decl(assignmentCompatWithCallSignatures6.ts, 4, 32))
 
 class OtherDerived extends Base { bing: string; }
 >OtherDerived : Symbol(OtherDerived, Decl(assignmentCompatWithCallSignatures6.ts, 4, 47))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
->bing : Symbol(bing, Decl(assignmentCompatWithCallSignatures6.ts, 5, 33))
+>bing : Symbol(OtherDerived.bing, Decl(assignmentCompatWithCallSignatures6.ts, 5, 33))
 
 interface A {
 >A : Symbol(A, Decl(assignmentCompatWithCallSignatures6.ts, 5, 49))
 
     a: <T>(x: T) => T[];
->a : Symbol(a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
+>a : Symbol(A.a, Decl(assignmentCompatWithCallSignatures6.ts, 7, 13))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 8, 11))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 8, 8))
 
     a2: <T>(x: T) => string[];
->a2 : Symbol(a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
+>a2 : Symbol(A.a2, Decl(assignmentCompatWithCallSignatures6.ts, 8, 24))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 9, 9))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 9, 12))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 9, 9))
 
     a3: <T>(x: T) => void;
->a3 : Symbol(a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
+>a3 : Symbol(A.a3, Decl(assignmentCompatWithCallSignatures6.ts, 9, 30))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 10, 9))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 10, 12))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 10, 9))
 
     a4: <T,U>(x: T, y: U) => string;
->a4 : Symbol(a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
+>a4 : Symbol(A.a4, Decl(assignmentCompatWithCallSignatures6.ts, 10, 26))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 11, 9))
 >U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 11, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 11, 14))
@@ -52,7 +52,7 @@ interface A {
 >U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 11, 11))
 
     a5: <T,U>(x: (arg: T) => U) => T;
->a5 : Symbol(a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
+>a5 : Symbol(A.a5, Decl(assignmentCompatWithCallSignatures6.ts, 11, 36))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 12, 9))
 >U : Symbol(U, Decl(assignmentCompatWithCallSignatures6.ts, 12, 11))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 12, 14))
@@ -62,7 +62,7 @@ interface A {
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 12, 9))
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
->a6 : Symbol(a6, Decl(assignmentCompatWithCallSignatures6.ts, 12, 37))
+>a6 : Symbol(A.a6, Decl(assignmentCompatWithCallSignatures6.ts, 12, 37))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 13, 9))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 13, 25))
@@ -72,7 +72,7 @@ interface A {
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 13, 9))
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
->a11 : Symbol(a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
+>a11 : Symbol(A.a11, Decl(assignmentCompatWithCallSignatures6.ts, 13, 54))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 14, 10))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 14, 13))
 >foo : Symbol(foo, Decl(assignmentCompatWithCallSignatures6.ts, 14, 17))
@@ -85,7 +85,7 @@ interface A {
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
 
     a15: <T>(x: { a: T; b: T }) => T[];
->a15 : Symbol(a15, Decl(assignmentCompatWithCallSignatures6.ts, 14, 59))
+>a15 : Symbol(A.a15, Decl(assignmentCompatWithCallSignatures6.ts, 14, 59))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 15, 13))
 >a : Symbol(a, Decl(assignmentCompatWithCallSignatures6.ts, 15, 17))
@@ -95,7 +95,7 @@ interface A {
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 15, 10))
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
->a16 : Symbol(a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
+>a16 : Symbol(A.a16, Decl(assignmentCompatWithCallSignatures6.ts, 15, 39))
 >T : Symbol(T, Decl(assignmentCompatWithCallSignatures6.ts, 16, 10))
 >Base : Symbol(Base, Decl(assignmentCompatWithCallSignatures6.ts, 0, 0))
 >x : Symbol(x, Decl(assignmentCompatWithCallSignatures6.ts, 16, 26))

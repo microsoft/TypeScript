@@ -22,14 +22,7 @@
     >:=> (line 3, col 0) to (line 7, col 4)
 3  >var z = (function foo() {
 
-           ~~                                     => Pos: (44 to 45)  SpanInfo: {"start":45,"length":36}
-    >(function foo() {
-    >    return x;
-    >})()
-    >:=> (line 3, col 8) to (line 5, col 4)
-3  >var z = (function foo() {
-
-             ~~~~~~~~~~~~~~~~~                    => Pos: (46 to 62)  SpanInfo: {"start":67,"length":8}
+           ~~~~~~~~~~~~~~~~~~~                    => Pos: (44 to 62)  SpanInfo: {"start":67,"length":8}
     >return x
     >:=> (line 4, col 4) to (line 4, col 12)
 --------------------------------
@@ -41,16 +34,9 @@
 --------------------------------
 5  >})() ? y : function bar() {
 
-    ~                                             => Pos: (77 to 77)  SpanInfo: {"start":77,"length":1}
+    ~~~~                                          => Pos: (77 to 80)  SpanInfo: {"start":77,"length":1}
     >}
     >:=> (line 5, col 0) to (line 5, col 1)
-5  >})() ? y : function bar() {
-
-     ~~~                                          => Pos: (78 to 80)  SpanInfo: {"start":45,"length":36}
-    >(function foo() {
-    >    return x;
-    >})()
-    >:=> (line 3, col 8) to (line 5, col 4)
 5  >})() ? y : function bar() {
 
         ~~~~~~                                    => Pos: (81 to 86)  SpanInfo: {"start":37,"length":90}
@@ -74,16 +60,9 @@
 --------------------------------
 7  >} ();
 
-    ~                                             => Pos: (123 to 123)  SpanInfo: {"start":123,"length":1}
+    ~~~~~~                                        => Pos: (123 to 128)  SpanInfo: {"start":123,"length":1}
     >}
     >:=> (line 7, col 0) to (line 7, col 1)
-7  >} ();
-
-     ~~~~~                                        => Pos: (124 to 128)  SpanInfo: {"start":88,"length":39}
-    >function bar() {
-    >        return x;
-    >} ()
-    >:=> (line 5, col 11) to (line 7, col 4)
 --------------------------------
 8  >x = y ? (function () {
 
@@ -94,14 +73,7 @@
     >:=> (line 8, col 0) to (line 10, col 10)
 8  >x = y ? (function () {
 
-           ~~                                     => Pos: (136 to 137)  SpanInfo: {"start":137,"length":33}
-    >(function () {
-    >    return z;
-    >})()
-    >:=> (line 8, col 8) to (line 10, col 4)
-8  >x = y ? (function () {
-
-             ~~~~~~~~~~~~~~                       => Pos: (138 to 151)  SpanInfo: {"start":156,"length":8}
+           ~~~~~~~~~~~~~~~~                       => Pos: (136 to 151)  SpanInfo: {"start":156,"length":8}
     >return z
     >:=> (line 9, col 4) to (line 9, col 12)
 --------------------------------
@@ -112,15 +84,9 @@
     >:=> (line 9, col 4) to (line 9, col 12)
 --------------------------------
 10 >})() :  10;
-    ~                                             => Pos: (166 to 166)  SpanInfo: {"start":166,"length":1}
+    ~~~~                                          => Pos: (166 to 169)  SpanInfo: {"start":166,"length":1}
     >}
     >:=> (line 10, col 0) to (line 10, col 1)
-10 >})() :  10;
-     ~~~                                          => Pos: (167 to 169)  SpanInfo: {"start":137,"length":33}
-    >(function () {
-    >    return z;
-    >})()
-    >:=> (line 8, col 8) to (line 10, col 4)
 10 >})() :  10;
         ~~~~~~~                                   => Pos: (170 to 176)  SpanInfo: {"start":129,"length":47}
     >x = y ? (function () {

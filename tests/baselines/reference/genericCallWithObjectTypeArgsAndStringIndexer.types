@@ -63,7 +63,7 @@ function other2<T extends Date>(arg: T) {
 >Date : Date
 >r2['hm'] : T
 >r2 : { [x: string]: T; }
->'hm' : string
+>'hm' : "hm"
 }
 
 function other3<T extends Date, U extends Date>(arg: T) {
@@ -91,7 +91,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
 >Date : Date
 >r2['hm'] : T
 >r2 : { [x: string]: T; }
->'hm' : string
+>'hm' : "hm"
 
     // BUG 821629
     //var u: U = r2['hm']; // ok

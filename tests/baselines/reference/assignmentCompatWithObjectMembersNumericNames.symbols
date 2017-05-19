@@ -18,11 +18,11 @@ var t: T;
 
 interface S2 { 1: string; bar?: string }
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 6, 9))
->bar : Symbol(bar, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 25))
+>bar : Symbol(S2.bar, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 25))
 
 interface T2 { 1.0: string; baz?: string }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 40))
->baz : Symbol(baz, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 9, 27))
+>baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 9, 27))
 
 var s2: S2;
 >s2 : Symbol(s2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 10, 3))

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports3-amd.ts] ////
 
 //// [t1.ts]
-
 export var v = 1;
 export function f() { }
 export class C {
@@ -36,6 +35,8 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = 1;
     exports.v1 = exports.v;
     function f() { }
@@ -45,15 +46,15 @@ define(["require", "exports"], function (require, exports) {
         function C() {
         }
         return C;
-    })();
+    }());
     exports.C = C;
     exports.C1 = C;
+    var E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(exports.E || (exports.E = {}));
-    var E = exports.E;
+    })(E = exports.E || (exports.E = {}));
     exports.E1 = E;
     var M;
     (function (M) {
@@ -64,6 +65,8 @@ define(["require", "exports"], function (require, exports) {
 });
 //// [t2.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v1;
     exports.f = t1_1.f1;
     exports.C = t1_1.C1;
@@ -73,6 +76,8 @@ define(["require", "exports", "./t1"], function (require, exports, t1_1) {
 });
 //// [t3.js]
 define(["require", "exports", "./t1"], function (require, exports, t1_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.v = t1_1.v1;
     exports.f = t1_1.f1;
     exports.C = t1_1.C1;

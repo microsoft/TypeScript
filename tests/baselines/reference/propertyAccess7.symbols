@@ -3,7 +3,7 @@ var foo: string;
 >foo : Symbol(foo, Decl(propertyAccess7.ts, 0, 3))
 
 foo.toUpperCase();
->foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, 405, 32))
+>foo.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
 >foo : Symbol(foo, Decl(propertyAccess7.ts, 0, 3))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, 405, 32))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
 

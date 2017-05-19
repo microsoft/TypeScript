@@ -20,6 +20,8 @@ class C {
 }
 
 //// [protoAsIndexInIndexExpression_0.js]
+"use strict";
+exports.__esModule = true;
 //// [protoAsIndexInIndexExpression_1.js]
 ///<reference path='protoAsIndexInIndexExpression_0.ts'/>
 var EntityPrototype = undefined;
@@ -36,4 +38,4 @@ var C = (function () {
         this["__proto__"] = 0;
     }
     return C;
-})();
+}());

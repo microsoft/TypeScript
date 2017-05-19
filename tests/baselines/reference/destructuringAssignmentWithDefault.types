@@ -1,0 +1,17 @@
+=== tests/cases/compiler/destructuringAssignmentWithDefault.ts ===
+const a: { x?: number } = { };
+>a : { x?: number | undefined; }
+>x : number | undefined
+>{ } : {}
+
+let x = 0;
+>x : number
+>0 : 0
+
+({x = 1} = a);
+>({x = 1} = a) : { x?: number | undefined; }
+>{x = 1} = a : { x?: number | undefined; }
+>{x = 1} : { x?: number; }
+>x : number
+>a : { x?: number | undefined; }
+

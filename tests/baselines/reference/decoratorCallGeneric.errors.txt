@@ -1,0 +1,22 @@
+tests/cases/conformance/decorators/decoratorCallGeneric.ts(7,2): error TS1238: Unable to resolve signature of class decorator when called as an expression.
+  The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+    Type argument candidate 'C' is not a valid type argument because it is not a supertype of candidate 'void'.
+
+
+==== tests/cases/conformance/decorators/decoratorCallGeneric.ts (1 errors) ====
+    interface I<T> {
+        prototype: T,
+        m: () => T
+    }
+    function dec<T>(c: I<T>) { }
+    
+    @dec
+     ~~~
+!!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
+!!! error TS1238:   The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS1238:     Type argument candidate 'C' is not a valid type argument because it is not a supertype of candidate 'void'.
+    class C {
+        _brand: any;
+        static m() {}
+    }
+    

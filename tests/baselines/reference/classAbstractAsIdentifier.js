@@ -11,5 +11,5 @@ var abstract = (function () {
     }
     abstract.prototype.foo = function () { return 1; };
     return abstract;
-})();
+}());
 new abstract;

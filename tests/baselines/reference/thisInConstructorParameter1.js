@@ -10,4 +10,4 @@ var Foo = (function () {
         if (x === void 0) { x = this.y; }
     }
     return Foo;
-})();
+}());

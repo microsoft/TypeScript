@@ -1,14 +1,14 @@
 /// <reference path="fourslash.ts" />
 
-////interface Iterator<T, U> {
+////interface Iterator_<T, U> {
 ////    (value: T, index: any, list: any): U;
 ////}
 ////interface WrappedArray<T> {
-////    map<U>(iterator: Iterator<T, U>, context?: any): U[];
+////    map<U>(iterator: Iterator_<T, U>, context?: any): U[];
 ////}
 ////interface Underscore {
 ////    <T>(list: T[]): WrappedArray<T>;
-////    map<T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[];
+////    map<T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[];
 ////}
 ////declare var _: Underscore;
 ////var aa: string[];
@@ -20,30 +20,15 @@
 ////var c/*5*/cc = _(aaa).map(xx => xx.length);  // Should not error, should be any[]
 ////var d/*6*/dd = aaa.map(xx => xx.length);     // should not error, should be any[]
 
-verify.numberOfErrorsInCurrentFile(0);
-goTo.marker('1');
-verify.quickInfoIs('var bb: number[]');
-
-goTo.marker('2');
-verify.quickInfoIs('var cc: number[]');
-
-goTo.marker('3');
-verify.quickInfoIs('var dd: number[]');
-
-goTo.marker('4');
-verify.quickInfoIs('var bbb: any[]');
-
-goTo.marker('5');
-verify.quickInfoIs('var ccc: any[]');
-
-goTo.marker('6');
-verify.quickInfoIs('var ddd: any[]');
-
-goTo.marker('7');
-verify.quickInfoIs('(parameter) xx: string');
-
-goTo.marker('8');
-verify.quickInfoIs('(parameter) xx: string');
-
-goTo.marker('9');
-verify.quickInfoIs('(parameter) xx: string');
+verify.noErrors();
+verify.quickInfos({
+    1: "var bb: number[]",
+    2: "var cc: number[]",
+    3: "var dd: number[]",
+    4: "var bbb: any[]",
+    5: "var ccc: any[]",
+    6: "var ddd: any[]",
+    7: "(parameter) xx: string",
+    8: "(parameter) xx: string",
+    9: "(parameter) xx: string"
+});

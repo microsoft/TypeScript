@@ -41,23 +41,28 @@ var d5 = new D(); // error
 var d6 = new D(1); // ok
 
 //// [classWithBaseClassButNoConstructor.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base(x) {
     }
     return Base;
-})();
+}());
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
-})(Base);
+}(Base));
 var r = C;
 var c = new C(); // error
 var c2 = new C(1); // ok
@@ -65,14 +70,14 @@ var Base2 = (function () {
     function Base2(x) {
     }
     return Base2;
-})();
+}());
 var D = (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
-})(Base2);
+}(Base2));
 var r2 = D;
 var d = new D(); // error
 var d2 = new D(1); // ok
@@ -80,20 +85,20 @@ var d2 = new D(1); // ok
 var D2 = (function (_super) {
     __extends(D2, _super);
     function D2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D2;
-})(Base2);
+}(Base2));
 var r3 = D2;
 var d3 = new D(); // error
 var d4 = new D(1); // ok
 var D3 = (function (_super) {
     __extends(D3, _super);
     function D3() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return D3;
-})(Base2);
+}(Base2));
 var r4 = D3;
 var d5 = new D(); // error
 var d6 = new D(1); // ok

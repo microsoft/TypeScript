@@ -95,11 +95,16 @@ d3.x;                   // Error, neither within their declaring class nor class
 d4.x;                   // Error, neither within their declaring class nor classes derived from their declaring class
 
 //// [protectedClassPropertyAccessibleWithinSubclass2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var Base = (function () {
     function Base() {
     }
@@ -116,11 +121,11 @@ var Base = (function () {
         d4.x; // OK, accessed within their declaring class
     };
     return Base;
-})();
+}());
 var Derived1 = (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived1.prototype.method1 = function () {
         var b;
@@ -135,11 +140,11 @@ var Derived1 = (function (_super) {
         d4.x; // Error, isn't accessed through an instance of the enclosing class
     };
     return Derived1;
-})(Base);
+}(Base));
 var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived2.prototype.method2 = function () {
         var b;
@@ -154,11 +159,11 @@ var Derived2 = (function (_super) {
         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class or one of its subclasses
     };
     return Derived2;
-})(Base);
+}(Base));
 var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived3.prototype.method3 = function () {
         var b;
@@ -173,11 +178,11 @@ var Derived3 = (function (_super) {
         d4.x; // Error, isn't accessed through an instance of the enclosing class
     };
     return Derived3;
-})(Derived1);
+}(Derived1));
 var Derived4 = (function (_super) {
     __extends(Derived4, _super);
     function Derived4() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Derived4.prototype.method4 = function () {
         var b;
@@ -192,7 +197,7 @@ var Derived4 = (function (_super) {
         d4.x; // OK, accessed within a class derived from their declaring class, and through an instance of the enclosing class
     };
     return Derived4;
-})(Derived2);
+}(Derived2));
 var b;
 var d1;
 var d2;

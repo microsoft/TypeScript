@@ -107,19 +107,19 @@ var A = (function () {
     }
     A.prototype.foo = function (x) { return null; };
     return A;
-})();
+}());
 var B = (function () {
     function B() {
     }
     B.prototype.foo = function (x, y) { return null; };
     return B;
-})();
+}());
 var C = (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { return null; };
     return C;
-})();
+}());
 var a;
 var b = { foo: function (x) { return ''; } };
 function foo1(x) { }

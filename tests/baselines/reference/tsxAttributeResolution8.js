@@ -1,4 +1,4 @@
-//// [tsxAttributeResolution8.tsx]
+//// [file.tsx]
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements {
@@ -10,7 +10,7 @@ var x: any;
 // Should be OK
 <test1 {...x} />
 
-//// [tsxAttributeResolution8.jsx]
+//// [file.jsx]
 var x;
 // Should be OK
 <test1 {...x}/>;

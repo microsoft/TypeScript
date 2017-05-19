@@ -1,0 +1,24 @@
+=== tests/cases/compiler/file1.ts ===
+export interface Foo { x }
+>Foo : Symbol(Foo, Decl(file1.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(file1.ts, 0, 22))
+
+=== tests/cases/compiler/file2.ts ===
+export interface A { x }
+>A : Symbol(A, Decl(file2.ts, 0, 0))
+>x : Symbol(A.x, Decl(file2.ts, 0, 20))
+
+export * from "file1"
+export * from "file3"
+var x = 1;
+>x : Symbol(x, Decl(file2.ts, 3, 3))
+
+=== tests/cases/compiler/file3.ts ===
+export interface B { x }
+>B : Symbol(B, Decl(file3.ts, 0, 0))
+>x : Symbol(B.x, Decl(file3.ts, 0, 20))
+
+export * from "file2"
+var x = 1;
+>x : Symbol(x, Decl(file3.ts, 2, 3))
+

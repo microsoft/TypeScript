@@ -845,7 +845,7 @@ var TypeScript;
             this.exceptionBlock = -1;
         }
         return Continuation;
-    })();
+    }());
     TypeScript.Continuation = Continuation;
     function getBaseTypeLinks(bases, baseTypeLinks) {
         if (bases) {

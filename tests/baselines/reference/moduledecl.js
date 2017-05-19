@@ -243,7 +243,7 @@ var m0;
         function c1() {
         }
         return c1;
-    })();
+    }());
 })(m0 || (m0 = {}));
 var m1;
 (function (m1) {
@@ -264,7 +264,7 @@ var m1;
             return "Hello";
         };
         return c1;
-    })();
+    }());
     m1.c1 = c1;
 })(m1 || (m1 = {}));
 var m;
@@ -277,7 +277,6 @@ var m;
     (function (m3) {
     })(m3 = m.m3 || (m.m3 = {}));
 })(m || (m = {}));
-var m;
 (function (m) {
     var m25;
     (function (m25) {
@@ -314,7 +313,7 @@ var exportTests;
             return "string";
         };
         return C1_public;
-    })();
+    }());
     exportTests.C1_public = C1_public;
     var C2_private = (function () {
         function C2_private() {
@@ -326,7 +325,7 @@ var exportTests;
             return "string";
         };
         return C2_private;
-    })();
+    }());
     var C3_public = (function () {
         function C3_public() {
         }
@@ -355,7 +354,7 @@ var exportTests;
             configurable: true
         });
         return C3_public;
-    })();
+    }());
     exportTests.C3_public = C3_public;
 })(exportTests || (exportTests = {}));
 function foo() {
@@ -458,10 +457,10 @@ declare module exportTests {
     class C3_public {
         private getC2_private();
         private setC2_private(arg);
-        private c2;
+        private readonly c2;
         getC1_public(): C1_public;
         setC1_public(arg: C1_public): void;
-        c1: C1_public;
+        readonly c1: C1_public;
     }
 }
 declare module mAmbient {

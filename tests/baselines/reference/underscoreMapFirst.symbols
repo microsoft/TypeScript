@@ -17,7 +17,7 @@ declare module _ {
 >T : Symbol(T, Decl(underscoreMapFirst.ts, 2, 19))
 
         length: number;
->length : Symbol(length, Decl(underscoreMapFirst.ts, 3, 27))
+>length : Symbol(List.length, Decl(underscoreMapFirst.ts, 3, 27))
     }
 
     interface ListIterator<T, TResult> {
@@ -89,14 +89,14 @@ declare class View {
 >View : Symbol(View, Decl(underscoreMapFirst.ts, 24, 1))
 
     model: any;
->model : Symbol(model, Decl(underscoreMapFirst.ts, 26, 20))
+>model : Symbol(View.model, Decl(underscoreMapFirst.ts, 26, 20))
 }
 
 interface IData {
 >IData : Symbol(IData, Decl(underscoreMapFirst.ts, 28, 1))
 
     series: ISeries[];
->series : Symbol(series, Decl(underscoreMapFirst.ts, 30, 17))
+>series : Symbol(IData.series, Decl(underscoreMapFirst.ts, 30, 17))
 >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
 }
 
@@ -104,10 +104,10 @@ interface ISeries {
 >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
 
     items: any[];
->items : Symbol(items, Decl(underscoreMapFirst.ts, 34, 19))
+>items : Symbol(ISeries.items, Decl(underscoreMapFirst.ts, 34, 19))
 
     key: string;
->key : Symbol(key, Decl(underscoreMapFirst.ts, 35, 17))
+>key : Symbol(ISeries.key, Decl(underscoreMapFirst.ts, 35, 17))
 }
 
 class MyView extends View {
@@ -115,7 +115,7 @@ class MyView extends View {
 >View : Symbol(View, Decl(underscoreMapFirst.ts, 24, 1))
 
     public getDataSeries(): ISeries[] {
->getDataSeries : Symbol(getDataSeries, Decl(underscoreMapFirst.ts, 39, 27))
+>getDataSeries : Symbol(MyView.getDataSeries, Decl(underscoreMapFirst.ts, 39, 27))
 >ISeries : Symbol(ISeries, Decl(underscoreMapFirst.ts, 32, 1))
 
         var data: IData[] = this.model.get("data");

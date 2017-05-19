@@ -10,7 +10,7 @@ class B {
     0b1110() {}
     11() { }
     interface() { }
->interface : Symbol(interface, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 7, 12))
+>interface : Symbol(B.interface, Decl(emitClassDeclarationWithLiteralPropertyNameInES6.ts, 7, 12))
 
     static "hi" = 10000;
     static 22 = "twenty-two";

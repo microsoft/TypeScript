@@ -7,7 +7,7 @@ module A {
 >C : Symbol(C, Decl(testContainerList.ts, 1, 10))
 
         constructor(public d: {}) { }
->d : Symbol(d, Decl(testContainerList.ts, 3, 20))
+>d : Symbol(C.d, Decl(testContainerList.ts, 3, 20))
     }
 }
 

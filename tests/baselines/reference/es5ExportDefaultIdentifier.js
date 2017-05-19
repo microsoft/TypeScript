@@ -1,11 +1,12 @@
 //// [es5ExportDefaultIdentifier.ts]
-
 export function f() { }
 
 export default f;
 
 
 //// [es5ExportDefaultIdentifier.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function f() { }
 exports.f = f;
 exports.default = f;

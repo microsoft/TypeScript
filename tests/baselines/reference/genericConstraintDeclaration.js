@@ -14,7 +14,7 @@ var List = (function () {
     }
     List.empty = function () { return null; };
     return List;
-})();
+}());
 
 
 //// [genericConstraintDeclaration.d.ts]

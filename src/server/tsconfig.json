@@ -1,17 +1,26 @@
 {
+    "extends": "../tsconfig-base",
     "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": true,
         "removeComments": true,
+        "outFile": "../../built/local/tsserver.js",
         "preserveConstEnums": true,
-        "out": "../../built/local/tsserver.js",
-        "sourceMap": true
+        "types": [
+            "node"
+        ]
     },
     "files": [
-        "node.d.ts",
+        "../services/shims.ts",
+        "../services/utilities.ts",
+        "shared.ts",
+        "utilities.ts",
+        "scriptVersionCache.ts",
+        "scriptInfo.ts",
+        "lsHost.ts",
+        "typingsCache.ts",
+        "project.ts",
         "editorServices.ts",
-        "protocol.d.ts",
-        "server.ts",
-        "session.ts"
+        "protocol.ts",
+        "session.ts",
+        "server.ts"
     ]
 }

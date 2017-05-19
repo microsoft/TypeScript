@@ -14,7 +14,7 @@
 
 // @Filename: externalModuleIntellisense_file1.ts
 ///////<reference path='externalModuleIntellisense_file0.ts'/>
-////import express = require('externalModuleIntellisense_file0');
+////import express = require('./externalModuleIntellisense_file0');
 ////var x = express();/*1*/
 
 goTo.marker('1');
@@ -23,4 +23,4 @@ goTo.eof();
 edit.insert("x.");
 verify.completionListContains('enable');
 verify.completionListContains('post');
-verify.memberListCount(2);
+verify.completionListCount(2);

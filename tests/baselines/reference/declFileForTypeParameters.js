@@ -1,5 +1,4 @@
 //// [declFileForTypeParameters.ts]
-
 class C<T> {
     x: T;
     foo(a: T): T {
@@ -15,7 +14,7 @@ var C = (function () {
         return this.x;
     };
     return C;
-})();
+}());
 
 
 //// [declFileForTypeParameters.d.ts]

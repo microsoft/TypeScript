@@ -86,19 +86,19 @@
 ////
 //////Remotes
 //////Type test
-////var remoteclsTest: rem/*2*/otefooCls;
+////var remoteclsTest: [|remotefooCls|];
 ////
 //////Arguments
-////remoteclsTest = new remotefooCls(remoteglo/*4*/balVar);
-////remotefoo(remotegl/*3*/obalVar);
+////remoteclsTest = new [|remotefooCls|]([|remoteglobalVar|]);
+////remotefoo([|remoteglobalVar|]);
 ////
 //////Increments
-////remotefooCls.remoteclsSVar++;
+////[|remotefooCls|].[|remoteclsSVar|]++;
 ////remotemodTest.remotemodVar++;
-/////*1*/remoteglobalVar = remoteglobalVar + remoteglobalVar;
+////[|{| "isWriteAccess": true |}remoteglobalVar|] = [|remoteglobalVar|] + [|remoteglobalVar|];
 ////
 //////ETC - Other cases
-////remoteglobalVar = 3;
+////[|{| "isWriteAccess": true |}remoteglobalVar|] = 3;
 ////
 //////Find References misses method param
 ////var
@@ -119,18 +119,18 @@
 ////});
 
 // @Filename: remoteGetReferences_2.ts
-////var remoteglobalVar: number = 2;
+////var [|{| "isWriteAccess": true, "isDefinition": true |}remoteglobalVar|]: number = 2;
 ////
-////class remotefooCls {
+////class [|{| "isWriteAccess": true, "isDefinition": true |}remotefooCls|] {
 ////	//Declare
-////	rem/*5*/oteclsVar = 1;
-////	static r/*6*/emoteclsSVar = 1;
+////	[|{| "isWriteAccess": true, "isDefinition": true |}remoteclsVar|] = 1;
+////	static [|{| "isWriteAccess": true, "isDefinition": true |}remoteclsSVar|] = 1;
 ////
 ////	constructor(public remoteclsParam: number) {
 ////		//Increments
-////		remoteglobalVar++;
-////		this.remoteclsVar++;
-////		remotefooCls.remoteclsSVar++;
+////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
+////		this.[|remoteclsVar|]++;
+////		[|remotefooCls|].[|remoteclsSVar|]++;
 ////		this.remoteclsParam++;
 ////		remotemodTest.remotemodVar++;
 ////	}
@@ -141,8 +141,8 @@
 ////	var remotefnVar = 1;
 ////
 ////	//Increments
-////	remotefooCls.remoteclsSVar++;
-////	remoteglobalVar++;
+////	[|remotefooCls|].[|remoteclsSVar|]++;
+////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
 ////	remotemodTest.remotemodVar++;
 ////	remotefnVar++;
 ////
@@ -155,8 +155,8 @@
 ////	export var remotemodVar: number;
 ////
 ////	//Increments
-////	remoteglobalVar++;
-////	remotefooCls.remoteclsSVar++;
+////	[|{| "isWriteAccess": true |}remoteglobalVar|]++;
+////	[|remotefooCls|].[|remoteclsSVar|]++;
 ////	remotemodVar++;
 ////
 ////	class remotetestCls {
@@ -167,8 +167,8 @@
 ////        static remoteboo = remotefoo;
 ////
 ////		//Increments
-////		remoteglobalVar++;
-////		remotefooCls.remoteclsSVar++;
+////		[|{| "isWriteAccess": true |}remoteglobalVar|]++;
+////		[|remotefooCls|].[|remoteclsSVar|]++;
 ////		remotemodVar++;
 ////    }
 ////
@@ -177,26 +177,24 @@
 ////	}
 ////}
 
-// References to a variable declared in global.
-goTo.marker("1");
-verify.referencesCountIs(11);
+test.rangesByText().forEach((ranges, text) => {
+    const definition = (() => {
+        switch (text) {
+            case "remotefooCls": return "class remotefooCls";
+            case "remoteglobalVar": return "var remoteglobalVar: number";
+            case "remoteclsSVar": return "(property) remotefooCls.remoteclsSVar: number";
+            case "remoteclsVar": return "(property) remotefooCls.remoteclsVar: number";
+            default: throw new Error(text);
+        }
+    })();
 
-// References to a type.
-goTo.marker("2");
-verify.referencesCountIs(8);
-
-// References to a function argument.
-goTo.marker("3");
-verify.referencesCountIs(11);
-
-// References to a class argument.
-goTo.marker("4");
-verify.referencesCountIs(11);
-
-// References to a variable declared in a class.
-goTo.marker("5");
-verify.referencesCountIs(2);
-
-// References to static variable declared in a class.
-goTo.marker("6");
-verify.referencesCountIs(6);
+    if (text === "remotefooCls") {
+        verify.referenceGroups([ranges[0], ...ranges.slice(2)], [{ definition, ranges }]);
+        verify.referenceGroups(ranges[1], [
+            { definition: "constructor remotefooCls(remoteclsParam: number): remotefooCls", ranges}
+        ]);
+    }
+    else {
+        verify.singleReferenceGroup(definition, ranges);
+    }
+});

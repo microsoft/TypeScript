@@ -1,6 +1,4 @@
 //// [iteratorSpreadInCall9.ts]
-new Foo(...new SymbolIterator, ...[...new StringIterator]);
-
 class Foo<T> {
     constructor(...s: T[]) { }
 }
@@ -31,11 +29,12 @@ class StringIterator {
     }
 }
 
-//// [iteratorSpreadInCall9.js]
 new Foo(...new SymbolIterator, ...[...new StringIterator]);
+
+
+//// [iteratorSpreadInCall9.js]
 class Foo {
-    constructor(...s) {
-    }
+    constructor(...s) { }
 }
 class SymbolIterator {
     next() {
@@ -59,3 +58,4 @@ class StringIterator {
         return this;
     }
 }
+new Foo(...new SymbolIterator, ...[...new StringIterator]);

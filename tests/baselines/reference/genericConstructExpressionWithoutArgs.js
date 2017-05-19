@@ -15,12 +15,12 @@ var B = (function () {
     function B() {
     }
     return B;
-})();
+}());
 var b = new B; // no error
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c = new C; // C<any>
 var c2 = new C(); // error, type params are actually part of the arg list so you need both

@@ -40,24 +40,31 @@ export var j = C.F6;
 
 
 //// [declFileGenericType.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
 var C;
 (function (C) {
     var A = (function () {
         function A() {
         }
         return A;
-    })();
+    }());
     C.A = A;
     var B = (function () {
         function B() {
         }
         return B;
-    })();
+    }());
     C.B = B;
     function F(x) { return null; }
     C.F = F;
@@ -76,7 +83,7 @@ var C;
             this.val = val;
         }
         return D;
-    })();
+    }());
     C.D = D;
 })(C = exports.C || (exports.C = {}));
 exports.b = C.F;
@@ -90,10 +97,10 @@ exports.g = C.F5();
 var h = (function (_super) {
     __extends(h, _super);
     function h() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return h;
-})(C.A);
+}(C.A));
 exports.h = h;
 exports.j = C.F6;
 

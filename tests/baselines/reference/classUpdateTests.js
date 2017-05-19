@@ -114,11 +114,16 @@ class R {
 }
 
 //// [classUpdateTests.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 //
 // test codegen for instance properties
 //
@@ -128,14 +133,14 @@ var A = (function () {
         this.p2 = 0;
     }
     return A;
-})();
+}());
 var B = (function () {
     function B() {
         this.p1 = 0;
         this.p2 = 0;
     }
     return B;
-})();
+}());
 var C = (function () {
     function C(p1, p2, p3) {
         if (p1 === void 0) { p1 = 0; }
@@ -145,7 +150,7 @@ var C = (function () {
         this.p2 = p2;
     }
     return C;
-})();
+}());
 //
 // test requirements for super calls
 //
@@ -153,76 +158,86 @@ var D = (function () {
     function D() {
     }
     return D;
-})();
+}());
 var E = (function (_super) {
     __extends(E, _super);
     function E() {
-        _super.apply(this, arguments);
-        this.p1 = 0;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.p1 = 0;
+        return _this;
     }
     return E;
-})(D);
+}(D));
 var F = (function (_super) {
     __extends(F, _super);
     function F() {
+        var _this = this;
+        return _this;
     } // ERROR - super call required
     return F;
-})(E);
+}(E));
 var G = (function (_super) {
     __extends(G, _super);
     function G() {
-        _super.call(this);
-        this.p1 = 0;
+        var _this = _super.call(this) || this;
+        _this.p1 = 0;
+        return _this;
     } // NO ERROR
     return G;
-})(D);
+}(D));
 var H = (function () {
     function H() {
-        _super.call(this);
+        _this = _super.call(this) || this;
     } // ERROR - no super call allowed
     return H;
-})();
+}());
 var I = (function (_super) {
     __extends(I, _super);
     function I() {
-        _super.call(this);
+        return _super.call(this) || this;
     } // ERROR - no super call allowed
     return I;
-})(Object);
+}(Object));
 var J = (function (_super) {
     __extends(J, _super);
     function J(p1) {
-        _super.call(this); // NO ERROR
-        this.p1 = p1;
+        var _this = _super.call(this) || this;
+        _this.p1 = p1;
+        return _this;
     }
     return J;
-})(G);
+}(G));
 var K = (function (_super) {
     __extends(K, _super);
     function K(p1) {
-        this.p1 = p1;
+        var _this = this;
+        _this.p1 = p1;
         var i = 0;
-        _super.call(this);
+        _this = _super.call(this) || this;
+        return _this;
     }
     return K;
-})(G);
+}(G));
 var L = (function (_super) {
     __extends(L, _super);
     function L(p1) {
-        _super.call(this); // NO ERROR
-        this.p1 = p1;
+        var _this = _super.call(this) || this;
+        _this.p1 = p1;
+        return _this;
     }
     return L;
-})(G);
+}(G));
 var M = (function (_super) {
     __extends(M, _super);
     function M(p1) {
-        this.p1 = p1;
+        var _this = this;
+        _this.p1 = p1;
         var i = 0;
-        _super.call(this);
+        _this = _super.call(this) || this;
+        return _this;
     }
     return M;
-})(G);
+}(G));
 //
 // test this reference in field initializers
 //
@@ -233,7 +248,7 @@ var N = (function () {
         this.p2 = 0;
     }
     return N;
-})();
+}());
 //
 // test error on property declarations within class constructors
 //
@@ -242,22 +257,22 @@ var O = (function () {
         this.p1 = 0; // ERROR
     }
     return O;
-})();
+}());
 var P = (function () {
     function P() {
         this.p1 = 0; // ERROR
     }
     return P;
-})();
+}());
 var Q = (function () {
     function Q() {
         this.p1 = 0; // ERROR
     }
     return Q;
-})();
+}());
 var R = (function () {
     function R() {
         this.p1 = 0; // ERROR
     }
     return R;
-})();
+}());

@@ -10,4 +10,4 @@ var C = (function () {
         this[1] = 2;
     }
     return C;
-})();
+}());

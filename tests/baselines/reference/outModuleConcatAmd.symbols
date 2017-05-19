@@ -1,0 +1,12 @@
+=== tests/cases/compiler/ref/a.ts ===
+export class A { }
+>A : Symbol(A, Decl(a.ts, 0, 0))
+
+=== tests/cases/compiler/b.ts ===
+import {A} from "./ref/a";
+>A : Symbol(A, Decl(b.ts, 0, 8))
+
+export class B extends A { }
+>B : Symbol(B, Decl(b.ts, 0, 26))
+>A : Symbol(A, Decl(b.ts, 0, 8))
+

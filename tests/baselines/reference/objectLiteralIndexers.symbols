@@ -3,7 +3,7 @@ interface A {
 >A : Symbol(A, Decl(objectLiteralIndexers.ts, 0, 0))
 
     x: number;
->x : Symbol(x, Decl(objectLiteralIndexers.ts, 0, 13))
+>x : Symbol(A.x, Decl(objectLiteralIndexers.ts, 0, 13))
 }
 
 interface B extends A {
@@ -11,7 +11,7 @@ interface B extends A {
 >A : Symbol(A, Decl(objectLiteralIndexers.ts, 0, 0))
 
     y: string;
->y : Symbol(y, Decl(objectLiteralIndexers.ts, 4, 23))
+>y : Symbol(B.y, Decl(objectLiteralIndexers.ts, 4, 23))
 }
 
 var a: A;

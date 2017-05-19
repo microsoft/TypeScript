@@ -1,5 +1,4 @@
 //// [exportCodeGen.ts]
-
 // should replace all refs to 'x' in the body,
 // with fully qualified
 module A {
@@ -90,17 +89,17 @@ var D;
 // validate all exportable statements
 var E;
 (function (E) {
+    var Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
-    })(E.Color || (E.Color = {}));
-    var Color = E.Color;
+    })(Color = E.Color || (E.Color = {}));
     function fn() { }
     E.fn = fn;
     var C = (function () {
         function C() {
         }
         return C;
-    })();
+    }());
     E.C = C;
     var M;
     (function (M) {
@@ -120,7 +119,7 @@ var F;
         function C() {
         }
         return C;
-    })();
+    }());
     var M;
     (function (M) {
         var x = 42;

@@ -1,7 +1,3 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(7,16): error TS2518: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(8,11): error TS2518: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(10,11): error TS2518: Only an ambient class can be merged with an interface.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(11,16): error TS2518: Only an ambient class can be merged with an interface.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(13,16): error TS2300: Duplicate identifier 'CC1'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(14,7): error TS2300: Duplicate identifier 'CC1'.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(16,7): error TS2300: Duplicate identifier 'CC2'.
@@ -20,7 +16,7 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts(39,1): error TS2511: Cannot create an instance of the abstract class 'DCC1'.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts (20 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractMergedDeclaration.ts (16 errors) ====
     abstract class CM {}
     module CM {}
     
@@ -28,18 +24,10 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     abstract class MC {}
     
     abstract class CI {}
-                   ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     interface CI {}
-              ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     
     interface IC {}
-              ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     abstract class IC {}
-                   ~~
-!!! error TS2518: Only an ambient class can be merged with an interface.
     
     abstract class CC1 {}
                    ~~~

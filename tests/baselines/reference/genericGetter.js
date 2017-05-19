@@ -21,6 +21,6 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var c = new C();
 var r = c.x;

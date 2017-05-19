@@ -1,0 +1,32 @@
+=== tests/cases/compiler/doNotEmitDetachedComments.ts ===
+/*
+
+    multi line
+    comment
+*/
+
+var x = 10;
+>x : number
+>10 : 10
+
+// Single Line comment
+
+function foo() { }
+>foo : () => void
+
+
+/*
+    multi-line comment
+
+*/
+
+
+//========================
+
+
+function bar() { }
+>bar : () => void
+
+
+//========================
+

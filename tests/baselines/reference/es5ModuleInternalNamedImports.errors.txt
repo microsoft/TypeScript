@@ -1,3 +1,4 @@
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(22,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(23,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(24,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(25,5): error TS1194: Export declarations are not permitted in a namespace.
@@ -5,11 +6,13 @@ tests/cases/compiler/es5ModuleInternalNamedImports.ts(26,5): error TS1194: Expor
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(27,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(28,5): error TS1194: Export declarations are not permitted in a namespace.
 tests/cases/compiler/es5ModuleInternalNamedImports.ts(29,5): error TS1194: Export declarations are not permitted in a namespace.
-tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,5): error TS1194: Export declarations are not permitted in a namespace.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,25): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(31,20): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(32,32): error TS1147: Import declarations in a namespace cannot reference a module.
+tests/cases/compiler/es5ModuleInternalNamedImports.ts(34,16): error TS2307: Cannot find module 'M3'.
 
 
-==== tests/cases/compiler/es5ModuleInternalNamedImports.ts (8 errors) ====
-    
+==== tests/cases/compiler/es5ModuleInternalNamedImports.ts (12 errors) ====
     export module M {
         // variable
         export var M_V = 0;
@@ -55,5 +58,17 @@ tests/cases/compiler/es5ModuleInternalNamedImports.ts(30,5): error TS1194: Expor
         export {M_A as a};
         ~~~~~~~~~~~~~~~~~~
 !!! error TS1194: Export declarations are not permitted in a namespace.
+        import * as M2 from "M2";
+                            ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        import M4 from "M4";
+                       ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
+        export import M5 = require("M5");
+                                   ~~~~
+!!! error TS1147: Import declarations in a namespace cannot reference a module.
     }
+    import M3 from "M3";
+                   ~~~~
+!!! error TS2307: Cannot find module 'M3'.
     

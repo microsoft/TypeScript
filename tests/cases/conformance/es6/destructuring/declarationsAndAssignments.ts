@@ -2,8 +2,8 @@ function f0() {
     var [] = [1, "hello"];
     var [x] = [1, "hello"];
     var [x, y] = [1, "hello"];
-    var [x, y, z] = [1, "hello"];  // Error
-    var [,, z] = [0, 1, 2];
+    var [x, y, z] = [1, "hello"];
+    var [,, x] = [0, 1, 2];
     var x: number;
     var y: string;
 }
@@ -19,14 +19,14 @@ function f1() {
 }
 
 function f2() {
-    var { } = { x: 5, y: "hello" };
-    var { x } = { x: 5, y: "hello" };
-    var { y } = { x: 5, y: "hello" };
+    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { x } = { x: 5, y: "hello" };     // Error, no y in target
+    var { y } = { x: 5, y: "hello" };     // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };
     var x: number;
     var y: string;
-    var { x: a } = { x: 5, y: "hello" };
-    var { y: b } = { x: 5, y: "hello" };
+    var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+    var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
     var { x: a, y: b } = { x: 5, y: "hello" };
     var a: number;
     var b: string;

@@ -12,15 +12,15 @@ class C extends Base {
 >super : typeof Base
 
         var obj = {
->obj : {}
->{            [(super(), "prop")]() { }        } : {}
+>obj : { [x: string]: () => void; }
+>{            [(super(), "prop")]() { }        } : { [x: string]: () => void; }
 
             [(super(), "prop")]() { }
->(super(), "prop") : string
->super(), "prop" : string
+>(super(), "prop") : "prop"
+>super(), "prop" : "prop"
 >super() : void
 >super : typeof Base
->"prop" : string
+>"prop" : "prop"
 
         };
     }

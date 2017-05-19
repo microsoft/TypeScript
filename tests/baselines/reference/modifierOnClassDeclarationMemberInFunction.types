@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts ===
-
 function f() {
 >f : () => void
 
@@ -8,7 +7,7 @@ function f() {
 
         public baz = 1;
 >baz : number
->1 : number
+>1 : 1
 
         static foo() { }
 >foo : () => void

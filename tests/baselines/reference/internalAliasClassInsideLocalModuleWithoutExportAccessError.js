@@ -18,6 +18,8 @@ export module m2 {
 export var d = new m2.m3.c();
 
 //// [internalAliasClassInsideLocalModuleWithoutExportAccessError.js]
+"use strict";
+exports.__esModule = true;
 var x;
 (function (x) {
     var c = (function () {
@@ -27,7 +29,7 @@ var x;
             return a;
         };
         return c;
-    })();
+    }());
     x.c = c;
 })(x = exports.x || (exports.x = {}));
 var m2;

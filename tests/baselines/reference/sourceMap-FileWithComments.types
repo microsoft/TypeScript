@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMap-FileWithComments.ts ===
-
 // Interface
 interface IPoint {
 >IPoint : IPoint
@@ -32,17 +31,17 @@ module Shapes {
 >this.x * this.x + this.y * this.y : number
 >this.x * this.x : number
 >this.x : number
->this : Point
+>this : this
 >x : number
 >this.x : number
->this : Point
+>this : this
 >x : number
 >this.y * this.y : number
 >this.y : number
->this : Point
+>this : this
 >y : number
 >this.y : number
->this : Point
+>this : this
 >y : number
 
         // Static member
@@ -50,14 +49,14 @@ module Shapes {
 >origin : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
     }
 
     // Variable comment after class
     var a = 10;
 >a : number
->10 : number
+>10 : 10
 
     export function foo() {
 >foo : () => void
@@ -68,7 +67,7 @@ module Shapes {
     */
     var b = 10;
 >b : number
->10 : number
+>10 : 10
 }
 
 /** Local Variable */
@@ -79,8 +78,8 @@ var p: IPoint = new Shapes.Point(3, 4);
 >Shapes.Point : typeof Shapes.Point
 >Shapes : typeof Shapes
 >Point : typeof Shapes.Point
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 
 var dist = p.getDist();
 >dist : number

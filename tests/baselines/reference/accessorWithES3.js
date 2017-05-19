@@ -1,5 +1,4 @@
 //// [accessorWithES3.ts]
-
 // error to use accessors in ES3 mode
 
 class C {
@@ -34,7 +33,7 @@ var C = (function () {
         configurable: true
     });
     return C;
-})();
+}());
 var D = (function () {
     function D() {
     }
@@ -45,7 +44,7 @@ var D = (function () {
         configurable: true
     });
     return D;
-})();
+}());
 var x = {
     get a() { return 1; }
 };

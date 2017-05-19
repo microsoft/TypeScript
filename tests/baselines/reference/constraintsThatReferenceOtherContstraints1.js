@@ -14,10 +14,10 @@ var Foo = (function () {
     function Foo() {
     }
     return Foo;
-})();
+}());
 var Bar = (function () {
     function Bar() {
     }
     return Bar;
-})();
+}());
 var x; // Error 2 Type '{ a: string; b: number; }' does not satisfy the constraint 'T' for type 

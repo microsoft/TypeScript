@@ -9,5 +9,5 @@ function foo() {
         function C() {
         }
         return C;
-    })();
+    }());
 }

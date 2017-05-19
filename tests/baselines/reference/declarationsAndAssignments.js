@@ -3,8 +3,8 @@ function f0() {
     var [] = [1, "hello"];
     var [x] = [1, "hello"];
     var [x, y] = [1, "hello"];
-    var [x, y, z] = [1, "hello"];  // Error
-    var [,, z] = [0, 1, 2];
+    var [x, y, z] = [1, "hello"];
+    var [,, x] = [0, 1, 2];
     var x: number;
     var y: string;
 }
@@ -20,14 +20,14 @@ function f1() {
 }
 
 function f2() {
-    var { } = { x: 5, y: "hello" };
-    var { x } = { x: 5, y: "hello" };
-    var { y } = { x: 5, y: "hello" };
+    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+    var { x } = { x: 5, y: "hello" };     // Error, no y in target
+    var { y } = { x: 5, y: "hello" };     // Error, no x in target
     var { x, y } = { x: 5, y: "hello" };
     var x: number;
     var y: string;
-    var { x: a } = { x: 5, y: "hello" };
-    var { y: b } = { x: 5, y: "hello" };
+    var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+    var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
     var { x: a, y: b } = { x: 5, y: "hello" };
     var a: number;
     var b: string;
@@ -185,8 +185,8 @@ function f0() {
     var _a = [1, "hello"];
     var x = [1, "hello"][0];
     var _b = [1, "hello"], x = _b[0], y = _b[1];
-    var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2]; // Error
-    var _d = [0, 1, 2], z = _d[2];
+    var _c = [1, "hello"], x = _c[0], y = _c[1], z = _c[2];
+    var _d = [0, 1, 2], x = _d[2];
     var x;
     var y;
 }
@@ -200,14 +200,14 @@ function f1() {
     var z;
 }
 function f2() {
-    var _a = { x: 5, y: "hello" };
-    var x = { x: 5, y: "hello" }.x;
-    var y = { x: 5, y: "hello" }.y;
+    var _a = { x: 5, y: "hello" }; // Error, no x and y in target
+    var x = { x: 5, y: "hello" }.x; // Error, no y in target
+    var y = { x: 5, y: "hello" }.y; // Error, no x in target
     var _b = { x: 5, y: "hello" }, x = _b.x, y = _b.y;
     var x;
     var y;
-    var a = { x: 5, y: "hello" }.x;
-    var b = { x: 5, y: "hello" }.y;
+    var a = { x: 5, y: "hello" }.x; // Error, no y in target
+    var b = { x: 5, y: "hello" }.y; // Error, no x in target
     var _c = { x: 5, y: "hello" }, a = _c.x, b = _c.y;
     var a;
     var b;
@@ -300,8 +300,8 @@ function f18() {
     var a;
     var b;
     var aa;
-    (_a = { a: a, b: b }, a = _a.a, b = _a.b, _a);
-    (_b = { b: b, a: a }, a = _b.a, b = _b.b, _b);
+    (_a = { a: a, b: b }, a = _a.a, b = _a.b);
+    (_b = { b: b, a: a }, a = _b.a, b = _b.b);
     _c = [a, b], aa[0] = _c[0], b = _c[1];
     _d = [b, a], a = _d[0], b = _d[1]; // Error
     _e = [2, "def"], _f = _e[0], a = _f === void 0 ? 1 : _f, _g = _e[1], b = _g === void 0 ? "abc" : _g;
@@ -311,7 +311,7 @@ function f19() {
     var a, b;
     _a = [1, 2], a = _a[0], b = _a[1];
     _b = [b, a], a = _b[0], b = _b[1];
-    (_c = { b: b, a: a }, a = _c.a, b = _c.b, _c);
+    (_c = { b: b, a: a }, a = _c.a, b = _c.b);
     _d = [[2, 3]][0], _e = _d === void 0 ? [1, 2] : _d, a = _e[0], b = _e[1];
     var x = (_f = [1, 2], a = _f[0], b = _f[1], _f);
     var _a, _b, _c, _d, _e, _f;

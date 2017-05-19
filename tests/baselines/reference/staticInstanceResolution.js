@@ -26,4 +26,4 @@ var Comment = (function () {
         c.getDocCommentText();
     };
     return Comment;
-})();
+}());

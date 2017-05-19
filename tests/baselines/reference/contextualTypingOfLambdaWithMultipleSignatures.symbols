@@ -3,11 +3,11 @@ interface Foo {
 >Foo : Symbol(Foo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 0))
 
     getFoo(n: number): void;
->getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+>getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
 >n : Symbol(n, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 11))
 
     getFoo(s: string): void;
->getFoo : Symbol(getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
+>getFoo : Symbol(Foo.getFoo, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 0, 15), Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 1, 28))
 >s : Symbol(s, Decl(contextualTypingOfLambdaWithMultipleSignatures.ts, 2, 11))
 }
 

@@ -83,7 +83,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 ;
 //Cond is an object type variable
 condObject ? exprAny1 : exprAny2;

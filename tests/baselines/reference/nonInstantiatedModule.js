@@ -77,6 +77,6 @@ var M3;
         function Utils() {
         }
         return Utils;
-    })();
+    }());
     M3.Utils = Utils;
 })(M3 || (M3 = {}));

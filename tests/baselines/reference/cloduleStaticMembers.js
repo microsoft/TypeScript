@@ -16,11 +16,10 @@ module Clod {
 var Clod = (function () {
     function Clod() {
     }
-    Clod.x = 10;
-    Clod.y = 10;
     return Clod;
-})();
-var Clod;
+}());
+Clod.x = 10;
+Clod.y = 10;
 (function (Clod) {
     var p = Clod.x;
     var q = x;

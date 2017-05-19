@@ -13,4 +13,4 @@ var x = (function () {
     function C() {
     }
     return C;
-})();
+}());

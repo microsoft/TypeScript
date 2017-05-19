@@ -9,6 +9,6 @@ class C {
 >foo : () => string
 
     return "bar";
->"bar" : string
+>"bar" : "bar"
   }
 }

@@ -11,4 +11,4 @@ var Outer = (function () {
     }
     Outer.public = function () { };
     return Outer;
-})();
+}());

@@ -1,0 +1,58 @@
+=== tests/cases/conformance/externalModules/test/file1.ts ===
+import foo = require('foo');
+>foo : typeof foo
+
+import other = require('./other');
+>other : typeof other
+
+import relMod = require('./sub/relMod');
+>relMod : typeof relMod
+
+if(foo.M2.x){
+>foo.M2.x : boolean
+>foo.M2 : typeof foo.M2
+>foo : typeof foo
+>M2 : typeof foo.M2
+>x : boolean
+
+	var x = new relMod(other.M2.x.charCodeAt(0));
+>x : relMod
+>new relMod(other.M2.x.charCodeAt(0)) : relMod
+>relMod : typeof relMod
+>other.M2.x.charCodeAt(0) : number
+>other.M2.x.charCodeAt : (index: number) => number
+>other.M2.x : string
+>other.M2 : typeof other.M2
+>other : typeof other
+>M2 : typeof other.M2
+>x : string
+>charCodeAt : (index: number) => number
+>0 : 0
+}
+
+=== tests/cases/conformance/externalModules/test/foo.d.ts ===
+export declare module M2 {
+>M2 : typeof M2
+
+	export var x: boolean;
+>x : boolean
+}
+
+=== tests/cases/conformance/externalModules/test/other.d.ts ===
+export declare module M2 {
+>M2 : typeof M2
+
+	export var x: string;
+>x : string
+}
+
+=== tests/cases/conformance/externalModules/test/sub/relMod.d.ts ===
+declare class Test {
+>Test : Test
+
+	constructor(x: number);
+>x : number
+}
+export = Test;
+>Test : Test
+

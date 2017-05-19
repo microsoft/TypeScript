@@ -1,0 +1,37 @@
+tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(18,10): error TS2678: Type '(number & true) | (number & false)' is not comparable to type 'string & number'.
+  Type 'number & false' is not comparable to type 'string & number'.
+    Type 'number & false' is not comparable to type 'string'.
+tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts(22,10): error TS2678: Type 'boolean' is not comparable to type 'string & number'.
+
+
+==== tests/cases/conformance/types/typeRelationships/comparable/switchCaseWithIntersectionTypes01.ts (2 errors) ====
+    var strAndNum: string & number;
+    var numAndBool: number & boolean;
+    var str: string;
+    var num: number;
+    var bool: boolean;
+    
+    switch (strAndNum) {
+        // Identical
+        case strAndNum:
+            break;
+    
+        // Constituents
+        case str:
+        case num:
+            break;
+    
+        // Overlap in constituents
+        case numAndBool:
+             ~~~~~~~~~~
+!!! error TS2678: Type '(number & true) | (number & false)' is not comparable to type 'string & number'.
+!!! error TS2678:   Type 'number & false' is not comparable to type 'string & number'.
+!!! error TS2678:     Type 'number & false' is not comparable to type 'string'.
+            break;
+    
+        // No relation
+        case bool:
+             ~~~~
+!!! error TS2678: Type 'boolean' is not comparable to type 'string & number'.
+            break;
+    }

@@ -38,17 +38,17 @@ module Consumer {
 >this.emitter.addListener('change', (e) => {                this.changed();            }) : void
 >this.emitter.addListener : (type: string, listener: Events.ListenerCallback) => void
 >this.emitter : Events.EventEmitter
->this : EventEmitterConsummer
+>this : this
 >emitter : Events.EventEmitter
 >addListener : (type: string, listener: Events.ListenerCallback) => void
->'change' : string
+>'change' : "change"
 >(e) => {                this.changed();            } : (e: any) => void
 >e : any
 
                 this.changed();
 >this.changed() : void
 >this.changed : () => void
->this : EventEmitterConsummer
+>this : this
 >changed : () => void
 
             });

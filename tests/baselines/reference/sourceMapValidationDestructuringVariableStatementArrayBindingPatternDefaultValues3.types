@@ -1,0 +1,361 @@
+=== tests/cases/compiler/sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.ts ===
+declare var console: {
+>console : { log(msg: any): void; }
+
+    log(msg: any): void;
+>log : (msg: any) => void
+>msg : any
+}
+type Robot = [number, string, string];
+>Robot : [number, string, string]
+
+type MultiSkilledRobot = [string, string[]];
+>MultiSkilledRobot : [string, string[]]
+
+var robotA: Robot = [1, "mower", "mowing"];
+>robotA : [number, string, string]
+>Robot : [number, string, string]
+>[1, "mower", "mowing"] : [number, string, string]
+>1 : 1
+>"mower" : "mower"
+>"mowing" : "mowing"
+
+var robotB: Robot = [2, "trimmer", "trimming"];
+>robotB : [number, string, string]
+>Robot : [number, string, string]
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
+
+var multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+>multiRobotA : [string, string[]]
+>MultiSkilledRobot : [string, string[]]
+>["mower", ["mowing", ""]] : [string, string[]]
+>"mower" : "mower"
+>["mowing", ""] : string[]
+>"mowing" : "mowing"
+>"" : ""
+
+var multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+>multiRobotB : [string, string[]]
+>MultiSkilledRobot : [string, string[]]
+>["trimmer", ["trimming", "edging"]] : [string, string[]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : string[]
+>"trimming" : "trimming"
+>"edging" : "edging"
+
+let nameA: string, numberB: number, nameB: string, skillB: string;
+>nameA : string
+>numberB : number
+>nameB : string
+>skillB : string
+
+let robotAInfo: (number | string)[];
+>robotAInfo : (string | number)[]
+
+let multiSkillB: string[], nameMB: string, primarySkillB: string, secondarySkillB: string;
+>multiSkillB : string[]
+>nameMB : string
+>primarySkillB : string
+>secondarySkillB : string
+
+let multiRobotAInfo: (string | string[])[];
+>multiRobotAInfo : (string | string[])[]
+
+[, nameA = "helloNoName"] = robotA;
+>[, nameA = "helloNoName"] = robotA : [number, string, string]
+>[, nameA = "helloNoName"] : [undefined, string]
+> : undefined
+>nameA = "helloNoName" : "helloNoName"
+>nameA : string
+>"helloNoName" : "helloNoName"
+>robotA : [number, string, string]
+
+[, nameB = "helloNoName"] = getRobotB();
+>[, nameB = "helloNoName"] = getRobotB() : [number, string, string]
+>[, nameB = "helloNoName"] : [undefined, string]
+> : undefined
+>nameB = "helloNoName" : "helloNoName"
+>nameB : string
+>"helloNoName" : "helloNoName"
+>getRobotB() : [number, string, string]
+>getRobotB : () => [number, string, string]
+
+[, nameB = "helloNoName"] = [2, "trimmer", "trimming"];
+>[, nameB = "helloNoName"] = [2, "trimmer", "trimming"] : [number, string, string]
+>[, nameB = "helloNoName"] : [undefined, string]
+> : undefined
+>nameB = "helloNoName" : "helloNoName"
+>nameB : string
+>"helloNoName" : "helloNoName"
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
+
+[, multiSkillB = []] = multiRobotB;
+>[, multiSkillB = []] = multiRobotB : [string, string[]]
+>[, multiSkillB = []] : [undefined, undefined[]]
+> : undefined
+>multiSkillB = [] : undefined[]
+>multiSkillB : string[]
+>[] : undefined[]
+>multiRobotB : [string, string[]]
+
+[, multiSkillB = []] = getMultiRobotB();
+>[, multiSkillB = []] = getMultiRobotB() : [string, string[]]
+>[, multiSkillB = []] : [undefined, undefined[]]
+> : undefined
+>multiSkillB = [] : undefined[]
+>multiSkillB : string[]
+>[] : undefined[]
+>getMultiRobotB() : [string, string[]]
+>getMultiRobotB : () => [string, string[]]
+
+[, multiSkillB = []] = ["roomba", ["vaccum", "mopping"]];
+>[, multiSkillB = []] = ["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>[, multiSkillB = []] : [undefined, undefined[]]
+> : undefined
+>multiSkillB = [] : undefined[]
+>multiSkillB : string[]
+>[] : undefined[]
+>["roomba", ["vaccum", "mopping"]] : [string, string[]]
+>"roomba" : "roomba"
+>["vaccum", "mopping"] : string[]
+>"vaccum" : "vaccum"
+>"mopping" : "mopping"
+
+[numberB = -1] = robotB;
+>[numberB = -1] = robotB : [number, string, string]
+>[numberB = -1] : [number]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>robotB : [number, string, string]
+
+[numberB = -1] = getRobotB();
+>[numberB = -1] = getRobotB() : [number, string, string]
+>[numberB = -1] : [number]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>getRobotB() : [number, string, string]
+>getRobotB : () => [number, string, string]
+
+[numberB = -1] = [2, "trimmer", "trimming"];
+>[numberB = -1] = [2, "trimmer", "trimming"] : [number, string, string]
+>[numberB = -1] : [number]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
+
+[nameMB = "helloNoName"] = multiRobotB;
+>[nameMB = "helloNoName"] = multiRobotB : [string, string[]]
+>[nameMB = "helloNoName"] : [string]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>multiRobotB : [string, string[]]
+
+[nameMB = "helloNoName"] = getMultiRobotB();
+>[nameMB = "helloNoName"] = getMultiRobotB() : [string, string[]]
+>[nameMB = "helloNoName"] : [string]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>getMultiRobotB() : [string, string[]]
+>getMultiRobotB : () => [string, string[]]
+
+[nameMB = "helloNoName"] = ["trimmer", ["trimming", "edging"]];
+>[nameMB = "helloNoName"] = ["trimmer", ["trimming", "edging"]] : [string, string[]]
+>[nameMB = "helloNoName"] : [string]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>["trimmer", ["trimming", "edging"]] : [string, string[]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : string[]
+>"trimming" : "trimming"
+>"edging" : "edging"
+
+[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = robotB;
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = robotB : [number, string, string]
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] : [number, string, string]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>nameB = "helloNoName" : "helloNoName"
+>nameB : string
+>"helloNoName" : "helloNoName"
+>skillB = "noSkill" : "noSkill"
+>skillB : string
+>"noSkill" : "noSkill"
+>robotB : [number, string, string]
+
+[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB();
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = getRobotB() : [number, string, string]
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] : [number, string, string]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>nameB = "helloNoName" : "helloNoName"
+>nameB : string
+>"helloNoName" : "helloNoName"
+>skillB = "noSkill" : "noSkill"
+>skillB : string
+>"noSkill" : "noSkill"
+>getRobotB() : [number, string, string]
+>getRobotB : () => [number, string, string]
+
+[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"];
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] = [2, "trimmer", "trimming"] : [number, string, string]
+>[numberB = -1, nameB = "helloNoName", skillB = "noSkill"] : [number, string, string]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>nameB = "helloNoName" : "helloNoName"
+>nameB : string
+>"helloNoName" : "helloNoName"
+>skillB = "noSkill" : "noSkill"
+>skillB : string
+>"noSkill" : "noSkill"
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
+
+[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB;
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = multiRobotB : [string, string[]]
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] : [string, [string, string]]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = [] : [string, string]
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] : [string, string]
+>primarySkillB = "noSkill" : "noSkill"
+>primarySkillB : string
+>"noSkill" : "noSkill"
+>secondarySkillB = "noSkill" : "noSkill"
+>secondarySkillB : string
+>"noSkill" : "noSkill"
+>[] : [string, string]
+>multiRobotB : [string, string[]]
+
+[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB();
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] = getMultiRobotB() : [string, string[]]
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] : [string, [string, string]]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = [] : [string, string]
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] : [string, string]
+>primarySkillB = "noSkill" : "noSkill"
+>primarySkillB : string
+>"noSkill" : "noSkill"
+>secondarySkillB = "noSkill" : "noSkill"
+>secondarySkillB : string
+>"noSkill" : "noSkill"
+>[] : [string, string]
+>getMultiRobotB() : [string, string[]]
+>getMultiRobotB : () => [string, string[]]
+
+[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] =    ["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>[nameMB = "helloNoName", [primarySkillB = "noSkill", secondarySkillB = "noSkill"] = []] : [string, [string, string]]
+>nameMB = "helloNoName" : "helloNoName"
+>nameMB : string
+>"helloNoName" : "helloNoName"
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] = [] : [string, string]
+>[primarySkillB = "noSkill", secondarySkillB = "noSkill"] : [string, string]
+>primarySkillB = "noSkill" : "noSkill"
+>primarySkillB : string
+>"noSkill" : "noSkill"
+>secondarySkillB = "noSkill" : "noSkill"
+>secondarySkillB : string
+>"noSkill" : "noSkill"
+>[] : [string, string]
+
+    ["trimmer", ["trimming", "edging"]];
+>["trimmer", ["trimming", "edging"]] : [string, [string, string]]
+>"trimmer" : "trimmer"
+>["trimming", "edging"] : [string, string]
+>"trimming" : "trimming"
+>"edging" : "edging"
+
+[numberB = -1, ...robotAInfo] = robotB;
+>[numberB = -1, ...robotAInfo] = robotB : [number, string, string]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
+>robotB : [number, string, string]
+
+[numberB = -1, ...robotAInfo] = getRobotB();
+>[numberB = -1, ...robotAInfo] = getRobotB() : [number, string, string]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
+>getRobotB() : [number, string, string]
+>getRobotB : () => [number, string, string]
+
+[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"];
+>[numberB = -1, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : [number, string, string]
+>[numberB = -1, ...robotAInfo] : (string | number)[]
+>numberB = -1 : -1
+>numberB : number
+>-1 : -1
+>1 : 1
+>...robotAInfo : string | number
+>robotAInfo : (string | number)[]
+><Robot>[2, "trimmer", "trimming"] : [number, string, string]
+>Robot : [number, string, string]
+>[2, "trimmer", "trimming"] : [number, string, string]
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
+
+if (nameA == nameB) {
+>nameA == nameB : boolean
+>nameA : string
+>nameB : string
+
+    console.log(skillB);
+>console.log(skillB) : void
+>console.log : (msg: any) => void
+>console : { log(msg: any): void; }
+>log : (msg: any) => void
+>skillB : string
+}
+
+function getRobotB() {
+>getRobotB : () => [number, string, string]
+
+    return robotB;
+>robotB : [number, string, string]
+}
+
+function getMultiRobotB() {
+>getMultiRobotB : () => [string, string[]]
+
+    return multiRobotB;
+>multiRobotB : [string, string[]]
+}

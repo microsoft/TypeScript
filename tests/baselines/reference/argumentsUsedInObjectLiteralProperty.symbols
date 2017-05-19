@@ -10,9 +10,9 @@ class A {
         return {
             selectedValue: arguments.length
 >selectedValue : Symbol(selectedValue, Decl(argumentsUsedInObjectLiteralProperty.ts, 2, 16))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, 272, 25))
+>arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, 272, 25))
+>length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
 
         };
     }

@@ -47,7 +47,7 @@ var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 var M;
 (function (M) {
 })(M || (M = {}));

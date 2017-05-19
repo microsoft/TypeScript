@@ -10,40 +10,40 @@ class C {
 
         return this._name;
 >this._name : string
->this : C
+>this : this
 >_name : string
     }
     static get name2(): string {
 >name2 : string
 
         return "BYE";
->"BYE" : string
+>"BYE" : "BYE"
     }
     static get ["computedname"]() {
->"computedname" : string
+>"computedname" : "computedname"
 
         return "";
->"" : string
+>"" : ""
     }
-    get ["computedname"]() {
->"computedname" : string
+    get ["computedname1"]() {
+>"computedname1" : "computedname1"
 
         return "";
->"" : string
+>"" : ""
     }
-    get ["computedname"]() {
->"computedname" : string
+    get ["computedname2"]() {
+>"computedname2" : "computedname2"
 
         return "";
->"" : string
+>"" : ""
     }
 
-    set ["computedname"](x: any) {
->"computedname" : string
+    set ["computedname3"](x: any) {
+>"computedname3" : "computedname3"
 >x : any
     }
-    set ["computedname"](y: string) {
->"computedname" : string
+    set ["computedname4"](y: string) {
+>"computedname4" : "computedname4"
 >y : string
     }
 
@@ -56,6 +56,6 @@ class C {
 >b : number
 
     static set ["computedname"](b: string) { }
->"computedname" : string
+>"computedname" : "computedname"
 >b : string
 }

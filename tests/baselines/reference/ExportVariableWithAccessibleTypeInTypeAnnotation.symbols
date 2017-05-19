@@ -6,10 +6,10 @@ module A {
 >Point : Symbol(Point, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 0, 10))
 
         x: number;
->x : Symbol(x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 2, 28))
+>x : Symbol(Point.x, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 2, 28))
 
         y: number;
->y : Symbol(y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 3, 18))
+>y : Symbol(Point.y, Decl(ExportVariableWithAccessibleTypeInTypeAnnotation.ts, 3, 18))
     }
 
     // valid since Point is exported

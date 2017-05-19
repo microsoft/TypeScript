@@ -2,10 +2,10 @@
 label1: for(var i = 0; i < 1; i++) {
 >label1 : any
 >i : number
->0 : number
+>0 : 0
 >i < 1 : boolean
 >i : number
->1 : number
+>1 : 1
 >i++ : number
 >i : number
 

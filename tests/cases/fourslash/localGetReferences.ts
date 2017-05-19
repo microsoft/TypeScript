@@ -2,35 +2,39 @@
 
 // @Filename: localGetReferences_1.ts
 ////// Comment Refence Test: g/*1*/lobalVar
-////var g/*3*/lobalVar: n/*2*/umber = 2;
+////// References to a variable declared in global.
+////var [|{| "isWriteAccess": true, "isDefinition": true |}globalVar|]: number = 2;
 ////
 ////class fooCls {
-////    static clsS/*5*/Var = 1;
-////    //Declare
-////    cls/*4*/Var = 1;
+////    // References to static variable declared in a class.
+////    static [|{| "isWriteAccess": true, "isDefinition": true |}clsSVar|] = 1;
+////    // References to a variable declared in a class.
+////    [|{| "isWriteAccess": true, "isDefinition": true |}clsVar|] = 1;
 ////
-////    constructor (public clsParam: number) {
+////    constructor (public [|{| "isWriteAccess": true, "isDefinition": true |}clsParam|]: number) {
 ////        //Increments
-////        globalVar++;
-////        this.clsVar++;
-////        fooCls.clsSVar++;
-////        this.cls/*7*/Param++;
+////        [|{| "isWriteAccess": true |}globalVar|]++;
+////        this.[|clsVar|]++;
+////        fooCls.[|clsSVar|]++;
+////        // References to a class parameter.
+////        this.[|clsParam|]++;
 ////        modTest.modVar++;
 ////    }
 ////}
 ////
-////function foo(/*8*/x: number) {
-////    //Declare
-////    var fn/*6*/Var = 1;
+////// References to a function parameter.
+////function [|{| "isWriteAccess": true, "isDefinition": true |}foo|]([|{| "isWriteAccess": true, "isDefinition": true |}x|]: number) {
+////    // References to a variable declared in a function.
+////    var [|{| "isWriteAccess": true, "isDefinition": true |}fnVar|] = 1;
 ////
 ////    //Increments
-////    fooCls.clsSVar++;
-////    globalVar++;
+////    fooCls.[|clsSVar|]++;
+////    [|{| "isWriteAccess": true |}globalVar|]++;
 ////    modTest.modVar++;
-////    fnVar++;
+////    [|{| "isWriteAccess": true |}fnVar|]++;
 ////
 ////    //Return
-////    return x++;
+////    return [|{| "isWriteAccess": true |}x|]++;
 ////}
 ////
 ////module modTest {
@@ -38,25 +42,25 @@
 ////    export var modVar:number;
 ////
 ////    //Increments
-////    globalVar++;
-////    fooCls.clsSVar++;
+////    [|{| "isWriteAccess": true |}globalVar|]++;
+////    fooCls.[|clsSVar|]++;
 ////    modVar++;
 ////
 ////    class testCls {
-////        static boo = foo;
+////        static boo = [|foo|];
 ////    }
 ////
 ////    function testFn(){
-////        static boo = foo;
+////        static boo = [|foo|];
 ////
 ////        //Increments
-////        globalVar++;
-////        fooCls.clsSVar++;
+////        [|{| "isWriteAccess": true |}globalVar|]++;
+////        fooCls.[|clsSVar|]++;
 ////        modVar++;
 ////    }
 ////
 ////    module testMod {
-////        var boo = foo;
+////        var boo = [|foo|];
 ////    }
 ////}
 ////
@@ -64,24 +68,27 @@
 ////var clsTest: fooCls;
 ////
 //////Arguments
-////clsTest = new fooCls(globalV/*10*/ar);
-////foo(glo/*9*/balVar);
+////// References to a class argument.
+////clsTest = new fooCls([|globalVar|]);
+////// References to a function argument.
+////[|foo|]([|globalVar|]);
 ////
 //////Increments
-////fooCls.clsSVar++;
+////fooCls.[|clsSVar|]++;
 ////modTest.modVar++;
-////globalVar = globalVar + globalVar;
+////[|{| "isWriteAccess": true |}globalVar|] = [|globalVar|] + [|globalVar|];
 ////
 //////ETC - Other cases
-////globalVar = 3;
-/////*11*/foo = foo + 1;
-/////*12*/err = err++;
-/////*13*/
+////[|{| "isWriteAccess": true |}globalVar|] = 3;
+////// References to illegal assignment.
+////[|{| "isWriteAccess": true |}foo|] = [|foo|] + 1;
+/////*3*/err = err++;
+/////*4*/
 //////Shadowed fn Parameter
-////function shdw(globa/*14*/lVar: number) {
+////function shdw([|{| "isWriteAccess": true, "isDefinition": true, "shadow": true |}globalVar|]: number) {
 ////    //Increments
-////    globalVar++;
-////    return globalVar;
+////    [|{| "isWriteAccess": true, "shadow": true |}globalVar|]++;
+////    return [|{| "shadow": true |}globalVar|];
 ////}
 ////
 //////Remotes
@@ -110,11 +117,12 @@
 ////array.forEach(
 ////
 ////
-////function(str) {
+////function([|{| "isWriteAccess": true, "isDefinition": true |}str|]) {
 ////
 ////
 ////
-////   return /*15*/str + " ";
+////   // Reference misses function parameter.
+////   return [|str|] + " ";
 ////
 ////});
 
@@ -162,7 +170,7 @@
 ////	class remotetestCls {
 ////		static remoteboo = remotefoo;
 ////	}
-////
+////`
 ////	function remotetestFn(){
 ////        static remoteboo = remotefoo;
 ////
@@ -179,60 +187,38 @@
 
 // References to comment.
 goTo.marker("1");
-verify.referencesCountIs(0);
-
-// References to type.
-goTo.marker("2");
-verify.referencesCountIs(0);
-
-// References to a variable declared in global.
-goTo.marker("3");
-verify.referencesCountIs(11);
-
-// References to a variable declared in a class.
-goTo.marker("4");
-verify.referencesCountIs(2);
-
-// References to static variable declared in a class.
-goTo.marker("5");
-verify.referencesCountIs(6);
-
-// References to a variable declared in a function.
-goTo.marker("6");
-verify.referencesCountIs(2);
-
-// References to a class parameter.
-goTo.marker("7");
-verify.referencesCountIs(2);
-
-// References to a function parameter.
-goTo.marker("8");
-verify.referencesCountIs(2);
-
-// References to a function argument.
-goTo.marker("9");
-verify.referencesCountIs(11);
-
-// References to a class argument.
-goTo.marker("10");
-verify.referencesCountIs(11);
-
-// References to illegal assignment.
-goTo.marker("11");
-verify.referencesCountIs(7);
+verify.noReferences();
 
 // References to unresolved symbol.
-goTo.marker("12");
-verify.referencesCountIs(0);
+goTo.marker("3");
+verify.noReferences();
 
 // References to no context.
-goTo.marker("13");
-verify.referencesCountIs(0);
+goTo.marker("4");
+verify.noReferences();
 
-// References to shadowed function parameter.
-goTo.marker("14");
-verify.referencesCountIs(3);
+test.rangesByText().forEach((ranges, text) => {
+    if (text === "globalVar") {
+        verify.singleReferenceGroup("(parameter) globalVar: number", ranges.filter(isShadow));
+        verify.singleReferenceGroup("var globalVar: number", ranges.filter(r => !isShadow(r)));
+        return;
+    }
 
-// Reference misses function parameter.
-goTo.marker("15");
-verify.referencesCountIs(2);
+    const definition = (() => {
+        switch (text) {
+            case "fnVar": return "(local var) fnVar: number";
+            case "clsSVar": return "(property) fooCls.clsSVar: number";
+            case "clsVar": return "(property) fooCls.clsVar: number";
+            case "clsParam": return "(property) fooCls.clsParam: number";
+            case "foo": return "function foo(x: number): number";
+            case "x": return "(parameter) x: number";
+            case "str": return "(parameter) str: string";
+            default: throw new Error(text);
+        }
+    })();
+    verify.singleReferenceGroup(definition, ranges);
+});
+
+function isShadow(r) {
+    return r.marker && r.marker.data && r.marker.data.shadow;
+}

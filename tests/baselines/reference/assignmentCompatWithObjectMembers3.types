@@ -53,14 +53,14 @@ var a2: S2 = { foo: '' };
 >S2 : S2
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 var b2: T2 = { foo: '' };
 >b2 : T2
 >T2 : T2
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 s = t;
 >s = t : T

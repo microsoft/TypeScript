@@ -42,13 +42,13 @@ var strOrNumOrBoolOrC: string | number | boolean | C;
 if (typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") {
 >typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool !== "string" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
->"string" : string
+>"string" : "string"
 >typeof strOrNumOrBool !== "number" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : number | boolean
->"number" : string
+>"number" : "number"
 
     bool = strOrNumOrBool; // boolean
 >bool = strOrNumOrBool : boolean
@@ -66,17 +66,17 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" && typeof strOrNumOrBoolOrC !== "boolean" : boolean
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC !== "string" : boolean
->typeof strOrNumOrBoolOrC : string
+>typeof strOrNumOrBoolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBoolOrC : string | number | boolean | C
->"string" : string
+>"string" : "string"
 >typeof strOrNumOrBoolOrC !== "number" : boolean
->typeof strOrNumOrBoolOrC : string
+>typeof strOrNumOrBoolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBoolOrC : number | boolean | C
->"number" : string
+>"number" : "number"
 >typeof strOrNumOrBoolOrC !== "boolean" : boolean
->typeof strOrNumOrBoolOrC : string
+>typeof strOrNumOrBoolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBoolOrC : boolean | C
->"boolean" : string
+>"boolean" : "boolean"
 
     c = strOrNumOrBoolOrC; // C
 >c = strOrNumOrBoolOrC : C
@@ -94,17 +94,17 @@ if (typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "numbe
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" && typeof strOrNumOrBool === "boolean" : boolean
 >typeof strOrNumOrBoolOrC !== "string" && typeof strOrNumOrBoolOrC !== "number" : boolean
 >typeof strOrNumOrBoolOrC !== "string" : boolean
->typeof strOrNumOrBoolOrC : string
+>typeof strOrNumOrBoolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBoolOrC : string | number | boolean | C
->"string" : string
+>"string" : "string"
 >typeof strOrNumOrBoolOrC !== "number" : boolean
->typeof strOrNumOrBoolOrC : string
+>typeof strOrNumOrBoolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBoolOrC : number | boolean | C
->"number" : string
+>"number" : "number"
 >typeof strOrNumOrBool === "boolean" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
->"boolean" : string
+>"boolean" : "boolean"
 
     cOrBool = strOrNumOrBoolOrC; // C | boolean
 >cOrBool = strOrNumOrBoolOrC : boolean | C
@@ -130,9 +130,9 @@ else {
 if (typeof strOrNumOrBool !== "string" && numOrBool !== strOrNumOrBool) {
 >typeof strOrNumOrBool !== "string" && numOrBool !== strOrNumOrBool : boolean
 >typeof strOrNumOrBool !== "string" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
->"string" : string
+>"string" : "string"
 >numOrBool !== strOrNumOrBool : boolean
 >numOrBool : number | boolean
 >strOrNumOrBool : number | boolean

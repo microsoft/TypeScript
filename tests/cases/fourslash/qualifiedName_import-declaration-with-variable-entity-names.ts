@@ -21,6 +21,4 @@ verify.occurrencesAtPositionContains(def);
 verify.occurrencesAtPositionContains(imp);
 verify.occurrencesAtPositionContains(mem);
 
-goTo.definition();
-
-verify.caretAtMarker('def');
+verify.goToDefinitionIs("def");

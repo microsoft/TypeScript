@@ -1,0 +1,192 @@
+=== tests/cases/compiler/express.d.ts ===
+declare module Express {
+>Express : any
+
+    export interface Request { }
+>Request : Request
+
+    export interface Response { }
+>Response : Response
+
+    export interface Application { }
+>Application : Application
+}
+
+declare module "express" {
+    function e(): e.Express;
+>e : typeof e
+>e : any
+>Express : Express
+
+    namespace e {
+>e : typeof e
+
+        interface IRoute {
+>IRoute : IRoute
+
+            all(...handler: RequestHandler[]): IRoute;
+>all : (...handler: RequestHandler[]) => IRoute
+>handler : RequestHandler[]
+>RequestHandler : RequestHandler
+>IRoute : IRoute
+        }
+
+        interface IRouterMatcher<T> {
+>IRouterMatcher : IRouterMatcher<T>
+>T : T
+
+            (name: string|RegExp, ...handlers: RequestHandler[]): T;
+>name : string | RegExp
+>RegExp : RegExp
+>handlers : RequestHandler[]
+>RequestHandler : RequestHandler
+>T : T
+        }
+
+        interface IRouter<T> extends RequestHandler {
+>IRouter : IRouter<T>
+>T : T
+>RequestHandler : RequestHandler
+
+            route(path: string): IRoute;
+>route : (path: string) => IRoute
+>path : string
+>IRoute : IRoute
+        }
+
+        export function Router(options?: any): Router;
+>Router : (options?: any) => Router
+>options : any
+>Router : Router
+
+        export interface Router extends IRouter<Router> {}
+>Router : Router
+>IRouter : IRouter<T>
+>Router : Router
+
+        interface Errback { (err: Error): void; }
+>Errback : Errback
+>err : Error
+>Error : Error
+
+        interface Request extends Express.Request {
+>Request : Request
+>Express.Request : any
+>Express : any
+>Request : Express.Request
+
+            get (name: string): string;
+>get : (name: string) => string
+>name : string
+        }
+
+        interface Response extends Express.Response {
+>Response : Response
+>Express.Response : any
+>Express : any
+>Response : Express.Response
+
+            charset: string;
+>charset : string
+        }
+
+        interface ErrorRequestHandler {
+>ErrorRequestHandler : ErrorRequestHandler
+
+            (err: any, req: Request, res: Response, next: Function): any;
+>err : any
+>req : Request
+>Request : Request
+>res : Response
+>Response : Response
+>next : Function
+>Function : Function
+        }
+
+        interface RequestHandler {
+>RequestHandler : RequestHandler
+
+            (req: Request, res: Response, next: Function): any;
+>req : Request
+>Request : Request
+>res : Response
+>Response : Response
+>next : Function
+>Function : Function
+        }
+
+        interface Handler extends RequestHandler {}
+>Handler : Handler
+>RequestHandler : RequestHandler
+
+        interface RequestParamHandler {
+>RequestParamHandler : RequestParamHandler
+
+            (req: Request, res: Response, next: Function, param: any): any;
+>req : Request
+>Request : Request
+>res : Response
+>Response : Response
+>next : Function
+>Function : Function
+>param : any
+        }
+
+        interface Application extends IRouter<Application>, Express.Application {
+>Application : Application
+>IRouter : IRouter<T>
+>Application : Application
+>Express.Application : any
+>Express : any
+>Application : Express.Application
+
+            routes: any;
+>routes : any
+        }
+
+        interface Express extends Application {
+>Express : Express
+>Application : Application
+
+            createApplication(): Application;
+>createApplication : () => Application
+>Application : Application
+        }
+
+        var static: any;
+>static : any
+    }
+
+    export = e;
+>e : typeof e
+}
+
+=== tests/cases/compiler/augmentation.ts ===
+/// <reference path="express.d.ts"/>
+import * as e from "express";
+>e : typeof e
+
+declare module "express" {
+    interface Request {
+>Request : Request
+
+        id: number;
+>id : number
+    }
+}
+
+=== tests/cases/compiler/consumer.ts ===
+import { Request } from "express";
+>Request : any
+
+import "./augmentation";
+let x: Request;
+>x : Request
+>Request : Request
+
+const y = x.id;
+>y : number
+>x.id : number
+>x : Request
+>id : number
+

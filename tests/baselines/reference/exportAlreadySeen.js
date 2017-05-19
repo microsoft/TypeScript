@@ -31,7 +31,7 @@ var M;
             function C() {
             }
             return C;
-        })();
+        }());
         N.C = C;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));

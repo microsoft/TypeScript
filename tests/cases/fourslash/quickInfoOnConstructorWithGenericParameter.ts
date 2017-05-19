@@ -16,14 +16,10 @@
 ////}
 ////var x = new /*2*/B(/*1*/
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker("1");
 verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
 edit.insert("null,");
 verify.currentSignatureHelpIs("B(a: Foo<I>, b: number): B");
 edit.insert("10);");
 
-goTo.marker("2");
-verify.quickInfoIs("constructor B(a: Foo<I>, b: number): B", undefined);
+verify.quickInfoAt("2", "constructor B(a: Foo<I>, b: number): B");

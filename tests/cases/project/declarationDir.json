@@ -1,0 +1,12 @@
+{
+    "scenario": "declarationDir: specify declarationDir only",
+    "projectRoot": "tests/cases/projects/declarationDir",
+    "inputFiles": [
+        "a.ts",
+        "subfolder/b.ts",
+        "subfolder/c.ts"
+    ],
+    "declaration": true,
+    "declarationDir": "declarations",
+    "baselineCheck": true
+}

@@ -6,10 +6,10 @@ module A {
 >B : Symbol(B, Decl(interMixingModulesInterfaces1.ts, 0, 10), Decl(interMixingModulesInterfaces1.ts, 5, 5))
 
         name: string;
->name : Symbol(name, Decl(interMixingModulesInterfaces1.ts, 2, 24))
+>name : Symbol(B.name, Decl(interMixingModulesInterfaces1.ts, 2, 24))
 
         value: number;
->value : Symbol(value, Decl(interMixingModulesInterfaces1.ts, 3, 21))
+>value : Symbol(B.value, Decl(interMixingModulesInterfaces1.ts, 3, 21))
     }
 
     export module B {

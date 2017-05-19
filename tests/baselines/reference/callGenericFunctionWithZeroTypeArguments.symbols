@@ -38,7 +38,7 @@ class C {
 >C : Symbol(C, Decl(callGenericFunctionWithZeroTypeArguments.ts, 9, 15))
 
     f<T>(x: T): T {
->f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
+>f : Symbol(C.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 11, 9))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
 >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 9))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 12, 6))
@@ -57,7 +57,7 @@ interface I {
 >I : Symbol(I, Decl(callGenericFunctionWithZeroTypeArguments.ts, 16, 24))
 
     f<T>(x: T): T;
->f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
+>f : Symbol(I.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 18, 13))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
 >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 9))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 19, 6))
@@ -78,7 +78,7 @@ class C2<T> {
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
 
     f(x: T): T {
->f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
+>f : Symbol(C2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 13))
 >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 25, 6))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 24, 9))
@@ -97,7 +97,7 @@ interface I2<T> {
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
 
     f(x: T): T;
->f : Symbol(f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
+>f : Symbol(I2.f, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 17))
 >x : Symbol(x, Decl(callGenericFunctionWithZeroTypeArguments.ts, 32, 6))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))
 >T : Symbol(T, Decl(callGenericFunctionWithZeroTypeArguments.ts, 31, 13))

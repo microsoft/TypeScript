@@ -23,7 +23,7 @@ module M {
 >d : Symbol(d, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 8, 10))
 
         constructor(private M, p = x) {
->M : Symbol(M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 10, 20))
+>M : Symbol(d.M, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 10, 20))
 >p : Symbol(p, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 10, 30))
 >x : Symbol(x, Decl(collisionCodeGenModuleWithConstructorChildren.ts, 1, 14))
         }

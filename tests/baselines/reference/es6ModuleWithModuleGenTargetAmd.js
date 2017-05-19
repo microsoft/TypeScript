@@ -12,10 +12,15 @@ export class A
 }
 
 //// [es6ModuleWithModuleGenTargetAmd.js]
-export class A {
-    constructor() {
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    class A {
+        constructor() {
+        }
+        B() {
+            return 42;
+        }
     }
-    B() {
-        return 42;
-    }
-}
+    exports.A = A;
+});

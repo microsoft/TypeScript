@@ -22,7 +22,7 @@ var m1;
         function m1() {
         }
         return m1;
-    })();
+    }());
     m1_1.m1 = m1;
 })(m1 || (m1 = {}));
 var foo = new m1.m1();
@@ -32,13 +32,13 @@ var m2;
         function m2() {
         }
         return m2;
-    })();
+    }());
     m2_1.m2 = m2;
     var _m2 = (function () {
         function _m2() {
         }
         return _m2;
-    })();
+    }());
     m2_1._m2 = _m2;
 })(m2 || (m2 = {}));
 var foo = new m2.m2();

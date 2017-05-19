@@ -1,3 +1,4 @@
+// @target: es5
 //super.publicInstanceMemberFunction in constructor of derived class
 //super.publicInstanceMemberFunction in instance member function of derived class
 //super.publicInstanceMemberFunction in instance member accessor(get and set) of derived class
@@ -15,6 +16,9 @@ class SomeBaseClass {
         return 3;
     }
 
+    returnThis() {
+        return this;
+    }
 }
 
 class SomeDerivedClass extends SomeBaseClass {
@@ -57,4 +61,10 @@ class SomeDerivedClass extends SomeBaseClass {
         var x: number;
     }
 
+    returnThis() {
+        return super.returnThis();
+    }
 }
+
+let instance = new SomeDerivedClass();
+instance.returnThis().fn();

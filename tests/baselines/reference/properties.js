@@ -1,5 +1,4 @@
 //// [properties.ts]
-
 class MyClass
 {
     public get Count(): number
@@ -28,7 +27,7 @@ var MyClass = (function () {
         configurable: true
     });
     return MyClass;
-})();
+}());
 //# sourceMappingURL=properties.js.map
 
 //// [properties.d.ts]

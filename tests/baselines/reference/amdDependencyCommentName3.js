@@ -11,5 +11,7 @@ m1.f();
 ///<amd-dependency path='foo'/>
 ///<amd-dependency path='goo' name='c'/>
 define(["require", "exports", "bar", "goo", "m2", "foo"], function (require, exports, b, c, m1) {
+    "use strict";
+    exports.__esModule = true;
     m1.f();
 });

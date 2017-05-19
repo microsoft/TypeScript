@@ -6,5 +6,5 @@ class C {
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
->"" : string
+>"" : ""
 }

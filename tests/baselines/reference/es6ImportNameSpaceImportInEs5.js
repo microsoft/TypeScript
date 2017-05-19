@@ -1,19 +1,22 @@
 //// [tests/cases/compiler/es6ImportNameSpaceImportInEs5.ts] ////
 
 //// [es6ImportNameSpaceImportInEs5_0.ts]
-
 export var a = 10;  
 
 //// [es6ImportNameSpaceImportInEs5_1.ts]
-import * as nameSpaceBinding from "es6ImportNameSpaceImportInEs5_0";
+import * as nameSpaceBinding from "./es6ImportNameSpaceImportInEs5_0";
 var x = nameSpaceBinding.a;
-import * as nameSpaceBinding2 from "es6ImportNameSpaceImportInEs5_0"; // elide this
+import * as nameSpaceBinding2 from "./es6ImportNameSpaceImportInEs5_0"; // elide this
 
 
 //// [es6ImportNameSpaceImportInEs5_0.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = 10;
 //// [es6ImportNameSpaceImportInEs5_1.js]
-var nameSpaceBinding = require("es6ImportNameSpaceImportInEs5_0");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var nameSpaceBinding = require("./es6ImportNameSpaceImportInEs5_0");
 var x = nameSpaceBinding.a;
 
 

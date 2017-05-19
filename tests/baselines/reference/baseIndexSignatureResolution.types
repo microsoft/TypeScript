@@ -37,7 +37,7 @@ var y: Derived = x[0];
 >Derived : Derived
 >x[0] : Derived
 >x : FooOf<Derived>
->0 : number
+>0 : 0
 
 /*
 // Note - the equivalent for normal interface methods works fine:

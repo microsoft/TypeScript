@@ -19,7 +19,7 @@ declare module 'M' {
 >C : Symbol(C, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 20), Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 3, 5))
 
         foo(): void;
->foo : Symbol(foo, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 4, 13))
+>foo : Symbol(C.foo, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 4, 13))
     }
     export = C;
 >C : Symbol(C, Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 0, 20), Decl(ambientExternalModuleWithoutInternalImportDeclaration_0.ts, 3, 5))

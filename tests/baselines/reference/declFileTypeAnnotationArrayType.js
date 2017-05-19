@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationArrayType.ts]
-
 class c {
 }
 module m {
@@ -56,27 +55,27 @@ var c = (function () {
     function c() {
     }
     return c;
-})();
+}());
 var m;
 (function (m) {
     var c = (function () {
         function c() {
         }
         return c;
-    })();
+    }());
     m.c = c;
     var g = (function () {
         function g() {
         }
         return g;
-    })();
+    }());
     m.g = g;
 })(m || (m = {}));
 var g = (function () {
     function g() {
     }
     return g;
-})();
+}());
 // Just the name
 function foo() {
     return [new c()];

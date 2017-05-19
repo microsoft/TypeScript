@@ -1,0 +1,10 @@
+tests/cases/compiler/test.ts(1,19): error TS2307: Cannot find module './foo'.
+
+
+==== tests/cases/compiler/test.ts (1 errors) ====
+    import {foo} from './foo';
+                      ~~~~~~~
+!!! error TS2307: Cannot find module './foo'.
+    const baz = 42;
+    const bar = { foo, baz };
+    

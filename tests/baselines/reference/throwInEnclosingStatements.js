@@ -83,7 +83,7 @@ var C = (function () {
         throw this.value;
     };
     return C;
-})();
+}());
 var aa = {
     id: 12,
     biz: function () {

@@ -8,14 +8,14 @@ interface C {
 >C : Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
 
     count(countTitle?: string): void;
->count : Symbol(count, Decl(file2.ts, 2, 13))
+>count : Symbol(C.count, Decl(file2.ts, 2, 13))
 >countTitle : Symbol(countTitle, Decl(file2.ts, 3, 10))
 }
 interface C {
 >C : Symbol(C, Decl(file2.ts, 1, 17), Decl(file2.ts, 4, 1))
 
     log(message?: any, ...optionalParams: any[]): void;
->log : Symbol(log, Decl(file2.ts, 5, 13))
+>log : Symbol(C.log, Decl(file2.ts, 5, 13))
 >message : Symbol(message, Decl(file2.ts, 6, 8))
 >optionalParams : Symbol(optionalParams, Decl(file2.ts, 6, 22))
 }
@@ -26,7 +26,7 @@ interface Q<T> {
 >T : Symbol(T, Decl(file1.ts, 0, 12))
 
     each(action: (item: T, index: number) => void): void;
->each : Symbol(each, Decl(file1.ts, 0, 16))
+>each : Symbol(Q.each, Decl(file1.ts, 0, 16))
 >action : Symbol(action, Decl(file1.ts, 1, 9))
 >item : Symbol(item, Decl(file1.ts, 1, 18))
 >T : Symbol(T, Decl(file1.ts, 0, 12))

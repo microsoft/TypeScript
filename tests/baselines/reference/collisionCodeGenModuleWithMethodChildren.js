@@ -43,9 +43,8 @@ var M;
             if (p === void 0) { p = M_1.x; }
         };
         return c;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_2) {
     var d = (function () {
         function d() {
@@ -55,9 +54,8 @@ var M;
             var p = M_2.x;
         };
         return d;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M_3) {
     var e = (function () {
         function e() {
@@ -68,9 +66,8 @@ var M;
             }
         };
         return e;
-    })();
+    }());
 })(M || (M = {}));
-var M;
 (function (M) {
     var f = (function () {
         function f() {
@@ -78,5 +75,5 @@ var M;
         f.prototype.M = function () {
         };
         return f;
-    })();
+    }());
 })(M || (M = {}));

@@ -38,14 +38,7 @@
     >:=> (line 6, col 0) to (line 8, col 8)
 6  >x = (function foo() {
 
-       ~~                                         => Pos: (55 to 56)  SpanInfo: {"start":56,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 6, col 4) to (line 8, col 4)
-6  >x = (function foo() {
-
-         ~~~~~~~~~~~~~~~~~                        => Pos: (57 to 73)  SpanInfo: {"start":78,"length":8}
+       ~~~~~~~~~~~~~~~~~~~                        => Pos: (55 to 73)  SpanInfo: {"start":78,"length":8}
     >return y
     >:=> (line 7, col 4) to (line 7, col 12)
 --------------------------------
@@ -57,16 +50,9 @@
 --------------------------------
 8  >})() + y;
 
-    ~                                             => Pos: (88 to 88)  SpanInfo: {"start":88,"length":1}
+    ~~~~                                          => Pos: (88 to 91)  SpanInfo: {"start":88,"length":1}
     >}
     >:=> (line 8, col 0) to (line 8, col 1)
-8  >})() + y;
-
-     ~~~                                          => Pos: (89 to 91)  SpanInfo: {"start":56,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 6, col 4) to (line 8, col 4)
 8  >})() + y;
 
         ~~~~~~                                    => Pos: (92 to 97)  SpanInfo: {"start":52,"length":44}
@@ -84,14 +70,7 @@
     >:=> (line 9, col 0) to (line 11, col 9)
 9  >x = y + 30 + (function foo() {
 
-                ~~                                => Pos: (110 to 111)  SpanInfo: {"start":111,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 9, col 13) to (line 11, col 4)
-9  >x = y + 30 + (function foo() {
-
-                  ~~~~~~~~~~~~~~~~~               => Pos: (112 to 128)  SpanInfo: {"start":133,"length":8}
+                ~~~~~~~~~~~~~~~~~~~               => Pos: (110 to 128)  SpanInfo: {"start":133,"length":8}
     >return y
     >:=> (line 10, col 4) to (line 10, col 12)
 --------------------------------
@@ -102,15 +81,9 @@
     >:=> (line 10, col 4) to (line 10, col 12)
 --------------------------------
 11 >})() * 40;
-    ~                                             => Pos: (143 to 143)  SpanInfo: {"start":143,"length":1}
+    ~~~~                                          => Pos: (143 to 146)  SpanInfo: {"start":143,"length":1}
     >}
     >:=> (line 11, col 0) to (line 11, col 1)
-11 >})() * 40;
-     ~~~                                          => Pos: (144 to 146)  SpanInfo: {"start":111,"length":36}
-    >(function foo() {
-    >    return y;
-    >})()
-    >:=> (line 9, col 13) to (line 11, col 4)
 11 >})() * 40;
         ~~~~~~                                    => Pos: (147 to 152)  SpanInfo: {"start":98,"length":54}
     >x = y + 30 + (function foo() {

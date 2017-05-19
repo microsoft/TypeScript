@@ -6,7 +6,7 @@ class C<T> {
 >T : Symbol(T, Decl(objectTypesIdentityWithPrivates2.ts, 2, 8))
 
     private foo: T;
->foo : Symbol(foo, Decl(objectTypesIdentityWithPrivates2.ts, 2, 12))
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithPrivates2.ts, 2, 12))
 >T : Symbol(T, Decl(objectTypesIdentityWithPrivates2.ts, 2, 8))
 }
 

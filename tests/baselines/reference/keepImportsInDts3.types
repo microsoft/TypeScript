@@ -1,0 +1,5 @@
+=== c:/test.ts ===
+export {};
+No type information for this code.=== c:/app/main.ts ===
+import "test"
+No type information for this code.

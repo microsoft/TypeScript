@@ -24,7 +24,7 @@ var __test2__;
             this.one = one;
         }
         return classWithOptional;
-    })();
+    }());
     __test2__.classWithOptional = classWithOptional;
     var x3 = new classWithOptional();
     ;

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/emitSuperCallBeforeEmitPropertyDeclaration1.ts ===
+class A {
+>A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 0, 0))
+
+    blub = 6;
+>blub : Symbol(A.blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 0, 9))
+}
+
+
+class B extends A {
+>B : Symbol(B, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 2, 1))
+>A : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 0, 0))
+
+    blub = 12;
+>blub : Symbol(B.blub, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 5, 19))
+
+    constructor() {
+        "use strict";
+        'someStringForEgngInject';
+        super()
+>super : Symbol(A, Decl(emitSuperCallBeforeEmitPropertyDeclaration1.ts, 0, 0))
+    }
+}

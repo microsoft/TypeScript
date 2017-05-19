@@ -15,4 +15,4 @@ var MyClass = (function () {
         configurable: true
     });
     return MyClass;
-})();
+}());

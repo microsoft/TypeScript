@@ -1,8 +1,8 @@
-tests/cases/conformance/jsx/tsxElementResolution10.tsx(13,1): error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
+tests/cases/conformance/jsx/file.tsx(13,1): error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
   Property 'render' is missing in type '{ x: number; }'.
 
 
-==== tests/cases/conformance/jsx/tsxElementResolution10.tsx (1 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementClass {

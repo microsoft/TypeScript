@@ -7,7 +7,7 @@ module TypeScript.Parser {
 >SyntaxCursor : Symbol(SyntaxCursor, Decl(moduleMemberWithoutTypeAnnotation1.ts, 0, 26))
 
         public currentNode(): SyntaxNode {
->currentNode : Symbol(currentNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 1, 24))
+>currentNode : Symbol(SyntaxCursor.currentNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 1, 24))
 >SyntaxNode : Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
 
             return null;
@@ -28,7 +28,7 @@ module TypeScript {
 >PositionedElement : Symbol(PositionedElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 10, 38))
 
         public childIndex(child: ISyntaxElement) {
->childIndex : Symbol(childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 12, 36))
+>childIndex : Symbol(PositionedElement.childIndex, Decl(moduleMemberWithoutTypeAnnotation1.ts, 12, 36))
 >child : Symbol(child, Decl(moduleMemberWithoutTypeAnnotation1.ts, 13, 26))
 >ISyntaxElement : Symbol(ISyntaxElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 8, 19))
 
@@ -59,22 +59,22 @@ module TypeScript {
 >SyntaxNode : Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
 
         public findToken(position: number, includeSkippedTokens: boolean = false): PositionedToken {
->findToken : Symbol(findToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 25, 29))
+>findToken : Symbol(SyntaxNode.findToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 25, 29))
 >position : Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 25))
 >includeSkippedTokens : Symbol(includeSkippedTokens, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 42))
 >PositionedToken : Symbol(PositionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 16, 5))
 
             var positionedToken = this.findTokenInternal(null, position, 0);
 >positionedToken : Symbol(positionedToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 27, 15))
->this.findTokenInternal : Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
+>this.findTokenInternal : Symbol(SyntaxNode.findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
 >this : Symbol(SyntaxNode, Decl(moduleMemberWithoutTypeAnnotation1.ts, 24, 19))
->findTokenInternal : Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
+>findTokenInternal : Symbol(SyntaxNode.findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
 >position : Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 26, 25))
 
             return null;
         }
         findTokenInternal(x, y, z) {
->findTokenInternal : Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
+>findTokenInternal : Symbol(SyntaxNode.findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 29, 9))
 >x : Symbol(x, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 26))
 >y : Symbol(y, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 28))
 >z : Symbol(z, Decl(moduleMemberWithoutTypeAnnotation1.ts, 30, 31))
@@ -96,7 +96,7 @@ module TypeScript.Syntax {
 >ISyntaxToken : Symbol(ISyntaxToken, Decl(moduleMemberWithoutTypeAnnotation1.ts, 9, 40))
 
         private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
->findTokenInternal : Symbol(findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 39, 79))
+>findTokenInternal : Symbol(VariableWidthTokenWithTrailingTrivia.findTokenInternal, Decl(moduleMemberWithoutTypeAnnotation1.ts, 39, 79))
 >parent : Symbol(parent, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 34))
 >PositionedElement : Symbol(PositionedElement, Decl(moduleMemberWithoutTypeAnnotation1.ts, 10, 38))
 >position : Symbol(position, Decl(moduleMemberWithoutTypeAnnotation1.ts, 40, 60))

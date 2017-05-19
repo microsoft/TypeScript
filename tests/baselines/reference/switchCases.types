@@ -3,7 +3,7 @@ switch(0) {
 >0 : number
 
  case 1:
->1 : number
+>1 : 1
 
  break;
 }

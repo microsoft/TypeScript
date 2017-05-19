@@ -21,9 +21,8 @@ var x: {
 >idx : number
 >A : A
 
-} = { data: new B() }
->{ data: new B() } : { [x: number]: undefined; data: B; }
->data : B
+} = { 0: new B() }
+>{ 0: new B() } : { 0: B; }
 >new B() : B
 >B : typeof B
 

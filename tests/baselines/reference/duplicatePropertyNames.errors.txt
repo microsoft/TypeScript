@@ -2,11 +2,9 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(4,5): error TS23
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(5,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(14,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(15,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(19,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(20,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(22,5): error TS2393: Duplicate function implementation.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(23,5): error TS2393: Duplicate function implementation.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(25,5): error TS2300: Duplicate identifier 'baz'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(26,5): error TS2300: Duplicate identifier 'baz'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(30,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(31,5): error TS2300: Duplicate identifier 'foo'.
@@ -14,13 +12,11 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(35,5): error TS2
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(36,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(38,5): error TS2300: Duplicate identifier 'bar'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(39,5): error TS2300: Duplicate identifier 'bar'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(43,5): error TS2300: Duplicate identifier 'foo'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(44,5): error TS2300: Duplicate identifier 'foo'.
-tests/cases/conformance/types/members/duplicatePropertyNames.ts(45,5): error TS2300: Duplicate identifier 'bar'.
 tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2300: Duplicate identifier 'bar'.
 
 
-==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (20 errors) ====
+==== tests/cases/conformance/types/members/duplicatePropertyNames.ts (16 errors) ====
     // duplicate property names are an error in all types
     
     interface Number {
@@ -48,8 +44,6 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2
     
     class C {
         foo: string;
-        ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
         foo: string;
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
@@ -62,8 +56,6 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2
 !!! error TS2393: Duplicate function implementation.
     
         baz = () => { }
-        ~~~
-!!! error TS2300: Duplicate identifier 'baz'.
         baz = () => { }
         ~~~
 !!! error TS2300: Duplicate identifier 'baz'.
@@ -96,14 +88,10 @@ tests/cases/conformance/types/members/duplicatePropertyNames.ts(46,5): error TS2
     
     var b = {
         foo: '',
-        ~~~
-!!! error TS2300: Duplicate identifier 'foo'.
         foo: '',
         ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
         bar: () => { },
-        ~~~
-!!! error TS2300: Duplicate identifier 'bar'.
         bar: () => { }
         ~~~
 !!! error TS2300: Duplicate identifier 'bar'.

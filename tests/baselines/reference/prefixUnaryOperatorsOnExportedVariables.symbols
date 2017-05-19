@@ -1,0 +1,41 @@
+=== tests/cases/compiler/prefixUnaryOperatorsOnExportedVariables.ts ===
+export var x = false;
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+
+export var y = 1;
+>y : Symbol(y, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 1, 10))
+
+if (!x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (+x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (-x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (~x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (void x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (typeof x) {
+>x : Symbol(x, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 0, 10))
+    
+}
+
+if (++y) {
+>y : Symbol(y, Decl(prefixUnaryOperatorsOnExportedVariables.ts, 1, 10))
+    
+}

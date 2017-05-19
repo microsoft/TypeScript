@@ -28,4 +28,4 @@ var MyClass = (function () {
         var x = this.callableThing();
     };
     return MyClass;
-})();
+}());

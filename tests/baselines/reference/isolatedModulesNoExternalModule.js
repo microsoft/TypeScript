@@ -1,6 +1,5 @@
-//// [isolatedModulesNoExternalModule.ts]
-
+//// [file1.ts]
 var x;
 
-//// [isolatedModulesNoExternalModule.js]
+//// [file1.js]
 var x;

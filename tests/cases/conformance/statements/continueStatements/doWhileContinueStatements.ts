@@ -1,3 +1,5 @@
+// @allowUnreachableCode: true
+
 do {
     continue;
 } while(true)

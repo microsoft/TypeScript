@@ -23,8 +23,8 @@ var Derived2 = (function () {
     Derived2.prototype.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     };
     return Derived2;
-})();
+}());

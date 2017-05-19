@@ -52,7 +52,6 @@ var M;
         var p = M_1.x;
     })(m1 || (m1 = {}));
 })(M || (M = {}));
-var M;
 (function (M_2) {
     var m2;
     (function (m2) {
@@ -60,12 +59,11 @@ var M;
             function M() {
             }
             return M;
-        })();
+        }());
         var p = M_2.x;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
-var M;
 (function (M_3) {
     var m3;
     (function (m3) {
@@ -75,7 +73,6 @@ var M;
         var p2 = M();
     })(m3 || (m3 = {}));
 })(M || (M = {}));
-var M;
 (function (M) {
     var m3;
     (function (m3) {
@@ -83,7 +80,6 @@ var M;
         var p2;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
-var M;
 (function (M_4) {
     var m4;
     (function (m4) {

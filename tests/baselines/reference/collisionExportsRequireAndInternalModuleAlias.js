@@ -24,13 +24,15 @@ module m2 {
 
 //// [collisionExportsRequireAndInternalModuleAlias.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
     var m;
     (function (m) {
         var c = (function () {
             function c() {
             }
             return c;
-        })();
+        }());
         m.c = c;
     })(m = exports.m || (exports.m = {}));
     var exports = m.c;

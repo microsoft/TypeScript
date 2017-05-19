@@ -35,4 +35,4 @@ var C = (function () {
     C.prototype["hello bye"] = function () { };
     C["hello " + a + " bye"] = function () { };
     return C;
-})();
+}());

@@ -33,4 +33,4 @@ var Foo = (function () {
         return 3;
     };
     return Foo;
-})();
+}());

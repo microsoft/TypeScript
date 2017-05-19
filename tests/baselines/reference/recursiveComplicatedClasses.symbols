@@ -3,7 +3,7 @@ class Signature {
 >Signature : Symbol(Signature, Decl(recursiveComplicatedClasses.ts, 0, 0))
 
     public parameters: ParameterSymbol[] = null;
->parameters : Symbol(parameters, Decl(recursiveComplicatedClasses.ts, 0, 17))
+>parameters : Symbol(Signature.parameters, Decl(recursiveComplicatedClasses.ts, 0, 17))
 >ParameterSymbol : Symbol(ParameterSymbol, Decl(recursiveComplicatedClasses.ts, 17, 1))
 }
 
@@ -19,10 +19,10 @@ class Symbol {
 >Symbol : Symbol(Symbol, Decl(recursiveComplicatedClasses.ts, 6, 1))
 
     public bound: boolean;
->bound : Symbol(bound, Decl(recursiveComplicatedClasses.ts, 8, 14))
+>bound : Symbol(Symbol.bound, Decl(recursiveComplicatedClasses.ts, 8, 14))
 
     public visible() {
->visible : Symbol(visible, Decl(recursiveComplicatedClasses.ts, 9, 26))
+>visible : Symbol(Symbol.visible, Decl(recursiveComplicatedClasses.ts, 9, 26))
 
         var b: TypeSymbol;
 >b : Symbol(b, Decl(recursiveComplicatedClasses.ts, 11, 11))

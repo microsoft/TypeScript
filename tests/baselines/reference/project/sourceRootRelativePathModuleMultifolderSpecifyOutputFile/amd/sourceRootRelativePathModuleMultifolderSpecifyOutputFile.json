@@ -6,9 +6,9 @@
     ],
     "out": "bin/test.js",
     "sourceMap": true,
-    "sourceRoot": "../src",
     "declaration": true,
     "baselineCheck": true,
+    "sourceRoot": "../src",
     "resolvedInputFiles": [
         "lib.d.ts",
         "ref/m1.ts",
@@ -16,15 +16,6 @@
         "test.ts"
     ],
     "emittedFiles": [
-        "ref/m1.js.map",
-        "ref/m1.js",
-        "ref/m1.d.ts",
-        "../outputdir_module_multifolder_ref/m2.js.map",
-        "../outputdir_module_multifolder_ref/m2.js",
-        "../outputdir_module_multifolder_ref/m2.d.ts",
-        "test.js.map",
-        "test.js",
-        "test.d.ts",
         "bin/test.js.map",
         "bin/test.js",
         "bin/test.d.ts"

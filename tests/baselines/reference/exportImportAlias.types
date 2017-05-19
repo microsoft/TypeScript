@@ -6,7 +6,7 @@ module A {
 
     export var x = 'hello world'
 >x : string
->'hello world' : string
+>'hello world' : "hello world"
 
     export class Point {
 >Point : Point
@@ -53,8 +53,8 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >C : typeof C
 >a : typeof A
 >Point : typeof A.Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 var c: { name: string };
 >c : { name: string; }
@@ -74,7 +74,7 @@ module X {
 >Y : typeof Y
 
         return 42;
->42 : number
+>42 : 42
     }
 
     export module Y {
@@ -117,8 +117,8 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >Z : typeof Z
 >y : typeof X.Y
 >Point : typeof X.Y.Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 module K {
 >K : typeof K
@@ -135,7 +135,7 @@ module K {
 
         export var y = 12;
 >y : number
->12 : number
+>12 : 12
 
         export interface Point {
 >Point : Point
@@ -168,7 +168,7 @@ var o = new M.D('Hello');
 >M.D : typeof K.L
 >M : typeof M
 >D : typeof K.L
->'Hello' : string
+>'Hello' : "Hello"
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }

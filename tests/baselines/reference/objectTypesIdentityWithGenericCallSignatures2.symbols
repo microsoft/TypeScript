@@ -5,7 +5,7 @@ class A {
 >A : Symbol(A, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 0, 0))
 
     foo<T, U>(x: T, y: U): T { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 2, 9))
+>foo : Symbol(A.foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 2, 9))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 3, 8))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 3, 10))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 3, 14))
@@ -21,7 +21,7 @@ class B<T, U> {
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 6, 10))
 
     foo(x: T, y: U): T { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 6, 15))
+>foo : Symbol(B.foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 6, 15))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 7, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 6, 8))
 >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 7, 13))
@@ -35,7 +35,7 @@ class C<T, U> {
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 10, 10))
 
     foo(x: T, y: U): T { return null; }
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 10, 15))
+>foo : Symbol(C.foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 10, 15))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 11, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 10, 8))
 >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 11, 13))
@@ -49,7 +49,7 @@ interface I<T, U> {
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 14, 14))
 
     foo(x: T, y: U): T;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 14, 19))
+>foo : Symbol(I.foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 14, 19))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 15, 8))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 14, 12))
 >y : Symbol(y, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 15, 13))
@@ -61,7 +61,7 @@ interface I2 {
 >I2 : Symbol(I2, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 16, 1))
 
     foo<T, U>(x: T, y: U): T;
->foo : Symbol(foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 18, 14))
+>foo : Symbol(I2.foo, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 18, 14))
 >T : Symbol(T, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 19, 8))
 >U : Symbol(U, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 19, 10))
 >x : Symbol(x, Decl(objectTypesIdentityWithGenericCallSignatures2.ts, 19, 14))

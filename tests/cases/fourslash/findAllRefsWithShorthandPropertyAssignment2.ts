@@ -1,22 +1,22 @@
 /// <reference path='fourslash.ts'/>
 
-//// var /*1*/dx = "Foo";
+//// var [|{| "isWriteAccess": true, "isDefinition": true |}dx|] = "Foo";
 ////
-//// module M { export var /*2*/dx; }
+//// module M { export var [|{| "isWriteAccess": true, "isDefinition": true |}dx|]; }
 //// module M {
 ////    var z = 100;
-////    export var y = { /*3*/dx, z };
+////    export var y = { [|{| "isWriteAccess": true, "isDefinition": true |}dx|], z };
 //// }
-//// M.y./*4*/dx;
+//// M.y.[|dx|];
 
-goTo.marker('1');
-verify.referencesCountIs(1);
-
-goTo.marker('2');
-verify.referencesCountIs(2);
-
-goTo.marker('3');
-verify.referencesCountIs(3);
-
-goTo.marker('4');
-verify.referencesCountIs(2);
+const [r0, r1, r2, r3] = test.ranges();
+verify.singleReferenceGroup("var dx: string", [r0]);
+verify.referenceGroups(r1, [{ definition: "var M.dx: any", ranges: [r1, r2] }]);
+verify.referenceGroups(r2, [
+    { definition: "var M.dx: any", ranges: [r1] },
+    { definition: "(property) dx: any", ranges: [r2, r3] }
+]);
+verify.referenceGroups(r3, [
+    { definition: "(property) dx: any", ranges: [r2] },
+    { definition: "(property) dx: any", ranges: [r3] }
+]);

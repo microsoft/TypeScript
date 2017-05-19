@@ -1,5 +1,5 @@
 ﻿///<reference path="fourslash.ts" />
-
+// @ModuleResolution: classic
 
 // @Filename: A.ts
 ////export interface I1 { one: number }

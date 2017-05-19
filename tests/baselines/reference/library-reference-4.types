@@ -1,0 +1,20 @@
+=== /src/root.ts ===
+/// <reference types="foo" />
+No type information for this code./// <reference types="bar" />
+No type information for this code.
+No type information for this code.=== /node_modules/foo/index.d.ts ===
+// Secondary references may be duplicated if they agree in content
+
+/// <reference types="alpha" />
+declare var foo: any;
+>foo : any
+
+=== /node_modules/foo/node_modules/alpha/index.d.ts ===
+declare var alpha: any;
+>alpha : any
+
+=== /node_modules/bar/index.d.ts ===
+/// <reference types="alpha" />
+declare var bar: any;
+>bar : any
+

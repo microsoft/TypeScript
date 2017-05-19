@@ -11,7 +11,7 @@ class C {
 >C : Symbol(C, Decl(strictModeUseContextualKeyword.ts, 2, 28))
 
     public as() { }
->as : Symbol(as, Decl(strictModeUseContextualKeyword.ts, 3, 9))
+>as : Symbol(C.as, Decl(strictModeUseContextualKeyword.ts, 3, 9))
 }
 function F() {
 >F : Symbol(F, Decl(strictModeUseContextualKeyword.ts, 5, 1))

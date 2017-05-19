@@ -25,26 +25,31 @@ module A {
 
 
 //// [ExportClassWithInaccessibleTypeInTypeParameterConstraint.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var A;
 (function (A) {
     var Point = (function () {
         function Point() {
         }
         return Point;
-    })();
+    }());
     A.Origin = { x: 0, y: 0 };
     var Point3d = (function (_super) {
         __extends(Point3d, _super);
         function Point3d() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Point3d;
-    })(Point);
+    }(Point));
     A.Point3d = Point3d;
     A.Origin3d = { x: 0, y: 0, z: 0 };
     var Line = (function () {
@@ -56,6 +61,6 @@ var A;
             return null;
         };
         return Line;
-    })();
+    }());
     A.Line = Line;
 })(A || (A = {}));

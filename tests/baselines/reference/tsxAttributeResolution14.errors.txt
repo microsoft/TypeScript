@@ -1,0 +1,44 @@
+tests/cases/conformance/jsx/file.tsx(13,28): error TS2322: Type '{ primaryText: 2; }' is not assignable to type 'IProps'.
+  Types of property 'primaryText' are incompatible.
+    Type '2' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(15,28): error TS2322: Type '{ justRandomProp1: true; primaryText: "hello"; }' is not assignable to type 'IProps'.
+  Property 'justRandomProp1' is incompatible with index signature.
+    Type 'true' is not assignable to type 'string | number'.
+
+
+==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
+    declare module JSX {
+    	interface Element { }
+    	interface IntrinsicElements {
+            div: any;
+    	}
+        interface ElementAttributesProperty { prop: any }
+    }
+    
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    interface IProps {
+      primaryText: string,
+      [propName: string]: string | number
+    }
+    
+    function VerticalNavMenuItem(prop: IProps) {
+      return <div>props.primaryText</div>
+    }
+    
+    function VerticalNav() {
+      return (
+        <div>
+          <VerticalNavMenuItem primaryText={2} />  // error
+                               ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ primaryText: 2; }' is not assignable to type 'IProps'.
+!!! error TS2322:   Types of property 'primaryText' are incompatible.
+!!! error TS2322:     Type '2' is not assignable to type 'string'.
+          <VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} />  // ok
+          <VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} />  // error
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ justRandomProp1: true; primaryText: "hello"; }' is not assignable to type 'IProps'.
+!!! error TS2322:   Property 'justRandomProp1' is incompatible with index signature.
+!!! error TS2322:     Type 'true' is not assignable to type 'string | number'.
+        </div>
+      )
+    } 

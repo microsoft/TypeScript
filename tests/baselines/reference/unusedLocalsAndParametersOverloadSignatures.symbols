@@ -1,0 +1,69 @@
+=== tests/cases/compiler/unusedLocalsAndParametersOverloadSignatures.ts ===
+export function func(details: number, message: string, ...args: any[]): void;
+>func : Symbol(func, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 0), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 77))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 21))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 37))
+>args : Symbol(args, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 54))
+
+export function func(details: number, message: string): any {
+>func : Symbol(func, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 0), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 0, 77))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 1, 21))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 1, 37))
+
+    return details + message;
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 1, 21))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 1, 37))
+}
+
+export class C {
+>C : Symbol(C, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 3, 1))
+
+    constructor(details: number, message: string, ...args: any[]);
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 6, 16))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 6, 32))
+>args : Symbol(args, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 6, 49))
+
+    constructor(details: number, message: string) {
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 7, 16))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 7, 32))
+
+        details + message;
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 7, 16))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 7, 32))
+    }
+
+    method(details: number, message: string, ...args: any[]): void;
+>method : Symbol(C.method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 11))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 27))
+>args : Symbol(args, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 44))
+
+    method(details: number, message: string): any {
+>method : Symbol(C.method, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 9, 5), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 11, 67))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 11))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 27))
+
+        return details + message;
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 11))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 12, 27))
+    }
+}
+
+
+export function genericFunc<T>(details: number, message: T, ...args: any[]): void;
+>genericFunc : Symbol(genericFunc, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 15, 1), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 82))
+>T : Symbol(T, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 28))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 31))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 47))
+>T : Symbol(T, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 28))
+>args : Symbol(args, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 59))
+
+export function genericFunc(details: number, message: any): any {
+>genericFunc : Symbol(genericFunc, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 15, 1), Decl(unusedLocalsAndParametersOverloadSignatures.ts, 18, 82))
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 19, 28))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 19, 44))
+
+    return details + message;
+>details : Symbol(details, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 19, 28))
+>message : Symbol(message, Decl(unusedLocalsAndParametersOverloadSignatures.ts, 19, 44))
+}

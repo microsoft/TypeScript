@@ -5,7 +5,7 @@ class C {
 
 //// [modifierOnParameter1.js]
 var C = (function () {
-    function C() {
+    function C(p) {
     }
     return C;
-})();
+}());

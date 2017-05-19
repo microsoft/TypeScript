@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationVisibilityErrorTypeLiteral.ts]
-
 module m {
     class private1 {
     }
@@ -41,14 +40,14 @@ var m;
         function private1() {
         }
         return private1;
-    })();
+    }());
     var m2;
     (function (m2) {
         var public1 = (function () {
             function public1() {
             }
             return public1;
-        })();
+        }());
         m2.public1 = public1;
     })(m2 || (m2 = {}));
     m.x2 = {

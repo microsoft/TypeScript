@@ -1,5 +1,4 @@
 //// [ambientExternalModuleInAnotherExternalModule.ts]
-
 class D { }
 export = D;
 
@@ -13,11 +12,12 @@ var x = ext;
 
 //// [ambientExternalModuleInAnotherExternalModule.js]
 define(["require", "exports", "ext"], function (require, exports, ext) {
+    "use strict";
     var D = (function () {
         function D() {
         }
         return D;
-    })();
+    }());
     var x = ext;
     return D;
 });

@@ -1,0 +1,13 @@
+=== tests/cases/compiler/a.js ===
+function foo(a) {
+>foo : Symbol(foo, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 0, 13))
+
+    for (let a = 0; a < 10; a++) {
+>a : Symbol(a, Decl(a.js, 1, 12))
+>a : Symbol(a, Decl(a.js, 1, 12))
+>a : Symbol(a, Decl(a.js, 1, 12))
+
+        // do something
+    }
+}

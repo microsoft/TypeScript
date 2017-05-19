@@ -3,7 +3,7 @@ interface Options {
 >Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
 
  value: number;
->value : Symbol(value, Decl(constructorArgs.ts, 0, 19))
+>value : Symbol(Options.value, Decl(constructorArgs.ts, 0, 19))
 }
 
 class Super {
@@ -19,7 +19,7 @@ class Sub extends Super {
 >Super : Symbol(Super, Decl(constructorArgs.ts, 2, 1))
 
  constructor(public options:Options) {
->options : Symbol(options, Decl(constructorArgs.ts, 10, 13))
+>options : Symbol(Sub.options, Decl(constructorArgs.ts, 10, 13))
 >Options : Symbol(Options, Decl(constructorArgs.ts, 0, 0))
 
   super(options.value);

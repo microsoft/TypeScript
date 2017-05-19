@@ -890,7 +890,7 @@ var Formatting;
             return result;
         };
         Indenter.GetIndentSizeFromIndentText = function (indentText, editorOptions) {
-            return GetIndentSizeFromText(indentText, editorOptions, false);
+            return GetIndentSizeFromText(indentText, editorOptions, /*includeNonIndentChars:*/ false);
         };
         Indenter.GetIndentSizeFromText = function (text, editorOptions, includeNonIndentChars) {
             var indentSize = 0;
@@ -1174,7 +1174,7 @@ var Formatting;
                     return null;
                 var origIndentText = this.snapshot.GetText(new Span(indentEditInfo.OrigIndentPosition, indentEditInfo.OrigIndentLength()));
                 var newIndentText = indentEditInfo.Indentation();
-                var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, true);
+                var origIndentSize = Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/ true);
                 var newIndentSize = Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions);
                 // Check the child's position whether it's before the parent position
                 // if so indent the child based on the first token on the line as opposed to the parent position
@@ -1340,6 +1340,6 @@ var Formatting;
                 this.snapshot.GetLineNumberFromPosition(token.Span.endPosition()) > this.snapshot.GetLineNumberFromPosition(token.Span.startPosition());
         };
         return Indenter;
-    })();
+    }());
     Formatting.Indenter = Indenter;
 })(Formatting || (Formatting = {}));

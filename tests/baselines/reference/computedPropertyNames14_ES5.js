@@ -21,4 +21,4 @@ var C = (function () {
     C.prototype[undefined] = function () { };
     C[null] = function () { };
     return C;
-})();
+}());

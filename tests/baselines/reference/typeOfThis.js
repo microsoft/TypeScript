@@ -248,7 +248,7 @@ var MyTestClass = (function () {
         configurable: true
     });
     return MyTestClass;
-})();
+}());
 var MyGenericTestClass = (function () {
     function MyGenericTestClass() {
         var _this = this;
@@ -318,7 +318,7 @@ var MyGenericTestClass = (function () {
         configurable: true
     });
     return MyGenericTestClass;
-})();
+}());
 //type of 'this' in a function declaration param list is Any
 function fn(s) {
     if (s === void 0) { s = this; }

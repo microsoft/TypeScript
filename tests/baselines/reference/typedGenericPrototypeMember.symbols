@@ -4,7 +4,7 @@ class List<T> {
 >T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
 
    add(item: T) { }
->add : Symbol(add, Decl(typedGenericPrototypeMember.ts, 0, 15))
+>add : Symbol(List.add, Decl(typedGenericPrototypeMember.ts, 0, 15))
 >item : Symbol(item, Decl(typedGenericPrototypeMember.ts, 1, 7))
 >T : Symbol(T, Decl(typedGenericPrototypeMember.ts, 0, 11))
 }

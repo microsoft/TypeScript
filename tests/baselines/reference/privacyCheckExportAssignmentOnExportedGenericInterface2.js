@@ -15,10 +15,10 @@ module Foo {
 
 //// [privacyCheckExportAssignmentOnExportedGenericInterface2.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
     function Foo(array) {
         return undefined;
     }
-    var Foo;
     (function (Foo) {
         Foo.x = "hello";
     })(Foo || (Foo = {}));

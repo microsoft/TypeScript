@@ -6,9 +6,10 @@ export function foo() {
 
 
 //// [parserModifierOnStatementInBlock3.js]
+"use strict";
+exports.__esModule = true;
 function foo() {
-    function bar() {
+    export function bar() {
     }
-    exports.bar = bar;
 }
 exports.foo = foo;

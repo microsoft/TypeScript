@@ -11,11 +11,11 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 // Classes can't be nested.  So we should bail out of parsing here and recover
 // this as a source unit element.
 var D = (function () {
     function D() {
     }
     return D;
-})();
+}());

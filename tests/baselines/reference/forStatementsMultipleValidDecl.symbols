@@ -20,8 +20,8 @@ function declSpace() {
 }
 interface Point { x: number; y: number; }
 >Point : Symbol(Point, Decl(forStatementsMultipleValidDecl.ts, 9, 1))
->x : Symbol(x, Decl(forStatementsMultipleValidDecl.ts, 10, 17))
->y : Symbol(y, Decl(forStatementsMultipleValidDecl.ts, 10, 28))
+>x : Symbol(Point.x, Decl(forStatementsMultipleValidDecl.ts, 10, 17))
+>y : Symbol(Point.y, Decl(forStatementsMultipleValidDecl.ts, 10, 28))
 
 for (var p: Point; ;) { }
 >p : Symbol(p, Decl(forStatementsMultipleValidDecl.ts, 12, 8), Decl(forStatementsMultipleValidDecl.ts, 13, 8), Decl(forStatementsMultipleValidDecl.ts, 14, 8), Decl(forStatementsMultipleValidDecl.ts, 15, 8), Decl(forStatementsMultipleValidDecl.ts, 16, 8), Decl(forStatementsMultipleValidDecl.ts, 17, 8), Decl(forStatementsMultipleValidDecl.ts, 18, 8))
@@ -102,7 +102,7 @@ for (var a: string[] = []; ;) { }
 
 for (var a = new Array<string>(); ;) { }
 >a : Symbol(a, Decl(forStatementsMultipleValidDecl.ts, 27, 8), Decl(forStatementsMultipleValidDecl.ts, 28, 8), Decl(forStatementsMultipleValidDecl.ts, 29, 8), Decl(forStatementsMultipleValidDecl.ts, 30, 8), Decl(forStatementsMultipleValidDecl.ts, 31, 8), Decl(forStatementsMultipleValidDecl.ts, 32, 8))
->Array : Symbol(Array, Decl(lib.d.ts, 1000, 23), Decl(lib.d.ts, 1171, 11))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
 for (var a: typeof a; ;) { }
 >a : Symbol(a, Decl(forStatementsMultipleValidDecl.ts, 27, 8), Decl(forStatementsMultipleValidDecl.ts, 28, 8), Decl(forStatementsMultipleValidDecl.ts, 29, 8), Decl(forStatementsMultipleValidDecl.ts, 30, 8), Decl(forStatementsMultipleValidDecl.ts, 31, 8), Decl(forStatementsMultipleValidDecl.ts, 32, 8))

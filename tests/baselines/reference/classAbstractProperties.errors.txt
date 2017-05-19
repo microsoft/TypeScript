@@ -1,29 +1,17 @@
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(2,5): error TS1242: 'abstract' modifier can only appear on a class or method declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(3,12): error TS1242: 'abstract' modifier can only appear on a class or method declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(4,15): error TS1242: 'abstract' modifier can only appear on a class or method declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1242: 'abstract' modifier can only appear on a class or method declaration.
-tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(7,5): error TS1242: 'abstract' modifier can only appear on a class or method declaration.
+tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(5,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts(12,13): error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
 
 
-==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts (6 errors) ====
+==== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractProperties.ts (2 errors) ====
     abstract class A {
         abstract x : number;
-        ~~~~~~~~
-!!! error TS1242: 'abstract' modifier can only appear on a class or method declaration.
         public abstract y : number;
-               ~~~~~~~~
-!!! error TS1242: 'abstract' modifier can only appear on a class or method declaration.
         protected abstract z : number;
-                  ~~~~~~~~
-!!! error TS1242: 'abstract' modifier can only appear on a class or method declaration.
         private abstract w : number;
                 ~~~~~~~~
-!!! error TS1242: 'abstract' modifier can only appear on a class or method declaration.
+!!! error TS1243: 'private' modifier cannot be used with 'abstract' modifier.
         
         abstract m: () => void; 
-        ~~~~~~~~
-!!! error TS1242: 'abstract' modifier can only appear on a class or method declaration.
         
         abstract foo_x() : number;
         public abstract foo_y() : number;

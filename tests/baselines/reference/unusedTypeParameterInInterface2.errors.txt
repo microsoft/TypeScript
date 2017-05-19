@@ -1,0 +1,10 @@
+tests/cases/compiler/unusedTypeParameterInInterface2.ts(1,18): error TS6133: 'U' is declared but never used.
+
+
+==== tests/cases/compiler/unusedTypeParameterInInterface2.ts (1 errors) ====
+    interface int<T, U, V> {
+                     ~
+!!! error TS6133: 'U' is declared but never used.
+        f1(a: T): string;
+        c: V;
+    }

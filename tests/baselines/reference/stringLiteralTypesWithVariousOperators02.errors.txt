@@ -1,0 +1,53 @@
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(6,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and '100'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(7,9): error TS2365: Operator '+' cannot be applied to types '100' and 'number | "ABC" | "XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'number | "ABC" | "XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'true'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.
+
+
+==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (11 errors) ====
+    let abc: "ABC" = "ABC";
+    let xyz: "XYZ" = "XYZ";
+    let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
+    let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
+    
+    let a = abcOrXyzOrNumber + 100;
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and '100'.
+    let b = 100 + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types '100' and 'number | "ABC" | "XYZ"'.
+    let c = abcOrXyzOrNumber + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'number | "ABC" | "XYZ"'.
+    let d = abcOrXyzOrNumber + true;
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'true'.
+    let e = false + abcOrXyzOrNumber;
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
+    let f = abcOrXyzOrNumber++;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    let g = --abcOrXyzOrNumber;
+              ~~~~~~~~~~~~~~~~
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+    let h = abcOrXyzOrNumber ^ 10;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    let i = abcOrXyzOrNumber | 10;
+            ~~~~~~~~~~~~~~~~
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+    let j = abc < xyz;
+    let k = abc === xyz;
+            ~~~~~~~~~~~
+!!! error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
+    let l = abc != xyz;
+            ~~~~~~~~~~
+!!! error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.

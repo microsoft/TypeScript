@@ -12,22 +12,19 @@
 ////var f = new Foo();
 ////f/*c3*/;
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker("c1");
 edit.insert(".");
-verify.memberListContains("x");
-verify.memberListContains("prototype");
-verify.memberListContains("staticMethod");
+verify.completionListContains("x");
+verify.completionListContains("prototype");
+verify.completionListContains("staticMethod");
 
 goTo.marker("c2");
 edit.insert(".");
-verify.memberListContains("x");
-verify.memberListContains("staticMethod");
-verify.memberListContains("prototype");
+verify.completionListContains("x");
+verify.completionListContains("staticMethod");
+verify.completionListContains("prototype");
 
 goTo.marker("c3");
 edit.insert(".");
-verify.memberListContains("doStuff");
-verify.memberListCount(1);
+verify.completionListContains("doStuff");
+verify.completionListCount(1);

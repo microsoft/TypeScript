@@ -5,6 +5,8 @@ export function a() {
 
 //// [exportSameNameFuncVar.js]
 define(["require", "exports"], function (require, exports) {
+    "use strict";
+    exports.__esModule = true;
     exports.a = 10;
     function a() {
     }

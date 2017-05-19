@@ -1,5 +1,4 @@
 //// [typeGuardsInProperties.ts]
-
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
@@ -48,7 +47,7 @@ var C1 = (function () {
         strOrNum = typeof this.pp3 === "string" && this.pp3; // string | number
     };
     return C1;
-})();
+}());
 var c1;
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number

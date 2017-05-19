@@ -15,9 +15,9 @@ class Super extends Base {
         super((() => this)()); // ok since this is not the case: The constructor declares parameter properties or the containing class declares instance member variables with initializers.
 >super((() => this)()) : void
 >super : typeof Base
->(() => this)() : Super
->(() => this) : () => Super
->() => this : () => Super
->this : Super
+>(() => this)() : this
+>(() => this) : () => this
+>() => this : () => this
+>this : this
     }
 }

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarFromEmptyModule.ts] ////
 
 //// [exportStarFromEmptyModule_module1.ts]
-
 export class A {
     static r;
 }
@@ -10,42 +9,48 @@ export class A {
 // empty
 
 //// [exportStarFromEmptyModule_module3.ts]
-export * from "exportStarFromEmptyModule_module2";
-export * from "exportStarFromEmptyModule_module1";
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
 
 export class A {
     static q;
 }
 
 //// [exportStarFromEmptyModule_module4.ts]
-import * as X from "exportStarFromEmptyModule_module3";
+import * as X from "./exportStarFromEmptyModule_module3";
 var s: X.A;
 X.A.q;
 X.A.r; // Error
 
 //// [exportStarFromEmptyModule_module1.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module2.js]
 // empty
 //// [exportStarFromEmptyModule_module3.js]
+"use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(require("exportStarFromEmptyModule_module2"));
-__export(require("exportStarFromEmptyModule_module1"));
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./exportStarFromEmptyModule_module2"));
+__export(require("./exportStarFromEmptyModule_module1"));
 var A = (function () {
     function A() {
     }
     return A;
-})();
+}());
 exports.A = A;
 //// [exportStarFromEmptyModule_module4.js]
-var X = require("exportStarFromEmptyModule_module3");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var X = require("./exportStarFromEmptyModule_module3");
 var s;
 X.A.q;
 X.A.r; // Error
@@ -57,8 +62,8 @@ export declare class A {
 }
 //// [exportStarFromEmptyModule_module2.d.ts]
 //// [exportStarFromEmptyModule_module3.d.ts]
-export * from "exportStarFromEmptyModule_module2";
-export * from "exportStarFromEmptyModule_module1";
+export * from "./exportStarFromEmptyModule_module2";
+export * from "./exportStarFromEmptyModule_module1";
 export declare class A {
     static q: any;
 }

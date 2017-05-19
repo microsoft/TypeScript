@@ -15,4 +15,4 @@ var C = (function () {
     }
     C.prototype[methodName] = function (v) { };
     return C;
-})();
+}());

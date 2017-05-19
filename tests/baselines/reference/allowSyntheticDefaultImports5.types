@@ -1,0 +1,19 @@
+=== tests/cases/compiler/b.d.ts ===
+declare class Foo {
+>Foo : Foo
+
+	member: string;
+>member : string
+}
+export = Foo;
+>Foo : Foo
+
+=== tests/cases/compiler/a.ts ===
+import Foo from "./b";
+>Foo : typeof Foo
+
+export var x = new Foo();
+>x : Foo
+>new Foo() : Foo
+>Foo : typeof Foo
+

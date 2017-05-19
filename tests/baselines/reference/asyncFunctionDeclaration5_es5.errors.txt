@@ -1,0 +1,23 @@
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,20): error TS1138: Parameter declaration expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,20): error TS2304: Cannot find name 'await'.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,25): error TS1005: ';' expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,26): error TS1128: Declaration or statement expected.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,36): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts(1,40): error TS1109: Expression expected.
+
+
+==== tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration5_es5.ts (6 errors) ====
+    async function foo(await): Promise<void> {
+                       ~~~~~
+!!! error TS1138: Parameter declaration expected.
+                       ~~~~~
+!!! error TS2304: Cannot find name 'await'.
+                            ~
+!!! error TS1005: ';' expected.
+                             ~
+!!! error TS1128: Declaration or statement expected.
+                                       ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+                                           ~
+!!! error TS1109: Expression expected.
+    }

@@ -1,5 +1,4 @@
 //// [es5-umd3.ts]
-
 export default class A
 {
     constructor ()
@@ -15,14 +14,17 @@ export default class A
 
 
 //// [es5-umd3.js]
-(function (deps, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
-        define(deps, factory);
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports"], factory);
     }
-})(["require", "exports"], function (require, exports) {
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var A = (function () {
         function A() {
         }
@@ -30,6 +32,6 @@ export default class A
             return 42;
         };
         return A;
-    })();
+    }());
     exports.default = A;
 });

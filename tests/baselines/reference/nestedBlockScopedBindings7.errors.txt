@@ -1,0 +1,16 @@
+tests/cases/compiler/nestedBlockScopedBindings7.ts(2,5): error TS7027: Unreachable code detected.
+tests/cases/compiler/nestedBlockScopedBindings7.ts(6,5): error TS7027: Unreachable code detected.
+
+
+==== tests/cases/compiler/nestedBlockScopedBindings7.ts (2 errors) ====
+    for (let x; false;) {
+        () => x;
+        ~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    for (let y; false;) {
+        y = 1;
+        ~
+!!! error TS7027: Unreachable code detected.
+    }

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/moduleA/a.js ===
+import {a} from "b";
+>a : any
+
+a++;
+>a++ : number
+>a : any
+
+import {c} from "c";
+>c : any
+
+c++;
+>c++ : number
+>c : any
+
+=== tests/cases/compiler/node_modules/b.ts ===
+var a = 10;
+>a : number
+>10 : 10
+
+=== tests/cases/compiler/node_modules/c.js ===
+exports.a = 10;
+>exports.a = 10 : 10
+>exports.a : any
+>exports : any
+>a : any
+>10 : 10
+
+c = 10;
+>c = 10 : 10
+>c : any
+>10 : 10
+

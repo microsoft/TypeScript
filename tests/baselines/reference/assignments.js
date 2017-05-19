@@ -45,7 +45,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 C = null; // Error
 var E;
 (function (E) {

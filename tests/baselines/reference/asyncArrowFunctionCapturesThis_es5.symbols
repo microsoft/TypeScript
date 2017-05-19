@@ -1,0 +1,13 @@
+=== tests/cases/conformance/async/es5/asyncArrowFunction/asyncArrowFunctionCapturesThis_es5.ts ===
+class C {
+>C : Symbol(C, Decl(asyncArrowFunctionCapturesThis_es5.ts, 0, 0))
+
+   method() {
+>method : Symbol(C.method, Decl(asyncArrowFunctionCapturesThis_es5.ts, 0, 9))
+
+      var fn = async () => await this;
+>fn : Symbol(fn, Decl(asyncArrowFunctionCapturesThis_es5.ts, 2, 9))
+>this : Symbol(C, Decl(asyncArrowFunctionCapturesThis_es5.ts, 0, 0))
+   }
+}
+

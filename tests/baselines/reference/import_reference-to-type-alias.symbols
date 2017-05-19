@@ -4,7 +4,7 @@ import appJs = require("file1");
 
 import Services = appJs.App.Services;
 >Services : Symbol(Services, Decl(file2.ts, 0, 32))
->appJs : Symbol(appJs, Decl(file1.ts, 0, 0))
+>appJs : Symbol(appJs, Decl(file2.ts, 0, 0))
 >App : Symbol(appJs.App, Decl(file1.ts, 0, 0))
 >Services : Symbol(Services, Decl(file1.ts, 0, 19))
 
@@ -27,7 +27,7 @@ export module App {
 >UserServices : Symbol(UserServices, Decl(file1.ts, 1, 28))
 
             public getUserName(): string {
->getUserName : Symbol(getUserName, Decl(file1.ts, 2, 35))
+>getUserName : Symbol(UserServices.getUserName, Decl(file1.ts, 2, 35))
 
                 return "Bill Gates";
             }

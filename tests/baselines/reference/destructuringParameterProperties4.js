@@ -1,5 +1,4 @@
 //// [destructuringParameterProperties4.ts]
-
 class C1<T, U, V> {
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
@@ -31,7 +30,6 @@ class C2 extends C1<number, string, boolean> {
 class C1 {
     constructor(k, [a, b, c]) {
         this.k = k;
-        this.[a, b, c] = [a, b, c];
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
             this.a = a || k;
         }

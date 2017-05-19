@@ -73,4 +73,4 @@ var X = (function () {
         outer();
     };
     return X;
-})();
+}());

@@ -1,0 +1,778 @@
+
+1  >declare var console: {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (0 to 22)  SpanInfo: undefined
+--------------------------------
+2  >    log(msg: any): void;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (23 to 47)  SpanInfo: undefined
+--------------------------------
+3  >}
+
+    ~~                                            => Pos: (48 to 49)  SpanInfo: undefined
+--------------------------------
+4  >type Robot = [number, string, string];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~       => Pos: (50 to 88)  SpanInfo: undefined
+--------------------------------
+5  >type MultiSkilledRobot = [string, [string, string]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (89 to 141)  SpanInfo: undefined
+--------------------------------
+6  >let robotA: Robot = [1, "mower", "mowing"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  => Pos: (142 to 185)  SpanInfo: {"start":142,"length":42}
+    >let robotA: Robot = [1, "mower", "mowing"]
+    >:=> (line 6, col 0) to (line 6, col 42)
+--------------------------------
+7  >let robotB: Robot = [2, "trimmer", "trimming"];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (186 to 233)  SpanInfo: {"start":186,"length":46}
+    >let robotB: Robot = [2, "trimmer", "trimming"]
+    >:=> (line 7, col 0) to (line 7, col 46)
+--------------------------------
+8  >let robots = [robotA, robotB];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               => Pos: (234 to 264)  SpanInfo: {"start":234,"length":29}
+    >let robots = [robotA, robotB]
+    >:=> (line 8, col 0) to (line 8, col 29)
+--------------------------------
+9  >function getRobots() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (265 to 287)  SpanInfo: {"start":292,"length":13}
+    >return robots
+    >:=> (line 10, col 4) to (line 10, col 17)
+--------------------------------
+10 >    return robots;
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (288 to 306)  SpanInfo: {"start":292,"length":13}
+    >return robots
+    >:=> (line 10, col 4) to (line 10, col 17)
+--------------------------------
+11 >}
+
+    ~~                                            => Pos: (307 to 308)  SpanInfo: {"start":307,"length":1}
+    >}
+    >:=> (line 11, col 0) to (line 11, col 1)
+--------------------------------
+12 >let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (309 to 372)  SpanInfo: {"start":309,"length":62}
+    >let multiRobotA: MultiSkilledRobot = ["mower", ["mowing", ""]]
+    >:=> (line 12, col 0) to (line 12, col 62)
+--------------------------------
+13 >let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (373 to 446)  SpanInfo: {"start":373,"length":72}
+    >let multiRobotB: MultiSkilledRobot = ["trimmer", ["trimming", "edging"]]
+    >:=> (line 13, col 0) to (line 13, col 72)
+--------------------------------
+14 >let multiRobots = [multiRobotA, multiRobotB];
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (447 to 492)  SpanInfo: {"start":447,"length":44}
+    >let multiRobots = [multiRobotA, multiRobotB]
+    >:=> (line 14, col 0) to (line 14, col 44)
+--------------------------------
+15 >function getMultiRobots() {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~                  => Pos: (493 to 520)  SpanInfo: {"start":525,"length":18}
+    >return multiRobots
+    >:=> (line 16, col 4) to (line 16, col 22)
+--------------------------------
+16 >    return multiRobots;
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (521 to 544)  SpanInfo: {"start":525,"length":18}
+    >return multiRobots
+    >:=> (line 16, col 4) to (line 16, col 22)
+--------------------------------
+17 >}
+
+    ~~                                            => Pos: (545 to 546)  SpanInfo: {"start":545,"length":1}
+    >}
+    >:=> (line 17, col 0) to (line 17, col 1)
+--------------------------------
+18 >for (let [, nameA] of robots) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (547 to 564)  SpanInfo: {"start":559,"length":5}
+    >nameA
+    >:=> (line 18, col 12) to (line 18, col 17)
+18 >for (let [, nameA] of robots) {
+
+                      ~~~~~~~~~~~~~~              => Pos: (565 to 578)  SpanInfo: {"start":569,"length":6}
+    >robots
+    >:=> (line 18, col 22) to (line 18, col 28)
+--------------------------------
+19 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (579 to 602)  SpanInfo: {"start":583,"length":18}
+    >console.log(nameA)
+    >:=> (line 19, col 4) to (line 19, col 22)
+--------------------------------
+20 >}
+
+    ~~                                            => Pos: (603 to 604)  SpanInfo: {"start":583,"length":18}
+    >console.log(nameA)
+    >:=> (line 19, col 4) to (line 19, col 22)
+--------------------------------
+21 >for (let [, nameA] of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (605 to 622)  SpanInfo: {"start":617,"length":5}
+    >nameA
+    >:=> (line 21, col 12) to (line 21, col 17)
+21 >for (let [, nameA] of getRobots()) {
+
+                      ~~~~~~~~~~~~~~~~~~~         => Pos: (623 to 641)  SpanInfo: {"start":627,"length":11}
+    >getRobots()
+    >:=> (line 21, col 22) to (line 21, col 33)
+--------------------------------
+22 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (642 to 665)  SpanInfo: {"start":646,"length":18}
+    >console.log(nameA)
+    >:=> (line 22, col 4) to (line 22, col 22)
+--------------------------------
+23 >}
+
+    ~~                                            => Pos: (666 to 667)  SpanInfo: {"start":646,"length":18}
+    >console.log(nameA)
+    >:=> (line 22, col 4) to (line 22, col 22)
+--------------------------------
+24 >for (let [, nameA] of [robotA, robotB]) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (668 to 685)  SpanInfo: {"start":680,"length":5}
+    >nameA
+    >:=> (line 24, col 12) to (line 24, col 17)
+24 >for (let [, nameA] of [robotA, robotB]) {
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (686 to 709)  SpanInfo: {"start":690,"length":16}
+    >[robotA, robotB]
+    >:=> (line 24, col 22) to (line 24, col 38)
+--------------------------------
+25 >    console.log(nameA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (710 to 733)  SpanInfo: {"start":714,"length":18}
+    >console.log(nameA)
+    >:=> (line 25, col 4) to (line 25, col 22)
+--------------------------------
+26 >}
+
+    ~~                                            => Pos: (734 to 735)  SpanInfo: {"start":714,"length":18}
+    >console.log(nameA)
+    >:=> (line 25, col 4) to (line 25, col 22)
+--------------------------------
+27 >for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+    ~~~~~~~~~~~                                   => Pos: (736 to 746)  SpanInfo: {"start":748,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 27, col 12) to (line 27, col 44)
+27 >for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+               ~~~~~~~~~~~~~~~~                   => Pos: (747 to 762)  SpanInfo: {"start":749,"length":13}
+    >primarySkillA
+    >:=> (line 27, col 13) to (line 27, col 26)
+27 >for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                               ~~~~~~~~~~~~~~~~~  => Pos: (763 to 779)  SpanInfo: {"start":764,"length":15}
+    >secondarySkillA
+    >:=> (line 27, col 28) to (line 27, col 43)
+27 >for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                                                ~ => Pos: (780 to 780)  SpanInfo: {"start":748,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 27, col 12) to (line 27, col 44)
+27 >for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                                                 ~~~~~~~~~~~~~~~~~~~=> Pos: (781 to 799)  SpanInfo: {"start":785,"length":11}
+    >multiRobots
+    >:=> (line 27, col 49) to (line 27, col 60)
+--------------------------------
+28 >    console.log(primarySkillA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              => Pos: (800 to 831)  SpanInfo: {"start":804,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 28, col 4) to (line 28, col 30)
+--------------------------------
+29 >}
+
+    ~~                                            => Pos: (832 to 833)  SpanInfo: {"start":804,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 28, col 4) to (line 28, col 30)
+--------------------------------
+30 >for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+    ~~~~~~~~~~~                                   => Pos: (834 to 844)  SpanInfo: {"start":846,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 30, col 12) to (line 30, col 44)
+30 >for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+               ~~~~~~~~~~~~~~~~                   => Pos: (845 to 860)  SpanInfo: {"start":847,"length":13}
+    >primarySkillA
+    >:=> (line 30, col 13) to (line 30, col 26)
+30 >for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                               ~~~~~~~~~~~~~~~~~  => Pos: (861 to 877)  SpanInfo: {"start":862,"length":15}
+    >secondarySkillA
+    >:=> (line 30, col 28) to (line 30, col 43)
+30 >for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                                                ~ => Pos: (878 to 878)  SpanInfo: {"start":846,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 30, col 12) to (line 30, col 44)
+30 >for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                                                 ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (879 to 902)  SpanInfo: {"start":883,"length":16}
+    >getMultiRobots()
+    >:=> (line 30, col 49) to (line 30, col 65)
+--------------------------------
+31 >    console.log(primarySkillA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              => Pos: (903 to 934)  SpanInfo: {"start":907,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 31, col 4) to (line 31, col 30)
+--------------------------------
+32 >}
+
+    ~~                                            => Pos: (935 to 936)  SpanInfo: {"start":907,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 31, col 4) to (line 31, col 30)
+--------------------------------
+33 >for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+    ~~~~~~~~~~~                                   => Pos: (937 to 947)  SpanInfo: {"start":949,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 33, col 12) to (line 33, col 44)
+33 >for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+               ~~~~~~~~~~~~~~~~                   => Pos: (948 to 963)  SpanInfo: {"start":950,"length":13}
+    >primarySkillA
+    >:=> (line 33, col 13) to (line 33, col 26)
+33 >for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                               ~~~~~~~~~~~~~~~~~  => Pos: (964 to 980)  SpanInfo: {"start":965,"length":15}
+    >secondarySkillA
+    >:=> (line 33, col 28) to (line 33, col 43)
+33 >for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                                                ~ => Pos: (981 to 981)  SpanInfo: {"start":949,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 33, col 12) to (line 33, col 44)
+33 >for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (982 to 1015)  SpanInfo: {"start":986,"length":26}
+    >[multiRobotA, multiRobotB]
+    >:=> (line 33, col 49) to (line 33, col 75)
+--------------------------------
+34 >    console.log(primarySkillA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~              => Pos: (1016 to 1047)  SpanInfo: {"start":1020,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 34, col 4) to (line 34, col 30)
+--------------------------------
+35 >}
+
+    ~~                                            => Pos: (1048 to 1049)  SpanInfo: {"start":1020,"length":26}
+    >console.log(primarySkillA)
+    >:=> (line 34, col 4) to (line 34, col 30)
+--------------------------------
+36 >for (let [numberB] of robots) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (1050 to 1067)  SpanInfo: {"start":1060,"length":7}
+    >numberB
+    >:=> (line 36, col 10) to (line 36, col 17)
+36 >for (let [numberB] of robots) {
+
+                      ~~~~~~~~~~~~~~              => Pos: (1068 to 1081)  SpanInfo: {"start":1072,"length":6}
+    >robots
+    >:=> (line 36, col 22) to (line 36, col 28)
+--------------------------------
+37 >    console.log(numberB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (1082 to 1107)  SpanInfo: {"start":1086,"length":20}
+    >console.log(numberB)
+    >:=> (line 37, col 4) to (line 37, col 24)
+--------------------------------
+38 >}
+
+    ~~                                            => Pos: (1108 to 1109)  SpanInfo: {"start":1086,"length":20}
+    >console.log(numberB)
+    >:=> (line 37, col 4) to (line 37, col 24)
+--------------------------------
+39 >for (let [numberB] of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (1110 to 1127)  SpanInfo: {"start":1120,"length":7}
+    >numberB
+    >:=> (line 39, col 10) to (line 39, col 17)
+39 >for (let [numberB] of getRobots()) {
+
+                      ~~~~~~~~~~~~~~~~~~~         => Pos: (1128 to 1146)  SpanInfo: {"start":1132,"length":11}
+    >getRobots()
+    >:=> (line 39, col 22) to (line 39, col 33)
+--------------------------------
+40 >    console.log(numberB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (1147 to 1172)  SpanInfo: {"start":1151,"length":20}
+    >console.log(numberB)
+    >:=> (line 40, col 4) to (line 40, col 24)
+--------------------------------
+41 >}
+
+    ~~                                            => Pos: (1173 to 1174)  SpanInfo: {"start":1151,"length":20}
+    >console.log(numberB)
+    >:=> (line 40, col 4) to (line 40, col 24)
+--------------------------------
+42 >for (let [numberB] of [robotA, robotB]) {
+
+    ~~~~~~~~~~~~~~~~~~                            => Pos: (1175 to 1192)  SpanInfo: {"start":1185,"length":7}
+    >numberB
+    >:=> (line 42, col 10) to (line 42, col 17)
+42 >for (let [numberB] of [robotA, robotB]) {
+
+                      ~~~~~~~~~~~~~~~~~~~~~~~~    => Pos: (1193 to 1216)  SpanInfo: {"start":1197,"length":16}
+    >[robotA, robotB]
+    >:=> (line 42, col 22) to (line 42, col 38)
+--------------------------------
+43 >    console.log(numberB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~                    => Pos: (1217 to 1242)  SpanInfo: {"start":1221,"length":20}
+    >console.log(numberB)
+    >:=> (line 43, col 4) to (line 43, col 24)
+--------------------------------
+44 >}
+
+    ~~                                            => Pos: (1243 to 1244)  SpanInfo: {"start":1221,"length":20}
+    >console.log(numberB)
+    >:=> (line 43, col 4) to (line 43, col 24)
+--------------------------------
+45 >for (let [nameB] of multiRobots) {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (1245 to 1260)  SpanInfo: {"start":1255,"length":5}
+    >nameB
+    >:=> (line 45, col 10) to (line 45, col 15)
+45 >for (let [nameB] of multiRobots) {
+
+                    ~~~~~~~~~~~~~~~~~~~           => Pos: (1261 to 1279)  SpanInfo: {"start":1265,"length":11}
+    >multiRobots
+    >:=> (line 45, col 20) to (line 45, col 31)
+--------------------------------
+46 >    console.log(nameB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1280 to 1303)  SpanInfo: {"start":1284,"length":18}
+    >console.log(nameB)
+    >:=> (line 46, col 4) to (line 46, col 22)
+--------------------------------
+47 >}
+
+    ~~                                            => Pos: (1304 to 1305)  SpanInfo: {"start":1284,"length":18}
+    >console.log(nameB)
+    >:=> (line 46, col 4) to (line 46, col 22)
+--------------------------------
+48 >for (let [nameB] of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (1306 to 1321)  SpanInfo: {"start":1316,"length":5}
+    >nameB
+    >:=> (line 48, col 10) to (line 48, col 15)
+48 >for (let [nameB] of getMultiRobots()) {
+
+                    ~~~~~~~~~~~~~~~~~~~~~~~~      => Pos: (1322 to 1345)  SpanInfo: {"start":1326,"length":16}
+    >getMultiRobots()
+    >:=> (line 48, col 20) to (line 48, col 36)
+--------------------------------
+49 >    console.log(nameB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1346 to 1369)  SpanInfo: {"start":1350,"length":18}
+    >console.log(nameB)
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+50 >}
+
+    ~~                                            => Pos: (1370 to 1371)  SpanInfo: {"start":1350,"length":18}
+    >console.log(nameB)
+    >:=> (line 49, col 4) to (line 49, col 22)
+--------------------------------
+51 >for (let [nameB] of [multiRobotA, multiRobotB]) {
+
+    ~~~~~~~~~~~~~~~~                              => Pos: (1372 to 1387)  SpanInfo: {"start":1382,"length":5}
+    >nameB
+    >:=> (line 51, col 10) to (line 51, col 15)
+51 >for (let [nameB] of [multiRobotA, multiRobotB]) {
+
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1388 to 1421)  SpanInfo: {"start":1392,"length":26}
+    >[multiRobotA, multiRobotB]
+    >:=> (line 51, col 20) to (line 51, col 46)
+--------------------------------
+52 >    console.log(nameB);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~                      => Pos: (1422 to 1445)  SpanInfo: {"start":1426,"length":18}
+    >console.log(nameB)
+    >:=> (line 52, col 4) to (line 52, col 22)
+--------------------------------
+53 >}
+
+    ~~                                            => Pos: (1446 to 1447)  SpanInfo: {"start":1426,"length":18}
+    >console.log(nameB)
+    >:=> (line 52, col 4) to (line 52, col 22)
+--------------------------------
+54 >for (let [numberA2, nameA2, skillA2] of robots) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1448 to 1466)  SpanInfo: {"start":1458,"length":8}
+    >numberA2
+    >:=> (line 54, col 10) to (line 54, col 18)
+54 >for (let [numberA2, nameA2, skillA2] of robots) {
+
+                       ~~~~~~~~                   => Pos: (1467 to 1474)  SpanInfo: {"start":1468,"length":6}
+    >nameA2
+    >:=> (line 54, col 20) to (line 54, col 26)
+54 >for (let [numberA2, nameA2, skillA2] of robots) {
+
+                               ~~~~~~~~~          => Pos: (1475 to 1483)  SpanInfo: {"start":1476,"length":7}
+    >skillA2
+    >:=> (line 54, col 28) to (line 54, col 35)
+54 >for (let [numberA2, nameA2, skillA2] of robots) {
+
+                                        ~~~~~~~~~~~~~~=> Pos: (1484 to 1497)  SpanInfo: {"start":1488,"length":6}
+    >robots
+    >:=> (line 54, col 40) to (line 54, col 46)
+--------------------------------
+55 >    console.log(nameA2);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1498 to 1522)  SpanInfo: {"start":1502,"length":19}
+    >console.log(nameA2)
+    >:=> (line 55, col 4) to (line 55, col 23)
+--------------------------------
+56 >}
+
+    ~~                                            => Pos: (1523 to 1524)  SpanInfo: {"start":1502,"length":19}
+    >console.log(nameA2)
+    >:=> (line 55, col 4) to (line 55, col 23)
+--------------------------------
+57 >for (let [numberA2, nameA2, skillA2] of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1525 to 1543)  SpanInfo: {"start":1535,"length":8}
+    >numberA2
+    >:=> (line 57, col 10) to (line 57, col 18)
+57 >for (let [numberA2, nameA2, skillA2] of getRobots()) {
+
+                       ~~~~~~~~                   => Pos: (1544 to 1551)  SpanInfo: {"start":1545,"length":6}
+    >nameA2
+    >:=> (line 57, col 20) to (line 57, col 26)
+57 >for (let [numberA2, nameA2, skillA2] of getRobots()) {
+
+                               ~~~~~~~~~          => Pos: (1552 to 1560)  SpanInfo: {"start":1553,"length":7}
+    >skillA2
+    >:=> (line 57, col 28) to (line 57, col 35)
+57 >for (let [numberA2, nameA2, skillA2] of getRobots()) {
+
+                                        ~~~~~~~~~~~~~~~~~~~=> Pos: (1561 to 1579)  SpanInfo: {"start":1565,"length":11}
+    >getRobots()
+    >:=> (line 57, col 40) to (line 57, col 51)
+--------------------------------
+58 >    console.log(nameA2);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1580 to 1604)  SpanInfo: {"start":1584,"length":19}
+    >console.log(nameA2)
+    >:=> (line 58, col 4) to (line 58, col 23)
+--------------------------------
+59 >}
+
+    ~~                                            => Pos: (1605 to 1606)  SpanInfo: {"start":1584,"length":19}
+    >console.log(nameA2)
+    >:=> (line 58, col 4) to (line 58, col 23)
+--------------------------------
+60 >for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (1607 to 1625)  SpanInfo: {"start":1617,"length":8}
+    >numberA2
+    >:=> (line 60, col 10) to (line 60, col 18)
+60 >for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
+
+                       ~~~~~~~~                   => Pos: (1626 to 1633)  SpanInfo: {"start":1627,"length":6}
+    >nameA2
+    >:=> (line 60, col 20) to (line 60, col 26)
+60 >for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
+
+                               ~~~~~~~~~          => Pos: (1634 to 1642)  SpanInfo: {"start":1635,"length":7}
+    >skillA2
+    >:=> (line 60, col 28) to (line 60, col 35)
+60 >for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
+
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1643 to 1666)  SpanInfo: {"start":1647,"length":16}
+    >[robotA, robotB]
+    >:=> (line 60, col 40) to (line 60, col 56)
+--------------------------------
+61 >    console.log(nameA2);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1667 to 1691)  SpanInfo: {"start":1671,"length":19}
+    >console.log(nameA2)
+    >:=> (line 61, col 4) to (line 61, col 23)
+--------------------------------
+62 >}
+
+    ~~                                            => Pos: (1692 to 1693)  SpanInfo: {"start":1671,"length":19}
+    >console.log(nameA2)
+    >:=> (line 61, col 4) to (line 61, col 23)
+--------------------------------
+63 >for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (1694 to 1710)  SpanInfo: {"start":1704,"length":6}
+    >nameMA
+    >:=> (line 63, col 10) to (line 63, col 16)
+63 >for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                     ~~~~~~~~~~~~~~~~             => Pos: (1711 to 1726)  SpanInfo: {"start":1713,"length":13}
+    >primarySkillA
+    >:=> (line 63, col 19) to (line 63, col 32)
+63 >for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                                     ~~~~~~~~~~~~~~~~~=> Pos: (1727 to 1743)  SpanInfo: {"start":1728,"length":15}
+    >secondarySkillA
+    >:=> (line 63, col 34) to (line 63, col 49)
+63 >for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                                                      ~=> Pos: (1744 to 1744)  SpanInfo: {"start":1712,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 63, col 18) to (line 63, col 50)
+63 >for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
+
+                                                       ~~~~~~~~~~~~~~~~~~~=> Pos: (1745 to 1763)  SpanInfo: {"start":1749,"length":11}
+    >multiRobots
+    >:=> (line 63, col 55) to (line 63, col 66)
+--------------------------------
+64 >    console.log(nameMA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1764 to 1788)  SpanInfo: {"start":1768,"length":19}
+    >console.log(nameMA)
+    >:=> (line 64, col 4) to (line 64, col 23)
+--------------------------------
+65 >}
+
+    ~~                                            => Pos: (1789 to 1790)  SpanInfo: {"start":1768,"length":19}
+    >console.log(nameMA)
+    >:=> (line 64, col 4) to (line 64, col 23)
+--------------------------------
+66 >for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (1791 to 1807)  SpanInfo: {"start":1801,"length":6}
+    >nameMA
+    >:=> (line 66, col 10) to (line 66, col 16)
+66 >for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                     ~~~~~~~~~~~~~~~~             => Pos: (1808 to 1823)  SpanInfo: {"start":1810,"length":13}
+    >primarySkillA
+    >:=> (line 66, col 19) to (line 66, col 32)
+66 >for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                                     ~~~~~~~~~~~~~~~~~=> Pos: (1824 to 1840)  SpanInfo: {"start":1825,"length":15}
+    >secondarySkillA
+    >:=> (line 66, col 34) to (line 66, col 49)
+66 >for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                                                      ~=> Pos: (1841 to 1841)  SpanInfo: {"start":1809,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 66, col 18) to (line 66, col 50)
+66 >for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
+
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1842 to 1865)  SpanInfo: {"start":1846,"length":16}
+    >getMultiRobots()
+    >:=> (line 66, col 55) to (line 66, col 71)
+--------------------------------
+67 >    console.log(nameMA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1866 to 1890)  SpanInfo: {"start":1870,"length":19}
+    >console.log(nameMA)
+    >:=> (line 67, col 4) to (line 67, col 23)
+--------------------------------
+68 >}
+
+    ~~                                            => Pos: (1891 to 1892)  SpanInfo: {"start":1870,"length":19}
+    >console.log(nameMA)
+    >:=> (line 67, col 4) to (line 67, col 23)
+--------------------------------
+69 >for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+    ~~~~~~~~~~~~~~~~~                             => Pos: (1893 to 1909)  SpanInfo: {"start":1903,"length":6}
+    >nameMA
+    >:=> (line 69, col 10) to (line 69, col 16)
+69 >for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                     ~~~~~~~~~~~~~~~~             => Pos: (1910 to 1925)  SpanInfo: {"start":1912,"length":13}
+    >primarySkillA
+    >:=> (line 69, col 19) to (line 69, col 32)
+69 >for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                                     ~~~~~~~~~~~~~~~~~=> Pos: (1926 to 1942)  SpanInfo: {"start":1927,"length":15}
+    >secondarySkillA
+    >:=> (line 69, col 34) to (line 69, col 49)
+69 >for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                                                      ~=> Pos: (1943 to 1943)  SpanInfo: {"start":1911,"length":32}
+    >[primarySkillA, secondarySkillA]
+    >:=> (line 69, col 18) to (line 69, col 50)
+69 >for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
+
+                                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (1944 to 1977)  SpanInfo: {"start":1948,"length":26}
+    >[multiRobotA, multiRobotB]
+    >:=> (line 69, col 55) to (line 69, col 81)
+--------------------------------
+70 >    console.log(nameMA);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~                     => Pos: (1978 to 2002)  SpanInfo: {"start":1982,"length":19}
+    >console.log(nameMA)
+    >:=> (line 70, col 4) to (line 70, col 23)
+--------------------------------
+71 >}
+
+    ~~                                            => Pos: (2003 to 2004)  SpanInfo: {"start":1982,"length":19}
+    >console.log(nameMA)
+    >:=> (line 70, col 4) to (line 70, col 23)
+--------------------------------
+72 >for (let [numberA3, ...robotAInfo] of robots) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (2005 to 2023)  SpanInfo: {"start":2015,"length":8}
+    >numberA3
+    >:=> (line 72, col 10) to (line 72, col 18)
+72 >for (let [numberA3, ...robotAInfo] of robots) {
+
+                       ~~~~~~~~~~~~~~~            => Pos: (2024 to 2038)  SpanInfo: {"start":2025,"length":13}
+    >...robotAInfo
+    >:=> (line 72, col 20) to (line 72, col 33)
+72 >for (let [numberA3, ...robotAInfo] of robots) {
+
+                                      ~~~~~~~~~~~~~~=> Pos: (2039 to 2052)  SpanInfo: {"start":2043,"length":6}
+    >robots
+    >:=> (line 72, col 38) to (line 72, col 44)
+--------------------------------
+73 >    console.log(numberA3);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (2053 to 2079)  SpanInfo: {"start":2057,"length":21}
+    >console.log(numberA3)
+    >:=> (line 73, col 4) to (line 73, col 25)
+--------------------------------
+74 >}
+
+    ~~                                            => Pos: (2080 to 2081)  SpanInfo: {"start":2057,"length":21}
+    >console.log(numberA3)
+    >:=> (line 73, col 4) to (line 73, col 25)
+--------------------------------
+75 >for (let [numberA3, ...robotAInfo] of getRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (2082 to 2100)  SpanInfo: {"start":2092,"length":8}
+    >numberA3
+    >:=> (line 75, col 10) to (line 75, col 18)
+75 >for (let [numberA3, ...robotAInfo] of getRobots()) {
+
+                       ~~~~~~~~~~~~~~~            => Pos: (2101 to 2115)  SpanInfo: {"start":2102,"length":13}
+    >...robotAInfo
+    >:=> (line 75, col 20) to (line 75, col 33)
+75 >for (let [numberA3, ...robotAInfo] of getRobots()) {
+
+                                      ~~~~~~~~~~~~~~~~~~~=> Pos: (2116 to 2134)  SpanInfo: {"start":2120,"length":11}
+    >getRobots()
+    >:=> (line 75, col 38) to (line 75, col 49)
+--------------------------------
+76 >    console.log(numberA3);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (2135 to 2161)  SpanInfo: {"start":2139,"length":21}
+    >console.log(numberA3)
+    >:=> (line 76, col 4) to (line 76, col 25)
+--------------------------------
+77 >}
+
+    ~~                                            => Pos: (2162 to 2163)  SpanInfo: {"start":2139,"length":21}
+    >console.log(numberA3)
+    >:=> (line 76, col 4) to (line 76, col 25)
+--------------------------------
+78 >for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
+
+    ~~~~~~~~~~~~~~~~~~~                           => Pos: (2164 to 2182)  SpanInfo: {"start":2174,"length":8}
+    >numberA3
+    >:=> (line 78, col 10) to (line 78, col 18)
+78 >for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
+
+                       ~~~~~~~~~~~~~~~            => Pos: (2183 to 2197)  SpanInfo: {"start":2184,"length":13}
+    >...robotAInfo
+    >:=> (line 78, col 20) to (line 78, col 33)
+78 >for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
+
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2198 to 2221)  SpanInfo: {"start":2202,"length":16}
+    >[robotA, robotB]
+    >:=> (line 78, col 38) to (line 78, col 54)
+--------------------------------
+79 >    console.log(numberA3);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~                   => Pos: (2222 to 2248)  SpanInfo: {"start":2226,"length":21}
+    >console.log(numberA3)
+    >:=> (line 79, col 4) to (line 79, col 25)
+--------------------------------
+80 >}
+
+    ~~                                            => Pos: (2249 to 2250)  SpanInfo: {"start":2226,"length":21}
+    >console.log(numberA3)
+    >:=> (line 79, col 4) to (line 79, col 25)
+--------------------------------
+81 >for (let [...multiRobotAInfo] of multiRobots) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (2251 to 2279)  SpanInfo: {"start":2261,"length":18}
+    >...multiRobotAInfo
+    >:=> (line 81, col 10) to (line 81, col 28)
+81 >for (let [...multiRobotAInfo] of multiRobots) {
+
+                                 ~~~~~~~~~~~~~~~~~~~=> Pos: (2280 to 2298)  SpanInfo: {"start":2284,"length":11}
+    >multiRobots
+    >:=> (line 81, col 33) to (line 81, col 44)
+--------------------------------
+82 >    console.log(multiRobotAInfo);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (2299 to 2332)  SpanInfo: {"start":2303,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 82, col 4) to (line 82, col 32)
+--------------------------------
+83 >}
+
+    ~~                                            => Pos: (2333 to 2334)  SpanInfo: {"start":2303,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 82, col 4) to (line 82, col 32)
+--------------------------------
+84 >for (let [...multiRobotAInfo] of getMultiRobots()) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (2335 to 2363)  SpanInfo: {"start":2345,"length":18}
+    >...multiRobotAInfo
+    >:=> (line 84, col 10) to (line 84, col 28)
+84 >for (let [...multiRobotAInfo] of getMultiRobots()) {
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2364 to 2387)  SpanInfo: {"start":2368,"length":16}
+    >getMultiRobots()
+    >:=> (line 84, col 33) to (line 84, col 49)
+--------------------------------
+85 >    console.log(multiRobotAInfo);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (2388 to 2421)  SpanInfo: {"start":2392,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 85, col 4) to (line 85, col 32)
+--------------------------------
+86 >}
+
+    ~~                                            => Pos: (2422 to 2423)  SpanInfo: {"start":2392,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 85, col 4) to (line 85, col 32)
+--------------------------------
+87 >for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~                 => Pos: (2424 to 2452)  SpanInfo: {"start":2434,"length":18}
+    >...multiRobotAInfo
+    >:=> (line 87, col 10) to (line 87, col 28)
+87 >for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
+
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=> Pos: (2453 to 2486)  SpanInfo: {"start":2457,"length":26}
+    >[multiRobotA, multiRobotB]
+    >:=> (line 87, col 33) to (line 87, col 59)
+--------------------------------
+88 >    console.log(multiRobotAInfo);
+
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~            => Pos: (2487 to 2520)  SpanInfo: {"start":2491,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 88, col 4) to (line 88, col 32)
+--------------------------------
+89 >}
+    ~                                             => Pos: (2521 to 2521)  SpanInfo: {"start":2491,"length":28}
+    >console.log(multiRobotAInfo)
+    >:=> (line 88, col 4) to (line 88, col 32)

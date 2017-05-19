@@ -12,12 +12,12 @@ interface MyArrayWrapper<T> {
 >T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
 
 	constructor(initialItems?: T[]);
->constructor : Symbol(constructor, Decl(objectLiteralArraySpecialization.ts, 1, 29))
+>constructor : Symbol(MyArrayWrapper.constructor, Decl(objectLiteralArraySpecialization.ts, 1, 29))
 >initialItems : Symbol(initialItems, Decl(objectLiteralArraySpecialization.ts, 2, 13))
 >T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))
 
 	doSomething(predicate: (x: T, y: T) => boolean): void;
->doSomething : Symbol(doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
+>doSomething : Symbol(MyArrayWrapper.doSomething, Decl(objectLiteralArraySpecialization.ts, 2, 33))
 >predicate : Symbol(predicate, Decl(objectLiteralArraySpecialization.ts, 3, 13))
 >x : Symbol(x, Decl(objectLiteralArraySpecialization.ts, 3, 25))
 >T : Symbol(T, Decl(objectLiteralArraySpecialization.ts, 1, 25))

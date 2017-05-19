@@ -18,7 +18,7 @@ class C extends B {
     protected get y() { return this.x; }
 >y : string
 >this.x : string
->this : C
+>this : this
 >x : string
 
     protected set y(x) { this.y = this.x; }
@@ -26,23 +26,23 @@ class C extends B {
 >x : string
 >this.y = this.x : string
 >this.y : string
->this : C
+>this : this
 >y : string
 >this.x : string
->this : C
+>this : this
 >x : string
 
     protected foo() { return this.x; }
 >foo : () => string
 >this.x : string
->this : C
+>this : this
 >x : string
 
     protected bar() { return this.foo(); }
 >bar : () => string
 >this.foo() : string
 >this.foo : () => string
->this : C
+>this : this
 >foo : () => string
 
     protected static get y() { return this.x; }

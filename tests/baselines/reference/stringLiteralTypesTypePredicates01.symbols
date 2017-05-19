@@ -1,0 +1,62 @@
+=== tests/cases/conformance/types/stringLiteral/stringLiteralTypesTypePredicates01.ts ===
+type Kind = "A" | "B"
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+
+function kindIs(kind: Kind, is: "A"): kind is "A";
+>kindIs : Symbol(kindIs, Decl(stringLiteralTypesTypePredicates01.ts, 0, 21), Decl(stringLiteralTypesTypePredicates01.ts, 2, 50), Decl(stringLiteralTypesTypePredicates01.ts, 3, 50))
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 2, 16))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+>is : Symbol(is, Decl(stringLiteralTypesTypePredicates01.ts, 2, 27))
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 2, 16))
+
+function kindIs(kind: Kind, is: "B"): kind is "B";
+>kindIs : Symbol(kindIs, Decl(stringLiteralTypesTypePredicates01.ts, 0, 21), Decl(stringLiteralTypesTypePredicates01.ts, 2, 50), Decl(stringLiteralTypesTypePredicates01.ts, 3, 50))
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 3, 16))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+>is : Symbol(is, Decl(stringLiteralTypesTypePredicates01.ts, 3, 27))
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 3, 16))
+
+function kindIs(kind: Kind, is: Kind): boolean {
+>kindIs : Symbol(kindIs, Decl(stringLiteralTypesTypePredicates01.ts, 0, 21), Decl(stringLiteralTypesTypePredicates01.ts, 2, 50), Decl(stringLiteralTypesTypePredicates01.ts, 3, 50))
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 4, 16))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+>is : Symbol(is, Decl(stringLiteralTypesTypePredicates01.ts, 4, 27))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+
+    return kind === is;
+>kind : Symbol(kind, Decl(stringLiteralTypesTypePredicates01.ts, 4, 16))
+>is : Symbol(is, Decl(stringLiteralTypesTypePredicates01.ts, 4, 27))
+}
+
+var x: Kind = undefined;
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+>Kind : Symbol(Kind, Decl(stringLiteralTypesTypePredicates01.ts, 0, 0))
+>undefined : Symbol(undefined)
+
+if (kindIs(x, "A")) {
+>kindIs : Symbol(kindIs, Decl(stringLiteralTypesTypePredicates01.ts, 0, 21), Decl(stringLiteralTypesTypePredicates01.ts, 2, 50), Decl(stringLiteralTypesTypePredicates01.ts, 3, 50))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+
+    let a = x;
+>a : Symbol(a, Decl(stringLiteralTypesTypePredicates01.ts, 11, 7))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+}
+else {
+    let b = x;
+>b : Symbol(b, Decl(stringLiteralTypesTypePredicates01.ts, 14, 7))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+}
+
+if (!kindIs(x, "B")) {
+>kindIs : Symbol(kindIs, Decl(stringLiteralTypesTypePredicates01.ts, 0, 21), Decl(stringLiteralTypesTypePredicates01.ts, 2, 50), Decl(stringLiteralTypesTypePredicates01.ts, 3, 50))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+
+    let c = x;
+>c : Symbol(c, Decl(stringLiteralTypesTypePredicates01.ts, 18, 7))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+}
+else {
+    let d = x;
+>d : Symbol(d, Decl(stringLiteralTypesTypePredicates01.ts, 21, 7))
+>x : Symbol(x, Decl(stringLiteralTypesTypePredicates01.ts, 8, 3))
+}

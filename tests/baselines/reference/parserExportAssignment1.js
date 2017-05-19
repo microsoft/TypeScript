@@ -2,3 +2,5 @@
 export = foo
 
 //// [parserExportAssignment1.js]
+"use strict";
+module.exports = foo;

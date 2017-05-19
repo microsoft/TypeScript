@@ -23,7 +23,7 @@ var A;
         function C() {
         }
         return C;
-    })();
+    }());
     A.C = C;
 })(A || (A = {}));
 var B;
@@ -32,13 +32,13 @@ var B;
         function C() {
         }
         return C;
-    })();
+    }());
     B.C = C;
     var D = (function () {
         function D() {
         }
         return D;
-    })();
+    }());
 })(B || (B = {}));
 var a;
 var b;

@@ -12,4 +12,4 @@ var Foo = (function () {
         this.foo();
     }
     return Foo;
-})();
+}());

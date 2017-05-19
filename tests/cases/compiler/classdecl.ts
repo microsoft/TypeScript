@@ -1,4 +1,5 @@
 // @declaration: true
+// @target: es5
 class a {
     //constructor ();
     constructor (n: number);
@@ -13,7 +14,7 @@ class a {
     public get d() {
         return 30;
     }
-    public set d() {
+    public set d(a: number) {
     }
 
     public static get p2() {

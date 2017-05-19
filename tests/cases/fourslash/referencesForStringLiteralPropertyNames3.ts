@@ -1,15 +1,17 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo2 {
-////    get /*1*/"42"() { return 0; }
-////    set /*2*/42(n) { }
+////    get "[|{| "isDefinition": true |}42|]"() { return 0; }
+////    set [|{| "isDefinition": true |}42|](n) { }
 ////}
 ////
 ////var y: Foo2;
-////y[42];
+////y[[|42|]];
 
-goTo.marker("1");
-verify.referencesCountIs(3);
-
-goTo.marker("2");
-verify.referencesCountIs(3);
+const ranges = test.ranges();
+const [r0, r1, r2] = ranges;
+verify.referenceGroups([r0, r1], [{ definition: '(property) Foo2["42"]: number', ranges }]);
+verify.referenceGroups(r2, [
+    { definition: '(property) Foo2["42"]: number', ranges: [r0, r1] },
+    { definition: '(property) Foo2["42"]: number', ranges: [r2] },
+]);

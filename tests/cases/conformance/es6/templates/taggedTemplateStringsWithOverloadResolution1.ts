@@ -1,7 +1,7 @@
-﻿function foo(strs: string[]): number;
-function foo(strs: string[], x: number): string;
-function foo(strs: string[], x: number, y: number): boolean;
-function foo(strs: string[], x: number, y: string): {};
+﻿function foo(strs: TemplateStringsArray): number;
+function foo(strs: TemplateStringsArray, x: number): string;
+function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
+function foo(strs: TemplateStringsArray, x: number, y: string): {};
 function foo(...stuff: any[]): any {
     return undefined;
 }

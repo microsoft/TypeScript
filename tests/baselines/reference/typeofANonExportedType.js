@@ -52,13 +52,15 @@ module foo {
 export var r13: typeof foo;
 
 //// [typeofANonExportedType.js]
+"use strict";
+exports.__esModule = true;
 var x = 1;
 var y = { foo: '' };
 var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var c2;
 var i2;
 var M;
@@ -68,7 +70,7 @@ var M;
         function C() {
         }
         return C;
-    })();
+    }());
     M.C = C;
 })(M || (M = {}));
 var E;
@@ -76,13 +78,12 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 function foo() { }
-var foo;
 (function (foo) {
     foo.y = 1;
     var C = (function () {
         function C() {
         }
         return C;
-    })();
+    }());
     foo.C = C;
 })(foo || (foo = {}));

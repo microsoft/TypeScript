@@ -41,7 +41,7 @@ var C = (function () {
     function C() {
     }
     return C;
-})();
+}());
 var f = x;
 var g = x;
 var h = x;

@@ -85,14 +85,9 @@
 --------------------------------
 12 >    throw new Error();
 
-    ~~~~~~~~~                                     => Pos: (113 to 121)  SpanInfo: {"start":117,"length":17}
+    ~~~~~~~~~~~~~~~~~~~~~~~                       => Pos: (113 to 135)  SpanInfo: {"start":117,"length":17}
     >throw new Error()
     >:=> (line 12, col 4) to (line 12, col 21)
-12 >    throw new Error();
-
-             ~~~~~~~~~~~~~~                       => Pos: (122 to 135)  SpanInfo: {"start":123,"length":11}
-    >new Error()
-    >:=> (line 12, col 10) to (line 12, col 21)
 --------------------------------
 13 >}
 
@@ -173,45 +168,21 @@
     >:=> (line 23, col 4) to (line 25, col 8)
 23 >    throw (function foo() {
 
-             ~~                                   => Pos: (210 to 211)  SpanInfo: {"start":211,"length":59}
-    >(function foo() {
-    >        new Error(x.toString());
-    >    })()
-    >:=> (line 23, col 10) to (line 25, col 8)
-23 >    throw (function foo() {
-
-               ~~~~~~~~~~~~~~~~~                  => Pos: (212 to 228)  SpanInfo: {"start":237,"length":23}
+             ~~~~~~~~~~~~~~~~~~~                  => Pos: (210 to 228)  SpanInfo: {"start":237,"length":23}
     >new Error(x.toString())
     >:=> (line 24, col 8) to (line 24, col 31)
 --------------------------------
 24 >        new Error(x.toString());
 
-    ~~~~~~~~~~~~~~~~~~                            => Pos: (229 to 246)  SpanInfo: {"start":237,"length":23}
-    >new Error(x.toString())
-    >:=> (line 24, col 8) to (line 24, col 31)
-24 >        new Error(x.toString());
-
-                      ~~~~~~~~~~~~                => Pos: (247 to 258)  SpanInfo: {"start":247,"length":12}
-    >x.toString()
-    >:=> (line 24, col 18) to (line 24, col 30)
-24 >        new Error(x.toString());
-
-                                  ~~~             => Pos: (259 to 261)  SpanInfo: {"start":237,"length":23}
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~             => Pos: (229 to 261)  SpanInfo: {"start":237,"length":23}
     >new Error(x.toString())
     >:=> (line 24, col 8) to (line 24, col 31)
 --------------------------------
 25 >    })();
 
-    ~~~~~                                         => Pos: (262 to 266)  SpanInfo: {"start":266,"length":1}
+    ~~~~~~~~~~                                    => Pos: (262 to 271)  SpanInfo: {"start":266,"length":1}
     >}
     >:=> (line 25, col 4) to (line 25, col 5)
-25 >    })();
-
-         ~~~~~                                    => Pos: (267 to 271)  SpanInfo: {"start":211,"length":59}
-    >(function foo() {
-    >        new Error(x.toString());
-    >    })()
-    >:=> (line 23, col 10) to (line 25, col 8)
 --------------------------------
 26 >}
 

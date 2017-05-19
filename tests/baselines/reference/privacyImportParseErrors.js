@@ -357,6 +357,8 @@ export module m3 {
 }
 
 //// [privacyImportParseErrors.js]
+"use strict";
+exports.__esModule = true;
 var m1;
 (function (m1) {
     var m1_M1_public;
@@ -365,7 +367,7 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M1_public.c1 = c1;
         function f1() {
             return new c1;
@@ -379,7 +381,7 @@ var m1;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m1_M2_private.c1 = c1;
         function f1() {
             return new c1;
@@ -432,7 +434,7 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M1_public.c1 = c1;
         function f1() {
             return new c1;
@@ -446,7 +448,7 @@ var m2;
             function c1() {
             }
             return c1;
-        })();
+        }());
         m2_M2_private.c1 = c1;
         function f1() {
             return new c1;
@@ -498,7 +500,7 @@ var glo_M1_public;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M1_public.c1 = c1;
     function f1() {
         return new c1;
@@ -512,7 +514,7 @@ var glo_M3_private;
         function c1() {
         }
         return c1;
-    })();
+    }());
     glo_M3_private.c1 = c1;
     function f1() {
         return new c1;
@@ -559,7 +561,8 @@ var glo_im4_private_v4_private = glo_im4_private.f1();
 // Parse error to export module
 exports.glo_im1_public = glo_M1_public;
 exports.glo_im2_public = glo_M3_private;
-var m2;
+exports.glo_im3_public = require("glo_M2_public");
+exports.glo_im4_public = require("glo_M4_private");
 (function (m2_1) {
     var m4;
     (function (m4) {
