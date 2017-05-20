@@ -8,7 +8,7 @@ function C() {
 C.prototype.m = function() {
 >C.prototype : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
 >C : Symbol(C, Decl(input.js, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es3.d.ts, --, --))
 >m : Symbol(C.m, Decl(input.js, 0, 14), Decl(input.js, 2, 1))
 
     this.nothing();

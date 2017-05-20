@@ -47,9 +47,9 @@ export let c = strStr.map(s => s.charCodeAt(0));
 >strStr : Symbol(strStr, Decl(mapOnTupleTypes01.ts, 10, 3))
 >map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
->s.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>s.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es3.d.ts, --, --))
 >s : Symbol(s, Decl(mapOnTupleTypes01.ts, 14, 26))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es3.d.ts, --, --))
 
 export let d = numStr.map(x => x);
 >d : Symbol(d, Decl(mapOnTupleTypes01.ts, 15, 10))

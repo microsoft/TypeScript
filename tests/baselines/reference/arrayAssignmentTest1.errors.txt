@@ -34,17 +34,17 @@ tests/cases/compiler/arrayAssignmentTest1.ts(77,1): error TS2322: Type 'I1[]' is
   Type 'I1' is not assignable to type 'C3'.
     Property 'CM3M1' is missing in type 'I1'.
 tests/cases/compiler/arrayAssignmentTest1.ts(79,1): error TS2322: Type '() => C1' is not assignable to type 'any[]'.
-  Property 'push' is missing in type '() => C1'.
+  Property 'indexOf' is missing in type '() => C1'.
 tests/cases/compiler/arrayAssignmentTest1.ts(80,1): error TS2322: Type '{ one: number; }' is not assignable to type 'any[]'.
-  Property 'length' is missing in type '{ one: number; }'.
+  Property 'indexOf' is missing in type '{ one: number; }'.
 tests/cases/compiler/arrayAssignmentTest1.ts(82,1): error TS2322: Type 'C1' is not assignable to type 'any[]'.
-  Property 'length' is missing in type 'C1'.
+  Property 'indexOf' is missing in type 'C1'.
 tests/cases/compiler/arrayAssignmentTest1.ts(83,1): error TS2322: Type 'C2' is not assignable to type 'any[]'.
-  Property 'length' is missing in type 'C2'.
+  Property 'indexOf' is missing in type 'C2'.
 tests/cases/compiler/arrayAssignmentTest1.ts(84,1): error TS2322: Type 'C3' is not assignable to type 'any[]'.
-  Property 'length' is missing in type 'C3'.
+  Property 'indexOf' is missing in type 'C3'.
 tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2322: Type 'I1' is not assignable to type 'any[]'.
-  Property 'length' is missing in type 'I1'.
+  Property 'indexOf' is missing in type 'I1'.
 
 
 ==== tests/cases/compiler/arrayAssignmentTest1.ts (19 errors) ====
@@ -177,25 +177,25 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2322: Type 'I1' is n
     arr_any = f1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type '() => C1' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'push' is missing in type '() => C1'.
+!!! error TS2322:   Property 'indexOf' is missing in type '() => C1'.
     arr_any = o1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type '{ one: number; }' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'length' is missing in type '{ one: number; }'.
+!!! error TS2322:   Property 'indexOf' is missing in type '{ one: number; }'.
     arr_any = a1; // should be ok - is
     arr_any = c1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type 'C1' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'length' is missing in type 'C1'.
+!!! error TS2322:   Property 'indexOf' is missing in type 'C1'.
     arr_any = c2; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type 'C2' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'length' is missing in type 'C2'.
+!!! error TS2322:   Property 'indexOf' is missing in type 'C2'.
     arr_any = c3; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type 'C3' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'length' is missing in type 'C3'.
+!!! error TS2322:   Property 'indexOf' is missing in type 'C3'.
     arr_any = i1; // should be an error - is
     ~~~~~~~
 !!! error TS2322: Type 'I1' is not assignable to type 'any[]'.
-!!! error TS2322:   Property 'length' is missing in type 'I1'.
+!!! error TS2322:   Property 'indexOf' is missing in type 'I1'.

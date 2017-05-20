@@ -40,7 +40,7 @@ class C3 {
 >b : [this, this]
 
     c: this | Date;
->c : this | Date
+>c : Date | this
 >Date : Date
 
     d: this & Date;

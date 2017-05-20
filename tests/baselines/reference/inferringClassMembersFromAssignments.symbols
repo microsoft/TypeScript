@@ -4,9 +4,9 @@ class C {
 
     constructor() {
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inConstructor = 0;
 >this.inConstructor : Symbol(C.inConstructor, Decl(a.js, 2, 28), Decl(a.js, 5, 14))
@@ -28,9 +28,9 @@ class C {
 >method : Symbol(C.method, Decl(a.js, 9, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inMethod = 0;
 >this.inMethod : Symbol(C.inMethod, Decl(a.js, 11, 28), Decl(a.js, 14, 14))
@@ -52,9 +52,9 @@ class C {
 >action : Symbol(action, Decl(a.js, 19, 11))
 
             if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
                 this.inNestedArrowFunction = 0;
 >this.inNestedArrowFunction : Symbol(C.inNestedArrowFunction, Decl(a.js, 20, 32), Decl(a.js, 23, 18))
@@ -73,9 +73,9 @@ class C {
 >get : Symbol(C.get, Decl(a.js, 27, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inGetter = 0;
 >this.inGetter : Symbol(C.inGetter, Decl(a.js, 29, 28), Decl(a.js, 32, 14))
@@ -97,9 +97,9 @@ class C {
 >set : Symbol(C.set, Decl(a.js, 36, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inSetter = 0;
 >this.inSetter : Symbol(C.inSetter, Decl(a.js, 38, 28), Decl(a.js, 41, 14))
@@ -117,9 +117,9 @@ class C {
 >prop : Symbol(C.prop, Decl(a.js, 44, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inPropertyDeclaration = 0;
 >this.inPropertyDeclaration : Symbol(C.inPropertyDeclaration, Decl(a.js, 46, 28), Decl(a.js, 49, 14))
@@ -137,9 +137,9 @@ class C {
 >method : Symbol(C.method, Decl(a.js, 52, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inStaticMethod = 0;
 >this.inStaticMethod : Symbol(C.inStaticMethod, Decl(a.js, 54, 28), Decl(a.js, 57, 14))
@@ -157,9 +157,9 @@ class C {
 >action : Symbol(action, Decl(a.js, 61, 11))
 
             if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
                 this.inStaticNestedArrowFunction = 0;
 >this.inStaticNestedArrowFunction : Symbol(C.inStaticNestedArrowFunction, Decl(a.js, 62, 32), Decl(a.js, 65, 18))
@@ -178,9 +178,9 @@ class C {
 >get : Symbol(C.get, Decl(a.js, 69, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inStaticGetter = 0;
 >this.inStaticGetter : Symbol(C.inStaticGetter, Decl(a.js, 71, 28), Decl(a.js, 74, 14))
@@ -198,9 +198,9 @@ class C {
 >set : Symbol(C.set, Decl(a.js, 77, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inStaticSetter = 0;
 >this.inStaticSetter : Symbol(C.inStaticSetter, Decl(a.js, 79, 28), Decl(a.js, 82, 14))
@@ -218,9 +218,9 @@ class C {
 >prop : Symbol(C.prop, Decl(a.js, 85, 5))
 
         if (Math.random()) {
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es3.d.ts, --, --))
 
             this.inStaticPropertyDeclaration = 0;
 >this.inStaticPropertyDeclaration : Symbol(C.inStaticPropertyDeclaration, Decl(a.js, 87, 28), Decl(a.js, 90, 14))

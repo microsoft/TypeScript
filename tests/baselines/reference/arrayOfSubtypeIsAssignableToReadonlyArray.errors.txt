@@ -1,13 +1,16 @@
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(13,1): error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
-  Types of property 'concat' are incompatible.
-    Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
-      Type 'A[]' is not assignable to type 'B[]'.
-        Type 'A' is not assignable to type 'B'.
-          Property 'b' is missing in type 'A'.
+  Types of property 'every' are incompatible.
+    Type '{ (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean): boolean; (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: A, index: number, array: A[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean): boolean; (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: Z): boolean; }'.
+      Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'A' is not assignable to type 'B'.
+            Property 'b' is missing in type 'A'.
 tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error TS2322: Type 'C<A>' is not assignable to type 'ReadonlyArray<B>'.
-  Types of property 'concat' are incompatible.
-    Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
-      Type 'A[]' is not assignable to type 'B[]'.
+  Types of property 'every' are incompatible.
+    Type '{ (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean): boolean; (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: A, index: number, array: A[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean): boolean; (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: Z): boolean; }'.
+      Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'A' is not assignable to type 'B'.
 
 
 ==== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts (2 errors) ====
@@ -26,11 +29,12 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
     rrb = ara; // error: 'A' is not assignable to 'B'
     ~~~
 !!! error TS2322: Type 'A[]' is not assignable to type 'ReadonlyArray<B>'.
-!!! error TS2322:   Types of property 'concat' are incompatible.
-!!! error TS2322:     Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
-!!! error TS2322:       Type 'A[]' is not assignable to type 'B[]'.
-!!! error TS2322:         Type 'A' is not assignable to type 'B'.
-!!! error TS2322:           Property 'b' is missing in type 'A'.
+!!! error TS2322:   Types of property 'every' are incompatible.
+!!! error TS2322:     Type '{ (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean): boolean; (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: A, index: number, array: A[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean): boolean; (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: Z): boolean; }'.
+!!! error TS2322:       Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:             Property 'b' is missing in type 'A'.
     
     rra = cra;
     rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
@@ -38,7 +42,9 @@ tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts(18,1): error T
     rrb = cra; // error: 'A' is not assignable to 'B'
     ~~~
 !!! error TS2322: Type 'C<A>' is not assignable to type 'ReadonlyArray<B>'.
-!!! error TS2322:   Types of property 'concat' are incompatible.
-!!! error TS2322:     Type '{ (...items: A[][]): A[]; (...items: (A | A[])[]): A[]; }' is not assignable to type '{ <U extends ReadonlyArray<B>>(...items: U[]): B[]; (...items: B[][]): B[]; (...items: (B | B[])[]): B[]; }'.
-!!! error TS2322:       Type 'A[]' is not assignable to type 'B[]'.
+!!! error TS2322:   Types of property 'every' are incompatible.
+!!! error TS2322:     Type '{ (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean): boolean; (callbackfn: (this: void, value: A, index: number, array: A[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: A, index: number, array: A[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean): boolean; (callbackfn: (this: void, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: B, index: number, array: ReadonlyArray<B>) => boolean, thisArg: Z): boolean; }'.
+!!! error TS2322:       Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+!!! error TS2322:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2322:           Type 'A' is not assignable to type 'B'.
     

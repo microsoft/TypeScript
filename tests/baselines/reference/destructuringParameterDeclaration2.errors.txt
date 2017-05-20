@@ -2,10 +2,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(7,29): error TS1005: ',' expected.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(8,4): error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-  Types of property 'pop' are incompatible.
-    Type '() => string | number | string[][]' is not assignable to type '() => number | string[][]'.
-      Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
-        Type 'string' is not assignable to type 'number | string[][]'.
+  Types of property 'every' are incompatible.
+    Type '{ (callbackfn: (this: void, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean): boolean; (callbackfn: (this: void, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: number | string[][], index: number, array: (number | string[][])[]) => boolean): boolean; (callbackfn: (this: void, value: number | string[][], index: number, array: (number | string[][])[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: number | string[][], index: number, array: (number | string[][])[]) => boolean, thisArg: Z): boolean; }'.
+      Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+        Types of parameters 'value' and 'value' are incompatible.
+          Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
+            Type 'string' is not assignable to type 'number | string[][]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,8): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(16,16): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(23,14): error TS2345: Argument of type '{ x: string; y: boolean; }' is not assignable to parameter of type '{ x: number; y: any; }'.
@@ -64,10 +66,12 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     a0([1, 2, [["world"]], "string"]);  // Error
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[number, number, string[][], string]' is not assignable to parameter of type '[number, number, string[][]]'.
-!!! error TS2345:   Types of property 'pop' are incompatible.
-!!! error TS2345:     Type '() => string | number | string[][]' is not assignable to type '() => number | string[][]'.
-!!! error TS2345:       Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
-!!! error TS2345:         Type 'string' is not assignable to type 'number | string[][]'.
+!!! error TS2345:   Types of property 'every' are incompatible.
+!!! error TS2345:     Type '{ (callbackfn: (this: void, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean): boolean; (callbackfn: (this: void, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: string | number | string[][], index: number, array: (string | number | string[][])[]) => boolean, thisArg: Z): boolean; }' is not assignable to type '{ (callbackfn: (this: void, value: number | string[][], index: number, array: (number | string[][])[]) => boolean): boolean; (callbackfn: (this: void, value: number | string[][], index: number, array: (number | string[][])[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: number | string[][], index: number, array: (number | string[][])[]) => boolean, thisArg: Z): boolean; }'.
+!!! error TS2345:       Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
+!!! error TS2345:         Types of parameters 'value' and 'value' are incompatible.
+!!! error TS2345:           Type 'string | number | string[][]' is not assignable to type 'number | string[][]'.
+!!! error TS2345:             Type 'string' is not assignable to type 'number | string[][]'.
     
     
     // If the declaration includes an initializer expression (which is permitted only

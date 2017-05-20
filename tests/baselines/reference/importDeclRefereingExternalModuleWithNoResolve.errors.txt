@@ -1,8 +1,26 @@
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+lib.d.ts(36,50): error TS2304: Cannot find name 'PropertyDescriptor'.
+lib.d.ts(56,42): error TS2304: Cannot find name 'PropertyDescriptorMap'.
+lib.d.ts(56,66): error TS2304: Cannot find name 'ThisType'.
+lib.d.ts(64,51): error TS2304: Cannot find name 'PropertyDescriptor'.
+lib.d.ts(64,72): error TS2304: Cannot find name 'ThisType'.
+lib.d.ts(71,42): error TS2304: Cannot find name 'PropertyDescriptorMap'.
+lib.d.ts(71,66): error TS2304: Cannot find name 'ThisType'.
+lib.d.ts(95,22): error TS2304: Cannot find name 'Readonly'.
 tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(1,20): error TS2307: Cannot find module 'externalModule'.
 tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(2,16): error TS2664: Invalid module name in augmentation, module 'm1' cannot be found.
 tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts(3,26): error TS2307: Cannot find module 'externalModule'.
 
 
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
 ==== tests/cases/compiler/importDeclRefereingExternalModuleWithNoResolve.ts (3 errors) ====
     import b = require("externalModule");
                        ~~~~~~~~~~~~~~~~

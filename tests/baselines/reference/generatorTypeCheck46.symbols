@@ -27,9 +27,9 @@ foo("", function* () {
 
             yield x => x.length
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es3.d.ts, --, --))
 >x : Symbol(x, Decl(generatorTypeCheck46.ts, 5, 17))
->length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es3.d.ts, --, --))
         }
     }
 }, p => undefined); // T is fixed, should be string

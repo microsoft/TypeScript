@@ -12,9 +12,9 @@ for (let i = 0; i < 3; i++) {
 >i : Symbol(i, Decl(classExpressionWithStaticPropertiesES63.ts, 2, 8))
 
     arr.push(class C {
->arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr.push : Symbol(Array.push, Decl(lib.es3.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticPropertiesES63.ts, 1, 5))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es3.d.ts, --, --))
 >C : Symbol(C, Decl(classExpressionWithStaticPropertiesES63.ts, 3, 13))
 
         static x = i;
