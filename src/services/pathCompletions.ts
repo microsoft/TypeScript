@@ -458,7 +458,7 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function createCompletionEntryForModule(name: string, kind: string, replacementSpan: TextSpan): CompletionEntry {
+    function createCompletionEntryForModule(name: string, kind: ScriptElementKind, replacementSpan: TextSpan): CompletionEntry {
         return { name, kind, kindModifiers: ScriptElementKindModifier.none, sortText: name, replacementSpan };
     }
 

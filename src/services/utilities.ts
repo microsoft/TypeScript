@@ -279,7 +279,7 @@ namespace ts {
         }
     }
 
-    export function getNodeKind(node: Node): string {
+    export function getNodeKind(node: Node): ScriptElementKind {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
@@ -326,7 +326,7 @@ namespace ts {
                 return ScriptElementKind.unknown;
         }
 
-        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
+        function getKindOfVariableDeclaration(v: VariableDeclaration): ScriptElementKind {
             return isConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)

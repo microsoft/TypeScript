@@ -698,10 +698,9 @@ namespace ts.server.protocol {
 
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
-     * Kind is taken from HighlightSpanKind type.
      */
     export interface HighlightSpan extends TextSpan {
-        kind: string;
+        kind: HighlightSpanKind;
     }
 
     /**
@@ -838,7 +837,7 @@ namespace ts.server.protocol {
         /**
          * The items's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1352,7 +1351,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1571,7 +1570,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1599,7 +1598,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -2058,7 +2057,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * exact, substring, or prefix.
@@ -2099,7 +2098,7 @@ namespace ts.server.protocol {
         /**
          * Kind of symbol's container symbol (if any).
          */
-        containerKind?: string;
+        containerKind?: ScriptElementKind;
     }
 
     /**
@@ -2172,7 +2171,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -2198,7 +2197,7 @@ namespace ts.server.protocol {
     /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
     export interface NavigationTree {
         text: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];

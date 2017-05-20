@@ -145,7 +145,7 @@ namespace ts.FindAllReferences {
         const { node, name, kind, displayParts } = info;
         const sourceFile = node.getSourceFile();
         return {
-            containerKind: "",
+            containerKind: ScriptElementKind.unknown,
             containerName: "",
             fileName: sourceFile.fileName,
             kind,
@@ -155,7 +155,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function getDefinitionKindAndDisplayParts(symbol: Symbol, node: Node, checker: TypeChecker): { displayParts: SymbolDisplayPart[], kind: string } {
+    function getDefinitionKindAndDisplayParts(symbol: Symbol, node: Node, checker: TypeChecker): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
         const { displayParts, symbolKind } =
             SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, node.getSourceFile(), getContainerNode(node), node);
         return { displayParts, kind: symbolKind };
@@ -186,7 +186,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker): { kind: string, displayParts: SymbolDisplayPart[] } {
+    function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker): { kind: ScriptElementKind, displayParts: SymbolDisplayPart[] } {
         const symbol = checker.getSymbolAtLocation(isDeclaration(node) && node.name ? node.name : node);
         if (symbol) {
             return getDefinitionKindAndDisplayParts(symbol, node, checker);

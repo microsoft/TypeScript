@@ -224,7 +224,7 @@ namespace ts.server {
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
 
-                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
                 })
             };
         }
@@ -265,7 +265,7 @@ namespace ts.server {
                 return {
                     name: entry.name,
                     containerName: entry.containerName || "",
-                    containerKind: entry.containerKind || "",
+                    containerKind: entry.containerKind || ScriptElementKind.unknown,
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
@@ -330,11 +330,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });
@@ -356,11 +356,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });

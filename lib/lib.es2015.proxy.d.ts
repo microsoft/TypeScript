@@ -23,7 +23,7 @@ interface ProxyHandler<T extends object> {
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
-    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor;
+    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor | undefined;
     has? (target: T, p: PropertyKey): boolean;
     get? (target: T, p: PropertyKey, receiver: any): any;
     set? (target: T, p: PropertyKey, value: any, receiver: any): boolean;
