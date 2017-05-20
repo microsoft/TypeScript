@@ -197,6 +197,7 @@ var librarySourceMap = [
     { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
 
     // JavaScript library
+    { target: "lib.es3.d.ts", sources: ["header.d.ts", "es3.d.ts"] },
     { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
@@ -204,6 +205,7 @@ var librarySourceMap = [
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
+    { target: "lib.es3.full.d.ts", sources: ["header.d.ts", "es3.d.ts"].concat(hostsLibrarySources) },
     { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
@@ -1200,7 +1202,7 @@ task("lint", ["build-rules"], () => {
     const fileMatcher = process.env.f || process.env.file || process.env.files;
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es3.d.ts --exclude 'src/lib/*.generated.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
     console.log("Linting: " + cmd);
     jake.exec([cmd], { interactive: true }, () => {
