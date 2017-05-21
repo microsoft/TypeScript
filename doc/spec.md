@@ -3981,6 +3981,16 @@ function drawText({ text, location: [x, y], bold }: DrawTextInfo) {
 }
 ```
 
+It is also possible to use arrays as a destructuring parameter declaration. The individual parameters must be defined within the array, by set up an array of parameters followed by an array with definition, separated by a colon.
+
+```TypeScript
+
+function setPoint([x, y, color]: [number, number, string]) {  
+    // Set point
+}
+```
+
+
 ## <a name="6.5"/>6.5 Generic Functions
 
 A function implementation may include type parameters in its signature (section [3.9.2.1](#3.9.2.1)) and is then called a ***generic function***. Type parameters provide a mechanism for expressing relationships between parameter and return types in call operations. Type parameters have no run-time representation—they are purely a compile-time construct.
