@@ -260,18 +260,9 @@ namespace ts {
                 case SyntaxKind.ExportAssignment:
                     return (<ExportAssignment>node).isExportEquals ? "export=" : "default";
                 case SyntaxKind.BinaryExpression:
-                    switch (getSpecialPropertyAssignmentKind(node as BinaryExpression)) {
-                        case SpecialPropertyAssignmentKind.ModuleExports:
-                            // module.exports = ...
-                            return "export=";
-                        case SpecialPropertyAssignmentKind.ExportsProperty:
-                        case SpecialPropertyAssignmentKind.ThisProperty:
-                        case SpecialPropertyAssignmentKind.Property:
-                            // exports.x = ... or this.y = ...
-                            return ((node as BinaryExpression).left as PropertyAccessExpression).name.text;
-                        case SpecialPropertyAssignmentKind.PrototypeProperty:
-                            // className.prototype.methodName = ...
-                            return (((node as BinaryExpression).left as PropertyAccessExpression).expression as PropertyAccessExpression).name.text;
+                    if (getSpecialPropertyAssignmentKind(node as BinaryExpression) === SpecialPropertyAssignmentKind.ModuleExports) {
+                        // module.exports = ...
+                        return "export=";
                     }
                     Debug.fail("Unknown binary declaration kind");
                     break;
