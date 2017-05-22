@@ -68,7 +68,7 @@ namespace ts {
                 clear: () => str = "",
                 trackSymbol: noop,
                 reportInaccessibleThisError: noop,
-                reportIllegalExtends: noop
+                reportPrivateInBaseOfClassExpression: noop,
             };
         }
 

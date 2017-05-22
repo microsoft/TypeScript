@@ -2456,9 +2456,9 @@
         "category": "Error",
         "code": 4092
     },
-    "'extends' clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
+    "Property '{0}' of exported class expression may not be private or protected.": {
         "category": "Error",
-        "code": 4093
+        "code": 4094
     },
 
     "The current host does not support the '{0}' option.": {
