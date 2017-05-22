@@ -2,10 +2,17 @@
 export var simpleExample = class {
     static getTags() { }
     tags() { }
+    private static ps = -1
+    private p = 12
 }
 export var circularReference = class C {
     static getTags(c: C): C { return c }
     tags(c: C): C { return c }
+}
+
+class Base { }
+export function foo() {
+    return class extends Base { }
 }
 
 // repro from #15066

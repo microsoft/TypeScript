@@ -3154,7 +3154,7 @@ namespace ts {
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                const globalFlagsToPass = globalFlags & (TypeFormatFlags.WriteOwnNameForAnyLike | TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                 let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
 
@@ -3266,7 +3266,9 @@ namespace ts {
                         writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
-                    else if (type.symbol.valueDeclaration && type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                    else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
+                             type.symbol.valueDeclaration &&
+                             type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
                         writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
                     }
                     else {
@@ -3316,7 +3318,9 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) && symbol.valueDeclaration.kind !== SyntaxKind.ClassExpression ||
+                        if (symbol.flags & SymbolFlags.Class &&
+                            !getBaseTypeVariableOfClass(symbol) &&
+                            !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                             writeTypeOfSymbol(type, flags);
                         }
@@ -3348,6 +3352,8 @@ namespace ts {
                                 getObjectFlags(type) & ObjectFlags.Anonymous &&
                                 type.symbol && type.symbol.flags & SymbolFlags.Class;
                             if (isConstructorObject) {
+                                // TODO: something needs to issue accessibility errors (here, I think)
+                                // before writing a literal type that flattens base types, check that the base types are accessible
                                 writeLiteralType(type, flags);
                             }
                             else {
@@ -3473,6 +3479,11 @@ namespace ts {
                     buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
                     buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
+                        if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
+                            (p.name === "prototype" ||
+                             getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected))) {
+                            continue;
+                        }
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
@@ -3487,7 +3498,7 @@ namespace ts {
                             writePropertyWithModifiers(p);
                             writePunctuation(writer, SyntaxKind.ColonToken);
                             writeSpace(writer);
-                            writeType(t, TypeFormatFlags.None);
+                            writeType(t, globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                             writePunctuation(writer, SyntaxKind.SemicolonToken);
                             writer.writeLine();
                         }
