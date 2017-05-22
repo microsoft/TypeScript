@@ -1785,36 +1785,6 @@ namespace ts {
         }
     }
 
-    export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
-        if (!declaration) {
-            return undefined;
-        }
-        if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
-            const lhs = (declaration as BinaryExpression).left;
-            switch (kind) {
-                case SpecialPropertyAssignmentKind.None:
-                case SpecialPropertyAssignmentKind.ModuleExports:
-                    return undefined;
-                case SpecialPropertyAssignmentKind.ExportsProperty:
-                    if (lhs.kind === SyntaxKind.Identifier) {
-                        return (lhs as PropertyAccessExpression).name;
-                    }
-                    else {
-                        return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
-                    }
-                case SpecialPropertyAssignmentKind.ThisProperty:
-                case SpecialPropertyAssignmentKind.Property:
-                    return (lhs as PropertyAccessExpression).name;
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
-            }
-        }
-        else {
-            return (declaration as NamedDeclaration).name;
-        }
-    }
-
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
         return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
@@ -4737,5 +4707,26 @@ namespace ts {
      */
     export function unescapeIdentifier(identifier: string): string {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
+    }
+
+    export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
+        if (!declaration) {
+            return undefined;
+        }
+        if (declaration.kind === SyntaxKind.BinaryExpression) {
+            const expr = declaration as BinaryExpression;
+            switch (getSpecialPropertyAssignmentKind(expr)) {
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Property:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return (expr.left as PropertyAccessExpression).name;
+                default:
+                    return undefined;
+            }
+        }
+        else {
+            return (declaration as NamedDeclaration).name;
+        }
     }
 }
