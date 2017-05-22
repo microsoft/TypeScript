@@ -2345,11 +2345,13 @@ namespace ts.server.protocol {
         body?: NavigationTree;
     }
 
-    export const enum IndentStyle {
-        None = "None",
-        Block = "Block",
-        Smart = "Smart",
+    export namespace IndentStyle {
+        export type None = "None";
+        export type Block = "Block";
+        export type Smart = "Smart";
     }
+
+    export type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
 
     export interface EditorSettings {
         baseIndentSize?: number;
@@ -2447,37 +2449,47 @@ namespace ts.server.protocol {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export const enum JsxEmit {
-        None = "None",
-        Preserve = "Preserve",
-        ReactNative = "ReactNative",
-        React = "React",
+    export namespace JsxEmit {
+        export type None = "None";
+        export type Preserve = "Preserve";
+        export type ReactNative = "ReactNative";
+        export type React = "React";
     }
 
-    export const enum ModuleKind {
-        None = "None",
-        CommonJS = "CommonJS",
-        AMD = "AMD",
-        UMD = "UMD",
-        System = "System",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
+
+    export namespace ModuleKind {
+        export type None = "None";
+        export type CommonJS = "CommonJS";
+        export type AMD = "AMD";
+        export type UMD = "UMD";
+        export type System = "System";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
     }
 
-    export const enum ModuleResolutionKind {
-        Classic = "Classic",
-        Node = "Node",
+    export type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
+
+    export namespace ModuleResolutionKind {
+        export type Classic = "Classic";
+        export type Node = "Node";
     }
 
-    export const enum NewLineKind {
-        Crlf = "Crlf",
-        Lf = "Lf",
+    export type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
+
+    export namespace NewLineKind {
+        export type Crlf = "Crlf";
+        export type Lf = "Lf";
     }
 
-    export const enum ScriptTarget {
-        ES3 = "ES3",
-        ES5 = "ES5",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    export type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
+
+    export namespace ScriptTarget {
+        export type ES3 = "ES3";
+        export type ES5 = "ES5";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
     }
+
+    export type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
