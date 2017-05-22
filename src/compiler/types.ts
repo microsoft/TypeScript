@@ -3356,14 +3356,19 @@ namespace ts {
         isFixed: boolean;
     }
 
+    export const enum InferenceFlags {
+        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
+        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+    }
+
     /* @internal */
     export interface InferenceContext {
         callNode: CallLikeExpression;       // Call expression node for which inferences are made
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
+        flags: InferenceFlags;              // Infer union types for disjoint candidates (otherwise undefinedType)
         mapper?: TypeMapper;                // Type mapper for this inference context
-        inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
-        noInferenceType: Type;              // Type to use for no inferences
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
     }

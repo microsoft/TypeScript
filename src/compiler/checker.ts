@@ -10134,13 +10134,12 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, inferUnionTypes: boolean, noInferenceType: Type): InferenceContext {
+        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, flags: InferenceFlags): InferenceContext {
             return {
                 callNode,
                 signature,
                 inferences: map(signature.typeParameters, createInferenceInfo),
-                inferUnionTypes,
-                noInferenceType
+                flags,
             };
         }
 
@@ -10160,8 +10159,7 @@ namespace ts {
                 callNode: context.callNode,
                 signature: context.signature,
                 inferences: map(context.inferences, cloneInferenceInfo),
-                inferUnionTypes: context.inferUnionTypes,
-                noInferenceType: silentNeverType
+                flags: context.flags | InferenceFlags.NoDefault,
             }
         }
 
@@ -10243,10 +10241,6 @@ namespace ts {
             }
         }
 
-        function inferTypesWithContext(context: InferenceContext, originalSource: Type, originalTarget: Type) {
-            inferTypes(context.inferences, originalSource, originalTarget);
-        }
-
         function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
@@ -10315,13 +10309,10 @@ namespace ts {
                     }
                     for (const inference of inferences) {
                         if (target === inference.typeParameter) {
-                            if (!inference.isFixed) {
-                                // Any inferences that are made to a type parameter in a union type are inferior
-                                // to inferences made to a flat (non-union) type. This is because if we infer to
-                                // T | string[], we really don't know if we should be inferring to T or not (because
-                                // the correct constituent on the target side could be string[]). Therefore, we put
-                                // such inferior inferences into a secondary bucket, and only use them if the primary
-                                // bucket is empty.
+                            // Even if an inference is marked as fixed, we can add candidates from inferences made
+                            // from the return type of generic functions (which only happens when no other candidates
+                            // are present).
+                            if (!inference.isFixed || priority & InferencePriority.ReturnType) {
                                 if (!inference.candidates || priority < inference.priority) {
                                     inference.candidates = [source];
                                     inference.priority = priority;
@@ -10543,15 +10534,21 @@ namespace ts {
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 if (!inference.candidates && context.callNode && isExpression(context.callNode)) {
+                    // We have no inference candidates. Now attempt to get the contextual type for the call
+                    // expression associated with the context, and if a contextual type is available, infer
+                    // from that type to the return type of the call expression. For example, given a
+                    // 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
+                    // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type
+                    // of 'f' to the return type of 'wrap'.
                     const contextualType = getContextualType(context.callNode);
                     if (contextualType) {
+                        // We clone the contextual mapper to avoid disturbing a resolution in progress for an
+                        // outer call expression. Effectively we just want a snapshot of whatever has been
+                        // inferred for any outer call expression so far.
                         const mapper = cloneTypeMapper(getContextualMapper(context.callNode));
                         const instantiatedType = instantiateType(contextualType, mapper);
                         const returnType = getReturnTypeOfSignature(context.signature);
-                        const saveFixed = inference.isFixed;
-                        inference.isFixed = false;
                         inferTypes([inference], instantiatedType, returnType, InferencePriority.ReturnType);
-                        inference.isFixed = saveFixed;
                     }
                 }
                 if (inference.candidates) {
@@ -10564,30 +10561,37 @@ namespace ts {
                         !hasPrimitiveConstraint(inference.typeParameter) &&
                         (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
                     const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
-                    // Infer widened union or supertype, or the unknown type for no common supertype
-                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
+                    // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
+                    // for inferences coming from return types in order to avoid common supertype failures.
+                    const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
+                        getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
-                    // Infer either the default or the empty object type when no inferences were
-                    // made. It is important to remember that in this case, inference still
-                    // succeeds, meaning there is no error for not having inference candidates. An
-                    // inference error only occurs when there are *conflicting* candidates, i.e.
-                    // candidates with no common supertype.
-                    const defaultType = context.noInferenceType === silentNeverType ? undefined : getDefaultFromTypeParameter(inference.typeParameter);
-                    if (defaultType) {
-                        // Instantiate the default type. Any forward reference to a type
-                        // parameter should be instantiated to the empty object type.
-                        inferredType = instantiateType(defaultType,
-                            combineTypeMappers(
-                                createBackreferenceMapper(context.signature.typeParameters, index),
-                                getInferenceMapper(context)));
+                    if (context.flags & InferenceFlags.NoDefault) {
+                        // We use silentNeverType as the wildcard that signals no inferences.
+                        inferredType = silentNeverType;
                     }
                     else {
-                        inferredType = context.noInferenceType;
+                        // Infer either the default or the empty object type when no inferences were
+                        // made. It is important to remember that in this case, inference still
+                        // succeeds, meaning there is no error for not having inference candidates. An
+                        // inference error only occurs when there are *conflicting* candidates, i.e.
+                        // candidates with no common supertype.
+                        const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                        if (defaultType) {
+                            // Instantiate the default type. Any forward reference to a type
+                            // parameter should be instantiated to the empty object type.
+                            inferredType = instantiateType(defaultType,
+                                combineTypeMappers(
+                                    createBackreferenceMapper(context.signature.typeParameters, index),
+                                    getInferenceMapper(context)));
+                        }
+                        else {
+                            inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
+                        }
                     }
-
                     inferenceSucceeded = true;
                 }
                 inference.inferredType = inferredType;
@@ -14872,10 +14876,10 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(/*callNode*/ undefined, signature, /*inferUnionTypes*/ true, /*noInferenceType*/ emptyObjectType);
+            const context = createInferenceContext(/*callNode*/ undefined, signature, InferenceFlags.InferUnionTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
+                inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
@@ -14910,7 +14914,7 @@ namespace ts {
             if (thisType) {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
-                inferTypesWithContext(context, thisArgumentType, thisType);
+                inferTypes(context.inferences, thisArgumentType, thisType);
             }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
@@ -14932,7 +14936,7 @@ namespace ts {
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
-                    inferTypesWithContext(context, argType, paramType);
+                    inferTypes(context.inferences, argType, paramType);
                 }
             }
 
@@ -14947,7 +14951,7 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
-                        inferTypesWithContext(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
+                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
                     }
                 }
             }
@@ -15606,7 +15610,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(node, originalCandidate, /*inferUnionTypes*/ false, /*noInferenceType*/ isInJavaScriptFile(node) ? anyType : emptyObjectType)
+                        ? createInferenceContext(node, originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0)
                         : undefined;
 
                     while (true) {
@@ -16192,7 +16196,7 @@ namespace ts {
                 for (let i = 0; i < len; i++) {
                     const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                     if (declaration.type) {
-                        inferTypesWithContext(mapper.context, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
+                        inferTypes(mapper.context.inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -16278,7 +16282,7 @@ namespace ts {
                 // T in the second overload so that we do not infer Base as a candidate for T
                 // (inferring Base would make type argument inference inconsistent between the two
                 // overloads).
-                inferTypesWithContext(mapper.context, links.type, instantiateType(contextualType, mapper));
+                inferTypes(mapper.context.inferences, links.type, instantiateType(contextualType, mapper));
             }
         }
 
