@@ -7937,6 +7937,10 @@ namespace ts {
             return context.mapper;
         }
 
+        function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
+            return mapper && mapper.context ? getInferenceMapper(cloneInferenceContext(mapper.context)) : mapper;
+        }
+
         function identityMapper(type: Type): Type {
             return type;
         }
@@ -10130,12 +10134,13 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
+        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, inferUnionTypes: boolean, noInferenceType: Type): InferenceContext {
             return {
+                callNode,
                 signature,
                 inferences: map(signature.typeParameters, createInferenceInfo),
                 inferUnionTypes,
-                useAnyForNoInferences
+                noInferenceType
             };
         }
 
@@ -10147,6 +10152,27 @@ namespace ts {
                 priority: undefined,
                 topLevel: true,
                 isFixed: false
+            };
+        }
+
+        function cloneInferenceContext(context: InferenceContext): InferenceContext {
+            return {
+                callNode: context.callNode,
+                signature: context.signature,
+                inferences: map(context.inferences, cloneInferenceInfo),
+                inferUnionTypes: context.inferUnionTypes,
+                noInferenceType: silentNeverType
+            }
+        }
+
+        function cloneInferenceInfo(inference: InferenceInfo): InferenceInfo {
+            return {
+                typeParameter: inference.typeParameter,
+                candidates: inference.candidates && inference.candidates.slice(),
+                inferredType: inference.inferredType,
+                priority: inference.priority,
+                topLevel: inference.topLevel,
+                isFixed: inference.isFixed
             };
         }
 
@@ -10221,10 +10247,9 @@ namespace ts {
             inferTypes(context.inferences, originalSource, originalTarget);
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
-            let priority = 0;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10285,7 +10310,7 @@ namespace ts {
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference.
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType) {
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
                         return;
                     }
                     for (const inference of inferences) {
@@ -10517,8 +10542,19 @@ namespace ts {
             let inferredType = inference.inferredType;
             let inferenceSucceeded: boolean;
             if (!inferredType) {
-                const candidates = inference.candidates;
-                if (candidates) {
+                if (!inference.candidates && context.callNode && isExpression(context.callNode)) {
+                    const contextualType = getContextualType(context.callNode);
+                    if (contextualType) {
+                        const mapper = cloneTypeMapper(getContextualMapper(context.callNode));
+                        const instantiatedType = instantiateType(contextualType, mapper);
+                        const returnType = getReturnTypeOfSignature(context.signature);
+                        const saveFixed = inference.isFixed;
+                        inference.isFixed = false;
+                        inferTypes([inference], instantiatedType, returnType, InferencePriority.ReturnType);
+                        inference.isFixed = saveFixed;
+                    }
+                }
+                if (inference.candidates) {
                     // We widen inferred literal types if
                     // all inferences were made to top-level ocurrences of the type parameter, and
                     // the type parameter has no constraint or its constraint includes no primitive or literal types, and
@@ -10527,7 +10563,7 @@ namespace ts {
                     const widenLiteralTypes = inference.topLevel &&
                         !hasPrimitiveConstraint(inference.typeParameter) &&
                         (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-                    const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
+                    const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
                     // Infer widened union or supertype, or the unknown type for no common supertype
                     const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
@@ -10539,7 +10575,7 @@ namespace ts {
                     // succeeds, meaning there is no error for not having inference candidates. An
                     // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
-                    const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                    const defaultType = context.noInferenceType === silentNeverType ? undefined : getDefaultFromTypeParameter(inference.typeParameter);
                     if (defaultType) {
                         // Instantiate the default type. Any forward reference to a type
                         // parameter should be instantiated to the empty object type.
@@ -10549,7 +10585,7 @@ namespace ts {
                                 getInferenceMapper(context)));
                     }
                     else {
-                        inferredType = context.useAnyForNoInferences ? anyType : emptyObjectType;
+                        inferredType = context.noInferenceType;
                     }
 
                     inferenceSucceeded = true;
@@ -14836,7 +14872,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, /*inferUnionTypes*/ true, /*useAnyForNoInferences*/ false);
+            const context = createInferenceContext(/*callNode*/ undefined, signature, /*inferUnionTypes*/ true, /*noInferenceType*/ emptyObjectType);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
@@ -15570,7 +15606,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ isInJavaScriptFile(node))
+                        ? createInferenceContext(node, originalCandidate, /*inferUnionTypes*/ false, /*noInferenceType*/ isInJavaScriptFile(node) ? anyType : emptyObjectType)
                         : undefined;
 
                     while (true) {

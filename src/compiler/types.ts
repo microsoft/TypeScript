@@ -3344,6 +3344,7 @@ namespace ts {
     export const enum InferencePriority {
         NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
         MappedType        = 1 << 1,  // Reverse inference for mapped type
+        ReturnType        = 1 << 2,  // Inference made from return type of generic function
     }
 
     export interface InferenceInfo {
@@ -3357,11 +3358,12 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext {
+        callNode: CallLikeExpression;       // Call expression node for which inferences are made
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         mapper?: TypeMapper;                // Type mapper for this inference context
         inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
-        useAnyForNoInferences: boolean;     // Use any instead of {} for no inferences
+        noInferenceType: Type;              // Type to use for no inferences
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
     }
