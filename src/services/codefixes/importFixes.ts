@@ -523,7 +523,7 @@ namespace ts.codefix {
                             catch (e) { }
                         }
 
-                        return relativeFileName;
+                        return getPackageNameFromAtTypesDirectory(relativeFileName);
                     }
                 }
 
