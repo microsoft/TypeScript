@@ -5,7 +5,7 @@ type MyType = {
 
     arguments: Array<string>
 >arguments : Symbol(arguments, Decl(argumentsAsPropertyName.ts, 1, 15))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 }
 
 declare function use(s: any);

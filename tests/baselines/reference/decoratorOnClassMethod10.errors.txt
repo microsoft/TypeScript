@@ -1,5 +1,5 @@
 tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6): error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
-  Property 'apply' is missing in type 'C'.
+  Property 'bind' is missing in type 'C'.
 
 
 ==== tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts (1 errors) ====
@@ -9,5 +9,5 @@ tests/cases/conformance/decorators/class/method/decoratorOnClassMethod10.ts(4,6)
         @dec method() {}
          ~~~
 !!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'Function'.
-!!! error TS2345:   Property 'apply' is missing in type 'C'.
+!!! error TS2345:   Property 'bind' is missing in type 'C'.
     }

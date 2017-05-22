@@ -1,3 +1,4 @@
+tests/cases/compiler/a.ts(1,21): error TS2307: Cannot find module '@types/foo-bar'.
 tests/cases/compiler/a.ts(1,21): error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.
 
 
@@ -7,8 +8,10 @@ tests/cases/compiler/a.ts(1,21): error TS6137: Cannot import type declaration fi
     }
     
     // This should error
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== tests/cases/compiler/a.ts (2 errors) ====
     import { Foo } from "@types/foo-bar";
+                        ~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module '@types/foo-bar'.
                         ~~~~~~~~~~~~~~~~
 !!! error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.
     

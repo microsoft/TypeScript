@@ -2,7 +2,7 @@ tests/cases/compiler/assignmentToObjectAndFunction.ts(1,5): error TS2322: Type '
   Types of property 'toString' are incompatible.
     Type 'number' is not assignable to type '() => string'.
 tests/cases/compiler/assignmentToObjectAndFunction.ts(8,5): error TS2322: Type '{}' is not assignable to type 'Function'.
-  Property 'apply' is missing in type '{}'.
+  Property 'bind' is missing in type '{}'.
 tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 'typeof bad' is not assignable to type 'Function'.
   Types of property 'apply' are incompatible.
     Type 'number' is not assignable to type '(this: Function, thisArg: any, argArray?: any) => any'.
@@ -23,7 +23,7 @@ tests/cases/compiler/assignmentToObjectAndFunction.ts(29,5): error TS2322: Type 
     var errFun: Function = {}; // Error for no call signature
         ~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'Function'.
-!!! error TS2322:   Property 'apply' is missing in type '{}'.
+!!! error TS2322:   Property 'bind' is missing in type '{}'.
     
     function foo() { }
     module foo {
