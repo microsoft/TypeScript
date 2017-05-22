@@ -2,7 +2,8 @@
  * Declaration module describing the TypeScript Server protocol
  */
 namespace ts.server.protocol {
-    export enum CommandTypes {
+    // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
+    export const enum CommandTypes {
         Brace = "brace",
         /* @internal */
         BraceFull = "brace-full",
