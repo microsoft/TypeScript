@@ -47,6 +47,9 @@ declare namespace ts.server.protocol {
         type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
         type GetCodeFixes = "getCodeFixes";
         type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        type GetApplicableRefactors = "getApplicableRefactors";
+        type GetRefactorCodeActions = "getRefactorCodeActions";
+        type GetRefactorCodeActionsFull = "getRefactorCodeActions-full";
     }
     /**
      * A TypeScript Server message
@@ -287,6 +290,33 @@ declare namespace ts.server.protocol {
          */
         offset: number;
     }
+    type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
+    interface GetApplicableRefactorsRequest extends Request {
+        command: CommandTypes.GetApplicableRefactors;
+        arguments: GetApplicableRefactorsRequestArgs;
+    }
+    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    interface ApplicableRefactorInfo {
+        name: string;
+        description: string;
+    }
+    interface GetApplicableRefactorsResponse extends Response {
+        body?: ApplicableRefactorInfo[];
+    }
+    interface GetRefactorCodeActionsRequest extends Request {
+        command: CommandTypes.GetRefactorCodeActions;
+        arguments: GetRefactorCodeActionsRequestArgs;
+    }
+    type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
+        refactorName: string;
+    };
+    type RefactorCodeActions = {
+        actions: protocol.CodeAction[];
+        renameLocation?: number;
+    };
+    interface GetRefactorCodeActionsResponse extends Response {
+        body: RefactorCodeActions;
+    }
     /**
      * Request for the available codefixes at a specific position.
      */
@@ -294,10 +324,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
-    /**
-     * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-     */
-    interface CodeFixRequestArgs extends FileRequestArgs {
+    interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
          */
@@ -314,6 +341,11 @@ declare namespace ts.server.protocol {
          * The character offset (on the line) for the request (1-based).
          */
         endOffset: number;
+    }
+    /**
+     * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+     */
+    interface CodeFixRequestArgs extends FileRangeRequestArgs {
         /**
          * Errorcodes we want to get the fixes for.
          */
@@ -1782,6 +1814,7 @@ declare namespace ts.server.protocol {
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceAfterTypeAssertion?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
