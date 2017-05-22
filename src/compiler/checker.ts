@@ -1642,6 +1642,12 @@ namespace ts {
                 return;
             }
 
+            if (startsWith(moduleReference, "@types/")) {
+                const diag = Diagnostics.Cannot_import_type_declaration_files_Consider_importing_0_instead_of_1;
+                const withoutAtTypePrefix = removePrefix(moduleReference, "@types/");
+                error(errorNode, diag, withoutAtTypePrefix, moduleReference);
+            }
+
             const ambientModule = tryFindAmbientModule(moduleName, /*withAugmentations*/ true);
             if (ambientModule) {
                 return ambientModule;
@@ -4846,6 +4852,7 @@ namespace ts {
                 return;
             }
             const baseTypeNode = getBaseTypeNodeOfClass(type);
+            const typeArgs = typeArgumentsFromTypeReferenceNode(baseTypeNode);
             let baseType: Type;
             const originalBaseType = baseConstructorType && baseConstructorType.symbol ? getDeclaredTypeOfSymbol(baseConstructorType.symbol) : undefined;
             if (baseConstructorType.symbol && baseConstructorType.symbol.flags & SymbolFlags.Class &&
@@ -4853,7 +4860,7 @@ namespace ts {
                 // When base constructor type is a class with no captured type arguments we know that the constructors all have the same type parameters as the
                 // class and all return the instance type of the class. There is no need for further checks and we can apply the
                 // type arguments in the same manner as a type reference to get the same error reporting experience.
-                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgumentsFromTypeReferenceNode(baseTypeNode));
+                baseType = getTypeFromClassOrInterfaceReference(baseTypeNode, baseConstructorType.symbol, typeArgs);
             }
             else if (baseConstructorType.flags & TypeFlags.Any) {
                 baseType = baseConstructorType;
@@ -7640,11 +7647,11 @@ namespace ts {
                 if (members.has(leftProp.name)) {
                     const rightProp = members.get(leftProp.name);
                     const rightType = getTypeOfSymbol(rightProp);
-                    if (maybeTypeOfKind(rightType, TypeFlags.Undefined) || rightProp.flags & SymbolFlags.Optional) {
+                    if (rightProp.flags & SymbolFlags.Optional) {
                         const declarations: Declaration[] = concatenate(leftProp.declarations, rightProp.declarations);
                         const flags = SymbolFlags.Property | (leftProp.flags & SymbolFlags.Optional);
                         const result = createSymbol(flags, leftProp.name);
-                        result.type = getUnionType([getTypeOfSymbol(leftProp), getTypeWithFacts(rightType, TypeFacts.NEUndefined)]);
+                        result.type = getUnionType([getTypeOfSymbol(leftProp), rightType]);
                         result.leftSpread = leftProp;
                         result.rightSpread = rightProp;
                         result.declarations = declarations;

@@ -1918,21 +1918,19 @@ namespace ts {
         const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
-                return {
-                    isNoDefaultLib: true
-                };
+                return { isNoDefaultLib: true };
             }
             else {
                 const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
-                if (refMatchResult || refLibResult) {
-                    const start = commentRange.pos;
-                    const end = commentRange.end;
+                const match = refMatchResult || refLibResult;
+                if (match) {
+                    const pos = commentRange.pos + match[1].length + match[2].length;
                     return {
                         fileReference: {
-                            pos: start,
-                            end: end,
-                            fileName: (refMatchResult || refLibResult)[3]
+                            pos,
+                            end: pos + match[3].length,
+                            fileName: match[3]
                         },
                         isNoDefaultLib: false,
                         isTypeReferenceDirective: !!refLibResult

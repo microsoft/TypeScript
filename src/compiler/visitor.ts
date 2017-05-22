@@ -516,7 +516,8 @@ namespace ts {
             case SyntaxKind.BinaryExpression:
                 return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
-                    visitNode((<BinaryExpression>node).right, visitor, isExpression));
+                    visitNode((<BinaryExpression>node).right, visitor, isExpression),
+                    visitNode((<BinaryExpression>node).operatorToken, visitor, isToken));
 
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,

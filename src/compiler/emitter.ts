@@ -200,7 +200,9 @@ namespace ts {
             onSetSourceFile,
             substituteNode,
             onBeforeEmitNodeArray,
-            onAfterEmitNodeArray
+            onAfterEmitNodeArray,
+            onBeforeEmitToken,
+            onAfterEmitToken
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -406,7 +408,7 @@ namespace ts {
             // Strict mode reserved words
             // Contextual keywords
             if (isKeyword(kind)) {
-                writeTokenText(kind);
+                writeTokenNode(node);
                 return;
             }
 
@@ -645,7 +647,7 @@ namespace ts {
             }
 
             if (isToken(node)) {
-                writeTokenText(kind);
+                writeTokenNode(node);
                 return;
             }
         }
@@ -672,7 +674,7 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
-                    writeTokenText(kind);
+                    writeTokenNode(node);
                     return;
 
                 // Expressions
@@ -1260,7 +1262,7 @@ namespace ts {
             const operand = node.operand;
             return operand.kind === SyntaxKind.PrefixUnaryExpression
                 && ((node.operator === SyntaxKind.PlusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusPlusToken))
-                || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
+                    || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
         }
 
         function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
@@ -1275,7 +1277,7 @@ namespace ts {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-            writeTokenText(node.operatorToken.kind);
+            writeTokenNode(node.operatorToken);
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -2455,6 +2457,16 @@ namespace ts {
                 : writeTokenText(token, pos);
         }
 
+        function writeTokenNode(node: Node) {
+            if (onBeforeEmitToken) {
+                onBeforeEmitToken(node);
+            }
+            writeTokenText(node.kind);
+            if (onAfterEmitToken) {
+                onAfterEmitToken(node);
+            }
+        }
+
         function writeTokenText(token: SyntaxKind, pos?: number) {
             const tokenString = tokenToString(token);
             write(tokenString);
@@ -2928,9 +2940,9 @@ namespace ts {
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
-        Auto      = 0x00000000,  // No preferred name
+        Auto = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
-        _i        = 0x10000000,  // Use/preference flag for '_i'
+        _i = 0x10000000,  // Use/preference flag for '_i'
     }
 
     const enum ListFormat {

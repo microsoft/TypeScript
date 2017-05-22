@@ -157,7 +157,7 @@ namespace ts.textChanges {
         private changes: Change[] = [];
         private readonly newLineCharacter: string;
 
-        public static fromCodeFixContext(context: CodeFixContext) {
+        public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider: formatting.RulesProvider }) {
             return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
         }
 
@@ -254,9 +254,9 @@ namespace ts.textChanges {
 
         public insertNodeAfter(sourceFile: SourceFile, after: Node, newNode: Node, options: InsertNodeOptions & ConfigurableEnd = {}) {
             if ((isStatementButNotDeclaration(after)) ||
-                 after.kind === SyntaxKind.PropertyDeclaration ||
-                 after.kind === SyntaxKind.PropertySignature ||
-                 after.kind === SyntaxKind.MethodSignature) {
+                after.kind === SyntaxKind.PropertyDeclaration ||
+                after.kind === SyntaxKind.PropertySignature ||
+                after.kind === SyntaxKind.MethodSignature) {
                 // check if previous statement ends with semicolon
                 // if not - insert semicolon to preserve the code from changing the meaning due to ASI
                 if (sourceFile.text.charCodeAt(after.end - 1) !== CharacterCodes.semicolon) {
@@ -481,7 +481,7 @@ namespace ts.textChanges {
             return (options.prefix || "") + text + (options.suffix || "");
         }
 
-        private static normalize(changes: Change[]) {
+        private static normalize(changes: Change[]): Change[] {
             // order changes by start position
             const normalized = stableSort(changes, (a, b) => a.range.pos - b.range.pos);
             // verify that change intervals do not overlap, except possibly at end points.
@@ -560,6 +560,8 @@ namespace ts.textChanges {
         public readonly onEmitNode: PrintHandlers["onEmitNode"];
         public readonly onBeforeEmitNodeArray: PrintHandlers["onBeforeEmitNodeArray"];
         public readonly onAfterEmitNodeArray: PrintHandlers["onAfterEmitNodeArray"];
+        public readonly onBeforeEmitToken: PrintHandlers["onBeforeEmitToken"];
+        public readonly onAfterEmitToken: PrintHandlers["onAfterEmitToken"];
 
         constructor(newLine: string) {
             this.writer = createTextWriter(newLine);
@@ -580,6 +582,16 @@ namespace ts.textChanges {
             this.onAfterEmitNodeArray = nodes => {
                 if (nodes) {
                     setEnd(nodes, this.lastNonTriviaPosition);
+                }
+            };
+            this.onBeforeEmitToken = node => {
+                if (node) {
+                    setPos(node, this.lastNonTriviaPosition);
+                }
+            };
+            this.onAfterEmitToken = node => {
+                if (node) {
+                    setEnd(node, this.lastNonTriviaPosition);
                 }
             };
         }
