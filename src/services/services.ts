@@ -107,6 +107,7 @@ namespace ts {
             scanner.setTextPos(pos);
             while (pos < end) {
                 const token = useJSDocScanner ? scanner.scanJSDocToken() : scanner.scan();
+                Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
                     nodes.push(createNode(token, pos, textPos, this));
@@ -135,10 +136,15 @@ namespace ts {
         }
 
         private createChildren(sourceFile?: SourceFileLike) {
-            let children: Node[];
-            if (this.kind >= SyntaxKind.FirstNode) {
+            if (isJSDocTag(this)) {
+                /** Don't add trivia for "tokens" since this is in a comment. */
+                const children: Node[] = [];
+                this.forEachChild(child => { children.push(child); });
+                this._children = children;
+            }
+            else if (this.kind >= SyntaxKind.FirstNode) {
+                const children: Node[] = [];
                 scanner.setText((sourceFile || this.getSourceFile()).text);
-                children = [];
                 let pos = this.pos;
                 const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
                 const processNode = (node: Node) => {
@@ -155,7 +161,7 @@ namespace ts {
                     if (pos < nodes.pos) {
                         pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
                     }
-                    children.push(this.createSyntaxList(<NodeArray<Node>>nodes));
+                    children.push(this.createSyntaxList(nodes));
                     pos = nodes.end;
                 };
                 // jsDocComments need to be the first children
@@ -173,8 +179,11 @@ namespace ts {
                     this.addSyntheticNodes(children, pos, this.end);
                 }
                 scanner.setText(undefined);
+                this._children = children;
             }
-            this._children = children || emptyArray;
+            else {
+                this._children = emptyArray;
+            }
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
@@ -215,7 +224,7 @@ namespace ts {
             return child.kind < SyntaxKind.FirstNode ? child : child.getLastToken(sourceFile);
         }
 
-        public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T {
+        public forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T {
             return forEachChild(this, cbNode, cbNodeArray);
         }
     }
@@ -1356,7 +1365,7 @@ namespace ts {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
-            const node = getTouchingPropertyName(sourceFile, position);
+            const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (node === sourceFile) {
                 return undefined;
             }
@@ -1543,7 +1552,7 @@ namespace ts {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
 
             // Get node at the location
-            const node = getTouchingPropertyName(sourceFile, startPos);
+            const node = getTouchingPropertyName(sourceFile, startPos, /*includeJsDocComment*/ false);
 
             if (node === sourceFile) {
                 return;
@@ -1654,7 +1663,7 @@ namespace ts {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const result: TextSpan[] = [];
 
-            const token = getTouchingToken(sourceFile, position);
+            const token = getTouchingToken(sourceFile, position, /*includeJsDocComment*/ false);
 
             if (token.getStart(sourceFile) === position) {
                 const matchKind = getMatchingTokenKind(token);
@@ -1856,7 +1865,6 @@ namespace ts {
 
                     // OK, we have found a match in the file.  This is only an acceptable match if
                     // it is contained within a comment.
-
                     if (!isInComment(sourceFile, matchPosition)) {
                         continue;
                     }

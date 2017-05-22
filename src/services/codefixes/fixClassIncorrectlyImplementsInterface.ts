@@ -8,7 +8,7 @@ namespace ts.codefix {
     function getActionForClassLikeIncorrectImplementsInterface(context: CodeFixContext): CodeAction[] | undefined {
         const sourceFile = context.sourceFile;
         const start = context.span.start;
-        const token = getTokenAtPosition(sourceFile, start);
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
 
         const classDeclaration = getContainingClass(token);
