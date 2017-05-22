@@ -22327,6 +22327,11 @@ namespace ts {
                 }
             }
 
+            if (entityName.parent!.kind === SyntaxKind.JSDocParameterTag) {
+                const parameter = ts.getParameterFromJSDoc(entityName.parent as JSDocParameterTag);
+                return parameter && parameter.symbol;
+            }
+
             if (isPartOfExpression(entityName)) {
                 if (nodeIsMissing(entityName)) {
                     // Missing entity name.

@@ -354,7 +354,7 @@ namespace ts.Completions {
         let requestJsDocTag = false;
 
         let start = timestamp();
-        const currentToken = getTokenAtPosition(sourceFile, position);
+        const currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         log("getCompletionData: Get current token: " + (timestamp() - start));
 
         start = timestamp();
@@ -449,7 +449,7 @@ namespace ts.Completions {
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
 
-        let location = getTouchingPropertyName(sourceFile, position);
+        let location = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         if (contextToken) {
             // Bail out if this is a known invalid completion location
             if (isCompletionListBlocker(contextToken)) {

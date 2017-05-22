@@ -1599,7 +1599,7 @@ namespace ts {
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
-                cache = concatenate(cache, getJSDocParameterTags(node));
+                cache = concatenate(cache, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
             if (isVariableLike(node) && node.initializer) {
@@ -1610,11 +1610,8 @@ namespace ts {
         }
     }
 
-    export function getJSDocParameterTags(param: Node): JSDocParameterTag[] {
-        if (!isParameter(param)) {
-            return undefined;
-        }
-        const func = param.parent as FunctionLikeDeclaration;
+    export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] {
+        const func = param.parent;
         const tags = getJSDocTags(func, SyntaxKind.JSDocParameterTag) as JSDocParameterTag[];
         if (!param.name) {
             // this is an anonymous jsdoc param from a `function(type1, type2): type3` specification
@@ -1635,10 +1632,22 @@ namespace ts {
         }
     }
 
+    /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
+    export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
+        const name = node.parameterName.text;
+        const grandParent = node.parent!.parent!;
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        if (!isFunctionLike(grandParent)) {
+            return undefined;
+        }
+        return find(grandParent.parameters, p =>
+            p.name.kind === SyntaxKind.Identifier && p.name.text === name);
+    }
+
     export function getJSDocType(node: Node): JSDocType {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTags(node);
+            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
             if (paramTags) {
                 tag = find(paramTags, tag => !!tag.typeExpression);
             }

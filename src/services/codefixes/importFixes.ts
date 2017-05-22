@@ -128,7 +128,7 @@ namespace ts.codefix {
         const allSourceFiles = context.program.getSourceFiles();
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
 
-        const token = getTokenAtPosition(sourceFile, context.span.start);
+        const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const name = token.getText();
         const symbolIdActionMap = new ImportCodeActionMap();
 
