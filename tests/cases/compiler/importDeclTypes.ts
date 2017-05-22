@@ -5,5 +5,5 @@ export interface Foo {
 }
 
 // This should error
-// @filename: a.ts
+// @filename: /a.ts
 import { Foo } from "@types/foo-bar";
