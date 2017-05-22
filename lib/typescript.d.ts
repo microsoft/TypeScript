@@ -491,6 +491,7 @@ declare namespace ts {
     type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
+        name?: DeclarationName;
     }
     interface NamedDeclaration extends Declaration {
         name?: DeclarationName;

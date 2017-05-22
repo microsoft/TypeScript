@@ -482,6 +482,7 @@ declare namespace ts {
     type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
     interface Declaration extends Node {
         _declarationBrand: any;
+        name?: DeclarationName;
     }
     interface NamedDeclaration extends Declaration {
         name?: DeclarationName;
@@ -4470,6 +4471,7 @@ declare namespace ts.server {
         throttleWaitMilliseconds?: number;
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
+        allowLocalPluginLoads?: boolean;
     }
     class Session implements EventSender {
         private readonly gcTimer;
@@ -5048,6 +5050,7 @@ declare namespace ts.server {
         throttleWaitMilliseconds?: number;
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
+        allowLocalPluginLoads?: boolean;
     }
     class ProjectService {
         readonly typingsCache: TypingsCache;
@@ -5077,6 +5080,7 @@ declare namespace ts.server {
         private readonly eventHandler?;
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
+        readonly allowLocalPluginLoads: boolean;
         constructor(opts: ProjectServiceOptions);
         ensureInferredProjectsUpToDate_TestOnly(): void;
         getCompilerOptionsForInferredProjects(): CompilerOptions;
