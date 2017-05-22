@@ -12,7 +12,7 @@ namespace ts.refactor {
 
     function isApplicable(context: RefactorContext): boolean {
         const start = context.startPosition;
-        const node = getTokenAtPosition(context.file, start);
+        const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
         let symbol = checker.getSymbolAtLocation(node);
 
@@ -27,7 +27,7 @@ namespace ts.refactor {
         const start = context.startPosition;
         const sourceFile = context.file;
         const checker = context.program.getTypeChecker();
-        const token = getTokenAtPosition(sourceFile, start);
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
         const ctorSymbol = checker.getSymbolAtLocation(token);
         const newLine = context.rulesProvider.getFormatOptions().newLineCharacter;
 
