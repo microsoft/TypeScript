@@ -1,17 +1,16 @@
-//// [emitClassExpressionInDeclarationFile.ts]
-export var simpleExample = class {
+//// [emitClassExpressionInDeclarationFile2.ts]
+export var noPrivates = class {
     static getTags() { }
     tags() { }
-}
-export var circularReference = class C {
-    static getTags(c: C): C { return c }
-    tags(c: C): C { return c }
+    private static ps = -1
+    private p = 12
 }
 
-// repro from #15066
+// altered repro from #15066 to add private property
 export class FooItem {
     foo(): void { }
     name?: string;
+    private property = "capitalism"
 }
 
 export type Constructor<T> = new(...args: any[]) => T;
@@ -30,7 +29,7 @@ Test.getTags()
 test.tags();
 
 
-//// [emitClassExpressionInDeclarationFile.js]
+//// [emitClassExpressionInDeclarationFile2.js]
 "use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -43,23 +42,20 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.simpleExample = (function () {
-    function class_1() {
-    }
-    class_1.getTags = function () { };
-    class_1.prototype.tags = function () { };
-    return class_1;
-}());
-exports.circularReference = (function () {
-    function C() {
-    }
-    C.getTags = function (c) { return c; };
-    C.prototype.tags = function (c) { return c; };
-    return C;
-}());
-// repro from #15066
+exports.noPrivates = (_a = (function () {
+        function class_1() {
+            this.p = 12;
+        }
+        class_1.getTags = function () { };
+        class_1.prototype.tags = function () { };
+        return class_1;
+    }()),
+    _a.ps = -1,
+    _a);
+// altered repro from #15066 to add private property
 var FooItem = (function () {
     function FooItem() {
+        this.property = "capitalism";
     }
     FooItem.prototype.foo = function () { };
     return FooItem;
@@ -88,45 +84,4 @@ exports.Test = Test;
 var test = new Test();
 Test.getTags();
 test.tags();
-
-
-//// [emitClassExpressionInDeclarationFile.d.ts]
-export declare var simpleExample: {
-    new (): {
-        tags(): void;
-    };
-    getTags(): void;
-};
-export declare var circularReference: {
-    new (): {
-        tags(c: any): any;
-    };
-    getTags(c: {
-        tags(c: any): any;
-    }): {
-        tags(c: any): any;
-    };
-};
-export declare class FooItem {
-    foo(): void;
-    name?: string;
-}
-export declare type Constructor<T> = new (...args: any[]) => T;
-export declare function WithTags<T extends Constructor<FooItem>>(Base: T): {
-    new (...args: any[]): {
-        tags(): void;
-        foo(): void;
-        name?: string;
-    };
-    getTags(): void;
-} & T;
-declare const Test_base: {
-    new (...args: any[]): {
-        tags(): void;
-        foo(): void;
-        name?: string;
-    };
-    getTags(): void;
-} & typeof FooItem;
-export declare class Test extends Test_base {
-}
+var _a;

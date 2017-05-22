@@ -1,17 +1,16 @@
 // @declaration: true
-export var simpleExample = class {
+export var noPrivates = class {
     static getTags() { }
     tags() { }
-}
-export var circularReference = class C {
-    static getTags(c: C): C { return c }
-    tags(c: C): C { return c }
+    private static ps = -1
+    private p = 12
 }
 
-// repro from #15066
+// altered repro from #15066 to add private property
 export class FooItem {
     foo(): void { }
     name?: string;
+    private property = "capitalism"
 }
 
 export type Constructor<T> = new(...args: any[]) => T;
