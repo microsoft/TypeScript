@@ -286,7 +286,7 @@ namespace ts {
 
     export interface ClassifiedSpan {
         textSpan: TextSpan;
-        classificationType: string; // ClassificationTypeNames
+        classificationType: ClassificationTypeNames;
     }
 
     /**
@@ -804,43 +804,43 @@ namespace ts {
         jsxAttribute = "JSX attribute",
     }
 
-    export namespace ScriptElementKindModifier {
-        export const none = "";
-        export const publicMemberModifier = "public";
-        export const privateMemberModifier = "private";
-        export const protectedMemberModifier = "protected";
-        export const exportedModifier = "export";
-        export const ambientModifier = "declare";
-        export const staticModifier = "static";
-        export const abstractModifier = "abstract";
+    export const enum ScriptElementKindModifier {
+        none = "",
+        publicMemberModifier = "public",
+        privateMemberModifier = "private",
+        protectedMemberModifier = "protected",
+        exportedModifier = "export",
+        ambientModifier = "declare",
+        staticModifier = "static",
+        abstractModifier = "abstract",
     }
 
-    export class ClassificationTypeNames {
-        public static comment = "comment";
-        public static identifier = "identifier";
-        public static keyword = "keyword";
-        public static numericLiteral = "number";
-        public static operator = "operator";
-        public static stringLiteral = "string";
-        public static whiteSpace = "whitespace";
-        public static text = "text";
+    export const enum ClassificationTypeNames {
+        comment = "comment",
+        identifier = "identifier",
+        keyword = "keyword",
+        numericLiteral = "number",
+        operator = "operator",
+        stringLiteral = "string",
+        whiteSpace = "whitespace",
+        text = "text",
 
-        public static punctuation = "punctuation";
+        punctuation = "punctuation",
 
-        public static className = "class name";
-        public static enumName = "enum name";
-        public static interfaceName = "interface name";
-        public static moduleName = "module name";
-        public static typeParameterName = "type parameter name";
-        public static typeAliasName = "type alias name";
-        public static parameterName = "parameter name";
-        public static docCommentTagName = "doc comment tag name";
-        public static jsxOpenTagName = "jsx open tag name";
-        public static jsxCloseTagName = "jsx close tag name";
-        public static jsxSelfClosingTagName = "jsx self closing tag name";
-        public static jsxAttribute = "jsx attribute";
-        public static jsxText = "jsx text";
-        public static jsxAttributeStringLiteralValue = "jsx attribute string literal value";
+        className = "class name",
+        enumName = "enum name",
+        interfaceName = "interface name",
+        moduleName = "module name",
+        typeParameterName = "type parameter name",
+        typeAliasName = "type alias name",
+        parameterName = "parameter name",
+        docCommentTagName = "doc comment tag name",
+        jsxOpenTagName = "jsx open tag name",
+        jsxCloseTagName = "jsx close tag name",
+        jsxSelfClosingTagName = "jsx self closing tag name",
+        jsxAttribute = "jsx attribute",
+        jsxText = "jsx text",
+        jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
 
     export const enum ClassificationType {

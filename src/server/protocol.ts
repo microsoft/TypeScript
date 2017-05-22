@@ -2,103 +2,103 @@
  * Declaration module describing the TypeScript Server protocol
  */
 namespace ts.server.protocol {
-    export namespace CommandTypes {
-        export type Brace = "brace";
+    export enum CommandTypes {
+        Brace = "brace",
         /* @internal */
-        export type BraceFull = "brace-full";
-        export type BraceCompletion = "braceCompletion";
-        export type Change = "change";
-        export type Close = "close";
-        export type Completions = "completions";
+        BraceFull = "brace-full",
+        BraceCompletion = "braceCompletion",
+        Change = "change",
+        Close = "close",
+        Completions = "completions",
         /* @internal */
-        export type CompletionsFull = "completions-full";
-        export type CompletionDetails = "completionEntryDetails";
-        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
-        export type Configure = "configure";
-        export type Definition = "definition";
+        CompletionsFull = "completions-full",
+        CompletionDetails = "completionEntryDetails",
+        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
+        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
+        Configure = "configure",
+        Definition = "definition",
         /* @internal */
-        export type DefinitionFull = "definition-full";
-        export type Implementation = "implementation";
+        DefinitionFull = "definition-full",
+        Implementation = "implementation",
         /* @internal */
-        export type ImplementationFull = "implementation-full";
-        export type Exit = "exit";
-        export type Format = "format";
-        export type Formatonkey = "formatonkey";
+        ImplementationFull = "implementation-full",
+        Exit = "exit",
+        Format = "format",
+        Formatonkey = "formatonkey",
         /* @internal */
-        export type FormatFull = "format-full";
+        FormatFull = "format-full",
         /* @internal */
-        export type FormatonkeyFull = "formatonkey-full";
+        FormatonkeyFull = "formatonkey-full",
         /* @internal */
-        export type FormatRangeFull = "formatRange-full";
-        export type Geterr = "geterr";
-        export type GeterrForProject = "geterrForProject";
-        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
-        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
-        export type NavBar = "navbar";
+        FormatRangeFull = "formatRange-full",
+        Geterr = "geterr",
+        GeterrForProject = "geterrForProject",
+        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
+        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        NavBar = "navbar",
         /* @internal */
-        export type NavBarFull = "navbar-full";
-        export type Navto = "navto";
+        NavBarFull = "navbar-full",
+        Navto = "navto",
         /* @internal */
-        export type NavtoFull = "navto-full";
-        export type NavTree = "navtree";
-        export type NavTreeFull = "navtree-full";
-        export type Occurrences = "occurrences";
-        export type DocumentHighlights = "documentHighlights";
+        NavtoFull = "navto-full",
+        NavTree = "navtree",
+        NavTreeFull = "navtree-full",
+        Occurrences = "occurrences",
+        DocumentHighlights = "documentHighlights",
         /* @internal */
-        export type DocumentHighlightsFull = "documentHighlights-full";
-        export type Open = "open";
-        export type Quickinfo = "quickinfo";
+        DocumentHighlightsFull = "documentHighlights-full",
+        Open = "open",
+        Quickinfo = "quickinfo",
         /* @internal */
-        export type QuickinfoFull = "quickinfo-full";
-        export type References = "references";
+        QuickinfoFull = "quickinfo-full",
+        References = "references",
         /* @internal */
-        export type ReferencesFull = "references-full";
-        export type Reload = "reload";
-        export type Rename = "rename";
+        ReferencesFull = "references-full",
+        Reload = "reload",
+        Rename = "rename",
         /* @internal */
-        export type RenameInfoFull = "rename-full";
+        RenameInfoFull = "rename-full",
         /* @internal */
-        export type RenameLocationsFull = "renameLocations-full";
-        export type Saveto = "saveto";
-        export type SignatureHelp = "signatureHelp";
+        RenameLocationsFull = "renameLocations-full",
+        Saveto = "saveto",
+        SignatureHelp = "signatureHelp",
         /* @internal */
-        export type SignatureHelpFull = "signatureHelp-full";
-        export type TypeDefinition = "typeDefinition";
-        export type ProjectInfo = "projectInfo";
-        export type ReloadProjects = "reloadProjects";
-        export type Unknown = "unknown";
-        export type OpenExternalProject = "openExternalProject";
-        export type OpenExternalProjects = "openExternalProjects";
-        export type CloseExternalProject = "closeExternalProject";
+        SignatureHelpFull = "signatureHelp-full",
+        TypeDefinition = "typeDefinition",
+        ProjectInfo = "projectInfo",
+        ReloadProjects = "reloadProjects",
+        Unknown = "unknown",
+        OpenExternalProject = "openExternalProject",
+        OpenExternalProjects = "openExternalProjects",
+        CloseExternalProject = "closeExternalProject",
         /* @internal */
-        export type SynchronizeProjectList = "synchronizeProjectList";
+        SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
-        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
         /* @internal */
-        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
-        export type Cleanup = "cleanup";
+        Cleanup = "cleanup",
         /* @internal */
-        export type OutliningSpans = "outliningSpans";
-        export type TodoComments = "todoComments";
-        export type Indentation = "indentation";
-        export type DocCommentTemplate = "docCommentTemplate";
+        OutliningSpans = "outliningSpans",
+        TodoComments = "todoComments",
+        Indentation = "indentation",
+        DocCommentTemplate = "docCommentTemplate",
         /* @internal */
-        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
         /* @internal */
-        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        NameOrDottedNameSpan = "nameOrDottedNameSpan",
         /* @internal */
-        export type BreakpointStatement = "breakpointStatement";
-        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
-        export type GetCodeFixes = "getCodeFixes";
+        BreakpointStatement = "breakpointStatement",
+        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
+        GetCodeFixes = "getCodeFixes",
         /* @internal */
-        export type GetCodeFixesFull = "getCodeFixes-full";
-        export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        GetCodeFixesFull = "getCodeFixes-full",
+        GetSupportedCodeFixes = "getSupportedCodeFixes",
 
-        export type GetApplicableRefactors = "getApplicableRefactors";
-        export type GetRefactorCodeActions = "getRefactorCodeActions";
-        export type GetRefactorCodeActionsFull = "getRefactorCodeActions-full";
+        GetApplicableRefactors = "getApplicableRefactors",
+        GetRefactorCodeActions = "getRefactorCodeActions",
+        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
     }
 
     /**
