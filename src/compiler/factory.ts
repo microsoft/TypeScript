@@ -1631,14 +1631,14 @@ namespace ts {
             : node;
     }
 
-    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause {
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = <ImportClause>createSynthesizedNode(SyntaxKind.ImportClause);
         node.name = name;
         node.namedBindings = namedBindings;
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
         return node.name !== name
             || node.namedBindings !== namedBindings
             ? updateNode(createImportClause(name, namedBindings), node)
