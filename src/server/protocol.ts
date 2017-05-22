@@ -2416,8 +2416,8 @@ namespace ts.server.protocol {
     }
 
     export const enum NewLineKind {
-        Crlf,
-        Lf,
+        Crlf = "Crlf",
+        Lf = "Lf",
     }
 
     export const enum ScriptTarget {
