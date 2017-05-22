@@ -10159,8 +10159,8 @@ namespace ts {
                 callNode: context.callNode,
                 signature: context.signature,
                 inferences: map(context.inferences, cloneInferenceInfo),
-                flags: context.flags | InferenceFlags.NoDefault,
-            }
+                flags: context.flags | InferenceFlags.NoDefault
+            };
         }
 
         function cloneInferenceInfo(inference: InferenceInfo): InferenceInfo {
@@ -10617,7 +10617,7 @@ namespace ts {
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
-            let result = [];
+            const result: Type[] = [];
             for (let i = 0; i < context.inferences.length; i++) {
                 result.push(getInferredType(context, i));
             }
