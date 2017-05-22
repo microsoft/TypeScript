@@ -134,7 +134,7 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         formatOptions: {
-                            indentStyle: "Block"
+                            indentStyle: protocol.IndentStyle.Block,
                         }
                     }
                 };
@@ -149,11 +149,11 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         options: {
-                            module: "System",
-                            target: "ES5",
-                            jsx: "React",
-                            newLine: "Lf",
-                            moduleResolution: "Node"
+                            module: protocol.ModuleKind.System,
+                            target: protocol.ScriptTarget.ES5,
+                            jsx: protocol.JsxEmit.React,
+                            newLine: protocol.NewLineKind.Lf,
+                            moduleResolution: protocol.ModuleResolutionKind.Node,
                         }
                     }
                 };
