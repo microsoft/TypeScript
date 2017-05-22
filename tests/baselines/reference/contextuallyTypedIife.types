@@ -175,8 +175,8 @@
 // destructuring parameters (with defaults too!)
 (({ q }) => q)({ q : 13 });
 >(({ q }) => q)({ q : 13 }) : number
->(({ q }) => q) : ({q}: { q: number; }) => number
->({ q }) => q : ({q}: { q: number; }) => number
+>(({ q }) => q) : ({ q }: { q: number; }) => number
+>({ q }) => q : ({ q }: { q: number; }) => number
 >q : number
 >q : number
 >{ q : 13 } : { q: number; }
@@ -185,8 +185,8 @@
 
 (({ p = 14 }) => p)({ p : 15 });
 >(({ p = 14 }) => p)({ p : 15 }) : number
->(({ p = 14 }) => p) : ({p}: { p: number; }) => number
->({ p = 14 }) => p : ({p}: { p: number; }) => number
+>(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
+>({ p = 14 }) => p : ({ p }: { p: number; }) => number
 >p : number
 >14 : 14
 >p : number
@@ -196,8 +196,8 @@
 
 (({ r = 17 } = { r: 18 }) => r)({r : 19});
 >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
->(({ r = 17 } = { r: 18 }) => r) : ({r}?: { r: number; }) => number
->({ r = 17 } = { r: 18 }) => r : ({r}?: { r: number; }) => number
+>(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
+>({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
 >r : number
 >17 : 17
 >{ r: 18 } : { r: number; }
@@ -210,8 +210,8 @@
 
 (({ u = 22 } = { u: 23 }) => u)();
 >(({ u = 22 } = { u: 23 }) => u)() : number
->(({ u = 22 } = { u: 23 }) => u) : ({u}?: { u?: number; }) => number
->({ u = 22 } = { u: 23 }) => u : ({u}?: { u?: number; }) => number
+>(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+>({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
 >u : number
 >22 : 22
 >{ u: 23 } : { u?: number; }
