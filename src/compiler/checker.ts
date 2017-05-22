@@ -2279,7 +2279,7 @@ namespace ts {
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const options = { removeComments: true };
             const writer = createTextWriter("");
-            const printer = createPrinter(options, writer);
+            const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
@@ -8668,6 +8668,7 @@ namespace ts {
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
+            let dynamicDisableWeakTypeErrors = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -8944,11 +8945,17 @@ namespace ts {
                 }
             }
 
-            function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+            function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
+                // disable weak-type detection for the main check
+                // unless all of target.types are weak, in which case run weak type detection on the *combined* properties of target
+                // at a minimum, do the first part.
+                // but the thing should be flexible enough to easily do the second part as a separate call
                 for (const targetType of targetTypes) {
+                    dynamicDisableWeakTypeErrors = true;
                     const related = isRelatedTo(source, targetType, reportErrors);
+                    dynamicDisableWeakTypeErrors = false;
                     if (!related) {
                         return Ternary.False;
                     }
@@ -9326,7 +9333,7 @@ namespace ts {
                         }
                     }
                 }
-                if (!foundMatchingProperty && getPropertiesOfType(source).length > 0)  {
+                if (!foundMatchingProperty && !dynamicDisableWeakTypeErrors && getPropertiesOfType(source).length > 0)  {
                     if (reportErrors) {
                         reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
                     }
@@ -10596,7 +10603,7 @@ namespace ts {
             let props = getPropertiesOfType(type);
             return type.flags & TypeFlags.Object &&
                 props.length > 0 &&
-                !forEach(props, p => !(p.flags & SymbolFlags.Optional)) &&
+                every(props, p => !!(p.flags & SymbolFlags.Optional)) &&
                 !getIndexTypeOfType(type, IndexKind.String) &&
                 !getIndexTypeOfType(type, IndexKind.Number);
         }
@@ -22655,12 +22662,12 @@ namespace ts {
                 return symbols;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
-                if ((symbol as SymbolLinks).leftSpread) {
-                    const links = symbol as SymbolLinks;
-                    return [...getRootSymbols(links.leftSpread), ...getRootSymbols(links.rightSpread)];
+                const transient = symbol as TransientSymbol;
+                if (transient.leftSpread) {
+                    return [...getRootSymbols(transient.leftSpread), ...getRootSymbols(transient.rightSpread)];
                 }
-                if ((symbol as SymbolLinks).syntheticOrigin) {
-                    return getRootSymbols((symbol as SymbolLinks).syntheticOrigin);
+                if (transient.syntheticOrigin) {
+                    return getRootSymbols(transient.syntheticOrigin);
                 }
 
                 let target: Symbol;
