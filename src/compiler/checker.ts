@@ -7921,10 +7921,10 @@ namespace ts {
         function getInferenceMapper(context: InferenceContext): TypeMapper {
             if (!context.mapper) {
                 const mapper: TypeMapper = t => {
-                    const typeParameters = context.signature.typeParameters;
-                    for (let i = 0; i < typeParameters.length; i++) {
-                        if (t === typeParameters[i]) {
-                            context.inferences[i].isFixed = true;
+                    const inferences = context.inferences;
+                    for (let i = 0; i < inferences.length; i++) {
+                        if (t === inferences[i].typeParameter) {
+                            inferences[i].isFixed = true;
                             return getInferredType(context, i);
                         }
                     }
@@ -10131,22 +10131,22 @@ namespace ts {
         }
 
         function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
-            const inferences = map(signature.typeParameters, createTypeInferencesObject);
             return {
                 signature,
+                inferences: map(signature.typeParameters, createInferenceInfo),
                 inferUnionTypes,
-                inferences,
-                inferredTypes: new Array(signature.typeParameters.length),
                 useAnyForNoInferences
             };
         }
 
-        function createTypeInferencesObject(): TypeInferences {
+        function createInferenceInfo(typeParameter: TypeParameter): InferenceInfo {
             return {
-                primary: undefined,
-                secondary: undefined,
+                typeParameter,
+                candidates: undefined,
+                inferredType: undefined,
+                priority: undefined,
                 topLevel: true,
-                isFixed: false,
+                isFixed: false
             };
         }
 
@@ -10183,10 +10183,9 @@ namespace ts {
             if (properties.length === 0 && !indexInfo) {
                 return undefined;
             }
-            const typeVariable = <TypeVariable>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
-            const typeVariableArray = [typeVariable];
-            const typeInferences = createTypeInferencesObject();
-            const typeInferencesArray = [typeInferences];
+            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+            const inference = createInferenceInfo(typeParameter);
+            const inferences = [inference];
             const templateType = getTemplateTypeFromMappedType(target);
             const readonlyMask = target.declaration.readonlyToken ? false : true;
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
@@ -10212,22 +10211,20 @@ namespace ts {
             return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
 
             function inferTargetType(sourceType: Type): Type {
-                typeInferences.primary = undefined;
-                typeInferences.secondary = undefined;
-                inferTypes(typeVariableArray, typeInferencesArray, sourceType, templateType);
-                const inferences = typeInferences.primary || typeInferences.secondary;
-                return inferences && getUnionType(inferences, /*subtypeReduction*/ true);
+                inference.candidates = undefined;
+                inferTypes(inferences, sourceType, templateType);
+                return inference.candidates && getUnionType(inference.candidates, /*subtypeReduction*/ true);
             }
         }
 
         function inferTypesWithContext(context: InferenceContext, originalSource: Type, originalTarget: Type) {
-            inferTypes(context.signature.typeParameters, context.inferences, originalSource, originalTarget);
+            inferTypes(context.inferences, originalSource, originalTarget);
         }
 
-        function inferTypes(typeVariables: TypeVariable[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
-            let inferiority = 0;
+            let priority = 0;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10291,24 +10288,24 @@ namespace ts {
                     if (source.flags & TypeFlags.ContainsAnyFunctionType) {
                         return;
                     }
-                    for (let i = 0; i < typeVariables.length; i++) {
-                        if (target === typeVariables[i]) {
-                            const inferences = typeInferences[i];
-                            if (!inferences.isFixed) {
+                    for (const inference of inferences) {
+                        if (target === inference.typeParameter) {
+                            if (!inference.isFixed) {
                                 // Any inferences that are made to a type parameter in a union type are inferior
                                 // to inferences made to a flat (non-union) type. This is because if we infer to
                                 // T | string[], we really don't know if we should be inferring to T or not (because
                                 // the correct constituent on the target side could be string[]). Therefore, we put
                                 // such inferior inferences into a secondary bucket, and only use them if the primary
                                 // bucket is empty.
-                                const candidates = inferiority ?
-                                    inferences.secondary || (inferences.secondary = []) :
-                                    inferences.primary || (inferences.primary = []);
-                                if (!contains(candidates, source)) {
-                                    candidates.push(source);
+                                if (!inference.candidates || priority < inference.priority) {
+                                    inference.candidates = [source];
+                                    inference.priority = priority;
+                                }
+                                else if (priority === inference.priority) {
+                                    inference.candidates.push(source);
                                 }
                                 if (target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
-                                    inferences.topLevel = false;
+                                    inference.topLevel = false;
                                 }
                             }
                             return;
@@ -10330,7 +10327,7 @@ namespace ts {
                     let typeVariable: TypeVariable;
                     // First infer to each type in union or intersection that isn't a type variable
                     for (const t of targetTypes) {
-                        if (t.flags & TypeFlags.TypeVariable && contains(typeVariables, t)) {
+                        if (getInferenceInfoForType(t)) {
                             typeVariable = <TypeVariable>t;
                             typeVariableCount++;
                         }
@@ -10342,9 +10339,10 @@ namespace ts {
                     // variable. This gives meaningful results for union types in co-variant positions and intersection
                     // types in contra-variant positions (such as callback parameters).
                     if (typeVariableCount === 1) {
-                        inferiority++;
+                        const savePriority = priority;
+                        priority |= InferencePriority.NakedTypeVariable;
                         inferFromTypes(source, typeVariable);
-                        inferiority--;
+                        priority = savePriority;
                     }
                 }
                 else if (source.flags & TypeFlags.UnionOrIntersection) {
@@ -10384,6 +10382,17 @@ namespace ts {
                 }
             }
 
+            function getInferenceInfoForType(type: Type) {
+                if (type.flags & TypeFlags.TypeVariable) {
+                    for (const inference of inferences) {
+                        if (type === inference.typeParameter) {
+                            return inference;
+                        }
+                    }
+                }
+                return undefined;
+            }
+
             function inferFromObjectTypes(source: Type, target: Type) {
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
@@ -10392,13 +10401,14 @@ namespace ts {
                         // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                         // type and then make a secondary inference from that type to T. We make a secondary inference
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                        const index = indexOf(typeVariables, (<IndexType>constraintType).type);
-                        if (index >= 0 && !typeInferences[index].isFixed) {
+                        const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                        if (inference && !inference.isFixed) {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
-                                inferiority++;
-                                inferFromTypes(inferredType, typeVariables[index]);
-                                inferiority--;
+                                const savePriority = priority;
+                                priority |= InferencePriority.MappedType;
+                                inferFromTypes(inferredType, inference.typeParameter);
+                                priority = savePriority;
                             }
                         }
                         return;
@@ -10497,33 +10507,29 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
         }
 
-        function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
-            const inferences = context.inferences[index];
-            return inferences.primary || inferences.secondary || emptyArray;
-        }
-
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function getInferredType(context: InferenceContext, index: number): Type {
-            let inferredType = context.inferredTypes[index];
+            const inference = context.inferences[index];
+            let inferredType = inference.inferredType;
             let inferenceSucceeded: boolean;
             if (!inferredType) {
-                const inferences = getInferenceCandidates(context, index);
-                if (inferences.length) {
+                const candidates = inference.candidates;
+                if (candidates) {
                     // We widen inferred literal types if
                     // all inferences were made to top-level ocurrences of the type parameter, and
                     // the type parameter has no constraint or its constraint includes no primitive or literal types, and
                     // the type parameter was fixed during inference or does not occur at top-level in the return type.
                     const signature = context.signature;
-                    const widenLiteralTypes = context.inferences[index].topLevel &&
-                        !hasPrimitiveConstraint(signature.typeParameters[index]) &&
-                        (context.inferences[index].isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
-                    const baseInferences = widenLiteralTypes ? sameMap(inferences, getWidenedLiteralType) : inferences;
+                    const widenLiteralTypes = inference.topLevel &&
+                        !hasPrimitiveConstraint(inference.typeParameter) &&
+                        (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+                    const baseCandidates = widenLiteralTypes ? sameMap(candidates, getWidenedLiteralType) : candidates;
                     // Infer widened union or supertype, or the unknown type for no common supertype
-                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
+                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
@@ -10533,7 +10539,7 @@ namespace ts {
                     // succeeds, meaning there is no error for not having inference candidates. An
                     // inference error only occurs when there are *conflicting* candidates, i.e.
                     // candidates with no common supertype.
-                    const defaultType = getDefaultFromTypeParameter(context.signature.typeParameters[index]);
+                    const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
                     if (defaultType) {
                         // Instantiate the default type. Any forward reference to a type
                         // parameter should be instantiated to the empty object type.
@@ -10548,7 +10554,7 @@ namespace ts {
 
                     inferenceSucceeded = true;
                 }
-                context.inferredTypes[index] = inferredType;
+                inference.inferredType = inferredType;
 
                 // Only do the constraint check if inference succeeded (to prevent cascading errors)
                 if (inferenceSucceeded) {
@@ -10556,7 +10562,7 @@ namespace ts {
                     if (constraint) {
                         const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                            context.inferredTypes[index] = inferredType = instantiatedConstraint;
+                            inference.inferredType = inferredType = instantiatedConstraint;
                         }
                     }
                 }
@@ -10571,10 +10577,11 @@ namespace ts {
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
-            for (let i = 0; i < context.inferredTypes.length; i++) {
-                getInferredType(context, i);
+            let result = [];
+            for (let i = 0; i < context.inferences.length; i++) {
+                result.push(getInferredType(context, i));
             }
-            return context.inferredTypes;
+            return result;
         }
 
         // EXPRESSION TYPE CHECKING
@@ -14837,18 +14844,18 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
-            const typeParameters = signature.typeParameters;
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
+            const inferences = context.inferences;
             const inferenceMapper = getInferenceMapper(context);
 
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
-            for (let i = 0; i < typeParameters.length; i++) {
+            for (let i = 0; i < inferences.length; i++) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
                 // for type parameters that have already been fixed on the previous call to inferTypeArguments.
                 // It would be just as correct to reset all of them. But then we'd be repeating the same work
                 // for the type parameters that were fixed, namely the work done by getInferredType.
-                if (!context.inferences[i].isFixed) {
-                    context.inferredTypes[i] = undefined;
+                if (!inferences[i].isFixed) {
+                    inferences[i].inferredType = undefined;
                 }
             }
 
@@ -14908,8 +14915,7 @@ namespace ts {
                     }
                 }
             }
-
-            getInferredTypes(context);
+            return getInferredTypes(context);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: TypeNode[], typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
@@ -15491,7 +15497,7 @@ namespace ts {
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
                     const failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
-                    const inferenceCandidates = getInferenceCandidates(resultOfFailedInference, resultOfFailedInference.failedTypeParameterIndex);
+                    const inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex].candidates;
 
                     let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
@@ -15576,8 +15582,7 @@ namespace ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
-                                inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentTypes = inferenceContext.inferredTypes;
+                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                             }
                             if (!typeArgumentsAreValid) {
