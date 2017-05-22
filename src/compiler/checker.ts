@@ -3352,8 +3352,6 @@ namespace ts {
                                 getObjectFlags(type) & ObjectFlags.Anonymous &&
                                 type.symbol && type.symbol.flags & SymbolFlags.Class;
                             if (isConstructorObject) {
-                                // TODO: something needs to issue accessibility errors (here, I think)
-                                // before writing a literal type that flattens base types, check that the base types are accessible
                                 writeLiteralType(type, flags);
                             }
                             else {
@@ -3479,10 +3477,13 @@ namespace ts {
                     buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
                     buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
-                        if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
-                            (p.name === "prototype" ||
-                             getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected))) {
-                            continue;
+                        if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                            if (p.flags & SymbolFlags.Prototype) {
+                                continue;
+                            }
+                            if (getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                                writer.reportPrivateInBaseOfClassExpression(p.name);
+                            }
                         }
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {

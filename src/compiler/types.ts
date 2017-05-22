@@ -2648,7 +2648,7 @@ namespace ts {
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
-        reportIllegalExtends(): void;
+        reportPrivateInBaseOfClassExpression(propertyName: string): void;
     }
 
     export const enum TypeFormatFlags {
