@@ -528,7 +528,7 @@ namespace Harness {
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
             export const fileExists: typeof IO.fileExists = fs.existsSync;
-            export const log: typeof IO.log = s => diffLines.push(s);
+            export const log: typeof IO.log = s => console.log(s);
             export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
 
             export function tryEnableSourceMapsForHost() {
