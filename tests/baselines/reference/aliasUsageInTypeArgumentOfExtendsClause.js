@@ -26,6 +26,7 @@ class D extends C<IHasVisualizationModel> {
 
 //// [aliasUsageInTypeArgumentOfExtendsClause_backbone.js]
 "use strict";
+exports.__esModule = true;
 var Model = (function () {
     function Model() {
     }
@@ -44,6 +45,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
 var VisualizationModel = (function (_super) {
     __extends(VisualizationModel, _super);
@@ -65,6 +67,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
 var C = (function () {
     function C() {

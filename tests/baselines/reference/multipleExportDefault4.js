@@ -7,14 +7,13 @@ export default {
 
 //// [multipleExportDefault4.js]
 "use strict";
+exports.__esModule = true;
 var C = (function () {
     function C() {
     }
     return C;
 }());
-exports.__esModule = true;
 exports["default"] = C;
-exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };

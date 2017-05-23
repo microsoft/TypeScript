@@ -65,15 +65,15 @@ var B = (function () {
 }());
 __decorate([
     PropDeco,
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], B.prototype, "x");
 __decorate([
     PropDeco,
-    __metadata("design:type", Boolean)
+    __metadata("design:type", Object)
 ], B.prototype, "y");
 __decorate([
     PropDeco,
-    __metadata("design:type", String)
+    __metadata("design:type", Object)
 ], B.prototype, "z");
 __decorate([
     PropDeco,
@@ -89,11 +89,11 @@ __decorate([
 ], B.prototype, "c");
 __decorate([
     PropDeco,
-    __metadata("design:type", void 0)
+    __metadata("design:type", Object)
 ], B.prototype, "d");
 __decorate([
     PropDeco,
-    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+    __metadata("design:type", Object)
 ], B.prototype, "e");
 __decorate([
     PropDeco,
@@ -101,13 +101,13 @@ __decorate([
 ], B.prototype, "f");
 __decorate([
     PropDeco,
-    __metadata("design:type", A)
+    __metadata("design:type", Object)
 ], B.prototype, "g");
 __decorate([
     PropDeco,
-    __metadata("design:type", B)
+    __metadata("design:type", Object)
 ], B.prototype, "h");
 __decorate([
     PropDeco,
-    __metadata("design:type", typeof Symbol === "function" ? Symbol : Object)
+    __metadata("design:type", Object)
 ], B.prototype, "j");

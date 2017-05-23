@@ -1,5 +1,4 @@
 //// [es5-commonjs4.ts]
-
 export default class A
 {
     constructor ()
@@ -17,6 +16,7 @@ export var __esModule = 1;
 
 //// [es5-commonjs4.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var A = (function () {
     function A() {
     }

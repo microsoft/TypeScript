@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports16.ts] ////
 
 //// [foo.tsx]
-
 import Element = require("react");
 
 export const FooComponent = <div></div>
@@ -23,5 +22,6 @@ declare global {
 
 //// [foo.js]
 "use strict";
+exports.__esModule = true;
 var Element = require("react");
 exports.FooComponent = Element.createElement("div", null);

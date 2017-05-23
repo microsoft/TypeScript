@@ -13,8 +13,27 @@ namespace ts.server {
         findInComments: boolean;
     }
 
+    /* @internal */
+    export function extractMessage(message: string) {
+        // Read the content length
+        const contentLengthPrefix = "Content-Length: ";
+        const lines = message.split(/\r?\n/);
+        Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
+
+        const contentLengthText = lines[0];
+        Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
+        const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
+
+        // Read the body
+        const responseBody = lines[2];
+
+        // Verify content length
+        Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
+        return responseBody;
+    }
+
     export class SessionClient implements LanguageService {
-        private sequence: number = 0;
+        private sequence = 0;
         private lineMaps: ts.Map<number[]> = ts.createMap<number[]>();
         private messages: string[] = [];
         private lastRenameEntry: RenameEntry;
@@ -84,7 +103,7 @@ namespace ts.server {
             while (!foundResponseMessage) {
                 lastMessage = this.messages.shift();
                 Debug.assert(!!lastMessage, "Did not receive any responses.");
-                const responseBody = processMessage(lastMessage);
+                const responseBody = extractMessage(lastMessage);
                 try {
                     response = JSON.parse(responseBody);
                     // the server may emit events before emitting the response. We
@@ -109,24 +128,6 @@ namespace ts.server {
             Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
 
             return response;
-
-            function processMessage(message: string) {
-                // Read the content length
-                const contentLengthPrefix = "Content-Length: ";
-                const lines = message.split("\r\n");
-                Debug.assert(lines.length >= 2, "Malformed response: Expected 3 lines in the response.");
-
-                const contentLengthText = lines[0];
-                Debug.assert(contentLengthText.indexOf(contentLengthPrefix) === 0, "Malformed response: Response text did not contain content-length header.");
-                const contentLength = parseInt(contentLengthText.substring(contentLengthPrefix.length));
-
-                // Read the body
-                const responseBody = lines[2];
-
-                // Verify content length
-                Debug.assert(responseBody.length + 1 === contentLength, "Malformed response: Content length did not match the response's body length.");
-                return responseBody;
-            }
         }
 
         openFile(fileName: string, content?: string, scriptKindName?: "TS" | "JS" | "TSX" | "JSX"): void {
@@ -177,7 +178,8 @@ namespace ts.server {
                 kindModifiers: response.body.kindModifiers,
                 textSpan: ts.createTextSpanFromBounds(start, end),
                 displayParts: [{ kind: "text", text: response.body.displayString }],
-                documentation: [{ kind: "text", text: response.body.documentation }]
+                documentation: [{ kind: "text", text: response.body.documentation }],
+                tags: response.body.tags
             };
         }
 
@@ -222,7 +224,7 @@ namespace ts.server {
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
 
-                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
                 })
             };
         }
@@ -263,7 +265,7 @@ namespace ts.server {
                 return {
                     name: entry.name,
                     containerName: entry.containerName || "",
-                    containerKind: entry.containerKind || "",
+                    containerKind: entry.containerKind || ScriptElementKind.unknown,
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
@@ -328,11 +330,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });
@@ -354,11 +356,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });
@@ -381,7 +383,9 @@ namespace ts.server {
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
                     fileName,
-                    textSpan: ts.createTextSpanFromBounds(start, end)
+                    textSpan: ts.createTextSpanFromBounds(start, end),
+                    kind: ScriptElementKind.unknown,
+                    displayParts: []
                 };
             });
         }
@@ -689,6 +693,46 @@ namespace ts.server {
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
+        }
+
+        private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
+            if (typeof positionOrRange === "number") {
+                const { line, offset } = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+                return <protocol.FileLocationRequestArgs>{ file: fileName, line, offset };
+            }
+            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.pos);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.end);
+            return <protocol.FileRangeRequestArgs>{
+                file: fileName,
+                startLine,
+                startOffset,
+                endLine,
+                endOffset
+            };
+        }
+
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+            const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
+            const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
+            return response.body;
+        }
+
+        getRefactorCodeActions(
+            fileName: string,
+            _formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorName: string) {
+
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetRefactorCodeActionsRequestArgs;
+            args.refactorName = refactorName;
+
+            const request = this.processRequest<protocol.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
+            const response = this.processResponse<protocol.GetRefactorCodeActionsResponse>(request);
+            const codeActions = response.body.actions;
+
+            return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
         }
 
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {

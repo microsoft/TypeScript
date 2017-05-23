@@ -43,6 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var foo2 = require("./foo2");
 var x = (function (_super) {
     __extends(x, _super);

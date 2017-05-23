@@ -1,5 +1,4 @@
 === /a/b/c/app.ts ===
-
 export let x = 1;
 >x : number
 >1 : 1

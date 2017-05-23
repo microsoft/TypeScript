@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.JsDoc {
     const jsDocTagNames = [
         "augments",
@@ -28,6 +28,7 @@ namespace ts.JsDoc {
         "namespace",
         "param",
         "private",
+        "prop",
         "property",
         "public",
         "requires",
@@ -38,11 +39,10 @@ namespace ts.JsDoc {
         "throws",
         "type",
         "typedef",
-        "property",
-        "prop",
         "version"
     ];
-    let jsDocCompletionEntries: CompletionEntry[];
+    let jsDocTagNameCompletionEntries: CompletionEntry[];
+    let jsDocTagCompletionEntries: CompletionEntry[];
 
     export function getJsDocCommentsFromDeclarations(declarations: Declaration[]) {
         // Only collect doc comments from duplicate declarations once:
@@ -69,6 +69,28 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
+    export function getJsDocTagsFromDeclarations(declarations: Declaration[]) {
+        // Only collect doc comments from duplicate declarations once.
+        const tags: JSDocTagInfo[] = [];
+        forEachUnique(declarations, declaration => {
+            const jsDocs = getJSDocs(declaration);
+            if (!jsDocs) {
+                return;
+            }
+            for (const doc of jsDocs) {
+                const tagsForDoc = (doc as JSDoc).tags;
+                if (tagsForDoc) {
+                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
+                        return {
+                            name: jsDocTag.tagName.text,
+                            text: jsDocTag.comment
+                        }; }));
+                }
+            }
+        });
+        return tags;
+    }
+
     /**
      * Iterates through 'array' by index and performs the callback on each element of array until the callback
      * returns a truthy value, then returns that value.
@@ -88,13 +110,24 @@ namespace ts.JsDoc {
         return undefined;
     }
 
-    export function getAllJsDocCompletionEntries(): CompletionEntry[] {
-        return jsDocCompletionEntries || (jsDocCompletionEntries = ts.map(jsDocTagNames, tagName => {
+    export function getJSDocTagNameCompletions(): CompletionEntry[] {
+        return jsDocTagNameCompletionEntries || (jsDocTagNameCompletionEntries = ts.map(jsDocTagNames, tagName => {
             return {
                 name: tagName,
                 kind: ScriptElementKind.keyword,
                 kindModifiers: "",
                 sortText: "0",
+            };
+        }));
+    }
+
+    export function getJSDocTagCompletions(): CompletionEntry[] {
+        return jsDocTagCompletionEntries || (jsDocTagCompletionEntries = ts.map(jsDocTagNames, tagName => {
+            return {
+                name: `@${tagName}`,
+                kind: ScriptElementKind.keyword,
+                kindModifiers: "",
+                sortText: "0"
             };
         }));
     }
@@ -125,7 +158,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position);
+        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const tokenStart = tokenAtPos.getStart();
         if (!tokenAtPos || tokenStart < position) {
             return undefined;
@@ -166,7 +199,8 @@ namespace ts.JsDoc {
         const posLineAndChar = sourceFile.getLineAndCharacterOfPosition(position);
         const lineStart = sourceFile.getLineStarts()[posLineAndChar.line];
 
-        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character);
+        // replace non-whitespace characters in prefix with spaces.
+        const indentationStr = sourceFile.text.substr(lineStart, posLineAndChar.character).replace(/\S/i, () => " ");
         const isJavaScriptFile = hasJavaScriptFileExtension(sourceFile.fileName);
 
         let docParams = "";

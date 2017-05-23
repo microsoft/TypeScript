@@ -1,5 +1,4 @@
 //// [specializationsShouldNotAffectEachOther.ts]
-
 interface Series  {
     data: string[];
 }

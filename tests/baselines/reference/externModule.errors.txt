@@ -8,10 +8,10 @@ tests/cases/compiler/externModule.ts(18,6): error TS2390: Constructor implementa
 tests/cases/compiler/externModule.ts(20,13): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/externModule.ts(26,13): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/externModule.ts(28,13): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/externModule.ts(32,11): error TS2304: Cannot find name 'XDate'.
-tests/cases/compiler/externModule.ts(34,7): error TS2304: Cannot find name 'XDate'.
-tests/cases/compiler/externModule.ts(36,7): error TS2304: Cannot find name 'XDate'.
-tests/cases/compiler/externModule.ts(37,3): error TS2304: Cannot find name 'XDate'.
+tests/cases/compiler/externModule.ts(32,11): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+tests/cases/compiler/externModule.ts(34,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+tests/cases/compiler/externModule.ts(36,7): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
+tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
 
 
 ==== tests/cases/compiler/externModule.ts (14 errors) ====
@@ -68,17 +68,17 @@ tests/cases/compiler/externModule.ts(37,3): error TS2304: Cannot find name 'XDat
     
     var d=new XDate();
               ~~~~~
-!!! error TS2304: Cannot find name 'XDate'.
+!!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
     d.getDay();
     d=new XDate(1978,2);
           ~~~~~
-!!! error TS2304: Cannot find name 'XDate'.
+!!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
     d.getXDate();
     var n=XDate.parse("3/2/2004");
           ~~~~~
-!!! error TS2304: Cannot find name 'XDate'.
+!!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
     n=XDate.UTC(1964,2,1);
       ~~~~~
-!!! error TS2304: Cannot find name 'XDate'.
+!!! error TS2552: Cannot find name 'XDate'. Did you mean 'Date'?
     
     

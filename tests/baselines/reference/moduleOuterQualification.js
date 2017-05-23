@@ -1,5 +1,4 @@
 //// [moduleOuterQualification.ts]
-
 declare module outer {
   interface Beta { }
   module inner {

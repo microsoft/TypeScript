@@ -16,5 +16,5 @@ export var React;
 import {React} from "./test";
 // Should emit test_1.React.createElement
 //  and React.__spread
-var foo;
+var foo: any;
 var spread1 = <div x='' {...foo} y='' />;

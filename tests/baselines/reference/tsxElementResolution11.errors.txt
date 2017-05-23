@@ -19,7 +19,7 @@ tests/cases/conformance/jsx/file.tsx(17,7): error TS2339: Property 'x' does not 
     }
     var Obj2: Obj2type;
     <Obj2 x={10} />; // Error
-          ~
+          ~~~~~~
 !!! error TS2339: Property 'x' does not exist on type '{ q?: number; }'.
     
     interface Obj3type {

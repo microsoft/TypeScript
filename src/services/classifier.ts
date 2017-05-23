@@ -160,7 +160,7 @@ namespace ts {
                 case EndOfLineState.InTemplateMiddleOrTail:
                     text = "}\n" + text;
                     offset = 2;
-                // fallthrough
+                    // falls through
                 case EndOfLineState.InTemplateSubstitutionPosition:
                     templateStack.push(SyntaxKind.TemplateHead);
                     break;
@@ -573,7 +573,7 @@ namespace ts {
         }
     }
 
-    function getClassificationTypeName(type: ClassificationType) {
+    function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
         switch (type) {
             case ClassificationType.comment: return ClassificationTypeNames.comment;
             case ClassificationType.identifier: return ClassificationTypeNames.identifier;

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor2.ts] ////
 
 //// [0.ts]
-
 export class base { }
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 
@@ -16,6 +15,7 @@ export class C  extends base{
 
 //// [0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var base = (function () {
     function base() {
     }
@@ -45,6 +45,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var _0_ts_1 = require("./0.ts");
 var _0_ts_2 = require("./0.ts");
 var C = (function (_super) {

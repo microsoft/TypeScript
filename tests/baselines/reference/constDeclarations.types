@@ -1,5 +1,4 @@
 === tests/cases/compiler/constDeclarations.ts ===
-
 // No error
 const c1 = false;
 >c1 : false

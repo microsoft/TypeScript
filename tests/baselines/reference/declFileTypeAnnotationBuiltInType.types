@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeAnnotationBuiltInType.ts ===
-
 // string
 function foo(): string {
 >foo : () => string

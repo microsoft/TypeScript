@@ -1,5 +1,4 @@
 === tests/cases/compiler/server.ts ===
-
 var foo = 2;
 >foo : number
 >2 : 2

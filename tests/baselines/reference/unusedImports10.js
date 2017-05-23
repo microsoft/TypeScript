@@ -1,5 +1,4 @@
 //// [unusedImports10.ts]
-
 module A {
     export class Calculator {
         public handelChar() {

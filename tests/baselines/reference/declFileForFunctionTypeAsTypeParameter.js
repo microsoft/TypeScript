@@ -1,5 +1,4 @@
 //// [declFileForFunctionTypeAsTypeParameter.ts]
-
 class X<T> {
 }
 class C extends X<() => number> {

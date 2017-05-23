@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyClassExtendsClauseDeclFile.ts] ////
 
 //// [privacyClassExtendsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export class publicClassInPublicModule {
         private f1() {
@@ -109,6 +108,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+exports.__esModule = true;
 var publicModule;
 (function (publicModule) {
     var publicClassInPublicModule = (function () {

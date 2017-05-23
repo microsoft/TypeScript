@@ -1,5 +1,4 @@
 === tests/cases/compiler/reactNamespaceJSXEmit.tsx ===
-
 declare var myReactLib: any;
 >myReactLib : any
 
@@ -15,7 +14,7 @@ declare var x: any;
 <foo data/>;
 ><foo data/> : any
 >foo : any
->data : any
+>data : true
 
 <Bar x={x} />;
 ><Bar x={x} /> : any
@@ -36,6 +35,6 @@ declare var x: any;
 ><Bar { ...x } y={2} /> : any
 >Bar : any
 >x : any
->y : any
+>y : number
 >2 : 2
 

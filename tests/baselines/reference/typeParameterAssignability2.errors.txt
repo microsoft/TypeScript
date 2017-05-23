@@ -8,7 +8,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
   Type 'V' is not assignable to type 'T'.
     Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(26,5): error TS2322: Type 'V' is not assignable to type 'T'.
-  Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(27,5): error TS2322: Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(30,5): error TS2322: Type 'V' is not assignable to type 'U'.
   Type 'Date' is not assignable to type 'U'.
@@ -18,7 +17,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
   Type 'V' is not assignable to type 'T'.
     Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(46,5): error TS2322: Type 'V' is not assignable to type 'T'.
-  Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(47,5): error TS2322: Type 'Date' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(50,5): error TS2322: Type 'V' is not assignable to type 'U'.
   Type 'Date' is not assignable to type 'U'.
@@ -76,7 +74,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'T'.
         t = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'T'.
@@ -112,7 +109,6 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'T'.
         t = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'T'.

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileFunctions.ts] ////
 
 //// [declFileFunctions_0.ts]
-
 /** This comment should appear for foo*/
 export function foo() {
 }
@@ -79,6 +78,7 @@ function globalfooWithOverloads(a: any): any {
 
 //// [declFileFunctions_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** This comment should appear for foo*/
 function foo() {
 }

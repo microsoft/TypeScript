@@ -1,10 +1,11 @@
-﻿namespace ts {
+namespace ts {
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
+        transformers?: CustomTransformers;
     }
 
     export interface TranspileOutput {
@@ -103,7 +104,7 @@
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
         // Emit
-        program.emit();
+        program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 
@@ -123,7 +124,8 @@
     let commandLineOptionsStringToEnum: CommandLineOptionOfCustomType[];
 
     /** JS users may pass in string values for enum compiler options (such as ModuleKind), so convert. */
-    function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
+    /*@internal*/
+    export function fixupCompilerOptions(options: CompilerOptions, diagnostics: Diagnostic[]): CompilerOptions {
         // Lazily create this value to fix module loading errors.
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
             typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));

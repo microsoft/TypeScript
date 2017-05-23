@@ -1,28 +1,27 @@
 === tests/cases/compiler/a.d.ts ===
-
 export { };
 
 // Extends
 declare class C { }
->C : Symbol(C, Decl(a.d.ts, 1, 11))
+>C : Symbol(C, Decl(a.d.ts, 0, 11))
 
 declare class D extends C { }
->D : Symbol(D, Decl(a.d.ts, 4, 19))
->C : Symbol(C, Decl(a.d.ts, 1, 11))
+>D : Symbol(D, Decl(a.d.ts, 3, 19))
+>C : Symbol(C, Decl(a.d.ts, 0, 11))
 
 // Destructuring
 interface I {
->I : Symbol(I, Decl(a.d.ts, 5, 29))
+>I : Symbol(I, Decl(a.d.ts, 4, 29))
 
     ({descendants, read}?: {
->descendants : Symbol(descendants, Decl(a.d.ts, 9, 6))
->read : Symbol(read, Decl(a.d.ts, 9, 18))
+>descendants : Symbol(descendants, Decl(a.d.ts, 8, 6))
+>read : Symbol(read, Decl(a.d.ts, 8, 18))
 
         descendants?: boolean;
->descendants : Symbol(descendants, Decl(a.d.ts, 9, 28))
+>descendants : Symbol(descendants, Decl(a.d.ts, 8, 28))
 
         read?: any;
->read : Symbol(read, Decl(a.d.ts, 10, 30))
+>read : Symbol(read, Decl(a.d.ts, 9, 30))
 
     }): any;
 }
@@ -30,16 +29,16 @@ interface I {
 
 // Object Rest
 interface Foo {
->Foo : Symbol(Foo, Decl(a.d.ts, 13, 1))
+>Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
 
     a: number; b: string;
->a : Symbol(Foo.a, Decl(a.d.ts, 17, 15))
->b : Symbol(Foo.b, Decl(a.d.ts, 18, 14))
+>a : Symbol(Foo.a, Decl(a.d.ts, 16, 15))
+>b : Symbol(Foo.b, Decl(a.d.ts, 17, 14))
 }
 export var { a, ...x } : Foo;
->a : Symbol(a, Decl(a.d.ts, 20, 12))
->x : Symbol(x, Decl(a.d.ts, 20, 15))
->Foo : Symbol(Foo, Decl(a.d.ts, 13, 1))
+>a : Symbol(a, Decl(a.d.ts, 19, 12))
+>x : Symbol(x, Decl(a.d.ts, 19, 15))
+>Foo : Symbol(Foo, Decl(a.d.ts, 12, 1))
 
 === tests/cases/compiler/b.ts ===
 export {};

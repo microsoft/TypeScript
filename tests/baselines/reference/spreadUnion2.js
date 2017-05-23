@@ -1,5 +1,4 @@
 //// [spreadUnion2.ts]
-
 declare const undefinedUnion: { a: number } | undefined;
 declare const nullUnion: { b: number } | null;
 declare const nullAndUndefinedUnion: null | undefined;

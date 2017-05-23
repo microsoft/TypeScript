@@ -134,6 +134,7 @@ function privateFunctionWithPublicTypeParametersWithoutExtends<T>() {
 
 //// [privacyTypeParameterOfFunction.js]
 "use strict";
+exports.__esModule = true;
 var privateClass = (function () {
     function privateClass() {
     }

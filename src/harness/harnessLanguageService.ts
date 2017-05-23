@@ -5,7 +5,7 @@
 
 namespace Harness.LanguageService {
     export class ScriptInfo {
-        public version: number = 1;
+        public version = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
         private lineMap: number[] = undefined;
 
@@ -126,7 +126,7 @@ namespace Harness.LanguageService {
         protected virtualFileSystem: Utils.VirtualFileSystem = new Utils.VirtualFileSystem(virtualFileSystemRoot, /*useCaseSensitiveFilenames*/false);
 
         constructor(protected cancellationToken = DefaultHostCancellationToken.Instance,
-                    protected settings = ts.getDefaultCompilerOptions()) {
+            protected settings = ts.getDefaultCompilerOptions()) {
         }
 
         public getNewLine(): string {
@@ -135,7 +135,7 @@ namespace Harness.LanguageService {
 
         public getFilenames(): string[] {
             const fileNames: string[] = [];
-            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()){
+            for (const virtualEntry of this.virtualFileSystem.getAllFileEntries()) {
                 const scriptInfo = virtualEntry.content;
                 if (scriptInfo.isRootFile) {
                     // only include root files here
@@ -169,9 +169,9 @@ namespace Harness.LanguageService {
         }
 
         /**
-          * @param line 0 based index
-          * @param col 0 based index
-          */
+         * @param line 0 based index
+         * @param col 0 based index
+         */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);
@@ -210,9 +210,9 @@ namespace Harness.LanguageService {
         }
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
-            /*useCaseSensitiveFileNames*/false,
-            this.getCurrentDirectory(),
-            (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
+                /*useCaseSensitiveFileNames*/ false,
+                this.getCurrentDirectory(),
+                (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
         readFile(path: string): string {
             const snapshot = this.getScriptSnapshot(path);
@@ -489,6 +489,15 @@ namespace Harness.LanguageService {
         getCodeFixesAtPosition(): ts.CodeAction[] {
             throw new Error("Not supported on the shim.");
         }
+        getCodeFixDiagnostics(): ts.Diagnostic[] {
+            throw new Error("Not supported on the shim.");
+        }
+        getRefactorCodeActions(): ts.CodeAction[] {
+            throw new Error("Not supported on the shim.");
+        }
+        getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
+            throw new Error("Not supported on the shim.");
+        }
         getEmitOutput(fileName: string): ts.EmitOutput {
             return unwrapJSONCallResult(this.shim.getEmitOutput(fileName));
         }
@@ -594,7 +603,7 @@ namespace Harness.LanguageService {
     class SessionServerHost implements ts.server.ServerHost, ts.server.Logger {
         args: string[] = [];
         newLine: string;
-        useCaseSensitiveFileNames: boolean = false;
+        useCaseSensitiveFileNames = false;
 
         constructor(private host: NativeLanguageServiceHost) {
             this.newLine = this.host.getNewLine();
@@ -724,6 +733,87 @@ namespace Harness.LanguageService {
         createHash(s: string) {
             return s;
         }
+
+        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+            switch (_moduleName) {
+                // Adds to the Quick Info a fixed string and a string from the config file
+                // and replaces the first display part
+                case "quickinfo-augmeneter":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const proxy = makeDefaultProxy(info);
+                                const langSvc: any = info.languageService;
+                                proxy.getQuickInfoAtPosition = function () {
+                                    const parts = langSvc.getQuickInfoAtPosition.apply(langSvc, arguments);
+                                    if (parts.displayParts.length > 0) {
+                                        parts.displayParts[0].text = "Proxied";
+                                    }
+                                    parts.displayParts.push({ text: info.config.message, kind: "punctuation" });
+                                    return parts;
+                                };
+
+                                return proxy;
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                // Throws during initialization
+                case "create-thrower":
+                    return {
+                        module: () => ({
+                            create() {
+                                throw new Error("I am not a well-behaved plugin");
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                // Adds another diagnostic
+                case "diagnostic-adder":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const proxy = makeDefaultProxy(info);
+                                proxy.getSemanticDiagnostics = function (filename: string) {
+                                    const prev = info.languageService.getSemanticDiagnostics(filename);
+                                    const sourceFile: ts.SourceFile = info.languageService.getSourceFile(filename);
+                                    prev.push({
+                                        category: ts.DiagnosticCategory.Warning,
+                                        file: sourceFile,
+                                        code: 9999,
+                                        length: 3,
+                                        messageText: `Plugin diagnostic`,
+                                        start: 0
+                                    });
+                                    return prev;
+                                };
+                                return proxy;
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                default:
+                    return {
+                        module: undefined,
+                        error: "Could not resolve module"
+                    };
+            }
+
+            function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
+                // tslint:disable-next-line:no-null-keyword
+                const proxy = Object.create(/*prototype*/ null);
+                const langSvc: any = info.languageService;
+                for (const k of Object.keys(langSvc)) {
+                    proxy[k] = function () {
+                        return langSvc[k].apply(langSvc, arguments);
+                    };
+                }
+                return proxy;
+            }
+        }
     }
 
     export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
@@ -737,13 +827,17 @@ namespace Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
-            const server = new ts.server.Session(serverHost,
-                { isCancellationRequested: () => false },
-                /*useOneInferredProject*/ false,
-                /*typingsInstaller*/ undefined,
-                Utils.byteLength,
-                process.hrtime, serverHost,
-                /*canUseEvents*/ true);
+            const opts: ts.server.SessionOptions = {
+                host: serverHost,
+                cancellationToken: ts.server.nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: undefined,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: serverHost,
+                canUseEvents: true
+            };
+            const server = new ts.server.Session(opts);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

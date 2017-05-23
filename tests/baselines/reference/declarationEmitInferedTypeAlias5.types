@@ -1,5 +1,4 @@
 === tests/cases/compiler/0.ts ===
-
 export type Data = string | boolean;
 >Data : Data
 

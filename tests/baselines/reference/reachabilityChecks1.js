@@ -1,5 +1,4 @@
 //// [reachabilityChecks1.ts]
-
 while (true);
 var x = 1;
 

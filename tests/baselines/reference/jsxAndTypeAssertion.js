@@ -1,5 +1,4 @@
 //// [jsxAndTypeAssertion.tsx]
-
 declare var createElement: any;
 
 class foo {}

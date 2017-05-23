@@ -1,10 +1,9 @@
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,6): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(45,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(45,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(43,6): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,8): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
+tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts(44,18): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment1ES6.ts (3 errors) ====
-    
     /* AssignmentPattern:
      *      ObjectAssignmentPattern
      *      ArrayAssignmentPattern

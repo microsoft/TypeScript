@@ -1,5 +1,4 @@
 //// [declFileForClassWithMultipleBaseClasses.ts]
-
 class A {
     foo() { }
 }

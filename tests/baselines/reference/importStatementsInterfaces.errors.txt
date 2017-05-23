@@ -1,4 +1,4 @@
-tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts(23,19): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts(23,19): error TS2708: Cannot use namespace 'a' as a value.
 
 
 ==== tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts (1 errors) ====
@@ -26,7 +26,7 @@ tests/cases/conformance/internalModules/codeGeneration/importStatementsInterface
         import b = a.inA;
         var m: typeof a;
                       ~
-!!! error TS2304: Cannot find name 'a'.
+!!! error TS2708: Cannot use namespace 'a' as a value.
         var p: b.Point3D;
         var p = {x:0, y:0, z: 0 };
     }

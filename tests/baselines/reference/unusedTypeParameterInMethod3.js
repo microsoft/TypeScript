@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInMethod3.ts]
-
 class A {
     public f1<X, Y, Z>() {
         var a: X;

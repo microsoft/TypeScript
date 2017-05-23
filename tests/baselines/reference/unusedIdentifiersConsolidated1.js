@@ -1,5 +1,4 @@
 //// [unusedIdentifiersConsolidated1.ts]
-
 function greeter(person: string) {
     var unused = 20;
 }

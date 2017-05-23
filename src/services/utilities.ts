@@ -1,4 +1,4 @@
-﻿// These utilities are common to multiple language service features.
+// These utilities are common to multiple language service features.
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
@@ -21,7 +21,6 @@ namespace ts {
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyAssignment:
             case SyntaxKind.ShorthandPropertyAssignment:
-            case SyntaxKind.EnumMember:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.MethodSignature:
             case SyntaxKind.Constructor:
@@ -31,6 +30,7 @@ namespace ts {
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.CatchClause:
+            case SyntaxKind.JsxAttribute:
                 return SemanticMeaning.Value;
 
             case SyntaxKind.TypeParameter:
@@ -39,9 +39,12 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
                 return SemanticMeaning.Type;
 
+            case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.EnumDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
+
+            case SyntaxKind.EnumDeclaration:
+                return SemanticMeaning.All;
 
             case SyntaxKind.ModuleDeclaration:
                 if (isAmbientModule(<ModuleDeclaration>node)) {
@@ -60,7 +63,7 @@ namespace ts {
             case SyntaxKind.ImportDeclaration:
             case SyntaxKind.ExportAssignment:
             case SyntaxKind.ExportDeclaration:
-                return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+                return SemanticMeaning.All;
 
             // An external module can be a Value
             case SyntaxKind.SourceFile:
@@ -237,7 +240,7 @@ namespace ts {
                 case SyntaxKind.GetAccessor:
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.ModuleDeclaration:
-                    return (<Declaration>node.parent).name === node;
+                    return getNameOfDeclaration(<Declaration>node.parent) === node;
                 case SyntaxKind.ElementAccessExpression:
                     return (<ElementAccessExpression>node.parent).argumentExpression === node;
                 case SyntaxKind.ComputedPropertyName:
@@ -251,37 +254,6 @@ namespace ts {
     export function isExpressionOfExternalModuleImportEqualsDeclaration(node: Node) {
         return isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
             getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node;
-    }
-
-    /** Returns true if the position is within a comment */
-    export function isInsideComment(sourceFile: SourceFile, token: Node, position: number): boolean {
-        // The position has to be: 1. in the leading trivia (before token.getStart()), and 2. within a comment
-        return position <= token.getStart(sourceFile) &&
-            (isInsideCommentRange(getTrailingCommentRanges(sourceFile.text, token.getFullStart())) ||
-                isInsideCommentRange(getLeadingCommentRanges(sourceFile.text, token.getFullStart())));
-
-        function isInsideCommentRange(comments: CommentRange[]): boolean {
-            return forEach(comments, comment => {
-                // either we are 1. completely inside the comment, or 2. at the end of the comment
-                if (comment.pos < position && position < comment.end) {
-                    return true;
-                }
-                else if (position === comment.end) {
-                    const text = sourceFile.text;
-                    const width = comment.end - comment.pos;
-                    // is single line comment or just /*
-                    if (width <= 2 || text.charCodeAt(comment.pos + 1) === CharacterCodes.slash) {
-                        return true;
-                    }
-                    else {
-                        // is unterminated multi-line comment
-                        return !(text.charCodeAt(comment.end - 1) === CharacterCodes.slash &&
-                            text.charCodeAt(comment.end - 2) === CharacterCodes.asterisk);
-                    }
-                }
-                return false;
-            });
-        }
     }
 
     export function getContainerNode(node: Node): Declaration {
@@ -307,7 +279,7 @@ namespace ts {
         }
     }
 
-    export function getNodeKind(node: Node): string {
+    export function getNodeKind(node: Node): ScriptElementKind {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
@@ -354,22 +326,13 @@ namespace ts {
                 return ScriptElementKind.unknown;
         }
 
-        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
+        function getKindOfVariableDeclaration(v: VariableDeclaration): ScriptElementKind {
             return isConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)
                     ? ScriptElementKind.letElement
                     : ScriptElementKind.variableElement;
         }
-    }
-
-    export function getStringLiteralTypeForNode(node: StringLiteral | LiteralTypeNode, typeChecker: TypeChecker): LiteralType {
-        const searchNode = node.parent.kind === SyntaxKind.LiteralType ? <LiteralTypeNode>node.parent : node;
-        const type = typeChecker.getTypeAtLocation(searchNode);
-        if (type && type.flags & TypeFlags.StringLiteral) {
-            return <LiteralType>type;
-        }
-        return undefined;
     }
 
     export function isThis(node: Node): boolean {
@@ -393,8 +356,8 @@ namespace ts {
         list: Node;
     }
 
-    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFile): number {
-        const lineStarts = sourceFile.getLineStarts();
+    export function getLineStartPositionForPosition(position: number, sourceFile: SourceFileLike): number {
+        const lineStarts = getLineStarts(sourceFile);
         const line = sourceFile.getLineAndCharacterOfPosition(position).line;
         return lineStarts[line];
     }
@@ -449,7 +412,7 @@ namespace ts {
                 if (!(<NewExpression>n).arguments) {
                     return true;
                 }
-            // fall through
+            // falls through
             case SyntaxKind.CallExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.ParenthesizedType:
@@ -603,7 +566,7 @@ namespace ts {
         return !!findChildOfKind(n, kind, sourceFile);
     }
 
-    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFile): Node | undefined {
+    export function findChildOfKind(n: Node, kind: SyntaxKind, sourceFile?: SourceFileLike): Node | undefined {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
@@ -627,29 +590,29 @@ namespace ts {
     /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
-    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
-        return getTouchingToken(sourceFile, position, n => isWord(n.kind), includeJsDocComment);
+    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isWord(n.kind));
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
      * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
-        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind), includeJsDocComment);
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, includeJsDocComment = false): Node {
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment = false): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -657,44 +620,26 @@ namespace ts {
                 return current;
             }
 
-            if (includeJsDocComment) {
-                const jsDocChildren = ts.filter(current.getChildren(), isJSDocNode);
-                for (const jsDocChild of jsDocChildren) {
-                    const start = allowPositionInLeadingTrivia ? jsDocChild.getFullStart() : jsDocChild.getStart(sourceFile, includeJsDocComment);
-                    if (start <= position) {
-                        const end = jsDocChild.getEnd();
-                        if (position < end || (position === end && jsDocChild.kind === SyntaxKind.EndOfFileToken)) {
-                            current = jsDocChild;
-                            continue outer;
-                        }
-                        else if (includeItemAtEndPosition && end === position) {
-                            const previousToken = findPrecedingToken(position, sourceFile, jsDocChild);
-                            if (previousToken && includeItemAtEndPosition(previousToken)) {
-                                return previousToken;
-                            }
-                        }
-                    }
-                }
-            }
-
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
-                // all jsDocComment nodes were already visited
-                if (isJSDocNode(child)) {
+                if (isJSDocNode(child) && !includeJsDocComment) {
                     continue;
                 }
+
                 const start = allowPositionInLeadingTrivia ? child.getFullStart() : child.getStart(sourceFile, includeJsDocComment);
-                if (start <= position) {
-                    const end = child.getEnd();
-                    if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
-                        current = child;
-                        continue outer;
-                    }
-                    else if (includeItemAtEndPosition && end === position) {
-                        const previousToken = findPrecedingToken(position, sourceFile, child);
-                        if (previousToken && includeItemAtEndPosition(previousToken)) {
-                            return previousToken;
-                        }
+                if (start > position) {
+                    continue;
+                }
+
+                const end = child.getEnd();
+                if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
+                    current = child;
+                    continue outer;
+                }
+                else if (includeItemAtEndPosition && end === position) {
+                    const previousToken = findPrecedingToken(position, sourceFile, child);
+                    if (previousToken && includeItemAtEndPosition(previousToken)) {
+                        return previousToken;
                     }
                 }
             }
@@ -704,17 +649,17 @@ namespace ts {
     }
 
     /**
-      * The token on the left of the position is the token that strictly includes the position
-      * or sits to the left of the cursor if it is on a boundary. For example
-      *
-      *   fo|o               -> will return foo
-      *   foo <comment> |bar -> will return foo
-      *
-      */
+     * The token on the left of the position is the token that strictly includes the position
+     * or sits to the left of the cursor if it is on a boundary. For example
+     *
+     *   fo|o               -> will return foo
+     *   foo <comment> |bar -> will return foo
+     *
+     */
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        const tokenAtPosition = getTokenAtPosition(file, position);
+        const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -840,15 +785,11 @@ namespace ts {
         return false;
     }
 
-    export function isInComment(sourceFile: SourceFile, position: number) {
-        return isInCommentHelper(sourceFile, position, /*predicate*/ undefined);
-    }
-
     /**
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
     export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
 
         if (!token) {
             return false;
@@ -884,20 +825,35 @@ namespace ts {
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
     /**
-     * Returns true if the cursor at position in sourceFile is within a comment that additionally
-     * satisfies predicate, and false otherwise.
+     * Returns true if the cursor at position in sourceFile is within a comment.
+     *
+     * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
+     * @param predicate Additional predicate to test on the comment range.
      */
-    export function isInCommentHelper(sourceFile: SourceFile, position: number, predicate?: (c: CommentRange) => boolean): boolean {
-        const token = getTokenAtPosition(sourceFile, position);
+    export function isInComment(
+            sourceFile: SourceFile,
+            position: number,
+            tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+            predicate?: (c: CommentRange) => boolean): boolean {
+        return position <= tokenAtPosition.getStart(sourceFile) &&
+            (isInCommentRange(getLeadingCommentRanges(sourceFile.text, tokenAtPosition.pos)) ||
+                isInCommentRange(getTrailingCommentRanges(sourceFile.text, tokenAtPosition.pos)));
 
-        if (token && position <= token.getStart(sourceFile)) {
-            const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
+        function isInCommentRange(commentRanges: CommentRange[]): boolean {
+            return forEach(commentRanges, c => isPositionInCommentRange(c, position, sourceFile.text) && (!predicate || predicate(c)));
+        }
+    }
 
+    function isPositionInCommentRange({ pos, end, kind }: ts.CommentRange, position: number, text: string): boolean {
+        if (pos < position && position < end) {
+            return true;
+        }
+        else if (position === end) {
             // The end marker of a single-line comment does not include the newline character.
             // In the following case, we are inside a comment (^ denotes the cursor position):
             //
@@ -908,19 +864,17 @@ namespace ts {
             //    /* asdf */^
             //
             // Internally, we represent the end of the comment at the newline and closing '/', respectively.
-            return predicate ?
-                forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end) &&
-                    predicate(c)) :
-                forEach(commentRanges, c => c.pos < position &&
-                    (c.kind == SyntaxKind.SingleLineCommentTrivia ? position <= c.end : position < c.end));
+            return kind === SyntaxKind.SingleLineCommentTrivia ||
+                // true for unterminated multi-line comment
+                !(text.charCodeAt(end - 1) === CharacterCodes.slash && text.charCodeAt(end - 2) === CharacterCodes.asterisk);
         }
-
-        return false;
+        else {
+            return false;
+        }
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
 
         // First, we have to see if this position actually landed in a comment.
         const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
@@ -937,7 +891,7 @@ namespace ts {
      * Get the corresponding JSDocTag node if the position is in a jsDoc comment
      */
     export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
-        let node = ts.getTokenAtPosition(sourceFile, position);
+        let node = ts.getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         if (isToken(node)) {
             switch (node.kind) {
                 case SyntaxKind.VarKeyword:
@@ -1002,10 +956,6 @@ namespace ts {
         return undefined;
     }
 
-    export function isToken(n: Node): boolean {
-        return n.kind >= SyntaxKind.FirstToken && n.kind <= SyntaxKind.LastToken;
-    }
-
     export function isWord(kind: SyntaxKind): boolean {
         return kind === SyntaxKind.Identifier || isKeyword(kind);
     }
@@ -1048,6 +998,10 @@ namespace ts {
     }
 
     export function compareDataObjects(dst: any, src: any): boolean {
+        if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
+            return false;
+        }
+
         for (const e in dst) {
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
@@ -1099,25 +1053,25 @@ namespace ts {
     }
 
     export function isInReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInCommentHelper(sourceFile, position, isReferenceComment);
-
-        function isReferenceComment(c: CommentRange): boolean {
+        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
             return tripleSlashDirectivePrefixRegex.test(commentText);
-        }
+        });
     }
 
     export function isInNonReferenceComment(sourceFile: SourceFile, position: number): boolean {
-        return isInCommentHelper(sourceFile, position, isNonReferenceComment);
-
-        function isNonReferenceComment(c: CommentRange): boolean {
+        return isInComment(sourceFile, position, /*tokenAtPosition*/ undefined, c => {
             const commentText = sourceFile.text.substring(c.pos, c.end);
             return !tripleSlashDirectivePrefixRegex.test(commentText);
-        }
+        });
     }
 
     export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile): TextSpan {
         return createTextSpanFromBounds(node.getStart(sourceFile), node.getEnd());
+    }
+
+    export function createTextSpanFromRange(range: TextRange): TextSpan {
+        return createTextSpanFromBounds(range.pos, range.end);
     }
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
@@ -1134,6 +1088,21 @@ namespace ts {
             default:
                 return false;
         }
+    }
+
+    /** True if the symbol is for an external module, as opposed to a namespace. */
+    export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
+        Debug.assert(!!(moduleSymbol.flags & SymbolFlags.Module));
+        return moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;
+    }
+
+    /** Returns `true` the first time it encounters a node and `false` afterwards. */
+    export function nodeSeenTracker<T extends Node>(): (node: T) => boolean {
+        const seen: Array<true> = [];
+        return node => {
+            const id = getNodeId(node);
+            return !seen[id] && (seen[id] = true);
+        };
     }
 }
 
@@ -1166,7 +1135,8 @@ namespace ts {
             decreaseIndent: () => { indent--; },
             clear: resetWriter,
             trackSymbol: noop,
-            reportInaccessibleThisError: noop
+            reportInaccessibleThisError: noop,
+            reportPrivateInBaseOfClassExpression: noop,
         };
 
         function writeIndent() {
@@ -1302,21 +1272,14 @@ namespace ts {
     export function getDeclaredName(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
         // If this is an export or import specifier it could have been renamed using the 'as' syntax.
         // If so we want to search for whatever is under the cursor.
-        if (isImportOrExportSpecifierName(location)) {
-            return location.getText();
-        }
-        else if (isStringOrNumericLiteral(location) &&
-            location.parent.kind === SyntaxKind.ComputedPropertyName) {
-            return (<LiteralExpression>location).text;
+        if (isImportOrExportSpecifierName(location) || isStringOrNumericLiteral(location) && location.parent.kind === SyntaxKind.ComputedPropertyName) {
+            return location.text;
         }
 
         // Try to get the local symbol if we're dealing with an 'export default'
         // since that symbol has the "true" name.
         const localExportDefaultSymbol = getLocalSymbolForExportDefault(symbol);
-
-        const name = typeChecker.symbolToString(localExportDefaultSymbol || symbol);
-
-        return name;
+        return typeChecker.symbolToString(localExportDefaultSymbol || symbol);
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
@@ -1336,7 +1299,7 @@ namespace ts {
             name.charCodeAt(0) === name.charCodeAt(length - 1) &&
             (name.charCodeAt(0) === CharacterCodes.doubleQuote || name.charCodeAt(0) === CharacterCodes.singleQuote)) {
             return name.substring(1, length - 1);
-        };
+        }
         return name;
     }
 
@@ -1382,8 +1345,19 @@ namespace ts {
         };
     }
 
-    export function getOpenBraceEnd(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
+    export function getFirstNonSpaceCharacterPosition(text: string, position: number) {
+        while (isWhiteSpaceLike(text.charCodeAt(position))) {
+            position += 1;
+        }
+        return position;
+    }
+
+    export function getOpenBrace(constructor: ConstructorDeclaration, sourceFile: SourceFile) {
         // First token is the open curly, this is where we want to put the 'super' call.
-        return constructor.body.getFirstToken(sourceFile).getEnd();
+        return constructor.body.getFirstToken(sourceFile);
+    }
+
+    export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
+        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
 }

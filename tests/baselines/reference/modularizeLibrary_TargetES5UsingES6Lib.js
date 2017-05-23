@@ -1,5 +1,4 @@
 //// [modularizeLibrary_TargetES5UsingES6Lib.ts]
-
 // Using Es6 array
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

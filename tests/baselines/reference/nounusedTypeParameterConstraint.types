@@ -1,5 +1,4 @@
 === tests/cases/compiler/bar.ts ===
-
 export interface IEventSourcedEntity { }
 >IEventSourcedEntity : IEventSourcedEntity
 

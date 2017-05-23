@@ -225,27 +225,28 @@
 ////
 ////var shwvar = 1;
 
-function goToMarkAndGeneralVerify(marker: string)
+function goToMarkAndGeneralVerify(marker: string, isClassScope?: boolean)
 {
     goTo.marker(marker);
 
-    verify.completionListContains('mod1var', 'var mod1var: number');
-    verify.completionListContains('mod1fn', 'function mod1fn(): void');
-    verify.completionListContains('mod1cls', 'class mod1cls');
-    verify.completionListContains('mod1int', 'interface mod1int');
-    verify.completionListContains('mod1mod', 'namespace mod1mod');
-    verify.completionListContains('mod1evar', 'var mod1.mod1evar: number');
-    verify.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
-    verify.completionListContains('mod1ecls', 'class mod1.mod1ecls');
-    verify.completionListContains('mod1eint', 'interface mod1.mod1eint');
-    verify.completionListContains('mod1emod', 'namespace mod1.mod1emod');
-    verify.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
-    verify.completionListContains('mod2', 'namespace mod2');
-    verify.completionListContains('mod3', 'namespace mod3');
-    verify.completionListContains('shwvar', 'var shwvar: number');
-    verify.completionListContains('shwfn', 'function shwfn(): void');
-    verify.completionListContains('shwcls', 'class shwcls');
-    verify.completionListContains('shwint', 'interface shwint');
+    const verifyModule = isClassScope ? verify.not : verify;
+    verifyModule.completionListContains('mod1var', 'var mod1var: number');
+    verifyModule.completionListContains('mod1fn', 'function mod1fn(): void');
+    verifyModule.completionListContains('mod1cls', 'class mod1cls');
+    verifyModule.completionListContains('mod1int', 'interface mod1int');
+    verifyModule.completionListContains('mod1mod', 'namespace mod1mod');
+    verifyModule.completionListContains('mod1evar', 'var mod1.mod1evar: number');
+    verifyModule.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
+    verifyModule.completionListContains('mod1ecls', 'class mod1.mod1ecls');
+    verifyModule.completionListContains('mod1eint', 'interface mod1.mod1eint');
+    verifyModule.completionListContains('mod1emod', 'namespace mod1.mod1emod');
+    verifyModule.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
+    verifyModule.completionListContains('mod2', 'namespace mod2');
+    verifyModule.completionListContains('mod3', 'namespace mod3');
+    verifyModule.completionListContains('shwvar', 'var shwvar: number');
+    verifyModule.completionListContains('shwfn', 'function shwfn(): void');
+    verifyModule.completionListContains('shwcls', 'class shwcls');
+    verifyModule.completionListContains('shwint', 'interface shwint');
 
     verify.not.completionListContains('mod2var');
     verify.not.completionListContains('mod2fn');
@@ -280,7 +281,7 @@ verify.completionListContains('bar', '(local var) bar: number');
 verify.completionListContains('foob', '(local function) foob(): void');
 
 // from class in mod1
-goToMarkAndGeneralVerify('class');
+goToMarkAndGeneralVerify('class', /*isClassScope*/ true);
 //verify.not.completionListContains('ceFunc');
 //verify.not.completionListContains('ceVar');
 
@@ -306,7 +307,7 @@ verify.completionListContains('bar', '(local var) bar: number');
 verify.completionListContains('foob', '(local function) foob(): void');
 
 // from exported class in mod1
-goToMarkAndGeneralVerify('exportedClass');
+goToMarkAndGeneralVerify('exportedClass', /*isClassScope*/ true);
 //verify.not.completionListContains('ceFunc');
 //verify.not.completionListContains('ceVar');
 

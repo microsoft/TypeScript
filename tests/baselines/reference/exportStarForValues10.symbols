@@ -1,7 +1,6 @@
 === tests/cases/compiler/file0.ts ===
-
 export var v = 1;
->v : Symbol(v, Decl(file0.ts, 1, 10))
+>v : Symbol(v, Decl(file0.ts, 0, 10))
 
 === tests/cases/compiler/file1.ts ===
 export interface Foo { x }

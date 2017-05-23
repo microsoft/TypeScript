@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/ifDoWhileStatements/ifDoWhileStatements.ts ===
-
 interface I {
 >I : I
 

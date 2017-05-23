@@ -1,5 +1,4 @@
 //// [duplicateVariablesByScope.ts]
-
 // duplicate local variables are only reported at global scope
 
 module M {

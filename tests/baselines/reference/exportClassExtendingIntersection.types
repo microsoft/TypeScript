@@ -1,0 +1,84 @@
+=== tests/cases/compiler/BaseClass.ts ===
+export type Constructor<T> = new (...args: any[]) => T;
+>Constructor : Constructor<T>
+>T : T
+>args : any[]
+>T : T
+
+export class MyBaseClass<T> {
+>MyBaseClass : MyBaseClass<T>
+>T : T
+
+    baseProperty: string;
+>baseProperty : string
+
+    constructor(value: T) {}
+>value : T
+>T : T
+}
+=== tests/cases/compiler/MixinClass.ts ===
+import { Constructor, MyBaseClass } from './BaseClass';
+>Constructor : any
+>MyBaseClass : typeof MyBaseClass
+
+export interface MyMixin {
+>MyMixin : MyMixin
+
+    mixinProperty: string;
+>mixinProperty : string
+}
+
+export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
+>MyMixin : <T extends Constructor<MyBaseClass<any>>>(base: T) => T & Constructor<MyMixin>
+>T : T
+>Constructor : Constructor<T>
+>MyBaseClass : MyBaseClass<T>
+>base : T
+>T : T
+>T : T
+>Constructor : Constructor<T>
+>MyMixin : MyMixin
+
+    return class extends base {
+>class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin<any>.(Anonymous class); } & T
+>base : MyBaseClass<any>
+
+        mixinProperty: string;
+>mixinProperty : string
+    }
+}
+=== tests/cases/compiler/FinalClass.ts ===
+import { MyBaseClass } from './BaseClass';
+>MyBaseClass : typeof MyBaseClass
+
+import { MyMixin } from './MixinClass';
+>MyMixin : <T extends new (...args: any[]) => MyBaseClass<any>>(base: T) => T & (new (...args: any[]) => MyMixin)
+
+export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
+>MyExtendedClass : MyExtendedClass
+>MyMixin(MyBaseClass) : MyBaseClass<string> & MyMixin
+>MyMixin : <T extends new (...args: any[]) => MyBaseClass<any>>(base: T) => T & (new (...args: any[]) => MyMixin)
+>MyBaseClass : typeof MyBaseClass
+
+    extendedClassProperty: number;
+>extendedClassProperty : number
+}
+=== tests/cases/compiler/Main.ts ===
+import { MyExtendedClass } from './FinalClass';
+>MyExtendedClass : typeof MyExtendedClass
+
+import { MyMixin } from './MixinClass';
+>MyMixin : <T extends new (...args: any[]) => MyBaseClass<any>>(base: T) => T & (new (...args: any[]) => MyMixin)
+
+const myExtendedClass = new MyExtendedClass('string');
+>myExtendedClass : MyExtendedClass
+>new MyExtendedClass('string') : MyExtendedClass
+>MyExtendedClass : typeof MyExtendedClass
+>'string' : "string"
+
+const AnotherMixedClass = MyMixin(MyExtendedClass);
+>AnotherMixedClass : typeof MyExtendedClass & (new (...args: any[]) => MyMixin)
+>MyMixin(MyExtendedClass) : typeof MyExtendedClass & (new (...args: any[]) => MyMixin)
+>MyMixin : <T extends new (...args: any[]) => MyBaseClass<any>>(base: T) => T & (new (...args: any[]) => MyMixin)
+>MyExtendedClass : typeof MyExtendedClass
+

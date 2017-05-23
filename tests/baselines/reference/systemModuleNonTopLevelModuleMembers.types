@@ -1,5 +1,4 @@
 === tests/cases/compiler/systemModuleNonTopLevelModuleMembers.ts ===
-
 export class TopLevelClass {}
 >TopLevelClass : TopLevelClass
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals1_1.ts] ////
 
 //// [file1.d.ts]
-
 declare module "file1" {
     var x: number;
     export = x;
@@ -25,9 +24,11 @@ let a: x.A; // should not work
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "file2"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a; // should not work
 });

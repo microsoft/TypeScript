@@ -1,9 +1,9 @@
-﻿/// <reference path="types.ts"/>
+/// <reference path="types.ts"/>
 /// <reference path="performance.ts" />
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.2.0";
+    export const version = "2.4.0";
 }
 
 /* @internal */
@@ -30,7 +30,7 @@ namespace ts {
 
     /** Create a MapLike with good performance. */
     function createDictionaryObject<T>(): MapLike<T> {
-        const map = Object.create(null); // tslint:disable-line:no-null-keyword
+        const map = Object.create(/*prototype*/ null); // tslint:disable-line:no-null-keyword
 
         // Using 'delete' on an object causes V8 to put the object in dictionary mode.
         // This disables creation of hidden classes, which are expensive when an object is
@@ -84,7 +84,7 @@ namespace ts {
                     this.index++;
                     return { value: this.selector(this.data, this.keys[index]), done: false };
                 }
-                return { value: undefined as never, done: true }
+                return { value: undefined as never, done: true };
             }
         }
 
@@ -140,7 +140,7 @@ namespace ts {
                     action(this.data[key], key);
                 }
             }
-        }
+        };
     }
 
     export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
@@ -224,12 +224,42 @@ namespace ts {
         }
         return undefined;
     }
+    /**
+     * Iterates through the parent chain of a node and performs the callback on each parent until the callback
+     * returns a truthy value, then returns that value.
+     * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
+     * At that point findAncestor returns undefined.
+     */
+    export function findAncestor<T extends Node>(node: Node, callback: (element: Node) => element is T): T | undefined;
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined;
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node {
+        while (node) {
+            const result = callback(node);
+            if (result === "quit") {
+                return undefined;
+            }
+            else if (result) {
+                return node;
+            }
+            node = node.parent;
+        }
+        return undefined;
+    }
 
     export function zipWith<T, U>(arrayA: T[], arrayB: U[], callback: (a: T, b: U, index: number) => void): void {
         Debug.assert(arrayA.length === arrayB.length);
         for (let i = 0; i < arrayA.length; i++) {
             callback(arrayA[i], arrayB[i], i);
         }
+    }
+
+    export function zipToMap<T>(keys: string[], values: T[]): Map<T> {
+        Debug.assert(keys.length === values.length);
+        const map = createMap<T>();
+        for (let i = 0; i < keys.length; ++i) {
+            map.set(keys[i], values[i]);
+        }
+        return map;
     }
 
     /**
@@ -460,6 +490,35 @@ namespace ts {
             }
         }
         return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     * Avoids allocation if all elements map to themselves.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = mapfn(item, i);
+                if (result || item !== mapped || isArray(mapped)) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (isArray(mapped)) {
+                        addRange(result, mapped);
+                    }
+                    else {
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
     }
 
     /**
@@ -887,10 +946,12 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T>(iterator: Iterator<T>): T[] {
-        const result: T[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+        const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(value);
+            result.push(map ? map(value) : value);
         }
         return result;
     }
@@ -943,7 +1004,7 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p of getOwnKeys(arg)) {
+            for (const p in arg) if (hasProperty(arg, p)) {
                 t[p] = arg[p];
             }
         }
@@ -1358,7 +1419,7 @@ namespace ts {
 
     /**
      * Returns length of path root (i.e. length of "/", "x:/", "//server/share/, file:///user/files")
-    */
+     */
     export function getRootLength(path: string): number {
         if (path.charCodeAt(0) === CharacterCodes.slash) {
             if (path.charCodeAt(1) !== CharacterCodes.slash) return 1;
@@ -1455,7 +1516,7 @@ namespace ts {
         return /^\.\.?($|[\\/])/.test(moduleName);
     }
 
-    export function getEmitScriptTarget(compilerOptions: CompilerOptions | PrinterOptions) {
+    export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
@@ -1704,6 +1765,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function removePrefix(str: string, prefix: string): string {
+        return startsWith(str, prefix) ? str.substr(prefix.length) : str;
+    }
+
+    /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -1717,7 +1783,8 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+    /* @internal */
+    export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
                 return true;
@@ -1917,7 +1984,7 @@ namespace ts {
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);
@@ -2020,14 +2087,14 @@ namespace ts {
     export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
-    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]): string[] {
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
         const needAllExtensions = options && options.allowJs;
-        if (!extraFileExtensions || extraFileExtensions.length === 0) {
+        if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions = (needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions).slice(0);
+        const extensions = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
-            if (needAllExtensions || extInfo.scriptKind === ScriptKind.TS) {
+            if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
             }
         }
@@ -2042,7 +2109,7 @@ namespace ts {
         return forEach(supportedTypeScriptExtensions, extension => fileExtensionIs(fileName, extension));
     }
 
-    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: FileExtensionInfo[]) {
+    export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]) {
         if (!fileName) { return false; }
 
         for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
@@ -2061,7 +2128,6 @@ namespace ts {
     export const enum ExtensionPriority {
         TypeScriptFiles = 0,
         DeclarationAndJavaScriptFiles = 2,
-        Limit = 5,
 
         Highest = TypeScriptFiles,
         Lowest = DeclarationAndJavaScriptFiles,
@@ -2070,7 +2136,7 @@ namespace ts {
     export function getExtensionPriority(path: string, supportedExtensions: string[]): ExtensionPriority {
         for (let i = supportedExtensions.length - 1; i >= 0; i--) {
             if (fileExtensionIs(path, supportedExtensions[i])) {
-                return adjustExtensionPriority(<ExtensionPriority>i);
+                return adjustExtensionPriority(<ExtensionPriority>i, supportedExtensions);
             }
         }
 
@@ -2082,27 +2148,26 @@ namespace ts {
     /**
      * Adjusts an extension priority to be the highest priority within the same range.
      */
-    export function adjustExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function adjustExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.TypeScriptFiles;
         }
-        else if (extensionPriority < ExtensionPriority.Limit) {
+        else if (extensionPriority < supportedExtensions.length) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
-        }
-    }
+            return supportedExtensions.length;
+        }    }
 
     /**
      * Gets the next lowest extension priority for a given priority.
      */
-    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority): ExtensionPriority {
+    export function getNextLowestExtensionPriority(extensionPriority: ExtensionPriority, supportedExtensions: string[]): ExtensionPriority {
         if (extensionPriority < ExtensionPriority.DeclarationAndJavaScriptFiles) {
             return ExtensionPriority.DeclarationAndJavaScriptFiles;
         }
         else {
-            return ExtensionPriority.Limit;
+            return supportedExtensions.length;
         }
     }
 
@@ -2361,5 +2426,9 @@ namespace ts {
         if (fileExtensionIs(path, ".jsx")) {
             return Extension.Jsx;
         }
+    }
+
+    export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
+        return sourceFile.checkJsDirective ? sourceFile.checkJsDirective.enabled : compilerOptions.checkJs;
     }
 }

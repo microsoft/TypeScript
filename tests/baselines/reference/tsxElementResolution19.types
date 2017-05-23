@@ -1,6 +1,5 @@
 === tests/cases/conformance/jsx/react.d.ts ===
-
-No type information for this code.declare module "react" {
+declare module "react" {
 No type information for this code.
 No type information for this code.}
 No type information for this code.
@@ -15,7 +14,6 @@ export class MyClass { }
 >MyClass : MyClass
 
 === tests/cases/conformance/jsx/file2.tsx ===
-
 // Should not elide React import
 import * as React from 'react';
 >React : typeof React
