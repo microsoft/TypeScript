@@ -2,7 +2,7 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code,
-                     Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
+        Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
         getCodeActions: getActionsForAddMissingMember
     });
 
@@ -79,19 +79,30 @@ namespace ts.codefix {
         }
 
         function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
-            let typeNode: TypeNode;
+            const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
+            const tokenName = token.getText(sourceFile);
+            let actions: CodeAction[];
 
+            if (token.parent.parent.kind === SyntaxKind.CallExpression) {
+                const callExpression = <CallExpression>token.parent.parent;
+                const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName);
+
+                const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                methodDeclarationChangeTracker.insertNodeAfter(sourceFile, openBrace, methodDeclaration, { suffix: context.newLineCharacter });
+                actions = [{
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_method_0), [tokenName]),
+                    changes: methodDeclarationChangeTracker.getChanges()
+                }];
+            }
+
+            let typeNode: TypeNode;
             if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
                 const binaryExpression = token.parent.parent as BinaryExpression;
-
                 const checker = context.program.getTypeChecker();
                 const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
                 typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
             }
-
             typeNode = typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
-
-            const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 
             const property = createProperty(
                 /*decorators*/undefined,
@@ -103,10 +114,10 @@ namespace ts.codefix {
             const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
             propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
 
-            const actions = [{
+            (actions || (actions = [])).push({
                 description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
                 changes: propertyChangeTracker.getChanges()
-            }];
+            });
 
             if (!isStatic) {
                 const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);

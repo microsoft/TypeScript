@@ -142,6 +142,46 @@ namespace ts.codefix {
         }
     }
 
+    export function createMethodFromCallExpression(callExpression: CallExpression, methodName: string): MethodDeclaration {
+        const argCount = callExpression.arguments.length;
+        const parameters: ParameterDeclaration[] = [];
+        for (let i = 0; i < argCount; i++) {
+            const typeNode = createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            const newParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                `arg${i}`,
+                /*questionToken*/ undefined,
+                typeNode,
+                /*initializer*/ undefined);
+            parameters.push(newParameter);
+        }
+
+        const typeArgCount = callExpression.typeArguments ? callExpression.typeArguments.length : 0;
+        let typeParameters: TypeParameterDeclaration[];
+        for (let i = 0; i < typeArgCount; i++) {
+            const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
+            const typeParameter = createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined);
+
+            (typeParameters ? typeParameters : typeParameters = []).push(typeParameter);
+        }
+
+        const newMethod = createMethod(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            /*asteriskToken*/ undefined,
+            methodName,
+            /*questionToken*/ undefined,
+            typeParameters,
+            parameters,
+            /*type*/ undefined,
+            createStubbedMethodBody()
+        )
+
+        return newMethod;
+    }
+
     function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
         /** This is *a* signature with the maximal number of arguments,
          * such that if there is a "maximal" signature without rest arguments,

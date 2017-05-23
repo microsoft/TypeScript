@@ -3583,7 +3583,11 @@
         "category": "Message",
         "code": 90022
     },
-
+    "Add declaration for missing method '{0}'.": {
+        "category": "Message",
+        "code": 90023
+    },
+    
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
