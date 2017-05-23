@@ -1964,8 +1964,7 @@ namespace Harness {
                 }
 
                 const diff = getDiff(expected, encoded_actual, referencePath(relativeFileName), actualFileName);
-                console.error(diff);
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+                throw new Error(`The baseline file ${relativeFileName} has changed.\n\n${diff}`);
             }
         }
 
