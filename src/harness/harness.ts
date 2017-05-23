@@ -605,7 +605,7 @@ namespace Harness {
             export const exit = ts.noop;
             export const getDirectories = () => <string[]>[];
 
-            export let log = (s: string) => diffLines.push(s);
+            export let log = (s: string) => console.log(s);
 
             namespace Http {
                 function waitForXHR(xhr: XMLHttpRequest) {
