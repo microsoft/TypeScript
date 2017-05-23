@@ -691,8 +691,7 @@ namespace ts {
         return typeAcquisition;
     }
 
-    /* @internal */
-    export function getOptionNameMap(): OptionNameMap {
+    function getOptionNameMap(): OptionNameMap {
         if (optionNameMapCache) {
             return optionNameMapCache;
         }
@@ -745,7 +744,6 @@ namespace ts {
         const options: CompilerOptions = {};
         const fileNames: string[] = [];
         const errors: Diagnostic[] = [];
-        const { optionNameMap, shortOptionNames } = getOptionNameMap();
 
         parseStrings(commandLine);
         return {
@@ -757,21 +755,13 @@ namespace ts {
         function parseStrings(args: string[]) {
             let i = 0;
             while (i < args.length) {
-                let s = args[i];
+                const s = args[i];
                 i++;
                 if (s.charCodeAt(0) === CharacterCodes.at) {
                     parseResponseFile(s.slice(1));
                 }
                 else if (s.charCodeAt(0) === CharacterCodes.minus) {
-                    s = s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
-
-                    // Try to translate short option names to their full equivalents.
-                    const short = shortOptionNames.get(s);
-                    if (short !== undefined) {
-                        s = short;
-                    }
-
-                    const opt = optionNameMap.get(s);
+                    const opt = getOptionFromName(s.slice(s.charCodeAt(1) === CharacterCodes.minus ? 2 : 1), /*allowShort*/ true);
                     if (opt) {
                         if (opt.isTSConfigOnly) {
                             errors.push(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file, opt.name));
@@ -857,6 +847,19 @@ namespace ts {
             }
             parseStrings(args);
         }
+    }
+
+    function getOptionFromName(optionName: string, allowShort = false): CommandLineOption | undefined {
+        optionName = optionName.toLowerCase();
+        const { optionNameMap, shortOptionNames } = getOptionNameMap();
+        // Try to translate short option names to their full equivalents.
+        if (allowShort) {
+            const short = shortOptionNames.get(optionName);
+            if (short !== undefined) {
+                optionName = short;
+            }
+        }
+        return optionNameMap.get(optionName);
     }
 
     /**
@@ -1703,5 +1706,48 @@ namespace ts {
      */
     function caseInsensitiveKeyMapper(key: string) {
         return key.toLowerCase();
+    }
+
+    /**
+     * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
+     * Also converts enum values back to strings.
+     */
+    export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
+        const out: ts.CompilerOptions = {};
+        for (const key in opts) if (opts.hasOwnProperty(key)) {
+            const type = getOptionFromName(key);
+            if (type !== undefined) {
+                const value = getOptionValueExcludingPaths(opts[key], type);
+                if (value !== undefined) {
+                    out[key] = value;
+                }
+            }
+        }
+        return out;
+    }
+
+    function getOptionValueExcludingPaths(value: any, option: CommandLineOption): {} | undefined {
+        switch (option.type) {
+            case "object": // Don't allow "paths"
+            case "string": // Don't allow arbitrary strings.
+                return undefined;
+            case "number": // Allow numbers, but be sure to check it's actually a number.
+                return typeof value === "number" ? value : undefined;
+            case "boolean":
+                return typeof value === "boolean" ? value : undefined;
+            case "list":
+                const elementType = (option as CommandLineOptionOfListType).element;
+                if (elementType.type === "number" || elementType.type === "boolean" || typeof elementType.type !== "string") {
+                    return mapDefined(value, v => getOptionValueExcludingPaths(v, elementType));
+                }
+                return undefined;
+            default:
+                const stringValue = ts.forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
+                    if (optionEnumValue === value) {
+                        return { value: optionStringValue };
+                    }
+                });
+                return stringValue && stringValue.value;
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace ts.server {
     export const ContextEvent = "context";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+    export const ProjectTelemetryEvent = "telemetry";
 
     export interface ContextEvent {
         eventName: typeof ContextEvent;
@@ -29,7 +30,49 @@ namespace ts.server {
         data: { project: Project, languageServiceEnabled: boolean };
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent;
+    export interface ProjectTelemetryEvent {
+        readonly eventName: typeof ProjectTelemetryEvent;
+        readonly data: ProjectTelemetryEventData;
+    }
+
+    export interface FileStats {
+        readonly ts: number;
+        readonly js: number;
+        readonly dts: number;
+    }
+
+    function getFileStats(fileNames: string[]): FileStats {
+        let ts = 0, js = 0, dts = 0;
+        for (const file of fileNames) {
+            switch (extensionFromPath(file)) {
+                case Extension.Ts:
+                case Extension.Tsx:
+                    ts++;
+                    break;
+                case Extension.Js:
+                case Extension.Jsx:
+                    js++;
+                    break;
+                case Extension.Dts:
+                    dts++;
+                    break;
+                default: Debug.fail();
+            }
+        }
+        return { ts, js, dts };
+    }
+
+    export interface ProjectTelemetryEventData {
+        /** Count of file extensions seen in the project. */
+        readonly fileStats: FileStats;
+        /**
+         * Any compiler options that might contain paths will be taken out.
+         * Enum compiler options will be converted to strings.
+         */
+        readonly compilerOptions: ts.CompilerOptions;
+    }
+
+    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -344,6 +387,9 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+
+        /** Tracks projects that we have already sent telemetry for. */
+        private readonly seenProjects = createMap<true>();
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -984,7 +1030,21 @@ namespace ts.server {
 
             this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
+            this.sendProjectTelemetry(project.externalProjectName, project);
             return project;
+        }
+
+        private sendProjectTelemetry(projectKey: string, project: ts.server.ExternalProject | ts.server.ConfiguredProject): void {
+            if (this.seenProjects.has(projectKey)) {
+                return;
+            }
+            this.seenProjects.set(projectKey, true);
+
+            const data: ProjectTelemetryEventData = {
+                fileStats: getFileStats(project.getFileNames()),
+                compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+            };
+            this.eventHandler({ eventName: ProjectTelemetryEvent, data });
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
@@ -1020,6 +1080,7 @@ namespace ts.server {
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
+            this.sendProjectTelemetry(project.getConfigFilePath(), project);
             return project;
         }
 

@@ -1,0 +1,154 @@
+/// <reference path="../harness.ts" />
+/// <reference path="./tsserverProjectSystem.ts" />
+
+namespace ts.projectSystem {
+    describe("project telemetry", () => {
+        it("does nothing for inferred project", () => {
+            const file = mkFile("/a.js");
+            const et = new EventTracker([file]);
+            et.service.openClientFile(file.path);
+            assert.equal(et.getEvents().length, 0);
+        });
+
+        it("only sends an event once", () => {
+            const file = mkFile("/a.ts");
+            const tsconfig = mkFile("/tsconfig.json", {});
+
+            const et = new EventTracker([file, tsconfig]);
+            et.service.openClientFile(file.path);
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 1, js: 0, dts: 0 }, compilerOptions: {} });
+
+            et.service.closeClientFile(file.path);
+            checkNumberOfProjects(et.service, { configuredProjects: 0 });
+
+            et.service.openClientFile(file.path);
+            checkNumberOfProjects(et.service, { configuredProjects: 1 });
+
+            assert.equal(et.getEvents().length, 0);
+        });
+
+        it("counts files by extension", () => {
+            const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => mkFile(`/src/${f}`));
+            const notIncludedFile = mkFile("/bin/ts.js");
+            const compilerOptions: ts.CompilerOptions = { allowJs: true };
+            const tsconfig = mkFile("/tsconfig.json", { compilerOptions, include: ["src"] });
+
+            const et = new EventTracker([...files, notIncludedFile, tsconfig]);
+            et.service.openClientFile(files[0].path);
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 3, js: 2, dts: 1 }, compilerOptions });
+        });
+
+        it("works with external project", () => {
+            const file1 = mkFile("/a.ts");
+            const et = new EventTracker([file1]);
+            const compilerOptions: ts.CompilerOptions = { strict: true };
+
+            const projectFileName = "foo.csproj";
+
+            open();
+
+            // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 1, js: 0, dts: 0 }, compilerOptions: { strict: true } });
+
+            // Also test that opening an external project only sends an event once.
+
+            et.service.closeExternalProject(projectFileName);
+            checkNumberOfProjects(et.service, { externalProjects: 0 });
+
+            open();
+            assert.equal(et.getEvents().length, 0);
+
+            function open(): void {
+                et.service.openExternalProject({
+                    rootFiles: toExternalFiles([file1.path]),
+                    options: compilerOptions,
+                    projectFileName: projectFileName,
+                });
+                checkNumberOfProjects(et.service, { externalProjects: 1 });
+            }
+        });
+
+        it("Does not expose paths", () => {
+            const file = mkFile("/a.ts");
+
+            const compilerOptions: ts.CompilerOptions = {
+                project: "",
+                outFile: "hunter2.js",
+                outDir: "hunter2",
+                rootDir: "hunter2",
+                baseUrl: "hunter2",
+                rootDirs: ["hunter2"],
+                typeRoots: ["hunter2"],
+                types: ["hunter2"],
+                sourceRoot: "hunter2",
+                mapRoot: "hunter2",
+                jsxFactory: "hunter2",
+                out: "hunter2",
+                reactNamespace: "hunter2",
+                charset: "hunter2",
+                locale: "hunter2",
+                declarationDir: "hunter2",
+                paths: {
+                    "*": ["hunter2"],
+                },
+
+                // Boolean / number options get through
+                declaration: true,
+
+                // List of string enum gets through -- but only if legitimately a member of the enum
+                lib: ["es6", "dom", "hunter2"],
+
+                // Sensitive data doesn't get through even if sent to an option of safe type
+                checkJs: "hunter2" as any as boolean,
+            };
+            (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
+            const tsconfig = mkFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
+
+            const et = new EventTracker([file, tsconfig]);
+            et.service.openClientFile(file.path);
+
+            assert.deepEqual(et.getProjectTelemetryEvent(), {
+                fileStats: { ts: 1, js: 0, dts: 0 },
+                compilerOptions: {
+                    declaration: true,
+                    lib: ["es6", "dom"],
+                },
+            });
+        });
+    });
+
+    class EventTracker {
+        private events: server.ProjectServiceEvent[] = [];
+        readonly service: TestProjectService;
+
+        constructor(files: projectSystem.FileOrFolder[]) {
+            this.service = createProjectService(createServerHost(files), {
+                eventHandler: event => {
+                    this.events.push(event);
+                },
+            });
+        }
+
+        getEvents(): ReadonlyArray<server.ProjectServiceEvent> {
+            const events = this.events;
+            this.events = [];
+            return events;
+        }
+
+        getProjectTelemetryEvent(): server.ProjectTelemetryEventData {
+            return this.getEvent<server.ProjectTelemetryEvent>(ts.server.ProjectTelemetryEvent);
+        }
+
+        private getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
+            const events = this.getEvents();
+            assert.equal(events.length, 1);
+            const event = events[0];
+            assert.equal(event.eventName, eventName);
+            return event.data;
+        }
+    }
+
+    function mkFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
+        return { path, content: typeof content === "string" ? "" : JSON.stringify(content) };
+    }
+}

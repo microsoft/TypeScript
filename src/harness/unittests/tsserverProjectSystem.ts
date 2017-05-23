@@ -2234,7 +2234,7 @@ namespace ts.projectSystem {
 
             let lastEvent: server.ProjectLanguageServiceStateEvent;
             const session = createSession(host, /*typingsInstaller*/ undefined, e => {
-                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent) {
+                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectTelemetryEvent) {
                     return;
                 }
                 assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
