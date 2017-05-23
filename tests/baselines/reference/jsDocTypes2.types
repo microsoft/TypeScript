@@ -1,0 +1,59 @@
+=== tests/cases/conformance/salsa/0.js ===
+// @ts-check
+/** @type {*} */
+var anyT = 2;
+>anyT : any
+>2 : 2
+
+/** @type {?} */
+var anyT1 = 2;
+>anyT1 : any
+>2 : 2
+
+anyT1 = "hi";
+>anyT1 = "hi" : "hi"
+>anyT1 : any
+>"hi" : "hi"
+
+/** @type {Function} */
+const x = (a) => a + 1;
+>x : Function
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x(1);
+>x(1) : any
+>x : Function
+>1 : 1
+
+/** @type {function (number)} */
+const x1 = (a) => a + 1;
+>x1 : (arg0: number) => any
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x1(0);
+>x1(0) : any
+>x1 : (arg0: number) => any
+>0 : 0
+
+/** @type {function (number): number} */
+const x2 = (a) => a + 1;
+>x2 : (arg0: number) => number
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x2(0);
+>x2(0) : number
+>x2 : (arg0: number) => number
+>0 : 0
+
