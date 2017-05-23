@@ -2292,10 +2292,10 @@ namespace FourSlash {
                 this.raiseError("Exactly one range should be specified in the testfile.");
             }
 
-            const actualText = this.normalizeNewlines(this.rangeText(ranges[0]));
+            const actualText = this.rangeText(ranges[0]);
 
             const result = includeWhiteSpace
-                ? actualText === this.normalizeNewlines(expectedText)
+                ? normalizeNewLines(actualText) === normalizeNewLines(expectedText)
                 : this.removeWhitespace(actualText) === this.removeWhitespace(expectedText);
 
             if (!result) {

@@ -2,7 +2,7 @@
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [Diagnostics.Property_0_does_not_exist_on_type_1.code,
-        Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
+                     Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code],
         getCodeActions: getActionsForAddMissingMember
     });
 
@@ -33,13 +33,12 @@ namespace ts.codefix {
             return undefined;
         }
 
+        const tokenName = token.getText(sourceFile);
         const isStatic = hasModifier(classMemberDeclaration, ModifierFlags.Static);
 
         return isInJavaScriptFile(sourceFile) ? getActionsForAddMissingMemberInJavaScriptFile() : getActionsForAddMissingMemberInTypeScriptFile();
 
         function getActionsForAddMissingMemberInJavaScriptFile(): CodeAction[] | undefined {
-            const memberName = token.getText();
-
             if (isStatic) {
                 if (classDeclaration.kind === SyntaxKind.ClassExpression) {
                     return undefined;
@@ -48,12 +47,12 @@ namespace ts.codefix {
                 const className = classDeclaration.name.getText();
 
                 return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [memberName]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
                     changes: [{
                         fileName: sourceFile.fileName,
                         textChanges: [{
                             span: { start: classDeclaration.getEnd(), length: 0 },
-                            newText: `${context.newLineCharacter}${className}.${memberName} = undefined;${context.newLineCharacter}`
+                            newText: `${context.newLineCharacter}${className}.${tokenName} = undefined;${context.newLineCharacter}`
                         }]
                     }]
                 }];
@@ -66,12 +65,12 @@ namespace ts.codefix {
                 }
 
                 return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [memberName]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]),
                     changes: [{
                         fileName: sourceFile.fileName,
                         textChanges: [{
                             span: { start: classConstructor.body.getEnd() - 1, length: 0 },
-                            newText: `this.${memberName} = undefined;${context.newLineCharacter}`
+                            newText: `this.${tokenName} = undefined;${context.newLineCharacter}`
                         }]
                     }]
                 }];
@@ -80,7 +79,6 @@ namespace ts.codefix {
 
         function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
             const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
-            const tokenName = token.getText(sourceFile);
             let actions: CodeAction[];
 
             if (token.parent.parent.kind === SyntaxKind.CallExpression) {
@@ -107,7 +105,7 @@ namespace ts.codefix {
             const property = createProperty(
                 /*decorators*/undefined,
                 /*modifiers*/ isStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
-                token.getText(sourceFile),
+                tokenName,
                 /*questionToken*/ undefined,
                 typeNode,
                 /*initializer*/ undefined);
@@ -115,7 +113,7 @@ namespace ts.codefix {
             propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
 
             (actions || (actions = [])).push({
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [tokenName]),
                 changes: propertyChangeTracker.getChanges()
             });
 
@@ -139,7 +137,7 @@ namespace ts.codefix {
                 indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
 
                 actions.push({
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [tokenName]),
                     changes: indexSignatureChangeTracker.getChanges()
                 });
             }
