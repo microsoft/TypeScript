@@ -131,6 +131,9 @@ namespace ts {
 
             // tslint:enable boolean-trivia
             printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile));
+
+            printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(EmitHint.Unspecified, createNamespaceExportDeclaration("B"), sourceFile));
+
             printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(EmitHint.Unspecified, classWithOptionalMethodAndProperty, sourceFile));
         });
     });
