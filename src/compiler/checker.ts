@@ -6696,8 +6696,10 @@ namespace ts {
             return length(type.target.typeParameters);
         }
 
-        // Get type from reference to class or interface
-        function getTypeFromClassOrInterfaceReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol, typeArgs: Type[]): Type {
+        /**
+         * Get type from type-reference that reference to class or interface
+         */
+        function getTypeFromClassOrInterfaceReference(node: TypeReferenceType, symbol: Symbol, typeArgs: Type[]): Type {
             const type = <InterfaceType>getDeclaredTypeOfSymbol(getMergedSymbol(symbol));
             const typeParameters = type.localTypeParameters;
             if (typeParameters) {
@@ -6738,10 +6740,12 @@ namespace ts {
             return instantiation;
         }
 
-        // Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
-        // references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
-        // declared type. Instantiations are cached using the type identities of the type arguments as the key.
-        function getTypeFromTypeAliasReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol, typeArguments: Type[]): Type {
+        /**
+         * Get type from reference to type alias. When a type alias is generic, the declared type of the type alias may include
+         * references to the type parameters of the alias. We replace those with the actual type arguments by instantiating the
+         * declared type. Instantiations are cached using the type identities of the type arguments as the key.
+         */
+        function getTypeFromTypeAliasReference(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const typeParameters = getSymbolLinks(symbol).typeParameters;
             if (typeParameters) {
@@ -6766,8 +6770,10 @@ namespace ts {
             return type;
         }
 
-        // Get type from reference to named type that cannot be generic (enum or type parameter)
-        function getTypeFromNonGenericTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol): Type {
+        /**
+         * Get type from reference to named type that cannot be generic (enum or type parameter)
+         */
+        function getTypeFromNonGenericTypeReference(node: TypeReferenceType, symbol: Symbol): Type {
             if (node.typeArguments) {
                 error(node, Diagnostics.Type_0_is_not_generic, symbolToString(symbol));
                 return unknownType;
@@ -6775,7 +6781,7 @@ namespace ts {
             return getDeclaredTypeOfSymbol(symbol);
         }
 
-        function getTypeReferenceName(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): EntityNameOrEntityNameExpression | undefined {
+        function getTypeReferenceName(node: TypeReferenceType): EntityNameOrEntityNameExpression | undefined {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
                     return (<TypeReferenceNode>node).typeName;
@@ -6803,7 +6809,7 @@ namespace ts {
             return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
         }
 
-        function getTypeReferenceType(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference, symbol: Symbol) {
+        function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
 
             if (symbol === unknownSymbol) {
@@ -6862,7 +6868,7 @@ namespace ts {
             return strictNullChecks ? getUnionType([type, nullType]) : type;
         }
 
-        function getTypeFromTypeReference(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type {
+        function getTypeFromTypeReference(node: TypeReferenceType): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 let symbol: Symbol;
@@ -6893,7 +6899,7 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function typeArgumentsFromTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference): Type[] {
+        function typeArgumentsFromTypeReferenceNode(node: TypeReferenceType): Type[] {
             return map(node.typeArguments, getTypeFromTypeNode);
         }
 
