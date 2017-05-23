@@ -4005,11 +4005,11 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const projectName = projectService.configuredProjects[0].getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
-                arguments: { projectFileName: projectName }
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response;
             assert.isTrue(diags.length === 2);
 
@@ -4017,18 +4017,18 @@ namespace ts.projectSystem {
             host.reloadFS([file, configFile]);
             host.triggerFileWatcherCallback(configFile.path);
 
-            const diagsAfterEdit = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
-                arguments: { projectFileName: projectName }
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response;
             assert.isTrue(diagsAfterEdit.length === 2);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
             verifyDiagnostic(diags[1], diagsAfterEdit[1]);
 
-            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePositionAndFileName, afterEditDiag: server.protocol.DiagnosticWithLinePositionAndFileName) {
+            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
                 assert.equal(beforeEditDiag.message, afterEditDiag.message);
                 assert.equal(beforeEditDiag.code, afterEditDiag.code);
                 assert.equal(beforeEditDiag.category, afterEditDiag.category);
@@ -4036,7 +4036,6 @@ namespace ts.projectSystem {
                 assert.equal(beforeEditDiag.startLocation.offset, afterEditDiag.startLocation.offset);
                 assert.equal(beforeEditDiag.endLocation.line, afterEditDiag.endLocation.line + 1);
                 assert.equal(beforeEditDiag.endLocation.offset, afterEditDiag.endLocation.offset);
-                assert.equal(beforeEditDiag.fileName, afterEditDiag.fileName);
             }
         });
     });

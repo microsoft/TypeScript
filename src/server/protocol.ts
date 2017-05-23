@@ -358,10 +358,6 @@ namespace ts.server.protocol {
         code: number;
     }
 
-    export interface DiagnosticWithLinePositionAndFileName extends DiagnosticWithLinePosition {
-        fileName: string;
-    }
-
     /**
      * Response message for "projectInfo" request
      */
@@ -969,7 +965,7 @@ namespace ts.server.protocol {
         /**
          * List of errors in project
          */
-        projectErrors: DiagnosticWithLinePositionAndFileName[];
+        projectErrors: DiagnosticWithLinePosition[];
     }
 
     /**

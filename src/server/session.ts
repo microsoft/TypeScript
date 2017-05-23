@@ -88,16 +88,16 @@ namespace ts.server {
         return { line: lineAndCharacter.line + 1, offset: lineAndCharacter.character + 1 };
     }
 
-    function formatConfigFileDiag(diag: ts.Diagnostic): protocol.DiagnosticWithFileName {
-        return {
-            start: diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start)),
-            end: diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length)),
-            text: ts.flattenDiagnosticMessageText(diag.messageText, "\n"),
-            code: diag.code,
-            category: DiagnosticCategory[diag.category].toLowerCase(),
-            fileName: diag.file && diag.file.fileName,
-            source: diag.source
-        };
+    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: true): protocol.DiagnosticWithFileName;
+    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: false): protocol.Diagnostic;
+    function formatConfigFileDiag(diag: ts.Diagnostic, includeFileName: boolean): protocol.Diagnostic | protocol.DiagnosticWithFileName {
+        const start = diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start));
+        const end = diag.file && convertToILineInfo(getLineAndCharacterOfPosition(diag.file, diag.start + diag.length));
+        const text = ts.flattenDiagnosticMessageText(diag.messageText, "\n");
+        const { code, source } = diag;
+        const category = DiagnosticCategory[diag.category].toLowerCase();
+        return includeFileName ? { start, end, text, code, category, source, fileName: diag.file && diag.file.fileName } :
+            { start, end, text, code, category, source };
     }
 
     export interface PendingErrorCheck {
@@ -223,17 +223,6 @@ namespace ts.server {
 
         const len = byteLength(json, "utf8");
         return `Content-Length: ${1 + len}\r\n\r\n${json}${newLine}`;
-    }
-
-    /**
-     * Should Remap project Files with ts diagnostics if
-     * - there are project errors
-     * - options contain configFile - so we can remove it from options before serializing
-     * @param p project files with ts diagnostics
-     */
-    function shouldRemapProjectFilesWithTSDiagnostics(p: ProjectFilesWithTSDiagnostics) {
-        return (p.projectErrors && !!p.projectErrors.length) ||
-            (p.info && !!p.info.options.configFile);
     }
 
     /**
@@ -491,7 +480,7 @@ namespace ts.server {
         }
 
         public configFileDiagnosticEvent(triggerFile: string, configFile: string, diagnostics: ts.Diagnostic[]) {
-            const bakedDiags = ts.map(diagnostics, formatConfigFileDiag);
+            const bakedDiags = ts.map(diagnostics, diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ true));
             const ev: protocol.ConfigFileDiagnosticEvent = {
                 seq: 0,
                 type: "event",
@@ -624,22 +613,55 @@ namespace ts.server {
             return projectFileName && this.projectService.findProject(projectFileName);
         }
 
-        private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
+        private getConfigFileAndProject(args: protocol.FileRequestArgs) {
             const project = this.getProject(args.projectFileName);
-            return this.convertToCompilerOptionsDiagnosticsWithLinePosition(project.getLanguageService().getCompilerOptionsDiagnostics());
+            const file = toNormalizedPath(args.file);
+
+            return {
+                configFile: project && project.hasConfigFile(file) && file,
+                project
+            };
         }
 
-        private convertToCompilerOptionsDiagnosticsWithLinePosition(diagnostics: Diagnostic[]) {
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePositionAndFileName>{
+        private getConfigFileDiagnostics(configFile: NormalizedPath, project: Project, includeLinePosition: boolean) {
+            const projectErrors = project.getAllProjectErrors();
+            const optionsErrors = project.getLanguageService().getCompilerOptionsDiagnostics();
+            const diagnosticsForConfigFile = filter(
+                concatenate(projectErrors, optionsErrors),
+                diagnostic => diagnostic.file && diagnostic.file.fileName === configFile
+            );
+            return includeLinePosition ?
+                this.convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnosticsForConfigFile) :
+                map(
+                    diagnosticsForConfigFile,
+                    diagnostic => formatConfigFileDiag(diagnostic, /*includeFileName*/ false)
+                );
+        }
+
+        private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: Diagnostic[]) {
+            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
                 start: d.start,
                 length: d.length,
                 category: DiagnosticCategory[d.category].toLowerCase(),
                 code: d.code,
                 startLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start)),
-                endLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start + d.length)),
-                fileName: d.file && d.file.fileName
+                endLocation: d.file && convertToILineInfo(getLineAndCharacterOfPosition(d.file, d.start + d.length))
             });
+        }
+
+        private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
+            const project = this.getProject(args.projectFileName);
+            // Get diagnostics that dont have associated file with them
+            // The diagnostics which have file would be in config file and
+            // would be reported as part of configFileDiagnostics
+            return this.convertToDiagnosticsWithLinePosition(
+                filter(
+                    project.getLanguageService().getCompilerOptionsDiagnostics(),
+                    diagnostic => !diagnostic.file
+                ),
+                /*scriptInfo*/ undefined
+            );
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: Diagnostic[], scriptInfo: ScriptInfo) {
@@ -765,10 +787,20 @@ namespace ts.server {
         }
 
         private getSyntacticDiagnosticsSync(args: protocol.SyntacticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
+            const { configFile } = this.getConfigFileAndProject(args);
+            if (configFile) {
+                // all the config file errors are reported as part of semantic check so nothing to report here
+                return [];
+            }
+
             return this.getDiagnosticsWorker(args, /*isSemantic*/ false, (project, file) => project.getLanguageService().getSyntacticDiagnostics(file), args.includeLinePosition);
         }
 
         private getSemanticDiagnosticsSync(args: protocol.SemanticDiagnosticsSyncRequestArgs): protocol.Diagnostic[] | protocol.DiagnosticWithLinePosition[] {
+            const { configFile, project } = this.getConfigFileAndProject(args);
+            if (configFile) {
+                return this.getConfigFileDiagnostics(configFile, project, args.includeLinePosition);
+            }
             return this.getDiagnosticsWorker(args, /*isSemantic*/ true, (project, file) => project.getLanguageService().getSemanticDiagnostics(file), args.includeLinePosition);
         }
 
@@ -1662,15 +1694,21 @@ namespace ts.server {
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
-                if (!result.some(shouldRemapProjectFilesWithTSDiagnostics)) {
+                // Remapping of the result is needed if
+                // - there are project errors
+                // - options contain configFile - need to remove it from options before serializing
+                const shouldRemapProjectFilesWithTSDiagnostics = (p: ProjectFilesWithTSDiagnostics) => (p.projectErrors && !!p.projectErrors.length) || (p.info && !!p.info.options.configFile);
+                if (!some(result, shouldRemapProjectFilesWithTSDiagnostics)) {
                     return this.requiredResponse(result);
                 }
                 const converted = map(result, p => {
                     if (shouldRemapProjectFilesWithTSDiagnostics(p)) {
+                        // Map the project errors
                         const projectErrors = p.projectErrors && p.projectErrors.length ?
-                            this.convertToCompilerOptionsDiagnosticsWithLinePosition(p.projectErrors) :
+                            this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined) :
                             p.projectErrors;
 
+                        // Remove the configFile in the options before serializing
                         const info = p.info && !!p.info.options.configFile ?
                             {
                                 projectName: p.info.projectName,

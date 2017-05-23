@@ -221,7 +221,14 @@ namespace ts.server {
             }
         }
 
-        getProjectErrors() {
+        /**
+         * Get the errors that dont have any file name associated
+         */
+        getGlobalProjectErrors() {
+            return filter(this.projectErrors, diagnostic => !diagnostic.file);
+        }
+
+        getAllProjectErrors() {
             return this.projectErrors;
         }
 
@@ -397,6 +404,25 @@ namespace ts.server {
                 }
             }
             return result;
+        }
+
+        hasConfigFile(configFilePath: NormalizedPath) {
+            if (this.program && this.languageServiceEnabled) {
+                const configFile = this.program.getCompilerOptions().configFile;
+                if (configFile) {
+                    if (configFilePath === asNormalizedPath(configFile.fileName)) {
+                        return true;
+                    }
+                    if (configFile.extendedSourceFiles) {
+                        for (const f of configFile.extendedSourceFiles) {
+                            if (configFilePath === asNormalizedPath(f)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
         getAllEmittableFiles() {
@@ -655,7 +681,7 @@ namespace ts.server {
             if (this.lastReportedFileNames && lastKnownVersion === this.lastReportedVersion) {
                 // if current structure version is the same - return info without any changes
                 if (this.projectStructureVersion === this.lastReportedVersion && !updatedFileNames) {
-                    return { info, projectErrors: this.projectErrors };
+                    return { info, projectErrors: this.getGlobalProjectErrors() };
                 }
                 // compute and return the difference
                 const lastReportedFileNames = this.lastReportedFileNames;
@@ -677,14 +703,14 @@ namespace ts.server {
                 });
                 this.lastReportedFileNames = currentFiles;
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, changes: { added, removed, updated }, projectErrors: this.projectErrors };
+                return { info, changes: { added, removed, updated }, projectErrors: this.getGlobalProjectErrors() };
             }
             else {
                 // unknown version - return everything
                 const projectFileNames = this.getFileNames();
                 this.lastReportedFileNames = arrayToMap(projectFileNames, x => x);
                 this.lastReportedVersion = this.projectStructureVersion;
-                return { info, files: projectFileNames, projectErrors: this.projectErrors };
+                return { info, files: projectFileNames, projectErrors: this.getGlobalProjectErrors() };
             }
         }
 
