@@ -934,7 +934,11 @@ namespace ts {
         return node && node.kind === SyntaxKind.Block && isFunctionLike(node.parent);
     }
 
-    export function isObjectLiteralMethod(node: Node): node is MethodDeclaration {
+    export function isContextualSignatureNode(node: Node): node is ContextualSignatureNode {
+        return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction || isObjectLiteralMethod(node);
+    }
+
+    export function isObjectLiteralMethod(node: Node): node is MethodDeclaration & { parent: ObjectLiteralExpression } {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 

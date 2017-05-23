@@ -721,6 +721,9 @@ namespace ts {
         | AccessorDeclaration
         ;
 
+    /** Type of nodes that may have a contextual signature. */
+    export type ContextualSignatureNode = FunctionExpression | ArrowFunction | MethodDeclaration & { parent: ObjectLiteralExpression };
+
     export interface PropertyAssignment extends ObjectLiteralElement {
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
@@ -2545,6 +2548,7 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        getContextualSignature(node: ContextualSignatureNode): Signature | undefined;
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature | undefined;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
