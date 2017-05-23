@@ -177,7 +177,7 @@ namespace ts.codefix {
             parameters,
             /*type*/ undefined,
             createStubbedMethodBody()
-        )
+        );
 
         return newMethod;
     }
