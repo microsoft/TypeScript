@@ -12750,7 +12750,7 @@ namespace ts {
         function getContextualTypeForBinaryOperand(node: Expression): Type {
             const binaryExpression = <BinaryExpression>node.parent;
             const operator = binaryExpression.operatorToken.kind;
-            if (operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+            if (isAssignmentOperator(operator)) {
                 // Don't do this for special property assignments to avoid circularity
                 if (getSpecialPropertyAssignmentKind(binaryExpression) !== SpecialPropertyAssignmentKind.None) {
                     return undefined;
@@ -17305,7 +17305,7 @@ namespace ts {
             }
 
             function checkAssignmentOperator(valueType: Type): void {
-                if (produceDiagnostics && operator >= SyntaxKind.FirstAssignment && operator <= SyntaxKind.LastAssignment) {
+                if (produceDiagnostics && isAssignmentOperator(operator)) {
                     // TypeScript 1.0 spec (April 2014): 4.17
                     // An assignment of the form
                     //    VarExpr = ValueExpr
