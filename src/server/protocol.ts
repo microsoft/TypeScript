@@ -2,103 +2,104 @@
  * Declaration module describing the TypeScript Server protocol
  */
 namespace ts.server.protocol {
-    export namespace CommandTypes {
-        export type Brace = "brace";
+    // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
+    export const enum CommandTypes {
+        Brace = "brace",
         /* @internal */
-        export type BraceFull = "brace-full";
-        export type BraceCompletion = "braceCompletion";
-        export type Change = "change";
-        export type Close = "close";
-        export type Completions = "completions";
+        BraceFull = "brace-full",
+        BraceCompletion = "braceCompletion",
+        Change = "change",
+        Close = "close",
+        Completions = "completions",
         /* @internal */
-        export type CompletionsFull = "completions-full";
-        export type CompletionDetails = "completionEntryDetails";
-        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
-        export type Configure = "configure";
-        export type Definition = "definition";
+        CompletionsFull = "completions-full",
+        CompletionDetails = "completionEntryDetails",
+        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
+        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
+        Configure = "configure",
+        Definition = "definition",
         /* @internal */
-        export type DefinitionFull = "definition-full";
-        export type Implementation = "implementation";
+        DefinitionFull = "definition-full",
+        Implementation = "implementation",
         /* @internal */
-        export type ImplementationFull = "implementation-full";
-        export type Exit = "exit";
-        export type Format = "format";
-        export type Formatonkey = "formatonkey";
+        ImplementationFull = "implementation-full",
+        Exit = "exit",
+        Format = "format",
+        Formatonkey = "formatonkey",
         /* @internal */
-        export type FormatFull = "format-full";
+        FormatFull = "format-full",
         /* @internal */
-        export type FormatonkeyFull = "formatonkey-full";
+        FormatonkeyFull = "formatonkey-full",
         /* @internal */
-        export type FormatRangeFull = "formatRange-full";
-        export type Geterr = "geterr";
-        export type GeterrForProject = "geterrForProject";
-        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
-        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
-        export type NavBar = "navbar";
+        FormatRangeFull = "formatRange-full",
+        Geterr = "geterr",
+        GeterrForProject = "geterrForProject",
+        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
+        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        NavBar = "navbar",
         /* @internal */
-        export type NavBarFull = "navbar-full";
-        export type Navto = "navto";
+        NavBarFull = "navbar-full",
+        Navto = "navto",
         /* @internal */
-        export type NavtoFull = "navto-full";
-        export type NavTree = "navtree";
-        export type NavTreeFull = "navtree-full";
-        export type Occurrences = "occurrences";
-        export type DocumentHighlights = "documentHighlights";
+        NavtoFull = "navto-full",
+        NavTree = "navtree",
+        NavTreeFull = "navtree-full",
+        Occurrences = "occurrences",
+        DocumentHighlights = "documentHighlights",
         /* @internal */
-        export type DocumentHighlightsFull = "documentHighlights-full";
-        export type Open = "open";
-        export type Quickinfo = "quickinfo";
+        DocumentHighlightsFull = "documentHighlights-full",
+        Open = "open",
+        Quickinfo = "quickinfo",
         /* @internal */
-        export type QuickinfoFull = "quickinfo-full";
-        export type References = "references";
+        QuickinfoFull = "quickinfo-full",
+        References = "references",
         /* @internal */
-        export type ReferencesFull = "references-full";
-        export type Reload = "reload";
-        export type Rename = "rename";
+        ReferencesFull = "references-full",
+        Reload = "reload",
+        Rename = "rename",
         /* @internal */
-        export type RenameInfoFull = "rename-full";
+        RenameInfoFull = "rename-full",
         /* @internal */
-        export type RenameLocationsFull = "renameLocations-full";
-        export type Saveto = "saveto";
-        export type SignatureHelp = "signatureHelp";
+        RenameLocationsFull = "renameLocations-full",
+        Saveto = "saveto",
+        SignatureHelp = "signatureHelp",
         /* @internal */
-        export type SignatureHelpFull = "signatureHelp-full";
-        export type TypeDefinition = "typeDefinition";
-        export type ProjectInfo = "projectInfo";
-        export type ReloadProjects = "reloadProjects";
-        export type Unknown = "unknown";
-        export type OpenExternalProject = "openExternalProject";
-        export type OpenExternalProjects = "openExternalProjects";
-        export type CloseExternalProject = "closeExternalProject";
+        SignatureHelpFull = "signatureHelp-full",
+        TypeDefinition = "typeDefinition",
+        ProjectInfo = "projectInfo",
+        ReloadProjects = "reloadProjects",
+        Unknown = "unknown",
+        OpenExternalProject = "openExternalProject",
+        OpenExternalProjects = "openExternalProjects",
+        CloseExternalProject = "closeExternalProject",
         /* @internal */
-        export type SynchronizeProjectList = "synchronizeProjectList";
+        SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
-        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
         /* @internal */
-        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
-        export type Cleanup = "cleanup";
+        Cleanup = "cleanup",
         /* @internal */
-        export type OutliningSpans = "outliningSpans";
-        export type TodoComments = "todoComments";
-        export type Indentation = "indentation";
-        export type DocCommentTemplate = "docCommentTemplate";
+        OutliningSpans = "outliningSpans",
+        TodoComments = "todoComments",
+        Indentation = "indentation",
+        DocCommentTemplate = "docCommentTemplate",
         /* @internal */
-        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
         /* @internal */
-        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        NameOrDottedNameSpan = "nameOrDottedNameSpan",
         /* @internal */
-        export type BreakpointStatement = "breakpointStatement";
-        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
-        export type GetCodeFixes = "getCodeFixes";
+        BreakpointStatement = "breakpointStatement",
+        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
+        GetCodeFixes = "getCodeFixes",
         /* @internal */
-        export type GetCodeFixesFull = "getCodeFixes-full";
-        export type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        GetCodeFixesFull = "getCodeFixes-full",
+        GetSupportedCodeFixes = "getSupportedCodeFixes",
 
-        export type GetApplicableRefactors = "getApplicableRefactors";
-        export type GetRefactorCodeActions = "getRefactorCodeActions";
-        export type GetRefactorCodeActionsFull = "getRefactorCodeActions-full";
+        GetApplicableRefactors = "getApplicableRefactors",
+        GetRefactorCodeActions = "getRefactorCodeActions",
+        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
     }
 
     /**
@@ -698,10 +699,9 @@ namespace ts.server.protocol {
 
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
-     * Kind is taken from HighlightSpanKind type.
      */
     export interface HighlightSpan extends TextSpan {
-        kind: string;
+        kind: HighlightSpanKind;
     }
 
     /**
@@ -838,7 +838,7 @@ namespace ts.server.protocol {
         /**
          * The items's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1352,7 +1352,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1571,7 +1571,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1599,7 +1599,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -2058,7 +2058,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * exact, substring, or prefix.
@@ -2099,7 +2099,7 @@ namespace ts.server.protocol {
         /**
          * Kind of symbol's container symbol (if any).
          */
-        containerKind?: string;
+        containerKind?: ScriptElementKind;
     }
 
     /**
@@ -2172,7 +2172,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -2198,7 +2198,7 @@ namespace ts.server.protocol {
     /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
     export interface NavigationTree {
         text: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
@@ -2292,13 +2292,11 @@ namespace ts.server.protocol {
         body?: NavigationTree;
     }
 
-    export namespace IndentStyle {
-        export type None = "None";
-        export type Block = "Block";
-        export type Smart = "Smart";
+    export const enum IndentStyle {
+        None = "None",
+        Block = "Block",
+        Smart = "Smart",
     }
-
-    export type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
 
     export interface EditorSettings {
         baseIndentSize?: number;
@@ -2396,47 +2394,37 @@ namespace ts.server.protocol {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export namespace JsxEmit {
-        export type None = "None";
-        export type Preserve = "Preserve";
-        export type ReactNative = "ReactNative";
-        export type React = "React";
+    export const enum JsxEmit {
+        None = "None",
+        Preserve = "Preserve",
+        ReactNative = "ReactNative",
+        React = "React",
     }
 
-    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
-
-    export namespace ModuleKind {
-        export type None = "None";
-        export type CommonJS = "CommonJS";
-        export type AMD = "AMD";
-        export type UMD = "UMD";
-        export type System = "System";
-        export type ES6 = "ES6";
-        export type ES2015 = "ES2015";
+    export const enum ModuleKind {
+        None = "None",
+        CommonJS = "CommonJS",
+        AMD = "AMD",
+        UMD = "UMD",
+        System = "System",
+        ES6 = "ES6",
+        ES2015 = "ES2015",
     }
 
-    export type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
-
-    export namespace ModuleResolutionKind {
-        export type Classic = "Classic";
-        export type Node = "Node";
+    export const enum ModuleResolutionKind {
+        Classic = "Classic",
+        Node = "Node",
     }
 
-    export type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
-
-    export namespace NewLineKind {
-        export type Crlf = "Crlf";
-        export type Lf = "Lf";
+    export const enum NewLineKind {
+        Crlf = "Crlf",
+        Lf = "Lf",
     }
 
-    export type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
-
-    export namespace ScriptTarget {
-        export type ES3 = "ES3";
-        export type ES5 = "ES5";
-        export type ES6 = "ES6";
-        export type ES2015 = "ES2015";
+    export const enum ScriptTarget {
+        ES3 = "ES3",
+        ES5 = "ES5",
+        ES6 = "ES6",
+        ES2015 = "ES2015",
     }
-
-    export type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
