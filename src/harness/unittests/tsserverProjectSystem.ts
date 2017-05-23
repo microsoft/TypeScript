@@ -731,7 +731,7 @@ namespace ts.projectSystem {
             checkNumberOfConfiguredProjects(projectService, 1);
 
             const project = projectService.configuredProjects[0];
-            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path]);
+            checkProjectActualFiles(project, [file1.path, libFile.path, file2.path, configFile.path]);
             checkProjectRootFiles(project, [file1.path, file2.path]);
             // watching all files except one that was open
             checkWatchedFiles(host, [configFile.path, file2.path, libFile.path]);
@@ -988,7 +988,7 @@ namespace ts.projectSystem {
 
             checkNumberOfConfiguredProjects(projectService, 1);
             const project = projectService.configuredProjects[0];
-            checkProjectActualFiles(project, [file1.path, nodeModuleFile.path]);
+            checkProjectActualFiles(project, [file1.path, nodeModuleFile.path, configFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
 
             configFile.content = `{
@@ -999,7 +999,7 @@ namespace ts.projectSystem {
             }`;
             host.reloadFS(files);
             host.triggerFileWatcherCallback(configFile.path);
-            checkProjectActualFiles(project, [file1.path, classicModuleFile.path]);
+            checkProjectActualFiles(project, [file1.path, classicModuleFile.path, configFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
 
@@ -1562,7 +1562,7 @@ namespace ts.projectSystem {
             host.reloadFS([file1, file2, file3, configFile]);
             host.triggerDirectoryWatcherCallback(getDirectoryPath(configFile.path), configFile.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, file3.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, file3.path, configFile.path]);
         });
 
         it("correctly migrate files between projects", () => {
@@ -1620,7 +1620,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, configFile.path]);
 
             host.reloadFS([file1, file2, configFile]);
 
@@ -1651,7 +1651,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, configFile.path]);
 
             const modifiedConfigFile = {
                 path: configFile.path,
@@ -1684,7 +1684,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, configFile.path]);
 
             const modifiedConfigFile = {
                 path: configFile.path,
@@ -1765,11 +1765,11 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(file1.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             projectService.openClientFile(file2.path);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             host.reloadFS([file1, file2]);
             host.triggerFileWatcherCallback(config.path, /*removed*/ true);
@@ -1804,13 +1804,13 @@ namespace ts.projectSystem {
             });
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, config.path]);
 
             projectService.closeClientFile(f1.path);
 
             projectService.openClientFile(f2.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, config.path]);
             checkProjectActualFiles(projectService.inferredProjects[0], [f2.path]);
         });
 
@@ -1834,7 +1834,7 @@ namespace ts.projectSystem {
 
             // HTML file will not be included in any projects yet
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, config.path]);
 
             // Specify .html extension as mixed content
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
@@ -1843,7 +1843,7 @@ namespace ts.projectSystem {
 
             // HTML file still not included in the project as it is closed
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, config.path]);
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
@@ -1853,7 +1853,7 @@ namespace ts.projectSystem {
 
             // Now HTML file is included in the project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are available in .ts file
             const project = projectService.configuredProjects[0];
@@ -1868,7 +1868,7 @@ namespace ts.projectSystem {
 
             // HTML file is still included in project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             // Check identifiers defined in HTML content are not available in .ts file
             completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 5);
@@ -2483,7 +2483,7 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, tsconfig.path]);
 
             // rename tsconfig.json back to lib.ts
             host.reloadFS([f1, f2]);
@@ -2541,8 +2541,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 2 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path]);
-            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path, cTsconfig.path]);
+            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path, dTsconfig.path]);
 
             // remove one config file
             projectService.openExternalProject({
@@ -2552,7 +2552,7 @@ namespace ts.projectSystem {
             });
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [dLib.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [dLib.path, dTsconfig.path]);
 
             // remove second config file
             projectService.openExternalProject({
@@ -2572,8 +2572,8 @@ namespace ts.projectSystem {
                 options: {}
             });
             projectService.checkNumberOfProjects({ configuredProjects: 2 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path]);
-            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [cLib.path, cTsconfig.path]);
+            checkProjectActualFiles(projectService.configuredProjects[1], [dLib.path, dTsconfig.path]);
 
             // close all projects - no projects should be opened
             projectService.closeExternalProject(projectName);
@@ -2629,13 +2629,13 @@ namespace ts.projectSystem {
             projectService.openClientFile(app.path);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path, config1.path]);
 
             host.reloadFS([libES5, libES2015Promise, app, config2]);
             host.triggerFileWatcherCallback(config1.path);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path, config2.path]);
         });
 
         it("should handle non-existing directories in config file", () => {
@@ -2690,7 +2690,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, barTypings.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, barTypings.path, config.path]);
         });
     });
 
@@ -2761,7 +2761,7 @@ namespace ts.projectSystem {
 
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t1.path, tsconfig.path]);
 
             // delete t1
             host.reloadFS([f1, tsconfig]);
@@ -2770,7 +2770,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, tsconfig.path]);
 
             // create t2
             host.reloadFS([f1, tsconfig, t2]);
@@ -2779,7 +2779,7 @@ namespace ts.projectSystem {
             host.runQueuedTimeoutCallbacks();
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, t2.path, tsconfig.path]);
         });
     });
 
@@ -2964,7 +2964,7 @@ namespace ts.projectSystem {
             const projectService = createProjectService(host);
             projectService.openClientFile(f1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, node.path]);
+            checkProjectActualFiles(projectService.configuredProjects[0], [f1.path, node.path, config.path]);
         });
     });
 
@@ -4005,11 +4005,11 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const projectName = projectService.configuredProjects[0].getProjectName();
 
-            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
-                arguments: { projectFileName: projectName }
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response;
             assert.isTrue(diags.length === 2);
 
@@ -4017,18 +4017,18 @@ namespace ts.projectSystem {
             host.reloadFS([file, configFile]);
             host.triggerFileWatcherCallback(configFile.path);
 
-            const diagsAfterEdit = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
-                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                command: server.CommandNames.SemanticDiagnosticsSync,
                 seq: 2,
-                arguments: { projectFileName: projectName }
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
             }).response;
             assert.isTrue(diagsAfterEdit.length === 2);
 
             verifyDiagnostic(diags[0], diagsAfterEdit[0]);
             verifyDiagnostic(diags[1], diagsAfterEdit[1]);
 
-            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePositionAndFileName, afterEditDiag: server.protocol.DiagnosticWithLinePositionAndFileName) {
+            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
                 assert.equal(beforeEditDiag.message, afterEditDiag.message);
                 assert.equal(beforeEditDiag.code, afterEditDiag.code);
                 assert.equal(beforeEditDiag.category, afterEditDiag.category);
@@ -4036,7 +4036,6 @@ namespace ts.projectSystem {
                 assert.equal(beforeEditDiag.startLocation.offset, afterEditDiag.startLocation.offset);
                 assert.equal(beforeEditDiag.endLocation.line, afterEditDiag.endLocation.line + 1);
                 assert.equal(beforeEditDiag.endLocation.offset, afterEditDiag.endLocation.offset);
-                assert.equal(beforeEditDiag.fileName, afterEditDiag.fileName);
             }
         });
     });

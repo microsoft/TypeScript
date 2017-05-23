@@ -1048,7 +1048,7 @@ namespace ts.server {
             return {
                 success: conversionResult.success,
                 project,
-                errors: project.getProjectErrors()
+                errors: project.getGlobalProjectErrors()
             };
         }
 

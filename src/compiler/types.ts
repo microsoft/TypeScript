@@ -2338,6 +2338,7 @@ namespace ts {
 
     export interface JsonSourceFile extends SourceFile {
         jsonObject?: ObjectLiteralExpression;
+        extendedSourceFiles?: string[];
     }
 
     export interface ScriptReferenceHost {
