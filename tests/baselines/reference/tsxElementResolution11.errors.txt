@@ -1,4 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(17,7): error TS2339: Property 'x' does not exist on type '{ q?: number; }'.
+tests/cases/conformance/jsx/file.tsx(17,7): error TS2322: Type '{ x: 10; }' is not assignable to type '{ q?: number; }'.
+  Weak type '{ q?: number; }' has no properties in common with '{ x: 10; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -20,7 +21,8 @@ tests/cases/conformance/jsx/file.tsx(17,7): error TS2339: Property 'x' does not 
     var Obj2: Obj2type;
     <Obj2 x={10} />; // Error
           ~~~~~~
-!!! error TS2339: Property 'x' does not exist on type '{ q?: number; }'.
+!!! error TS2322: Type '{ x: 10; }' is not assignable to type '{ q?: number; }'.
+!!! error TS2322:   Weak type '{ q?: number; }' has no properties in common with '{ x: 10; }'.
     
     interface Obj3type {
     	new(n: string): { x: number; };

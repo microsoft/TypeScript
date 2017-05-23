@@ -9392,8 +9392,10 @@ namespace ts {
                 return result;
             }
 
-            // A type is 'weak' if it is an object type with at least one optional property
-            // and no required properties or index signatures
+            /**
+             * A type is 'weak' if it is an object type with at least one optional property
+             * and no required properties or index signatures
+             */
             function isWeak(type: Type) {
                 let props = getPropertiesOfType(type);
                 return type.flags & TypeFlags.Object &&
