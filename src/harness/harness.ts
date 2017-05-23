@@ -528,7 +528,7 @@ namespace Harness {
             export const readFile: typeof IO.readFile = path => ts.sys.readFile(path);
             export const writeFile: typeof IO.writeFile = (path, content) => ts.sys.writeFile(path, content);
             export const fileExists: typeof IO.fileExists = fs.existsSync;
-            export const log: typeof IO.log = s => console.log(s);
+            export const log: typeof IO.log = s => diffLines.push(s);
             export const getEnvironmentVariable: typeof IO.getEnvironmentVariable = name => ts.sys.getEnvironmentVariable(name);
 
             export function tryEnableSourceMapsForHost() {
@@ -605,7 +605,7 @@ namespace Harness {
             export const exit = ts.noop;
             export const getDirectories = () => <string[]>[];
 
-            export let log = (s: string) => console.log(s);
+            export let log = (s: string) => diffLines.push(s);
 
             namespace Http {
                 function waitForXHR(xhr: XMLHttpRequest) {
@@ -1963,7 +1963,8 @@ namespace Harness {
                     IO.writeFile(actualFileName, actual);
                 }
 
-                printDiff(expected, encoded_actual, referencePath(relativeFileName), actualFileName);
+                const diff = getDiff(expected, encoded_actual, referencePath(relativeFileName), actualFileName);
+                console.error(diff);
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
         }
@@ -1997,7 +1998,7 @@ namespace Harness {
      * It also emits a `cp tests/baselines/local/<file> tests/baselines/reference/<file>`
      * Which makes experience of updating basefiles case by case a lot nicer
      */
-    export function printDiff(expectedText: string, actualText: string, expectedFileName: string, actualFileName: string) {
+    export function getDiff(expectedText: string, actualText: string, expectedFileName: string, actualFileName: string): string {
         const removedMarker = ` <-|`;
         const addedMarker = ` ->|`;
         const sameMarker = `   |`;
@@ -2005,6 +2006,7 @@ namespace Harness {
         const actualLines = actualText.split(/\r?\n/g);
         const numExpectedLines = expectedLines.length;
         const numActualLines = actualLines.length;
+        const diffLines = [];
         // Create a matrix of m*n of -1s
         const lcsLenMatrix: number[][] = Array.apply(null, Array(numExpectedLines + 1))
                                         .map((_: any) => Array.apply(null, Array(numActualLines + 1)).map((_: any) => -1));
@@ -2023,33 +2025,35 @@ namespace Harness {
         })(0, 0);
 
         // Print files names and diff
-        console.log(`\ncp ${actualFileName} ${expectedFileName}`);
-        console.log(`${sameMarker} ${new Array(actualFileName.length).join('=')}`);
+        diffLines.push(`\ncp ${actualFileName} ${expectedFileName}`);
+        diffLines.push(`${sameMarker} ${new Array(actualFileName.length).join('=')}`);
 
         while (iE < numExpectedLines && iA < numActualLines) {
             if (expectedLines[iE] == actualLines[iA]) {
-                console.log(`${sameMarker} ${expectedLines[iE]}`);
+                diffLines.push(`${sameMarker} ${expectedLines[iE]}`);
                 iE++; iA++;
             }
             else if (lcsLenMatrix[iE + 1][iA] >= lcsLenMatrix[iE][iA + 1]) {
-                console.log(`${removedMarker} ${expectedLines[iE]}`);
+                diffLines.push(`${removedMarker} ${expectedLines[iE]}`);
                 iE++;
             }
             else {
-                console.log(`${addedMarker} ${actualLines[iA]}`);
+                diffLines.push(`${addedMarker} ${actualLines[iA]}`);
                 iA++;
             }
         }
 
         // Print removed lines
         for (; iE < numExpectedLines; iE++) {
-            console.log(`${removedMarker} ${expectedLines[iE]}`);
+            diffLines.push(`${removedMarker} ${expectedLines[iE]}`);
         }
 
         // print added lines
         for (; iA < numActualLines; iA++) {
-            console.log(`${addedMarker} ${actualLines[iA]}`);
+            diffLines.push(`${addedMarker} ${actualLines[iA]}`);
         }
+
+        return diffLines.join("\n");
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;
