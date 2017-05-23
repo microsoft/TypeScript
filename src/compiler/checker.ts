@@ -2818,9 +2818,11 @@ namespace ts {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
                 const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
-                const name = parameterDeclaration.name.kind === SyntaxKind.Identifier ?
-                    setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
-                    cloneBindingName(parameterDeclaration.name);
+                const name = parameterDeclaration.name ?
+                    parameterDeclaration.name.kind === SyntaxKind.Identifier ?
+                        setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
+                        cloneBindingName(parameterDeclaration.name) :
+                    parameterSymbol.name;
                 const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
@@ -6852,7 +6854,7 @@ namespace ts {
                     case "Object":
                         return anyType;
                     case "Function":
-                        return anyFunctionType;
+                        return globalFunctionType;
                     case "Array":
                     case "array":
                         return !node.typeArguments || !node.typeArguments.length ? createArrayType(anyType) : undefined;
