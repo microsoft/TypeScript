@@ -9,4 +9,24 @@ function getDefaultSettings() {
 
 function doSomething(settings: Settings) { /* ... */ }
 
+// forgot to call `getDefaultSettings`
+// but it is not caught because we don't check for call signatures
 doSomething(getDefaultSettings);
+
+// this is an oddly popular way of defining settings
+// this example is from services/textChanges.ts
+type ConfigurableStart = { useStart?: boolean }
+type ConfigurableEnd = { useEnd?: boolean }
+type ConfigurableStartEnd = ConfigurableStart & ConfigurableEnd
+interface InsertOptions {
+    prefix?: string
+    suffix?: string
+}
+type ChangeOptions = ConfigurableStartEnd & InsertOptions;
+
+function del(options: ConfigurableStartEnd = {},
+             error: { error?: number } = {}) {
+    let changes: ChangeOptions[];
+    changes.push(options);
+    changes.push(error);
+}

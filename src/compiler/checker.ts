@@ -8959,14 +8959,31 @@ namespace ts {
                 // unless all of target.types are weak, in which case run weak type detection on the *combined* properties of target
                 // at a minimum, do the first part.
                 // but the thing should be flexible enough to easily do the second part as a separate call
+                const saveDynamicDisableWeakTypeErrors = dynamicDisableWeakTypeErrors;
+                dynamicDisableWeakTypeErrors = true;
                 for (const targetType of targetTypes) {
-                    dynamicDisableWeakTypeErrors = true;
                     const related = isRelatedTo(source, targetType, reportErrors);
-                    dynamicDisableWeakTypeErrors = false;
                     if (!related) {
+                        dynamicDisableWeakTypeErrors = saveDynamicDisableWeakTypeErrors;
                         return Ternary.False;
                     }
                     result &= related;
+                }
+                dynamicDisableWeakTypeErrors = saveDynamicDisableWeakTypeErrors;
+                if (source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeak)) {
+                    let found = false;
+                    for (const property of getPropertiesOfType(source)) {
+                        if (isKnownProperty(target, property.name, /*isComparingJsxAttributes*/ false)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        if (reportErrors) {
+                            reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
+                        }
+                        return Ternary.False;
+                    }
                 }
                 return result;
             }
@@ -9340,13 +9357,24 @@ namespace ts {
                         }
                     }
                 }
-                if (!foundMatchingProperty && !dynamicDisableWeakTypeErrors && getPropertiesOfType(source).length > 0)  {
+                if (!foundMatchingProperty && !dynamicDisableWeakTypeErrors && source !== globalObjectType && getPropertiesOfType(source).length > 0)  {
                     if (reportErrors) {
                         reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
                     }
                     return Ternary.False;
                 }
                 return result;
+            }
+
+            // A type is 'weak' if it is an object type with at least one optional property
+            // and no required properties or index signatures
+            function isWeak(type: Type) {
+                let props = getPropertiesOfType(type);
+                return type.flags & TypeFlags.Object &&
+                    props.length > 0 &&
+                    every(props, p => !!(p.flags & SymbolFlags.Optional)) &&
+                    !getIndexTypeOfType(type, IndexKind.String) &&
+                    !getIndexTypeOfType(type, IndexKind.Number);
             }
 
             function propertiesIdenticalTo(source: Type, target: Type): Ternary {
@@ -10604,17 +10632,6 @@ namespace ts {
             return links.resolvedSymbol;
         }
 
-        // A type is 'weak' if it is an object type with at least one optional property
-        // and no required properties or index signatures
-        function isWeak(type: Type) {
-            let props = getPropertiesOfType(type);
-            return type.flags & TypeFlags.Object &&
-                props.length > 0 &&
-                every(props, p => !!(p.flags & SymbolFlags.Optional)) &&
-                !getIndexTypeOfType(type, IndexKind.String) &&
-                !getIndexTypeOfType(type, IndexKind.Number);
-        }
-
         function isInTypeQuery(node: Node): boolean {
             // TypeScript 1.0 spec (April 2014): 3.6.3
             // A type query consists of the keyword typeof followed by an expression.
@@ -10622,7 +10639,6 @@ namespace ts {
             return !!findAncestor(
                 node,
                 n => n.kind === SyntaxKind.TypeQuery ? true : n.kind === SyntaxKind.Identifier || n.kind === SyntaxKind.QualifiedName ? false : "quit");
-
         }
 
         // Return the flow cache key for a "dotted name" (i.e. a sequence of identifiers
@@ -14124,8 +14140,10 @@ namespace ts {
         function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
-                if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    getPropertyOfType(targetType, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                if (resolved.stringIndexInfo ||
+                    resolved.numberIndexInfo && isNumericLiteralName(name) ||
+                    getPropertyOfType(targetType, name) ||
+                    isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
                 }
