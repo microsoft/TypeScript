@@ -2283,7 +2283,7 @@ namespace FourSlash {
          */
         public getAndApplyCodeActions(errorCode?: number, index?: number) {
             const fileName = this.activeFile.fileName;
-            this.applyCodeActions(fileName, this.getCodeFixActions(fileName, errorCode), index);
+            this.applyCodeAction(fileName, this.getCodeFixActions(fileName, errorCode), index);
         }
 
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
@@ -2328,7 +2328,7 @@ namespace FourSlash {
         public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            this.applyCodeActions(fileName, this.getCodeFixActions(fileName));
+            this.applyCodeAction(fileName, this.getCodeFixActions(fileName));
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
@@ -2366,7 +2366,7 @@ namespace FourSlash {
             return actions;
         }
 
-        private applyCodeActions(fileName: string, actions: ts.CodeAction[], index?: number): void {
+        private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
                     this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
@@ -2769,7 +2769,7 @@ namespace FourSlash {
 
             const codeActions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply);
 
-            this.applyCodeActions(this.activeFile.fileName, codeActions);
+            this.applyCodeAction(this.activeFile.fileName, codeActions);
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
