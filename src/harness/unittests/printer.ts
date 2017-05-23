@@ -100,6 +100,9 @@ namespace ts {
             );
             // tslint:enable boolean-trivia
             printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile));
+
+            // https://github.com/Microsoft/TypeScript/issues/15969
+            printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(EmitHint.Unspecified, createNamespaceExportDeclaration("B"), sourceFile));
         });
     });
 }

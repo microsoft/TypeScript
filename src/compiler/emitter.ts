@@ -571,6 +571,8 @@ namespace ts {
                     return emitModuleBlock(<ModuleBlock>node);
                 case SyntaxKind.CaseBlock:
                     return emitCaseBlock(<CaseBlock>node);
+                case SyntaxKind.NamespaceExportDeclaration:
+                    return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
@@ -1881,6 +1883,12 @@ namespace ts {
                 write(" from ");
                 emitExpression(node.moduleSpecifier);
             }
+            write(";");
+        }
+
+        function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
+            write("export as namespace ");
+            emit(node.name);
             write(";");
         }
 

@@ -345,6 +345,9 @@ namespace ts {
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided.
+
+                case SyntaxKind.NamespaceExportDeclaration:
+                    // TypeScript namespace export declarations are elided.
                     return undefined;
 
                 case SyntaxKind.Constructor:
