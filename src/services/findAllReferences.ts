@@ -176,7 +176,7 @@ namespace ts.FindAllReferences {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccess(node),
-            isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
+            isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
     }
@@ -242,22 +242,20 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccess(node: Node): boolean {
-        if (node.kind === SyntaxKind.Identifier && isDeclarationName(node)) {
+        if (isAnyDeclarationName(node)) {
             return true;
         }
 
-        const parent = node.parent;
-        if (parent) {
-            if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
+        const { parent } = node;
+        switch (parent && parent.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.PrefixUnaryExpression:
                 return true;
-            }
-            else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                const operator = (<BinaryExpression>parent).operatorToken.kind;
-                return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
-            }
+            case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
+            default:
+                return false;
         }
-
-        return false;
     }
 }
 

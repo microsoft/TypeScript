@@ -1785,6 +1785,23 @@ namespace ts {
         }
     }
 
+    /* @internal */
+    // See GH#16030
+    export function isAnyDeclarationName(name: Node): boolean {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                if (isDeclaration(name.parent)) {
+                    return name.parent.name === name;
+                }
+                const binExp = name.parent.parent;
+                return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+            default:
+                return false;
+        }
+    }
+
     export function isLiteralComputedPropertyDeclarationName(node: Node) {
         return (node.kind === SyntaxKind.StringLiteral || node.kind === SyntaxKind.NumericLiteral) &&
             node.parent.kind === SyntaxKind.ComputedPropertyName &&
