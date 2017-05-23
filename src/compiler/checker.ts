@@ -3087,7 +3087,7 @@ namespace ts {
                         // Write type arguments of instantiated class/interface here
                         if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                                const params = getTypeParametersOfClassOrInterface(symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                                const params = getTypeParametersOfClassOrInterface(parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol);
                                 buildDisplayForTypeArgumentsAndDelimiters(params, (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
                             }
                             else {
