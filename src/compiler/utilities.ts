@@ -3168,11 +3168,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations[0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
