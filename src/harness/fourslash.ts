@@ -916,7 +916,7 @@ namespace FourSlash {
         }
 
         private getNode(): ts.Node {
-            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition);
+            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition, /*includeJsDocComment*/ false);
         }
 
         private goToAndGetNode(range: Range): ts.Node {
@@ -994,12 +994,11 @@ namespace FourSlash {
         }
 
         public verifyReferenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void {
-            interface ReferenceJson { definition: string; ranges: ts.ReferenceEntry[]; }
             const fullExpected = ts.map(parts, ({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
-                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceJson>(this.findReferencesAtCaret(), ({ definition, references }) => ({
+                const fullActual = ts.map(this.findReferencesAtCaret(), ({ definition, references }) => ({
                     definition: definition.displayParts.map(d => d.text).join(""),
                     ranges: references
                 }));
@@ -1045,6 +1044,10 @@ namespace FourSlash {
                     console.log("Actual: ", stringify(fullActual));
                     this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
                 };
+
+                if ((actual === undefined) !== (expected === undefined)) {
+                    fail(`Expected ${expected}, got ${actual}`);
+                }
 
                 for (const key in actual) if (ts.hasProperty(actual as any, key)) {
                     const ak = actual[key], ek = expected[key];

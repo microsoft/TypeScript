@@ -3161,7 +3161,7 @@ namespace ts {
             }
 
             function buildTypeDisplay(type: Type, writer: SymbolWriter, enclosingDeclaration?: Node, globalFlags?: TypeFormatFlags, symbolStack?: Symbol[]) {
-                const globalFlagsToPass = globalFlags & TypeFormatFlags.WriteOwnNameForAnyLike;
+                const globalFlagsToPass = globalFlags & (TypeFormatFlags.WriteOwnNameForAnyLike | TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                 let inObjectTypeLiteral = false;
                 return writeType(type, globalFlags);
 
@@ -3278,6 +3278,11 @@ namespace ts {
                         writeTypeList(type.typeArguments.slice(0, getTypeReferenceArity(type)), SyntaxKind.CommaToken);
                         writePunctuation(writer, SyntaxKind.CloseBracketToken);
                     }
+                    else if (flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral &&
+                             type.symbol.valueDeclaration &&
+                             type.symbol.valueDeclaration.kind === SyntaxKind.ClassExpression) {
+                        writeAnonymousType(getDeclaredTypeOfClassOrInterface(type.symbol), flags);
+                    }
                     else {
                         // Write the type reference in the format f<A>.g<B>.C<X, Y> where A and B are type arguments
                         // for outer type parameters, and f and g are the respective declaring containers of those
@@ -3325,7 +3330,9 @@ namespace ts {
                     const symbol = type.symbol;
                     if (symbol) {
                         // Always use 'typeof T' for type of class, enum, and module objects
-                        if (symbol.flags & SymbolFlags.Class && !getBaseTypeVariableOfClass(symbol) ||
+                        if (symbol.flags & SymbolFlags.Class &&
+                            !getBaseTypeVariableOfClass(symbol) &&
+                            !(symbol.valueDeclaration.kind === SyntaxKind.ClassExpression && flags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) ||
                             symbol.flags & (SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                             writeTypeOfSymbol(type, flags);
                         }
@@ -3347,12 +3354,23 @@ namespace ts {
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
+                            // However, in case of class expressions, we want to write both the static side and the instance side.
+                            // We skip adding the static side so that the instance side has a chance to be written
+                            // before checking for circular references.
                             if (!symbolStack) {
                                 symbolStack = [];
                             }
-                            symbolStack.push(symbol);
-                            writeLiteralType(type, flags);
-                            symbolStack.pop();
+                            const isConstructorObject = type.flags & TypeFlags.Object &&
+                                getObjectFlags(type) & ObjectFlags.Anonymous &&
+                                type.symbol && type.symbol.flags & SymbolFlags.Class;
+                            if (isConstructorObject) {
+                                writeLiteralType(type, flags);
+                            }
+                            else {
+                                symbolStack.push(symbol);
+                                writeLiteralType(type, flags);
+                                symbolStack.pop();
+                            }
                         }
                     }
                     else {
@@ -3471,6 +3489,14 @@ namespace ts {
                     buildIndexSignatureDisplay(resolved.stringIndexInfo, writer, IndexKind.String, enclosingDeclaration, globalFlags, symbolStack);
                     buildIndexSignatureDisplay(resolved.numberIndexInfo, writer, IndexKind.Number, enclosingDeclaration, globalFlags, symbolStack);
                     for (const p of resolved.properties) {
+                        if (globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral) {
+                            if (p.flags & SymbolFlags.Prototype) {
+                                continue;
+                            }
+                            if (getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected)) {
+                                writer.reportPrivateInBaseOfClassExpression(p.name);
+                            }
+                        }
                         const t = getTypeOfSymbol(p);
                         if (p.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(t).length) {
                             const signatures = getSignaturesOfType(t, SignatureKind.Call);
@@ -3485,7 +3511,7 @@ namespace ts {
                             writePropertyWithModifiers(p);
                             writePunctuation(writer, SyntaxKind.ColonToken);
                             writeSpace(writer);
-                            writeType(t, TypeFormatFlags.None);
+                            writeType(t, globalFlags & TypeFormatFlags.WriteClassExpressionAsTypeLiteral);
                             writePunctuation(writer, SyntaxKind.SemicolonToken);
                             writer.writeLine();
                         }
@@ -22325,6 +22351,11 @@ namespace ts {
                 if (entityNameSymbol) {
                     return entityNameSymbol;
                 }
+            }
+
+            if (entityName.parent!.kind === SyntaxKind.JSDocParameterTag) {
+                const parameter = ts.getParameterFromJSDoc(entityName.parent as JSDocParameterTag);
+                return parameter && parameter.symbol;
             }
 
             if (isPartOfExpression(entityName)) {

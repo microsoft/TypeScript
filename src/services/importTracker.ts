@@ -300,7 +300,7 @@ namespace ts.FindAllReferences {
         });
     }
 
-    type ModuleReference =
+    export type ModuleReference =
         /** "import" also includes require() calls. */
         | { kind: "import", literal: StringLiteral }
         /** <reference path> or <reference types> */

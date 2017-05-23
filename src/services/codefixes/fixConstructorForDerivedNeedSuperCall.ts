@@ -4,7 +4,7 @@ namespace ts.codefix {
         errorCodes: [Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call.code],
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
-            const token = getTokenAtPosition(sourceFile, context.span.start);
+            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
 
             if (token.kind !== SyntaxKind.ConstructorKeyword) {
                 return undefined;
