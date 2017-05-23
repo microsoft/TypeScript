@@ -291,8 +291,12 @@ namespace ts {
     }
 
     /**
-     * Parses a set of root files in order, walks their dependency declaration (both imports and triple-slash references)
-     * resolving references to actual files on disk and then pulls them into the compilation process.
+     * Create a new `Program` instance. A Program is an immutable collection of `SourceFile`s and a compilation
+     * options that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash reference directives transitively. `@types` and triple-slash-reference-types are also pulled in.
+     *
      * @param rootNames - A set of root files.
      * @param options - The compiler options which should be used.
      * @param host - The host interacts with the underlying file system.
