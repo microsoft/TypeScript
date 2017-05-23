@@ -2722,7 +2722,6 @@ declare namespace ts {
      * @returns The unescaped identifier text.
      */
     function unescapeIdentifier(identifier: string): string;
-    function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined;
 }
 declare namespace ts {
     /**
@@ -3110,7 +3109,7 @@ declare namespace ts {
 }
 declare namespace ts {
     function createNode(kind: SyntaxKind, pos?: number, end?: number): Node;
-    function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
+    function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T | undefined;
     function createSourceFile(fileName: string, sourceText: string, languageVersion: ScriptTarget, setParentNodes?: boolean, scriptKind?: ScriptKind): SourceFile;
     function parseIsolatedEntityName(text: string, languageVersion: ScriptTarget): EntityName;
     function isExternalModule(file: SourceFile): boolean;

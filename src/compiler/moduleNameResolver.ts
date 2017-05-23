@@ -653,11 +653,13 @@ namespace ts {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
-                // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
-                const tsExtension = tryGetExtensionFromPath(candidate);
-                if (tsExtension !== undefined) {
+                // A path mapping may have an extension, in contrast to an import, which should omit it.
+                const extension = tryGetExtensionFromPath(candidate);
+                if (extension !== undefined) {
                     const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-                    return path && { path, extension: tsExtension };
+                    if (path !== undefined) {
+                        return { path, extension };
+                    }
                 }
 
                 return loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);

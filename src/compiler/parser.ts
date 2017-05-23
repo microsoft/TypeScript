@@ -23,19 +23,19 @@ namespace ts {
         }
     }
 
-    function visitNode<T>(cbNode: (node: Node) => T, node: Node): T | undefined {
+    function visitNode<T>(cbNode: (node: Node) => T, node?: Node): T | undefined {
         if (node) {
             return cbNode(node);
         }
     }
 
-    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]): T | undefined {
+    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes?: Node[]): T | undefined {
         if (nodes) {
             return cbNodes(nodes);
         }
     }
 
-    function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]): T | undefined {
+    function visitEachNode<T>(cbNode: (node: Node) => T, nodes?: Node[]): T | undefined {
         if (nodes) {
             for (const node of nodes) {
                 const result = cbNode(node);
@@ -57,7 +57,7 @@ namespace ts {
         // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray
         // callback parameters, but that causes a closure allocation for each invocation with noticeable effects
         // on performance.
-        const visitNodes: (cb: ((node: Node) => T) | ((node: Node[]) => T), nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
+        const visitNodes: (cb: ((node?: Node) => T | undefined) | ((node?: Node[]) => T | undefined), nodes?: Node[]) => T | undefined = cbNodeArray ? visitNodeArray : visitEachNode;
         const cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
             case SyntaxKind.QualifiedName:

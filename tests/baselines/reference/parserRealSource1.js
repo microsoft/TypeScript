@@ -247,28 +247,28 @@ var TypeScript;
         var addChar = function (index) {
             var ch = value.charCodeAt(index);
             switch (ch) {
-                case 0x09:
+                case 0x09:// tab
                     result += "\\t";
                     break;
-                case 0x0a:
+                case 0x0a:// line feed
                     result += "\\n";
                     break;
-                case 0x0b:
+                case 0x0b:// vertical tab
                     result += "\\v";
                     break;
-                case 0x0c:
+                case 0x0c:// form feed
                     result += "\\f";
                     break;
-                case 0x0d:
+                case 0x0d:// carriage return
                     result += "\\r";
                     break;
-                case 0x22:
+                case 0x22:// double quote
                     result += "\\\"";
                     break;
-                case 0x27:
+                case 0x27:// single quote
                     result += "\\\'";
                     break;
-                case 0x5c:
+                case 0x5c:// Backslash
                     result += "\\";
                     break;
                 default:

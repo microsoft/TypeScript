@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.SymbolDisplay {
     // TODO(drosen): use contextual SemanticMeaning.
-    export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): string {
+    export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         const { flags } = symbol;
 
         if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
@@ -22,7 +22,7 @@ namespace ts.SymbolDisplay {
         return result;
     }
 
-    function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node) {
+    function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         if (typeChecker.isUndefinedSymbol(symbol)) {
             return ScriptElementKind.variableElement;
         }
