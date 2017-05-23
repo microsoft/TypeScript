@@ -1,5 +1,4 @@
 //// [declFileClassWithIndexSignature.ts]
-
 class BlockIntrinsics {
     [s: string]: string;
 }

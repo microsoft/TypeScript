@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
-[![Downloads](https://img.shields.io/npm/dm/TypeScript.svg)](https://www.npmjs.com/package/typescript)
+[![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 
 # TypeScript
 
@@ -39,8 +39,8 @@ with any additional questions or comments.
 
 ## Documentation
 
-*  [Quick tutorial](http://www.typescriptlang.org/Tutorial)
-*  [Programming handbook](http://www.typescriptlang.org/Handbook)
+*  [Quick tutorial](http://www.typescriptlang.org/docs/tutorial.html)
+*  [Programming handbook](http://www.typescriptlang.org/docs/handbook/basic-types.html)
 *  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
 *  [Homepage](http://www.typescriptlang.org/)
 

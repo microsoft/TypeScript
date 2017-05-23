@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileWithErrorsInInputDeclarationFileWithOut.ts] ////
 
 //// [declFile.d.ts]
-
 declare module M {
     declare var x;
     declare function f();

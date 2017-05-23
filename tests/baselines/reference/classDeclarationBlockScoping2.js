@@ -19,9 +19,9 @@ function f() {
     var c1 = C;
     {
         var C_1 = (function () {
-            function C_1() {
+            function C() {
             }
-            return C_1;
+            return C;
         }());
         var c2 = C_1;
     }

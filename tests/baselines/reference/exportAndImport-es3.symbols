@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
-
 export default function f1() {
 >f1 : Symbol(f1, Decl(m1.ts, 0, 0))
 }

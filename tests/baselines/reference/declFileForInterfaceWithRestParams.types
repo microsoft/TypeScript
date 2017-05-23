@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileForInterfaceWithRestParams.ts ===
-
 interface I {
 >I : I
 

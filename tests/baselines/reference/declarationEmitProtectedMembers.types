@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitProtectedMembers.ts ===
-
 // Class with protected members
 class C1 {
 >C1 : C1

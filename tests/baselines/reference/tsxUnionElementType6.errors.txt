@@ -1,0 +1,52 @@
+tests/cases/conformance/jsx/file.tsx(18,23): error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes'.
+tests/cases/conformance/jsx/file.tsx(19,27): error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+  Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
+    Types of property 'x' are incompatible.
+      Type '"hi"' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(20,9): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+  Type '{}' is not assignable to type '{ x: boolean; }'.
+    Property 'x' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(21,27): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+  Type '{}' is not assignable to type '{ x: boolean; }'.
+    Property 'x' is missing in type '{}'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+    import React = require('react');
+    
+    function EmptySFC1() {
+        return <div>Hi</div>
+    }
+    
+    function EmptySFC2() {
+        return <div>Hello</div>
+    }
+    
+    function SFC2(prop: { x: boolean }) {
+        return <h1>World</h1>;
+    }
+    
+    var EmptySFCComp = EmptySFC1 || EmptySFC2;
+    var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+    // Error
+    let a = <EmptySFCComp x />;
+                          ~
+!!! error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes'.
+    let b = <SFC2AndEmptyComp x="hi" />;
+                              ~~~~~~
+!!! error TS2322: Type '{ x: "hi"; }' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+!!! error TS2322:   Type '{ x: "hi"; }' is not assignable to type '{ x: boolean; }'.
+!!! error TS2322:     Types of property 'x' are incompatible.
+!!! error TS2322:       Type '"hi"' is not assignable to type 'boolean'.
+    let c = <SFC2AndEmptyComp />;
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+!!! error TS2322:   Type '{}' is not assignable to type '{ x: boolean; }'.
+!!! error TS2322:     Property 'x' is missing in type '{}'.
+    let d = <SFC2AndEmptyComp data-prop />;
+                              ~~~~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { x: boolean; }'.
+!!! error TS2322:   Type '{}' is not assignable to type '{ x: boolean; }'.
+!!! error TS2322:     Property 'x' is missing in type '{}'.
+    
+    

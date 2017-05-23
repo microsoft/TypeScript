@@ -1,5 +1,4 @@
 //// [exhaustiveSwitchWithWideningLiteralTypes.ts]
-
 // Repro from #12529
 
 class A {

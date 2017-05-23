@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commentsMultiModuleMultiFile.ts] ////
 
 //// [commentsMultiModuleMultiFile_0.ts]
-
 /** this is multi declare module*/
 export module multiM {
     /// class b comment
@@ -39,6 +38,7 @@ new multiM.d();
 //// [commentsMultiModuleMultiFile_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi declare module*/
     var multiM;
     (function (multiM) {
@@ -73,6 +73,7 @@ define(["require", "exports"], function (require, exports) {
 //// [commentsMultiModuleMultiFile_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /** this is multi module 3 comment*/
     var multiM;
     (function (multiM) {

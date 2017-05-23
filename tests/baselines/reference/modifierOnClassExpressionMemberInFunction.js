@@ -1,5 +1,4 @@
 //// [modifierOnClassExpressionMemberInFunction.ts]
-
 function g() {
     var x = class C {
         public prop1 = 1;

@@ -1,5 +1,4 @@
 //// [visibilityOfTypeParameters.ts]
-
 export class MyClass {
     protected myMethod<T>(val: T): T {
         return val;
@@ -8,6 +7,7 @@ export class MyClass {
 
 //// [visibilityOfTypeParameters.js]
 "use strict";
+exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {
     }

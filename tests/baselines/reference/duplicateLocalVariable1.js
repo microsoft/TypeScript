@@ -1,5 +1,4 @@
 //// [duplicateLocalVariable1.ts]
-
 / /@module: commonjs
 
 //import FileManager = require('filemanager');
@@ -347,6 +346,7 @@ export var tests: TestRunner = (function () {
 
 //// [duplicateLocalVariable1.js]
 "use strict";
+exports.__esModule = true;
 / /;
 commonjs;
 var TestFileDir = ".\\TempTestFiles";

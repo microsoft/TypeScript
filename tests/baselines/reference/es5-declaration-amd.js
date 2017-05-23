@@ -1,5 +1,4 @@
 //// [es5-declaration-amd.ts]
-
 class A
 {
     constructor ()

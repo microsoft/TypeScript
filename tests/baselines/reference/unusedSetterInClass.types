@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedSetterInClass.ts ===
-
 class Employee {
 >Employee : Employee
 

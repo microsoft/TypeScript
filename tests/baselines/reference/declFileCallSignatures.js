@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileCallSignatures.ts] ////
 
 //// [declFileCallSignatures_0.ts]
-
 export interface ICallSignature {
     /** This comment should appear for foo*/
     (): string;
@@ -67,6 +66,7 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 
 //// [declFileCallSignatures_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileCallSignatures_1.js]
 
 

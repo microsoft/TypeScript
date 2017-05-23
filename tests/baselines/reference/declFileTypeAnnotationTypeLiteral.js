@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationTypeLiteral.ts]
-
 class c {
 }
 class g<T> {

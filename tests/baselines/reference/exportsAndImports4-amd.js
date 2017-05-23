@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports4-amd.ts] ////
 
 //// [t1.ts]
-
 export default "hello";
 
 //// [t2.ts]
@@ -48,6 +47,7 @@ define(["require", "exports"], function (require, exports) {
 //// [t3.js]
 define(["require", "exports", "./t1", "./t1", "./t1", "./t1", "./t1", "./t1"], function (require, exports, a, t1_1, c, t1_2, t1_3, t1_4) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = a;
     a.default;
     exports.b = t1_1.default;

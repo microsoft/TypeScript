@@ -1,6 +1,5 @@
 === tests/cases/compiler/file1.ts ===
-
-No type information for this code.export default function() {}
+export default function() {}
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/file2.ts ===
 export default function foo() {}

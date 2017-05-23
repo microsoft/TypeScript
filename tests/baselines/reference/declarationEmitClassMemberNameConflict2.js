@@ -1,5 +1,4 @@
 //// [declarationEmitClassMemberNameConflict2.ts]
-
 const Bar = 'bar';
 
 enum Hello {

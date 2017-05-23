@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileForClassWithMultipleBaseClasses.ts ===
-
 class A {
 >A : A
 

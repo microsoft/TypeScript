@@ -1,5 +1,4 @@
 //// [optionalMethods.ts]
-
 interface Foo {
     a: number;
     b?: number;

@@ -41,8 +41,7 @@ namespace ts.formatting {
         }
 
         private FillRule(rule: Rule, rulesBucketConstructionStateList: RulesBucketConstructionState[]): void {
-            const specificRule = rule.Descriptor.LeftTokenRange !== Shared.TokenRange.Any &&
-                               rule.Descriptor.RightTokenRange !== Shared.TokenRange.Any;
+            const specificRule = rule.Descriptor.LeftTokenRange.isSpecific() && rule.Descriptor.RightTokenRange.isSpecific();
 
             rule.Descriptor.LeftTokenRange.GetTokens().forEach((left) => {
                 rule.Descriptor.RightTokenRange.GetTokens().forEach((right) => {

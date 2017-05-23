@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(24,33): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(38,34): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(48,37): error TS2694: Namespace 'TypeScript' has no exported member 'AST'.
@@ -165,7 +165,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource14.ts(572,20): error 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

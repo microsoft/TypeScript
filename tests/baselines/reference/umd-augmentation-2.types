@@ -44,7 +44,6 @@ var t = p.x;
 >x : number
 
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
-
 export as namespace Math2d;
 >Math2d : typeof Math2d
 

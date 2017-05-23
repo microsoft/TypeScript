@@ -1,5 +1,4 @@
 //// [declarationEmitInferedDefaultExportType2.ts]
-
 // test.ts
 export = {
   foo: [],
@@ -17,7 +16,7 @@ module.exports = {
 
 
 //// [declarationEmitInferedDefaultExportType2.d.ts]
-declare var _default: {
+declare const _default: {
     foo: any[];
     bar: any;
     baz: any;

@@ -1,5 +1,4 @@
 //// [iterableArrayPattern1.ts]
-var [a, b] = new SymbolIterator;
 class SymbolIterator {
     next() {
         return {
@@ -12,9 +11,10 @@ class SymbolIterator {
         return this;
     }
 }
+
+var [a, b] = new SymbolIterator;
 
 //// [iterableArrayPattern1.js]
-var [a, b] = new SymbolIterator;
 class SymbolIterator {
     next() {
         return {
@@ -26,3 +26,4 @@ class SymbolIterator {
         return this;
     }
 }
+var [a, b] = new SymbolIterator;

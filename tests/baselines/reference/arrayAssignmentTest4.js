@@ -1,6 +1,4 @@
 //// [arrayAssignmentTest4.ts]
-
-
 class C3 {
     CM3M1() { return 3;}
 }

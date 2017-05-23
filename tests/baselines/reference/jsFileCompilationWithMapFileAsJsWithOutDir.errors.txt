@@ -5,7 +5,6 @@ error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. Th
 !!! error TS6054: File 'tests/cases/compiler/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
 !!! error TS6054: File 'tests/cases/compiler/b.js.map' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
 ==== tests/cases/compiler/a.ts (0 errors) ====
-    
     class c {
     }
     

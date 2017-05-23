@@ -8,7 +8,6 @@ interface A {
 >$ : $
 }
 === /types/lib/index.d.ts ===
-
 interface $ { x }
 >$ : $
 >x : any

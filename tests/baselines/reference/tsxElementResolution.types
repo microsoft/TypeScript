@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxElementResolution.tsx ===
-
 declare namespace JSX {
 >JSX : any
 
@@ -33,7 +32,7 @@ var a = <foundFirst  x="hello" />;
 >a : any
 ><foundFirst  x="hello" /> : any
 >foundFirst : typeof foundFirst
->x : any
+>x : string
 
 var b = <string_named />;
 >b : any

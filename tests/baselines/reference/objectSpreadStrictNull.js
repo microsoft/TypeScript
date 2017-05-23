@@ -1,5 +1,4 @@
 //// [objectSpreadStrictNull.ts]
-
 function f(
     definiteBoolean: { sn: boolean },
     definiteString: { sn: string },
@@ -19,6 +18,15 @@ function f(
 
     let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
 }
+
+type Movie = {
+    title: string;
+    yearReleased: number;
+}
+
+const m = { title: "The Matrix", yearReleased: 1999 };
+// should error here because title: undefined is not assignable to string
+const x: Movie = { ...m, title: undefined };
 
 
 //// [objectSpreadStrictNull.js]
@@ -41,3 +49,6 @@ function f(definiteBoolean, definiteString, optionalString, optionalNumber, unde
     var allUndefined = __assign({}, undefinedString, undefinedNumber);
     var undefinedWithOptionalContinues = __assign({}, definiteBoolean, undefinedString, optionalNumber);
 }
+var m = { title: "The Matrix", yearReleased: 1999 };
+// should error here because title: undefined is not assignable to string
+var x = __assign({}, m, { title: undefined });

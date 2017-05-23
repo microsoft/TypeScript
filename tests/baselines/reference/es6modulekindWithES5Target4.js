@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target4.ts]
-
 class E { }
 export default E;
 

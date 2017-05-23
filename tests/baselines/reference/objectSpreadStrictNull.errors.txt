@@ -1,0 +1,84 @@
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(9,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+  Types of property 'sn' are incompatible.
+    Type 'string | number | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(10,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+  Types of property 'sn' are incompatible.
+    Type 'string | number | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,9): error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+  Types of property 'sn' are incompatible.
+    Type 'number | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(15,9): error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+  Types of property 'sn' are incompatible.
+    Type 'number | undefined' is not assignable to type 'string | number'.
+      Type 'undefined' is not assignable to type 'string | number'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number | boolean; }'.
+  Types of property 'sn' are incompatible.
+    Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
+      Type 'undefined' is not assignable to type 'string | number | boolean'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,7): error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
+  Types of property 'title' are incompatible.
+    Type 'undefined' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts (6 errors) ====
+    function f(
+        definiteBoolean: { sn: boolean },
+        definiteString: { sn: string },
+        optionalString: { sn?: string },
+        optionalNumber: { sn?: number },
+        undefinedString: { sn: string | undefined },
+        undefinedNumber: { sn: number | undefined }) {
+        // optional
+        let optionalUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
+            ~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+        let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+        let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
+    
+        // undefined
+        let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+        let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
+            ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+        let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
+    
+        let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number | boolean; }'.
+!!! error TS2322:   Types of property 'sn' are incompatible.
+!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number | boolean'.
+    }
+    
+    type Movie = {
+        title: string;
+        yearReleased: number;
+    }
+    
+    const m = { title: "The Matrix", yearReleased: 1999 };
+    // should error here because title: undefined is not assignable to string
+    const x: Movie = { ...m, title: undefined };
+          ~
+!!! error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
+!!! error TS2322:   Types of property 'title' are incompatible.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+    

@@ -1,5 +1,4 @@
 === tests/cases/compiler/file1.ts ===
-
 function foo() {}
 >foo : typeof foo
 

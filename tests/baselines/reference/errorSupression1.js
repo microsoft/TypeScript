@@ -1,5 +1,4 @@
 //// [errorSupression1.ts]
-
 class Foo { static bar() { return "x"; } }
 
 var baz = Foo.b;

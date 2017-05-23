@@ -12,4 +12,4 @@
 ////var /**/x = b.foo2().foo(5).foo(); // 'x' is of type 'void'
 
 verify.quickInfoAt("", "var x: void");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -7,7 +7,6 @@ tests/cases/compiler/file2.ts(4,9): error TS2661: Cannot export 'NS2'. Only loca
 
 
 ==== tests/cases/compiler/file1.d.ts (0 errors) ====
-    
     declare namespace NS1 {
         export var foo: number;
     }

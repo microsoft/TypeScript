@@ -1,5 +1,4 @@
 //// [ifDoWhileStatements.ts]
-
 interface I {
     id: number;
 }

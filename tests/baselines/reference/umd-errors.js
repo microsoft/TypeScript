@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd-errors.ts] ////
 
 //// [err1.d.ts]
-
 // Illegal, can't be in script file
 export as namespace Foo;
 
@@ -34,3 +33,4 @@ export as namespace C2;
 
 //// [err5.js]
 "use strict";
+exports.__esModule = true;

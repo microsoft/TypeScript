@@ -1,0 +1,68 @@
+tests/cases/conformance/jsx/file.tsx(8,34): error TS2322: Type 'T & { ignore-prop: 10; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+  Type 'T & { ignore-prop: 10; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+    Types of property '"ignore-prop"' are incompatible.
+      Type '10' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(13,34): error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
+  Type 'T' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ func: (a: number, b: string) => void; }' is not assignable to type 'IntrinsicAttributes & { func: (arg: number) => void; }'.
+  Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
+    Types of property 'func' are incompatible.
+      Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
+tests/cases/conformance/jsx/file.tsx(31,9): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+  Property 'render' is missing in type 'Element'.
+tests/cases/conformance/jsx/file.tsx(31,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
+    import React = require('react')
+    
+    declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
+    declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
+    
+    // Error
+    function Bar<T extends {prop: number}>(arg: T) {
+        let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'T & { ignore-prop: 10; }' is not assignable to type 'IntrinsicAttributes & { prop: number; "ignore-prop": string; }'.
+!!! error TS2322:   Type 'T & { ignore-prop: 10; }' is not assignable to type '{ prop: number; "ignore-prop": string; }'.
+!!! error TS2322:     Types of property '"ignore-prop"' are incompatible.
+!!! error TS2322:       Type '10' is not assignable to type 'string'.
+     }
+    
+    // Error
+    function Baz<T>(arg: T) {
+        let a0 = <ComponentSpecific1 {...arg} />
+                                     ~~~~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: {}; "ignore-prop": string; }'.
+!!! error TS2322:   Type 'T' is not assignable to type '{ prop: {}; "ignore-prop": string; }'.
+    }
+    
+    declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
+    
+    // Error
+    function createLink(func: (a: number, b: string)=>void) {
+        let o = <Link func={func} />
+                      ~~~~~~~~~~~
+!!! error TS2322: Type '{ func: (a: number, b: string) => void; }' is not assignable to type 'IntrinsicAttributes & { func: (arg: number) => void; }'.
+!!! error TS2322:   Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
+!!! error TS2322:     Types of property 'func' are incompatible.
+!!! error TS2322:       Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
+    }
+    
+    interface InferParamProp<T> {
+        values: Array<T>;
+        selectHandler: (selectedVal: T) => void;
+    }
+    
+    declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
+    
+    // Error
+    let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+!!! error TS2605:   Property 'render' is missing in type 'Element'.
+             ~~~~~~~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+    

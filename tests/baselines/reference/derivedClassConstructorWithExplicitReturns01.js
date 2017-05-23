@@ -1,5 +1,4 @@
 //// [derivedClassConstructorWithExplicitReturns01.ts]
-
 class C {
     cProp = 10;
 

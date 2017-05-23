@@ -27,6 +27,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var Collection = (function () {
         function Collection() {
         }

@@ -1,14 +1,14 @@
 /// <reference path="fourslash.ts" />
 
-////interface Iterator<T, U> {
+////interface Iterator_<T, U> {
 ////    (value: T, index: any, list: any): U;
 ////}
 ////interface WrappedArray<T> {
-////    map<U>(iterator: Iterator<T, U>, context?: any): U[];
+////    map<U>(iterator: Iterator_<T, U>, context?: any): U[];
 ////}
 ////interface Underscore {
 ////    <T>(list: T[]): WrappedArray<T>;
-////    map<T, U>(list: T[], iterator: Iterator<T, U>, context?: any): U[];
+////    map<T, U>(list: T[], iterator: Iterator_<T, U>, context?: any): U[];
 ////}
 ////declare var _: Underscore;
 ////var aa: string[];
@@ -20,7 +20,7 @@
 ////var c/*5*/cc = _(aaa).map(xx => xx.length);  // Should not error, should be any[]
 ////var d/*6*/dd = aaa.map(xx => xx.length);     // should not error, should be any[]
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 verify.quickInfos({
     1: "var bb: number[]",
     2: "var cc: number[]",

@@ -4,11 +4,12 @@
 ////    return /*2*/[|DefaultExportedFunction|]
 ////}
 /////**
-//// *  Commenting [|DefaultExportedFunction|]
+//// *  Commenting [|{| "inComment": true |}DefaultExportedFunction|]
 //// */
 ////
 ////var x: typeof /*3*/[|DefaultExportedFunction|];
 ////
 ////var y = /*4*/[|DefaultExportedFunction|]();
 
-goTo.eachMarker(() => verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ true));
+const ranges = test.ranges();
+verify.renameLocations(ranges.filter(r => !(r.marker && r.marker.data.inComment)), { findInComments: true, ranges });

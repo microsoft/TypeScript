@@ -19,6 +19,7 @@ x + y;
 
 //// [/app/bin/index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="../types/bar.d.ts"/>
 var foo_1 = require("foo");
 var bar_1 = require("bar");

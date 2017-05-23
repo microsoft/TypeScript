@@ -111,8 +111,7 @@ class ProjectRunner extends RunnerBase {
                 else if (url.indexOf(diskProjectPath) === 0) {
                     // Replace the disk specific path into the project root path
                     url = url.substr(diskProjectPath.length);
-                    // TODO: should be '!=='?
-                    if (url.charCodeAt(0) != ts.CharacterCodes.slash) {
+                    if (url.charCodeAt(0) !== ts.CharacterCodes.slash) {
                         url = "/" + url;
                     }
                 }
@@ -373,7 +372,7 @@ class ProjectRunner extends RunnerBase {
             const compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
-                if (ts.isDeclarationFile(sourceFile)) {
+                if (sourceFile.isDeclarationFile) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {

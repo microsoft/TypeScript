@@ -1,15 +1,11 @@
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(2,10): error TS4060: Return type of exported function has or is using private name 'D'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(6,17): error TS2315: Type 'D' is not generic.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(10,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(15,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(15,18): error TS4020: Extends clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(5,17): error TS2315: Type 'D' is not generic.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(9,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
+tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS4020: 'extends' clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
 
 
-==== tests/cases/compiler/declarationEmitExpressionInExtends4.ts (5 errors) ====
-    
+==== tests/cases/compiler/declarationEmitExpressionInExtends4.ts (4 errors) ====
     function getSomething() {
-             ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'D'.
         return class D { }
     }
     
@@ -30,6 +26,6 @@ tests/cases/compiler/declarationEmitExpressionInExtends4.ts(15,18): error TS4020
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SomeUndefinedFunction'.
                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS4020: Extends clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
+!!! error TS4020: 'extends' clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
     
     }

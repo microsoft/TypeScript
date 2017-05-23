@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reExportGlobalDeclaration1.ts] ////
 
 //// [file1.d.ts]
-
 declare var x: number;
 declare var x1: number;
 declare let {a, b}: {a: number, b: number};
@@ -22,3 +21,4 @@ export {b as b2};
 
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

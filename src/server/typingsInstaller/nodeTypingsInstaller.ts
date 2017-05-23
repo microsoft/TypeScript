@@ -1,4 +1,4 @@
-﻿/// <reference path="typingsInstaller.ts"/>
+/// <reference path="typingsInstaller.ts"/>
 /// <reference types="node" />
 
 namespace ts.server.typingsInstaller {
@@ -13,19 +13,25 @@ namespace ts.server.typingsInstaller {
     } = require("path");
 
     class FileLog implements Log {
+        private logEnabled = true;
         constructor(private readonly logFile?: string) {
         }
 
         isEnabled() {
-            return this.logFile !== undefined;
+            return this.logEnabled && this.logFile !== undefined;
         }
         writeLine(text: string) {
-            fs.appendFileSync(this.logFile, text + sys.newLine);
+            try {
+                fs.appendFileSync(this.logFile, text + sys.newLine);
+            }
+            catch (e) {
+                this.logEnabled = false;
+            }
         }
     }
 
     function getNPMLocation(processName: string) {
-        if (path.basename(processName).indexOf("node") == 0) {
+        if (path.basename(processName).indexOf("node") === 0) {
             return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
         }
         else {
@@ -61,20 +67,20 @@ namespace ts.server.typingsInstaller {
         return combinePaths(normalizeSlashes(globalTypingsCacheLocation), `node_modules/${TypesRegistryPackageName}/index.json`);
     }
 
-    type ExecSync = {
-        (command: string, options: { cwd: string, stdio?: "ignore" }): any
-    }
+    type ExecSync = (command: string, options: { cwd: string, stdio?: "ignore" }) => any;
 
     export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly execSync: ExecSync;
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;
 
-        constructor(globalTypingsCacheLocation: string, throttleLimit: number, log: Log) {
+        private delayedInitializationError: InitializationFailedResponse;
+
+        constructor(globalTypingsCacheLocation: string, typingSafeListLocation: string, throttleLimit: number, log: Log) {
             super(
                 sys,
                 globalTypingsCacheLocation,
-                toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
+                typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
             if (this.log.isEnabled()) {
@@ -90,11 +96,19 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Updating ${TypesRegistryPackageName} npm package...`);
                 }
                 this.execSync(`${this.npmPath} install ${TypesRegistryPackageName}`, { cwd: globalTypingsCacheLocation, stdio: "ignore" });
+                if (this.log.isEnabled()) {
+                    this.log.writeLine(`Updated ${TypesRegistryPackageName} npm package`);
+                }
             }
             catch (e) {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Error updating ${TypesRegistryPackageName} package: ${(<Error>e).message}`);
                 }
+                // store error info to report it later when it is known that server is already listening to events from typings installer
+                this.delayedInitializationError = {
+                    kind: "event::initializationFailed",
+                    message: (<Error>e).message
+                };
             }
 
             this.typesRegistry = loadTypesRegistryFile(getTypesRegistryFileLocation(globalTypingsCacheLocation), this.installTypingHost, this.log);
@@ -102,6 +116,11 @@ namespace ts.server.typingsInstaller {
 
         listen() {
             process.on("message", (req: DiscoverTypings | CloseProject) => {
+                if (this.delayedInitializationError) {
+                    // report initializationFailed error
+                    this.sendResponse(this.delayedInitializationError);
+                    this.delayedInitializationError = undefined;
+                }
                 switch (req.kind) {
                     case "discover":
                         this.install(req);
@@ -112,7 +131,7 @@ namespace ts.server.typingsInstaller {
             });
         }
 
-        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes) {
+        protected sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Sending response: ${JSON.stringify(response)}`);
             }
@@ -148,6 +167,7 @@ namespace ts.server.typingsInstaller {
 
     const logFilePath = findArgument(server.Arguments.LogFile);
     const globalTypingsCacheLocation = findArgument(server.Arguments.GlobalCacheLocation);
+    const typingSafeListLocation = findArgument(server.Arguments.TypingSafeListLocation);
 
     const log = new FileLog(logFilePath);
     if (log.isEnabled()) {
@@ -161,6 +181,6 @@ namespace ts.server.typingsInstaller {
         }
         process.exit(0);
     });
-    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, /*throttleLimit*/5, log);
+    const installer = new NodeTypingsInstaller(globalTypingsCacheLocation, typingSafeListLocation, /*throttleLimit*/5, log);
     installer.listen();
 }

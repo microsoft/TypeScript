@@ -1,5 +1,4 @@
 //// [unreachableFlowAfterFinally.ts]
-
 function f() {
     let x = 100;
     try {

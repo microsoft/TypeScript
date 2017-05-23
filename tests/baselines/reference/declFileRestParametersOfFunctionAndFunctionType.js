@@ -1,5 +1,4 @@
 //// [declFileRestParametersOfFunctionAndFunctionType.ts]
-
 function f1(...args) { }
 function f2(x: (...args) => void) { }
 function f3(x: { (...args): void }) { }

@@ -1,5 +1,4 @@
 === tests/cases/conformance/classes/classDeclarations/modifierOnClassDeclarationMemberInFunction.ts ===
-
 function f() {
 >f : () => void
 

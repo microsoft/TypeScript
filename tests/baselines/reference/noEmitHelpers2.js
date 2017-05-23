@@ -1,5 +1,4 @@
 //// [noEmitHelpers2.ts]
-
 declare var decorator: any;
 
 @decorator

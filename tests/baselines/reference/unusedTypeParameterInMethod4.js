@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInMethod4.ts]
-
 class A {
     public f1<X>() {
 

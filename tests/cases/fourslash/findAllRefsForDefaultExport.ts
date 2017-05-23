@@ -7,5 +7,16 @@
 ////import [|{| "isWriteAccess": true, "isDefinition": true |}g|] from "./a";
 /////*ref*/[|g|]();
 
-verify.singleReferenceGroup("function f(): void");
+// @Filename: c.ts
+////import { f } from "./a";
+
+const ranges = test.ranges();
+const [r0, r1, r2] = ranges;
+verify.referenceGroups(r0, [
+    { definition: "function f(): void", ranges: [r0] },
+    { definition: "import g", ranges: [r1, r2] }
+]);
+verify.referenceGroups(r1, [{ definition: "import g", ranges: [r1, r2] }]);
+verify.referenceGroups(r2, [{ definition: "(alias) g(): void\nimport g", ranges: [r1, r2] }]);
+
 verify.goToDefinition("ref", "def");

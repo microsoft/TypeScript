@@ -1,5 +1,4 @@
 //// [constructableDecoratorOnClass01.ts]
-
 class CtorDtor {}
 
 @CtorDtor

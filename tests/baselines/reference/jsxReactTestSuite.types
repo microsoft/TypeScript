@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/jsxReactTestSuite.tsx ===
-
 declare var React: any;
 >React : any
 
@@ -116,7 +115,7 @@ var x =
 >div : any
 
     attr1={
->attr1 : any
+>attr1 : string
 
       "foo" + "bar"
 >"foo" + "bar" : string
@@ -124,7 +123,7 @@ var x =
 >"bar" : "bar"
     }
     attr2={
->attr2 : any
+>attr2 : string
 
       "foo" + "bar" +
 >"foo" + "bar" +            "baz" + "bug" : string
@@ -138,7 +137,7 @@ var x =
 >"bug" : "bug"
     }
     attr3={
->attr3 : any
+>attr3 : string
 
       "foo" + "bar" +
 >"foo" + "bar" +      "baz" + "bug" : string
@@ -154,7 +153,7 @@ var x =
       // Extra line here.
     }
     attr4="baz">
->attr4 : any
+>attr4 : string
 
   </div>;
 >div : any
@@ -198,14 +197,14 @@ var x =
     /* a multi-line
        comment */
     attr1="foo">
->attr1 : any
+>attr1 : string
 
     <span // a double-slash comment
 ><span // a double-slash comment      attr2="bar"    /> : any
 >span : any
 
       attr2="bar"
->attr2 : any
+>attr2 : string
 
     />
   </div>
@@ -231,7 +230,7 @@ var x =
 <Component constructor="foo" />;
 ><Component constructor="foo" /> : any
 >Component : any
->constructor : any
+>constructor : string
 
 <Namespace.Component />;
 ><Namespace.Component /> : any
@@ -251,11 +250,11 @@ var x =
 ><Component { ... x } y={2 } z /> : any
 >Component : any
 >x : any
->y : any
+>y : number
 
 ={2 } z />;
 >2 : 2
->z : any
+>z : true
 
 <Component
 ><Component    {...this.props} sound="moo" /> : any
@@ -265,7 +264,7 @@ var x =
 >this.props : any
 >this : any
 >props : any
->sound : any
+>sound : string
 
 <font-face />;
 ><font-face /> : any
@@ -290,21 +289,21 @@ var x =
 ><Component { ...x } y={2} /> : any
 >Component : any
 >x : any
->y : any
+>y : number
 >2 : 2
 
 <Component { ... x } y={2} z />;
 ><Component { ... x } y={2} z /> : any
 >Component : any
 >x : any
->y : any
+>y : number
 >2 : 2
->z : any
+>z : true
 
 <Component x={1} {...y} />;
 ><Component x={1} {...y} /> : any
 >Component : any
->x : any
+>x : number
 >1 : 1
 >y : any
 
@@ -312,9 +311,9 @@ var x =
 <Component x={1} y="2" {...z} {...z}><Child /></Component>;
 ><Component x={1} y="2" {...z} {...z}><Child /></Component> : any
 >Component : any
->x : any
+>x : number
 >1 : 1
->y : any
+>y : string
 >z : any
 >z : any
 ><Child /> : any
@@ -324,7 +323,7 @@ var x =
 <Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component>;
 ><Component x="1" {...(z = { y: 2 }, z)} z={3}>Text</Component> : any
 >Component : any
->x : any
+>x : string
 >(z = { y: 2 }, z) : any
 >z = { y: 2 }, z : any
 >z = { y: 2 } : { y: number; }
@@ -333,7 +332,7 @@ var x =
 >y : number
 >2 : 2
 >z : any
->z : any
+>z : number
 >3 : 3
 >Component : any
 

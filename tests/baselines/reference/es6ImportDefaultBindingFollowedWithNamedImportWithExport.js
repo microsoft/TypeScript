@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImportWithExport.ts] ////
 
 //// [server.ts]
-
 export var a = 10;
 export var x = a;
 export var m = a;
@@ -25,15 +24,16 @@ export var x1: number = m;
 //// [server.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
-    Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {};
 });
 //// [client.js]
 define(["require", "exports", "server", "server", "server", "server", "server"], function (require, exports, server_1, server_2, server_3, server_4, server_5) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     exports.x1 = server_1.a;
     exports.x1 = server_2.a;
     exports.x1 = server_3.x;
@@ -47,7 +47,7 @@ define(["require", "exports", "server", "server", "server", "server", "server"],
 export declare var a: number;
 export declare var x: number;
 export declare var m: number;
-declare var _default: {};
+declare const _default: {};
 export default _default;
 //// [client.d.ts]
 export declare var x1: number;

@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const node = getTouchingWord(sourceFile, position);
-        return node && (getSemanticDocumentHighlights(node, typeChecker, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+        const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
+        return node && (getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -16,33 +16,23 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(node: Node, typeChecker: TypeChecker, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const referencedSymbols = FindAllReferences.getReferencedSymbolsForNode(typeChecker, cancellationToken, node, sourceFilesToSearch);
-        return referencedSymbols && convertReferencedSymbols(referencedSymbols);
+    function getSemanticDocumentHighlights(node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, program, sourceFilesToSearch, cancellationToken);
+        return referenceEntries && convertReferencedSymbols(referenceEntries);
     }
 
-    function convertReferencedSymbols(referencedSymbols: ReferencedSymbol[]): DocumentHighlights[] {
-        const fileNameToDocumentHighlights = createMap<DocumentHighlights>();
-        const result: DocumentHighlights[] = [];
-        for (const referencedSymbol of referencedSymbols) {
-            for (const referenceEntry of referencedSymbol.references) {
-                const fileName = referenceEntry.fileName;
-                let documentHighlights = fileNameToDocumentHighlights.get(fileName);
-                if (!documentHighlights) {
-                    documentHighlights = { fileName, highlightSpans: [] };
-
-                    fileNameToDocumentHighlights.set(fileName, documentHighlights);
-                    result.push(documentHighlights);
-                }
-
-                documentHighlights.highlightSpans.push({
-                    textSpan: referenceEntry.textSpan,
-                    kind: referenceEntry.isWriteAccess ? HighlightSpanKind.writtenReference : HighlightSpanKind.reference
-                });
+    function convertReferencedSymbols(referenceEntries: FindAllReferences.Entry[]): DocumentHighlights[] {
+        const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
+        for (const entry of referenceEntries) {
+            const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
+            let highlightSpans = fileNameToDocumentHighlights.get(fileName);
+            if (!highlightSpans) {
+                fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
             }
+            highlightSpans.push(span);
         }
 
-        return result;
+        return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));
     }
 
     function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
@@ -243,7 +233,7 @@ namespace ts.DocumentHighlights {
                     if (statement.kind === SyntaxKind.ContinueStatement) {
                         continue;
                     }
-                // Fall through.
+                    // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:

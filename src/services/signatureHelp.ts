@@ -1,174 +1,13 @@
 ///<reference path='services.ts' />
 /* @internal */
 namespace ts.SignatureHelp {
-
-    // A partially written generic type expression is not guaranteed to have the correct syntax tree. the expression could be parsed as less than/greater than expression or a comma expression
-    // or some other combination depending on what the user has typed so far. For the purposes of signature help we need to consider any location after "<" as a possible generic type reference.
-    // To do this, the method will back parse the expression starting at the position required. it will try to parse the current expression as a generic type expression, if it did succeed it
-    // will return the generic identifier that started the expression (e.g. "foo" in "foo<any, |"). It is then up to the caller to ensure that this is a valid generic expression through
-    // looking up the type. The method will also keep track of the parameter index inside the expression.
-    // public static isInPartiallyWrittenTypeArgumentList(syntaxTree: TypeScript.SyntaxTree, position: number): any {
-    //    let token = Syntax.findTokenOnLeft(syntaxTree.sourceUnit(), position, /*includeSkippedTokens*/ true);
-
-    //    if (token && TypeScript.Syntax.hasAncestorOfKind(token, TypeScript.SyntaxKind.TypeParameterList)) {
-    //        // We are in the wrong generic list. bail out
-    //        return null;
-    //    }
-
-    //    let stack = 0;
-    //    let argumentIndex = 0;
-
-    //    whileLoop:
-    //    while (token) {
-    //        switch (token.kind()) {
-    //            case TypeScript.SyntaxKind.LessThanToken:
-    //                if (stack === 0) {
-    //                    // Found the beginning of the generic argument expression
-    //                    let lessThanToken = token;
-    //                    token = previousToken(token, /*includeSkippedTokens*/ true);
-    //                    if (!token || token.kind() !== TypeScript.SyntaxKind.IdentifierName) {
-    //                        break whileLoop;
-    //                    }
-
-    //                    // Found the name, return the data
-    //                    return {
-    //                        genericIdentifer: token,
-    //                        lessThanToken: lessThanToken,
-    //                        argumentIndex: argumentIndex
-    //                    };
-    //                }
-    //                else if (stack < 0) {
-    //                    // Seen one too many less than tokens, bail out
-    //                    break whileLoop;
-    //                }
-    //                else {
-    //                    stack--;
-    //                }
-
-    //                break;
-
-    //            case TypeScript.SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-    //                stack++;
-
-    //            // Intentional fall through
-    //            case TypeScript.SyntaxKind.GreaterThanToken:
-    //                stack++;
-    //                break;
-
-    //            case TypeScript.SyntaxKind.CommaToken:
-    //                if (stack == 0) {
-    //                    argumentIndex++;
-    //                }
-
-    //                break;
-
-    //            case TypeScript.SyntaxKind.CloseBraceToken:
-    //                // This can be object type, skip untill we find the matching open brace token
-    //                let unmatchedOpenBraceTokens = 0;
-
-    //                // Skip untill the matching open brace token
-    //                token = SignatureInfoHelpers.moveBackUpTillMatchingTokenKind(token, TypeScript.SyntaxKind.CloseBraceToken, TypeScript.SyntaxKind.OpenBraceToken);
-    //                if (!token) {
-    //                    // No matching token was found. bail out
-    //                    break whileLoop;
-    //                }
-
-    //                break;
-
-    //            case TypeScript.SyntaxKind.EqualsGreaterThanToken:
-    //                // This can be a function type or a constructor type. In either case, we want to skip the function definition
-    //                token = previousToken(token, /*includeSkippedTokens*/ true);
-
-    //                if (token && token.kind() === TypeScript.SyntaxKind.CloseParenToken) {
-    //                    // Skip untill the matching open paren token
-    //                    token = SignatureInfoHelpers.moveBackUpTillMatchingTokenKind(token, TypeScript.SyntaxKind.CloseParenToken, TypeScript.SyntaxKind.OpenParenToken);
-
-    //                    if (token && token.kind() === TypeScript.SyntaxKind.GreaterThanToken) {
-    //                        // Another generic type argument list, skip it\
-    //                        token = SignatureInfoHelpers.moveBackUpTillMatchingTokenKind(token, TypeScript.SyntaxKind.GreaterThanToken, TypeScript.SyntaxKind.LessThanToken);
-    //                    }
-
-    //                    if (token && token.kind() === TypeScript.SyntaxKind.NewKeyword) {
-    //                        // In case this was a constructor type, skip the new keyword
-    //                        token = previousToken(token, /*includeSkippedTokens*/ true);
-    //                    }
-
-    //                    if (!token) {
-    //                        // No matching token was found. bail out
-    //                        break whileLoop;
-    //                    }
-    //                }
-    //                else {
-    //                    // This is not a function type. exit the main loop
-    //                    break whileLoop;
-    //                }
-
-    //                break;
-
-    //            case TypeScript.SyntaxKind.IdentifierName:
-    //            case TypeScript.SyntaxKind.AnyKeyword:
-    //            case TypeScript.SyntaxKind.NumberKeyword:
-    //            case TypeScript.SyntaxKind.StringKeyword:
-    //            case TypeScript.SyntaxKind.VoidKeyword:
-    //            case TypeScript.SyntaxKind.BooleanKeyword:
-    //            case TypeScript.SyntaxKind.DotToken:
-    //            case TypeScript.SyntaxKind.OpenBracketToken:
-    //            case TypeScript.SyntaxKind.CloseBracketToken:
-    //                // Valid tokens in a type name. Skip.
-    //                break;
-
-    //            default:
-    //                break whileLoop;
-    //        }
-
-    //        token = previousToken(token, /*includeSkippedTokens*/ true);
-    //    }
-
-    //    return null;
-    // }
-
-    // private static moveBackUpTillMatchingTokenKind(token: TypeScript.ISyntaxToken, tokenKind: TypeScript.SyntaxKind, matchingTokenKind: TypeScript.SyntaxKind): TypeScript.ISyntaxToken {
-    //    if (!token || token.kind() !== tokenKind) {
-    //        throw TypeScript.Errors.invalidOperation();
-    //    }
-
-    //    // Skip the current token
-    //    token = previousToken(token, /*includeSkippedTokens*/ true);
-
-    //    let stack = 0;
-
-    //    while (token) {
-    //        if (token.kind() === matchingTokenKind) {
-    //            if (stack === 0) {
-    //                // Found the matching token, return
-    //                return token;
-    //            }
-    //            else if (stack < 0) {
-    //                // tokens overlapped.. bail out.
-    //                break;
-    //            }
-    //            else {
-    //                stack--;
-    //            }
-    //        }
-    //        else if (token.kind() === tokenKind) {
-    //            stack++;
-    //        }
-
-    //        // Move back
-    //        token = previousToken(token, /*includeSkippedTokens*/ true);
-    //    }
-
-    //    // Did not find matching token
-    //    return null;
-    // }
-
     const emptyArray: any[] = [];
 
     export const enum ArgumentListKind {
         TypeArguments,
         CallArguments,
-        TaggedTemplateArguments
+        TaggedTemplateArguments,
+        JSXAttributesArguments
     }
 
     export interface ArgumentListInfo {
@@ -261,21 +100,21 @@ namespace ts.SignatureHelp {
      * in the argument of an invocation; returns undefined otherwise.
      */
     export function getImmediatelyContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile): ArgumentListInfo {
-        if (node.parent.kind === SyntaxKind.CallExpression || node.parent.kind === SyntaxKind.NewExpression) {
+        if (isCallOrNewExpression(node.parent)) {
             const callExpression = <CallExpression>node.parent;
             // There are 3 cases to handle:
-            //   1. The token introduces a list, and should begin a sig help session
+            //   1. The token introduces a list, and should begin a signature help session
             //   2. The token is either not associated with a list, or ends a list, so the session should end
-            //   3. The token is buried inside a list, and should give sig help
+            //   3. The token is buried inside a list, and should give signature help
             //
             // The following are examples of each:
             //
             //    Case 1:
-            //          foo<#T, U>(#a, b)    -> The token introduces a list, and should begin a sig help session
+            //          foo<#T, U>(#a, b)    -> The token introduces a list, and should begin a signature help session
             //    Case 2:
             //          fo#o<T, U>#(a, b)#   -> The token is either not associated with a list, or ends a list, so the session should end
             //    Case 3:
-            //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give sig help
+            //          foo<T#, U#>(a#, #b#) -> The token is buried inside a list, and should give signature help
             // Find out if 'node' is an argument, a type argument, or neither
             if (node.kind === SyntaxKind.LessThanToken ||
                 node.kind === SyntaxKind.OpenParenToken) {
@@ -295,7 +134,7 @@ namespace ts.SignatureHelp {
 
             // findListItemInfo can return undefined if we are not in parent's argument list
             // or type argument list. This includes cases where the cursor is:
-            //   - To the right of the closing paren, non-substitution template, or template tail.
+            //   - To the right of the closing parenthesis, non-substitution template, or template tail.
             //   - Between the type arguments and the arguments (greater than token)
             //   - On the target of the call (parent.func)
             //   - On the 'new' keyword in a 'new' expression
@@ -352,6 +191,22 @@ namespace ts.SignatureHelp {
 
             return getArgumentListInfoForTemplate(tagExpression, argumentIndex, sourceFile);
         }
+        else if (node.parent && isJsxOpeningLikeElement(node.parent)) {
+            // Provide a signature help for JSX opening element or JSX self-closing element.
+            // This is not guarantee that JSX tag-name is resolved into stateless function component. (that is done in "getSignatureHelpItems")
+            // i.e
+            //      export function MainButton(props: ButtonProps, context: any): JSX.Element { ... }
+            //      <MainButton /*signatureHelp*/
+            const attributeSpanStart = node.parent.attributes.getFullStart();
+            const attributeSpanEnd = skipTrivia(sourceFile.text, node.parent.attributes.getEnd(), /*stopAfterLineBreak*/ false);
+            return {
+                kind: ArgumentListKind.JSXAttributesArguments,
+                invocation: node.parent,
+                argumentsSpan: createTextSpan(attributeSpanStart, attributeSpanEnd - attributeSpanStart),
+                argumentIndex: 0,
+                argumentCount: 1
+            };
+        }
 
         return undefined;
     }
@@ -392,7 +247,7 @@ namespace ts.SignatureHelp {
         //
         // Note: this subtlety only applies to the last comma.  If you had "Foo(a,,"  then
         // we'll have:  'a' '<comma>' '<missing>'
-        // That will give us 2 non-commas.  We then add one for the last comma, givin us an
+        // That will give us 2 non-commas.  We then add one for the last comma, giving us an
         // arg count of 3.
         const listChildren = argumentsList.getChildren();
 
@@ -435,7 +290,6 @@ namespace ts.SignatureHelp {
             : (<TemplateExpression>tagExpression.template).templateSpans.length + 1;
 
         Debug.assert(argumentIndex === 0 || argumentIndex < argumentCount, `argumentCount < argumentIndex, ${argumentCount} < ${argumentIndex}`);
-
         return {
             kind: ArgumentListKind.TaggedTemplateArguments,
             invocation: tagExpression,
@@ -590,7 +444,8 @@ namespace ts.SignatureHelp {
                 suffixDisplayParts,
                 separatorDisplayParts: [punctuationPart(SyntaxKind.CommaToken), spacePart()],
                 parameters: signatureHelpParameters,
-                documentation: candidateSignature.getDocumentationComment()
+                documentation: candidateSignature.getDocumentationComment(),
+                tags: candidateSignature.getJsDocTags()
             };
         });
 

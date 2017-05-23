@@ -166,11 +166,11 @@ namespace ts.server {
     export interface ProjectOptions {
         /**
          * true if config file explicitly listed files
-         **/
+         */
         configHasFilesProperty?: boolean;
         /**
          * these fields can be present in the project file
-         **/
+         */
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
@@ -219,7 +219,7 @@ namespace ts.server {
         }
 
         public scheduleCollect() {
-            if (!this.host.gc || this.timerId != undefined) {
+            if (!this.host.gc || this.timerId !== undefined) {
                 // no global.gc or collection was already scheduled - skip this request
                 return;
             }

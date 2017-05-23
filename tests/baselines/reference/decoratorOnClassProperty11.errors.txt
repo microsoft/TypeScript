@@ -1,5 +1,4 @@
 tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(4,5): error TS1240: Unable to resolve signature of property decorator when called as an expression.
-  Supplied parameters do not match any signature of call target.
 
 
 ==== tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts (1 errors) ====
@@ -9,5 +8,4 @@ tests/cases/conformance/decorators/class/property/decoratorOnClassProperty11.ts(
         @dec prop;
         ~~~~
 !!! error TS1240: Unable to resolve signature of property decorator when called as an expression.
-!!! error TS1240:   Supplied parameters do not match any signature of call target.
     }

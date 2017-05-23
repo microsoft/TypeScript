@@ -1,5 +1,4 @@
 //// [constEnumDeclarations.ts]
-
 const enum E {
     A = 1,
     B = 2,

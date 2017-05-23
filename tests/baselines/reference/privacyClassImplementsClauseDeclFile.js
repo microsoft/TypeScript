@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }
@@ -96,6 +95,7 @@ class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceI
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var publicModule;
 (function (publicModule) {
     var privateClassImplementingPublicInterfaceInModule = (function () {

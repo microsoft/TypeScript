@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/modules/exportBinding.ts ===
+export { x }
+>x : "x"
+
+const x = 'x'
+>x : "x"
+>'x' : "x"
+
+export { Y as Z }
+>Y : typeof Y
+>Z : typeof Y
+
+class Y {}
+>Y : Y
+
