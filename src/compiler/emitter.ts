@@ -1064,7 +1064,7 @@ namespace ts {
             }
             else {
                 write("{");
-                emitList(node, elements, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.ObjectBindingPatternElements : ListFormat.ObjectBindingPatternElementsWithSpaceBetweenBraces);
+                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
                 write("}");
             }
         }
@@ -3019,8 +3019,7 @@ namespace ts {
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | CommaDelimited | SpaceBetweenSiblings,
-        ObjectBindingPatternElementsWithSpaceBetweenBraces = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
