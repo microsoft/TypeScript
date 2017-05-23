@@ -860,6 +860,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
             write(";");
@@ -881,6 +882,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             writeIfPresent(node.asteriskToken, "*");
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
