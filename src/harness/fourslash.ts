@@ -916,7 +916,7 @@ namespace FourSlash {
         }
 
         private getNode(): ts.Node {
-            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition);
+            return ts.getTouchingPropertyName(this.getSourceFile(), this.currentCaretPosition, /*includeJsDocComment*/ false);
         }
 
         private goToAndGetNode(range: Range): ts.Node {
@@ -994,12 +994,11 @@ namespace FourSlash {
         }
 
         public verifyReferenceGroups(startRanges: Range | Range[], parts: Array<{ definition: string, ranges: Range[] }>): void {
-            interface ReferenceJson { definition: string; ranges: ts.ReferenceEntry[]; }
             const fullExpected = ts.map(parts, ({ definition, ranges }) => ({ definition, ranges: ranges.map(rangeToReferenceEntry) }));
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
-                const fullActual = ts.map<ts.ReferencedSymbol, ReferenceJson>(this.findReferencesAtCaret(), ({ definition, references }) => ({
+                const fullActual = ts.map(this.findReferencesAtCaret(), ({ definition, references }) => ({
                     definition: definition.displayParts.map(d => d.text).join(""),
                     ranges: references
                 }));
@@ -1045,6 +1044,10 @@ namespace FourSlash {
                     console.log("Actual: ", stringify(fullActual));
                     this.raiseError(`${msgPrefix}At ${path}: ${msg}`);
                 };
+
+                if ((actual === undefined) !== (expected === undefined)) {
+                    fail(`Expected ${expected}, got ${actual}`);
+                }
 
                 for (const key in actual) if (ts.hasProperty(actual as any, key)) {
                     const ak = actual[key], ek = expected[key];
@@ -2174,7 +2177,7 @@ namespace FourSlash {
             }
 
             ts.zipWith(expected, actual, (expectedClassification, actualClassification) => {
-                const expectedType: string = (<any>ts.ClassificationTypeNames)[expectedClassification.classificationType];
+                const expectedType = expectedClassification.classificationType;
                 if (expectedType !== actualClassification.classificationType) {
                     this.raiseError("verifyClassifications failed - expected classifications type to be " +
                         expectedType + ", but was " +
@@ -3876,7 +3879,7 @@ namespace FourSlashInterface {
         /**
          * This method *requires* an ordered stream of classifications for a file, and spans are highly recommended.
          */
-        public semanticClassificationsAre(...classifications: { classificationType: string; text: string; textSpan?: FourSlash.TextSpan }[]) {
+        public semanticClassificationsAre(...classifications: Classification[]) {
             this.state.verifySemanticClassifications(classifications);
         }
 
@@ -4071,102 +4074,107 @@ namespace FourSlashInterface {
         }
     }
 
+    interface Classification {
+        classificationType: ts.ClassificationTypeNames;
+        text: string;
+        textSpan?: FourSlash.TextSpan;
+    }
     export namespace Classification {
-        export function comment(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("comment", text, position);
+        export function comment(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.comment, text, position);
         }
 
-        export function identifier(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("identifier", text, position);
+        export function identifier(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.identifier, text, position);
         }
 
-        export function keyword(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("keyword", text, position);
+        export function keyword(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.keyword, text, position);
         }
 
-        export function numericLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("numericLiteral", text, position);
+        export function numericLiteral(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.numericLiteral, text, position);
         }
 
-        export function operator(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("operator", text, position);
+        export function operator(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.operator, text, position);
         }
 
-        export function stringLiteral(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("stringLiteral", text, position);
+        export function stringLiteral(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.stringLiteral, text, position);
         }
 
-        export function whiteSpace(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("whiteSpace", text, position);
+        export function whiteSpace(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.whiteSpace, text, position);
         }
 
-        export function text(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("text", text, position);
+        export function text(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.text, text, position);
         }
 
-        export function punctuation(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("punctuation", text, position);
+        export function punctuation(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.punctuation, text, position);
         }
 
-        export function docCommentTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("docCommentTagName", text, position);
+        export function docCommentTagName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.docCommentTagName, text, position);
         }
 
-        export function className(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("className", text, position);
+        export function className(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.className, text, position);
         }
 
-        export function enumName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("enumName", text, position);
+        export function enumName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.enumName, text, position);
         }
 
-        export function interfaceName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("interfaceName", text, position);
+        export function interfaceName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.interfaceName, text, position);
         }
 
-        export function moduleName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("moduleName", text, position);
+        export function moduleName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.moduleName, text, position);
         }
 
-        export function typeParameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("typeParameterName", text, position);
+        export function typeParameterName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.typeParameterName, text, position);
         }
 
-        export function parameterName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("parameterName", text, position);
+        export function parameterName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.parameterName, text, position);
         }
 
-        export function typeAliasName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("typeAliasName", text, position);
+        export function typeAliasName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.typeAliasName, text, position);
         }
 
-        export function jsxOpenTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxOpenTagName", text, position);
+        export function jsxOpenTagName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxOpenTagName, text, position);
         }
 
-        export function jsxCloseTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxCloseTagName", text, position);
+        export function jsxCloseTagName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxCloseTagName, text, position);
         }
 
-        export function jsxSelfClosingTagName(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxSelfClosingTagName", text, position);
+        export function jsxSelfClosingTagName(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxSelfClosingTagName, text, position);
         }
 
-        export function jsxAttribute(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxAttribute", text, position);
+        export function jsxAttribute(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxAttribute, text, position);
         }
 
-        export function jsxText(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxText", text, position);
+        export function jsxText(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxText, text, position);
         }
 
-        export function jsxAttributeStringLiteralValue(text: string, position?: number): { classificationType: string; text: string; textSpan?: FourSlash.TextSpan } {
-            return getClassification("jsxAttributeStringLiteralValue", text, position);
+        export function jsxAttributeStringLiteralValue(text: string, position?: number): Classification {
+            return getClassification(ts.ClassificationTypeNames.jsxAttributeStringLiteralValue, text, position);
         }
 
-        function getClassification(type: string, text: string, position?: number) {
+        function getClassification(classificationType: ts.ClassificationTypeNames, text: string, position?: number): Classification {
             return {
-                classificationType: type,
+                classificationType,
                 text: text,
                 textSpan: position === undefined ? undefined : { start: position, end: position + text.length }
             };

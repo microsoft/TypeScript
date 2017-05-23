@@ -1783,7 +1783,8 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+    /* @internal */
+    export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
                 return true;
@@ -1983,7 +1984,7 @@ namespace ts {
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);

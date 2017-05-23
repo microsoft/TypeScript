@@ -1,4 +1,4 @@
-tests/cases/compiler/a.ts(1,21): error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.
+/a.ts(1,21): error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.
 
 
 ==== /node_modules/@types/foo-bar/index.d.ts (0 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/a.ts(1,21): error TS6137: Cannot import type declaration fi
     }
     
     // This should error
-==== tests/cases/compiler/a.ts (1 errors) ====
+==== /a.ts (1 errors) ====
     import { Foo } from "@types/foo-bar";
                         ~~~~~~~~~~~~~~~~
 !!! error TS6137: Cannot import type declaration files. Consider importing 'foo-bar' instead of '@types/foo-bar'.

@@ -5,7 +5,7 @@ namespace ts.codefix {
         getCodeActions: (context: CodeFixContext) => {
             const sourceFile = context.sourceFile;
 
-            const token = getTokenAtPosition(sourceFile, context.span.start);
+            const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
             if (token.kind !== SyntaxKind.ThisKeyword) {
                 return undefined;
             }

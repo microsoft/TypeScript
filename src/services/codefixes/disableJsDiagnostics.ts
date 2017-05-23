@@ -22,7 +22,7 @@ namespace ts.codefix {
         // We also want to check if the previous line holds a comment for a node on the next line
         // if so, we do not want to separate the node from its comment if we can.
         if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
-            const token = getTouchingToken(sourceFile, startPosition);
+            const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
             const tokenLeadingCommnets = getLeadingCommentRangesOfNode(token, sourceFile);
             if (!tokenLeadingCommnets || !tokenLeadingCommnets.length || tokenLeadingCommnets[0].pos >= startPosition) {
                 return {

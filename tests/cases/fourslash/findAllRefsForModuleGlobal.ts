@@ -6,7 +6,7 @@
 // @Filename: /b.ts
 /////// <reference types="[|foo|]" />
 ////import { x } from "[|foo|]";
-////declare module "[|{| "isDefinition": true |}foo|]" {}
+////declare module "[|{| "isWriteAccess": true, "isDefinition": true |}foo|]" {}
 
 verify.noErrors();
 

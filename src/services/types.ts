@@ -19,34 +19,34 @@ namespace ts {
         getFirstToken(sourceFile?: SourceFile): Node;
         getLastToken(sourceFile?: SourceFile): Node;
         // See ts.forEachChild for documentation.
-        forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T;
+        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
     export interface Symbol {
         getFlags(): SymbolFlags;
         getName(): string;
-        getDeclarations(): Declaration[];
+        getDeclarations(): Declaration[] | undefined;
         getDocumentationComment(): SymbolDisplayPart[];
         getJsDocTags(): JSDocTagInfo[];
     }
 
     export interface Type {
         getFlags(): TypeFlags;
-        getSymbol(): Symbol;
+        getSymbol(): Symbol | undefined;
         getProperties(): Symbol[];
-        getProperty(propertyName: string): Symbol;
+        getProperty(propertyName: string): Symbol | undefined;
         getApparentProperties(): Symbol[];
         getCallSignatures(): Signature[];
         getConstructSignatures(): Signature[];
-        getStringIndexType(): Type;
-        getNumberIndexType(): Type;
-        getBaseTypes(): BaseType[];
+        getStringIndexType(): Type | undefined;
+        getNumberIndexType(): Type | undefined;
+        getBaseTypes(): BaseType[] | undefined;
         getNonNullableType(): Type;
     }
 
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
-        getTypeParameters(): TypeParameter[];
+        getTypeParameters(): TypeParameter[] | undefined;
         getParameters(): Symbol[];
         getReturnType(): Type;
         getDocumentationComment(): SymbolDisplayPart[];
@@ -286,7 +286,7 @@ namespace ts {
 
     export interface ClassifiedSpan {
         textSpan: TextSpan;
-        classificationType: string; // ClassificationTypeNames
+        classificationType: ClassificationTypeNames;
     }
 
     /**
@@ -297,7 +297,7 @@ namespace ts {
      */
     export interface NavigationBarItem {
         text: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
         childItems: NavigationBarItem[];
@@ -313,8 +313,7 @@ namespace ts {
     export interface NavigationTree {
         /** Name of the declaration, or a short description, e.g. "<class>". */
         text: string;
-        /** A ScriptElementKind */
-        kind: string;
+        kind: ScriptElementKind;
         /** ScriptElementKindModifier separated by commas, e.g. "public,abstract" */
         kindModifiers: string;
         /**
@@ -380,7 +379,7 @@ namespace ts {
     }
 
     export interface ImplementationLocation extends DocumentSpan {
-        kind: string;
+        kind: ScriptElementKind;
         displayParts: SymbolDisplayPart[];
     }
 
@@ -389,30 +388,30 @@ namespace ts {
         highlightSpans: HighlightSpan[];
     }
 
-    export namespace HighlightSpanKind {
-        export const none = "none";
-        export const definition = "definition";
-        export const reference = "reference";
-        export const writtenReference = "writtenReference";
+    export const enum HighlightSpanKind {
+        none = "none",
+        definition = "definition",
+        reference = "reference",
+        writtenReference = "writtenReference",
     }
 
     export interface HighlightSpan {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
-        kind: string;
+        kind: HighlightSpanKind;
     }
 
     export interface NavigateToItem {
         name: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
-        matchKind: string;
+        matchKind: string; // TODO: keyof typeof PatternMatchKind; (https://github.com/Microsoft/TypeScript/issues/15102)
         isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
         containerName: string;
-        containerKind: string;
+        containerKind: ScriptElementKind;
     }
 
     export enum IndentStyle {
@@ -480,9 +479,9 @@ namespace ts {
     export interface DefinitionInfo {
         fileName: string;
         textSpan: TextSpan;
-        kind: string;
+        kind: ScriptElementKind;
         name: string;
-        containerKind: string;
+        containerKind: ScriptElementKind;
         containerName: string;
     }
 
@@ -522,7 +521,7 @@ namespace ts {
 
     export interface SymbolDisplayPart {
         text: string;
-        kind: string; // A ScriptElementKind
+        kind: string;
     }
 
     export interface JSDocTagInfo {
@@ -531,7 +530,7 @@ namespace ts {
     }
 
     export interface QuickInfo {
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
@@ -544,7 +543,7 @@ namespace ts {
         localizedErrorMessage: string;
         displayName: string;
         fullDisplayName: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         triggerSpan: TextSpan;
     }
@@ -597,7 +596,7 @@ namespace ts {
 
     export interface CompletionEntry {
         name: string;
-        kind: string;            // see ScriptElementKind
+        kind: ScriptElementKind;
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         sortText: string;
         /**
@@ -610,7 +609,7 @@ namespace ts {
 
     export interface CompletionEntryDetails {
         name: string;
-        kind: string;            // see ScriptElementKind
+        kind: ScriptElementKind;
         kindModifiers: string;   // see ScriptElementKindModifier, comma separated
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
@@ -708,141 +707,140 @@ namespace ts {
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
 
-    // TODO: move these to enums
-    export namespace ScriptElementKind {
-        export const unknown = "";
-        export const warning = "warning";
+    export const enum ScriptElementKind {
+        unknown = "",
+        warning = "warning",
 
         /** predefined type (void) or keyword (class) */
-        export const keyword = "keyword";
+        keyword = "keyword",
 
         /** top level script node */
-        export const scriptElement = "script";
+        scriptElement = "script",
 
         /** module foo {} */
-        export const moduleElement = "module";
+        moduleElement = "module",
 
         /** class X {} */
-        export const classElement = "class";
+        classElement = "class",
 
         /** var x = class X {} */
-        export const localClassElement = "local class";
+        localClassElement = "local class",
 
         /** interface Y {} */
-        export const interfaceElement = "interface";
+        interfaceElement = "interface",
 
         /** type T = ... */
-        export const typeElement = "type";
+        typeElement = "type",
 
         /** enum E */
-        export const enumElement = "enum";
-        export const enumMemberElement = "enum member";
+        enumElement = "enum",
+        enumMemberElement = "enum member",
 
         /**
          * Inside module and script only
          * const v = ..
          */
-        export const variableElement = "var";
+        variableElement = "var",
 
         /** Inside function */
-        export const localVariableElement = "local var";
+        localVariableElement = "local var",
 
         /**
          * Inside module and script only
          * function f() { }
          */
-        export const functionElement = "function";
+        functionElement = "function",
 
         /** Inside function */
-        export const localFunctionElement = "local function";
+        localFunctionElement = "local function",
 
         /** class X { [public|private]* foo() {} } */
-        export const memberFunctionElement = "method";
+        memberFunctionElement = "method",
 
         /** class X { [public|private]* [get|set] foo:number; } */
-        export const memberGetAccessorElement = "getter";
-        export const memberSetAccessorElement = "setter";
+        memberGetAccessorElement = "getter",
+        memberSetAccessorElement = "setter",
 
         /**
          * class X { [public|private]* foo:number; }
          * interface Y { foo:number; }
          */
-        export const memberVariableElement = "property";
+        memberVariableElement = "property",
 
         /** class X { constructor() { } } */
-        export const constructorImplementationElement = "constructor";
+        constructorImplementationElement = "constructor",
 
         /** interface Y { ():number; } */
-        export const callSignatureElement = "call";
+        callSignatureElement = "call",
 
         /** interface Y { []:number; } */
-        export const indexSignatureElement = "index";
+        indexSignatureElement = "index",
 
         /** interface Y { new():Y; } */
-        export const constructSignatureElement = "construct";
+        constructSignatureElement = "construct",
 
         /** function foo(*Y*: string) */
-        export const parameterElement = "parameter";
+        parameterElement = "parameter",
 
-        export const typeParameterElement = "type parameter";
+        typeParameterElement = "type parameter",
 
-        export const primitiveType = "primitive type";
+        primitiveType = "primitive type",
 
-        export const label = "label";
+        label = "label",
 
-        export const alias = "alias";
+        alias = "alias",
 
-        export const constElement = "const";
+        constElement = "const",
 
-        export const letElement = "let";
+        letElement = "let",
 
-        export const directory = "directory";
+        directory = "directory",
 
-        export const externalModuleName = "external module name";
+        externalModuleName = "external module name",
 
         /**
          * <JsxTagName attribute1 attribute2={0} />
          */
-        export const jsxAttribute = "JSX attribute";
+        jsxAttribute = "JSX attribute",
     }
 
-    export namespace ScriptElementKindModifier {
-        export const none = "";
-        export const publicMemberModifier = "public";
-        export const privateMemberModifier = "private";
-        export const protectedMemberModifier = "protected";
-        export const exportedModifier = "export";
-        export const ambientModifier = "declare";
-        export const staticModifier = "static";
-        export const abstractModifier = "abstract";
+    export const enum ScriptElementKindModifier {
+        none = "",
+        publicMemberModifier = "public",
+        privateMemberModifier = "private",
+        protectedMemberModifier = "protected",
+        exportedModifier = "export",
+        ambientModifier = "declare",
+        staticModifier = "static",
+        abstractModifier = "abstract",
     }
 
-    export class ClassificationTypeNames {
-        public static comment = "comment";
-        public static identifier = "identifier";
-        public static keyword = "keyword";
-        public static numericLiteral = "number";
-        public static operator = "operator";
-        public static stringLiteral = "string";
-        public static whiteSpace = "whitespace";
-        public static text = "text";
+    export const enum ClassificationTypeNames {
+        comment = "comment",
+        identifier = "identifier",
+        keyword = "keyword",
+        numericLiteral = "number",
+        operator = "operator",
+        stringLiteral = "string",
+        whiteSpace = "whitespace",
+        text = "text",
 
-        public static punctuation = "punctuation";
+        punctuation = "punctuation",
 
-        public static className = "class name";
-        public static enumName = "enum name";
-        public static interfaceName = "interface name";
-        public static moduleName = "module name";
-        public static typeParameterName = "type parameter name";
-        public static typeAliasName = "type alias name";
-        public static parameterName = "parameter name";
-        public static docCommentTagName = "doc comment tag name";
-        public static jsxOpenTagName = "jsx open tag name";
-        public static jsxCloseTagName = "jsx close tag name";
-        public static jsxSelfClosingTagName = "jsx self closing tag name";
-        public static jsxAttribute = "jsx attribute";
-        public static jsxText = "jsx text";
-        public static jsxAttributeStringLiteralValue = "jsx attribute string literal value";
+        className = "class name",
+        enumName = "enum name",
+        interfaceName = "interface name",
+        moduleName = "module name",
+        typeParameterName = "type parameter name",
+        typeAliasName = "type alias name",
+        parameterName = "parameter name",
+        docCommentTagName = "doc comment tag name",
+        jsxOpenTagName = "jsx open tag name",
+        jsxCloseTagName = "jsx close tag name",
+        jsxSelfClosingTagName = "jsx self closing tag name",
+        jsxAttribute = "jsx attribute",
+        jsxText = "jsx text",
+        jsxAttributeStringLiteralValue = "jsx attribute string literal value",
     }
 
     export const enum ClassificationType {

@@ -279,7 +279,7 @@ namespace ts {
         }
     }
 
-    export function getNodeKind(node: Node): string {
+    export function getNodeKind(node: Node): ScriptElementKind {
         switch (node.kind) {
             case SyntaxKind.SourceFile:
                 return isExternalModule(<SourceFile>node) ? ScriptElementKind.moduleElement : ScriptElementKind.scriptElement;
@@ -326,7 +326,7 @@ namespace ts {
                 return ScriptElementKind.unknown;
         }
 
-        function getKindOfVariableDeclaration(v: VariableDeclaration): string {
+        function getKindOfVariableDeclaration(v: VariableDeclaration): ScriptElementKind {
             return isConst(v)
                 ? ScriptElementKind.constElement
                 : isLet(v)
@@ -590,29 +590,29 @@ namespace ts {
     /* Gets the token whose text has range [start, end) and
      * position >= start and (position < end or (position === end && token is keyword or identifier))
      */
-    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
-        return getTouchingToken(sourceFile, position, n => isWord(n.kind), includeJsDocComment);
+    export function getTouchingWord(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isWord(n.kind));
     }
 
     /* Gets the token whose text has range [start, end) and position >= start
      * and (position < end or (position === end && token is keyword or identifier or numeric/string literal))
      */
-    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
-        return getTouchingToken(sourceFile, position, n => isPropertyName(n.kind), includeJsDocComment);
+    export function getTouchingPropertyName(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
+        return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
     }
 
     /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeItemAtEndPosition?: (n: Node) => boolean, includeJsDocComment = false): Node {
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment = false): Node {
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
         return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment = false): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -659,7 +659,7 @@ namespace ts {
     export function findTokenOnLeftOfPosition(file: SourceFile, position: number): Node {
         // Ideally, getTokenAtPosition should return a token. However, it is currently
         // broken, so we do a check to make sure the result was indeed a token.
-        const tokenAtPosition = getTokenAtPosition(file, position);
+        const tokenAtPosition = getTokenAtPosition(file, position, /*includeJsDocComment*/ false);
         if (isToken(tokenAtPosition) && position > tokenAtPosition.getStart(file) && position < tokenAtPosition.getEnd()) {
             return tokenAtPosition;
         }
@@ -789,7 +789,7 @@ namespace ts {
      * returns true if the position is in between the open and close elements of an JSX expression.
      */
     export function isInsideJsxElementOrAttribute(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
 
         if (!token) {
             return false;
@@ -825,7 +825,7 @@ namespace ts {
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
@@ -835,7 +835,11 @@ namespace ts {
      * @param tokenAtPosition Must equal `getTokenAtPosition(sourceFile, position)
      * @param predicate Additional predicate to test on the comment range.
      */
-    export function isInComment(sourceFile: SourceFile, position: number, tokenAtPosition = getTokenAtPosition(sourceFile, position), predicate?: (c: CommentRange) => boolean): boolean {
+    export function isInComment(
+            sourceFile: SourceFile,
+            position: number,
+            tokenAtPosition = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false),
+            predicate?: (c: CommentRange) => boolean): boolean {
         return position <= tokenAtPosition.getStart(sourceFile) &&
             (isInCommentRange(getLeadingCommentRanges(sourceFile.text, tokenAtPosition.pos)) ||
                 isInCommentRange(getTrailingCommentRanges(sourceFile.text, tokenAtPosition.pos)));
@@ -870,7 +874,7 @@ namespace ts {
     }
 
     export function hasDocComment(sourceFile: SourceFile, position: number) {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
 
         // First, we have to see if this position actually landed in a comment.
         const commentRanges = getLeadingCommentRanges(sourceFile.text, token.pos);
@@ -887,7 +891,7 @@ namespace ts {
      * Get the corresponding JSDocTag node if the position is in a jsDoc comment
      */
     export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
-        let node = ts.getTokenAtPosition(sourceFile, position);
+        let node = ts.getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         if (isToken(node)) {
             switch (node.kind) {
                 case SyntaxKind.VarKeyword:
@@ -1132,7 +1136,7 @@ namespace ts {
             clear: resetWriter,
             trackSymbol: noop,
             reportInaccessibleThisError: noop,
-            reportIllegalExtends: noop
+            reportPrivateInBaseOfClassExpression: noop,
         };
 
         function writeIndent() {
@@ -1354,6 +1358,6 @@ namespace ts {
     }
 
     export function getOpenBraceOfClassLike(declaration: ClassLikeDeclaration, sourceFile: SourceFile) {
-        return getTokenAtPosition(sourceFile, declaration.members.pos - 1);
+        return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
 }

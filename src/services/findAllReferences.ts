@@ -61,13 +61,18 @@ namespace ts.FindAllReferences {
     }
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], sourceFile: SourceFile, position: number): ImplementationLocation[] {
-        const node = getTouchingPropertyName(sourceFile, position);
+        // A node in a JSDoc comment can't have an implementation anyway.
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false);
         const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node);
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
     function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: SourceFile[], node: Node): Entry[] | undefined {
+        if (node.kind === SyntaxKind.SourceFile) {
+            return undefined;
+        }
+
         const checker = program.getTypeChecker();
         // If invoked directly on a shorthand property assignment, then return
         // the declaration of the symbol being assigned (not the symbol being assigned to).
@@ -145,7 +150,7 @@ namespace ts.FindAllReferences {
         const { node, name, kind, displayParts } = info;
         const sourceFile = node.getSourceFile();
         return {
-            containerKind: "",
+            containerKind: ScriptElementKind.unknown,
             containerName: "",
             fileName: sourceFile.fileName,
             kind,
@@ -155,7 +160,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function getDefinitionKindAndDisplayParts(symbol: Symbol, node: Node, checker: TypeChecker): { displayParts: SymbolDisplayPart[], kind: string } {
+    function getDefinitionKindAndDisplayParts(symbol: Symbol, node: Node, checker: TypeChecker): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
         const { displayParts, symbolKind } =
             SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, node.getSourceFile(), getContainerNode(node), node);
         return { displayParts, kind: symbolKind };
@@ -171,7 +176,7 @@ namespace ts.FindAllReferences {
             fileName: node.getSourceFile().fileName,
             textSpan: getTextSpan(node),
             isWriteAccess: isWriteAccess(node),
-            isDefinition: isDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
+            isDefinition: isAnyDeclarationName(node) || isLiteralComputedPropertyDeclarationName(node),
             isInString
         };
     }
@@ -186,7 +191,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker): { kind: string, displayParts: SymbolDisplayPart[] } {
+    function implementationKindDisplayParts(node: ts.Node, checker: ts.TypeChecker): { kind: ScriptElementKind, displayParts: SymbolDisplayPart[] } {
         const symbol = checker.getSymbolAtLocation(isDeclaration(node) && node.name ? node.name : node);
         if (symbol) {
             return getDefinitionKindAndDisplayParts(symbol, node, checker);
@@ -237,22 +242,20 @@ namespace ts.FindAllReferences {
 
     /** A node is considered a writeAccess iff it is a name of a declaration or a target of an assignment */
     function isWriteAccess(node: Node): boolean {
-        if (node.kind === SyntaxKind.Identifier && isDeclarationName(node)) {
+        if (isAnyDeclarationName(node)) {
             return true;
         }
 
-        const parent = node.parent;
-        if (parent) {
-            if (parent.kind === SyntaxKind.PostfixUnaryExpression || parent.kind === SyntaxKind.PrefixUnaryExpression) {
+        const { parent } = node;
+        switch (parent && parent.kind) {
+            case SyntaxKind.PostfixUnaryExpression:
+            case SyntaxKind.PrefixUnaryExpression:
                 return true;
-            }
-            else if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).left === node) {
-                const operator = (<BinaryExpression>parent).operatorToken.kind;
-                return SyntaxKind.FirstAssignment <= operator && operator <= SyntaxKind.LastAssignment;
-            }
+            case SyntaxKind.BinaryExpression:
+                return (<BinaryExpression>parent).left === node && isAssignmentOperator((<BinaryExpression>parent).operatorToken.kind);
+            default:
+                return false;
         }
-
-        return false;
     }
 }
 
@@ -740,7 +743,7 @@ namespace ts.FindAllReferences.Core {
         const labelName = targetLabel.text;
         const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container);
         for (const position of possiblePositions) {
-            const node = getTouchingWord(sourceFile, position);
+            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
             // Only pick labels that are either the target label, or have a target that is the target label
             if (node && (node === targetLabel || (isJumpStatementTarget(node) && getTargetLabel(node, labelName) === targetLabel))) {
                 references.push(nodeEntry(node));
@@ -778,9 +781,10 @@ namespace ts.FindAllReferences.Core {
     }
 
     function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, references: Push<NodeEntry>): void {
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText);
+        // Want fullStart so we can find the symbol in JSDoc comments
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile, /*fullStart*/ true);
         for (const position of possiblePositions) {
-            const referenceLocation = getTouchingPropertyName(sourceFile, position);
+            const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (referenceLocation.kind === kind) {
                 references.push(nodeEntry(referenceLocation));
             }
@@ -802,13 +806,13 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.findInComments)) {
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.findInComments || container.jsDoc !== undefined)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
 
     function getReferencesAtLocation(sourceFile: SourceFile, position: number, search: Search, state: State): void {
-        const referenceLocation = getTouchingPropertyName(sourceFile, position);
+        const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
 
         if (!isValidReferencePosition(referenceLocation, search.text)) {
             // This wasn't the start of a token.  Check to see if it might be a
@@ -1248,7 +1252,7 @@ namespace ts.FindAllReferences.Core {
         const sourceFile = searchSpaceNode.getSourceFile();
         const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, "super", searchSpaceNode);
         for (const position of possiblePositions) {
-            const node = getTouchingWord(sourceFile, position);
+            const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
 
             if (!node || node.kind !== SyntaxKind.SuperKeyword) {
                 continue;
@@ -1325,7 +1329,7 @@ namespace ts.FindAllReferences.Core {
 
         function getThisReferencesInFile(sourceFile: SourceFile, searchSpaceNode: Node, possiblePositions: number[], result: Entry[]): void {
             forEach(possiblePositions, position => {
-                const node = getTouchingWord(sourceFile, position);
+                const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
                 if (!node || !isThis(node)) {
                     return;
                 }
@@ -1379,7 +1383,7 @@ namespace ts.FindAllReferences.Core {
 
         function getReferencesForStringLiteralInFile(sourceFile: SourceFile, searchText: string, possiblePositions: number[], references: Push<NodeEntry>): void {
             for (const position of possiblePositions) {
-                const node = getTouchingWord(sourceFile, position);
+                const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
                 if (node && node.kind === SyntaxKind.StringLiteral && (node as StringLiteral).text === searchText) {
                     references.push(nodeEntry(node, /*isInString*/ true));
                 }

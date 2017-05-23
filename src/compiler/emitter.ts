@@ -571,6 +571,8 @@ namespace ts {
                     return emitModuleBlock(<ModuleBlock>node);
                 case SyntaxKind.CaseBlock:
                     return emitCaseBlock(<CaseBlock>node);
+                case SyntaxKind.NamespaceExportDeclaration:
+                    return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
@@ -860,6 +862,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
             write(";");
@@ -881,6 +884,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             writeIfPresent(node.asteriskToken, "*");
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1884,6 +1888,12 @@ namespace ts {
             write(";");
         }
 
+        function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
+            write("export as namespace ");
+            emit(node.name);
+            write(";");
+        }
+
         function emitNamedExports(node: NamedExports) {
             emitNamedImportsOrExports(node);
         }
@@ -2020,6 +2030,22 @@ namespace ts {
                     nodeIsSynthesized(statements[0]) ||
                     rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
+
+            // e.g:
+            //      case 0: // Zero
+            //      case 1: // One
+            //      case 2: // two
+            //          return "hi";
+            // If there is no statements, emitNodeWithComments of the parentNode which is caseClause will take care of trailing comment.
+            // So in example above, comment "// Zero" and "// One" will be emit in emitTrailingComments in emitNodeWithComments.
+            // However, for "case 2", because parentNode which is caseClause has an "end" property to be end of the statements (in this case return statement)
+            // comment "// two" will not be emitted in emitNodeWithComments.
+            // Therefore, we have to do the check here to emit such comment.
+            if (statements.length > 0) {
+                // We use emitTrailingCommentsOfPosition instead of emitLeadingCommentsOfPosition because leading comments is defined as comments before the node after newline character separating it from previous line
+                // Note: we can't use parentNode.end as such position includes statements.
+                emitTrailingCommentsOfPosition(statements.pos);
+            }
 
             if (emitAsSingleStatement) {
                 write(" ");
