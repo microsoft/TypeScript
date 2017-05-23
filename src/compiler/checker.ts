@@ -2033,7 +2033,7 @@ namespace ts {
                                 ts.forEach(symbolFromSymbolTable.declarations, isExternalModuleImportEqualsDeclaration)) {
 
                                 const resolvedImportedSymbol = resolveAlias(symbolFromSymbolTable);
-                                if (isAccessible(symbolFromSymbolTable, resolveAlias(symbolFromSymbolTable))) {
+                                if (isAccessible(symbolFromSymbolTable, resolvedImportedSymbol)) {
                                     return [symbolFromSymbolTable];
                                 }
 
@@ -3093,8 +3093,8 @@ namespace ts {
                         // Write type arguments of instantiated class/interface here
                         if (flags & SymbolFormatFlags.WriteTypeParametersOrArguments) {
                             if (getCheckFlags(symbol) & CheckFlags.Instantiated) {
-                                buildDisplayForTypeArgumentsAndDelimiters(getTypeParametersOfClassOrInterface(parentSymbol),
-                                    (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
+                                const params = getTypeParametersOfClassOrInterface(parentSymbol.flags & SymbolFlags.Alias ? resolveAlias(parentSymbol) : parentSymbol);
+                                buildDisplayForTypeArgumentsAndDelimiters(params, (<TransientSymbol>symbol).mapper, writer, enclosingDeclaration);
                             }
                             else {
                                 buildTypeParameterDisplayFromSymbol(parentSymbol, writer, enclosingDeclaration);
