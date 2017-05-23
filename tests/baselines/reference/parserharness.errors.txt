@@ -1,7 +1,7 @@
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(16,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(17,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(18,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(19,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(21,29): error TS2694: Namespace 'Harness' has no exported member 'Assert'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(25,17): error TS2304: Cannot find name 'IIO'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(41,12): error TS2304: Cannot find name 'ActiveXObject'.
@@ -127,16 +127,16 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts(2030,32): 
     //
     
     ///<reference path='..\compiler\io.ts'/>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/io.ts' not found.
     ///<reference path='..\compiler\typescript.ts'/>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/compiler/typescript.ts' not found.
     ///<reference path='..\services\typescriptServices.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/services/typescriptServices.ts' not found.
     ///<reference path='diff.ts'/>
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/diff.ts' not found.
     
     declare var assert: Harness.Assert;

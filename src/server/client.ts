@@ -695,6 +695,46 @@ namespace ts.server {
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
         }
 
+        private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
+            if (typeof positionOrRange === "number") {
+                const { line, offset } = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+                return <protocol.FileLocationRequestArgs>{ file: fileName, line, offset };
+            }
+            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.pos);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.end);
+            return <protocol.FileRangeRequestArgs>{
+                file: fileName,
+                startLine,
+                startOffset,
+                endLine,
+                endOffset
+            };
+        }
+
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+            const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
+            const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
+            return response.body;
+        }
+
+        getRefactorCodeActions(
+            fileName: string,
+            _formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorName: string) {
+
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetRefactorCodeActionsRequestArgs;
+            args.refactorName = refactorName;
+
+            const request = this.processRequest<protocol.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
+            const response = this.processResponse<protocol.GetRefactorCodeActionsResponse>(request);
+            const codeActions = response.body.actions;
+
+            return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+        }
+
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {
             return {
                 description: entry.description,

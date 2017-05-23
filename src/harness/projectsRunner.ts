@@ -372,7 +372,7 @@ class ProjectRunner extends RunnerBase {
             const compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
-                if (ts.isDeclarationFile(sourceFile)) {
+                if (sourceFile.isDeclarationFile) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {

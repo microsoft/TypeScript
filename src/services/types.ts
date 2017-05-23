@@ -19,7 +19,7 @@ namespace ts {
         getFirstToken(sourceFile?: SourceFile): Node;
         getLastToken(sourceFile?: SourceFile): Node;
         // See ts.forEachChild for documentation.
-        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: Node[]) => T | undefined): T | undefined;
+        forEachChild<T>(cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined;
     }
 
     export interface Symbol {
@@ -261,6 +261,8 @@ namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
+        getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
+        getRefactorCodeActions(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string): CodeAction[] | undefined;
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
@@ -350,6 +352,11 @@ namespace ts {
         description: string;
         /** Text changes to apply to each file as part of the code action */
         changes: FileTextChanges[];
+    }
+
+    export interface ApplicableRefactorInfo {
+        name: string;
+        description: string;
     }
 
     export interface TextInsertion {

@@ -13,5 +13,4 @@
 
 const ranges = test.ranges();
 const [r0, r1] = ranges;
-verify.referenceGroups(r0, [{ definition: 'module "foo"', ranges }]);
-verify.referenceGroups(r1, [{ definition: 'module f', ranges }]);
+verify.referenceGroups(ranges, [{ definition: 'module "foo"', ranges: [r1, r0] }]);

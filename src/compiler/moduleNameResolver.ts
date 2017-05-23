@@ -971,10 +971,13 @@ namespace ts {
         }
     }
 
+    /** Double underscores are used in DefinitelyTyped to delimit scoped packages. */
+    const mangledScopedPackageSeparator = "__";
+
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
     function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
         if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== moduleName) {
                 const mangled = replaceSlash.slice(1); // Take off the "@"
                 if (state.traceEnabled) {
@@ -984,6 +987,17 @@ namespace ts {
             }
         }
         return moduleName;
+    }
+
+    /* @internal */
+    export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
+        const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
+        if (withoutAtTypePrefix !== mangledName) {
+            return withoutAtTypePrefix.indexOf("__") !== -1 ?
+                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+                withoutAtTypePrefix;
+        }
+        return mangledName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

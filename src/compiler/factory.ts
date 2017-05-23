@@ -984,10 +984,10 @@ namespace ts {
         return node;
     }
 
-    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression) {
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, node.operatorToken, right), node)
+            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
             : node;
     }
 
@@ -1502,19 +1502,23 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function createTypeAliasDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
         node.type = type;
         return node;
     }
 
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
-        return node.name !== name
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
             || node.typeParameters !== typeParameters
             || node.type !== type
-            ? updateNode(createTypeAliasDeclaration(name, typeParameters, type), node)
+            ? updateNode(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
             : node;
     }
 
@@ -1627,14 +1631,14 @@ namespace ts {
             : node;
     }
 
-    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause {
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = <ImportClause>createSynthesizedNode(SyntaxKind.ImportClause);
         node.name = name;
         node.namedBindings = namedBindings;
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
         return node.name !== name
             || node.namedBindings !== namedBindings
             ? updateNode(createImportClause(name, namedBindings), node)
@@ -2371,7 +2375,7 @@ namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;
@@ -3858,7 +3862,7 @@ namespace ts {
         if (file.moduleName) {
             return createLiteral(file.moduleName);
         }
-        if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+        if (!file.isDeclarationFile && (options.out || options.outFile)) {
             return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
         }
         return undefined;
