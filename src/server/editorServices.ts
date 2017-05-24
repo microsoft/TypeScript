@@ -44,8 +44,16 @@ namespace ts.server {
          * Enum compiler options will be converted to strings.
          */
         readonly compilerOptions: ts.CompilerOptions;
+        readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
         /** TypeScript version used by the server. */
         readonly version: string;
+    }
+
+    export interface ProjectInfoTypeAcquisitionData {
+        readonly enable: boolean;
+        // Actual values of include/exclude entries are scrubbed.
+        readonly include: Array<"">;
+        readonly exclude: Array<"">;
     }
 
     export interface FileStats {
@@ -1029,9 +1037,19 @@ namespace ts.server {
             const data: ProjectInfoTelemetryEventData = {
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+                typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
                 version: ts.version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
+
+            /** Need to blank out paths. */
+            function convertTypeAcquisition(ta: TypeAcquisition): ProjectInfoTypeAcquisitionData {
+                return {
+                    enable: ta.enable,
+                    include: ta.include.map<"">(() => ""),
+                    exclude: ta.exclude.map<"">(() => ""),
+                };
+            }
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {

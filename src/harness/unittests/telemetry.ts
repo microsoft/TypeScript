@@ -10,13 +10,24 @@ namespace ts.projectSystem {
             assert.equal(et.getEvents().length, 0);
         });
 
+        const typeAcquisition: server.ProjectInfoTypeAcquisitionData = {
+            enable: false,
+            exclude: [],
+            include: [],
+        };
+
         it("only sends an event once", () => {
             const file = makeFile("/a.ts");
             const tsconfig = makeFile("/tsconfig.json", {});
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {}, version: ts.version });
+            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: {},
+                typeAcquisition,
+                version: ts.version,
+            });
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -35,7 +46,12 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions, version: ts.version });
+            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+                fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
+                compilerOptions,
+                typeAcquisition,
+                version: ts.version,
+            });
         });
 
         it("works with external project", () => {
@@ -48,7 +64,12 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true }, version: ts.version });
+            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: { strict: true },
+                typeAcquisition,
+                version: ts.version,
+            });
 
             // Also test that opening an external project only sends an event once.
 
@@ -132,9 +153,41 @@ namespace ts.projectSystem {
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
 
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), {
+            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: safeCompilerOptions,
+                typeAcquisition,
+                version: ts.version,
+            });
+        });
+
+        it("sends telemetry for typeAcquisition settings", () => {
+            const file = makeFile("/a.js");
+            const jsconfig = makeFile("/jsconfig.json", {
+                compilerOptions: {},
+                typeAcquisition: {
+                    enable: true,
+                    enableAutoDiscovery: false,
+                    include: ["hunter2", "hunter3"],
+                    exclude: [],
+                },
+            });
+            const et = new EventTracker([jsconfig, file]);
+            et.service.openClientFile(file.path);
+            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+                fileStats: fileStats({ js: 1 }),
+                compilerOptions: {
+                    // Apparently some options are added by default.
+                    allowJs: true,
+                    allowSyntheticDefaultImports: true,
+                    maxNodeModuleJsDepth: 2,
+                    skipLibCheck: true,
+                },
+                typeAcquisition: {
+                    enable: true,
+                    include: ["", ""],
+                    exclude: [],
+                },
                 version: ts.version,
             });
         });
