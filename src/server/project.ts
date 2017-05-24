@@ -13,13 +13,6 @@ namespace ts.server {
         External
     }
 
-    function remove<T>(items: T[], item: T) {
-        const index = items.indexOf(item);
-        if (index >= 0) {
-            items.splice(index, 1);
-        }
-    }
-
     function countEachFileTypes(infos: ScriptInfo[]): { js: number, jsx: number, ts: number, tsx: number, dts: number } {
         const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
         for (const info of infos) {
@@ -732,7 +725,7 @@ namespace ts.server {
 
         // remove a root file from project
         protected removeRoot(info: ScriptInfo): void {
-            remove(this.rootFiles, info);
+            orderedRemoveItem(this.rootFiles, info);
             this.rootFilesMap.remove(info.path);
         }
     }
