@@ -7924,7 +7924,7 @@ namespace ts {
 
         function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
             return mapper && isInferenceContext(mapper) ?
-                createInferenceContext(mapper.callNode, mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.inferences) :
+                createInferenceContext(mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.inferences) :
                 mapper;
         }
 
@@ -10121,11 +10121,10 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, flags: InferenceFlags, baseInferences?: InferenceInfo[]): InferenceContext {
+        function createInferenceContext(signature: Signature, flags: InferenceFlags, baseInferences?: InferenceInfo[]): InferenceContext {
             const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(signature.typeParameters, createInferenceInfo);
             const context = mapper as InferenceContext;
             context.mappedTypes = signature.typeParameters;
-            context.callNode = callNode;
             context.signature = signature;
             context.inferences = inferences;
             context.flags = flags;
@@ -10302,7 +10301,7 @@ namespace ts {
                             // Even if an inference is marked as fixed, we can add candidates from inferences made
                             // from the return type of generic functions (which only happens when no other candidates
                             // are present).
-                            if (!inference.isFixed || priority & InferencePriority.ReturnType) {
+                            if (!inference.isFixed) {
                                 if (!inference.candidates || priority < inference.priority) {
                                     inference.candidates = [source];
                                     inference.priority = priority;
@@ -10310,7 +10309,7 @@ namespace ts {
                                 else if (priority === inference.priority) {
                                     inference.candidates.push(source);
                                 }
-                                if (target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                                if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                     inference.topLevel = false;
                                 }
                             }
@@ -10523,24 +10522,6 @@ namespace ts {
             let inferredType = inference.inferredType;
             let inferenceSucceeded: boolean;
             if (!inferredType) {
-                if (!inference.candidates && context.callNode && isExpression(context.callNode)) {
-                    // We have no inference candidates. Now attempt to get the contextual type for the call
-                    // expression associated with the context, and if a contextual type is available, infer
-                    // from that type to the return type of the call expression. For example, given a
-                    // 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
-                    // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type
-                    // of 'f' to the return type of 'wrap'.
-                    const contextualType = getContextualType(context.callNode);
-                    if (contextualType) {
-                        // We clone the contextual mapper to avoid disturbing a resolution in progress for an
-                        // outer call expression. Effectively we just want a snapshot of whatever has been
-                        // inferred for any outer call expression so far.
-                        const mapper = cloneTypeMapper(getContextualMapper(context.callNode));
-                        const instantiatedType = instantiateType(contextualType, mapper);
-                        const returnType = getReturnTypeOfSignature(context.signature);
-                        inferTypes([inference], instantiatedType, returnType, InferencePriority.ReturnType);
-                    }
-                }
                 if (inference.candidates) {
                     // We widen inferred literal types if
                     // all inferences were made to top-level ocurrences of the type parameter, and
@@ -14866,7 +14847,7 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(/*callNode*/ undefined, signature, InferenceFlags.InferUnionTypes);
+            const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
@@ -14897,6 +14878,24 @@ namespace ts {
             // we will lose information that we won't recover this time around.
             if (context.failedTypeParameterIndex !== undefined && !context.inferences[context.failedTypeParameterIndex].isFixed) {
                 context.failedTypeParameterIndex = undefined;
+            }
+
+            // If a contextual type is available, infer from that type to the return type of the call expression. For
+            // example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
+            // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
+            // return type of 'wrap'.
+            if (isExpression(node)) {
+                const contextualType = getContextualType(node);
+                if (contextualType) {
+                    // We clone the contextual mapper to avoid disturbing a resolution in progress for an
+                    // outer call expression. Effectively we just want a snapshot of whatever has been
+                    // inferred for any outer call expression so far.
+                    const mapper = cloneTypeMapper(getContextualMapper(node));
+                    const instantiatedType = instantiateType(contextualType, mapper);
+                    const returnType = getReturnTypeOfSignature(signature);
+                    // Inferences made from return types have lower priority than all other inferences.
+                    inferTypes(context.inferences, instantiatedType, returnType, InferencePriority.ReturnType);
+                }
             }
 
             const thisType = getThisTypeOfSignature(signature);
@@ -15599,7 +15598,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(node, originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0)
+                        ? createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0)
                         : undefined;
 
                     while (true) {

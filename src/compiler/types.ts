@@ -3361,7 +3361,6 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext extends TypeMapper {
-        callNode: CallLikeExpression;       // Call expression node for which inferences are made
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
         flags: InferenceFlags;              // Inference flags
