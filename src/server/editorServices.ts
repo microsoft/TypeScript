@@ -44,6 +44,12 @@ namespace ts.server {
          * Enum compiler options will be converted to strings.
          */
         readonly compilerOptions: ts.CompilerOptions;
+        // "files", "include", or "exclude" will be undefined if an external config is used.
+        // Otherwise, we will use "true" if the property is present and "false" if it is missing.
+        readonly files: boolean | undefined;
+        readonly include: boolean | undefined;
+        readonly exclude: boolean | undefined;
+        readonly compileOnSave: boolean;
         readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
         /** TypeScript version used by the server. */
         readonly version: string;
@@ -972,7 +978,9 @@ namespace ts.server {
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasFilesProperty: config["files"] !== undefined,
+                configHasFilesProperty: config.files !== undefined,
+                configHasIncludeProperty: config.include !== undefined,
+                configHasExcludeProperty: config.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
@@ -1026,7 +1034,7 @@ namespace ts.server {
             return project;
         }
 
-        private sendProjectTelemetry(projectKey: string, project: ts.server.ExternalProject | ts.server.ConfiguredProject): void {
+        private sendProjectTelemetry(projectKey: string, project: ts.server.ExternalProject | ts.server.ConfiguredProject, projectOptions?: ProjectOptions): void {
             if (this.seenProjects.has(projectKey)) {
                 return;
             }
@@ -1038,6 +1046,10 @@ namespace ts.server {
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
+                files: projectOptions && projectOptions.configHasFilesProperty,
+                include: projectOptions && projectOptions.configHasIncludeProperty,
+                exclude: projectOptions && projectOptions.configHasExcludeProperty,
+                compileOnSave: project.compileOnSaveEnabled,
                 version: ts.version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
@@ -1085,7 +1097,7 @@ namespace ts.server {
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
-            this.sendProjectTelemetry(project.getConfigFilePath(), project);
+            this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
         }
 
@@ -1118,7 +1130,7 @@ namespace ts.server {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
             const projectOptions: ProjectOptions = conversionResult.success
                 ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {}, typeAcquisition: { enable: false } };
+                : { files: [], compilerOptions: {}, configHasFilesProperty: false, configHasIncludeProperty: false, configHasExcludeProperty: false, typeAcquisition: { enable: false } };
             const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
             return {
                 success: conversionResult.success,

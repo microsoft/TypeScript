@@ -9,25 +9,13 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             assert.equal(et.getEvents().length, 0);
         });
-
-        const typeAcquisition: server.ProjectInfoTypeAcquisitionData = {
-            enable: false,
-            exclude: [],
-            include: [],
-        };
-
         it("only sends an event once", () => {
             const file = makeFile("/a.ts");
             const tsconfig = makeFile("/tsconfig.json", {});
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
-                fileStats: fileStats({ ts: 1 }),
-                compilerOptions: {},
-                typeAcquisition,
-                version: ts.version,
-            });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({}));
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -46,12 +34,11 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
                 fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
                 compilerOptions,
-                typeAcquisition,
-                version: ts.version,
-            });
+                include: true,
+            }));
         });
 
         it("works with external project", () => {
@@ -64,12 +51,14 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
-                fileStats: fileStats({ ts: 1 }),
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
                 compilerOptions: { strict: true },
-                typeAcquisition,
-                version: ts.version,
-            });
+                compileOnSave: true,
+                // These properties can't be present for an external project, so they are undefined instead of false.
+                files: undefined,
+                include: undefined,
+                exclude: undefined,
+            }));
 
             // Also test that opening an external project only sends an event once.
 
@@ -153,12 +142,30 @@ namespace ts.projectSystem {
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
 
-            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
-                fileStats: fileStats({ ts: 1 }),
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
                 compilerOptions: safeCompilerOptions,
-                typeAcquisition,
-                version: ts.version,
+                files: true,
+            }));
+        });
+
+        it("sends telemetry for files, include, exclude, and compileOnSave", () => {
+            const file = makeFile("/hunter2/a.ts");
+            const tsconfig = makeFile("/tsconfig.json", {
+                compilerOptions: {},
+                files: ["hunter2/a.ts"],
+                include: ["hunter2"],
+                exclude: ["hunter2"],
+                compileOnSave: true,
             });
+
+            const et = new EventTracker([tsconfig, file]);
+            et.service.openClientFile(file.path);
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+                files: true,
+                include: true,
+                exclude: true,
+                compileOnSave: true,
+            }));
         });
 
         it("sends telemetry for typeAcquisition settings", () => {
@@ -174,7 +181,7 @@ namespace ts.projectSystem {
             });
             const et = new EventTracker([jsconfig, file]);
             et.service.openClientFile(file.path);
-            assert.deepEqual<server.ProjectInfoTelemetryEventData>(et.getProjectInfoTelemetryEvent(), {
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: {
                     // Apparently some options are added by default.
@@ -188,8 +195,7 @@ namespace ts.projectSystem {
                     include: ["", ""],
                     exclude: [],
                 },
-                version: ts.version,
-            });
+            }));
         });
     });
 
@@ -224,12 +230,29 @@ namespace ts.projectSystem {
         }
     }
 
+    function makePayload(partial: Partial<server.ProjectInfoTelemetryEventData>): server.ProjectInfoTelemetryEventData {
+        return {
+            fileStats: fileStats({ ts: 1 }),
+            compilerOptions: {},
+            files: false,
+            include: false,
+            exclude: false,
+            compileOnSave: false,
+            typeAcquisition: {
+                enable: false,
+                exclude: [],
+                include: [],
+            },
+            version: ts.version,
+            ...partial
+        };
+    }
+
     function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
         return { path, content: typeof content === "string" ? "" : JSON.stringify(content) };
     }
 
-    function fileStats(nonZeroStats: Partial<server.FileStats>) {
+    function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
         return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
     }
-
 }
