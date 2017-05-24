@@ -3011,7 +3011,7 @@ namespace ts {
         NoInterveningComments = 1 << 17, // Do not emit comments between each node
 
         // Precomputed Formats
-        Modifiers = SingleLine | SpaceBetweenSiblings,
+        Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
         HeritageClauses = SingleLine | SpaceBetweenSiblings,
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings | Indented,
         MultiLineTypeLiteralMembers = MultiLine | Indented,
