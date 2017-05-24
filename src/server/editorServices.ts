@@ -283,6 +283,7 @@ namespace ts.server {
         throttleWaitMilliseconds?: number;
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
+        allowLocalPluginLoads?: boolean;
     }
 
     export class ProjectService {
@@ -342,6 +343,7 @@ namespace ts.server {
 
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
+        public readonly allowLocalPluginLoads: boolean;
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -353,6 +355,7 @@ namespace ts.server {
             this.eventHandler = opts.eventHandler;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+            this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 

@@ -22,7 +22,7 @@ export default function Component(props: ComponentProps) {
 
         <AnotherComponent {...props} property2 AnotherProperty1="hi"/>
 ><AnotherComponent {...props} property2 AnotherProperty1="hi"/> : JSX.Element
->AnotherComponent : ({property1}: AnotherComponentProps) => JSX.Element
+>AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >props : ComponentProps
 >property2 : true
 >AnotherProperty1 : string
@@ -44,7 +44,7 @@ interface AnotherComponentProps {
 }
 
 function AnotherComponent({ property1 }: AnotherComponentProps) {
->AnotherComponent : ({property1}: AnotherComponentProps) => JSX.Element
+>AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
 >property1 : string
 >AnotherComponentProps : AnotherComponentProps
 

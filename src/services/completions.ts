@@ -275,7 +275,7 @@ namespace ts.Completions {
             }
         }
         else if (type.flags & TypeFlags.StringLiteral) {
-            const name = (<LiteralType>type).text;
+            const name = (<StringLiteralType>type).value;
             if (!uniques.has(name)) {
                 uniques.set(name, true);
                 result.push({
@@ -354,12 +354,12 @@ namespace ts.Completions {
         let requestJsDocTag = false;
 
         let start = timestamp();
-        const currentToken = getTokenAtPosition(sourceFile, position);
+        const currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         log("getCompletionData: Get current token: " + (timestamp() - start));
 
         start = timestamp();
         // Completion not allowed inside comments, bail out if this is the case
-        const insideComment = isInsideComment(sourceFile, currentToken, position);
+        const insideComment = isInComment(sourceFile, position, currentToken);
         log("getCompletionData: Is inside comment: " + (timestamp() - start));
 
         if (insideComment) {
@@ -449,7 +449,7 @@ namespace ts.Completions {
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
 
-        let location = getTouchingPropertyName(sourceFile, position);
+        let location = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
         if (contextToken) {
             // Bail out if this is a known invalid completion location
             if (isCompletionListBlocker(contextToken)) {

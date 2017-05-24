@@ -53,7 +53,7 @@ namespace ts.Rename {
         }
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
         return {
             canRename: true,
             kind,

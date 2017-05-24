@@ -98,8 +98,43 @@ namespace ts {
                     )
                 ])
             );
+
+            // https://github.com/Microsoft/TypeScript/issues/15971
+            const classWithOptionalMethodAndProperty = createClassDeclaration(
+                undefined,
+                /* modifiers */ createNodeArray([createToken(SyntaxKind.DeclareKeyword)]),
+                /* name      */ createIdentifier("X"),
+                undefined,
+                undefined,
+                createNodeArray([
+                    createMethod(
+                        undefined,
+                        undefined,
+                        undefined,
+                        /* name          */ createIdentifier("method"),
+                        /* questionToken */ createToken(SyntaxKind.QuestionToken),
+                        undefined,
+                        undefined,
+                        /* type          */ createKeywordTypeNode(SyntaxKind.VoidKeyword),
+                        undefined
+                    ),
+                    createProperty(
+                        undefined,
+                        undefined,
+                        /* name          */ createIdentifier("property"),
+                        /* questionToken */ createToken(SyntaxKind.QuestionToken),
+                        /* type          */ createKeywordTypeNode(SyntaxKind.StringKeyword),
+                        undefined
+                    ),
+                ])
+            );
+
             // tslint:enable boolean-trivia
             printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile));
+
+            printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(EmitHint.Unspecified, createNamespaceExportDeclaration("B"), sourceFile));
+
+            printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(EmitHint.Unspecified, classWithOptionalMethodAndProperty, sourceFile));
         });
     });
 }

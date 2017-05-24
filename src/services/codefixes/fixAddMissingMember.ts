@@ -13,7 +13,7 @@ namespace ts.codefix {
         // This is the identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(sourceFile, start);
+        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
 
         if (token.kind !== SyntaxKind.Identifier) {
             return undefined;

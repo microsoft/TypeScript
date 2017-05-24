@@ -9,11 +9,11 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
 
-            let token = getTokenAtPosition(sourceFile, start);
+            let token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
 
             // this handles var ["computed"] = 12;
             if (token.kind === SyntaxKind.OpenBracketToken) {
-                token = getTokenAtPosition(sourceFile, start + 1);
+                token = getTokenAtPosition(sourceFile, start + 1, /*includeJsDocComment*/ false);
             }
 
             switch (token.kind) {
@@ -48,11 +48,11 @@ namespace ts.codefix {
                     case SyntaxKind.TypeParameter:
                         const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
                         if (typeParameters.length === 1) {
-                            const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1);
+                            const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
                             if (!previousToken || previousToken.kind !== SyntaxKind.LessThanToken) {
                                 return deleteRange(typeParameters);
                             }
-                            const nextToken = getTokenAtPosition(sourceFile, typeParameters.end);
+                            const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
                             if (!nextToken || nextToken.kind !== SyntaxKind.GreaterThanToken) {
                                 return deleteRange(typeParameters);
                             }
@@ -99,7 +99,7 @@ namespace ts.codefix {
                         else {
                             // import |d,| * as ns from './file'
                             const start = importClause.name.getStart(sourceFile);
-                            const nextToken = getTokenAtPosition(sourceFile, importClause.name.end);
+                            const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
                             if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                                 // shift first non-whitespace position after comma to the start position of the node
                                 return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) });
@@ -116,7 +116,7 @@ namespace ts.codefix {
                             return deleteNode(importDecl);
                         }
                         else {
-                            const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1);
+                            const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1, /*includeJsDocComment*/ false);
                             if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
                                 const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
                                 return deleteRange({ pos: startPosition, end: namespaceImport.end });

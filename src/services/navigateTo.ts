@@ -205,7 +205,7 @@ namespace ts.NavigateTo {
                 textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
                 containerName: containerName ? (<Identifier>containerName).text : "",
-                containerKind: containerName ? getNodeKind(container) : ""
+                containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
             };
         }
     }
