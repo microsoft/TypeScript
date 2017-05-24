@@ -3336,9 +3336,6 @@ namespace ts {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
-        context?: InferenceContext; // The inference context this mapper was created from.
-                                    // Only inference mappers have this set (in createInferenceMapper).
-                                    // The identity mapper and regular instantiation mappers do not need it.
     }
 
     export const enum InferencePriority {
@@ -3363,12 +3360,11 @@ namespace ts {
     }
 
     /* @internal */
-    export interface InferenceContext {
+    export interface InferenceContext extends TypeMapper {
         callNode: CallLikeExpression;       // Call expression node for which inferences are made
         signature: Signature;               // Generic signature for which inferences are made
         inferences: InferenceInfo[];        // Inferences made for each type parameter
-        flags: InferenceFlags;              // Infer union types for disjoint candidates (otherwise undefinedType)
-        mapper?: TypeMapper;                // Type mapper for this inference context
+        flags: InferenceFlags;              // Inference flags
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
     }

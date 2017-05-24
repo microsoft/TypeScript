@@ -7918,27 +7918,14 @@ namespace ts {
             return mapper;
         }
 
-        function getInferenceMapper(context: InferenceContext): TypeMapper {
-            if (!context.mapper) {
-                const mapper: TypeMapper = t => {
-                    const inferences = context.inferences;
-                    for (let i = 0; i < inferences.length; i++) {
-                        if (t === inferences[i].typeParameter) {
-                            inferences[i].isFixed = true;
-                            return getInferredType(context, i);
-                        }
-                    }
-                    return t;
-                };
-                mapper.mappedTypes = context.signature.typeParameters;
-                mapper.context = context;
-                context.mapper = mapper;
-            }
-            return context.mapper;
+        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
+            return !!(<InferenceContext>mapper).signature;
         }
 
         function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
-            return mapper && mapper.context ? getInferenceMapper(cloneInferenceContext(mapper.context)) : mapper;
+            return mapper && isInferenceContext(mapper) ?
+                createInferenceContext(mapper.callNode, mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.inferences) :
+                mapper;
         }
 
         function identityMapper(type: Type): Type {
@@ -10134,13 +10121,25 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, flags: InferenceFlags): InferenceContext {
-            return {
-                callNode,
-                signature,
-                inferences: map(signature.typeParameters, createInferenceInfo),
-                flags,
-            };
+        function createInferenceContext(callNode: CallLikeExpression, signature: Signature, flags: InferenceFlags, baseInferences?: InferenceInfo[]): InferenceContext {
+            const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(signature.typeParameters, createInferenceInfo);
+            const context = mapper as InferenceContext;
+            context.mappedTypes = signature.typeParameters;
+            context.callNode = callNode;
+            context.signature = signature;
+            context.inferences = inferences;
+            context.flags = flags;
+            return context;
+
+            function mapper(t: Type): Type {
+                for (let i = 0; i < inferences.length; i++) {
+                    if (t === inferences[i].typeParameter) {
+                        inferences[i].isFixed = true;
+                        return getInferredType(context, i);
+                    }
+                }
+                return t;
+            }
         }
 
         function createInferenceInfo(typeParameter: TypeParameter): InferenceInfo {
@@ -10151,15 +10150,6 @@ namespace ts {
                 priority: undefined,
                 topLevel: true,
                 isFixed: false
-            };
-        }
-
-        function cloneInferenceContext(context: InferenceContext): InferenceContext {
-            return {
-                callNode: context.callNode,
-                signature: context.signature,
-                inferences: map(context.inferences, cloneInferenceInfo),
-                flags: context.flags | InferenceFlags.NoDefault
             };
         }
 
@@ -10586,7 +10576,7 @@ namespace ts {
                             inferredType = instantiateType(defaultType,
                                 combineTypeMappers(
                                     createBackreferenceMapper(context.signature.typeParameters, index),
-                                    getInferenceMapper(context)));
+                                    context));
                         }
                         else {
                             inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
@@ -10600,7 +10590,7 @@ namespace ts {
                 if (inferenceSucceeded) {
                     const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
                     if (constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
+                        const instantiatedConstraint = instantiateType(constraint, context);
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                             inference.inferredType = inferredType = instantiatedConstraint;
                         }
@@ -14886,7 +14876,6 @@ namespace ts {
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
             const inferences = context.inferences;
-            const inferenceMapper = getInferenceMapper(context);
 
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (let i = 0; i < inferences.length; i++) {
@@ -14932,7 +14921,7 @@ namespace ts {
                     if (argType === undefined) {
                         // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                         // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
@@ -14951,7 +14940,7 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
-                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
+                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
                     }
                 }
             }
@@ -16196,7 +16185,7 @@ namespace ts {
                 for (let i = 0; i < len; i++) {
                     const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                     if (declaration.type) {
-                        inferTypes(mapper.context.inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
+                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -16282,7 +16271,7 @@ namespace ts {
                 // T in the second overload so that we do not infer Base as a candidate for T
                 // (inferring Base would make type argument inference inconsistent between the two
                 // overloads).
-                inferTypes(mapper.context.inferences, links.type, instantiateType(contextualType, mapper));
+                inferTypes((<InferenceContext>mapper).inferences, links.type, instantiateType(contextualType, mapper));
             }
         }
 
