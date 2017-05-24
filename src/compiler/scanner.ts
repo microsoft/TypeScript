@@ -712,11 +712,11 @@ namespace ts {
         return accumulator;
     }
 
-    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
         return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state);
     }
 
-    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
         return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state);
     }
 
@@ -746,10 +746,11 @@ namespace ts {
     }
 
     /** Optionally, get the shebang */
-    export function getShebang(text: string): string {
-        return shebangTriviaRegex.test(text)
-            ? shebangTriviaRegex.exec(text)[0]
-            : undefined;
+    export function getShebang(text: string): string | undefined {
+        const match = shebangTriviaRegex.exec(text);
+        if (match) {
+            return match[0];
+        }
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {

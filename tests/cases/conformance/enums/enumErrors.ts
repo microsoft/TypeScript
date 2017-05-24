@@ -23,8 +23,17 @@ enum E10 {
 
 // Enum with computed member intializer of other types
 enum E11 {
-    A = '',
+    A = true,
     B = new Date(),
     C = window,
     D = {}
+}
+
+// Enum with string valued member and computed member initializers
+enum E12 {
+    A = '',
+    B = new Date(),
+    C = window,
+    D = {},
+    E = 1 + 1,
 }

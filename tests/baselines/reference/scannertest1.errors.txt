@@ -1,4 +1,4 @@
-tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(1,1): error TS6053: File 'tests/cases/conformance/scanner/ecmascript5/References.ts' not found.
+tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(1,21): error TS6053: File 'tests/cases/conformance/scanner/ecmascript5/References.ts' not found.
 tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(5,21): error TS2304: Cannot find name 'CharacterCodes'.
 tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(5,47): error TS2304: Cannot find name 'CharacterCodes'.
 tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(9,16): error TS2662: Cannot find name 'isDecimalDigit'. Did you mean the static member 'CharacterInfo.isDecimalDigit'?
@@ -18,7 +18,7 @@ tests/cases/conformance/scanner/ecmascript5/scannertest1.ts(20,23): error TS2304
 
 ==== tests/cases/conformance/scanner/ecmascript5/scannertest1.ts (16 errors) ====
     ///<reference path='References.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/scanner/ecmascript5/References.ts' not found.
     
     class CharacterInfo {

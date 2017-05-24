@@ -6,4 +6,4 @@
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
 verify.referenceGroups(r0, [{ definition: '(property) ["foo"]: number', ranges }]);
-verify.referenceGroups([r1, r2], []); // TODO: fix
+verify.referenceGroups([r1, r2], undefined); // TODO: fix

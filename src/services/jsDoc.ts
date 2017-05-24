@@ -28,6 +28,7 @@ namespace ts.JsDoc {
         "namespace",
         "param",
         "private",
+        "prop",
         "property",
         "public",
         "requires",
@@ -38,14 +39,12 @@ namespace ts.JsDoc {
         "throws",
         "type",
         "typedef",
-        "property",
-        "prop",
         "version"
     ];
     let jsDocTagNameCompletionEntries: CompletionEntry[];
     let jsDocTagCompletionEntries: CompletionEntry[];
 
-    export function getJsDocCommentsFromDeclarations(declarations: Declaration[]) {
+    export function getJsDocCommentsFromDeclarations(declarations?: Declaration[]) {
         // Only collect doc comments from duplicate declarations once:
         // In case of a union property there might be same declaration multiple times
         // which only varies in type parameter
@@ -70,7 +69,7 @@ namespace ts.JsDoc {
         return documentationComment;
     }
 
-    export function getJsDocTagsFromDeclarations(declarations: Declaration[]) {
+    export function getJsDocTagsFromDeclarations(declarations?: Declaration[]) {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
@@ -159,7 +158,7 @@ namespace ts.JsDoc {
             return undefined;
         }
 
-        const tokenAtPos = getTokenAtPosition(sourceFile, position);
+        const tokenAtPos = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const tokenStart = tokenAtPos.getStart();
         if (!tokenAtPos || tokenStart < position) {
             return undefined;

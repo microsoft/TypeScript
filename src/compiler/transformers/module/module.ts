@@ -56,7 +56,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node) || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 

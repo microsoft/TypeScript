@@ -241,6 +241,101 @@ namespace ts {
         return output;
     }
 
+    const redForegroundEscapeSequence = "\u001b[91m";
+    const yellowForegroundEscapeSequence = "\u001b[93m";
+    const blueForegroundEscapeSequence = "\u001b[93m";
+    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterSeparator = " ";
+    const resetEscapeSequence = "\u001b[0m";
+    const ellipsis = "...";
+    function getCategoryFormat(category: DiagnosticCategory): string {
+        switch (category) {
+            case DiagnosticCategory.Warning: return yellowForegroundEscapeSequence;
+            case DiagnosticCategory.Error: return redForegroundEscapeSequence;
+            case DiagnosticCategory.Message: return blueForegroundEscapeSequence;
+        }
+    }
+
+    function formatAndReset(text: string, formatStyle: string) {
+        return formatStyle + text + resetEscapeSequence;
+    }
+
+    function padLeft(s: string, length: number) {
+        while (s.length < length) {
+            s = " " + s;
+        }
+        return s;
+    }
+
+    export function formatDiagnosticsWithColorAndContext(diagnostics: Diagnostic[], host: FormatDiagnosticsHost): string {
+        let output = "";
+        for (const diagnostic of diagnostics) {
+            if (diagnostic.file) {
+                const { start, length, file } = diagnostic;
+                const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
+                const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
+                const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
+                const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
+
+                const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
+                let gutterWidth = (lastLine + 1 + "").length;
+                if (hasMoreThanFiveLines) {
+                    gutterWidth = Math.max(ellipsis.length, gutterWidth);
+                }
+
+                output += sys.newLine;
+                for (let i = firstLine; i <= lastLine; i++) {
+                    // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
+                    // so we'll skip ahead to the second-to-last line.
+                    if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
+                        output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
+                        i = lastLine - 1;
+                    }
+
+                    const lineStart = getPositionOfLineAndCharacter(file, i, 0);
+                    const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
+                    let lineContent = file.text.slice(lineStart, lineEnd);
+                    lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
+                    lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
+
+                    // Output the gutter and the actual contents of the line.
+                    output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    output += lineContent + sys.newLine;
+
+                    // Output the gutter and the error span for the line using tildes.
+                    output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
+                    output += redForegroundEscapeSequence;
+                    if (i === firstLine) {
+                        // If we're on the last line, then limit it to the last character of the last line.
+                        // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
+                        const lastCharForLine = i === lastLine ? lastLineChar : undefined;
+
+                        output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
+                        output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
+                    }
+                    else if (i === lastLine) {
+                        output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
+                    }
+                    else {
+                        // Squiggle the entire line.
+                        output += lineContent.replace(/./g, "~");
+                    }
+                    output += resetEscapeSequence;
+
+                    output += sys.newLine;
+                }
+
+                output += sys.newLine;
+                output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
+            }
+
+            const categoryColor = getCategoryFormat(diagnostic.category);
+            const category = DiagnosticCategory[diagnostic.category].toLowerCase();
+            output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
+        }
+        return output;
+    }
+
     export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain, newLine: string): string {
         if (typeof messageText === "string") {
             return messageText;
@@ -291,6 +386,19 @@ namespace ts {
         allDiagnostics?: Diagnostic[];
     }
 
+    /**
+     * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
+     * that represent a compilation unit.
+     *
+     * Creating a program proceeds from a set of root files, expanding the set of inputs by following imports and
+     * triple-slash-reference-path directives transitively. '@types' and triple-slash-reference-types are also pulled in.
+     *
+     * @param rootNames - A set of root files.
+     * @param options - The compiler options which should be used.
+     * @param host - The host interacts with the underlying file system.
+     * @param oldProgram - Reuses an old program structure.
+     * @returns A 'Program' object.
+     */
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -434,7 +542,8 @@ namespace ts {
             getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
             getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
             isSourceFileFromExternalLibrary,
-            dropDiagnosticsProducingTypeChecker
+            dropDiagnosticsProducingTypeChecker,
+            getSourceFileFromReference,
         };
 
         verifyCompilerOptions();
@@ -1214,7 +1323,7 @@ namespace ts {
         }
 
         function getDeclarationDiagnosticsForFile(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
-            return isDeclarationFile(sourceFile) ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
+            return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
         function getOptionsDiagnostics(): Diagnostic[] {
@@ -1253,7 +1362,6 @@ namespace ts {
 
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
-            const isDtsFile = isDeclarationFile(file);
 
             // file.imports may not be undefined if there exists dynamic import
             let imports: LiteralExpression[];
@@ -1307,7 +1415,7 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.ModuleDeclaration:
-                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || isDeclarationFile(file))) {
+                        if (isAmbientModule(<ModuleDeclaration>node) && (inAmbientModule || hasModifier(node, ModifierFlags.Ambient) || file.isDeclarationFile)) {
                             const moduleName = <LiteralExpression>(<ModuleDeclaration>node).name;
                             // Ambient module declarations can be interpreted as augmentations for some existing external modules.
                             // This will happen in two cases:
@@ -1318,7 +1426,7 @@ namespace ts {
                                 (moduleAugmentations || (moduleAugmentations = [])).push(moduleName);
                             }
                             else if (!inAmbientModule) {
-                                if (isDtsFile) {
+                                if (file.isDeclarationFile) {
                                     // for global .d.ts files record name of ambient module
                                     (ambientModules || (ambientModules = [])).push(moduleName.text);
                                 }
@@ -1353,46 +1461,58 @@ namespace ts {
             }
         }
 
-        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number) {
-            let diagnosticArgument: string[];
-            let diagnostic: DiagnosticMessage;
+        /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
+        function getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined {
+            return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName, currentDirectory, getCanonicalFileName)));
+        }
+
+        function getSourceFileFromReferenceWorker(
+                fileName: string,
+                getSourceFile: (fileName: string) => SourceFile | undefined,
+                fail?: (diagnostic: DiagnosticMessage, ...argument: string[]) => void,
+                refFile?: SourceFile): SourceFile | undefined {
+
             if (hasExtension(fileName)) {
                 if (!options.allowNonTsExtensions && !forEach(supportedExtensions, extension => fileExtensionIs(host.getCanonicalFileName(fileName), extension))) {
-                    diagnostic = Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1;
-                    diagnosticArgument = [fileName, "'" + supportedExtensions.join("', '") + "'"];
+                    if (fail) fail(Diagnostics.File_0_has_unsupported_extension_The_only_supported_extensions_are_1, fileName, "'" + supportedExtensions.join("', '") + "'");
+                    return undefined;
                 }
-                else if (!findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd)) {
-                    diagnostic = Diagnostics.File_0_not_found;
-                    diagnosticArgument = [fileName];
-                }
-                else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
-                    diagnostic = Diagnostics.A_file_cannot_have_a_reference_to_itself;
-                    diagnosticArgument = [fileName];
-                }
-            }
-            else {
-                const nonTsFile: SourceFile = options.allowNonTsExtensions && findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd);
-                if (!nonTsFile) {
-                    if (options.allowNonTsExtensions) {
-                        diagnostic = Diagnostics.File_0_not_found;
-                        diagnosticArgument = [fileName];
-                    }
-                    else if (!forEach(supportedExtensions, extension => findSourceFile(fileName + extension, toPath(fileName + extension, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd))) {
-                        diagnostic = Diagnostics.File_0_not_found;
-                        fileName += ".ts";
-                        diagnosticArgument = [fileName];
-                    }
-                }
-            }
 
-            if (diagnostic) {
-                if (refFile !== undefined && refEnd !== undefined && refPos !== undefined) {
-                    fileProcessingDiagnostics.add(createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...diagnosticArgument));
+                const sourceFile = getSourceFile(fileName);
+                if (fail) {
+                    if (!sourceFile) {
+                        fail(Diagnostics.File_0_not_found, fileName);
+                    }
+                    else if (refFile && host.getCanonicalFileName(fileName) === host.getCanonicalFileName(refFile.fileName)) {
+                        fail(Diagnostics.A_file_cannot_have_a_reference_to_itself, fileName);
+                    }
                 }
-                else {
-                    fileProcessingDiagnostics.add(createCompilerDiagnostic(diagnostic, ...diagnosticArgument));
+                return sourceFile;
+            } else {
+                const sourceFileNoExtension = options.allowNonTsExtensions && getSourceFile(fileName);
+                if (sourceFileNoExtension) return sourceFileNoExtension;
+
+                if (fail && options.allowNonTsExtensions) {
+                    fail(Diagnostics.File_0_not_found, fileName);
+                    return undefined;
                 }
+
+                const sourceFileWithAddedExtension = forEach(supportedExtensions, extension => getSourceFile(fileName + extension));
+                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + ".ts");
+                return sourceFileWithAddedExtension;
             }
+        }
+
+        /** This has side effects through `findSourceFile`. */
+        function processSourceFile(fileName: string, isDefaultLib: boolean, refFile?: SourceFile, refPos?: number, refEnd?: number): void {
+            getSourceFileFromReferenceWorker(fileName,
+                fileName => findSourceFile(fileName, toPath(fileName, currentDirectory, getCanonicalFileName), isDefaultLib, refFile, refPos, refEnd),
+                (diagnostic, ...args) => {
+                    fileProcessingDiagnostics.add(refFile !== undefined && refEnd !== undefined && refPos !== undefined
+                        ? createFileDiagnostic(refFile, refPos, refEnd - refPos, diagnostic, ...args)
+                        : createCompilerDiagnostic(diagnostic, ...args));
+                },
+                refFile);
         }
 
         function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFileName: string, refFile: SourceFile, refPos: number, refEnd: number): void {
@@ -1640,7 +1760,7 @@ namespace ts {
                 const absoluteRootDirectoryPath = host.getCanonicalFileName(getNormalizedAbsolutePath(rootDirectory, currentDirectory));
 
                 for (const sourceFile of sourceFiles) {
-                    if (!isDeclarationFile(sourceFile)) {
+                    if (!sourceFile.isDeclarationFile) {
                         const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                         if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
                             programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files, sourceFile.fileName, options.rootDir));
@@ -1753,13 +1873,13 @@ namespace ts {
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
-            const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
+            const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
                     programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
                 }
 
-                const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !isDeclarationFile(f) ? f : undefined);
+                const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
                     programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));

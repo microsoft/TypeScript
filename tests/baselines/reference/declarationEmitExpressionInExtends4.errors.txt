@@ -1,30 +1,21 @@
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(1,10): error TS4060: Return type of exported function has or is using private name 'D'.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(5,7): error TS4093: 'extends' clause of exported class 'C' refers to a type whose name cannot be referenced.
 tests/cases/compiler/declarationEmitExpressionInExtends4.ts(5,17): error TS2315: Type 'D' is not generic.
-tests/cases/compiler/declarationEmitExpressionInExtends4.ts(9,7): error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
 tests/cases/compiler/declarationEmitExpressionInExtends4.ts(9,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
 tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS2304: Cannot find name 'SomeUndefinedFunction'.
 tests/cases/compiler/declarationEmitExpressionInExtends4.ts(14,18): error TS4020: 'extends' clause of exported class 'C3' has or is using private name 'SomeUndefinedFunction'.
 
 
-==== tests/cases/compiler/declarationEmitExpressionInExtends4.ts (7 errors) ====
+==== tests/cases/compiler/declarationEmitExpressionInExtends4.ts (4 errors) ====
     function getSomething() {
-             ~~~~~~~~~~~~
-!!! error TS4060: Return type of exported function has or is using private name 'D'.
         return class D { }
     }
     
     class C extends getSomething()<number, string> {
-          ~
-!!! error TS4093: 'extends' clause of exported class 'C' refers to a type whose name cannot be referenced.
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2315: Type 'D' is not generic.
     
     }
     
     class C2 extends SomeUndefinedFunction()<number, string> {
-          ~~
-!!! error TS4093: 'extends' clause of exported class 'C2' refers to a type whose name cannot be referenced.
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'SomeUndefinedFunction'.
     

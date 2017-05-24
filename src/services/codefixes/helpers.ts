@@ -63,7 +63,7 @@ namespace ts.codefix {
 
         const declaration = declarations[0] as Declaration;
         // Clone name to remove leading trivia.
-        const name = getSynthesizedClone(<PropertyName>declaration.name);
+        const name = getSynthesizedClone(getNameOfDeclaration(declaration)) as PropertyName;
         const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
         const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
         const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
@@ -130,7 +130,7 @@ namespace ts.codefix {
         }
 
         function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
-            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
+            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
             if (signatureDeclaration) {
                 signatureDeclaration.decorators = undefined;
                 signatureDeclaration.modifiers = modifiers;
@@ -200,7 +200,7 @@ namespace ts.codefix {
     }
 
     export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
-        return createMethodDeclaration(
+        return createMethod(
             /*decorators*/ undefined,
             modifiers,
             /*asteriskToken*/ undefined,

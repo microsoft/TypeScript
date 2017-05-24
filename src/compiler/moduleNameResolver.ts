@@ -2,7 +2,6 @@
 /// <reference path="diagnosticInformationMap.generated.ts" />
 
 namespace ts {
-
     /* @internal */
     export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
     export function trace(host: ModuleResolutionHost): void {
@@ -15,6 +14,7 @@ namespace ts {
     }
 
     /** Array that is only intended to be pushed to, never read. */
+    /* @internal */
     export interface Push<T> {
         push(value: T): void;
     }
@@ -47,13 +47,11 @@ namespace ts {
         return resolved.path;
     }
 
-    /** Adds `isExernalLibraryImport` to a Resolved to get a ResolvedModule. */
-    function resolvedModuleFromResolved({ path, extension }: Resolved, isExternalLibraryImport: boolean): ResolvedModuleFull {
-        return { resolvedFileName: path, extension, isExternalLibraryImport };
-    }
-
     function createResolvedModuleWithFailedLookupLocations(resolved: Resolved | undefined, isExternalLibraryImport: boolean, failedLookupLocations: string[]): ResolvedModuleWithFailedLookupLocations {
-        return { resolvedModule: resolved && resolvedModuleFromResolved(resolved, isExternalLibraryImport), failedLookupLocations };
+        return {
+            resolvedModule: resolved && { resolvedFileName: resolved.path, extension: resolved.extension, isExternalLibraryImport },
+            failedLookupLocations
+        };
     }
 
     export function moduleHasNonRelativeName(moduleName: string): boolean {
@@ -442,6 +440,8 @@ namespace ts {
                 case ModuleResolutionKind.Classic:
                     result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache);
                     break;
+                default:
+                    Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
             }
 
             if (perFolderCache) {
@@ -653,11 +653,13 @@ namespace ts {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
-                // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
-                const tsExtension = tryGetExtensionFromPath(candidate);
-                if (tsExtension !== undefined) {
+                // A path mapping may have an extension, in contrast to an import, which should omit it.
+                const extension = tryGetExtensionFromPath(candidate);
+                if (extension !== undefined) {
                     const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-                    return path && { path, extension: tsExtension };
+                    if (path !== undefined) {
+                        return { path, extension };
+                    }
                 }
 
                 return loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
@@ -675,12 +677,25 @@ namespace ts {
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, containingFile, compilerOptions, host, cache, /*jsOnly*/ false);
+        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, /*jsOnly*/ false);
     }
 
+    /**
+     * Expose resolution logic to allow us to use Node module resolution logic from arbitrary locations.
+     * No way to do this with `require()`: https://github.com/nodejs/node/issues/5963
+     * Throws an error if the module can't be resolved.
+     */
     /* @internal */
-    export function nodeModuleNameResolverWorker(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, jsOnly = false): ResolvedModuleWithFailedLookupLocations {
-        const containingDirectory = getDirectoryPath(containingFile);
+    export function resolveJavaScriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+        const { resolvedModule, failedLookupLocations } =
+            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+        if (!resolvedModule) {
+            throw new Error(`Could not resolve JS module ${moduleName} starting at ${initialDir}. Looked in: ${failedLookupLocations.join(", ")}`);
+        }
+        return resolvedModule.resolvedFileName;
+    }
+
+    function nodeModuleNameResolverWorker(moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, jsOnly: boolean): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
@@ -958,10 +973,13 @@ namespace ts {
         }
     }
 
+    /** Double underscores are used in DefinitelyTyped to delimit scoped packages. */
+    const mangledScopedPackageSeparator = "__";
+
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
     function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
         if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== moduleName) {
                 const mangled = replaceSlash.slice(1); // Take off the "@"
                 if (state.traceEnabled) {
@@ -971,6 +989,17 @@ namespace ts {
             }
         }
         return moduleName;
+    }
+
+    /* @internal */
+    export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
+        const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
+        if (withoutAtTypePrefix !== mangledName) {
+            return withoutAtTypePrefix.indexOf("__") !== -1 ?
+                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+                withoutAtTypePrefix;
+        }
+        return mangledName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

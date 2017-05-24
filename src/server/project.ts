@@ -13,13 +13,6 @@ namespace ts.server {
         External
     }
 
-    function remove<T>(items: T[], item: T) {
-        const index = items.indexOf(item);
-        if (index >= 0) {
-            items.splice(index, 1);
-        }
-    }
-
     function countEachFileTypes(infos: ScriptInfo[]): { js: number, jsx: number, ts: number, tsx: number, dts: number } {
         const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
         for (const info of infos) {
@@ -732,7 +725,7 @@ namespace ts.server {
 
         // remove a root file from project
         protected removeRoot(info: ScriptInfo): void {
-            remove(this.rootFiles, info);
+            orderedRemoveItem(this.rootFiles, info);
             this.rootFilesMap.remove(info.path);
         }
     }
@@ -872,6 +865,12 @@ namespace ts.server {
             // Search our peer node_modules, then any globally-specified probe paths
             // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
             const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+
+            if (this.projectService.allowLocalPluginLoads) {
+                const local = getDirectoryPath(this.canonicalConfigFilePath);
+                this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);
+                searchPaths.unshift(local);
+            }
 
             // Enable tsconfig-specified plugins
             if (options.plugins) {

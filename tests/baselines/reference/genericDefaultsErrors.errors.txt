@@ -3,8 +3,8 @@ tests/cases/compiler/genericDefaultsErrors.ts(4,59): error TS2344: Type 'T' does
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(5,44): error TS2344: Type 'T' does not satisfy the constraint 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(6,39): error TS2344: Type 'number' does not satisfy the constraint 'T'.
-tests/cases/compiler/genericDefaultsErrors.ts(10,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/genericDefaultsErrors.ts(13,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/genericDefaultsErrors.ts(10,1): error TS2558: Expected 2-3 type arguments, but got 1.
+tests/cases/compiler/genericDefaultsErrors.ts(13,1): error TS2558: Expected 2-3 type arguments, but got 4.
 tests/cases/compiler/genericDefaultsErrors.ts(17,13): error TS2345: Argument of type '"a"' is not assignable to parameter of type 'number'.
 tests/cases/compiler/genericDefaultsErrors.ts(19,11): error TS2428: All declarations of 'i00' must have identical type parameters.
 tests/cases/compiler/genericDefaultsErrors.ts(20,11): error TS2428: All declarations of 'i00' must have identical type parameters.
@@ -44,12 +44,12 @@ tests/cases/compiler/genericDefaultsErrors.ts(38,20): error TS4033: Property 'x'
     f11(); // ok
     f11<1>(); // error
     ~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2-3 type arguments, but got 1.
     f11<1, 2>(); // ok
     f11<1, 2, 3>(); // ok
     f11<1, 2, 3, 4>(); // error
     ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2-3 type arguments, but got 4.
     
     declare function f12<T, U = T>(a?: U): void;
     f12<number>(); // ok

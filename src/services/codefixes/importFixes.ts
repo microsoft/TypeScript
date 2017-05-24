@@ -3,6 +3,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
             Diagnostics.Cannot_find_name_0.code,
+            Diagnostics.Cannot_find_name_0_Did_you_mean_1.code,
             Diagnostics.Cannot_find_namespace_0.code,
             Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code
         ],
@@ -127,7 +128,7 @@ namespace ts.codefix {
         const allSourceFiles = context.program.getSourceFiles();
         const useCaseSensitiveFileNames = context.host.useCaseSensitiveFileNames ? context.host.useCaseSensitiveFileNames() : false;
 
-        const token = getTokenAtPosition(sourceFile, context.span.start);
+        const token = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false);
         const name = token.getText();
         const symbolIdActionMap = new ImportCodeActionMap();
 
@@ -522,7 +523,7 @@ namespace ts.codefix {
                             catch (e) { }
                         }
 
-                        return relativeFileName;
+                        return getPackageNameFromAtTypesDirectory(relativeFileName);
                     }
                 }
 
