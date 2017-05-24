@@ -1,4 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(12,36): error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(12,20): error TS2322: Type 'U & { x: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }'.
+  Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }' has no properties in common with 'U & { x: "hi"; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -14,7 +15,8 @@ tests/cases/conformance/jsx/file.tsx(12,36): error TS2339: Property 'x' does not
         render() {
             // Should be an ok but as of 2.3.3 this will be an error as we will instantiate B1.props to be empty object
             return <B1 {...this.props} x="hi" />;
-                                       ~~~~~~
-!!! error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }'.
+                       ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'U & { x: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }'.
+!!! error TS2322:   Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<B1<{}>> & { children?: ReactNode; }' has no properties in common with 'U & { x: "hi"; }'.
         }
     }

@@ -14,17 +14,17 @@ interface PoisonedProp {
 
 class Poisoned extends React.Component<PoisonedProp, {}> {
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >PoisonedProp : Symbol(PoisonedProp, Decl(file.tsx, 0, 32))
 
     render() {
 >render : Symbol(Poisoned.render, Decl(file.tsx, 7, 58))
 
         return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 
@@ -48,16 +48,16 @@ let p = <Poisoned {...obj} />;
 
 class EmptyProp extends React.Component<{}, {}> {
 >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(EmptyProp.render, Decl(file.tsx, 21, 49))
 
         return <div>Default hi</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 

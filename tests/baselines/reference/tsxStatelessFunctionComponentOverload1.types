@@ -171,12 +171,6 @@ const e1 = <TestingOptional />
 ><TestingOptional /> : JSX.Element
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
 
-const e2 = <TestingOptional extra-prop/>
->e2 : JSX.Element
-><TestingOptional extra-prop/> : JSX.Element
->TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
->extra-prop : true
-
 const e3 = <TestingOptional y1="hello"/>
 >e3 : JSX.Element
 ><TestingOptional y1="hello"/> : JSX.Element
@@ -206,6 +200,14 @@ const e6 = <TestingOptional y1 y3 y2={10} />
 >y3 : true
 >y2 : number
 >10 : 10
+
+const e2 = <TestingOptional y1 y3 extra-prop/>
+>e2 : JSX.Element
+><TestingOptional y1 y3 extra-prop/> : JSX.Element
+>TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
+>y1 : true
+>y3 : true
+>extra-prop : true
 
 
 
