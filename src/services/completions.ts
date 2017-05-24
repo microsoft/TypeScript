@@ -578,6 +578,9 @@ namespace ts.Completions {
             isMemberCompletion = true;
             isNewIdentifierLocation = false;
 
+            // Since this is qualified name check its a type node location
+            const isTypeLocation = isPartOfTypeNode(node.parent);
+            const isRhsOfImportDeclaration = isInRightSideOfInternalImportEqualsDeclaration(node);
             if (node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName || node.kind === SyntaxKind.PropertyAccessExpression) {
                 let symbol = typeChecker.getSymbolAtLocation(node);
 
@@ -589,16 +592,24 @@ namespace ts.Completions {
                 if (symbol && symbol.flags & SymbolFlags.HasExports) {
                     // Extract module or enum members
                     const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                    const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
+                    const isValidTypeAccess = (symbol: Symbol) => symbolCanbeReferencedAtTypeLocation(symbol);
+                    const isValidAccess = isRhsOfImportDeclaration ?
+                        // Any kind is allowed when dotting off namespace in internal import equals declaration
+                        (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
+                        isTypeLocation ? isValidTypeAccess : isValidValueAccess;
                     forEach(exportedSymbols, symbol => {
-                        if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                        if (isValidAccess(symbol)) {
                             symbols.push(symbol);
                         }
                     });
                 }
             }
 
-            const type = typeChecker.getTypeAtLocation(node);
-            addTypeProperties(type);
+            if (!isTypeLocation) {
+                const type = typeChecker.getTypeAtLocation(node);
+                addTypeProperties(type);
+            }
         }
 
         function addTypeProperties(type: Type) {
@@ -706,11 +717,86 @@ namespace ts.Completions {
                     isStatement(scopeNode);
             }
 
-            /// TODO filter meaning based on the current context
             const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
-            symbols = typeChecker.getSymbolsInScope(scopeNode, symbolMeanings);
+            symbols = filterGlobalCompletion(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings));
 
             return true;
+        }
+
+        function filterGlobalCompletion(symbols: Symbol[]) {
+            return filter(symbols, symbol => {
+                if (!isSourceFile(location)) {
+                    // export = /**/ here we want to get all meanings, so any symbol is ok
+                    if (isExportAssignment(location.parent)) {
+                        return true;
+                    }
+
+                    // This is an alias, follow what it aliases
+                    if (symbol && symbol.flags & SymbolFlags.Alias) {
+                        symbol = typeChecker.getAliasedSymbol(symbol);
+                    }
+
+                    // import m = /**/ <-- It can only access namespace (if typing import = x. this would get member symbols and not namespace)
+                    if (isInRightSideOfInternalImportEqualsDeclaration(location)) {
+                        return !!(symbol.flags & SymbolFlags.Namespace);
+                    }
+
+                    if (!isContextTokenValueLocation(contextToken) &&
+                        (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken))) {
+                        // Its a type, but you can reach it by namespace.type as well
+                        return symbolCanbeReferencedAtTypeLocation(symbol);
+                    }
+                }
+
+                // expressions are value space (which includes the value namespaces)
+                return !!(symbol.flags & SymbolFlags.Value);
+            });
+        }
+
+        function isContextTokenValueLocation(contextToken: Node) {
+            if (contextToken) {
+                const parentKind = contextToken.parent.kind;
+                switch (contextToken.kind) {
+                    case SyntaxKind.TypeOfKeyword:
+                        return parentKind === SyntaxKind.TypeQuery;
+                }
+            }
+        }
+
+        function isContextTokenTypeLocation(contextToken: Node) {
+            if (contextToken) {
+                const parentKind = contextToken.parent.kind;
+                switch (contextToken.kind) {
+                    case SyntaxKind.ColonToken:
+                        return parentKind === SyntaxKind.PropertyDeclaration ||
+                            parentKind === SyntaxKind.PropertySignature ||
+                            parentKind === SyntaxKind.Parameter ||
+                            parentKind === SyntaxKind.VariableDeclaration ||
+                            isFunctionLikeKind(parentKind);
+
+                    case SyntaxKind.EqualsToken:
+                        return parentKind === SyntaxKind.TypeAliasDeclaration;
+
+                    case SyntaxKind.AsKeyword:
+                        return parentKind === SyntaxKind.AsExpression;
+                }
+            }
+        }
+
+        function symbolCanbeReferencedAtTypeLocation(symbol: Symbol): boolean {
+            // This is an alias, follow what it aliases
+            if (symbol && symbol.flags & SymbolFlags.Alias) {
+                symbol = typeChecker.getAliasedSymbol(symbol);
+            }
+
+            if (symbol.flags & (SymbolFlags.ValueModule | SymbolFlags.NamespaceModule)) {
+                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
+                // If the exported symbols contains type,
+                // symbol can be referenced at locations where type is allowed
+                return forEach(exportedSymbols, symbolCanbeReferencedAtTypeLocation);
+            }
+
+            return !!(symbol.flags & (SymbolFlags.NamespaceModule | SymbolFlags.Type));
         }
 
         /**
@@ -1140,21 +1226,6 @@ namespace ts.Completions {
             return undefined;
         }
 
-        function isFunction(kind: SyntaxKind): boolean {
-            if (!isFunctionLikeKind(kind)) {
-                return false;
-            }
-
-            switch (kind) {
-                case SyntaxKind.Constructor:
-                case SyntaxKind.ConstructorType:
-                case SyntaxKind.FunctionType:
-                    return false;
-                default:
-                    return true;
-            }
-        }
-
         /**
          * @returns true if we are certain that the currently edited location must define a new location; false otherwise.
          */
@@ -1166,7 +1237,7 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.VariableDeclarationList ||
                         containingNodeKind === SyntaxKind.VariableStatement ||
                         containingNodeKind === SyntaxKind.EnumDeclaration ||                        // enum a { foo, |
-                        isFunction(containingNodeKind) ||
+                        isFunctionLikeButNotConstructor(containingNodeKind) ||
                         containingNodeKind === SyntaxKind.ClassDeclaration ||                       // class A<T, |
                         containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D<T, |
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A<T, |
@@ -1184,7 +1255,7 @@ namespace ts.Completions {
 
                 case SyntaxKind.OpenParenToken:
                     return containingNodeKind === SyntaxKind.CatchClause ||
-                        isFunction(containingNodeKind);
+                        isFunctionLikeButNotConstructor(containingNodeKind);
 
                 case SyntaxKind.OpenBraceToken:
                     return containingNodeKind === SyntaxKind.EnumDeclaration ||                     // enum a { |
@@ -1202,7 +1273,7 @@ namespace ts.Completions {
                         containingNodeKind === SyntaxKind.ClassExpression ||                        // var C = class D< |
                         containingNodeKind === SyntaxKind.InterfaceDeclaration ||                   // interface A< |
                         containingNodeKind === SyntaxKind.TypeAliasDeclaration ||                   // type List< |
-                        isFunction(containingNodeKind);
+                        isFunctionLikeKind(containingNodeKind);
 
                 case SyntaxKind.StaticKeyword:
                     return containingNodeKind === SyntaxKind.PropertyDeclaration && !isClassLike(contextToken.parent.parent);
@@ -1269,6 +1340,10 @@ namespace ts.Completions {
             }
 
             return false;
+        }
+
+        function isFunctionLikeButNotConstructor(kind: SyntaxKind) {
+            return isFunctionLikeKind(kind) && kind !== SyntaxKind.Constructor;
         }
 
         function isDotOfNumericLiteral(contextToken: Node): boolean {

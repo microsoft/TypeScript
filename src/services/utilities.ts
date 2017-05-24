@@ -82,7 +82,7 @@ namespace ts {
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.All;
         }
-        else if (isInRightSideOfImport(node)) {
+        else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
         }
         else if (isDeclarationName(node)) {
@@ -118,7 +118,7 @@ namespace ts {
         return SemanticMeaning.Namespace;
     }
 
-    function isInRightSideOfImport(node: Node) {
+    export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
