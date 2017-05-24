@@ -1,4 +1,4 @@
-/// <reference path="utilities.ts"/>
+﻿/// <reference path="utilities.ts"/>
 /// <reference path="parser.ts"/>
 
 /* @internal */
@@ -2178,7 +2178,11 @@ namespace ts {
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
-                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    let optionalType = 0;
+                    if ((node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) {
+                        optionalType = SymbolFlags.Optional;
+                    }
+                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag, SymbolFlags.Property | optionalType, SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocFunctionType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.JSDocTypeLiteral:
