@@ -8981,10 +8981,6 @@ namespace ts {
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
-                // disable weak-type detection for the main check
-                // unless all of target.types are weak, in which case run weak type detection on the *combined* properties of target
-                // at a minimum, do the first part.
-                // but the thing should be flexible enough to easily do the second part as a separate call
                 const saveDynamicDisableWeakTypeErrors = dynamicDisableWeakTypeErrors;
                 dynamicDisableWeakTypeErrors = true;
                 for (const targetType of targetTypes) {
