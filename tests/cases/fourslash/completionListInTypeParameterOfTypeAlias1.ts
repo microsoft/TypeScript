@@ -1,4 +1,4 @@
-﻿/// <reference path='fourslash.ts'/>
+/// <reference path='fourslash.ts'/>
 
 ////type List1</*0*/
 ////type List2</*1*/T> = T[];
@@ -8,7 +8,7 @@
 goTo.marker("0");
 verify.completionListIsEmpty();
 goTo.marker("1");
-verify.not.completionListIsEmpty();
+verify.completionListIsEmpty();
 goTo.marker("2");
 verify.completionListContains("T");
 goTo.marker("3");

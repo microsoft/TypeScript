@@ -1,4 +1,4 @@
-﻿/// <reference path='fourslash.ts'/>
+/// <reference path='fourslash.ts'/>
 
 ////type Map1<K, /*0*/
 ////type Map1<K, /*1*/V> = [];
@@ -8,12 +8,12 @@
 goTo.marker("0");
 verify.completionListIsEmpty();
 goTo.marker("1");
-verify.completionListContains("V");
+verify.completionListIsEmpty();
 goTo.marker("2");
 verify.completionListContains("K");
 verify.completionListContains("V");
 goTo.marker("3");
 verify.not.completionListContains("K");
 verify.not.completionListContains("V");
-verify.completionListContains("K1");
-verify.completionListContains("V1");
+verify.not.completionListContains("K1");
+verify.not.completionListContains("V1");

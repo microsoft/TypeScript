@@ -14554,12 +14554,31 @@ namespace ts {
                 ? (<PropertyAccessExpression>node).expression
                 : (<QualifiedName>node).left;
 
-            const type = checkExpression(left);
+            return isValidPropertyAccessWithType(node, left, propertyName, getWidenedType(checkExpression(left)));
+        }
+
+        function isValidPropertyAccessWithType(
+            node: PropertyAccessExpression | QualifiedName,
+            left: LeftHandSideExpression | QualifiedName,
+            propertyName: string,
+            type: Type): boolean {
+
             if (type !== unknownType && !isTypeAny(type)) {
-                const prop = getPropertyOfType(getWidenedType(type), propertyName);
+                const prop = getPropertyOfType(type, propertyName);
                 if (prop) {
                     return checkPropertyAccessibility(node, left, type, prop);
                 }
+
+                // In js files properties of unions are allowed in completion
+                if (isInJavaScriptFile(left) && (type.flags & TypeFlags.Union)) {
+                    for (const elementType of (<UnionType>type).types) {
+                        if (isValidPropertyAccessWithType(node, left, propertyName, elementType)) {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
             }
             return true;
         }
