@@ -9397,7 +9397,7 @@ namespace ts {
              * and no required properties or index signatures
              */
             function isWeak(type: Type) {
-                let props = getPropertiesOfType(type);
+                const props = getPropertiesOfType(type);
                 return type.flags & TypeFlags.Object &&
                     props.length > 0 &&
                     every(props, p => !!(p.flags & SymbolFlags.Optional)) &&
