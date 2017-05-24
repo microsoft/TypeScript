@@ -68,7 +68,7 @@ namespace ts.projectSystem {
             }
         });
 
-        it("Does not expose paths", () => {
+        it("does not expose paths", () => {
             const file = makeFile("/a.ts");
 
             const compilerOptions: ts.CompilerOptions = {
@@ -101,6 +101,31 @@ namespace ts.projectSystem {
                 // Sensitive data doesn't get through even if sent to an option of safe type
                 checkJs: "hunter2" as any as boolean,
             };
+            const safeCompilerOptions: ts.CompilerOptions = {
+                project: "",
+                outFile: "",
+                outDir: "",
+                rootDir: "",
+                baseUrl: "",
+                rootDirs: [""],
+                typeRoots: [""],
+                types: [""],
+                sourceRoot: "",
+                mapRoot: "",
+                jsxFactory: "",
+                out: "",
+                reactNamespace: "",
+                charset: "",
+                locale: "",
+                declarationDir: "",
+                paths: "" as any,
+
+                declaration: true,
+
+                lib: ["es6", "dom"],
+
+                checkJs: "" as any as boolean,
+            };
             (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
             const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
 
@@ -109,10 +134,7 @@ namespace ts.projectSystem {
 
             assert.deepEqual(et.getProjectInfoTelemetryEvent(), {
                 fileStats: fileStats({ ts: 1 }),
-                compilerOptions: {
-                    declaration: true,
-                    lib: ["es6", "dom"],
-                },
+                compilerOptions: safeCompilerOptions,
             });
         });
     });

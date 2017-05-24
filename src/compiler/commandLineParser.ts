@@ -1717,38 +1717,32 @@ namespace ts {
         const out: ts.CompilerOptions = {};
         for (const key in opts) if (opts.hasOwnProperty(key)) {
             const type = getOptionFromName(key);
-            if (type !== undefined) {
-                const value = getOptionValueExcludingPaths(opts[key], type);
-                if (value !== undefined) {
-                    out[key] = value;
-                }
+            if (type !== undefined) { // Ignore unknown options
+                out[key] = getOptionValueWithEmptyStrings(opts[key], type);
             }
         }
         return out;
     }
 
-    function getOptionValueExcludingPaths(value: any, option: CommandLineOption): {} | undefined {
+    function getOptionValueWithEmptyStrings(value: any, option: CommandLineOption): {} {
         switch (option.type) {
-            case "object": // Don't allow "paths"
-            case "string": // Don't allow arbitrary strings.
-                return undefined;
+            case "object": // "paths". Can't get any useful information from the value since we blank out strings, so just return "".
+                return "";
+            case "string": // Could be any arbitrary string -- use empty string instead.
+                return "";
             case "number": // Allow numbers, but be sure to check it's actually a number.
-                return typeof value === "number" ? value : undefined;
+                return typeof value === "number" ? value : "";
             case "boolean":
-                return typeof value === "boolean" ? value : undefined;
+                return typeof value === "boolean" ? value : "";
             case "list":
                 const elementType = (option as CommandLineOptionOfListType).element;
-                if (elementType.type === "number" || elementType.type === "boolean" || typeof elementType.type !== "string") {
-                    return mapDefined(value, v => getOptionValueExcludingPaths(v, elementType));
-                }
-                return undefined;
+                return ts.isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
-                const stringValue = ts.forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
+                return ts.forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
                     if (optionEnumValue === value) {
-                        return { value: optionStringValue };
+                        return optionStringValue;
                     }
                 });
-                return stringValue && stringValue.value;
         }
     }
 }
