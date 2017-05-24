@@ -1712,6 +1712,7 @@ namespace ts {
      * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
      * Also converts enum values back to strings.
      */
+    /* @internal */
     export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
         const out: ts.CompilerOptions = {};
         for (const key in opts) if (opts.hasOwnProperty(key)) {

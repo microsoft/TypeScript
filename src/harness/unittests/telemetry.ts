@@ -4,19 +4,19 @@
 namespace ts.projectSystem {
     describe("project telemetry", () => {
         it("does nothing for inferred project", () => {
-            const file = mkFile("/a.js");
+            const file = makeFile("/a.js");
             const et = new EventTracker([file]);
             et.service.openClientFile(file.path);
             assert.equal(et.getEvents().length, 0);
         });
 
         it("only sends an event once", () => {
-            const file = mkFile("/a.ts");
-            const tsconfig = mkFile("/tsconfig.json", {});
+            const file = makeFile("/a.ts");
+            const tsconfig = makeFile("/tsconfig.json", {});
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 1, js: 0, dts: 0 }, compilerOptions: {} });
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {} });
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -28,18 +28,18 @@ namespace ts.projectSystem {
         });
 
         it("counts files by extension", () => {
-            const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => mkFile(`/src/${f}`));
-            const notIncludedFile = mkFile("/bin/ts.js");
+            const files = ["ts.ts", "tsx.tsx", "moo.ts", "dts.d.ts", "jsx.jsx", "js.js", "badExtension.badExtension"].map(f => makeFile(`/src/${f}`));
+            const notIncludedFile = makeFile("/bin/ts.js");
             const compilerOptions: ts.CompilerOptions = { allowJs: true };
-            const tsconfig = mkFile("/tsconfig.json", { compilerOptions, include: ["src"] });
+            const tsconfig = makeFile("/tsconfig.json", { compilerOptions, include: ["src"] });
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 3, js: 2, dts: 1 }, compilerOptions });
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions });
         });
 
         it("works with external project", () => {
-            const file1 = mkFile("/a.ts");
+            const file1 = makeFile("/a.ts");
             const et = new EventTracker([file1]);
             const compilerOptions: ts.CompilerOptions = { strict: true };
 
@@ -48,7 +48,7 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 1, js: 0, dts: 0 }, compilerOptions: { strict: true } });
+            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true } });
 
             // Also test that opening an external project only sends an event once.
 
@@ -69,7 +69,7 @@ namespace ts.projectSystem {
         });
 
         it("Does not expose paths", () => {
-            const file = mkFile("/a.ts");
+            const file = makeFile("/a.ts");
 
             const compilerOptions: ts.CompilerOptions = {
                 project: "",
@@ -102,13 +102,13 @@ namespace ts.projectSystem {
                 checkJs: "hunter2" as any as boolean,
             };
             (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
-            const tsconfig = mkFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
+            const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
 
             assert.deepEqual(et.getProjectTelemetryEvent(), {
-                fileStats: { ts: 1, js: 0, dts: 0 },
+                fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {
                     declaration: true,
                     lib: ["es6", "dom"],
@@ -148,7 +148,12 @@ namespace ts.projectSystem {
         }
     }
 
-    function mkFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
+    function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {
         return { path, content: typeof content === "string" ? "" : JSON.stringify(content) };
     }
+
+    function fileStats(nonZeroStats: Partial<server.FileStats>) {
+        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, ...nonZeroStats };
+    }
+
 }

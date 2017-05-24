@@ -36,30 +36,11 @@ namespace ts.server {
     }
 
     export interface FileStats {
-        readonly ts: number;
-        readonly js: number;
-        readonly dts: number;
-    }
-
-    function getFileStats(fileNames: string[]): FileStats {
-        let ts = 0, js = 0, dts = 0;
-        for (const file of fileNames) {
-            switch (extensionFromPath(file)) {
-                case Extension.Ts:
-                case Extension.Tsx:
-                    ts++;
-                    break;
-                case Extension.Js:
-                case Extension.Jsx:
-                    js++;
-                    break;
-                case Extension.Dts:
-                    dts++;
-                    break;
-                default: Debug.fail();
-            }
-        }
-        return { ts, js, dts };
+        js: number;
+        jsx: number;
+        ts: number;
+        tsx: number;
+        dts: number;
     }
 
     export interface ProjectTelemetryEventData {
@@ -1040,8 +1021,10 @@ namespace ts.server {
             }
             this.seenProjects.set(projectKey, true);
 
+            if (!this.eventHandler) return;
+
             const data: ProjectTelemetryEventData = {
-                fileStats: getFileStats(project.getFileNames()),
+                fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
             };
             this.eventHandler({ eventName: ProjectTelemetryEvent, data });
