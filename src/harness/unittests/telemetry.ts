@@ -16,7 +16,7 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {} });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {} });
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -35,7 +35,7 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions });
         });
 
         it("works with external project", () => {
@@ -48,7 +48,7 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual(et.getProjectTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true } });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true } });
 
             // Also test that opening an external project only sends an event once.
 
@@ -107,7 +107,7 @@ namespace ts.projectSystem {
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
 
-            assert.deepEqual(et.getProjectTelemetryEvent(), {
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), {
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {
                     declaration: true,
@@ -135,8 +135,8 @@ namespace ts.projectSystem {
             return events;
         }
 
-        getProjectTelemetryEvent(): server.ProjectTelemetryEventData {
-            return this.getEvent<server.ProjectTelemetryEvent>(ts.server.ProjectTelemetryEvent);
+        getProjectInfoTelemetryEvent(): server.ProjectInfoTelemetryEventData {
+            return this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent);
         }
 
         private getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {

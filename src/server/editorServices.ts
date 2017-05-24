@@ -13,7 +13,7 @@ namespace ts.server {
     export const ContextEvent = "context";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
-    export const ProjectTelemetryEvent = "telemetry";
+    export const ProjectInfoTelemetryEvent = "projectInfo";
 
     export interface ContextEvent {
         eventName: typeof ContextEvent;
@@ -30,20 +30,13 @@ namespace ts.server {
         data: { project: Project, languageServiceEnabled: boolean };
     }
 
-    export interface ProjectTelemetryEvent {
-        readonly eventName: typeof ProjectTelemetryEvent;
-        readonly data: ProjectTelemetryEventData;
+    /** This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler. */
+    export interface ProjectInfoTelemetryEvent {
+        readonly eventName: typeof ProjectInfoTelemetryEvent;
+        readonly data: ProjectInfoTelemetryEventData;
     }
 
-    export interface FileStats {
-        js: number;
-        jsx: number;
-        ts: number;
-        tsx: number;
-        dts: number;
-    }
-
-    export interface ProjectTelemetryEventData {
+    export interface ProjectInfoTelemetryEventData {
         /** Count of file extensions seen in the project. */
         readonly fileStats: FileStats;
         /**
@@ -53,7 +46,15 @@ namespace ts.server {
         readonly compilerOptions: ts.CompilerOptions;
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectTelemetryEvent;
+    export interface FileStats {
+        readonly js: number;
+        readonly jsx: number;
+        readonly ts: number;
+        readonly tsx: number;
+        readonly dts: number;
+    }
+
+    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -1023,11 +1024,11 @@ namespace ts.server {
 
             if (!this.eventHandler) return;
 
-            const data: ProjectTelemetryEventData = {
+            const data: ProjectInfoTelemetryEventData = {
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
             };
-            this.eventHandler({ eventName: ProjectTelemetryEvent, data });
+            this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
