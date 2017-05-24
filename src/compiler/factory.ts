@@ -2257,14 +2257,6 @@ namespace ts {
     }
 
     /**
-     * Gets flags that control emit behavior of a node.
-     */
-    export function getEmitFlags(node: Node): EmitFlags | undefined {
-        const emitNode = node.emitNode;
-        return emitNode && emitNode.flags;
-    }
-
-    /**
      * Sets flags that control emit behavior of a node.
      */
     export function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags) {

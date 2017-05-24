@@ -321,6 +321,14 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
+    /**
+     * Gets flags that control emit behavior of a node.
+     */
+    export function getEmitFlags(node: Node): EmitFlags | undefined {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.flags;
+    }
+
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
