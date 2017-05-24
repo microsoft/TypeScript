@@ -79,7 +79,7 @@ var bar3 = <any>0;
 var array = <any>[null, undefined];
 
 //// [implicitAnyCastedValue.js]
-var x = function () {
+var x = function x() {
     return 0; // this should not be an error
 };
 function foo() {

@@ -20,7 +20,7 @@ var promise = function( obj ) {
 };
 
 //// [recursiveNamedLambdaCall.js]
-var promise = function (obj) {
+var promise = function promise(obj) {
     if (top && top.doScroll) {
         (function doScrollCheck() {
             if (false) {

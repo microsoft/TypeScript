@@ -51,7 +51,7 @@ TWO: for (;;) {
     };
 }
 THREE: for (;;) {
-    var fn = function () {
+    var fn = function fn() {
         break THREE;
     };
 }

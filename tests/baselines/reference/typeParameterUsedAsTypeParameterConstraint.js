@@ -41,11 +41,11 @@ function foo2(x, y) {
     x = y;
     return y;
 }
-var f = function (x, y) {
+var f = function f(x, y) {
     x = y;
     return y;
 };
-var f2 = function (x, y) {
+var f2 = function f2(x, y) {
     x = y;
     return y;
 };

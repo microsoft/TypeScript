@@ -18,7 +18,7 @@ var funcExp1 = function funcExp1(X) {
         rest[_i - 1] = arguments[_i];
     }
 };
-var funcExp2 = function () {
+var funcExp2 = function funcExp2() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];

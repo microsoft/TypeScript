@@ -254,11 +254,11 @@ var c3t2 = ({
     n: 1
 });
 var c3t3 = [];
-var c3t4 = function () { return ({}); };
-var c3t5 = function (n) { return ({}); };
-var c3t6 = function (n, s) { return ({}); };
-var c3t7 = function (n) { return n; };
-var c3t8 = function (n) { return n; };
+var c3t4 = function c3t4() { return ({}); };
+var c3t5 = function c3t5(n) { return ({}); };
+var c3t6 = function c3t6(n, s) { return ({}); };
+var c3t7 = function c3t7(n) { return n; };
+var c3t8 = function c3t8(n) { return n; };
 var c3t9 = [[], []];
 var c3t10 = [({}), ({})];
 var c3t11 = [function (n, s) { return s; }];
@@ -323,7 +323,7 @@ c9t5(function (n) {
     return ({});
 });
 // CONTEXT: Return statement
-var c10t5 = function () { return function (n) { return ({}); }; };
+var c10t5 = function c10t5() { return function (n) { return ({}); }; };
 // CONTEXT: Newing a class
 var C11t5 = (function () {
     function C11t5(f) {

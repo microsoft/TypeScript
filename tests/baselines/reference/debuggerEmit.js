@@ -3,5 +3,5 @@ var x = function () { debugger; }
 x();
 
 //// [debuggerEmit.js]
-var x = function () { debugger; };
+var x = function x() { debugger; };
 x();

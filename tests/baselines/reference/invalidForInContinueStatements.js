@@ -52,7 +52,7 @@ TWO: for (var x in {}) {
     };
 }
 THREE: for (var x in {}) {
-    var fn = function () {
+    var fn = function fn() {
         continue THREE;
     };
 }

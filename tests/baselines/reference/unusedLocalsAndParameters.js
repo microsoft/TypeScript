@@ -91,7 +91,7 @@ function f(a) {
 }
 f(0);
 // function expression paramter
-var fexp = function (a) {
+var fexp = function fexp(a) {
 };
 fexp(0);
 // arrow function paramter

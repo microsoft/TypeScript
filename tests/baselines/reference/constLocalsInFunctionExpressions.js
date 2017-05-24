@@ -55,7 +55,7 @@ function f2() {
 function f3() {
     var x = getStringOrNumber();
     if (typeof x === "string") {
-        var f = function () { return x.length; };
+        var f = function f() { return x.length; };
     }
 }
 function f4() {
@@ -63,7 +63,7 @@ function f4() {
     if (typeof x !== "string") {
         return;
     }
-    var f = function () { return x.length; };
+    var f = function f() { return x.length; };
 }
 function f5() {
     var x = getStringOrNumber();

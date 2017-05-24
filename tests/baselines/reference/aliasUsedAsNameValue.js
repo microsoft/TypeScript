@@ -33,7 +33,7 @@ exports.__esModule = true;
 ///<reference path='aliasUsedAsNameValue_1.ts' />
 var mod = require("./aliasUsedAsNameValue_0");
 var b = require("./aliasUsedAsNameValue_1");
-exports.a = function () {
+exports.a = function a() {
     //var x = mod.id; // TODO needed hack that mod is loaded
     b.b(mod);
 };

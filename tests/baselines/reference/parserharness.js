@@ -2609,7 +2609,7 @@ var Harness;
             if (f === void 0) { f = benchmark.bench; }
             var t = new Timer();
             t.start();
-            var subBenchmark = function (name, f) {
+            var subBenchmark = function subBenchmark(name, f) {
                 timeFunction(benchmark, description, name, f);
             };
             f.call(benchmark, subBenchmark);

@@ -30,7 +30,7 @@ var lambda4 = function lambda4(y) {
         rest[_i - 1] = arguments[_i];
     }
 };
-var x = function (str) {
+var x = function x(str) {
     if (str === void 0) { str = "hello"; }
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {

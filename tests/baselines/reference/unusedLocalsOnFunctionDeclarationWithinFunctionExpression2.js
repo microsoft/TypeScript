@@ -11,7 +11,7 @@ var greeter = function (person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionExpression2.js]
-var greeter = function (person, person2) {
+var greeter = function greeter(person, person2) {
     var unused = 20;
     function maker(child) {
         var unused2 = 22;

@@ -35,7 +35,7 @@ function bar() {
 var a = function a() {
     var arg = arguments[0]; // error
 };
-var b = function () {
+var b = function b() {
     var a = function a() {
         var arg = arguments[0]; // error
     };

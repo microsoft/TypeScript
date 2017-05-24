@@ -4,6 +4,6 @@ var func = function(person: string) {
 }
 
 //// [unusedSingleParameterInFunctionExpression.js]
-var func = function (person) {
+var func = function func(person) {
     var unused = 20;
 };

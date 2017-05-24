@@ -75,15 +75,15 @@ function foo2(x, y) {
         }
     }
 }
-var f = function (x, y) {
+var f = function f(x, y) {
     function bar() {
-        var g = function (a, b) {
+        var g = function g(a, b) {
             x = y;
             return y;
         };
     }
 };
-var f2 = function (x, y) {
+var f2 = function f2(x, y) {
     function bar() {
         var g = function baz(a, b) {
             x = y;

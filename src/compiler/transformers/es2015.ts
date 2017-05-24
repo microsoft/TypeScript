@@ -1709,7 +1709,7 @@ namespace ts {
          *
          * @param node a FunctionExpression node.
          */
-        function visitFunctionExpression(node: FunctionExpression): Expression {
+        function visitFunctionExpression(node: FunctionExpression, functionName?: Identifier): Expression {
             const ancestorFacts = getEmitFlags(node) & EmitFlags.AsyncFunctionBody
                 ? enterSubtree(HierarchyFacts.AsyncFunctionBodyExcludes, HierarchyFacts.AsyncFunctionBodyIncludes)
                 : enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
@@ -1722,7 +1722,7 @@ namespace ts {
                 : visitFunctionBodyDownLevel(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
                 ? getLocalName(node)
-                : node.name;
+                : (functionName && !node.name) ? functionName : node.name;
 
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
@@ -2173,6 +2173,14 @@ namespace ts {
                     name.parent = clonedNode.initializer;
                 }
                 clonedNode.initializer = visitArrowFunction((<ArrowFunction>node.initializer), name);
+                updated = clonedNode;
+            } else if (isFunctionExpression(node.initializer)) {
+                const clonedNode = getMutableClone(node);
+                const name = (clonedNode.name && (<Identifier>clonedNode.name).text) ? createIdentifier((<Identifier>clonedNode.name).text) : undefined;
+                if (name) {
+                    name.parent = clonedNode.initializer;
+                }
+                clonedNode.initializer = visitFunctionExpression(<FunctionExpression>node.initializer, name);
                 updated = clonedNode;
             } else if (isBindingPattern(node.name)) {
                 updated = flattenDestructuringBinding(

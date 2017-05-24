@@ -52,7 +52,7 @@ TWO: while (true) {
     };
 }
 THREE: while (true) {
-    var fn = function () {
+    var fn = function fn() {
         break THREE;
     };
 }

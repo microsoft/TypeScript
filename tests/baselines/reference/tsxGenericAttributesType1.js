@@ -17,12 +17,12 @@ const decorator3 = function <T extends { x: number }, U extends { x: number } >(
 "use strict";
 exports.__esModule = true;
 var React = require("react");
-var decorator = function (Component) {
+var decorator = function decorator(Component) {
     return function (props) { return <Component {...props}></Component>; };
 };
-var decorator2 = function (Component) {
+var decorator2 = function decorator2(Component) {
     return function (props) { return <Component {...props} x={2}></Component>; };
 };
-var decorator3 = function (Component) {
+var decorator3 = function decorator3(Component) {
     return function (props) { return <Component x={2} {...props}></Component>; };
 };

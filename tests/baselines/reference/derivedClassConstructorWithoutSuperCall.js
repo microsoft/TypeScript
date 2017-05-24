@@ -75,7 +75,7 @@ var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
         var _this = this;
-        var r = function () { _this = _super.call(this) || this; }; // error
+        var r = function r() { _this = _super.call(this) || this; }; // error
         return _this;
     }
     return Derived3;

@@ -66,6 +66,6 @@ SEVEN: do
     while (true);
 while (true);
 EIGHT: do {
-    var fn = function () { };
+    var fn = function fn() { };
     break EIGHT;
 } while (true);

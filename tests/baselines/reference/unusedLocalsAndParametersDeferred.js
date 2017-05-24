@@ -173,7 +173,7 @@ function f(a) {
 }
 f(0);
 // function expression paramter
-var fexp = function (a) {
+var fexp = function fexp(a) {
     defered(function () {
         a;
     });

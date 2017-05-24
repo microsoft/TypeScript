@@ -85,7 +85,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // FunctionExpression with no return type annotation with multiple return statements with unrelated types
-var f1 = function () {
+var f1 = function f1() {
     return '';
     return 3;
 };
@@ -98,7 +98,7 @@ var f3 = function f3() {
     return 3;
 };
 // FunctionExpression with no return type annotation with return branch of number[] and other of string[]
-var f4 = function () {
+var f4 = function f4() {
     if (true) {
         return [''];
     }
@@ -153,7 +153,7 @@ function f8() {
     return new Derived1();
     return new Derived2();
 }
-var f9 = function () {
+var f9 = function f9() {
     return new Derived1();
     return new Derived2();
 };
@@ -165,7 +165,7 @@ function f11() {
     return new Base();
     return new AnotherClass();
 }
-var f12 = function () {
+var f12 = function f12() {
     return new Base();
     return new AnotherClass();
 };

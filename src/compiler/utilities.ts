@@ -3772,6 +3772,14 @@ namespace ts {
         return false;
     }
 
+    export function isFunctionExpression(node?: Node): node is FunctionExpression {
+        if (node) {
+            return node.kind === SyntaxKind.FunctionExpression;
+        }
+
+        return false;
+    }
+
 
     /**
      * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration

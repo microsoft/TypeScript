@@ -8,7 +8,7 @@ function bar(): void {
 }
 
 //// [functionWithNoBestCommonType2.js]
-var v = function () {
+var v = function v() {
     return true;
     return bar();
 };

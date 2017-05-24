@@ -47,7 +47,7 @@ var D = (function (_super) {
         var y = function y() {
             _this = _super.call(this) || this;
         };
-        var y2 = function () {
+        var y2 = function y2() {
             _this = _super.call(this) || this;
         };
         return _this;

@@ -51,7 +51,7 @@ function fn() {
     var p = this;
     var p;
 }
-var t = function () {
+var t = function t() {
     var p = this;
     var p;
 };
@@ -78,7 +78,7 @@ var M;
         var p = this;
         var p;
     }
-    var t = function () {
+    var t = function t() {
         var p = this;
         var p;
     };

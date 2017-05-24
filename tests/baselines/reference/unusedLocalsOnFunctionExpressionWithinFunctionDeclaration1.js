@@ -10,7 +10,7 @@ function greeter(person: string, person2: string) {
 //// [unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.js]
 function greeter(person, person2) {
     var unused = 20;
-    var maker = function (child) {
+    var maker = function maker(child) {
         var unused2 = 22;
     };
     person2 = "dummy value";

@@ -57,7 +57,7 @@ function foo2(x) {
         return x.length; // string
     }
     else {
-        var f = function () {
+        var f = function f() {
             return x * x;
         };
     }

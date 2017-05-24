@@ -55,7 +55,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // none of these function calls should be allowed
-var x = function () { return; };
+var x = function x() { return; };
 var r1 = x();
 var y = x;
 var r2 = y();

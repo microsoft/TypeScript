@@ -989,7 +989,7 @@ var TypeScript;
                 }
             }
         };
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             if (isValidAstNode(cur)) {
                 // Add "cur" to the stack if it contains our position
                 // For "identifier" nodes, we need a special case: A position equal to "limChar" is
@@ -1060,13 +1060,13 @@ var TypeScript;
     /// Simple function to Walk an AST using a simple callback function.
     ///
     function walkAST(ast, callback) {
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             var path = walker.state;
             path.push(cur);
             callback(path, walker);
             return cur;
         };
-        var post = function (cur, parent, walker) {
+        var post = function post(cur, parent, walker) {
             var path = walker.state;
             path.pop();
             return cur;

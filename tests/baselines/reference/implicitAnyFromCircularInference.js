@@ -61,7 +61,7 @@ function f() { return f; }
 // Error expected
 function g() { return g(); }
 // Error expected
-var f1 = function () {
+var f1 = function f1() {
     return f1();
 };
 // Error expected

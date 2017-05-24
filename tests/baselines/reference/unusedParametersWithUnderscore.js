@@ -46,4 +46,4 @@ function f5() {
 function f6(arg, _arg) {
 }
 var f7 = function f7(_) { return undefined; };
-var f8 = function (_) { };
+var f8 = function f8(_) { };
