@@ -2385,7 +2385,10 @@ namespace FourSlash {
             const codeFixes = this.getCodeFixActions(this.activeFile.fileName, errorCode);
 
             if (!codeFixes || codeFixes.length === 0) {
-                this.raiseError("No codefixes returned.");
+                if (expectedTextArray.length !== 0) {
+                    this.raiseError("No codefixes returned.");
+                }
+                return;
             }
 
             const actualTextArray: string[] = [];

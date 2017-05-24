@@ -2594,6 +2594,8 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
+
+        /* @internal */ getJsxNamespaceSymbol(location: ts.Node): Symbol;
     }
 
     export enum NodeBuilderFlags {

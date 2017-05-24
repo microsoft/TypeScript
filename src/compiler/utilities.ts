@@ -2004,6 +2004,10 @@ namespace ts {
         return node.kind === SyntaxKind.NumericLiteral;
     }
 
+    export function isStringLiteral(node: Node): node is StringLiteral {
+        return node.kind === SyntaxKind.StringLiteral;
+    }
+
     export function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
         const kind = node.kind;
         return kind === SyntaxKind.StringLiteral
@@ -4041,6 +4045,10 @@ namespace ts {
 
     export function isExportAssignment(node: Node): node is ExportAssignment {
         return node.kind === SyntaxKind.ExportAssignment;
+    }
+
+    export function isModuleDeclaration(node: Node): node is ModuleDeclaration {
+        return node.kind === SyntaxKind.ModuleDeclaration;
     }
 
     export function isModuleOrEnumDeclaration(node: Node): node is ModuleDeclaration | EnumDeclaration {
