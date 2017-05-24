@@ -16,7 +16,7 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {} });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: {}, version: ts.version });
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -35,7 +35,7 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 }, compilerOptions, version: ts.version });
         });
 
         it("works with external project", () => {
@@ -48,7 +48,7 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true } });
+            assert.deepEqual(et.getProjectInfoTelemetryEvent(), { fileStats: fileStats({ ts: 1 }), compilerOptions: { strict: true }, version: ts.version });
 
             // Also test that opening an external project only sends an event once.
 
@@ -135,6 +135,7 @@ namespace ts.projectSystem {
             assert.deepEqual(et.getProjectInfoTelemetryEvent(), {
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: safeCompilerOptions,
+                version: ts.version,
             });
         });
     });

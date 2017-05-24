@@ -44,6 +44,8 @@ namespace ts.server {
          * Enum compiler options will be converted to strings.
          */
         readonly compilerOptions: ts.CompilerOptions;
+        /** TypeScript version used by the server. */
+        readonly version: string;
     }
 
     export interface FileStats {
@@ -1027,6 +1029,7 @@ namespace ts.server {
             const data: ProjectInfoTelemetryEventData = {
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+                version: ts.version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
         }
