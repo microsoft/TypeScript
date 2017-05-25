@@ -1080,7 +1080,7 @@ var loggedIOJsPath = builtLocalDirectory + 'loggedIO.js';
 file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function () {
     var temp = builtLocalDirectory + 'temp';
     jake.mkdirP(temp);
-    var options = "--types --outdir " + temp + ' ' + loggedIOpath;
+    var options = "--target es5 --lib es6 --types --outdir " + temp + ' ' + loggedIOpath;
     var cmd = host + " " + LKGDirectory + compilerFilename + " " + options + " ";
     console.log(cmd + "\n");
     var ex = jake.createExec([cmd]);
@@ -1094,7 +1094,7 @@ file(loggedIOJsPath, [builtLocalDirectory, loggedIOpath], function () {
 
 var instrumenterPath = harnessDirectory + 'instrumenter.ts';
 var instrumenterJsPath = builtLocalDirectory + 'instrumenter.js';
-compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true);
+compileFile(instrumenterJsPath, [instrumenterPath], [tscFile, instrumenterPath].concat(libraryTargets), [], /*useBuiltCompiler*/ true, { lib: "es6", types: ["node"] });
 
 desc("Builds an instrumented tsc.js");
 task('tsc-instrumented', [loggedIOJsPath, instrumenterJsPath, tscFile], function () {
