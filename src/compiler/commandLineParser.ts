@@ -113,6 +113,7 @@ namespace ts {
                 name: "lib",
                 type: createMapFromTemplate({
                     // JavaScript only
+                    "es3": "lib.es3.d.ts",
                     "es5": "lib.es5.d.ts",
                     "es6": "lib.es2015.d.ts",
                     "es2015": "lib.es2015.d.ts",

@@ -156,6 +156,7 @@ const librarySourceMap = [
     { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
 
     // JavaScript library
+    { target: "lib.es3.d.ts", sources: ["header.d.ts", "es3.d.ts"] },
     { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
     { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
     { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
@@ -163,7 +164,8 @@ const librarySourceMap = [
     { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
 
     // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
+    { target: "lib.d.ts", sources: ["header.d.ts", "es3.d.ts"].concat(hostsLibrarySources) },
+    { target: "lib.es5.full.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
     { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
     { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
@@ -1035,7 +1037,7 @@ gulp.task("lint", "Runs tslint on the compiler sources. Optional arguments are: 
     const fileMatcher = cmdLineOptions["files"];
     const files = fileMatcher
         ? `src/**/${fileMatcher}`
-        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude src/lib/es5.d.ts --exclude 'src/lib/*.generated.d.ts'";
+        : "Gulpfile.ts 'scripts/tslint/*.ts' 'src/**/*.ts' --exclude 'src/lib/*.generated.d.ts'";
     const cmd = `node node_modules/tslint/bin/tslint ${files} --format stylish`;
     console.log("Linting: " + cmd);
     child_process.execSync(cmd, { stdio: [0, 1, 2] });
