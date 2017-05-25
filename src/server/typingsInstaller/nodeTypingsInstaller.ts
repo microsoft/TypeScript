@@ -84,10 +84,11 @@ namespace ts.server.typingsInstaller {
                 typingSafeListLocation ? toPath(typingSafeListLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typingSafeList.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
+            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
+                this.log.writeLine(`NPM location: ${npmLocation}`);
             }
-            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
             ({ execSync: this.execSync } = require("child_process"));
 
             this.ensurePackageDirectoryExists(globalTypingsCacheLocation);
