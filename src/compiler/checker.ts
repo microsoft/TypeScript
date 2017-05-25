@@ -8701,7 +8701,7 @@ namespace ts {
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
-            let dynamicDisableWeakTypeErrors = false;
+            let disableWeakTypeErrors = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -8981,33 +8981,32 @@ namespace ts {
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
-                const saveDynamicDisableWeakTypeErrors = dynamicDisableWeakTypeErrors;
-                dynamicDisableWeakTypeErrors = true;
+                const saveDisableWeakTypeErrors = disableWeakTypeErrors;
+                disableWeakTypeErrors = true;
                 for (const targetType of targetTypes) {
                     const related = isRelatedTo(source, targetType, reportErrors);
                     if (!related) {
-                        dynamicDisableWeakTypeErrors = saveDynamicDisableWeakTypeErrors;
+                        disableWeakTypeErrors = saveDisableWeakTypeErrors;
                         return Ternary.False;
                     }
                     result &= related;
                 }
-                dynamicDisableWeakTypeErrors = saveDynamicDisableWeakTypeErrors;
-                if (source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeak)) {
-                    let found = false;
-                    for (const property of getPropertiesOfType(source)) {
-                        if (isKnownProperty(target, property.name, /*isComparingJsxAttributes*/ false)) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        if (reportErrors) {
-                            reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
-                        }
-                        return Ternary.False;
-                    }
+                disableWeakTypeErrors = saveDisableWeakTypeErrors;
+                return reportAssignmentToWeakIntersection(source, target, reportErrors) ? Ternary.False : result;
+            }
+
+            function reportAssignmentToWeakIntersection(source: Type, target: IntersectionType, reportErrors: boolean) {
+                const needsWeakTypeCheck = source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeak);
+                if (!needsWeakTypeCheck) {
+                    return false;
                 }
-                return result;
+                const hasSharedProperty = forEach(
+                    getPropertiesOfType(source),
+                    p => isKnownProperty(target, p.name, /*isComparingJsxAttributes*/ false));
+                if (!hasSharedProperty && reportErrors) {
+                    reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
+                }
+                return !hasSharedProperty;
             }
 
             function someTypeRelatedToType(source: UnionOrIntersectionType, target: Type, reportErrors: boolean): Ternary {
@@ -9379,7 +9378,7 @@ namespace ts {
                         }
                     }
                 }
-                if (!foundMatchingProperty && !dynamicDisableWeakTypeErrors && source !== globalObjectType && getPropertiesOfType(source).length > 0)  {
+                if (!foundMatchingProperty && !disableWeakTypeErrors && source !== globalObjectType && getPropertiesOfType(source).length > 0)  {
                     if (reportErrors) {
                         reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
                     }
