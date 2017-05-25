@@ -15,7 +15,7 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({}));
+            et.assertProjectInfoTelemetryEvent({});
 
             et.service.closeClientFile(file.path);
             checkNumberOfProjects(et.service, { configuredProjects: 0 });
@@ -34,11 +34,11 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([...files, notIncludedFile, tsconfig]);
             et.service.openClientFile(files[0].path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+            et.assertProjectInfoTelemetryEvent({
                 fileStats: { ts: 2, tsx: 1, js: 1, jsx: 1, dts: 1 },
                 compilerOptions,
                 include: true,
-            }));
+            });
         });
 
         it("works with external project", () => {
@@ -51,14 +51,17 @@ namespace ts.projectSystem {
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+            et.assertProjectInfoTelemetryEvent({
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
+                extends: undefined,
                 files: undefined,
                 include: undefined,
                 exclude: undefined,
-            }));
+                configFileName: undefined,
+                projectType: "external",
+            });
 
             // Also test that opening an external project only sends an event once.
 
@@ -142,16 +145,17 @@ namespace ts.projectSystem {
             const et = new EventTracker([file, tsconfig]);
             et.service.openClientFile(file.path);
 
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+            et.assertProjectInfoTelemetryEvent({
                 compilerOptions: safeCompilerOptions,
                 files: true,
-            }));
+            });
         });
 
-        it("sends telemetry for files, include, exclude, and compileOnSave", () => {
+        it("sends telemetry for extends, files, include, exclude, and compileOnSave", () => {
             const file = makeFile("/hunter2/a.ts");
             const tsconfig = makeFile("/tsconfig.json", {
                 compilerOptions: {},
+                extends: "hunter2.json",
                 files: ["hunter2/a.ts"],
                 include: ["hunter2"],
                 exclude: ["hunter2"],
@@ -160,12 +164,13 @@ namespace ts.projectSystem {
 
             const et = new EventTracker([tsconfig, file]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+            et.assertProjectInfoTelemetryEvent({
+                extends: true,
                 files: true,
                 include: true,
                 exclude: true,
                 compileOnSave: true,
-            }));
+            });
         });
 
         it("sends telemetry for typeAcquisition settings", () => {
@@ -181,7 +186,7 @@ namespace ts.projectSystem {
             });
             const et = new EventTracker([jsconfig, file]);
             et.service.openClientFile(file.path);
-            assert.deepEqual(et.getProjectInfoTelemetryEvent(), makePayload({
+            et.assertProjectInfoTelemetryEvent({
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: {
                     // Apparently some options are added by default.
@@ -195,7 +200,8 @@ namespace ts.projectSystem {
                     include: true,
                     exclude: false,
                 },
-            }));
+                configFileName: "jsconfig.json",
+            });
         });
     });
 
@@ -217,6 +223,10 @@ namespace ts.projectSystem {
             return events;
         }
 
+        assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
+            assert.deepEqual(this.getProjectInfoTelemetryEvent(), makePayload(partial));
+        }
+
         getProjectInfoTelemetryEvent(): server.ProjectInfoTelemetryEventData {
             return this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent);
         }
@@ -234,6 +244,7 @@ namespace ts.projectSystem {
         return {
             fileStats: fileStats({ ts: 1 }),
             compilerOptions: {},
+            extends: false,
             files: false,
             include: false,
             exclude: false,
@@ -243,6 +254,8 @@ namespace ts.projectSystem {
                 exclude: false,
                 include: false,
             },
+            configFileName: "tsconfig.json",
+            projectType: "configured",
             version: ts.version,
             ...partial
         };
