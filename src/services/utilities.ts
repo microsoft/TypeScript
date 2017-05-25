@@ -37,14 +37,12 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.TypeLiteral:
+            case SyntaxKind.JSDocTypedefTag:
                 return SemanticMeaning.Type;
 
             case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
-
-            case SyntaxKind.EnumDeclaration:
-                return SemanticMeaning.All;
 
             case SyntaxKind.ModuleDeclaration:
                 if (isAmbientModule(<ModuleDeclaration>node)) {
@@ -57,6 +55,7 @@ namespace ts {
                     return SemanticMeaning.Namespace;
                 }
 
+            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.NamedImports:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
@@ -70,7 +69,7 @@ namespace ts {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
         }
 
-        return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+        return SemanticMeaning.All;
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
@@ -78,7 +77,7 @@ namespace ts {
             return SemanticMeaning.Value;
         }
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            return SemanticMeaning.All;
         }
         else if (isInRightSideOfImport(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);

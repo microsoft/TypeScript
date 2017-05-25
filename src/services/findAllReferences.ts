@@ -784,7 +784,8 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.options.findInComments || container.jsDoc !== undefined)) {
+        const fullStart = state.options.findInComments || container.jsDoc !== undefined || forEach(search.symbol.declarations, d => d.kind === ts.SyntaxKind.JSDocTypedefTag);
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, fullStart)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
