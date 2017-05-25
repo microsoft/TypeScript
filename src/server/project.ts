@@ -646,7 +646,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated: string[] = arrayFrom(updatedFileNames.keys());
+                const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
 
                 forEachKey(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
