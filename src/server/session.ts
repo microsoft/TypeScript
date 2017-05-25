@@ -474,7 +474,7 @@ namespace ts.server {
                 }
                 case ProjectInfoTelemetryEvent: {
                     const eventName: protocol.TelemetryEventName = "telemetry";
-                    this.event<protocol.TelemetryEventBody>({
+                    this.event(<protocol.TelemetryEventBody>{
                         telemetryEventName: event.eventName,
                         payload: event.data,
                     }, eventName);
