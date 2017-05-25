@@ -43,6 +43,16 @@ namespace ts {
                 });
         });
 
+        it("Ignore previous arguments ", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--lib", "es6", "0.ts", "-j", "true"],
+                {
+                    errors: [],
+                    fileNames: [],
+                    options: {}
+                });
+        });
+
         it("Parse multiple options of library flags ", () => {
             // --lib es5,es2015.symbol.wellknown 0.ts
             assertParseResult(["--lib", "es5,es2015.symbol.wellknown", "0.ts"],
