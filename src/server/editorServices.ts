@@ -58,8 +58,8 @@ namespace ts.server {
     export interface ProjectInfoTypeAcquisitionData {
         readonly enable: boolean;
         // Actual values of include/exclude entries are scrubbed.
-        readonly include: Array<"">;
-        readonly exclude: Array<"">;
+        readonly include: boolean;
+        readonly exclude: boolean;
     }
 
     export interface FileStats {
@@ -1055,11 +1055,11 @@ namespace ts.server {
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
 
             /** Need to blank out paths. */
-            function convertTypeAcquisition(ta: TypeAcquisition): ProjectInfoTypeAcquisitionData {
+            function convertTypeAcquisition({ enable, include, exclude }: TypeAcquisition): ProjectInfoTypeAcquisitionData {
                 return {
-                    enable: ta.enable,
-                    include: ta.include.map<"">(() => ""),
-                    exclude: ta.exclude.map<"">(() => ""),
+                    enable,
+                    include: include.length !== 0,
+                    exclude: exclude.length !== 0,
                 };
             }
         }

@@ -192,8 +192,8 @@ namespace ts.projectSystem {
                 },
                 typeAcquisition: {
                     enable: true,
-                    include: ["", ""],
-                    exclude: [],
+                    include: true,
+                    exclude: false,
                 },
             }));
         });
@@ -240,8 +240,8 @@ namespace ts.projectSystem {
             compileOnSave: false,
             typeAcquisition: {
                 enable: false,
-                exclude: [],
-                include: [],
+                exclude: false,
+                include: false,
             },
             version: ts.version,
             ...partial
