@@ -892,6 +892,8 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
+    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference;
+
     export interface TypeReferenceNode extends TypeNode {
         kind: SyntaxKind.TypeReference;
         typeName: EntityName;
