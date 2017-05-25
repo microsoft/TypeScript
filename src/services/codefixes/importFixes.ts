@@ -147,7 +147,7 @@ namespace ts.codefix {
             }
             else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
-                symbol = checker.getAliasedSymbol(checker.getJsxNamespaceSymbol(token));
+                symbol = checker.getAliasedSymbol(checker.resolveJsxNamespaceAtLocation(token));
                 symbolName = symbol.name;
             }
             else {

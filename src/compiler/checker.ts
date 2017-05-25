@@ -210,9 +210,9 @@ namespace ts {
             getSuggestionForNonexistentProperty,
             getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
-            getJsxNamespaceSymbol: node => {
+            resolveJsxNamespaceAtLocation: node => {
                 node = getParseTreeNode(node);
-                return getJsxNamespaceSymbol(node, /*diagnostics*/ false);
+                return resolveJsxNamespaceAtLocation(node, /*diagnostics*/ false);
             },
         };
 
@@ -14106,7 +14106,7 @@ namespace ts {
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const reactSym = getJsxNamespaceSymbol(node.tagName, /*diagnostics*/ true);
+            const reactSym = resolveJsxNamespaceAtLocation(node.tagName, /*diagnostics*/ true);
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
@@ -14121,7 +14121,7 @@ namespace ts {
             checkJsxAttributesAssignableToTagNameAttributes(node);
         }
 
-        function getJsxNamespaceSymbol(location: ts.Node, diagnostics: boolean): Symbol {
+        function resolveJsxNamespaceAtLocation(location: ts.Node, diagnostics: boolean): Symbol {
             const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();
             return resolveName(location, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
