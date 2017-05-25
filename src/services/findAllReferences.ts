@@ -650,10 +650,12 @@ namespace ts.FindAllReferences.Core {
 
         // If this is private property or method, the scope is the containing class
         if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-            const privateDeclaration = find(declarations, d => !!(getModifierFlags(d) & ModifierFlags.Private));
+            const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private));
             if (privateDeclaration) {
                 return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
             }
+            // Else this is a public property and could be accessed from anywhere.
+            return undefined;
         }
 
         // If symbol is of object binding pattern element without property name we would want to
@@ -666,11 +668,6 @@ namespace ts.FindAllReferences.Core {
         // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
         // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
         if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
-            return undefined;
-        }
-
-        // If this is a synthetic property, it's a property and must be searched for globally.
-        if ((flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.Synthetic)) {
             return undefined;
         }
 
