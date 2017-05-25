@@ -2,6 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "es5",
+    "lib": ["es3", "es5"],
     "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

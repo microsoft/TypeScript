@@ -161,8 +161,8 @@ class ProjectRunner extends RunnerBase {
 
             function getSourceFile(fileName: string, languageVersion: ts.ScriptTarget): ts.SourceFile {
                 let sourceFile: ts.SourceFile = undefined;
-                if (fileName === Harness.Compiler.defaultLibFileName) {
-                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(Harness.Compiler.getDefaultLibFileName(compilerOptions));
+                if (Harness.isDefaultLibraryFile(fileName)) {
+                    sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
                 }
                 else {
                     const text = getSourceFileText(fileName);
@@ -177,7 +177,7 @@ class ProjectRunner extends RunnerBase {
             function createCompilerHost(): ts.CompilerHost {
                 return {
                     getSourceFile,
-                    getDefaultLibFileName: () => Harness.Compiler.defaultLibFileName,
+                    getDefaultLibFileName: options => Harness.Compiler.getDefaultLibFileName(options),
                     writeFile,
                     getCurrentDirectory,
                     getCanonicalFileName: Harness.Compiler.getCanonicalFileName,
