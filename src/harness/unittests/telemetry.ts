@@ -59,7 +59,7 @@ namespace ts.projectSystem {
                 files: undefined,
                 include: undefined,
                 exclude: undefined,
-                configFileName: undefined,
+                configFileName: "other",
                 projectType: "external",
             });
 

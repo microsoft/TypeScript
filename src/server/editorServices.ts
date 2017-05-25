@@ -53,8 +53,7 @@ namespace ts.server {
         readonly compileOnSave: boolean;
         readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
 
-        /** Is 'undefined' if config file name is not tsconfig or jsconfig. */
-        readonly configFileName: "tsconfig.json" | "jsconfig.json" | undefined;
+        readonly configFileName: "tsconfig.json" | "jsconfig.json" | "other";
         readonly projectType: "external" | "configured";
         /** TypeScript version used by the server. */
         readonly version: string;
@@ -1065,12 +1064,12 @@ namespace ts.server {
 
             function configFileName(): ProjectInfoTelemetryEventData["configFileName"] {
                 if (!(project instanceof server.ConfiguredProject)) {
-                    return undefined;
+                    return "other";
                 }
 
                 const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
                 const base = ts.getBaseFileName(configFilePath);
-                return base === "tsconfig.json" || base === "jsconfig.json" ? base : undefined;
+                return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
             }
 
             function convertTypeAcquisition({ enable, include, exclude }: TypeAcquisition): ProjectInfoTypeAcquisitionData {
