@@ -1,4 +1,5 @@
 // @allowUnreachableCode: true
+// @lib: es5
 
 var ANY: any;
 var BOOLEAN: boolean;

@@ -1,3 +1,4 @@
+// @lib: es5
 // Repro from #14896
 
 type Attributes<Keys extends string> = {

@@ -1,4 +1,5 @@
 // @declaration: true
+// @lib: es5
 /*
 var n: number[];
 

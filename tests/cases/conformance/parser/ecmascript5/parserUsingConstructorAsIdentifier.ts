@@ -1,3 +1,4 @@
+// @lib: es5
         function define(constructor, instanceMembers, staticMembers) {
             constructor = constructor || function () { };
             PluginUtilities.Utilities.markSupportedForProcessing(constructor);

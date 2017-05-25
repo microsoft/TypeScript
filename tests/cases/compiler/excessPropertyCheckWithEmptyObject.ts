@@ -1,3 +1,4 @@
+// @lib: es5
 // Repro from #14910
 
 // Excess property error expected here

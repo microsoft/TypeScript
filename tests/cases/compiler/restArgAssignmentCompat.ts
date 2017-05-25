@@ -1,3 +1,4 @@
+// @lib: es5
 function f(...x: number[]) {
     x.forEach((n, i) => void ('item ' + i + ' = ' + n));
 }

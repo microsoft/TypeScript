@@ -1,3 +1,4 @@
+// @lib: es5
 function foo(callback: (x: string) => void) {
     callback("hello");   
 }

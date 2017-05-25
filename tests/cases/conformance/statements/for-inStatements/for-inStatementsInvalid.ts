@@ -1,3 +1,4 @@
+// @lib: es5
 var aNumber: number;
 for (aNumber in {}) { }
 

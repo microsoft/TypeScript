@@ -1,3 +1,4 @@
+// @lib: es5
 class Bar {
     constructor(public foo: string) { }
 }

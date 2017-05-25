@@ -1,3 +1,4 @@
+// @lib: es5
 function identity<A>(a: A): A {
     return a;
 }

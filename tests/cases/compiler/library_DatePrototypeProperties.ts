@@ -1,3 +1,4 @@
+// @lib: es5
 // Properties of the Date prototype object as per ES5 spec
 // http://www.ecma-international.org/ecma-262/5.1/#sec-15.9.5
 Date.prototype.constructor;

@@ -1,3 +1,4 @@
+// @target: es5
 // target: es5
 type MyType = {
     arguments: Array<string>

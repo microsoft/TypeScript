@@ -1,3 +1,4 @@
+// @lib: es5
 var foo = [
     { name: 'bar' },
     { name: null },

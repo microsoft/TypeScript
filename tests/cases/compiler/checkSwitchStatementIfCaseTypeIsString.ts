@@ -1,3 +1,4 @@
+// @lib: es5
 declare function use(a: any): void;
 
 class A {

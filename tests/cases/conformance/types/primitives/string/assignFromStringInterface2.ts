@@ -1,3 +1,4 @@
+// @lib: es5
 interface String {
     doStuff(): string;
 }

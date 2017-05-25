@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @lib: es5
 
 declare var union: null | { a: number, b: string };
 

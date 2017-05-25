@@ -1,4 +1,5 @@
 //@jsx: preserve
+// @lib: es5
 
 declare module JSX {
 	interface Element { }

@@ -1,3 +1,4 @@
+// @lib: es5
 module M {
  export class C {
    public n = 42;

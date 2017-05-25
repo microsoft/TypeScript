@@ -1,3 +1,4 @@
+// @lib: es5
 interface Array<T> {
     reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T,
         initialValue?: T): T;

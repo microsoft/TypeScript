@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @lib: es5
 
 var value = null;
 JSON.stringify(value, undefined, 2);

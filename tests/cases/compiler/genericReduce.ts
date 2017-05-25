@@ -1,3 +1,4 @@
+// @lib: es5
 var a = ["An", "array", "of", "strings"];
 var b = a.map(s => s.length);
 var n1 = b.reduce((x, y) => x + y);

@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @lib: es5
 
 // Repro from #10041
 

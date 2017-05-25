@@ -1,5 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
+// @lib: es5
 
 type Item = { a: string, b: number, c: boolean };
 
