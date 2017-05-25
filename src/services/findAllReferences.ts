@@ -386,7 +386,7 @@ namespace ts.FindAllReferences.Core {
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations);
 
         const result: SymbolAndEntries[] = [];
-        const state = new State(sourceFiles, node, checker, cancellationToken, searchMeaning, options, result);
+        const state = new State(sourceFiles, /*isForConstructor*/ node.kind === SyntaxKind.ConstructorKeyword, checker, cancellationToken, searchMeaning, options, result);
         const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
         // Try to get the smallest valid scope that we can limit our search to;
@@ -447,17 +447,8 @@ namespace ts.FindAllReferences.Core {
      * Unlike `Search`, there is only one `State`.
      */
     class State {
-        /** True if we're searching for constructor references. */
-        readonly isForConstructor: boolean;
-
         /** Cache for `explicitlyinheritsFrom`. */
         readonly inheritsFromCache = createMap<boolean>();
-
-        private readonly symbolIdToReferences: Entry[][] = [];
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
-
-        private importTracker: ImportTracker | undefined;
 
         /**
          * Type nodes can contain multiple references to the same type. For example:
@@ -466,7 +457,7 @@ namespace ts.FindAllReferences.Core {
          * duplicate entries would be returned here as each of the type references is part of
          * the same implementation. For that reason, check before we add a new entry.
          */
-        readonly markSeenContainingTypeReference: (containingTypeReference: Node) => boolean;
+        readonly markSeenContainingTypeReference = nodeSeenTracker();
 
         /**
          * It's possible that we will encounter the right side of `export { foo as bar } from "x";` more than once.
@@ -479,36 +470,23 @@ namespace ts.FindAllReferences.Core {
          * But another reference to it may appear in the same source file.
          * See `tests/cases/fourslash/transitiveExportImports3.ts`.
          */
-        readonly markSeenReExportRHS: (rhs: Identifier) => boolean;
-
-        readonly findInStrings?: boolean;
-        readonly findInComments?: boolean;
-        readonly isForRename?: boolean;
-        readonly implementations?: boolean;
+        readonly markSeenReExportRHS = nodeSeenTracker();
 
         constructor(
             readonly sourceFiles: SourceFile[],
-            originalLocation: Node,
+            /** True if we're searching for constructor references. */
+            readonly isForConstructor: boolean,
             readonly checker: TypeChecker,
             readonly cancellationToken: CancellationToken,
             readonly searchMeaning: SemanticMeaning,
-            options: Options,
-            private readonly result: Push<SymbolAndEntries>) {
+            readonly options: Options,
+            private readonly result: Push<SymbolAndEntries>) {}
 
-            this.findInStrings = options.findInStrings;
-            this.findInComments = options.findInComments;
-            this.isForRename = options.isForRename;
-            this.implementations = options.implementations;
-
-            this.isForConstructor = originalLocation.kind === SyntaxKind.ConstructorKeyword;
-            this.markSeenContainingTypeReference = nodeSeenTracker();
-            this.markSeenReExportRHS = nodeSeenTracker();
-        }
-
+        private importTracker: ImportTracker | undefined;
         /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
         getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
             if (!this.importTracker) this.importTracker = createImportTracker(this.sourceFiles, this.checker, this.cancellationToken);
-            return this.importTracker(exportSymbol, exportInfo, this.isForRename);
+            return this.importTracker(exportSymbol, exportInfo, this.options.isForRename);
         }
 
         /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
@@ -516,7 +494,7 @@ namespace ts.FindAllReferences.Core {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
-            const parents = this.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
+            const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return { location, symbol, comingFrom, text, escapedText, parents, includes };
 
             function includes(referenceSymbol: Symbol): boolean {
@@ -524,6 +502,7 @@ namespace ts.FindAllReferences.Core {
             }
         }
 
+        private readonly symbolIdToReferences: Entry[][] = [];
         /**
          * Callback to add references for a particular searched symbol.
          * This initializes a reference group, so only call this if you will add at least one reference.
@@ -546,6 +525,8 @@ namespace ts.FindAllReferences.Core {
             });
         }
 
+        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
         /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
         markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
@@ -580,7 +561,7 @@ namespace ts.FindAllReferences.Core {
                     break;
                 case ExportKind.Default:
                     // Search for a property access to '.default'. This can't be renamed.
-                    indirectSearch = state.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
+                    indirectSearch = state.options.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
                     break;
                 case ExportKind.ExportEquals:
                     break;
@@ -806,7 +787,7 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.findInComments || container.jsDoc !== undefined)) {
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.options.findInComments || container.jsDoc !== undefined)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
@@ -818,7 +799,7 @@ namespace ts.FindAllReferences.Core {
             // This wasn't the start of a token.  Check to see if it might be a
             // match in a comment or string if that's what the caller is asking
             // for.
-            if (!state.implementations && (state.findInStrings && isInString(sourceFile, position) || state.findInComments && isInNonReferenceComment(sourceFile, position))) {
+            if (!state.options.implementations && (state.options.findInStrings && isInString(sourceFile, position) || state.options.findInComments && isInNonReferenceComment(sourceFile, position))) {
                 // In the case where we're looking inside comments/strings, we don't have
                 // an actual definition.  So just use 'undefined' here.  Features like
                 // 'Rename' won't care (as they ignore the definitions), and features like
@@ -884,7 +865,7 @@ namespace ts.FindAllReferences.Core {
                 addRef();
             }
 
-            if (!state.isForRename && state.markSeenReExportRHS(name)) {
+            if (!state.options.isForRename && state.markSeenReExportRHS(name)) {
                 addReference(name, referenceSymbol, name, state);
             }
         }
@@ -895,7 +876,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
-        if (!(referenceLocation === propertyName && state.isForRename)) {
+        if (!(referenceLocation === propertyName && state.options.isForRename)) {
             const exportKind = (referenceLocation as Identifier).originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
@@ -937,7 +918,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!state.isForRename || importOrExport.isNamedImport) {
+            if (!state.options.isForRename || importOrExport.isNamedImport) {
                 searchForImportedSymbol(symbol, state);
             }
         }
@@ -963,7 +944,7 @@ namespace ts.FindAllReferences.Core {
 
     function addReference(referenceLocation: Node, relatedSymbol: Symbol, searchLocation: Node, state: State): void {
         const addRef = state.referenceAdder(relatedSymbol, searchLocation);
-        if (state.implementations) {
+        if (state.options.implementations) {
             addImplementationReferences(referenceLocation, addRef, state);
         }
         else {
