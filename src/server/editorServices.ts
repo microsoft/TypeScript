@@ -55,6 +55,7 @@ namespace ts.server {
 
         readonly configFileName: "tsconfig.json" | "jsconfig.json" | "other";
         readonly projectType: "external" | "configured";
+        readonly languageServiceEnabled: boolean;
         /** TypeScript version used by the server. */
         readonly version: string;
     }
@@ -1058,6 +1059,7 @@ namespace ts.server {
                 compileOnSave: project.compileOnSaveEnabled,
                 configFileName: configFileName(),
                 projectType: project instanceof server.ExternalProject ? "external" : "configured",
+                languageServiceEnabled: project.languageServiceEnabled,
                 version: ts.version,
             };
             this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });

@@ -173,6 +173,14 @@ namespace ts.projectSystem {
             });
         });
 
+        const autoJsCompilerOptions = {
+            // Apparently some options are added by default.
+            allowJs: true,
+            allowSyntheticDefaultImports: true,
+            maxNodeModuleJsDepth: 2,
+            skipLibCheck: true,
+        };
+
         it("sends telemetry for typeAcquisition settings", () => {
             const file = makeFile("/a.js");
             const jsconfig = makeFile("/jsconfig.json", {
@@ -188,13 +196,7 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
                 fileStats: fileStats({ js: 1 }),
-                compilerOptions: {
-                    // Apparently some options are added by default.
-                    allowJs: true,
-                    allowSyntheticDefaultImports: true,
-                    maxNodeModuleJsDepth: 2,
-                    skipLibCheck: true,
-                },
+                compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
                     enable: true,
                     include: true,
@@ -203,14 +205,36 @@ namespace ts.projectSystem {
                 configFileName: "jsconfig.json",
             });
         });
+
+        it("detects whether language service was disabled", () => {
+            const file = makeFile("/a.js");
+            const tsconfig = makeFile("/jsconfig.json", {});
+            const et = new EventTracker([tsconfig, file]);
+            et.host.getFileSize = () => server.maxProgramSizeForNonTsFiles + 1;
+            et.service.openClientFile(file.path);
+            et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent, /*mayBeMore*/ true);
+            et.assertProjectInfoTelemetryEvent({
+                fileStats: fileStats({ js: 1 }),
+                compilerOptions: autoJsCompilerOptions,
+                configFileName: "jsconfig.json",
+                typeAcquisition: {
+                    enable: true,
+                    include: false,
+                    exclude: false,
+                },
+                languageServiceEnabled: false,
+            });
+        });
     });
 
     class EventTracker {
         private events: server.ProjectServiceEvent[] = [];
         readonly service: TestProjectService;
+        readonly host: projectSystem.TestServerHost;
 
         constructor(files: projectSystem.FileOrFolder[]) {
-            this.service = createProjectService(createServerHost(files), {
+            this.host = createServerHost(files);
+            this.service = createProjectService(this.host, {
                 eventHandler: event => {
                     this.events.push(event);
                 },
@@ -224,17 +248,12 @@ namespace ts.projectSystem {
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
-            assert.deepEqual(this.getProjectInfoTelemetryEvent(), makePayload(partial));
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), makePayload(partial));
         }
 
-        getProjectInfoTelemetryEvent(): server.ProjectInfoTelemetryEventData {
-            return this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent);
-        }
-
-        private getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"]): T["data"] {
-            const events = this.getEvents();
-            assert.equal(events.length, 1);
-            const event = events[0];
+        getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"], mayBeMore = false): T["data"] {
+            if (mayBeMore) assert(this.events.length !== 0); else assert.equal(this.events.length, 1);
+            const event = this.events.shift();
             assert.equal(event.eventName, eventName);
             return event.data;
         }
@@ -256,6 +275,7 @@ namespace ts.projectSystem {
             },
             configFileName: "tsconfig.json",
             projectType: "configured",
+            languageServiceEnabled: true,
             version: ts.version,
             ...partial
         };
