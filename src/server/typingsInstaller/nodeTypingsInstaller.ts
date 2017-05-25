@@ -87,7 +87,7 @@ namespace ts.server.typingsInstaller {
             this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
             if (this.log.isEnabled()) {
                 this.log.writeLine(`Process id: ${process.pid}`);
-                this.log.writeLine(`NPM location: ${npmLocation}`);
+                this.log.writeLine(`NPM location: ${this.npmPath} (explicit '${Arguments.NpmLocation}' ${npmLocation === undefined ? "not " : ""} provided)`);
             }
             ({ execSync: this.execSync } = require("child_process"));
 
