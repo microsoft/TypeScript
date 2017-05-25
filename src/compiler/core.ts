@@ -521,6 +521,18 @@ namespace ts {
         return result || array;
     }
 
+    export function mapDefined<T>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => T | undefined): ReadonlyArray<T> {
+        const result: T[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const item = array[i];
+            const mapped = mapFn(item, i);
+            if (mapped !== undefined) {
+                result.push(mapped);
+            }
+        }
+        return result;
+    }
+
     /**
      * Computes the first matching span of elements and returns a tuple of the first span
      * and the remaining elements.
