@@ -386,7 +386,7 @@ namespace ts.FindAllReferences.Core {
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations);
 
         const result: SymbolAndEntries[] = [];
-        const state = createState(sourceFiles, node, checker, cancellationToken, searchMeaning, options, result);
+        const state = new State(sourceFiles, node, checker, cancellationToken, searchMeaning, options, result);
         const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
         // Try to get the smallest valid scope that we can limit our search to;
@@ -446,35 +446,18 @@ namespace ts.FindAllReferences.Core {
      * Holds all state needed for the finding references.
      * Unlike `Search`, there is only one `State`.
      */
-    interface State extends Options {
+    class State {
         /** True if we're searching for constructor references. */
         readonly isForConstructor: boolean;
 
-        readonly sourceFiles: SourceFile[];
-        readonly checker: TypeChecker;
-        readonly cancellationToken: CancellationToken;
-        readonly searchMeaning: SemanticMeaning;
-
         /** Cache for `explicitlyinheritsFrom`. */
-        readonly inheritsFromCache: Map<boolean>;
+        readonly inheritsFromCache = createMap<boolean>();
 
-        /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
-        getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult;
+        private readonly symbolIdToReferences: Entry[][] = [];
+        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
 
-        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
-        createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions?: { text?: string, allSearchSymbols?: Symbol[] }): Search;
-
-        /**
-         * Callback to add references for a particular searched symbol.
-         * This initializes a reference group, so only call this if you will add at least one reference.
-         */
-        referenceAdder(searchSymbol: Symbol, searchLocation: Node): (node: Node) => void;
-
-        /** Add a reference with no associated definition. */
-        addStringOrCommentReference(fileName: string, textSpan: TextSpan): void;
-
-        /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
-        markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean;
+        private importTracker: ImportTracker | undefined;
 
         /**
          * Type nodes can contain multiple references to the same type. For example:
@@ -483,7 +466,7 @@ namespace ts.FindAllReferences.Core {
          * duplicate entries would be returned here as each of the type references is part of
          * the same implementation. For that reason, check before we add a new entry.
          */
-        markSeenContainingTypeReference(containingTypeReference: Node): boolean;
+        readonly markSeenContainingTypeReference: (containingTypeReference: Node) => boolean;
 
         /**
          * It's possible that we will encounter the right side of `export { foo as bar } from "x";` more than once.
@@ -496,33 +479,44 @@ namespace ts.FindAllReferences.Core {
          * But another reference to it may appear in the same source file.
          * See `tests/cases/fourslash/transitiveExportImports3.ts`.
          */
-        markSeenReExportRHS(rhs: Identifier): boolean;
-    }
+        readonly markSeenReExportRHS: (rhs: Identifier) => boolean;
 
-    function createState(sourceFiles: SourceFile[], originalLocation: Node, checker: TypeChecker, cancellationToken: CancellationToken, searchMeaning: SemanticMeaning, options: Options, result: Push<SymbolAndEntries>): State {
-        const symbolIdToReferences: Entry[][] = [];
-        const inheritsFromCache = createMap<boolean>();
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        const sourceFileToSeenSymbols: Array<Array<true>> = [];
-        const isForConstructor = originalLocation.kind === SyntaxKind.ConstructorKeyword;
-        let importTracker: ImportTracker | undefined;
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly isForRename?: boolean;
+        readonly implementations?: boolean;
 
-        return {
-            ...options,
-            sourceFiles, isForConstructor, checker, cancellationToken, searchMeaning, inheritsFromCache, getImportSearches, createSearch, referenceAdder, addStringOrCommentReference,
-            markSearchedSymbol, markSeenContainingTypeReference: nodeSeenTracker(), markSeenReExportRHS: nodeSeenTracker(),
-        };
+        constructor(
+            readonly sourceFiles: SourceFile[],
+            originalLocation: Node,
+            readonly checker: TypeChecker,
+            readonly cancellationToken: CancellationToken,
+            readonly searchMeaning: SemanticMeaning,
+            options: Options,
+            private readonly result: Push<SymbolAndEntries>) {
 
-        function getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
-            if (!importTracker) importTracker = createImportTracker(sourceFiles, checker, cancellationToken);
-            return importTracker(exportSymbol, exportInfo, options.isForRename);
+            this.findInStrings = options.findInStrings;
+            this.findInComments = options.findInComments;
+            this.isForRename = options.isForRename;
+            this.implementations = options.implementations;
+
+            this.isForConstructor = originalLocation.kind === SyntaxKind.ConstructorKeyword;
+            this.markSeenContainingTypeReference = nodeSeenTracker();
+            this.markSeenReExportRHS = nodeSeenTracker();
         }
 
-        function createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
+        /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
+        getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
+            if (!this.importTracker) this.importTracker = createImportTracker(this.sourceFiles, this.checker, this.cancellationToken);
+            return this.importTracker(exportSymbol, exportInfo, this.isForRename);
+        }
+
+        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
+        createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            const { text = stripQuotes(getDeclaredName(checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
+            const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
-            const parents = options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, checker);
+            const parents = this.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return { location, symbol, comingFrom, text, escapedText, parents, includes };
 
             function includes(referenceSymbol: Symbol): boolean {
@@ -530,27 +524,33 @@ namespace ts.FindAllReferences.Core {
             }
         }
 
-        function referenceAdder(referenceSymbol: Symbol, searchLocation: Node): (node: Node) => void {
-            const symbolId = getSymbolId(referenceSymbol);
-            let references = symbolIdToReferences[symbolId];
+        /**
+         * Callback to add references for a particular searched symbol.
+         * This initializes a reference group, so only call this if you will add at least one reference.
+         */
+        referenceAdder(searchSymbol: Symbol, searchLocation: Node): (node: Node) => void {
+            const symbolId = getSymbolId(searchSymbol);
+            let references = this.symbolIdToReferences[symbolId];
             if (!references) {
-                references = symbolIdToReferences[symbolId] = [];
-                result.push({ definition: { type: "symbol", symbol: referenceSymbol, node: searchLocation }, references });
+                references = this.symbolIdToReferences[symbolId] = [];
+                this.result.push({ definition: { type: "symbol", symbol: searchSymbol, node: searchLocation }, references });
             }
             return node => references.push(nodeEntry(node));
         }
 
-        function addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
-            result.push({
+        /** Add a reference with no associated definition. */
+        addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
+            this.result.push({
                 definition: undefined,
                 references: [{ type: "span", fileName, textSpan }]
             });
         }
 
-        function markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
+        /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
+        markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
             const symbolId = getSymbolId(symbol);
-            const seenSymbols = sourceFileToSeenSymbols[sourceId] || (sourceFileToSeenSymbols[sourceId] = []);
+            const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = []);
             return !seenSymbols[symbolId] && (seenSymbols[symbolId] = true);
         }
     }
