@@ -70,7 +70,7 @@ namespace ts.server.typingsInstaller {
 
     type ExecSync = (command: string, options: { cwd: string, stdio?: "ignore" }) => any;
 
-    class NodeTypingsInstaller extends TypingsInstaller {
+    export class NodeTypingsInstaller extends TypingsInstaller {
         private readonly execSync: ExecSync;
         private readonly npmPath: string;
         readonly typesRegistry: Map<void>;

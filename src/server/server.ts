@@ -220,7 +220,7 @@ namespace ts.server {
         }
     }
 
-    export class NodeTypingsInstaller implements ITypingsInstaller {
+    class NodeTypingsInstaller implements ITypingsInstaller {
         private installer: NodeChildProcess;
         private installerPidReported = false;
         private socket: NodeSocket;
