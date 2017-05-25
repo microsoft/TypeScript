@@ -144,7 +144,8 @@ namespace ts.codefix {
             if (umdSymbol.flags & ts.SymbolFlags.Alias) {
                 symbol = checker.getAliasedSymbol(umdSymbol);
                 symbolName = name;
-            } else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
+            }
+            else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
                 // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
                 symbol = checker.getAliasedSymbol(checker.getJsxNamespaceSymbol(token));
                 symbolName = symbol.name;

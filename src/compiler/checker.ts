@@ -5844,7 +5844,8 @@ namespace ts {
                     }
                 }
                 return arrayFrom(props.values());
-            } else {
+            }
+            else {
                 return getPropertiesOfType(type);
             }
         }
