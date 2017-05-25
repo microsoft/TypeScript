@@ -192,7 +192,7 @@ namespace Harness.LanguageService {
             return [];
         }
         getCurrentDirectory(): string { return virtualFileSystemRoot; }
-        getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
+        getDefaultLibFileName(options: ts.CompilerOptions): string { return Harness.Compiler.getDefaultLibFileName(options); }
         getScriptFileNames(): string[] { return this.getFilenames(); }
         getScriptSnapshot(fileName: string): ts.IScriptSnapshot {
             const script = this.getScriptInfo(fileName);
@@ -302,7 +302,7 @@ namespace Harness.LanguageService {
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
         getDirectories(path: string): string { return JSON.stringify(this.nativeHost.getDirectories(path)); }
-        getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
+        getDefaultLibFileName(options: string): string { return this.nativeHost.getDefaultLibFileName(JSON.parse(options)); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
             const nativeScriptSnapshot = this.nativeHost.getScriptSnapshot(fileName);

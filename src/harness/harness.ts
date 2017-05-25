@@ -836,7 +836,7 @@ namespace Harness {
 
         // Cache of lib files from "built/local"
         const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es3.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
         // Cache of lib files from  "tests/lib/"
@@ -863,6 +863,8 @@ namespace Harness {
                     return "lib.es2016.d.ts";
                 case ts.ScriptTarget.ES2015:
                     return es2015DefaultLibFileName;
+                case ts.ScriptTarget.ES5:
+                    return "lib.es5.d.ts";
 
                 default:
                     return defaultLibFileName;
