@@ -13,6 +13,7 @@ namespace ts.server {
     export const ContextEvent = "context";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+    export const ProjectInfoTelemetryEvent = "projectInfo";
 
     export interface ContextEvent {
         eventName: typeof ContextEvent;
@@ -29,7 +30,52 @@ namespace ts.server {
         data: { project: Project, languageServiceEnabled: boolean };
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent;
+    /** This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler. */
+    export interface ProjectInfoTelemetryEvent {
+        readonly eventName: typeof ProjectInfoTelemetryEvent;
+        readonly data: ProjectInfoTelemetryEventData;
+    }
+
+    export interface ProjectInfoTelemetryEventData {
+        /** Count of file extensions seen in the project. */
+        readonly fileStats: FileStats;
+        /**
+         * Any compiler options that might contain paths will be taken out.
+         * Enum compiler options will be converted to strings.
+         */
+        readonly compilerOptions: ts.CompilerOptions;
+        // "extends", "files", "include", or "exclude" will be undefined if an external config is used.
+        // Otherwise, we will use "true" if the property is present and "false" if it is missing.
+        readonly extends: boolean | undefined;
+        readonly files: boolean | undefined;
+        readonly include: boolean | undefined;
+        readonly exclude: boolean | undefined;
+        readonly compileOnSave: boolean;
+        readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
+
+        readonly configFileName: "tsconfig.json" | "jsconfig.json" | "other";
+        readonly projectType: "external" | "configured";
+        readonly languageServiceEnabled: boolean;
+        /** TypeScript version used by the server. */
+        readonly version: string;
+    }
+
+    export interface ProjectInfoTypeAcquisitionData {
+        readonly enable: boolean;
+        // Actual values of include/exclude entries are scrubbed.
+        readonly include: boolean;
+        readonly exclude: boolean;
+    }
+
+    export interface FileStats {
+        readonly js: number;
+        readonly jsx: number;
+        readonly ts: number;
+        readonly tsx: number;
+        readonly dts: number;
+    }
+
+    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -344,6 +390,9 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+
+        /** Tracks projects that we have already sent telemetry for. */
+        private readonly seenProjects = createMap<true>();
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -934,7 +983,10 @@ namespace ts.server {
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasFilesProperty: config["files"] !== undefined,
+                configHasExtendsProperty: config.extends !== undefined,
+                configHasFilesProperty: config.files !== undefined,
+                configHasIncludeProperty: config.include !== undefined,
+                configHasExcludeProperty: config.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
@@ -984,7 +1036,51 @@ namespace ts.server {
 
             this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
+            this.sendProjectTelemetry(project.externalProjectName, project);
             return project;
+        }
+
+        private sendProjectTelemetry(projectKey: string, project: server.ExternalProject | server.ConfiguredProject, projectOptions?: ProjectOptions): void {
+            if (this.seenProjects.has(projectKey)) {
+                return;
+            }
+            this.seenProjects.set(projectKey, true);
+
+            if (!this.eventHandler) return;
+
+            const data: ProjectInfoTelemetryEventData = {
+                fileStats: countEachFileTypes(project.getScriptInfos()),
+                compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+                typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
+                extends: projectOptions && projectOptions.configHasExtendsProperty,
+                files: projectOptions && projectOptions.configHasFilesProperty,
+                include: projectOptions && projectOptions.configHasIncludeProperty,
+                exclude: projectOptions && projectOptions.configHasExcludeProperty,
+                compileOnSave: project.compileOnSaveEnabled,
+                configFileName: configFileName(),
+                projectType: project instanceof server.ExternalProject ? "external" : "configured",
+                languageServiceEnabled: project.languageServiceEnabled,
+                version: ts.version,
+            };
+            this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
+
+            function configFileName(): ProjectInfoTelemetryEventData["configFileName"] {
+                if (!(project instanceof server.ConfiguredProject)) {
+                    return "other";
+                }
+
+                const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
+                const base = ts.getBaseFileName(configFilePath);
+                return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
+            }
+
+            function convertTypeAcquisition({ enable, include, exclude }: TypeAcquisition): ProjectInfoTypeAcquisitionData {
+                return {
+                    enable,
+                    include: include !== undefined && include.length !== 0,
+                    exclude: exclude !== undefined && exclude.length !== 0,
+                };
+            }
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
@@ -1020,6 +1116,7 @@ namespace ts.server {
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
+            this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
         }
 
@@ -1052,7 +1149,7 @@ namespace ts.server {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
             const projectOptions: ProjectOptions = conversionResult.success
                 ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {}, typeAcquisition: { enable: false } };
+                : { files: [], compilerOptions: {}, configHasExtendsProperty: false, configHasFilesProperty: false, configHasIncludeProperty: false, configHasExcludeProperty: false, typeAcquisition: { enable: false } };
             const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
             return {
                 success: conversionResult.success,

@@ -129,6 +129,7 @@ var harnessSources = harnessCoreSources.concat([
     "initializeTSConfig.ts",
     "printer.ts",
     "textChanges.ts",
+    "telemetry.ts",
     "transform.ts",
     "customTransforms.ts",
 ].map(function (f) {
