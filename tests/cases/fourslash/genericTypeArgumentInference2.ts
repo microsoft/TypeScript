@@ -18,8 +18,8 @@
 ////var /*4*/r4 = _./*41*/all([<any>true], _.identity);
 
 verify.quickInfos({
-    1: "var r: string | number | boolean",
-    11: "(method) Underscore.Static.all<string | number | boolean>(list: (string | number | boolean)[], iterator?: Underscore.Iterator<string | number | boolean, boolean>, context?: any): string | number | boolean",
+    1: "var r: T",
+    11: "(method) Underscore.Static.all<T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any): T",
 
     2: "var r2: boolean",
     21: "(method) Underscore.Static.all<boolean>(list: boolean[], iterator?: Underscore.Iterator<boolean, boolean>, context?: any): boolean",
@@ -30,4 +30,4 @@ verify.quickInfos({
     4: "var r4: any",
     41: "(method) Underscore.Static.all<any>(list: any[], iterator?: Underscore.Iterator<any, boolean>, context?: any): any"
 });
-verify.noErrors();
+verify.numberOfErrorsInCurrentFile(1);
