@@ -1,4 +1,4 @@
-﻿/// <reference path="moduleNameResolver.ts"/>
+/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -7973,7 +7973,7 @@ namespace ts {
             const fakeSignature = <Signature>{
                 typeParameters: []
             };
-            return getInferenceMapper(createInferenceContext(fakeSignature, false, false));
+            return getInferenceMapper(createInferenceContext(fakeSignature, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ false));
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
