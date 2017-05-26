@@ -470,7 +470,7 @@ namespace ts.textChanges {
             const delta =
                 change.options.delta !== undefined
                     ? change.options.delta
-                    : formatting.SmartIndenter.shouldIndentChildNode(change.node)
+                    : formatting.SmartIndenter.shouldIndentChildNode(change.node, formatOptions)
                         ? formatOptions.indentSize
                         : 0;
 
