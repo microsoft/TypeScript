@@ -46,11 +46,11 @@ namespace ts.projectSystem {
 
     export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
-        path: "/a/lib/lib.d.ts",
+        path: "/a/lib/lib.es3.full.d.ts",
         content: libFileContent
     };
     export const es5LibFile: FileOrFolder = {
-        path: "/a/lib/lib.es5.full.d.ts",
+        path: "/a/lib/lib.d.ts",
         content: libFileContent
     };
 

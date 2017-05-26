@@ -831,7 +831,7 @@ namespace Harness {
         const carriageReturnLineFeed = "\r\n";
         const lineFeed = "\n";
 
-        export const defaultLibFileName = "lib.d.ts";
+        export const defaultLibFileName = "lib.es3.full.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
@@ -867,7 +867,7 @@ namespace Harness {
                     return "lib.es5.d.ts";
 
                 default:
-                    return defaultLibFileName;
+                    return "lib.es3.d.ts";
             }
         }
 
