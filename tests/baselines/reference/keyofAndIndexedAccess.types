@@ -62,7 +62,7 @@ type K00 = keyof any;  // string
 >K00 : string
 
 type K01 = keyof string;  // "toString" | "charAt" | ...
->K01 : "length" | "toString" | "concat" | "slice" | "indexOf" | "lastIndexOf" | "charAt" | "charCodeAt" | "localeCompare" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "trim" | "substr" | "valueOf"
+>K01 : "length" | "indexOf" | "lastIndexOf" | "toString" | "concat" | "slice" | "trim" | "localeCompare" | "charAt" | "charCodeAt" | "match" | "replace" | "search" | "split" | "substring" | "toLowerCase" | "toLocaleLowerCase" | "toUpperCase" | "toLocaleUpperCase" | "substr" | "valueOf"
 
 type K02 = keyof number;  // "toString" | "toFixed" | "toExponential" | ...
 >K02 : "toString" | "toLocaleString" | "valueOf" | "toFixed" | "toExponential" | "toPrecision"
@@ -88,7 +88,7 @@ type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >Shape : Shape
 
 type K11 = keyof Shape[];  // "length" | "toString" | ...
->K11 : "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K11 : "length" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift"
 >Shape : Shape
 
 type K12 = keyof Dictionary<Shape>;  // string
@@ -108,7 +108,7 @@ type K15 = keyof E;  // "toString" | "toFixed" | "toExponential" | ...
 >E : E
 
 type K16 = keyof [string, number];  // "0" | "1" | "length" | "toString" | ...
->K16 : "0" | "1" | "length" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight"
+>K16 : "0" | "1" | "length" | "indexOf" | "lastIndexOf" | "every" | "some" | "forEach" | "map" | "filter" | "reduce" | "reduceRight" | "toString" | "toLocaleString" | "push" | "pop" | "concat" | "join" | "reverse" | "shift" | "slice" | "sort" | "splice" | "unshift"
 
 type K17 = keyof (Shape | Item);  // "name"
 >K17 : "name"

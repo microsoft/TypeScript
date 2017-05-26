@@ -7,7 +7,7 @@
     "baselineCheck": true,
     "runTest": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es3.d.ts",
         "decl.ts",
         "dont_emit.ts"
     ],

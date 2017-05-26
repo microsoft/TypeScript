@@ -5,7 +5,7 @@
     "declaration": true,
     "project": "SameNameDTsSpecified",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es3.d.ts",
         "SameNameDTsSpecified/a.d.ts"
     ],
     "emittedFiles": []

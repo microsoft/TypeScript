@@ -20,11 +20,11 @@ class C {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 7, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 8, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     0: number;
 
@@ -47,11 +47,11 @@ interface I {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 18, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface2.ts, 19, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     0: number;
 }
