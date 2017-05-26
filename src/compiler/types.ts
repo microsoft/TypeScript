@@ -2595,7 +2595,8 @@ namespace ts {
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
 
-        /* @internal */ resolveJsxNamespaceAtLocation(location: ts.Node): Symbol;
+        /* @internal */ getJsxNamespace(): string;
+        /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
     }
 
     export enum NodeBuilderFlags {

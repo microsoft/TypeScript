@@ -210,9 +210,10 @@ namespace ts {
             getSuggestionForNonexistentProperty,
             getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
-            resolveJsxNamespaceAtLocation: node => {
-                node = getParseTreeNode(node);
-                return resolveJsxNamespaceAtLocation(node, /*diagnostics*/ false);
+            getJsxNamespace,
+            resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined {
+                location = getParseTreeNode(location);
+                return resolveName(location, name, meaning, /*nameNotFoundMessage*/ undefined, name);
             },
         };
 
@@ -851,7 +852,7 @@ namespace ts {
             location: Node | undefined,
             name: string,
             meaning: SymbolFlags,
-            nameNotFoundMessage: DiagnosticMessage,
+            nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: string | Identifier,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
@@ -14106,7 +14107,9 @@ namespace ts {
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const reactSym = resolveJsxNamespaceAtLocation(node.tagName, /*diagnostics*/ true);
+            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const reactNamespace = getJsxNamespace();
+            const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
             if (reactSym) {
                 // Mark local symbol as referenced here because it might not have been marked
                 // if jsx emit was not react as there wont be error being emitted
@@ -14119,12 +14122,6 @@ namespace ts {
             }
 
             checkJsxAttributesAssignableToTagNameAttributes(node);
-        }
-
-        function resolveJsxNamespaceAtLocation(location: ts.Node, diagnostics: boolean): Symbol {
-            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const reactNamespace = getJsxNamespace();
-            return resolveName(location, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
         }
 
         /**
