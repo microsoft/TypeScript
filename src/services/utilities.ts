@@ -161,10 +161,22 @@ namespace ts {
             node = node.parent;
         }
 
-        return node.parent.kind === SyntaxKind.TypeReference ||
-            (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-            (node.kind === SyntaxKind.ThisKeyword && !isPartOfExpression(node)) ||
-            node.kind === SyntaxKind.ThisType;
+        switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+                return !isPartOfExpression(node);
+            case SyntaxKind.ThisType:
+                return true;
+        }
+
+        switch (node.parent.kind) {
+            case SyntaxKind.TypeReference:
+            case SyntaxKind.JSDocTypeReference:
+                return true;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
+        }
+
+        return false;
     }
 
     export function isCallExpressionTarget(node: Node): boolean {
