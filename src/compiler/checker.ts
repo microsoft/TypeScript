@@ -7971,9 +7971,9 @@ namespace ts {
 
         function createFakeInferenceMapper(): TypeMapper {
             const fakeSignature = <Signature>{
-                typeParameters: []
+                 typeParameters: []
             };
-            return getInferenceMapper(createInferenceContext(fakeSignature, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ false));
+            return createInferenceContext(fakeSignature, 0);
         }
 
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
@@ -14899,7 +14899,7 @@ namespace ts {
                 // If inference has failed, use the first constituent type. During checking, the other
                 // constituents will fail to match, resulting in a nice error message pointing it out.
                 if (inferred[i] === unknownType) {
-                    inferred[i] = getInferenceCandidates(context, i)[0] || inferred[i];
+                    inferred[i] = context.inferences[i].candidates[0] || inferred[i];
                 }
             }
             return getSignatureInstantiation(signature, inferred);
