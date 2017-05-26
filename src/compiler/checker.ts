@@ -14896,6 +14896,8 @@ namespace ts {
             });
             const inferred = getInferredTypes(context);
             for (let i = 0; i < inferred.length; ++i) {
+                // If inference has failed, use the first constituent type. During checking, the other
+                // constituents will fail to match, resulting in a nice error message pointing it out.
                 if (inferred[i] === unknownType) {
                     inferred[i] = getInferenceCandidates(context, i)[0] || inferred[i];
                 }
