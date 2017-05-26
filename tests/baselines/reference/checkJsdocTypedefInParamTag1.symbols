@@ -4,14 +4,16 @@
  * @typedef {Object} Opts
  * @property {string} x
  * @property {string=} y
+ * @property {string} [z]
+ * @property {string} [w="hi"]
  * 
  * @param {Opts} opts
  */
 function foo(opts) {}
 >foo : Symbol(foo, Decl(0.js, 0, 0))
->opts : Symbol(opts, Decl(0.js, 8, 13))
+>opts : Symbol(opts, Decl(0.js, 10, 13))
 
 foo({x: 'abc'});
 >foo : Symbol(foo, Decl(0.js, 0, 0))
->x : Symbol(x, Decl(0.js, 10, 5))
+>x : Symbol(x, Decl(0.js, 12, 5))
 
