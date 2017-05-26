@@ -286,7 +286,7 @@ namespace ts {
 
     const tokenStrings = makeReverseMap(textToToken);
 
-    export function tokenToString(t: SyntaxKind): string {
+    export function tokenToString(t: SyntaxKind): string | undefined {
         return tokenStrings[t];
     }
 
