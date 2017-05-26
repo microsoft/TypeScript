@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/**
+ * @typedef {Object} Opts
+ * @property {string} x
+ * @property {string=} y
+ * 
+ * @param {Opts} opts
+ */
+function foo(opts) {}
+>foo : (opts: { x: string; y?: string; }) => void
+>opts : { x: string; y?: string; }
+
+foo({x: 'abc'});
+>foo({x: 'abc'}) : void
+>foo : (opts: { x: string; y?: string; }) => void
+>{x: 'abc'} : { x: string; }
+>x : string
+>'abc' : "abc"
+
