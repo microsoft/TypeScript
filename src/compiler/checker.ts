@@ -335,6 +335,8 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
+        const fakeInferenceMapper = createFakeInferenceMapper();
+
         const diagnostics = createDiagnosticCollection();
 
         const enum TypeFacts {
@@ -7967,6 +7969,13 @@ namespace ts {
             return type;
         }
 
+        function createFakeInferenceMapper(): TypeMapper {
+            const fakeSignature = <Signature>{
+                typeParameters: []
+            };
+            return getInferenceMapper(createInferenceContext(fakeSignature, false, false));
+        }
+
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             const mapper: TypeMapper = t => instantiateType(mapper1(t), mapper2);
             mapper.mappedTypes = concatenate(mapper1.mappedTypes, mapper2.mappedTypes);
@@ -15068,11 +15077,6 @@ namespace ts {
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             const argCount = getEffectiveArgumentCount(node, args, signature);
-
-            const savedParams = signature.typeParameters;
-            signature.typeParameters = signature.typeParameters || [];
-            const mapper = getInferenceMapper(createInferenceContext(signature, false, false));
-
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
@@ -15084,19 +15088,17 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : mapper);
+                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : fakeInferenceMapper);
                     }
 
                     // Use argument expression as error location when reporting errors
                     const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
                     if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
-                        signature.typeParameters = savedParams;
                         return false;
                     }
                 }
             }
 
-            signature.typeParameters = savedParams;
             return true;
         }
 
