@@ -1,0 +1,17 @@
+=== tests/cases/conformance/jsdoc/0.js ===
+// @ts-check
+/**
+ * @typedef {Object} Opts
+ * @property {string} x
+ * @property {string=} y
+ * 
+ * @param {Opts} opts
+ */
+function foo(opts) {}
+>foo : Symbol(foo, Decl(0.js, 0, 0))
+>opts : Symbol(opts, Decl(0.js, 8, 13))
+
+foo({x: 'abc'});
+>foo : Symbol(foo, Decl(0.js, 0, 0))
+>x : Symbol(x, Decl(0.js, 10, 5))
+

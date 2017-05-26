@@ -39,12 +39,13 @@ namespace ts {
             case SyntaxKind.TypeLiteral:
                 return SemanticMeaning.Type;
 
+            case SyntaxKind.JSDocTypedefTag:
+                // If it has no name node, it shares the name with the value declaration below it.
+                return (node as JSDocTypedefTag).name === undefined ? SemanticMeaning.Value | SemanticMeaning.Type : SemanticMeaning.Type;
+
             case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:
                 return SemanticMeaning.Value | SemanticMeaning.Type;
-
-            case SyntaxKind.EnumDeclaration:
-                return SemanticMeaning.All;
 
             case SyntaxKind.ModuleDeclaration:
                 if (isAmbientModule(<ModuleDeclaration>node)) {
@@ -57,6 +58,7 @@ namespace ts {
                     return SemanticMeaning.Namespace;
                 }
 
+            case SyntaxKind.EnumDeclaration:
             case SyntaxKind.NamedImports:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
@@ -70,7 +72,7 @@ namespace ts {
                 return SemanticMeaning.Namespace | SemanticMeaning.Value;
         }
 
-        return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+        return SemanticMeaning.All;
     }
 
     export function getMeaningFromLocation(node: Node): SemanticMeaning {
@@ -78,7 +80,7 @@ namespace ts {
             return SemanticMeaning.Value;
         }
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
-            return SemanticMeaning.Value | SemanticMeaning.Type | SemanticMeaning.Namespace;
+            return SemanticMeaning.All;
         }
         else if (isInRightSideOfImport(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
@@ -162,10 +164,22 @@ namespace ts {
             node = node.parent;
         }
 
-        return node.parent.kind === SyntaxKind.TypeReference ||
-            (node.parent.kind === SyntaxKind.ExpressionWithTypeArguments && !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent)) ||
-            (node.kind === SyntaxKind.ThisKeyword && !isPartOfExpression(node)) ||
-            node.kind === SyntaxKind.ThisType;
+        switch (node.kind) {
+            case SyntaxKind.ThisKeyword:
+                return !isPartOfExpression(node);
+            case SyntaxKind.ThisType:
+                return true;
+        }
+
+        switch (node.parent.kind) {
+            case SyntaxKind.TypeReference:
+            case SyntaxKind.JSDocTypeReference:
+                return true;
+            case SyntaxKind.ExpressionWithTypeArguments:
+                return !isExpressionWithTypeArgumentsInClassExtendsClause(<ExpressionWithTypeArguments>node.parent);
+        }
+
+        return false;
     }
 
     export function isCallExpressionTarget(node: Node): boolean {

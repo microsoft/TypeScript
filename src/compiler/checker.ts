@@ -5697,6 +5697,7 @@ namespace ts {
                     prop.type = propType;
                     if (propertySymbol) {
                         prop.syntheticOrigin = propertySymbol;
+                        prop.declarations = propertySymbol.declarations;
                     }
                     members.set(propName, prop);
                 }
