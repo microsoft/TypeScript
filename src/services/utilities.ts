@@ -37,8 +37,11 @@ namespace ts {
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
             case SyntaxKind.TypeLiteral:
-            case SyntaxKind.JSDocTypedefTag:
                 return SemanticMeaning.Type;
+
+            case SyntaxKind.JSDocTypedefTag:
+                // If it has no name node, it shares the name with the value declaration below it.
+                return (node as JSDocTypedefTag).name === undefined ? SemanticMeaning.Value | SemanticMeaning.Type : SemanticMeaning.Type;
 
             case SyntaxKind.EnumMember:
             case SyntaxKind.ClassDeclaration:

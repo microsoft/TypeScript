@@ -1559,7 +1559,7 @@ namespace ts {
     }
 
    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
-        if (isJSDocTypedefTag(node) && isJSDoc(node.parent)) {
+        if (isJSDocTypedefTag(node)) {
             return [node.parent];
         }
 
