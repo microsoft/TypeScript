@@ -472,7 +472,7 @@ namespace ts {
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
         insertSpaceAfterTypeAssertion?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;
-        indentInsideTernaryOperator?: boolean;
+        indentConditionalExpressionFalseBranch?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
     }

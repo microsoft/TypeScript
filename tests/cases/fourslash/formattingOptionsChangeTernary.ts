@@ -13,7 +13,7 @@
 ////    ? ScanAction.RescanJsxText
 ////    : ScanAction.Scan;
 
-format.setOption("indentInsideTernaryOperator", false);
+format.setOption("indentConditionalExpressionFalseBranch", false);
 format.document();
 verify.currentFileContentIs(`const expectedScanAction =
     shouldRescanGreaterThanToken(n)
@@ -28,7 +28,7 @@ verify.currentFileContentIs(`const expectedScanAction =
         ? ScanAction.RescanJsxText
         : ScanAction.Scan;`)
 
-format.setOption("indentInsideTernaryOperator", true);
+format.setOption("indentConditionalExpressionFalseBranch", true);
 format.document();
 verify.currentFileContentIs(`const expectedScanAction =
     shouldRescanGreaterThanToken(n)

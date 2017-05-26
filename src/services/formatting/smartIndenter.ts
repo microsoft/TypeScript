@@ -512,7 +512,7 @@ namespace ts.formatting {
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
                 case SyntaxKind.ConditionalExpression:
-                    return options.indentInsideTernaryOperator || (parent as ConditionalExpression).whenFalse !== child;
+                    return options.indentConditionalExpressionFalseBranch || (parent as ConditionalExpression).whenFalse !== child;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
