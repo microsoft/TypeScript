@@ -2102,6 +2102,7 @@ namespace ts {
     }
 
     export interface JSDocTag extends Node {
+        parent: JSDoc;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2132,6 +2133,7 @@ namespace ts {
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2140,6 +2142,7 @@ namespace ts {
     }
 
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
         typeExpression: JSDocTypeExpression;

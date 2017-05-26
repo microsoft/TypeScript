@@ -288,6 +288,14 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
     }
 
+    export function isJSDoc(node: Node): node is JSDoc {
+        return node.kind === SyntaxKind.JSDocComment;
+    }
+
+    export function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag;
+    }
+
     export function isJSDocTag(node: Node) {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
@@ -1551,6 +1559,10 @@ namespace ts {
     }
 
    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+        if (isJSDocTypedefTag(node)) {
+            return [node.parent];
+        }
+
         let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);
