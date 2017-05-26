@@ -1,4 +1,4 @@
-/// <reference path="moduleNameResolver.ts"/>
+﻿/// <reference path="moduleNameResolver.ts"/>
 /// <reference path="binder.ts"/>
 
 /* @internal */
@@ -14880,12 +14880,18 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes);
+            const context = createInferenceContext(signature, 0);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
-            return getSignatureInstantiation(signature, getInferredTypes(context));
+            const inferred = getInferredTypes(context);
+            for (let i = 0; i < inferred.length; ++i) {
+                if (inferred[i] === unknownType) {
+                    inferred[i] = getInferenceCandidates(context, i)[0] || inferred[i];
+                }
+            }
+            return getSignatureInstantiation(signature, inferred);
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
@@ -15062,6 +15068,11 @@ namespace ts {
             }
             const headMessage = Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1;
             const argCount = getEffectiveArgumentCount(node, args, signature);
+
+            const savedParams = signature.typeParameters;
+            signature.typeParameters = signature.typeParameters || [];
+            const mapper = getInferenceMapper(createInferenceContext(signature, false, false));
+
             for (let i = 0; i < argCount; i++) {
                 const arg = getEffectiveArgument(node, args, i);
                 // If the effective argument is 'undefined', then it is an argument that is present but is synthetic.
@@ -15073,17 +15084,19 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : mapper);
                     }
 
                     // Use argument expression as error location when reporting errors
                     const errorNode = reportErrors ? getEffectiveArgumentErrorNode(node, i, arg) : undefined;
                     if (!checkTypeRelatedTo(argType, paramType, relation, errorNode, headMessage)) {
+                        signature.typeParameters = savedParams;
                         return false;
                     }
                 }
             }
 
+            signature.typeParameters = savedParams;
             return true;
         }
 
