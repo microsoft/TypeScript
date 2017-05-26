@@ -6631,10 +6631,7 @@ namespace ts {
                     });
                 }
 
-                function parseParamTag(atToken: AtToken, tagName: Identifier) {
-                    let typeExpression = tryParseTypeExpression();
-                    skipWhitespace();
-
+                function parseBracketNameInPropertyAndParamTag() {
                     let name: Identifier;
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
@@ -6653,6 +6650,14 @@ namespace ts {
                     else if (tokenIsIdentifierOrKeyword(token())) {
                         name = parseJSDocIdentifierName();
                     }
+                    return { name, isBracketed };
+                }
+
+                function parseParamTag(atToken: AtToken, tagName: Identifier) {
+                    let typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
+
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
 
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
@@ -6709,8 +6714,9 @@ namespace ts {
                 function parsePropertyTag(atToken: AtToken, tagName: Identifier): JSDocPropertyTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    const name = parseJSDocIdentifierName();
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
+
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
                         return undefined;
@@ -6721,6 +6727,7 @@ namespace ts {
                     result.tagName = tagName;
                     result.name = name;
                     result.typeExpression = typeExpression;
+                    result.isBracketed = isBracketed;
                     return finishNode(result);
                 }
 

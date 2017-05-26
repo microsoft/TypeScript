@@ -2179,7 +2179,7 @@ namespace ts {
                     return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
                     return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag,
-                        (node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType ?
+                        (node as JSDocPropertyTag).isBracketed || ((node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
                             SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
                         SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocFunctionType:

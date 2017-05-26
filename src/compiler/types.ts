@@ -2143,6 +2143,7 @@ namespace ts {
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
         typeExpression: JSDocTypeExpression;
+        isBracketed: boolean;
     }
 
     export interface JSDocTypeLiteral extends JSDocType {
