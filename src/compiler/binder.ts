@@ -1,4 +1,4 @@
-﻿/// <reference path="utilities.ts"/>
+/// <reference path="utilities.ts"/>
 /// <reference path="parser.ts"/>
 
 /* @internal */
