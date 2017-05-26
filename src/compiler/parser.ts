@@ -1114,8 +1114,8 @@ namespace ts {
             return array;
         }
 
-        function finishNode<T extends Node>(node: T, end?: number): T {
-            node.end = end === undefined ? scanner.getStartPos() : end;
+        function finishNode<T extends Node>(node: T, end = scanner.getStartPos()): T {
+            node.end = end;
 
             if (contextFlags) {
                 node.flags |= contextFlags;
@@ -6659,14 +6659,12 @@ namespace ts {
                     });
                 }
 
-                function parseBracketNameInPropertyAndParamTag() {
-                    let name: Identifier;
-                    let isBracketed: boolean;
+                function parseBracketNameInPropertyAndParamTag(): { name: Identifier, isBracketed: boolean } {
                     // Looking for something like '[foo]' or 'foo'
-                    if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = parseJSDocIdentifierName();
+                    const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
+                    const name = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                    if (isBracketed) {
                         skipWhitespace();
-                        isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
                         if (parseOptionalToken(SyntaxKind.EqualsToken)) {
@@ -6675,9 +6673,7 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (tokenIsIdentifierOrKeyword(token())) {
-                        name = parseJSDocIdentifierName();
-                    }
+
                     return { name, isBracketed };
                 }
 
@@ -6687,11 +6683,6 @@ namespace ts {
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
-
-                    if (!name) {
-                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                        return undefined;
-                    }
 
                     let preName: Identifier, postName: Identifier;
                     if (typeExpression) {
@@ -6715,7 +6706,11 @@ namespace ts {
                     result.postParameterName = postName;
                     result.name = postName || preName;
                     result.isBracketed = isBracketed;
-                    return finishNode(result);
+                    // Include trailing whitespace inside the range of the `@param` tag.
+                    // This way we can provide completions after `@param `.
+                    let end = scanner.getStartPos();
+                    while (ts.isWhiteSpaceSingleLine(scanner.getText().charCodeAt(end))) end++;
+                    return finishNode(result, end);
                 }
 
                 function parseReturnTag(atToken: AtToken, tagName: Identifier): JSDocReturnTag {
@@ -6936,14 +6931,19 @@ namespace ts {
                     return currentToken = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifierName(): Identifier {
-                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()));
+                function parseJSDocIdentifierName(createIfMissing = false): Identifier {
+                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()), createIfMissing);
                 }
 
-                function createJSDocIdentifier(isIdentifier: boolean): Identifier {
+                function createJSDocIdentifier(isIdentifier: boolean, createIfMissing: boolean): Identifier {
                     if (!isIdentifier) {
-                        parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                        return undefined;
+                        if (createIfMissing) {
+                            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                        }
+                        else {
+                            parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
                     }
 
                     const pos = scanner.getTokenPos();

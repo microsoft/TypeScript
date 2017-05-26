@@ -13,7 +13,7 @@ verify.syntacticClassificationsAre(
     c.comment(" "),
     c.punctuation("{"),
     c.keyword("number"),
-    c.comment(" /* } */"),
+    c.comment("/* } */"),
     c.keyword("var"),
     c.identifier("v"),
     c.punctuation(";"));

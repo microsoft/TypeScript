@@ -18,7 +18,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords } = completionData;
+        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, hasFilteredClassMemberKeywords } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX &&
             location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
@@ -36,14 +36,15 @@ namespace ts.Completions {
                 }]};
         }
 
-        if (requestJsDocTagName) {
-            // If the current position is a jsDoc tag name, only tag names should be provided for completion
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getJSDocTagNameCompletions() };
-        }
-
-        if (requestJsDocTag) {
-            // If the current position is a jsDoc tag, only tags should be provided for completion
-            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getJSDocTagCompletions() };
+        if (request) {
+            const entries = request.kind === "JsDocTagName"
+                // If the current position is a jsDoc tag name, only tag names should be provided for completion
+                ? JsDoc.getJSDocTagNameCompletions()
+                : request.kind === "JsDocTag"
+                // If the current position is a jsDoc tag, only tags should be provided for completion
+                ? JsDoc.getJSDocTagCompletions()
+                : JsDoc.getJSDocParameterNameCompletions(request.tag);
+            return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false,  entries };
         }
 
         const entries: CompletionEntry[] = [];
@@ -66,7 +67,7 @@ namespace ts.Completions {
             addRange(entries, classMemberKeywordCompletions);
         }
         // Add keywords if this is not a member completion list
-        else if (!isMemberCompletion && !requestJsDocTag && !requestJsDocTagName) {
+        else if (!isMemberCompletion) {
             addRange(entries, keywordCompletions);
         }
 
@@ -347,16 +348,27 @@ namespace ts.Completions {
         return undefined;
     }
 
-    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number) {
+    interface CompletionData {
+        symbols: Symbol[];
+        isGlobalCompletion: boolean;
+        isMemberCompletion: boolean;
+        isNewIdentifierLocation: boolean;
+        location: Node;
+        isRightOfDot: boolean;
+        request?: Request;
+        hasFilteredClassMemberKeywords: boolean;
+    }
+    type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
+
+    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number): CompletionData {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
-        // JsDoc tag-name is just the name of the JSDoc tagname (exclude "@")
-        let requestJsDocTagName = false;
-        // JsDoc tag includes both "@" and tag-name
-        let requestJsDocTag = false;
+        let request: Request | undefined;
 
         let start = timestamp();
-        const currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false); // TODO: GH#15853
+        const currentToken = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        // We will check for jsdoc comments with insideComment and getJsDocTagAtPosition. (TODO: that seems rather inefficient to check the same thing so many times.)
+
         log("getCompletionData: Get current token: " + (timestamp() - start));
 
         start = timestamp();
@@ -366,10 +378,10 @@ namespace ts.Completions {
 
         if (insideComment) {
             if (hasDocComment(sourceFile, position)) {
-                // The current position is next to the '@' sign, when no tag name being provided yet.
-                // Provide a full list of tag names
                 if (sourceFile.text.charCodeAt(position - 1) === CharacterCodes.at) {
-                    requestJsDocTagName = true;
+                    // The current position is next to the '@' sign, when no tag name being provided yet.
+                    // Provide a full list of tag names
+                    request = { kind: "JsDocTagName" };
                 }
                 else {
                     // When completion is requested without "@", we will have check to make sure that
@@ -389,7 +401,9 @@ namespace ts.Completions {
                     //    *         |c|
                     //    */
                     const lineStart = getLineStartPositionForPosition(position, sourceFile);
-                    requestJsDocTag = !(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/));
+                    if (!(sourceFile.text.substring(lineStart, position).match(/[^\*|\s|(/\*\*)]/))) {
+                        request = { kind: "JsDocTag" };
+                    }
                 }
             }
 
@@ -400,7 +414,7 @@ namespace ts.Completions {
             const tag = getJsDocTagAtPosition(sourceFile, position);
             if (tag) {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
-                    requestJsDocTagName = true;
+                    request = { kind: "JsDocTagName" };
                 }
 
                 switch (tag.kind) {
@@ -408,15 +422,18 @@ namespace ts.Completions {
                     case SyntaxKind.JSDocParameterTag:
                     case SyntaxKind.JSDocReturnTag:
                         const tagWithExpression = <JSDocTypeTag | JSDocParameterTag | JSDocReturnTag>tag;
-                        if (tagWithExpression.typeExpression) {
-                            insideJsDocTagExpression = tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end;
+                        if (tagWithExpression.typeExpression && tagWithExpression.typeExpression.pos < position && position < tagWithExpression.typeExpression.end) {
+                            insideJsDocTagExpression = true;
+                        }
+                        else if (isJSDocParameterTag(tag) && (nodeIsMissing(tag.name) || tag.name.pos <= position && position <= tag.name.end)) {
+                            request = { kind: "JsDocParameterName", tag };
                         }
                         break;
                 }
             }
 
-            if (requestJsDocTagName || requestJsDocTag) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords: false };
+            if (request) {
+                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, hasFilteredClassMemberKeywords: false };
             }
 
             if (!insideJsDocTagExpression) {
@@ -553,7 +570,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords };
+        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, hasFilteredClassMemberKeywords };
 
         function getTypeScriptMemberSymbols(): void {
             // Right of dot member completion list
@@ -1517,5 +1534,11 @@ namespace ts.Completions {
             kind === SyntaxKind.ExclamationEqualsToken ||
             kind === SyntaxKind.EqualsEqualsEqualsToken ||
             kind === SyntaxKind.ExclamationEqualsEqualsToken;
+    }
+
+    /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
+    function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag | undefined {
+        const node = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true, /*includeEndPosition*/ true);
+        return findAncestor(node, a => isJSDocTag(a) ? true : isJSDoc(a) ? "quit" : false) as JSDocTag | undefined;
     }
 }
