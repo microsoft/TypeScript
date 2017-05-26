@@ -87,7 +87,7 @@ namespace ts.server.typingsInstaller {
             this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
 
             // If the NPM path contains spaces and isn't wrapped in quotes, do so.
-            if (this.npmPath.indexOf(" ") !== -1 && this.npmPath[0] != `"`) {
+            if (this.npmPath.indexOf(" ") !== -1 && this.npmPath[0] !== `"`) {
                 this.npmPath = `"${this.npmPath}"`;
             }
             if (this.log.isEnabled()) {
