@@ -60,7 +60,7 @@ module Errors {
 
     var r2arg = <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null;
     var r2arg2 = (x: (arg: Base) => Derived) => (r: Base) => <Derived2>null;
-    var r2 = foo7(r2arg); // any
+    var r2 = foo7(r2arg);
     var r2a = [r2arg2, r2arg];
     var r2b = [r2arg, r2arg2];
 
@@ -72,13 +72,13 @@ module Errors {
 
     var r4arg = <T extends Derived>(...x: T[]) => <T>null;
     var r4arg2 = (...x: Base[]) => <Base>null;
-    var r4 = foo10(r4arg); // any
+    var r4 = foo10(r4arg);
     var r4a = [r4arg2, r4arg];
     var r4b = [r4arg, r4arg2];
 
     var r5arg = <T extends Derived>(x: T, y: T) => <T>null;
     var r5arg2 = (x: { foo: string }, y: { foo: string; bar: string }) => <Base>null;
-    var r5 = foo11(r5arg); // any
+    var r5 = foo11(r5arg);
     var r5a = [r5arg2, r5arg];
     var r5b = [r5arg, r5arg2];
 
@@ -95,7 +95,7 @@ module Errors {
     var r7b = [r7arg, r7arg2];
 
     var r7arg3 = <T extends Base>(x: { a: T; b: T }) => 1;
-    var r7c = foo15(r7arg3); // (x: { a: string; b: number }) => number): number;
+    var r7c = foo15(r7arg3); // any
     var r7d = [r7arg2, r7arg3];
     var r7e = [r7arg3, r7arg2];
 
@@ -117,6 +117,7 @@ module WithGenericSignaturesInBaseType {
     var r3arg2 = <T>(x: T) => <T[]>null;
     var r3 = foo3(r3arg2); // any
 }
+
 
 //// [subtypingWithCallSignatures3.js]
 // checking subtype relations for function types as it relates to contextual signature instantiation
@@ -164,7 +165,7 @@ var Errors;
     var r1b = [function (x) { return null; }, function (x) { return ['']; }];
     var r2arg = function (x) { return function (r) { return null; }; };
     var r2arg2 = function (x) { return function (r) { return null; }; };
-    var r2 = foo7(r2arg); // any
+    var r2 = foo7(r2arg);
     var r2a = [r2arg2, r2arg];
     var r2b = [r2arg, r2arg2];
     var r3arg = function (x, y) { return function (r) { return null; }; };
@@ -186,12 +187,12 @@ var Errors;
         }
         return null;
     };
-    var r4 = foo10(r4arg); // any
+    var r4 = foo10(r4arg);
     var r4a = [r4arg2, r4arg];
     var r4b = [r4arg, r4arg2];
     var r5arg = function (x, y) { return null; };
     var r5arg2 = function (x, y) { return null; };
-    var r5 = foo11(r5arg); // any
+    var r5 = foo11(r5arg);
     var r5a = [r5arg2, r5arg];
     var r5b = [r5arg, r5arg2];
     var r6arg = function (x, y) { return null; };
@@ -205,7 +206,7 @@ var Errors;
     var r7a = [r7arg2, r7arg];
     var r7b = [r7arg, r7arg2];
     var r7arg3 = function (x) { return 1; };
-    var r7c = foo15(r7arg3); // (x: { a: string; b: number }) => number): number;
+    var r7c = foo15(r7arg3); // any
     var r7d = [r7arg2, r7arg3];
     var r7e = [r7arg3, r7arg2];
     var r8arg = function (x) { return null; };

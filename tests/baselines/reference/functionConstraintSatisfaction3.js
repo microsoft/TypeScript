@@ -41,6 +41,30 @@ var r10 = foo(<U extends string>(x: U) => x);
 var r12 = foo(i2);
 var r15 = foo(c2);
 
+declare function id2<T>(x: T, y: T): T;
+
+declare function boom<R>(f: (x: string, y: number) => R): R;
+declare function boom2(f: (x: string, y: number) => string): void;
+
+boom(id2);  // Should be an error T = [string, number]
+boom2(id2); // Should be an error T = [string, number]
+
+declare function withNum<N extends number>(x: N): N;
+declare function withString<S extends string>(f: (x: S) => S): void;
+declare function useString(f: (x: string) => string): void;
+
+withString(withNum);  // Error
+useString(withNum);   // Error
+
+declare function okay<R>(f: (x: 1, y: number) => R): R;
+declare function transitive<T>(x: T, f: (x: T) => T): void;
+
+okay(id2);
+
+transitive(1, withNum);
+transitive('1', withNum);
+
+
 //// [functionConstraintSatisfaction3.js]
 // satisfaction of a constraint to Function, no errors expected
 function foo(x) { return x; }
@@ -72,3 +96,10 @@ var r9 = foo(function (x) { return x; });
 var r10 = foo(function (x) { return x; });
 var r12 = foo(i2);
 var r15 = foo(c2);
+boom(id2); // Should be an error T = [string, number]
+boom2(id2); // Should be an error T = [string, number]
+withString(withNum); // Error
+useString(withNum); // Error
+okay(id2);
+transitive(1, withNum);
+transitive('1', withNum);
