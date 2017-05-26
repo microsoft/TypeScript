@@ -39,3 +39,13 @@ tests/cases/compiler/weakType.ts(31,18): error TS2345: Argument of type '{ error
 !!! error TS2345:   Weak type 'ChangeOptions' has no properties in common with '{ error?: number; }'.
     }
     
+    class K {
+        constructor(s: string) { }
+    }
+    // Ctor isn't a weak type because it has a construct signature
+    interface Ctor {
+        new (s: string): K
+        n?: number
+    }
+    let ctor: Ctor = K
+    

@@ -30,3 +30,13 @@ function del(options: ConfigurableStartEnd = {},
     changes.push(options);
     changes.push(error);
 }
+
+class K {
+    constructor(s: string) { }
+}
+// Ctor isn't a weak type because it has a construct signature
+interface Ctor {
+    new (s: string): K
+    n?: number
+}
+let ctor: Ctor = K

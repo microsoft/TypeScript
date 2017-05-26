@@ -9389,13 +9389,15 @@ namespace ts {
 
             /**
              * A type is 'weak' if it is an object type with at least one optional property
-             * and no required properties or index signatures
+             * and no required properties, call/construct signatures or index signatures
              */
             function isWeak(type: Type) {
                 const props = getPropertiesOfType(type);
                 return type.flags & TypeFlags.Object &&
                     props.length > 0 &&
                     every(props, p => !!(p.flags & SymbolFlags.Optional)) &&
+                    !getSignaturesOfType(type, SignatureKind.Call).length &&
+                    !getSignaturesOfType(type, SignatureKind.Construct).length &&
                     !getIndexTypeOfType(type, IndexKind.String) &&
                     !getIndexTypeOfType(type, IndexKind.Number);
             }

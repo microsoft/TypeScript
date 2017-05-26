@@ -32,6 +32,16 @@ function del(options: ConfigurableStartEnd = {},
     changes.push(error);
 }
 
+class K {
+    constructor(s: string) { }
+}
+// Ctor isn't a weak type because it has a construct signature
+interface Ctor {
+    new (s: string): K
+    n?: number
+}
+let ctor: Ctor = K
+
 
 //// [weakType.js]
 function getDefaultSettings() {
@@ -48,3 +58,9 @@ function del(options, error) {
     changes.push(options);
     changes.push(error);
 }
+var K = (function () {
+    function K(s) {
+    }
+    return K;
+}());
+var ctor = K;
