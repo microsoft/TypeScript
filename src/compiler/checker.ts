@@ -10292,29 +10292,26 @@ namespace ts {
                     // Because the anyFunctionType is internal, it should not be exposed to the user by adding
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
-                    // of inference.
+                    // of inference. Also, we exclude inferences for silentNeverType which is used as a wildcard
+                    // when constructing types from type parameters that had no inference candidates.
                     if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
                         return;
                     }
-                    for (const inference of inferences) {
-                        if (target === inference.typeParameter) {
-                            // Even if an inference is marked as fixed, we can add candidates from inferences made
-                            // from the return type of generic functions (which only happens when no other candidates
-                            // are present).
-                            if (!inference.isFixed) {
-                                if (!inference.candidates || priority < inference.priority) {
-                                    inference.candidates = [source];
-                                    inference.priority = priority;
-                                }
-                                else if (priority === inference.priority) {
-                                    inference.candidates.push(source);
-                                }
-                                if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
-                                    inference.topLevel = false;
-                                }
+                    const inference = getInferenceInfoForType(target);
+                    if (inference) {
+                        if (!inference.isFixed) {
+                            if (!inference.candidates || priority < inference.priority) {
+                                inference.candidates = [source];
+                                inference.priority = priority;
                             }
-                            return;
+                            else if (priority === inference.priority) {
+                                inference.candidates.push(source);
+                            }
+                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                                inference.topLevel = false;
+                            }
                         }
+                        return;
                     }
                 }
                 else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
