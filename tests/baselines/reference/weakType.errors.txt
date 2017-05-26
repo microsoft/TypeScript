@@ -1,8 +1,13 @@
 tests/cases/compiler/weakType.ts(31,18): error TS2345: Argument of type '{ error?: number; }' is not assignable to parameter of type 'ChangeOptions'.
   Weak type 'ChangeOptions' has no properties in common with '{ error?: number; }'.
+tests/cases/compiler/weakType.ts(56,5): error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+  Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak'.
+    Types of property 'properties' are incompatible.
+      Type '{ wrong: string; }' is not assignable to type '{ b?: number; }'.
+        Weak type '{ b?: number; }' has no properties in common with '{ wrong: string; }'.
 
 
-==== tests/cases/compiler/weakType.ts (1 errors) ====
+==== tests/cases/compiler/weakType.ts (2 errors) ====
     interface Settings {
         timeout?: number;
         onError?(): void;
@@ -48,4 +53,24 @@ tests/cases/compiler/weakType.ts(31,18): error TS2345: Argument of type '{ error
         n?: number
     }
     let ctor: Ctor = K
+    
+    type Spoiler = { nope?: string }
+    type Weak = {
+        a?: number
+        properties?: {
+            b?: number
+        }
+    }
+    declare let unknown: {
+        properties: {
+            wrong: string
+        }
+    }
+    let weak: Weak & Spoiler = unknown
+        ~~~~
+!!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
+!!! error TS2322:   Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak'.
+!!! error TS2322:     Types of property 'properties' are incompatible.
+!!! error TS2322:       Type '{ wrong: string; }' is not assignable to type '{ b?: number; }'.
+!!! error TS2322:         Weak type '{ b?: number; }' has no properties in common with '{ wrong: string; }'.
     

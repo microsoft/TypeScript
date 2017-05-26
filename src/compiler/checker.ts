@@ -9352,7 +9352,10 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
+                            const saveDisableWeakTypeErrors = disableWeakTypeErrors;
+                            disableWeakTypeErrors = false;
                             const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            disableWeakTypeErrors = saveDisableWeakTypeErrors;
                             if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));

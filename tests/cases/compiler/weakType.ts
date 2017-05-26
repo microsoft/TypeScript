@@ -40,3 +40,17 @@ interface Ctor {
     n?: number
 }
 let ctor: Ctor = K
+
+type Spoiler = { nope?: string }
+type Weak = {
+    a?: number
+    properties?: {
+        b?: number
+    }
+}
+declare let unknown: {
+    properties: {
+        wrong: string
+    }
+}
+let weak: Weak & Spoiler = unknown
