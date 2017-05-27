@@ -777,27 +777,33 @@ namespace ts {
     }
 
     /**
+     * Returns the element at a specific offset in an array if non-empty, `undefined` otherwise.
+     * A negative offset indicates the element should be retrieved from the end of the array.
+     */
+    export function elementAt<T>(array: T[] | undefined, offset: number): T | undefined {
+        return array && array.length > 0 && (offset < 0 ? ~offset : offset) < array.length
+            ? array[offset < 0 ? array.length + offset : offset]
+            : undefined;
+    }
+
+    /**
      * Returns the first element of an array if non-empty, `undefined` otherwise.
      */
-    export function firstOrUndefined<T>(array: T[]): T {
-        return array && array.length > 0
-            ? array[0]
-            : undefined;
+    export function firstOrUndefined<T>(array: T[]): T | undefined {
+        return elementAt(array, 0);
     }
 
     /**
      * Returns the last element of an array if non-empty, `undefined` otherwise.
      */
-    export function lastOrUndefined<T>(array: T[]): T {
-        return array && array.length > 0
-            ? array[array.length - 1]
-            : undefined;
+    export function lastOrUndefined<T>(array: T[]): T | undefined {
+        return elementAt(array, -1);
     }
 
     /**
      * Returns the only element of an array if it contains only one element, `undefined` otherwise.
      */
-    export function singleOrUndefined<T>(array: T[]): T {
+    export function singleOrUndefined<T>(array: T[]): T | undefined {
         return array && array.length === 1
             ? array[0]
             : undefined;
@@ -1123,6 +1129,15 @@ namespace ts {
      */
     export function isArray(value: any): value is any[] {
         return Array.isArray ? Array.isArray(value) : value instanceof Array;
+    }
+
+    export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined {
+        return value !== undefined && test(value) ? value : undefined;
+    }
+
+    export function cast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut {
+        if (value !== undefined && test(value)) return value;
+        Debug.fail(`Invalid cast. The supplied value did not pass the test '${Debug.getFunctionName(test)}'.`);
     }
 
     /** Does nothing. */
@@ -2204,8 +2219,11 @@ namespace ts {
         this.declarations = undefined;
     }
 
-    function Type(this: Type, _checker: TypeChecker, flags: TypeFlags) {
+    function Type(this: Type, checker: TypeChecker, flags: TypeFlags) {
         this.flags = flags;
+        if (Debug.isDebugging) {
+            this.checker = checker;
+        }
     }
 
     function Signature() {
@@ -2242,24 +2260,42 @@ namespace ts {
 
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
+        export let isDebugging = false;
 
         export function shouldAssert(level: AssertionLevel): boolean {
             return currentAssertionLevel >= level;
         }
 
-        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string): void {
+        export function assert(expression: boolean, message?: string, verboseDebugInfo?: () => string, stackCrawlMark?: Function): void {
             if (!expression) {
-                let verboseDebugString = "";
                 if (verboseDebugInfo) {
-                    verboseDebugString = "\r\nVerbose Debug Information: " + verboseDebugInfo();
+                    message += "\r\nVerbose Debug Information: " + verboseDebugInfo();
                 }
-                debugger;
-                throw new Error("Debug Failure. False expression: " + (message || "") + verboseDebugString);
+                fail(message ? "False expression: " + message : "False expression.", stackCrawlMark || assert);
             }
         }
 
-        export function fail(message?: string): void {
-            Debug.assert(/*expression*/ false, message);
+        export function fail(message?: string, stackCrawlMark?: Function): void {
+            debugger;
+            const e = new Error(message ? `Debug Failure. ` : "Debug Failure.");
+            if ((<any>Error).captureStackTrace) {
+                (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
+            }
+            throw e;
+        }
+
+        export function getFunctionName(func: Function) {
+            if (typeof func !== "function") {
+                return "";
+            }
+            else if (func.hasOwnProperty("name")) {
+                return (<any>func).name;
+            }
+            else {
+                const text = Function.prototype.toString.call(func);
+                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
+                return match ? match[1] : "";
+            }
         }
     }
 

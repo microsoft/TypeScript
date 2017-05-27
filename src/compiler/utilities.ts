@@ -850,8 +850,86 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node): node is ClassLikeDeclaration {
+    export function isClassLike(node: Node | undefined): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
+    }
+
+    export function isImmediatelyInvokedFunctionExpression(node: Node) {
+        if (!isCallExpression(node) ||
+            some(node.typeArguments) ||
+            some(node.arguments)) {
+            return false;
+        }
+        const expression = skipParentheses(node.expression);
+        if (!isFunctionExpression(expression) ||
+            some(expression.typeParameters) ||
+            some(expression.parameters) ||
+            expression.type ||
+            !expression.body) {
+            return false;
+        }
+        return true;
+    }
+
+    export function isTypeScriptClassWrapper(node: Node) {
+        if (!isImmediatelyInvokedFunctionExpression(node) ||
+            isParseTreeNode(node)) {
+            return false;
+        }
+
+        const func = <FunctionExpression>skipParentheses((<CallExpression>node).expression);
+        if (isParseTreeNode(func)) {
+            return false;
+        }
+
+        const statements = func.body.statements;
+        if (statements.length < 2) {
+            return false;
+        }
+
+        const firstStatement = statements[0];
+        if (isParseTreeNode(firstStatement) ||
+            !isClassLike(firstStatement) &&
+            !isClassLikeVariableStatement(firstStatement)) {
+            return false;
+        }
+
+        const returnStatement = tryCast(elementAt(statements, isVariableStatement(lastOrUndefined(statements)) ? -2 : -1), isReturnStatement);
+        if (!isReturnStatement(returnStatement) ||
+            !returnStatement.expression ||
+            !isIdentifier(skipOuterExpressions(returnStatement.expression))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function isClassLikeVariableStatement(node: Node) {
+        if (!isVariableStatement(node)) return false;
+        const variable = singleOrUndefined((<VariableStatement>node).declarationList.declarations);
+        return variable
+            && variable.initializer
+            && isIdentifier(variable.name)
+            && (isClassLike(variable.initializer)
+                || (isAssignmentExpression(variable.initializer)
+                    && isIdentifier(variable.initializer.left)
+                    && isClassLike(variable.initializer.right)));
+    }
+
+    export function isExpressionStatement(node: Node): node is ExpressionStatement {
+        return node.kind === SyntaxKind.ExpressionStatement;
+    }
+
+    export function isReturnStatement(node: Node): node is ReturnStatement {
+        return node.kind === SyntaxKind.ReturnStatement;
+    }
+
+    export function isFunctionExpression(node: Node): node is FunctionExpression {
+        return node.kind === SyntaxKind.FunctionExpression;
+    }
+
+    export function isFunctionDeclaration(node: Node): node is FunctionDeclaration {
+        return node.kind === SyntaxKind.FunctionDeclaration;
     }
 
     export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
@@ -3051,6 +3129,13 @@ namespace ts {
             return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
 
+        const flags = getModifierFlagsNoCache(node);
+        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
+        return flags;
+    }
+
+    export function getModifierFlagsNoCache(node: Node): ModifierFlags {
+
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {
@@ -3062,7 +3147,6 @@ namespace ts {
             flags |= ModifierFlags.Export;
         }
 
-        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
         return flags;
     }
 
@@ -3351,27 +3435,104 @@ namespace ts {
         return false;
     }
 
+    /**
+     * Formats an enum value as a string for debugging and debug assertions.
+     */
+    function formatEnum(value = 0, enumObject: any, isFlags: boolean, formatCache?: string[]) {
+        const cached = formatCache && formatCache[value];
+        if (cached !== undefined) {
+            return cached;
+        }
+        const result = isFlags ? formatFlagsEnum(value, enumObject) : getEnumName(value, enumObject);
+        if (formatCache) {
+            formatCache[value] = result;
+        }
+        return result;
+    }
+
+    /**
+     * Gets the name for an enum value for debugging and debug assertions.
+     */
+    function getEnumName(value: number, enumObject: any) {
+        for (const name in enumObject) {
+            if (enumObject[name] === value) {
+                return name;
+            }
+        }
+        return value.toString();
+    }
+
+    /**
+     * Formats the bitwise flag values of an enum value for debugging and debug assertions.
+     */
+    function formatFlagsEnum(value: number, enumObject: any) {
+        const members = getEnumMembers(enumObject);
+        let result = "";
+        if (value === 0) {
+            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
+        }
+
+        let remainingFlags = value;
+        for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
+            const [enumValue, enumName] = members[i];
+            if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                remainingFlags &= ~enumValue;
+                result = `${enumName}${result ? ", " : ""}${result}`;
+            }
+        }
+
+        if (remainingFlags === 0) {
+            return result;
+        }
+
+        return value.toString();
+    }
+
+    function getEnumMembers(enumObject: any) {
+        const result: [number, string][] = [];
+        for (const name in enumObject) {
+            const value = enumObject[name];
+            if (typeof value === "number") {
+                result.push([value, name]);
+            }
+        }
+
+        return stableSort(result, (x, y) => compareValues(x[0], y[0]));
+    }
+
     const syntaxKindCache: string[] = [];
-
     export function formatSyntaxKind(kind: SyntaxKind): string {
-        const syntaxKindEnum = (<any>ts).SyntaxKind;
-        if (syntaxKindEnum) {
-            const cached = syntaxKindCache[kind];
-            if (cached !== undefined) {
-                return cached;
-            }
+        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false, syntaxKindCache);
+    }
 
-            for (const name in syntaxKindEnum) {
-                if (syntaxKindEnum[name] === kind) {
-                    const result = `${kind} (${name})`;
-                    syntaxKindCache[kind] = result;
-                    return result;
-                }
-            }
-        }
-        else {
-            return kind.toString();
-        }
+    const modifierFlagsCache: string[] = [];
+    export function formatModifierFlags(flags: ModifierFlags): string {
+        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true, modifierFlagsCache);
+    }
+
+    const transformFlagsCache: string[] = [];
+    export function formatTransformFlags(flags: TransformFlags): string {
+        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true, transformFlagsCache);
+    }
+
+    const emitFlagsCache: string[] = [];
+    export function formatEmitFlags(flags: EmitFlags): string {
+        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true, emitFlagsCache);
+    }
+
+    const symbolFlagsCache: string[] = [];
+    export function formatSymbolFlags(flags: SymbolFlags): string {
+        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true, symbolFlagsCache);
+    }
+
+    const typeFlagsCache: string[] = [];
+    export function formatTypeFlags(flags: TypeFlags): string {
+        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true, typeFlagsCache);
+    }
+
+    const objectFlagsCache: string[] = [];
+    export function formatObjectFlags(flags: ObjectFlags): string {
+        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true, objectFlagsCache);
     }
 
     export function getRangePos(range: TextRange | undefined) {
@@ -3858,6 +4019,10 @@ namespace ts {
         return node.kind === SyntaxKind.CallExpression;
     }
 
+    export function isParethesizedExpression(node: Node): node is ParenthesizedExpression {
+        return node.kind === SyntaxKind.ParenthesizedExpression;
+    }
+
     export function isTemplateLiteral(node: Node): node is TemplateLiteral {
         const kind = node.kind;
         return kind === SyntaxKind.TemplateExpression
@@ -3982,6 +4147,10 @@ namespace ts {
     export function isForInitializer(node: Node): node is ForInitializer {
         return isVariableDeclarationList(node)
             || isExpression(node);
+    }
+
+    export function isVariableStatement(node: Node): node is VariableStatement {
+        return node.kind === SyntaxKind.VariableStatement;
     }
 
     export function isVariableDeclaration(node: Node): node is VariableDeclaration {

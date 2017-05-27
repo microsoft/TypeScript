@@ -55,20 +55,20 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "x");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Boolean)
+    ], B.prototype, "y");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "z");
     return B;
 }());
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "x");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Boolean)
-], B.prototype, "y");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "z");
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
@@ -79,21 +79,21 @@ var E;
 var D = (function () {
     function D() {
     }
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Number)
+    ], D.prototype, "a");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Number)
+    ], D.prototype, "b");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Number)
+    ], D.prototype, "c");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Number)
+    ], D.prototype, "d");
     return D;
 }());
-__decorate([
-    PropDeco,
-    __metadata("design:type", Number)
-], D.prototype, "a");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Number)
-], D.prototype, "b");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Number)
-], D.prototype, "c");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Number)
-], D.prototype, "d");

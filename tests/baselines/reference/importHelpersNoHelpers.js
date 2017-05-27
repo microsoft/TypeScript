@@ -55,17 +55,17 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec
-], C);
 var o = { a: 1 };
 var y = tslib_1.__assign({}, o);
 var x = tslib_1.__rest(y, []);
@@ -109,14 +109,14 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    __decorate([
+        __param(0, dec),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number]),
+        __metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }());
-__decorate([
-    __param(0, dec),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = __decorate([
-    dec
-], C);
