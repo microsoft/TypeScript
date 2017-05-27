@@ -14894,6 +14894,20 @@ namespace ts {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
+            // If contextualMapper is fakeInferenceMapper we are being called by checkApplicableSignature.
+            if (contextualMapper === fakeInferenceMapper) {
+                let source, target;
+                if (contextualSignature.typePredicate && signature.typePredicate && contextualSignature.typePredicate.kind === signature.typePredicate.kind) {
+                    source = contextualSignature.typePredicate.type;
+                    target = signature.typePredicate.type;
+                }
+                else {
+                    source = getReturnTypeOfSignature(contextualSignature);
+                    target = getReturnTypeOfSignature(signature);
+                }
+                // source is already instantiated by the caller of checkApplicableSignature.
+                inferTypes(context.inferences, source, target);
+            }
             const inferred = getInferredTypes(context);
             for (let i = 0; i < inferred.length; ++i) {
                 // If inference has failed, use the first constituent type. During checking, the other
