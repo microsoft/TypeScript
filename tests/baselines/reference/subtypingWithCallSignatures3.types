@@ -206,8 +206,8 @@ module Errors {
 >a2 : any
 
     var r1 = foo2(<T, U>(x: T) => <U[]>null); // any
->r1 : any
->foo2(<T, U>(x: T) => <U[]>null) : any
+>r1 : (x: number) => string[]
+>foo2(<T, U>(x: T) => <U[]>null) : (x: number) => string[]
 >foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
 >T : T

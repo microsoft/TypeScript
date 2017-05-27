@@ -888,8 +888,8 @@ var r14arg2 = (x: { a: string; b: number }) => <Object>null;
 >null : null
 
 var r14 = foo14(r14arg1); // any
->r14 : any
->foo14(r14arg1) : any
+>r14 : (x: { a: string; b: number; }) => Object
+>foo14(r14arg1) : (x: { a: string; b: number; }) => Object
 >foo14 : { (a: (x: { a: string; b: number; }) => Object): (x: { a: string; b: number; }) => Object; (a: any): any; }
 >r14arg1 : <T>(x: { a: T; b: T; }) => T
 

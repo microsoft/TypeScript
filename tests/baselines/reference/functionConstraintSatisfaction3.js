@@ -42,12 +42,16 @@ var r12 = foo(i2);
 var r15 = foo(c2);
 
 declare function id2<T>(x: T, y: T): T;
+declare function id3<T>(x: T, y: T, z: T): T;
 
 declare function boom<R>(f: (x: string, y: number) => R): R;
 declare function boom2(f: (x: string, y: number) => string): void;
+declare function boom3<R>(f: (x: string, y: number, z: R) => R): R;
 
 boom(id2);  // Should be an error T = [string, number]
 boom2(id2); // Should be an error T = [string, number]
+boom<string|number>(id2);   // Should be OK
+boom3<string|number>(id3);  // Should be OK
 
 declare function withNum<N extends number>(x: N): N;
 declare function withString<S extends string>(f: (x: S) => S): void;
@@ -57,9 +61,11 @@ withString(withNum);  // Error
 useString(withNum);   // Error
 
 declare function okay<R>(f: (x: 1, y: number) => R): R;
+declare function okay2(f: (x: string, y: number) => string|number);
 declare function transitive<T>(x: T, f: (x: T) => T): void;
 
 okay(id2);
+okay2(id2);
 
 transitive(1, withNum);
 transitive('1', withNum);
@@ -98,8 +104,11 @@ var r12 = foo(i2);
 var r15 = foo(c2);
 boom(id2); // Should be an error T = [string, number]
 boom2(id2); // Should be an error T = [string, number]
+boom(id2); // Should be OK
+boom3(id3); // Should be OK
 withString(withNum); // Error
 useString(withNum); // Error
 okay(id2);
+okay2(id2);
 transitive(1, withNum);
 transitive('1', withNum);
