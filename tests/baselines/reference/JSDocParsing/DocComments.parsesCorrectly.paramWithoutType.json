@@ -24,7 +24,7 @@
                 "end": 18,
                 "text": "foo"
             },
-            "parameterName": {
+            "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 18,

@@ -2163,7 +2163,7 @@ namespace ts {
         /** the parameter name, if provided *after* the type (JSDoc-standard) */
         postParameterName?: Identifier;
         /** the parameter name, regardless of the location it was provided */
-        parameterName: Identifier;
+        name: Identifier;
         isBracketed: boolean;
     }
 
