@@ -3449,7 +3449,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
-        /* @internal */ configFile?: JsonSourceFile;
+        /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;

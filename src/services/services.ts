@@ -1292,7 +1292,7 @@ namespace ts {
                 const currentOptions = program.getCompilerOptions();
                 const newOptions = hostCache.compilationSettings();
                 // If the compilation settings do no match, then the program is not up-to-date
-                if (!compareDataObjects(currentOptions, newOptions, "configFile")) {
+                if (!compareDataObjects(currentOptions, newOptions)) {
                     return false;
                 }
 

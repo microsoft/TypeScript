@@ -87,6 +87,7 @@ namespace RWC {
                         const configParseResult = ts.parseJsonSourceFileConfigFileContent(parsedTsconfigFileContents, configParseHost, ts.getDirectoryPath(tsconfigFile.path));
                         fileNames = configParseResult.fileNames;
                         opts.options = ts.extend(opts.options, configParseResult.options);
+                        ts.setConfigFileInOptions(opts.options, configParseResult.options.configFile);
                     }
 
                     // Load the files

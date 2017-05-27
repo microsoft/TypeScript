@@ -133,20 +133,6 @@ namespace ts.server {
     }
 
     /**
-     * Get the compiler options without configFile key
-     * @param options
-     */
-    function getCompilerOptionsWithoutConfigFile(options: CompilerOptions) {
-        const result: CompilerOptions = {};
-        for (const option in options) {
-            if (option !== "configFile") {
-                result[option] = options[option];
-            }
-        }
-        return result;
-    }
-
-    /**
      * Allows to schedule next step in multistep operation
      */
     interface NextStep {
@@ -1670,39 +1656,19 @@ namespace ts.server {
             },
             [CommandNames.SynchronizeProjectList]: (request: protocol.SynchronizeProjectListRequest) => {
                 const result = this.projectService.synchronizeProjectList(request.arguments.knownProjects);
-                // Remapping of the result is needed if
-                // - there are project errors
-                // - options contain configFile - need to remove it from options before serializing
-                const shouldRemapProjectFilesWithTSDiagnostics = (p: ProjectFilesWithTSDiagnostics) => (p.projectErrors && !!p.projectErrors.length) || (p.info && !!p.info.options.configFile);
-                if (!some(result, shouldRemapProjectFilesWithTSDiagnostics)) {
+                if (!result.some(p => p.projectErrors && p.projectErrors.length !== 0)) {
                     return this.requiredResponse(result);
                 }
                 const converted = map(result, p => {
-                    if (shouldRemapProjectFilesWithTSDiagnostics(p)) {
-                        // Map the project errors
-                        const projectErrors = p.projectErrors && p.projectErrors.length ?
-                            this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined) :
-                            p.projectErrors;
-
-                        // Remove the configFile in the options before serializing
-                        const info = p.info && !!p.info.options.configFile ?
-                            {
-                                projectName: p.info.projectName,
-                                isInferred: p.info.isInferred,
-                                version: p.info.version,
-                                options: getCompilerOptionsWithoutConfigFile(p.info.options),
-                                languageServiceDisabled: p.info.languageServiceDisabled
-                            } : p.info;
-
-                        return {
-                            info,
-                            changes: p.changes,
-                            files: p.files,
-                            projectErrors
-                        };
+                    if (!p.projectErrors || p.projectErrors.length === 0) {
+                        return p;
                     }
-
-                    return p;
+                    return {
+                        info: p.info,
+                        changes: p.changes,
+                        files: p.files,
+                        projectErrors: this.convertToDiagnosticsWithLinePosition(p.projectErrors, /*scriptInfo*/ undefined)
+                    };
                 });
                 return this.requiredResponse(converted);
             },

@@ -1380,6 +1380,13 @@ namespace ts {
         return parseJsonConfigFileContentWorker(/*json*/ undefined, sourceFile, host, basePath, existingOptions, configFileName, resolutionStack, extraFileExtensions);
     }
 
+    /*@internal*/
+    export function setConfigFileInOptions(options: CompilerOptions, configFile: JsonSourceFile) {
+        if (configFile) {
+            Object.defineProperty(options, "configFile", { enumerable: false, writable: false, value: configFile });
+        }
+    }
+
     /**
      * Parse the contents of a config file from json or json source file (tsconfig.json).
      * @param json The contents of the config file to parse
@@ -1406,8 +1413,7 @@ namespace ts {
         const { raw } = parsedConfig;
         const options = extend(existingOptions, parsedConfig.options || {});
         options.configFilePath = configFileName;
-        options.configFile = sourceFile;
-
+        setConfigFileInOptions(options, sourceFile);
         const { fileNames, wildcardDirectories } = getFileNames();
         return {
             options,

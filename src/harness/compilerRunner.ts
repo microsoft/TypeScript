@@ -82,7 +82,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 if (testCaseContent.tsConfig) {
                     assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
 
-                    tsConfigOptions = ts.clone(testCaseContent.tsConfig.options);
+                    tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
                     tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath)));
                 }
                 else {

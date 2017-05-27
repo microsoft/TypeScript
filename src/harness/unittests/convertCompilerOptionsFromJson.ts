@@ -34,11 +34,11 @@ namespace ts {
             const host: ParseConfigHost = new Utils.MockParseConfigHost("/apath/", true, []);
             const { options: actualCompilerOptions, errors: actualParseErrors } = parseJsonSourceFileConfigFileContent(result, host, "/apath/", /*existingOptions*/ undefined, configFileName);
             expectedResult.compilerOptions["configFilePath"] = configFileName;
-            expectedResult.compilerOptions.configFile = result;
 
             const parsedCompilerOptions = JSON.stringify(actualCompilerOptions);
             const expectedCompilerOptions = JSON.stringify(expectedResult.compilerOptions);
             assert.equal(parsedCompilerOptions, expectedCompilerOptions);
+            assert.equal(actualCompilerOptions.configFile, result);
 
             const actualErrors = filter(actualParseErrors, error => error.code !== Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code);
             const expectedErrors = expectedResult.errors;

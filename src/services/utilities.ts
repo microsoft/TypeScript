@@ -997,16 +997,18 @@ namespace ts {
         return false;
     }
 
-    export function compareDataObjects(dst: any, src: any, ignoreKey?: string): boolean {
+    export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions {
+        const result = clone(options);
+        setConfigFileInOptions(result, options && options.configFile);
+        return result;
+    }
+
+    export function compareDataObjects(dst: any, src: any): boolean {
         if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
             return false;
         }
 
         for (const e in dst) {
-            if (ignoreKey && ignoreKey === e) {
-                continue;
-            }
-
             if (typeof dst[e] === "object") {
                 if (!compareDataObjects(dst[e], src[e])) {
                     return false;

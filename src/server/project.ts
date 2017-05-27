@@ -789,7 +789,7 @@ namespace ts.server {
 
         setCompilerOptions(options?: CompilerOptions) {
             // Avoid manipulating the given options directly
-            const newOptions = options ? clone(options) : this.getCompilerOptions();
+            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilerOptions();
             if (!newOptions) {
                 return;
             }

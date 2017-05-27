@@ -131,14 +131,15 @@ namespace ts {
                 it(name, () => {
                     const parsed = getParseCommandLine(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: undefined }));
+                    assert.deepEqual(parsed.options, expected);
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
 
                 it(name + " with jsonSourceFile", () => {
                     const { parsed, jsonSourceFile } = getParseCommandLineJsonSourceFile(entry);
                     assert(!parsed.errors.length, flattenDiagnosticMessageText(parsed.errors[0] && parsed.errors[0].messageText, "\n"));
-                    assert.deepEqual(parsed.options, ts.extend(expected, <CompilerOptions>{ configFile: jsonSourceFile }));
+                    assert.deepEqual(parsed.options, expected);
+                    assert.equal(parsed.options.configFile, jsonSourceFile);
                     assert.deepEqual(parsed.fileNames, expectedFiles);
                 });
             }
