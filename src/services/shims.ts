@@ -1110,17 +1110,6 @@ namespace ts {
                     const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
                     const result = parseJsonText(fileName, text);
-
-                    if (!result.endOfFileToken) {
-                        return {
-                            options: {},
-                            typeAcquisition: {},
-                            files: [],
-                            raw: {},
-                            errors: realizeDiagnostics(result.parseDiagnostics, "\r\n")
-                        };
-                    }
-
                     const normalizedFileName = normalizeSlashes(fileName);
                     const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 

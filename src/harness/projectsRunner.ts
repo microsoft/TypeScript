@@ -222,16 +222,9 @@ class ProjectRunner extends RunnerBase {
                     readFile
                 };
                 const configParseResult = ts.parseJsonSourceFileConfigFileContent(result, configParseHost, ts.getDirectoryPath(configFileName), compilerOptions);
-                if (configParseResult.errors.length > 0) {
-                    return {
-                        configFileSourceFiles,
-                        moduleKind,
-                        errors: result.parseDiagnostics.concat(configParseResult.errors)
-                    };
-                }
                 inputFiles = configParseResult.fileNames;
                 compilerOptions = configParseResult.options;
-                errors = result.parseDiagnostics;
+                errors = result.parseDiagnostics.concat(configParseResult.errors);
             }
 
             const projectCompilerResult = compileProjectFiles(moduleKind, configFileSourceFiles, () => inputFiles, getSourceFileText, writeFile, compilerOptions);

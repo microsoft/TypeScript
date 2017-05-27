@@ -874,7 +874,7 @@ namespace ts {
             text = readFile(fileName);
         }
         catch (e) {
-            return { error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
+            return { config: {}, error: createCompilerDiagnostic(Diagnostics.Cannot_read_file_0_Colon_1, fileName, e.message) };
         }
         return parseConfigFileTextToJson(fileName, text);
     }
@@ -1011,10 +1011,7 @@ namespace ts {
         knownRootOptions: Map<CommandLineOption> | undefined,
         jsonConversionNotifier: JsonConversionNotifier | undefined): any {
         if (!sourceFile.jsonObject) {
-            if (sourceFile.endOfFileToken) {
-                return {};
-            }
-            return undefined;
+            return {};
         }
 
         return convertObjectLiteralExpressionToJson(sourceFile.jsonObject, knownRootOptions,

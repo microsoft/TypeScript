@@ -225,17 +225,11 @@ namespace ts {
 
             const result = parseJsonText(configFileName, cachedConfigFileText);
             reportDiagnostics(result.parseDiagnostics, /* compilerHost */ undefined);
-            if (!result.endOfFileToken) {
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+
             const cwd = sys.getCurrentDirectory();
             const configParseResult = parseJsonSourceFileConfigFileContent(result, sys, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), commandLine.options, getNormalizedAbsolutePath(configFileName, cwd));
-            if (configParseResult.errors.length > 0) {
-                reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
-                sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
-                return;
-            }
+            reportDiagnostics(configParseResult.errors, /* compilerHost */ undefined);
+
             if (isWatchSet(configParseResult.options)) {
                 if (!sys.watchFile) {
                     reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--watch"), /* host */ undefined);
