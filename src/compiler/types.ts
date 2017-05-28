@@ -2145,6 +2145,10 @@ namespace ts {
         parent: JSDoc;
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
+        /** the parameter name, if provided *before* the type (TypeScript-style) */
+        preParameterName?: Identifier;
+        /** the parameter name, if provided *after* the type (JSDoc-standard) */
+        postParameterName?: Identifier;
         typeExpression: JSDocTypeExpression;
         isBracketed: boolean;
     }
