@@ -15,3 +15,14 @@
 function foo(opts) {}
 
 foo({x: 'abc'});
+
+/**
+ * @typedef {Object} AnotherOpts
+ * @property anotherX {string}
+ * @property anotherY {string=}
+ * 
+ * @param {AnotherOpts} opts
+ */
+function foo1(opts) {}
+
+foo1({anotherX: "world"});

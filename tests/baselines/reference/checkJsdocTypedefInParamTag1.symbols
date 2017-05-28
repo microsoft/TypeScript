@@ -17,3 +17,18 @@ foo({x: 'abc'});
 >foo : Symbol(foo, Decl(0.js, 0, 0))
 >x : Symbol(x, Decl(0.js, 12, 5))
 
+/**
+ * @typedef {Object} AnotherOpts
+ * @property anotherX {string}
+ * @property anotherY {string=}
+ * 
+ * @param {AnotherOpts} opts
+ */
+function foo1(opts) {}
+>foo1 : Symbol(foo1, Decl(0.js, 12, 16))
+>opts : Symbol(opts, Decl(0.js, 21, 14))
+
+foo1({anotherX: "world"});
+>foo1 : Symbol(foo1, Decl(0.js, 12, 16))
+>anotherX : Symbol(anotherX, Decl(0.js, 23, 6))
+

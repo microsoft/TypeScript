@@ -20,3 +20,21 @@ foo({x: 'abc'});
 >x : string
 >'abc' : "abc"
 
+/**
+ * @typedef {Object} AnotherOpts
+ * @property anotherX {string}
+ * @property anotherY {string=}
+ * 
+ * @param {AnotherOpts} opts
+ */
+function foo1(opts) {}
+>foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
+>opts : { anotherX: string; anotherY?: string; }
+
+foo1({anotherX: "world"});
+>foo1({anotherX: "world"}) : void
+>foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
+>{anotherX: "world"} : { anotherX: string; }
+>anotherX : string
+>"world" : "world"
+
