@@ -66,6 +66,12 @@ namespace ts.formatting {
                 }
             }
 
+            const containerList = getListByPosition(position, precedingToken.parent);
+            // use list position if the preceding token is before any list items
+            if (containerList && !rangeContainsRange(containerList, precedingToken)) {
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize;
+            }
+
             return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
         }
 
@@ -392,6 +398,13 @@ namespace ts.formatting {
                 case SyntaxKind.ArrayBindingPattern:
                     return getListIfVisualStartEndIsInListRange((<ObjectBindingPattern | ArrayBindingPattern>node).elements, start, end, node);
             }
+        }
+
+        function getActualIndentationForListStartLine(list: NodeArray<Node>, sourceFile: SourceFile, options: EditorSettings): number {
+            if (!list) {
+                return Value.Unknown;
+            }
+            return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
