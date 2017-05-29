@@ -72,6 +72,12 @@ namespace ts.formatting {
                 }
             }
 
+            const containerList = getListByPosition(position, precedingToken.parent);
+            // use list position if the preceding token is before any list items
+            if (containerList && !rangeContainsRange(containerList, precedingToken)) {
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize;
+            }
+
             // try to find node that can contribute to indentation and includes 'position' starting from 'precedingToken'
             // if such node is found - compute initial indentation for 'position' inside this node
             let previous: Node;
@@ -340,6 +346,13 @@ namespace ts.formatting {
                 case SyntaxKind.NamedExports:
                     return getListIfVisualStartEndIsInListRange((<NamedImportsOrExports>node).elements, start, end, node);
             }
+        }
+
+        function getActualIndentationForListStartLine(list: NodeArray<Node>, sourceFile: SourceFile, options: EditorSettings): number {
+            if (!list) {
+                return Value.Unknown;
+            }
+            return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
         }
 
         function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
