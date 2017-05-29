@@ -34,7 +34,7 @@ namespace ts.formatting {
      * the first token in line so it should be indented
      */
     interface DynamicIndentation {
-        getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind, container: Node): number;
+        getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind, container: Node, suppressDelta?: boolean): number;
         getIndentationForComment(owningToken: SyntaxKind, tokenIndentation: number, container: Node): number;
         /**
          * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
@@ -399,7 +399,7 @@ namespace ts.formatting {
         let previousRangeStartLine: number;
 
         let lastIndentedLine: number;
-        let indentationOnLastIndentedLine: number;
+        let indentationOnLastIndentedLine = Constants.Unknown;
 
         const edits: TextChange[] = [];
 
@@ -540,8 +540,18 @@ namespace ts.formatting {
                     }
                     return tokenIndentation !== Constants.Unknown ? tokenIndentation : indentation;
                 },
-                getIndentationForToken: (line, kind, container) =>
-                    shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
+                // if list end token is LessThanToken '>' then its delta should be explicitly suppressed
+                // so that LessThanToken as a binary operator can still be indented.
+                // foo.then
+                //     <
+                //         number,
+                //         string,
+                //     >();
+                // vs
+                // var a = xValue
+                //     > yValue;
+                getIndentationForToken: (line, kind, container, suppressDelta) =>
+                    !suppressDelta && shouldAddDelta(line, kind, container) ? indentation + getDelta(container) : indentation,
                 getIndentation: () => indentation,
                 getDelta,
                 recomputeIndentation: lineAdded => {
@@ -557,7 +567,6 @@ namespace ts.formatting {
                     // open and close brace, 'else' and 'while' (in do statement) tokens has indentation of the parent
                     case SyntaxKind.OpenBraceToken:
                     case SyntaxKind.CloseBraceToken:
-                    case SyntaxKind.OpenParenToken:
                     case SyntaxKind.CloseParenToken:
                     case SyntaxKind.ElseKeyword:
                     case SyntaxKind.WhileKeyword:
@@ -726,6 +735,7 @@ namespace ts.formatting {
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
+                let indentationOnListStartToken = parentDynamicIndentation.getIndentation();
 
                 if (listStartToken !== SyntaxKind.Unknown) {
                     // introduce a new indentation scope for lists (including list start and end tokens)
@@ -738,11 +748,22 @@ namespace ts.formatting {
                         else if (tokenInfo.token.kind === listStartToken) {
                             // consume list start token
                             startLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
-                            const indentation =
-                                computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, parentStartLine);
 
-                            listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation.indentation, indentation.delta);
-                            consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
+                            consumeTokenAndAdvanceScanner(tokenInfo, parent, parentDynamicIndentation, parent);
+
+                            if (indentationOnLastIndentedLine !== Constants.Unknown) {
+                                // scanner just processed list start token so consider last indentation as list indentation
+                                // function foo(): { // last indentation was 0, list item will be indented based on this value
+                                //   foo: number;
+                                // }: {};
+                                indentationOnListStartToken = indentationOnLastIndentedLine;
+                            }
+                            else {
+                                const startLinePosition = getLineStartPositionForPosition(tokenInfo.token.pos, sourceFile);
+                                indentationOnListStartToken = SmartIndenter.findFirstNonWhitespaceColumn(startLinePosition, tokenInfo.token.pos, sourceFile, options);
+                            }
+
+                            listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentationOnListStartToken, options.indentSize!); // TODO: GH#18217
                         }
                         else {
                             // consume any tokens that precede the list as child elements of 'node' using its indentation scope
@@ -771,12 +792,12 @@ namespace ts.formatting {
                     // without this check close paren will be interpreted as list end token for function expression which is wrong
                     if (tokenInfo && tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
                         // consume list end token
-                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
+                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent, /*isListEndToken*/ true);
                     }
                 }
             }
 
-            function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation, container: Node): void {
+            function consumeTokenAndAdvanceScanner(currentTokenInfo: TokenInfo, parent: Node, dynamicIndentation: DynamicIndentation, container: Node, isListEndToken?: boolean): void {
                 Debug.assert(rangeContainsRange(parent, currentTokenInfo.token));
 
                 const lastTriviaWasNewLine = formattingScanner.lastTrailingTriviaWasNewLine();
@@ -814,7 +835,7 @@ namespace ts.formatting {
 
                 if (indentToken) {
                     const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
-                        dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container) :
+                        dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, isListEndToken) :
                         Constants.Unknown;
 
                     let indentNextTokenOrTrivia = true;
@@ -1228,6 +1249,9 @@ namespace ts.formatting {
                 if ((<TypeReferenceNode>node).typeArguments === list) {
                     return SyntaxKind.LessThanToken;
                 }
+                break;
+            case SyntaxKind.TypeLiteral:
+                return SyntaxKind.OpenBraceToken;
         }
 
         return SyntaxKind.Unknown;
@@ -1239,6 +1263,8 @@ namespace ts.formatting {
                 return SyntaxKind.CloseParenToken;
             case SyntaxKind.LessThanToken:
                 return SyntaxKind.GreaterThanToken;
+            case SyntaxKind.OpenBraceToken:
+                return SyntaxKind.CloseBraceToken;
         }
 
         return SyntaxKind.Unknown;
