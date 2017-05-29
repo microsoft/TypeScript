@@ -99,10 +99,6 @@ namespace ts.formatting {
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
-                actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
-                if (actualIndentation !== Value.Unknown) {
-                    return actualIndentation + options.indentSize;
-                }
 
                 previous = current;
                 current = current.parent;
@@ -160,10 +156,6 @@ namespace ts.formatting {
                 if (useActualIndentation) {
                     // try to fetch actual indentation for current node from source text
                     let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
-                    if (actualIndentation !== Value.Unknown) {
-                        return actualIndentation + indentationDelta;
-                    }
-                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -331,50 +323,6 @@ namespace ts.formatting {
             function getActualIndentationFromList(list: Node[]): number {
                 const index = indexOf(list, node);
                 return index !== -1 ? deriveActualIndentationFromList(list, index, sourceFile, options) : Value.Unknown;
-            }
-        }
-
-        function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
-            // actual indentation should not be used when:
-            // - node is close parenthesis - this is the end of the expression
-            if (node.kind === SyntaxKind.CloseParenToken) {
-                return Value.Unknown;
-            }
-
-            if (node.parent && isCallOrNewExpression(node.parent) && (<CallExpression>node.parent).expression !== node) {
-
-                const fullCallOrNewExpression = (<CallExpression | NewExpression>node.parent).expression;
-                const startingExpression = getStartingExpression(fullCallOrNewExpression);
-
-                if (fullCallOrNewExpression === startingExpression) {
-                    return Value.Unknown;
-                }
-
-                const fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
-                const startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
-
-                if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
-                    return Value.Unknown;
-                }
-
-                return findColumnForFirstNonWhitespaceCharacterInLine(fullCallOrNewExpressionEnd, sourceFile, options);
-            }
-
-            return Value.Unknown;
-
-            function getStartingExpression(node: Expression) {
-                while (true) {
-                    switch (node.kind) {
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                        case SyntaxKind.PropertyAccessExpression:
-                        case SyntaxKind.ElementAccessExpression:
-                            node = (<PropertyAccessExpression | CallExpression | NewExpression | ElementAccessExpression | PropertyAccessExpression>node).expression;
-                            break;
-                        default:
-                            return node;
-                    }
-                }
             }
         }
 
