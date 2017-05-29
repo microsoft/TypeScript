@@ -716,7 +716,7 @@ namespace ts.formatting {
                 let startLine = parentStartLine;
                 let indentationOnListStartToken = parentDynamicIndentation.getIndentation();
 
-                if (listStartToken !== SyntaxKind.Unknown) {
+                if (listStartToken !== SyntaxKind.Unknown && nodes.end !== undefined /* TODO: nodes.end must not be `undefined` */) {
                     // introduce a new indentation scope for lists (including list start and end tokens)
                     while (formattingScanner.isOnToken()) {
                         const tokenInfo = formattingScanner.readTokenInfo(parent);
