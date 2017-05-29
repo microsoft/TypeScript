@@ -101,7 +101,10 @@ namespace ts.formatting {
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
-                let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                // do not consider parent-child line sharing yet:
+                // function foo(a
+                //    | preceding node 'a' does share line with its parent but indentation is expected
+                const actualIndentation = getActualIndentationForListItem(current, sourceFile, options, /*listIndentsChild*/ true);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
                 }
@@ -147,21 +150,20 @@ namespace ts.formatting {
                     useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
                 }
 
-                if (useActualIndentation) {
-                    // check if current node is a list item - if yes, take indentation from it
-                    const actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                    if (actualIndentation !== Value.Unknown) {
-                        return actualIndentation + indentationDelta;
-                    }
-                }
                 parentStart = getParentStart(parent, current, sourceFile);
                 const parentAndChildShareLine =
                     parentStart.line === currentStart.line ||
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
                 if (useActualIndentation) {
+                    // check if current node is a list item - if yes, take indentation from it
+                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, !parentAndChildShareLine);
+                    if (actualIndentation !== Value.Unknown) {
+                        return actualIndentation + indentationDelta;
+                    }
+
                     // try to fetch actual indentation for current node from source text
-                    let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -355,9 +357,19 @@ namespace ts.formatting {
             return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
         }
 
-        function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
+        function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings, listIndentsChild: boolean): number {
+            if (node.parent && node.parent.kind === SyntaxKind.VariableDeclarationList) {
+                // VariableDeclarationList has no wrapping tokens
+                return Value.Unknown;
+            }
             const containingList = getContainingList(node, sourceFile);
-            return containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
+            const result = containingList ? getActualIndentationFromList(containingList) : Value.Unknown;
+            if (containingList && result === Value.Unknown) {
+                return getActualIndentationForListStartLine(containingList, sourceFile, options) + (listIndentsChild ? options.indentSize : 0);
+            }
+            else {
+                return result;
+            }
 
             function getActualIndentationFromList(list: Node[]): number {
                 const index = indexOf(list, node);
