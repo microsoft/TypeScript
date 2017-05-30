@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(8,38): error TS2304: Cannot find name 'TypeChecker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,48): error TS2304: Cannot find name 'TypeLink'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(9,67): error TS2304: Cannot find name 'SymbolScope'.
@@ -38,7 +38,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource9.ts(200,48): error T
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

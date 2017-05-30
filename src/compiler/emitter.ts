@@ -200,7 +200,9 @@ namespace ts {
             onSetSourceFile,
             substituteNode,
             onBeforeEmitNodeArray,
-            onAfterEmitNodeArray
+            onAfterEmitNodeArray,
+            onBeforeEmitToken,
+            onAfterEmitToken
         } = handlers;
 
         const newLine = getNewLineCharacter(printerOptions);
@@ -406,7 +408,7 @@ namespace ts {
             // Strict mode reserved words
             // Contextual keywords
             if (isKeyword(kind)) {
-                writeTokenText(kind);
+                writeTokenNode(node);
                 return;
             }
 
@@ -569,6 +571,8 @@ namespace ts {
                     return emitModuleBlock(<ModuleBlock>node);
                 case SyntaxKind.CaseBlock:
                     return emitCaseBlock(<CaseBlock>node);
+                case SyntaxKind.NamespaceExportDeclaration:
+                    return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
                 case SyntaxKind.ImportEqualsDeclaration:
                     return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ImportDeclaration:
@@ -645,7 +649,7 @@ namespace ts {
             }
 
             if (isToken(node)) {
-                writeTokenText(kind);
+                writeTokenNode(node);
                 return;
             }
         }
@@ -672,7 +676,7 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
-                    writeTokenText(kind);
+                    writeTokenNode(node);
                     return;
 
                 // Expressions
@@ -858,6 +862,7 @@ namespace ts {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitWithPrefix(": ", node.type);
             emitExpressionWithPrefix(" = ", node.initializer);
             write(";");
@@ -879,6 +884,7 @@ namespace ts {
             emitModifiers(node, node.modifiers);
             writeIfPresent(node.asteriskToken, "*");
             emit(node.name);
+            writeIfPresent(node.questionToken, "?");
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
@@ -1058,7 +1064,7 @@ namespace ts {
             }
             else {
                 write("{");
-                emitList(node, elements, getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.ObjectBindingPatternElements : ListFormat.ObjectBindingPatternElementsWithSpaceBetweenBraces);
+                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
                 write("}");
             }
         }
@@ -1260,7 +1266,7 @@ namespace ts {
             const operand = node.operand;
             return operand.kind === SyntaxKind.PrefixUnaryExpression
                 && ((node.operator === SyntaxKind.PlusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusPlusToken))
-                || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
+                    || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
         }
 
         function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
@@ -1275,7 +1281,7 @@ namespace ts {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-            writeTokenText(node.operatorToken.kind);
+            writeTokenNode(node.operatorToken);
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1882,6 +1888,12 @@ namespace ts {
             write(";");
         }
 
+        function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
+            write("export as namespace ");
+            emit(node.name);
+            write(";");
+        }
+
         function emitNamedExports(node: NamedExports) {
             emitNamedImportsOrExports(node);
         }
@@ -2018,6 +2030,22 @@ namespace ts {
                     nodeIsSynthesized(statements[0]) ||
                     rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
+
+            // e.g:
+            //      case 0: // Zero
+            //      case 1: // One
+            //      case 2: // two
+            //          return "hi";
+            // If there is no statements, emitNodeWithComments of the parentNode which is caseClause will take care of trailing comment.
+            // So in example above, comment "// Zero" and "// One" will be emit in emitTrailingComments in emitNodeWithComments.
+            // However, for "case 2", because parentNode which is caseClause has an "end" property to be end of the statements (in this case return statement)
+            // comment "// two" will not be emitted in emitNodeWithComments.
+            // Therefore, we have to do the check here to emit such comment.
+            if (statements.length > 0) {
+                // We use emitTrailingCommentsOfPosition instead of emitLeadingCommentsOfPosition because leading comments is defined as comments before the node after newline character separating it from previous line
+                // Note: we can't use parentNode.end as such position includes statements.
+                emitTrailingCommentsOfPosition(statements.pos);
+            }
 
             if (emitAsSingleStatement) {
                 write(" ");
@@ -2453,6 +2481,16 @@ namespace ts {
             return onEmitSourceMapOfToken
                 ? onEmitSourceMapOfToken(contextNode, token, pos, writeTokenText)
                 : writeTokenText(token, pos);
+        }
+
+        function writeTokenNode(node: Node) {
+            if (onBeforeEmitToken) {
+                onBeforeEmitToken(node);
+            }
+            writeTokenText(node.kind);
+            if (onAfterEmitToken) {
+                onAfterEmitToken(node);
+            }
         }
 
         function writeTokenText(token: SyntaxKind, pos?: number) {
@@ -2928,9 +2966,9 @@ namespace ts {
 
     // Flags enum to track count of temp variables and a few dedicated names
     const enum TempFlags {
-        Auto      = 0x00000000,  // No preferred name
+        Auto = 0x00000000,  // No preferred name
         CountMask = 0x0FFFFFFF,  // Temp variable counter
-        _i        = 0x10000000,  // Use/preference flag for '_i'
+        _i = 0x10000000,  // Use/preference flag for '_i'
     }
 
     const enum ListFormat {
@@ -2973,7 +3011,7 @@ namespace ts {
         NoInterveningComments = 1 << 17, // Do not emit comments between each node
 
         // Precomputed Formats
-        Modifiers = SingleLine | SpaceBetweenSiblings,
+        Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
         HeritageClauses = SingleLine | SpaceBetweenSiblings,
         SingleLineTypeLiteralMembers = SingleLine | SpaceBetweenBraces | SpaceBetweenSiblings | Indented,
         MultiLineTypeLiteralMembers = MultiLine | Indented,
@@ -2981,8 +3019,7 @@ namespace ts {
         TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
         UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
         IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | CommaDelimited | SpaceBetweenSiblings,
-        ObjectBindingPatternElementsWithSpaceBetweenBraces = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
+        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
         ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
         ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
         ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,

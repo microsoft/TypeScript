@@ -40,7 +40,7 @@ var App: React.StatelessComponent<{ children }> = ({children}) => (
 >React : any
 >StatelessComponent : React.StatelessComponent<P>
 >children : any
->({children}) => (    <div >        <MainMenu/>	</div>) : ({children}: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
+>({children}) => (    <div >        <MainMenu/>	</div>) : ({ children }: { children: any; } & { children?: React.ReactNode; }) => JSX.Element
 >children : any
 >(    <div >        <MainMenu/>	</div>) : JSX.Element
 

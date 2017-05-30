@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////var x = { "[|{| "isDefinition": true |}someProperty|]": 0 }
+////var x = { "[|{| "isWriteAccess": true, "isDefinition": true |}someProperty|]": 0 }
 ////x["[|someProperty|]"] = 3;
 ////x.[|someProperty|] = 5;
 

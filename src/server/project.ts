@@ -13,14 +13,8 @@ namespace ts.server {
         External
     }
 
-    function remove<T>(items: T[], item: T) {
-        const index = items.indexOf(item);
-        if (index >= 0) {
-            items.splice(index, 1);
-        }
-    }
-
-    function countEachFileTypes(infos: ScriptInfo[]): { js: number, jsx: number, ts: number, tsx: number, dts: number } {
+    /* @internal */
+    export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
         const result = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0 };
         for (const info of infos) {
             switch (info.scriptKind) {
@@ -732,11 +726,15 @@ namespace ts.server {
 
         // remove a root file from project
         protected removeRoot(info: ScriptInfo): void {
-            remove(this.rootFiles, info);
+            orderedRemoveItem(this.rootFiles, info);
             this.rootFilesMap.remove(info.path);
         }
     }
 
+    /**
+     * If a file is opened and no tsconfig (or jsconfig) is found,
+     * the file and its imports/references are put into an InferredProject.
+     */
     export class InferredProject extends Project {
 
         private static newName = (() => {
@@ -830,6 +828,11 @@ namespace ts.server {
         }
     }
 
+    /**
+     * If a file is opened, the server will look for a tsconfig (or jsconfig)
+     * and if successfull create a ConfiguredProject for it.
+     * Otherwise it will create an InferredProject.
+     */
     export class ConfiguredProject extends Project {
         private typeAcquisition: TypeAcquisition;
         private projectFileWatcher: FileWatcher;
@@ -872,6 +875,12 @@ namespace ts.server {
             // Search our peer node_modules, then any globally-specified probe paths
             // ../../.. to walk from X/node_modules/typescript/lib/tsserver.js to X/node_modules/
             const searchPaths = [combinePaths(host.getExecutingFilePath(), "../../.."), ...this.projectService.pluginProbeLocations];
+
+            if (this.projectService.allowLocalPluginLoads) {
+                const local = getDirectoryPath(this.canonicalConfigFilePath);
+                this.projectService.logger.info(`Local plugin loading enabled; adding ${local} to search paths`);
+                searchPaths.unshift(local);
+            }
 
             // Enable tsconfig-specified plugins
             if (options.plugins) {
@@ -1049,6 +1058,10 @@ namespace ts.server {
         }
     }
 
+    /**
+     * Project whose configuration is handled externally, such as in a '.csproj'.
+     * These are created only if a host explicitly calls `openExternalProject`.
+     */
     export class ExternalProject extends Project {
         private typeAcquisition: TypeAcquisition;
         constructor(public externalProjectName: string,

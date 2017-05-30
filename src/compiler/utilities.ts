@@ -68,7 +68,7 @@ namespace ts {
                 clear: () => str = "",
                 trackSymbol: noop,
                 reportInaccessibleThisError: noop,
-                reportIllegalExtends: noop
+                reportPrivateInBaseOfClassExpression: noop,
             };
         }
 
@@ -286,6 +286,14 @@ namespace ts {
 
     export function isJSDocNode(node: Node) {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+
+    export function isJSDoc(node: Node): node is JSDoc {
+        return node.kind === SyntaxKind.JSDocComment;
+    }
+
+    export function isJSDocTypedefTag(node: Node): node is JSDocTypedefTag {
+        return node.kind === SyntaxKind.JSDocTypedefTag;
     }
 
     export function isJSDocTag(node: Node) {
@@ -1567,6 +1575,10 @@ namespace ts {
     }
 
    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+        if (isJSDocTypedefTag(node)) {
+            return [node.parent];
+        }
+
         let cache: (JSDoc | JSDocTag)[] = node.jsDocCache;
         if (!cache) {
             getJSDocsWorker(node);
@@ -1615,7 +1627,7 @@ namespace ts {
 
             // Pull parameter comments from declaring function as well
             if (node.kind === SyntaxKind.Parameter) {
-                cache = concatenate(cache, getJSDocParameterTags(node));
+                cache = concatenate(cache, getJSDocParameterTags(node as ParameterDeclaration));
             }
 
             if (isVariableLike(node) && node.initializer) {
@@ -1626,11 +1638,8 @@ namespace ts {
         }
     }
 
-    export function getJSDocParameterTags(param: Node): JSDocParameterTag[] {
-        if (!isParameter(param)) {
-            return undefined;
-        }
-        const func = param.parent as FunctionLikeDeclaration;
+    export function getJSDocParameterTags(param: ParameterDeclaration): JSDocParameterTag[] {
+        const func = param.parent;
         const tags = getJSDocTags(func, SyntaxKind.JSDocParameterTag) as JSDocParameterTag[];
         if (!param.name) {
             // this is an anonymous jsdoc param from a `function(type1, type2): type3` specification
@@ -1651,10 +1660,22 @@ namespace ts {
         }
     }
 
+    /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
+    export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
+        const name = node.parameterName.text;
+        const grandParent = node.parent!.parent!;
+        Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
+        if (!isFunctionLike(grandParent)) {
+            return undefined;
+        }
+        return find(grandParent.parameters, p =>
+            p.name.kind === SyntaxKind.Identifier && p.name.text === name);
+    }
+
     export function getJSDocType(node: Node): JSDocType {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
-            const paramTags = getJSDocParameterTags(node);
+            const paramTags = getJSDocParameterTags(node as ParameterDeclaration);
             if (paramTags) {
                 tag = find(paramTags, tag => !!tag.typeExpression);
             }
@@ -1792,33 +1813,20 @@ namespace ts {
         }
     }
 
-    export function getNameOfDeclaration(declaration: Declaration): DeclarationName {
-        if (!declaration) {
-            return undefined;
-        }
-        if (declaration.kind === SyntaxKind.BinaryExpression) {
-            const kind = getSpecialPropertyAssignmentKind(declaration as BinaryExpression);
-            const lhs = (declaration as BinaryExpression).left;
-            switch (kind) {
-                case SpecialPropertyAssignmentKind.None:
-                case SpecialPropertyAssignmentKind.ModuleExports:
-                    return undefined;
-                case SpecialPropertyAssignmentKind.ExportsProperty:
-                    if (lhs.kind === SyntaxKind.Identifier) {
-                        return (lhs as PropertyAccessExpression).name;
-                    }
-                    else {
-                        return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
-                    }
-                case SpecialPropertyAssignmentKind.ThisProperty:
-                case SpecialPropertyAssignmentKind.Property:
-                    return (lhs as PropertyAccessExpression).name;
-                case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    return ((lhs as PropertyAccessExpression).expression as PropertyAccessExpression).name;
-            }
-        }
-        else {
-            return (declaration as NamedDeclaration).name;
+    /* @internal */
+    // See GH#16030
+    export function isAnyDeclarationName(name: Node): boolean {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NumericLiteral:
+                if (isDeclaration(name.parent)) {
+                    return name.parent.name === name;
+                }
+                const binExp = name.parent.parent;
+                return isBinaryExpression(binExp) && getSpecialPropertyAssignmentKind(binExp) !== SpecialPropertyAssignmentKind.None && getNameOfDeclaration(binExp) === name;
+            default:
+                return false;
         }
     }
 
@@ -1934,21 +1942,19 @@ namespace ts {
         const isNoDefaultLibRegEx = /^(\/\/\/\s*<reference\s+no-default-lib\s*=\s*)('|")(.+?)\2\s*\/>/gim;
         if (simpleReferenceRegEx.test(comment)) {
             if (isNoDefaultLibRegEx.test(comment)) {
-                return {
-                    isNoDefaultLib: true
-                };
+                return { isNoDefaultLib: true };
             }
             else {
                 const refMatchResult = fullTripleSlashReferencePathRegEx.exec(comment);
                 const refLibResult = !refMatchResult && fullTripleSlashReferenceTypeReferenceDirectiveRegEx.exec(comment);
-                if (refMatchResult || refLibResult) {
-                    const start = commentRange.pos;
-                    const end = commentRange.end;
+                const match = refMatchResult || refLibResult;
+                if (match) {
+                    const pos = commentRange.pos + match[1].length + match[2].length;
                     return {
                         fileReference: {
-                            pos: start,
-                            end: end,
-                            fileName: (refMatchResult || refLibResult)[3]
+                            pos,
+                            end: pos + match[3].length,
+                            fileName: match[3]
                         },
                         isNoDefaultLib: false,
                         isTypeReferenceDirective: !!refLibResult
@@ -3196,11 +3202,11 @@ namespace ts {
     }
 
     export function getLocalSymbolForExportDefault(symbol: Symbol) {
-        return isExportDefaultSymbol(symbol) ? symbol.valueDeclaration.localSymbol : undefined;
+        return isExportDefaultSymbol(symbol) ? symbol.declarations[0].localSymbol : undefined;
     }
 
     function isExportDefaultSymbol(symbol: Symbol): boolean {
-        return symbol && symbol.valueDeclaration && hasModifier(symbol.valueDeclaration, ModifierFlags.Default);
+        return symbol && length(symbol.declarations) > 0 && hasModifier(symbol.declarations[0], ModifierFlags.Default);
     }
 
     /** Return ".ts", ".d.ts", or ".tsx", if that is the extension. */
@@ -4809,5 +4815,26 @@ namespace ts {
      */
     export function unescapeIdentifier(identifier: string): string {
         return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
+    }
+
+    export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {
+        if (!declaration) {
+            return undefined;
+        }
+        if (declaration.kind === SyntaxKind.BinaryExpression) {
+            const expr = declaration as BinaryExpression;
+            switch (getSpecialPropertyAssignmentKind(expr)) {
+                case SpecialPropertyAssignmentKind.ExportsProperty:
+                case SpecialPropertyAssignmentKind.ThisProperty:
+                case SpecialPropertyAssignmentKind.Property:
+                case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    return (expr.left as PropertyAccessExpression).name;
+                default:
+                    return undefined;
+            }
+        }
+        else {
+            return (declaration as NamedDeclaration).name;
+        }
     }
 }

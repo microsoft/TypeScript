@@ -12,7 +12,7 @@ namespace ts.codefix {
         // This is the identifier of the misspelled word. eg:
         // this.speling = 1;
         //      ^^^^^^^
-        const node = getTokenAtPosition(sourceFile, context.span.start);
+        const node = getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false); // TODO: GH#15852
         const checker = context.program.getTypeChecker();
         let suggestion: string;
         if (node.kind === SyntaxKind.Identifier && isPropertyAccessExpression(node.parent)) {

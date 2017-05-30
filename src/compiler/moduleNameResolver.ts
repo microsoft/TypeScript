@@ -653,11 +653,13 @@ namespace ts {
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
                 }
-                // A path mapping may have a ".ts" extension; in contrast to an import, which should omit it.
-                const tsExtension = tryGetExtensionFromPath(candidate);
-                if (tsExtension !== undefined) {
+                // A path mapping may have an extension, in contrast to an import, which should omit it.
+                const extension = tryGetExtensionFromPath(candidate);
+                if (extension !== undefined) {
                     const path = tryFile(candidate, failedLookupLocations, /*onlyRecordFailures*/ false, state);
-                    return path && { path, extension: tsExtension };
+                    if (path !== undefined) {
+                        return { path, extension };
+                    }
                 }
 
                 return loader(extensions, candidate, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
@@ -971,10 +973,13 @@ namespace ts {
         }
     }
 
+    /** Double underscores are used in DefinitelyTyped to delimit scoped packages. */
+    const mangledScopedPackageSeparator = "__";
+
     /** For a scoped package, we must look in `@types/foo__bar` instead of `@types/@foo/bar`. */
     function mangleScopedPackage(moduleName: string, state: ModuleResolutionState): string {
         if (startsWith(moduleName, "@")) {
-            const replaceSlash = moduleName.replace(ts.directorySeparator, "__");
+            const replaceSlash = moduleName.replace(ts.directorySeparator, mangledScopedPackageSeparator);
             if (replaceSlash !== moduleName) {
                 const mangled = replaceSlash.slice(1); // Take off the "@"
                 if (state.traceEnabled) {
@@ -984,6 +989,17 @@ namespace ts {
             }
         }
         return moduleName;
+    }
+
+    /* @internal */
+    export function getPackageNameFromAtTypesDirectory(mangledName: string): string {
+        const withoutAtTypePrefix = removePrefix(mangledName, "@types/");
+        if (withoutAtTypePrefix !== mangledName) {
+            return withoutAtTypePrefix.indexOf("__") !== -1 ?
+                "@" + withoutAtTypePrefix.replace(mangledScopedPackageSeparator, ts.directorySeparator) :
+                withoutAtTypePrefix;
+        }
+        return mangledName;
     }
 
     function tryFindNonRelativeModuleNameInCache(cache: PerModuleNameCache | undefined, moduleName: string, containingDirectory: string, traceEnabled: boolean, host: ModuleResolutionHost): SearchResult<Resolved> {

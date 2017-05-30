@@ -23,19 +23,19 @@ namespace ts {
         }
     }
 
-    function visitNode<T>(cbNode: (node: Node) => T, node: Node): T | undefined {
+    function visitNode<T>(cbNode: (node: Node) => T, node?: Node): T | undefined {
         if (node) {
             return cbNode(node);
         }
     }
 
-    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes: Node[]): T | undefined {
+    function visitNodeArray<T>(cbNodes: (nodes: Node[]) => T, nodes?: Node[]): T | undefined {
         if (nodes) {
             return cbNodes(nodes);
         }
     }
 
-    function visitEachNode<T>(cbNode: (node: Node) => T, nodes: Node[]): T | undefined {
+    function visitEachNode<T>(cbNode: (node: Node) => T, nodes?: Node[]): T | undefined {
         if (nodes) {
             for (const node of nodes) {
                 const result = cbNode(node);
@@ -50,14 +50,14 @@ namespace ts {
     // stored in properties. If a 'cbNodes' callback is specified, it is invoked for embedded arrays; otherwise,
     // embedded arrays are flattened and the 'cbNode' callback is invoked for each element. If a callback returns
     // a truthy value, iteration stops and that value is returned. Otherwise, undefined is returned.
-    export function forEachChild<T>(node: Node, cbNode: (node: Node) => T, cbNodeArray?: (nodes: Node[]) => T): T | undefined {
+    export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodeArray?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         if (!node) {
             return;
         }
         // The visitXXX functions could be written as local functions that close over the cbNode and cbNodeArray
         // callback parameters, but that causes a closure allocation for each invocation with noticeable effects
         // on performance.
-        const visitNodes: (cb: ((node: Node) => T) | ((node: Node[]) => T), nodes: Node[]) => T = cbNodeArray ? visitNodeArray : visitEachNode;
+        const visitNodes: (cb: ((node?: Node) => T | undefined) | ((node?: Node[]) => T | undefined), nodes?: Node[]) => T | undefined = cbNodeArray ? visitNodeArray : visitEachNode;
         const cbNodes = cbNodeArray || cbNode;
         switch (node.kind) {
             case SyntaxKind.QualifiedName:
@@ -1240,12 +1240,12 @@ namespace ts {
             if (token() === SyntaxKind.ExportKeyword) {
                 nextToken();
                 if (token() === SyntaxKind.DefaultKeyword) {
-                    return lookAhead(nextTokenIsClassOrFunctionOrAsync);
+                    return lookAhead(nextTokenCanFollowDefaultKeyword);
                 }
                 return token() !== SyntaxKind.AsteriskToken && token() !== SyntaxKind.AsKeyword && token() !== SyntaxKind.OpenBraceToken && canFollowModifier();
             }
             if (token() === SyntaxKind.DefaultKeyword) {
-                return nextTokenIsClassOrFunctionOrAsync();
+                return nextTokenCanFollowDefaultKeyword();
             }
             if (token() === SyntaxKind.StaticKeyword) {
                 nextToken();
@@ -1267,9 +1267,10 @@ namespace ts {
                 || isLiteralPropertyName();
         }
 
-        function nextTokenIsClassOrFunctionOrAsync(): boolean {
+        function nextTokenCanFollowDefaultKeyword(): boolean {
             nextToken();
             return token() === SyntaxKind.ClassKeyword || token() === SyntaxKind.FunctionKeyword ||
+                token() === SyntaxKind.InterfaceKeyword ||
                 (token() === SyntaxKind.AbstractKeyword && lookAhead(nextTokenIsClassKeywordOnSameLine)) ||
                 (token() === SyntaxKind.AsyncKeyword && lookAhead(nextTokenIsFunctionKeywordOnSameLine));
         }
@@ -6074,7 +6075,10 @@ namespace ts {
                     case SyntaxKind.OpenBraceToken:
                         return parseJSDocRecordType();
                     case SyntaxKind.FunctionKeyword:
-                        return parseJSDocFunctionType();
+                        if (lookAhead(nextTokenIsOpenParen)) {
+                            return parseJSDocFunctionType();
+                        }
+                        break;
                     case SyntaxKind.DotDotDotToken:
                         return parseJSDocVariadicType();
                     case SyntaxKind.NewKeyword:
@@ -6090,7 +6094,6 @@ namespace ts {
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.UndefinedKeyword:
                     case SyntaxKind.NeverKeyword:
-                    case SyntaxKind.ObjectKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -6630,10 +6633,7 @@ namespace ts {
                     });
                 }
 
-                function parseParamTag(atToken: AtToken, tagName: Identifier) {
-                    let typeExpression = tryParseTypeExpression();
-                    skipWhitespace();
-
+                function parseBracketNameInPropertyAndParamTag() {
                     let name: Identifier;
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
@@ -6652,6 +6652,14 @@ namespace ts {
                     else if (tokenIsIdentifierOrKeyword(token())) {
                         name = parseJSDocIdentifierName();
                     }
+                    return { name, isBracketed };
+                }
+
+                function parseParamTag(atToken: AtToken, tagName: Identifier) {
+                    let typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
+
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
 
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
@@ -6708,8 +6716,9 @@ namespace ts {
                 function parsePropertyTag(atToken: AtToken, tagName: Identifier): JSDocPropertyTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    const name = parseJSDocIdentifierName();
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
+
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
                         return undefined;
@@ -6720,6 +6729,7 @@ namespace ts {
                     result.tagName = tagName;
                     result.name = name;
                     result.typeExpression = typeExpression;
+                    result.isBracketed = isBracketed;
                     return finishNode(result);
                 }
 
@@ -6761,7 +6771,7 @@ namespace ts {
                             const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
                             if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
                                 const name = <Identifier>jsDocTypeReference.name;
-                                if (name.text === "Object") {
+                                if (name.text === "Object" || name.text === "object") {
                                     typedefTag.jsDocTypeLiteral = scanChildTags();
                                 }
                             }

@@ -1,4 +1,4 @@
-tests/cases/compiler/functionCall13.ts(4,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/functionCall13.ts(4,1): error TS2555: Expected at least 1 arguments, but got 0.
 tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
 
 
@@ -8,7 +8,7 @@ tests/cases/compiler/functionCall13.ts(5,5): error TS2345: Argument of type '1' 
     foo('foo'); 
     foo();
     ~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2555: Expected at least 1 arguments, but got 0.
     foo(1, 'bar');
         ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
