@@ -1978,8 +1978,8 @@ namespace Harness {
         return filePath.indexOf(Harness.libFolder) === 0;
     }
 
-    export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
-        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
+    export function getDefaultLibraryFile(io: Harness.IO, fileName = Harness.Compiler.defaultLibFileName): Harness.Compiler.TestFile {
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + fileName;
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 

@@ -120,7 +120,7 @@ namespace RWC {
                                 }
                                 else {
                                     // set the flag to put default library to the beginning of the list
-                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO));
+                                    inputFiles.unshift(Harness.getDefaultLibraryFile(oldIO, ts.getBaseFileName(fileRead.path)));
                                 }
                             }
                         }
