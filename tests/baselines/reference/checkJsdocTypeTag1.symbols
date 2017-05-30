@@ -31,21 +31,30 @@ const x = (a) => a + 1;
 x(1);
 >x : Symbol(x, Decl(0.js, 16, 5))
 
+/** @type {function} */
+const y = (a) => a + 1;
+>y : Symbol(y, Decl(0.js, 20, 5))
+>a : Symbol(a, Decl(0.js, 20, 11))
+>a : Symbol(a, Decl(0.js, 20, 11))
+
+x(1);
+>x : Symbol(x, Decl(0.js, 16, 5))
+
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
->x1 : Symbol(x1, Decl(0.js, 20, 5))
->a : Symbol(a, Decl(0.js, 20, 12))
->a : Symbol(a, Decl(0.js, 20, 12))
+>x1 : Symbol(x1, Decl(0.js, 24, 5))
+>a : Symbol(a, Decl(0.js, 24, 12))
+>a : Symbol(a, Decl(0.js, 24, 12))
 
 x1(0);
->x1 : Symbol(x1, Decl(0.js, 20, 5))
+>x1 : Symbol(x1, Decl(0.js, 24, 5))
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
->x2 : Symbol(x2, Decl(0.js, 24, 5))
->a : Symbol(a, Decl(0.js, 24, 12))
->a : Symbol(a, Decl(0.js, 24, 12))
+>x2 : Symbol(x2, Decl(0.js, 28, 5))
+>a : Symbol(a, Decl(0.js, 28, 12))
+>a : Symbol(a, Decl(0.js, 28, 12))
 
 x2(0);
->x2 : Symbol(x2, Decl(0.js, 24, 5))
+>x2 : Symbol(x2, Decl(0.js, 28, 5))
 
