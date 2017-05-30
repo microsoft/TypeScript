@@ -245,18 +245,15 @@ namespace ts.Completions.PathCompletions {
 
         // Get modules that the type checker picked up
         const ambientModules = map(typeChecker.getAmbientModules(), sym => stripQuotes(sym.name));
-        let nonRelativeModules = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
+        let nonRelativeModuleNames = filter(ambientModules, moduleName => startsWith(moduleName, fragment));
 
         // Nested modules of the form "module-name/sub" need to be adjusted to only return the string
         // after the last '/' that appears in the fragment because that's where the replacement span
         // starts
         if (isNestedModule) {
             const moduleNameWithSeperator = ensureTrailingDirectorySeparator(moduleNameFragment);
-            nonRelativeModules = map(nonRelativeModules, moduleName => {
-                if (startsWith(fragment, moduleNameWithSeperator)) {
-                    return moduleName.substr(moduleNameWithSeperator.length);
-                }
-                return moduleName;
+            nonRelativeModuleNames = map(nonRelativeModuleNames, nonRelativeModuleName => {
+                return removePrefix(nonRelativeModuleName, moduleNameWithSeperator);
             });
         }
 
@@ -264,7 +261,7 @@ namespace ts.Completions.PathCompletions {
         if (!options.moduleResolution || options.moduleResolution === ModuleResolutionKind.NodeJs) {
             for (const visibleModule of enumerateNodeModulesVisibleToScript(host, scriptPath)) {
                 if (!isNestedModule) {
-                    nonRelativeModules.push(visibleModule.moduleName);
+                    nonRelativeModuleNames.push(visibleModule.moduleName);
                 }
                 else if (startsWith(visibleModule.moduleName, moduleNameFragment)) {
                     const nestedFiles = tryReadDirectory(host, visibleModule.moduleDir, supportedTypeScriptExtensions, /*exclude*/ undefined, /*include*/ ["./*"]);
@@ -272,18 +269,18 @@ namespace ts.Completions.PathCompletions {
                         for (let f of nestedFiles) {
                             f = normalizePath(f);
                             const nestedModule = removeFileExtension(getBaseFileName(f));
-                            nonRelativeModules.push(nestedModule);
+                            nonRelativeModuleNames.push(nestedModule);
                         }
                     }
                 }
             }
         }
 
-        return deduplicate(nonRelativeModules);
+        return deduplicate(nonRelativeModuleNames);
     }
 
     export function getTripleSlashReferenceCompletion(sourceFile: SourceFile, position: number, compilerOptions: CompilerOptions, host: LanguageServiceHost): CompletionInfo {
-        const token = getTokenAtPosition(sourceFile, position);
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         if (!token) {
             return undefined;
         }
@@ -458,7 +455,7 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function createCompletionEntryForModule(name: string, kind: string, replacementSpan: TextSpan): CompletionEntry {
+    function createCompletionEntryForModule(name: string, kind: ScriptElementKind, replacementSpan: TextSpan): CompletionEntry {
         return { name, kind, kindModifiers: ScriptElementKindModifier.none, sortText: name, replacementSpan };
     }
 

@@ -1406,6 +1406,14 @@ interface ArrayBuffer {
     slice(begin: number, end?: number): ArrayBuffer;
 }
 
+/**
+ * Allowed ArrayBuffer types for the buffer of an ArrayBufferView and related Typed Arrays.
+ */
+interface ArrayBufferTypes {
+    ArrayBuffer: ArrayBuffer;
+}
+type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
+
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
     new (byteLength: number): ArrayBuffer;
@@ -1417,7 +1425,7 @@ interface ArrayBufferView {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    buffer: ArrayBuffer;
+    buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1559,7 +1567,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+    new (buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
 declare const DataView: DataViewConstructor;
 
@@ -1576,7 +1584,7 @@ interface Int8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1819,7 +1827,7 @@ interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
     new (length: number): Int8Array;
     new (array: ArrayLike<number>): Int8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -1860,7 +1868,7 @@ interface Uint8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2104,7 +2112,7 @@ interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
     new (length: number): Uint8Array;
     new (array: ArrayLike<number>): Uint8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2145,7 +2153,7 @@ interface Uint8ClampedArray {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2389,7 +2397,7 @@ interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
     new (length: number): Uint8ClampedArray;
     new (array: ArrayLike<number>): Uint8ClampedArray;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
       * The size in bytes of each element in the array.
@@ -2429,7 +2437,7 @@ interface Int16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2673,7 +2681,7 @@ interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
     new (length: number): Int16Array;
     new (array: ArrayLike<number>): Int16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2714,7 +2722,7 @@ interface Uint16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2958,7 +2966,7 @@ interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
     new (length: number): Uint16Array;
     new (array: ArrayLike<number>): Uint16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2998,7 +3006,7 @@ interface Int32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3242,7 +3250,7 @@ interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
     new (length: number): Int32Array;
     new (array: ArrayLike<number>): Int32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3282,7 +3290,7 @@ interface Uint32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3526,7 +3534,7 @@ interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
     new (length: number): Uint32Array;
     new (array: ArrayLike<number>): Uint32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3566,7 +3574,7 @@ interface Float32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3810,7 +3818,7 @@ interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
     new (length: number): Float32Array;
     new (array: ArrayLike<number>): Float32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3851,7 +3859,7 @@ interface Float64Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -4095,7 +4103,7 @@ interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
     new (length: number): Float64Array;
     new (array: ArrayLike<number>): Float64Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -4977,17 +4985,17 @@ interface Array<T> {
     [Symbol.iterator](): IterableIterator<T>;
 
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Returns an iterable of key, value pairs for every entry in the array
      */
     entries(): IterableIterator<[number, T]>;
 
     /**
-     * Returns an list of keys in the array
+     * Returns an iterable of keys in the array
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Returns an iterable of values in the array
      */
     values(): IterableIterator<T>;
 }
@@ -5011,21 +5019,21 @@ interface ArrayConstructor {
 }
 
 interface ReadonlyArray<T> {
-    /** Iterator */
+    /** Iterator of values in the array. */
     [Symbol.iterator](): IterableIterator<T>;
 
     /**
-     * Returns an array of key, value pairs for every entry in the array
+     * Returns an iterable of key, value pairs for every entry in the array
      */
     entries(): IterableIterator<[number, T]>;
 
     /**
-     * Returns an list of keys in the array
+     * Returns an iterable of keys in the array
      */
     keys(): IterableIterator<number>;
 
     /**
-     * Returns an list of values in the array
+     * Returns an iterable of values in the array
      */
     values(): IterableIterator<T>;
 }
@@ -5036,9 +5044,42 @@ interface IArguments {
 }
 
 interface Map<K, V> {
+    /** Returns an iterable of entries in the map. */
     [Symbol.iterator](): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of key, value pairs for every entry in the map.
+     */
     entries(): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of keys in the map
+     */
     keys(): IterableIterator<K>;
+
+    /**
+     * Returns an iterable of values in the map
+     */
+    values(): IterableIterator<V>;
+}
+
+interface ReadonlyMap<K, V> {
+    /** Returns an iterable of entries in the map. */
+    [Symbol.iterator](): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of key, value pairs for every entry in the map.
+     */
+    entries(): IterableIterator<[K, V]>;
+
+    /**
+     * Returns an iterable of keys in the map
+     */
+    keys(): IterableIterator<K>;
+
+    /**
+     * Returns an iterable of values in the map
+     */
     values(): IterableIterator<V>;
 }
 
@@ -5053,9 +5094,40 @@ interface WeakMapConstructor {
 }
 
 interface Set<T> {
+    /** Iterates over values in the set. */
     [Symbol.iterator](): IterableIterator<T>;
+    /**
+     * Returns an iterable of [v,v] pairs for every value `v` in the set.
+     */
     entries(): IterableIterator<[T, T]>;
+    /**
+     * Despite its name, returns an iterable of the values in the set,
+     */
     keys(): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of values in the set.
+     */
+    values(): IterableIterator<T>;
+}
+
+interface ReadonlySet<T> {
+    /** Iterates over values in the set. */
+    [Symbol.iterator](): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of [v,v] pairs for every value `v` in the set.
+     */
+    entries(): IterableIterator<[T, T]>;
+
+    /**
+     * Despite its name, returns an iterable of the values in the set,
+     */
+    keys(): IterableIterator<T>;
+
+    /**
+     * Returns an iterable of values in the set.
+     */
     values(): IterableIterator<T>;
 }
 
@@ -5637,7 +5709,7 @@ interface ProxyHandler<T extends object> {
     setPrototypeOf? (target: T, v: any): boolean;
     isExtensible? (target: T): boolean;
     preventExtensions? (target: T): boolean;
-    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor;
+    getOwnPropertyDescriptor? (target: T, p: PropertyKey): PropertyDescriptor | undefined;
     has? (target: T, p: PropertyKey): boolean;
     get? (target: T, p: PropertyKey, receiver: any): any;
     set? (target: T, p: PropertyKey, value: any, receiver: any): boolean;

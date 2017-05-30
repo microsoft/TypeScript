@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(9,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(18,4): error TS2339: Property 'foo' does not exist on type 'Date'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(44,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(44,1): error TS2554: Expected 2-4 arguments, but got 1.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(62,9): error TS2345: Argument of type 'true' is not assignable to parameter of type 'number'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(63,18): error TS2345: Argument of type 'true' is not assignable to parameter of type 'string'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts(69,18): error TS2339: Property 'toFixed' does not exist on type 'string'.
@@ -56,7 +56,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     // Generic overloads with differing arity tagging with argument count that doesn't match any overload
     fn3 ``; // Error
     ~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2-4 arguments, but got 1.
     
     // Generic overloads with constraints
     function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);

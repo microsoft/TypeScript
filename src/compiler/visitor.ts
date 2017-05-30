@@ -220,6 +220,10 @@ namespace ts {
 
         switch (kind) {
             // Names
+
+            case SyntaxKind.Identifier:
+                return updateIdentifier(<Identifier>node, nodesVisitor((<Identifier>node).typeArguments, visitor, isTypeNode));
+
             case SyntaxKind.QualifiedName:
                 return updateQualifiedName(<QualifiedName>node,
                     visitNode((<QualifiedName>node).left, visitor, isEntityName),
@@ -255,6 +259,7 @@ namespace ts {
 
             case SyntaxKind.PropertySignature:
                 return updatePropertySignature((<PropertySignature>node),
+                    nodesVisitor((<PropertySignature>node).modifiers, visitor, isToken),
                     visitNode((<PropertySignature>node).name, visitor, isPropertyName),
                     visitNode((<PropertySignature>node).questionToken, tokenVisitor, isToken),
                     visitNode((<PropertySignature>node).type, visitor, isTypeNode),
@@ -511,7 +516,8 @@ namespace ts {
             case SyntaxKind.BinaryExpression:
                 return updateBinary(<BinaryExpression>node,
                     visitNode((<BinaryExpression>node).left, visitor, isExpression),
-                    visitNode((<BinaryExpression>node).right, visitor, isExpression));
+                    visitNode((<BinaryExpression>node).right, visitor, isExpression),
+                    visitNode((<BinaryExpression>node).operatorToken, visitor, isToken));
 
             case SyntaxKind.ConditionalExpression:
                 return updateConditional(<ConditionalExpression>node,
@@ -695,6 +701,8 @@ namespace ts {
 
             case SyntaxKind.TypeAliasDeclaration:
                 return updateTypeAliasDeclaration(<TypeAliasDeclaration>node,
+                    nodesVisitor((<TypeAliasDeclaration>node).decorators, visitor, isDecorator),
+                    nodesVisitor((<TypeAliasDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<TypeAliasDeclaration>node).name, visitor, isIdentifier),
                     nodesVisitor((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameter),
                     visitNode((<TypeAliasDeclaration>node).type, visitor, isTypeNode));
@@ -970,6 +978,15 @@ namespace ts {
                 break;
 
             // Type member
+
+            case SyntaxKind.PropertySignature:
+                result = reduceNodes((<PropertySignature>node).modifiers, cbNodes, result);
+                result = reduceNode((<PropertySignature>node).name, cbNode, result);
+                result = reduceNode((<PropertySignature>node).questionToken, cbNode, result);
+                result = reduceNode((<PropertySignature>node).type, cbNode, result);
+                result = reduceNode((<PropertySignature>node).initializer, cbNode, result);
+                break;
+
             case SyntaxKind.PropertyDeclaration:
                 result = reduceNodes((<PropertyDeclaration>node).decorators, cbNodes, result);
                 result = reduceNodes((<PropertyDeclaration>node).modifiers, cbNodes, result);

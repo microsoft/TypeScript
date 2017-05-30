@@ -53,7 +53,7 @@ function Todo(prop: { key: number, todo: string }) {
 >div : any
 }
 function TodoList({ todos }: TodoListProps) {
->TodoList : ({todos}: TodoListProps) => JSX.Element
+>TodoList : ({ todos }: TodoListProps) => JSX.Element
 >todos : TodoProp[]
 >TodoListProps : TodoListProps
 
@@ -88,6 +88,6 @@ let x: TodoListProps;
 
     <TodoList {...x}/>
 ><TodoList {...x}/> : JSX.Element
->TodoList : ({todos}: TodoListProps) => JSX.Element
+>TodoList : ({ todos }: TodoListProps) => JSX.Element
 >x : TodoListProps
 

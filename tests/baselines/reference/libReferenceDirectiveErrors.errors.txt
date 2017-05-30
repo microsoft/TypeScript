@@ -1,8 +1,8 @@
 tests/cases/compiler/a.ts(1,1): error TS1084: Invalid 'reference' directive syntax.
 tests/cases/compiler/b.ts(1,1): error TS1084: Invalid 'reference' directive syntax.
-tests/cases/compiler/c.ts(1,1): error TS2711: Cannot find lib definition for 'es2015.foo'.
-tests/cases/compiler/d.ts(1,1): error TS2712: Cannot find lib definition for 'es2015.collections'. Did you mean 'es2015.collection'?
-tests/cases/compiler/e.ts(1,1): error TS2712: Cannot find lib definition for 'lib.es2015.d.ts'. Did you mean 'es2015'?
+tests/cases/compiler/c.ts(1,21): error TS2711: Cannot find lib definition for 'es2015.foo'.
+tests/cases/compiler/d.ts(1,21): error TS2712: Cannot find lib definition for 'es2015.collections'. Did you mean 'es2015.collection'?
+tests/cases/compiler/e.ts(1,21): error TS2712: Cannot find lib definition for 'lib.es2015.d.ts'. Did you mean 'es2015'?
 
 
 ==== tests/cases/compiler/a.ts (1 errors) ====
@@ -15,13 +15,13 @@ tests/cases/compiler/e.ts(1,1): error TS2712: Cannot find lib definition for 'li
 !!! error TS1084: Invalid 'reference' directive syntax.
 ==== tests/cases/compiler/c.ts (1 errors) ====
     /// <reference lib="es2015.foo" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~
 !!! error TS2711: Cannot find lib definition for 'es2015.foo'.
 ==== tests/cases/compiler/d.ts (1 errors) ====
     /// <reference lib="es2015.collections" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~~~~~~
 !!! error TS2712: Cannot find lib definition for 'es2015.collections'. Did you mean 'es2015.collection'?
 ==== tests/cases/compiler/e.ts (1 errors) ====
     /// <reference lib="lib.es2015.d.ts" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~~~
 !!! error TS2712: Cannot find lib definition for 'lib.es2015.d.ts'. Did you mean 'es2015'?

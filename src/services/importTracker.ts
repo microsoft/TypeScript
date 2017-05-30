@@ -300,6 +300,40 @@ namespace ts.FindAllReferences {
         });
     }
 
+    export type ModuleReference =
+        /** "import" also includes require() calls. */
+        | { kind: "import", literal: StringLiteral }
+        /** <reference path> or <reference types> */
+        | { kind: "reference", referencingFile: SourceFile, ref: FileReference };
+    export function findModuleReferences(program: Program, sourceFiles: SourceFile[], searchModuleSymbol: Symbol): ModuleReference[] {
+        const refs: ModuleReference[] = [];
+        const checker = program.getTypeChecker();
+        for (const referencingFile of sourceFiles) {
+            const searchSourceFile = searchModuleSymbol.valueDeclaration;
+            if (searchSourceFile.kind === ts.SyntaxKind.SourceFile) {
+                for (const ref of referencingFile.referencedFiles) {
+                    if (program.getSourceFileFromReference(referencingFile, ref) === searchSourceFile) {
+                        refs.push({ kind: "reference", referencingFile, ref });
+                    }
+                }
+                for (const ref of referencingFile.typeReferenceDirectives) {
+                    const referenced = program.getResolvedTypeReferenceDirectives().get(ref.fileName);
+                    if (referenced !== undefined && referenced.resolvedFileName === (searchSourceFile as ts.SourceFile).fileName) {
+                        refs.push({ kind: "reference", referencingFile, ref });
+                    }
+                }
+            }
+
+            forEachImport(referencingFile, (_importDecl, moduleSpecifier) => {
+                const moduleSymbol = checker.getSymbolAtLocation(moduleSpecifier);
+                if (moduleSymbol === searchModuleSymbol) {
+                    refs.push({ kind: "import", literal: moduleSpecifier });
+                }
+            });
+        }
+        return refs;
+    }
+
     /** Returns a map from a module symbol Id to all import statements that directly reference the module. */
     function getDirectImportsMap(sourceFiles: SourceFile[], checker: TypeChecker, cancellationToken: CancellationToken): Map<ImporterOrCallExpression[]> {
         const map = createMap<ImporterOrCallExpression[]>();
@@ -371,7 +405,7 @@ namespace ts.FindAllReferences {
             case SyntaxKind.ExternalModuleReference:
                 return (decl as ExternalModuleReference).parent;
             default:
-                Debug.assert(false);
+                Debug.fail(`Unexpected module specifier parent: ${decl.kind}`);
         }
     }
 
@@ -526,17 +560,18 @@ namespace ts.FindAllReferences {
         return isExternalModuleSymbol(exportingModuleSymbol) ? { exportingModuleSymbol, exportKind } : undefined;
     }
 
-    function symbolName(symbol: Symbol): string {
+    function symbolName(symbol: Symbol): string | undefined {
         if (symbol.name !== "default") {
             return symbol.name;
         }
 
-        const name = forEach(symbol.declarations, decl => {
+        return forEach(symbol.declarations, decl => {
+            if (isExportAssignment(decl)) {
+                return isIdentifier(decl.expression) ? decl.expression.text : undefined;
+            }
             const name = getNameOfDeclaration(decl);
             return name && name.kind === SyntaxKind.Identifier && name.text;
         });
-        Debug.assert(!!name);
-        return name;
     }
 
     /** If at an export specifier, go to the symbol it refers to. */
