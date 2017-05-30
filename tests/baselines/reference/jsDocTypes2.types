@@ -29,6 +29,20 @@ x(1);
 >x : Function
 >1 : 1
 
+/** @type {function} */
+const y = (a) => a + 1;
+>y : Function
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x(1);
+>x(1) : any
+>x : Function
+>1 : 1
+
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 >x1 : (arg0: number) => any

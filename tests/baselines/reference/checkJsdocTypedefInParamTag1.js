@@ -6,10 +6,12 @@
  * @property {string=} y
  * @property {string} [z]
  * @property {string} [w="hi"]
- * 
+ *
  * @param {Opts} opts
  */
-function foo(opts) {}
+function foo(opts) {
+    opts.x;
+}
 
 foo({x: 'abc'});
 
@@ -20,9 +22,26 @@ foo({x: 'abc'});
  * 
  * @param {AnotherOpts} opts
  */
-function foo1(opts) {}
+function foo1(opts) {
+    opts.anotherX;
+}
 
 foo1({anotherX: "world"});
+
+/**
+ * @typedef {object} Opts1
+ * @property {string} x
+ * @property {string=} y
+ * @property {string} [z]
+ * @property {string} [w="hi"]
+ *
+ * @param {Opts1} opts
+ */
+function foo2(opts) {
+    opts.x;
+}
+foo2({x: 'abc'});
+
 
 //// [0.js]
 // @ts-check
@@ -35,7 +54,9 @@ foo1({anotherX: "world"});
  *
  * @param {Opts} opts
  */
-function foo(opts) { }
+function foo(opts) {
+    opts.x;
+}
 foo({ x: 'abc' });
 /**
  * @typedef {Object} AnotherOpts
@@ -44,5 +65,20 @@ foo({ x: 'abc' });
  *
  * @param {AnotherOpts} opts
  */
-function foo1(opts) { }
+function foo1(opts) {
+    opts.anotherX;
+}
 foo1({ anotherX: "world" });
+/**
+ * @typedef {object} Opts1
+ * @property {string} x
+ * @property {string=} y
+ * @property {string} [z]
+ * @property {string} [w="hi"]
+ *
+ * @param {Opts1} opts
+ */
+function foo2(opts) {
+    opts.x;
+}
+foo2({ x: 'abc' });
