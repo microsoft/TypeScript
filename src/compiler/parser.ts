@@ -6075,7 +6075,10 @@ namespace ts {
                     case SyntaxKind.OpenBraceToken:
                         return parseJSDocRecordType();
                     case SyntaxKind.FunctionKeyword:
-                        return parseJSDocFunctionType();
+                        if (lookAhead(nextTokenIsOpenParen)) {
+                            return parseJSDocFunctionType();
+                        }
+                        break;
                     case SyntaxKind.DotDotDotToken:
                         return parseJSDocVariadicType();
                     case SyntaxKind.NewKeyword:
