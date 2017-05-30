@@ -3360,10 +3360,13 @@ namespace ts {
             const classStatements = visitNodes(body.statements, visitor, isStatement, 0, 1);
             const remainingStatements = visitNodes(body.statements, visitor, isStatement, 1, body.statements.length - 1);
             const varStatement = cast(firstOrUndefined(classStatements), isVariableStatement);
+
+            // We know there is only one variable declaration here as we verified this in an
+            // earlier call to isTypeScriptClassWrapper
             const variable = varStatement.declarationList.declarations[0];
             const initializer = skipOuterExpressions(variable.initializer);
 
-            // Under certain conditions, the 'ts' transformer may may introduce a class alias, which
+            // Under certain conditions, the 'ts' transformer may introduce a class alias, which
             // we see as an assignment, for example:
             //
             //  (function () {
