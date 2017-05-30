@@ -6855,6 +6855,7 @@ namespace ts {
                     case "Object":
                         return anyType;
                     case "Function":
+                    case "function":
                         return globalFunctionType;
                     case "Array":
                     case "array":

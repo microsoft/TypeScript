@@ -18,6 +18,10 @@ anyT1 = "hi";
 const x = (a) => a + 1;
 x(1);
 
+/** @type {function} */
+const y = (a) => a + 1;
+x(1);
+
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 x1(0);
@@ -40,6 +44,9 @@ var anyT1 = 2;
 anyT1 = "hi";
 /** @type {Function} */
 var x = function (a) { return a + 1; };
+x(1);
+/** @type {function} */
+var y = function (a) { return a + 1; };
 x(1);
 /** @type {function (number)} */
 var x1 = function (a) { return a + 1; };
