@@ -2275,7 +2275,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.3.3";
+    const version = "2.3.4";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -3483,9 +3483,10 @@ declare namespace ts.server {
         const LogFile = "--logFile";
         const EnableTelemetry = "--enableTelemetry";
         const TypingSafeListLocation = "--typingSafeListLocation";
+        const NpmLocation = "--npmLocation";
     }
     function hasArgument(argumentName: string): boolean;
-    function findArgument(argumentName: string): string;
+    function findArgument(argumentName: string): string | undefined;
 }
 declare namespace ts.server {
     enum LogLevel {
@@ -3538,7 +3539,10 @@ declare namespace ts.server {
     }
     function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
     interface ProjectOptions {
-        configHasFilesProperty?: boolean;
+        configHasExtendsProperty: boolean;
+        configHasFilesProperty: boolean;
+        configHasIncludeProperty: boolean;
+        configHasExcludeProperty: boolean;
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
@@ -4833,6 +4837,7 @@ declare namespace ts.server {
         Configured = 1,
         External = 2,
     }
+    function countEachFileTypes(infos: ScriptInfo[]): FileStats;
     function allRootFilesAreJsOrDts(project: Project): boolean;
     function allFilesAreJsOrDts(project: Project): boolean;
     class UnresolvedImportsMap {
@@ -4993,6 +4998,7 @@ declare namespace ts.server {
     const ContextEvent = "context";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+    const ProjectInfoTelemetryEvent = "projectInfo";
     interface ContextEvent {
         eventName: typeof ContextEvent;
         data: {
@@ -5015,7 +5021,37 @@ declare namespace ts.server {
             languageServiceEnabled: boolean;
         };
     }
-    type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent;
+    interface ProjectInfoTelemetryEvent {
+        readonly eventName: typeof ProjectInfoTelemetryEvent;
+        readonly data: ProjectInfoTelemetryEventData;
+    }
+    interface ProjectInfoTelemetryEventData {
+        readonly fileStats: FileStats;
+        readonly compilerOptions: ts.CompilerOptions;
+        readonly extends: boolean | undefined;
+        readonly files: boolean | undefined;
+        readonly include: boolean | undefined;
+        readonly exclude: boolean | undefined;
+        readonly compileOnSave: boolean;
+        readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
+        readonly configFileName: "tsconfig.json" | "jsconfig.json" | "other";
+        readonly projectType: "external" | "configured";
+        readonly languageServiceEnabled: boolean;
+        readonly version: string;
+    }
+    interface ProjectInfoTypeAcquisitionData {
+        readonly enable: boolean;
+        readonly include: boolean;
+        readonly exclude: boolean;
+    }
+    interface FileStats {
+        readonly js: number;
+        readonly jsx: number;
+        readonly ts: number;
+        readonly tsx: number;
+        readonly dts: number;
+    }
+    type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
     interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
     }
@@ -5081,6 +5117,7 @@ declare namespace ts.server {
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
         readonly allowLocalPluginLoads: boolean;
+        private readonly seenProjects;
         constructor(opts: ProjectServiceOptions);
         ensureInferredProjectsUpToDate_TestOnly(): void;
         getCompilerOptionsForInferredProjects(): CompilerOptions;
@@ -5113,6 +5150,7 @@ declare namespace ts.server {
         private convertConfigFileContentToProjectOptions(configFilename);
         private exceededTotalSizeLimitForNonTsFiles<T>(name, options, fileNames, propertyReader);
         private createAndAddExternalProject(projectFileName, files, options, typeAcquisition);
+        private sendProjectTelemetry(projectKey, project, projectOptions?);
         private reportConfigFileDiagnostics(configFileName, diagnostics, triggerFile);
         private createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, clientFileName?);
         private watchConfigDirectoryForProject(project, options);
