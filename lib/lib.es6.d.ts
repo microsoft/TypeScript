@@ -8530,7 +8530,7 @@ interface DOMException {
     readonly URL_MISMATCH_ERR: number;
     readonly VALIDATION_ERR: number;
     readonly WRONG_DOCUMENT_ERR: number;
-    new(message: string, type: DOMExceptionType): DOMException;
+    new(message?: string, name?: string): DOMException;
 }
 
 declare var DOMException: {
