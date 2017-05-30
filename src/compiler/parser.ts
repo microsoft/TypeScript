@@ -6094,7 +6094,6 @@ namespace ts {
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.UndefinedKeyword:
                     case SyntaxKind.NeverKeyword:
-                    case SyntaxKind.ObjectKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -6772,7 +6771,7 @@ namespace ts {
                             const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
                             if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
                                 const name = <Identifier>jsDocTypeReference.name;
-                                if (name.text === "Object") {
+                                if (name.text === "Object" || name.text === "object") {
                                     typedefTag.jsDocTypeLiteral = scanChildTags();
                                 }
                             }
