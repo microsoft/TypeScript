@@ -6,7 +6,7 @@
  * @property {string=} y
  * @property {string} [z]
  * @property {string} [w="hi"]
- * 
+ *
  * @param {Opts} opts
  */
 function foo(opts) {
@@ -32,7 +32,7 @@ foo({x: 'abc'});
  * @property {string=} y
  * @property {string} [z]
  * @property {string} [w="hi"]
- * 
+ *
  * @param {Opts1} opts
  */
 function foo1(opts) {
