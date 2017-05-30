@@ -3736,7 +3736,7 @@ namespace ts {
         All = Parentheses | Assertions | PartiallyEmittedExpressions
     }
 
-    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | PartiallyEmittedExpression;
+    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | NonNullExpression | PartiallyEmittedExpression;
 
     export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
         switch (node.kind) {
@@ -3744,6 +3744,7 @@ namespace ts {
                 return (kinds & OuterExpressionKinds.Parentheses) !== 0;
             case SyntaxKind.TypeAssertionExpression:
             case SyntaxKind.AsExpression:
+            case SyntaxKind.NonNullExpression:
                 return (kinds & OuterExpressionKinds.Assertions) !== 0;
             case SyntaxKind.PartiallyEmittedExpression:
                 return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
@@ -3787,8 +3788,8 @@ namespace ts {
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
+        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
+            node = (<AssertionExpression | NonNullExpression>node).expression;
         }
 
         return node;
@@ -3809,6 +3810,7 @@ namespace ts {
             case SyntaxKind.ParenthesizedExpression: return updateParen(outerExpression, expression);
             case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
             case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
+            case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
             case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
         }
     }

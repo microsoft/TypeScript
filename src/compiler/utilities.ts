@@ -850,70 +850,8 @@ namespace ts {
         return node && (node.kind === SyntaxKind.GetAccessor || node.kind === SyntaxKind.SetAccessor);
     }
 
-    export function isClassLike(node: Node | undefined): node is ClassLikeDeclaration {
+    export function isClassLike(node: Node): node is ClassLikeDeclaration {
         return node && (node.kind === SyntaxKind.ClassDeclaration || node.kind === SyntaxKind.ClassExpression);
-    }
-
-    export function isImmediatelyInvokedFunctionExpression(node: Node) {
-        if (!isCallExpression(node) ||
-            some(node.typeArguments) ||
-            some(node.arguments)) {
-            return false;
-        }
-        const expression = skipParentheses(node.expression);
-        if (!isFunctionExpression(expression) ||
-            some(expression.typeParameters) ||
-            some(expression.parameters) ||
-            expression.type ||
-            !expression.body) {
-            return false;
-        }
-        return true;
-    }
-
-    export function isTypeScriptClassWrapper(node: Node) {
-        if (!isImmediatelyInvokedFunctionExpression(node) ||
-            isParseTreeNode(node)) {
-            return false;
-        }
-
-        const func = <FunctionExpression>skipParentheses((<CallExpression>node).expression);
-        if (isParseTreeNode(func)) {
-            return false;
-        }
-
-        const statements = func.body.statements;
-        if (statements.length < 2) {
-            return false;
-        }
-
-        const firstStatement = statements[0];
-        if (isParseTreeNode(firstStatement) ||
-            !isClassLike(firstStatement) &&
-            !isClassLikeVariableStatement(firstStatement)) {
-            return false;
-        }
-
-        const returnStatement = tryCast(elementAt(statements, isVariableStatement(lastOrUndefined(statements)) ? -2 : -1), isReturnStatement);
-        if (!isReturnStatement(returnStatement) ||
-            !returnStatement.expression ||
-            !isIdentifier(skipOuterExpressions(returnStatement.expression))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    function isClassLikeVariableStatement(node: Node) {
-        if (!isVariableStatement(node)) return false;
-        const variable = singleOrUndefined((<VariableStatement>node).declarationList.declarations);
-        return variable
-            && variable.initializer
-            && isIdentifier(variable.name)
-            && (isClassLike(variable.initializer)
-                || (isAssignmentExpression(variable.initializer)
-                    && isIdentifier(variable.initializer.left)
-                    && isClassLike(variable.initializer.right)));
     }
 
     export function isExpressionStatement(node: Node): node is ExpressionStatement {
@@ -3438,53 +3376,32 @@ namespace ts {
     /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
-    function formatEnum(value = 0, enumObject: any, isFlags: boolean, formatCache?: string[]) {
-        const cached = formatCache && formatCache[value];
-        if (cached !== undefined) {
-            return cached;
-        }
-        const result = isFlags ? formatFlagsEnum(value, enumObject) : getEnumName(value, enumObject);
-        if (formatCache) {
-            formatCache[value] = result;
-        }
-        return result;
-    }
-
-    /**
-     * Gets the name for an enum value for debugging and debug assertions.
-     */
-    function getEnumName(value: number, enumObject: any) {
-        for (const name in enumObject) {
-            if (enumObject[name] === value) {
-                return name;
-            }
-        }
-        return value.toString();
-    }
-
-    /**
-     * Formats the bitwise flag values of an enum value for debugging and debug assertions.
-     */
-    function formatFlagsEnum(value: number, enumObject: any) {
+    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
         const members = getEnumMembers(enumObject);
-        let result = "";
         if (value === 0) {
             return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
         }
-
-        let remainingFlags = value;
-        for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
-            const [enumValue, enumName] = members[i];
-            if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
-                remainingFlags &= ~enumValue;
-                result = `${enumName}${result ? ", " : ""}${result}`;
+        if (isFlags) {
+            let result = "";
+            let remainingFlags = value;
+            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
+                const [enumValue, enumName] = members[i];
+                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                    remainingFlags &= ~enumValue;
+                    result = `${enumName}${result ? ", " : ""}${result}`;
+                }
+            }
+            if (remainingFlags === 0) {
+                return result;
             }
         }
-
-        if (remainingFlags === 0) {
-            return result;
+        else {
+            for (const [enumValue, enumName] of members) {
+                if (enumValue === value) {
+                    return enumName;
+                }
+            }
         }
-
         return value.toString();
     }
 
@@ -3500,39 +3417,32 @@ namespace ts {
         return stableSort(result, (x, y) => compareValues(x[0], y[0]));
     }
 
-    const syntaxKindCache: string[] = [];
     export function formatSyntaxKind(kind: SyntaxKind): string {
-        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false, syntaxKindCache);
+        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
     }
 
-    const modifierFlagsCache: string[] = [];
     export function formatModifierFlags(flags: ModifierFlags): string {
-        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true, modifierFlagsCache);
+        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
     }
 
-    const transformFlagsCache: string[] = [];
     export function formatTransformFlags(flags: TransformFlags): string {
-        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true, transformFlagsCache);
+        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
     }
 
-    const emitFlagsCache: string[] = [];
     export function formatEmitFlags(flags: EmitFlags): string {
-        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true, emitFlagsCache);
+        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
     }
 
-    const symbolFlagsCache: string[] = [];
     export function formatSymbolFlags(flags: SymbolFlags): string {
-        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true, symbolFlagsCache);
+        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
     }
 
-    const typeFlagsCache: string[] = [];
     export function formatTypeFlags(flags: TypeFlags): string {
-        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true, typeFlagsCache);
+        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
     }
 
-    const objectFlagsCache: string[] = [];
     export function formatObjectFlags(flags: ObjectFlags): string {
-        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true, objectFlagsCache);
+        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
     export function getRangePos(range: TextRange | undefined) {

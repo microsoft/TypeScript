@@ -339,6 +339,58 @@ namespace ts {
                 && !(<ReturnStatement>node).expression;
         }
 
+        function isClassLikeVariableStatement(node: Node) {
+            if (!isVariableStatement(node)) return false;
+            const variable = singleOrUndefined((<VariableStatement>node).declarationList.declarations);
+            return variable
+                && variable.initializer
+                && isIdentifier(variable.name)
+                && (isClassLike(variable.initializer)
+                    || (isAssignmentExpression(variable.initializer)
+                        && isIdentifier(variable.initializer.left)
+                        && isClassLike(variable.initializer.right)));
+        }
+
+        function isTypeScriptClassWrapper(node: Node) {
+            const call = tryCast(node, isCallExpression);
+            if (!call || isParseTreeNode(call) ||
+                some(call.typeArguments) ||
+                some(call.arguments)) {
+                return false;
+            }
+
+            const func = tryCast(skipOuterExpressions(call.expression), isFunctionExpression);
+            if (!func || isParseTreeNode(func) ||
+                some(func.typeParameters) ||
+                some(func.parameters) ||
+                func.type ||
+                !func.body) {
+                return false;
+            }
+
+            const statements = func.body.statements;
+            if (statements.length < 2) {
+                return false;
+            }
+
+            const firstStatement = statements[0];
+            if (isParseTreeNode(firstStatement) ||
+                !isClassLike(firstStatement) &&
+                !isClassLikeVariableStatement(firstStatement)) {
+                return false;
+            }
+
+            const lastStatement = elementAt(statements, -1);
+            const returnStatement = tryCast(isVariableStatement(lastStatement) ? elementAt(statements, -2) : lastStatement, isReturnStatement);
+            if (!returnStatement ||
+                !returnStatement.expression ||
+                !isIdentifier(skipOuterExpressions(returnStatement.expression))) {
+                return false;
+            }
+
+            return true;
+        }
+
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
@@ -3326,23 +3378,24 @@ namespace ts {
             //      var C_1;
             //  }())
             //
-            const aliasAssignment = isAssignmentExpression(initializer) ? initializer : undefined;
+            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
 
             // The underlying call (3) is another IIFE that may contain a '_super' argument.
             const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
             const func = cast(skipOuterExpressions(call.expression), isFunctionExpression);
 
-            // When we extract the statements of the inner IIFE, we exclude the 'return' statement (4)
-            // as we already have one that has been introduced by the 'ts' transformer.
-            const funcStatements = func.body.statements.slice(0, -1);
+            const funcStatements = func.body.statements;
+            let classBodyStart = 0;
+            let classBodyEnd = -1;
 
             const statements: Statement[] = [];
             if (aliasAssignment) {
                 // If we have a class alias assignment, we need to move it to the down-level constructor
                 // function we generated for the class.
-                const hasExtendsCall = isExpressionStatement(funcStatements[0]);
-                if (hasExtendsCall) {
-                    statements.push(funcStatements[0]);
+                const extendsCall = tryCast(funcStatements[classBodyStart], isExpressionStatement);
+                if (extendsCall) {
+                    statements.push(extendsCall);
+                    classBodyStart++;
                 }
 
                 // We reuse the comment and source-map positions from the original variable statement
@@ -3359,25 +3412,37 @@ namespace ts {
                                 updateBinary(aliasAssignment,
                                     aliasAssignment.left,
                                     convertFunctionDeclarationToExpression(
-                                        cast(funcStatements[hasExtendsCall ? 1 : 0], isFunctionDeclaration)
+                                        cast(funcStatements[classBodyStart], isFunctionDeclaration)
                                     )
                                 )
                             )
                         ])
                     )
                 );
-
-                addRange(statements, funcStatements.slice(hasExtendsCall ? 2 : 1));
-            }
-            else {
-                addRange(statements, funcStatements);
+                classBodyStart++;
             }
 
+            // Find the trailing 'return' statement (4)
+            while (!isReturnStatement(elementAt(funcStatements, classBodyEnd))) {
+                classBodyEnd--;
+            }
+
+            // When we extract the statements of the inner IIFE, we exclude the 'return' statement (4)
+            // as we already have one that has been introduced by the 'ts' transformer.
+            addRange(statements, funcStatements, classBodyStart, classBodyEnd);
+
+            if (classBodyEnd < -1) {
+                // If there were any hoisted declarations following the return statement, we should
+                // append them.
+                addRange(statements, funcStatements, classBodyEnd + 1);
+            }
+
+            // Add the remaining statements of the outer wrapper.
             addRange(statements, remainingStatements);
 
             // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
             // after the remaining statements from the 'ts' transformer.
-            addRange(statements, classStatements.slice(1));
+            addRange(statements, classStatements, /*start*/ 1);
 
             // Recreate any outer parentheses or partially-emitted expressions to preserve source map
             // and comment locations.
@@ -3952,7 +4017,6 @@ namespace ts {
                     return false;
                 }
                 if (isClassElement(currentNode) && currentNode.parent === declaration) {
-                    // we are in the class body, but we treat static fields as outside of the class body
                     return true;
                 }
                 currentNode = currentNode.parent;

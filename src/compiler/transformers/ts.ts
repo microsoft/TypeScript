@@ -19,10 +19,11 @@ namespace ts {
     }
 
     const enum ClassFacts {
+        None = 0,
         HasStaticInitializedProperties = 1 << 0,
         HasConstructorDecorators = 1 << 1,
         HasMemberDecorators = 1 << 2,
-        IsNamespaceExport = 1 << 3,
+        IsExportOfNamespace = 1 << 3,
         IsNamedExternalExport = 1 << 4,
         IsDefaultExternalExport = 1 << 5,
         HasExtendsClause = 1 << 6,
@@ -31,7 +32,7 @@ namespace ts {
         HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
         NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
         MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
-        IsExported = IsNamespaceExport | IsDefaultExternalExport | IsNamedExternalExport,
+        IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
     }
 
     export function transformTypeScript(context: TransformationContext) {
@@ -519,14 +520,14 @@ namespace ts {
         }
 
         function getClassFacts(node: ClassDeclaration, staticProperties: PropertyDeclaration[]) {
-            let facts: ClassFacts = 0;
+            let facts = ClassFacts.None;
             if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
             if (getClassExtendsHeritageClauseElement(node)) facts |= ClassFacts.HasExtendsClause;
             if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
             if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
-            if (isNamespaceExport(node)) facts |= ClassFacts.IsNamespaceExport;
-            if ((facts & ClassFacts.IsExported) === 0 && isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
-            if ((facts & ClassFacts.IsExported) === 0 && isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
+            if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
+            else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
+            else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
             if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
             return facts;
         }
@@ -609,7 +610,7 @@ namespace ts {
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
             // declaration or export default for the class.
-            if (facts & ClassFacts.IsNamespaceExport) {
+            if (facts & ClassFacts.IsExportOfNamespace) {
                 addExportMemberAssignment(statements, node);
             }
             else if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression || facts & ClassFacts.HasConstructorDecorators) {
@@ -672,11 +673,6 @@ namespace ts {
         /**
          * Transforms a decorated class declaration and appends the resulting statements. If
          * the class requires an alias to avoid issues with double-binding, the alias is returned.
-         *
-         * @param statements A statement list to which to add the declaration.
-         * @param node A ClassDeclaration node.
-         * @param name The name of the class.
-         * @param facts Precomputed facts about the clas.
          */
         function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier, facts: ClassFacts) {
             // When we emit an ES6 class that has a class decorator, we must tailor the
@@ -2223,7 +2219,7 @@ namespace ts {
                 /*type*/ undefined,
                 visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
-            if (isNamespaceExport(node)) {
+            if (isExportOfNamespace(node)) {
                 const statements: Statement[] = [updated];
                 addExportMemberAssignment(statements, node);
                 return statements;
@@ -2316,7 +2312,7 @@ namespace ts {
          * - The node is exported from a TypeScript namespace.
          */
         function visitVariableStatement(node: VariableStatement): Statement {
-            if (isNamespaceExport(node)) {
+            if (isExportOfNamespace(node)) {
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length === 0) {
                     // elide statement if there are no initialized variables.
@@ -2620,7 +2616,7 @@ namespace ts {
          * or `exports.x`).
          */
         function hasNamespaceQualifiedExportName(node: Node) {
-            return isNamespaceExport(node)
+            return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
                     && moduleKind !== ModuleKind.System);
@@ -3062,7 +3058,7 @@ namespace ts {
             const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
             setEmitFlags(moduleReference, EmitFlags.NoComments | EmitFlags.NoNestedComments);
 
-            if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
+            if (isNamedExternalModuleExport(node) || !isExportOfNamespace(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
                 return setOriginalNode(
@@ -3103,7 +3099,7 @@ namespace ts {
          *
          * @param node The node to test.
          */
-        function isNamespaceExport(node: Node) {
+        function isExportOfNamespace(node: Node) {
             return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
         }
 
