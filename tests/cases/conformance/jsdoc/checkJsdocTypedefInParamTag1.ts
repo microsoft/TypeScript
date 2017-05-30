@@ -19,6 +19,19 @@ function foo(opts) {
 foo({x: 'abc'});
 
 /**
+ * @typedef {Object} AnotherOpts
+ * @property anotherX {string}
+ * @property anotherY {string=}
+ * 
+ * @param {AnotherOpts} opts
+ */
+function foo1(opts) {
+    opts.anotherX;
+}
+
+foo1({anotherX: "world"});
+
+/**
  * @typedef {object} Opts1
  * @property {string} x
  * @property {string=} y
@@ -27,7 +40,7 @@ foo({x: 'abc'});
  *
  * @param {Opts1} opts
  */
-function foo1(opts) {
+function foo2(opts) {
     opts.x;
 }
-foo1({x: 'abc'});
+foo2({x: 'abc'});
