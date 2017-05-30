@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
-////declare module "[|{| "isDefinition": true |}foo|]" {
+////declare module "[|{| "isWriteAccess": true, "isDefinition": true |}foo|]" {
 ////    var [|{| "isWriteAccess": true, "isDefinition": true |}f|]: number;
 ////}
 ////
-////declare module "[|{| "isDefinition": true |}bar|]" {
+////declare module "[|{| "isWriteAccess": true, "isDefinition": true |}bar|]" {
 ////    export import [|{| "isWriteAccess": true, "isDefinition": true |}foo|] = require("[|foo|]");
 ////    var f2: typeof [|foo|].[|f|];
 ////}

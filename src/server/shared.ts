@@ -12,13 +12,18 @@ namespace ts.server {
         export const LogFile = "--logFile";
         export const EnableTelemetry = "--enableTelemetry";
         export const TypingSafeListLocation = "--typingSafeListLocation";
+        /**
+         * This argument specifies the location of the NPM executable.
+         * typingsInstaller will run the command with `${npmLocation} install ...`.
+         */
+        export const NpmLocation = "--npmLocation";
     }
 
     export function hasArgument(argumentName: string) {
         return sys.args.indexOf(argumentName) >= 0;
     }
 
-    export function findArgument(argumentName: string) {
+    export function findArgument(argumentName: string): string | undefined {
         const index = sys.args.indexOf(argumentName);
         return index >= 0 && index < sys.args.length - 1
             ? sys.args[index + 1]

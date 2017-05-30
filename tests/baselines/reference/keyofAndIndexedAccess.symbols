@@ -820,19 +820,19 @@ function f71(func: <T, U>(x: T, y: U) => Partial<T & U>) {
 >c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 226, 40))
 
     x.a;  // number | undefined
->x.a : Symbol(a)
+>x.a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 226, 18))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 226, 7))
->a : Symbol(a)
+>a : Symbol(a, Decl(keyofAndIndexedAccess.ts, 226, 18))
 
     x.b;  // string | undefined
->x.b : Symbol(b)
+>x.b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 226, 24))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 226, 7))
->b : Symbol(b)
+>b : Symbol(b, Decl(keyofAndIndexedAccess.ts, 226, 24))
 
     x.c;  // boolean | undefined
->x.c : Symbol(c)
+>x.c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 226, 40))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 226, 7))
->c : Symbol(c)
+>c : Symbol(c, Decl(keyofAndIndexedAccess.ts, 226, 40))
 }
 
 function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]) {
@@ -1951,11 +1951,11 @@ class AnotherSampleClass<T> extends SampleClass<T & Foo> {
 
         this.props.foo.concat;
 >this.props.foo.concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
->this.props.foo : Symbol(foo)
+>this.props.foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 536, 15))
 >this.props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 529, 22))
 >this : Symbol(AnotherSampleClass, Decl(keyofAndIndexedAccess.ts, 540, 54))
 >props : Symbol(SampleClass.props, Decl(keyofAndIndexedAccess.ts, 529, 22))
->foo : Symbol(foo)
+>foo : Symbol(foo, Decl(keyofAndIndexedAccess.ts, 536, 15))
 >concat : Symbol(String.concat, Decl(lib.d.ts, --, --))
     }
 }

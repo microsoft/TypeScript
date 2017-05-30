@@ -685,9 +685,9 @@ namespace ts {
                         continue;
                     }
 
-                    // for the ======== add a comment for the first line, and then lex all
-                    // subsequent lines up until the end of the conflict marker.
-                    Debug.assert(ch === CharacterCodes.equals);
+                    // for the ||||||| and ======== markers, add a comment for the first line,
+                    // and then lex all subsequent lines up until the end of the conflict marker.
+                    Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
                     classifyDisabledMergeCode(text, start, end);
                 }
             }
@@ -782,8 +782,8 @@ namespace ts {
         }
 
         function classifyDisabledMergeCode(text: string, start: number, end: number) {
-            // Classify the line that the ======= marker is on as a comment.  Then just lex
-            // all further tokens and add them to the result.
+            // Classify the line that the ||||||| or ======= marker is on as a comment.
+            // Then just lex all further tokens and add them to the result.
             let i: number;
             for (i = start; i < end; i++) {
                 if (isLineBreak(text.charCodeAt(i))) {

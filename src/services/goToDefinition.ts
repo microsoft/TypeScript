@@ -8,7 +8,7 @@ namespace ts.GoToDefinition {
             if (referenceFile) {
                 return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
             }
-            return undefined;
+            // Might still be on jsdoc, so keep looking.
         }
 
         // Type reference directives

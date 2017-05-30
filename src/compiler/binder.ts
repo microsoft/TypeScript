@@ -2178,7 +2178,10 @@ namespace ts {
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
-                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag, SymbolFlags.Property, SymbolFlags.PropertyExcludes);
+                    return declareSymbolAndAddToSymbolTable(node as JSDocPropertyTag,
+                        (node as JSDocPropertyTag).isBracketed || ((node as JSDocPropertyTag).typeExpression && (node as JSDocPropertyTag).typeExpression.type.kind === SyntaxKind.JSDocOptionalType) ?
+                            SymbolFlags.Property | SymbolFlags.Optional : SymbolFlags.Property,
+                        SymbolFlags.PropertyExcludes);
                 case SyntaxKind.JSDocFunctionType:
                     return bindFunctionOrConstructorType(<SignatureDeclaration>node);
                 case SyntaxKind.JSDocTypeLiteral:
@@ -3398,6 +3401,7 @@ namespace ts {
             case SyntaxKind.IndexedAccessType:
             case SyntaxKind.MappedType:
             case SyntaxKind.LiteralType:
+            case SyntaxKind.NamespaceExportDeclaration:
                 // Types and signatures are TypeScript syntax, and exclude all other facts.
                 transformFlags = TransformFlags.AssertTypeScript;
                 excludeFlags = TransformFlags.TypeExcludes;

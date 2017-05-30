@@ -71,17 +71,17 @@ function f1(b: Bacon) {
     let isPerfect = bb.isPerfect.value;
 >isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 23, 7))
 >bb.isPerfect.value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
->bb.isPerfect : Symbol(isPerfect)
+>bb.isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
 >bb : Symbol(bb, Decl(mappedTypes3.ts, 22, 7))
->isPerfect : Symbol(isPerfect)
+>isPerfect : Symbol(isPerfect, Decl(mappedTypes3.ts, 11, 17))
 >value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
 
     let weight = bb.weight.value;
 >weight : Symbol(weight, Decl(mappedTypes3.ts, 24, 7))
 >bb.weight.value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
->bb.weight : Symbol(weight)
+>bb.weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
 >bb : Symbol(bb, Decl(mappedTypes3.ts, 22, 7))
->weight : Symbol(weight)
+>weight : Symbol(weight, Decl(mappedTypes3.ts, 12, 23))
 >value : Symbol(Box.value, Decl(mappedTypes3.ts, 0, 14))
 }
 
