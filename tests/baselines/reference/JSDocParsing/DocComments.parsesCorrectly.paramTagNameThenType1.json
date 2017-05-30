@@ -34,7 +34,7 @@
                     "end": 28
                 }
             },
-            "parameterName": {
+            "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
