@@ -164,10 +164,13 @@ namespace ts.server {
     }
 
     export interface ProjectOptions {
+        configHasExtendsProperty: boolean;
         /**
          * true if config file explicitly listed files
          */
-        configHasFilesProperty?: boolean;
+        configHasFilesProperty: boolean;
+        configHasIncludeProperty: boolean;
+        configHasExcludeProperty: boolean;
         /**
          * these fields can be present in the project file
          */

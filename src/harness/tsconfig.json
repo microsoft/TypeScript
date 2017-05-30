@@ -128,6 +128,7 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
-        "./unittests/textChanges.ts"
+        "./unittests/textChanges.ts",
+        "./unittests/telemetry.ts"
     ]
 }

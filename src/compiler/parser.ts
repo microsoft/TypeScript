@@ -6108,7 +6108,10 @@ namespace ts {
                     case SyntaxKind.OpenBraceToken:
                         return parseJSDocRecordType();
                     case SyntaxKind.FunctionKeyword:
-                        return parseJSDocFunctionType();
+                        if (lookAhead(nextTokenIsOpenParen)) {
+                            return parseJSDocFunctionType();
+                        }
+                        break;
                     case SyntaxKind.DotDotDotToken:
                         return parseJSDocVariadicType();
                     case SyntaxKind.NewKeyword:
@@ -6124,7 +6127,6 @@ namespace ts {
                     case SyntaxKind.NullKeyword:
                     case SyntaxKind.UndefinedKeyword:
                     case SyntaxKind.NeverKeyword:
-                    case SyntaxKind.ObjectKeyword:
                         return parseTokenNode<JSDocType>();
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.NumericLiteral:
@@ -6664,10 +6666,7 @@ namespace ts {
                     });
                 }
 
-                function parseParamTag(atToken: AtToken, tagName: Identifier) {
-                    let typeExpression = tryParseTypeExpression();
-                    skipWhitespace();
-
+                function parseBracketNameInPropertyAndParamTag() {
                     let name: Identifier;
                     let isBracketed: boolean;
                     // Looking for something like '[foo]' or 'foo'
@@ -6686,6 +6685,14 @@ namespace ts {
                     else if (tokenIsIdentifierOrKeyword(token())) {
                         name = parseJSDocIdentifierName();
                     }
+                    return { name, isBracketed };
+                }
+
+                function parseParamTag(atToken: AtToken, tagName: Identifier) {
+                    let typeExpression = tryParseTypeExpression();
+                    skipWhitespace();
+
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
 
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
@@ -6742,8 +6749,9 @@ namespace ts {
                 function parsePropertyTag(atToken: AtToken, tagName: Identifier): JSDocPropertyTag {
                     const typeExpression = tryParseTypeExpression();
                     skipWhitespace();
-                    const name = parseJSDocIdentifierName();
+                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
+
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
                         return undefined;
@@ -6754,6 +6762,7 @@ namespace ts {
                     result.tagName = tagName;
                     result.name = name;
                     result.typeExpression = typeExpression;
+                    result.isBracketed = isBracketed;
                     return finishNode(result);
                 }
 
@@ -6795,7 +6804,7 @@ namespace ts {
                             const jsDocTypeReference = <JSDocTypeReference>typeExpression.type;
                             if (jsDocTypeReference.name.kind === SyntaxKind.Identifier) {
                                 const name = <Identifier>jsDocTypeReference.name;
-                                if (name.text === "Object") {
+                                if (name.text === "Object" || name.text === "object") {
                                     typedefTag.jsDocTypeLiteral = scanChildTags();
                                 }
                             }

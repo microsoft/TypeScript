@@ -14,6 +14,10 @@ anyT1 = "hi";
 const x = (a) => a + 1;
 x(1);
 
+/** @type {function} */
+const y = (a) => a + 1;
+x(1);
+
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
 x1(0);
