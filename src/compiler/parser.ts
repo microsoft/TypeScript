@@ -6510,7 +6510,7 @@ namespace ts {
                             case "arg":
                             case "argument":
                             case "param":
-                                tag = parseParamTag(atToken, tagName);
+                                tag = parseParameterOrPropertyTag(atToken, tagName, /*shouldParseParamTag*/ true);
                                 break;
                             case "return":
                             case "returns":
@@ -6655,11 +6655,12 @@ namespace ts {
                     return { name, isBracketed };
                 }
 
-                function parseParamTag(atToken: AtToken, tagName: Identifier) {
+                function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, shouldParseParamTag: boolean): JSDocPropertyTag | JSDocParameterTag {
                     let typeExpression = tryParseTypeExpression();
                     skipWhitespace();
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
+                    skipWhitespace();
 
                     if (!name) {
                         parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
@@ -6678,13 +6679,15 @@ namespace ts {
                         typeExpression = tryParseTypeExpression();
                     }
 
-                    const result = <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos);
+                    const result = shouldParseParamTag ?
+                        <JSDocParameterTag>createNode(SyntaxKind.JSDocParameterTag, atToken.pos) :
+                        <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.preParameterName = preName;
                     result.typeExpression = typeExpression;
                     result.postParameterName = postName;
-                    result.parameterName = postName || preName;
+                    result.name = postName || preName;
                     result.isBracketed = isBracketed;
                     return finishNode(result);
                 }
@@ -6710,26 +6713,6 @@ namespace ts {
                     result.atToken = atToken;
                     result.tagName = tagName;
                     result.typeExpression = tryParseTypeExpression();
-                    return finishNode(result);
-                }
-
-                function parsePropertyTag(atToken: AtToken, tagName: Identifier): JSDocPropertyTag {
-                    const typeExpression = tryParseTypeExpression();
-                    skipWhitespace();
-                    const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
-                    skipWhitespace();
-
-                    if (!name) {
-                        parseErrorAtPosition(scanner.getStartPos(), /*length*/ 0, Diagnostics.Identifier_expected);
-                        return undefined;
-                    }
-
-                    const result = <JSDocPropertyTag>createNode(SyntaxKind.JSDocPropertyTag, atToken.pos);
-                    result.atToken = atToken;
-                    result.tagName = tagName;
-                    result.name = name;
-                    result.typeExpression = typeExpression;
-                    result.isBracketed = isBracketed;
                     return finishNode(result);
                 }
 
@@ -6869,7 +6852,7 @@ namespace ts {
                             return true;
                         case "prop":
                         case "property":
-                            const propertyTag = parsePropertyTag(atToken, tagName);
+                            const propertyTag = parseParameterOrPropertyTag(atToken, tagName, /*shouldParseParamTag*/ false) as JSDocPropertyTag;
                             if (propertyTag) {
                                 if (!parentTag.jsDocPropertyTags) {
                                     parentTag.jsDocPropertyTags = <NodeArray<JSDocPropertyTag>>[];

@@ -27,6 +27,30 @@ foo({x: 'abc'});
 >'abc' : "abc"
 
 /**
+ * @typedef {Object} AnotherOpts
+ * @property anotherX {string}
+ * @property anotherY {string=}
+ * 
+ * @param {AnotherOpts} opts
+ */
+function foo1(opts) {
+>foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
+>opts : { anotherX: string; anotherY?: string; }
+
+    opts.anotherX;
+>opts.anotherX : string
+>opts : { anotherX: string; anotherY?: string; }
+>anotherX : string
+}
+
+foo1({anotherX: "world"});
+>foo1({anotherX: "world"}) : void
+>foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
+>{anotherX: "world"} : { anotherX: string; }
+>anotherX : string
+>"world" : "world"
+
+/**
  * @typedef {object} Opts1
  * @property {string} x
  * @property {string=} y
@@ -35,8 +59,8 @@ foo({x: 'abc'});
  *
  * @param {Opts1} opts
  */
-function foo1(opts) {
->foo1 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
+function foo2(opts) {
+>foo2 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
 >opts : { x: string; y?: string; z?: string; w?: string; }
 
     opts.x;
@@ -44,9 +68,9 @@ function foo1(opts) {
 >opts : { x: string; y?: string; z?: string; w?: string; }
 >x : string
 }
-foo1({x: 'abc'});
->foo1({x: 'abc'}) : void
->foo1 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
+foo2({x: 'abc'});
+>foo2({x: 'abc'}) : void
+>foo2 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
 >{x: 'abc'} : { x: string; }
 >x : string
 >'abc' : "abc"
