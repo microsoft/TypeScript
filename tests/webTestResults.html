@@ -1,17 +1,19 @@
-﻿<html>
+<!DOCTYPE html>
+<html>
 <head>
   <meta charset="utf-8">
   <title>Mocha Tests</title>
   <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
   <link rel="icon" href="./webhost/favicon-32x32.png"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 <body>
   <div id='setup'>
+    <button id='runTestBtn' onclick='runTests()' type="button" class="btn btn-success btn-lg">Run Tests</button><br /><br /><br />
     <div>
-      <button id='selectCompilerBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=compiler"'>Select Compiler Tests</button>
-      <button id='selectFourslashBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=fourslash"'>Select Fourslash Tests</button>
+      <button id='selectCompilerBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=compiler"' type="button" class="btn btn-warning">Select Compiler Tests</button>
+      <button id='selectFourslashBtn' onclick='location.href="http://localhost:8888/tests/webTestResults.html?grep=fourslash"' type="button" class="btn btn-warning">Select Fourslash Tests</button>
     </div>
-    <button id='runTestBtn' onclick='runTests()'>Run Tests</button>
   </div>
 
   <div id="mocha"></div>
