@@ -4,17 +4,19 @@
 
 // @filename: 0.js
 // @ts-check
+var lol;
 const obj = {
-  /** @type {string|undefined} */
-  foo: undefined,
   /** @type {string|undefined} */
   bar: 42,
   /** @type {function(number): number} */
   method1(n1) {
-      return (n1 + 42).toString()
+      return "42";
   },
+  /** @type {function(number): number} */
+  method2: (n1) => "lol",
   /** @type {string} */
   lol
 }
-var lol = "string"
-obj.foo = 5
+lol = "string"
+/** @type {string} */
+var s = obj.method1(0);

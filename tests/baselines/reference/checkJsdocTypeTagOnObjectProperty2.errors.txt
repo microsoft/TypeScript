@@ -1,0 +1,39 @@
+tests/cases/conformance/jsdoc/0.js(5,3): error TS2322: Type 'number' is not assignable to type 'string | undefined'.
+tests/cases/conformance/jsdoc/0.js(7,3): error TS2322: Type '(n1: any) => string' is not assignable to type '(arg0: number) => number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/0.js(11,3): error TS2322: Type '(n1: any) => string' is not assignable to type '(arg0: number) => number'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/0.js(13,3): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/jsdoc/0.js(17,5): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/jsdoc/0.js (5 errors) ====
+    // @ts-check
+    var lol;
+    const obj = {
+      /** @type {string|undefined} */
+      bar: 42,
+      ~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string | undefined'.
+      /** @type {function(number): number} */
+      method1(n1) {
+      ~~~~~~~
+!!! error TS2322: Type '(n1: any) => string' is not assignable to type '(arg0: number) => number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+          return "42";
+      },
+      /** @type {function(number): number} */
+      method2: (n1) => "lol",
+      ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '(n1: any) => string' is not assignable to type '(arg0: number) => number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+      /** @type {string} */
+      lol
+      ~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
+    }
+    lol = "string"
+    /** @type {string} */
+    var s = obj.method1(0);
+        ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.

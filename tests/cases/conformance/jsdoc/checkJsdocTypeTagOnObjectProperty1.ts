@@ -9,16 +9,18 @@ const obj = {
   /** @type {string|undefined} */
   foo: undefined,
   /** @type {string|undefined} */
-  bar: 42,
+  bar: "42",
   /** @type {function(number): number} */
   method1(n1) {
       return n1 + 42;
   },
   /** @type {string} */
-  lol
+  lol,
+  /** @type {number} */
+  ['b' + 'ar1']: 42,
 }
 obj.foo = 'string'
-obj.foo;
 obj.lol
 obj.bar = undefined;
 var k = obj.method1(0);
+obj.bar1 = "42";
