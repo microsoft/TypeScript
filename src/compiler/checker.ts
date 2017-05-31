@@ -1095,13 +1095,13 @@ namespace ts {
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
-                                suggestionCount++;
                                 error(errorLocation, suggestedNameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg), suggestion);
                             }
                         }
                         if (!suggestion) {
                             error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg));
                         }
+                        suggestionCount++;
                     }
                 }
                 return undefined;
