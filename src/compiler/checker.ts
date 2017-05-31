@@ -21082,10 +21082,6 @@ namespace ts {
             }
         }
 
-        function isAccessor(kind: SyntaxKind): boolean {
-            return kind === SyntaxKind.GetAccessor || kind === SyntaxKind.SetAccessor;
-        }
-
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
             const baseTypes = getBaseTypes(type);
             if (baseTypes.length < 2) {
@@ -24555,7 +24551,7 @@ namespace ts {
         function checkGrammarStatementInAmbientContext(node: Node): boolean {
             if (isInAmbientContext(node)) {
                 // An accessors is already reported about the ambient context
-                if (isAccessor(node.parent.kind)) {
+                if (isAccessor(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
                 }
 
