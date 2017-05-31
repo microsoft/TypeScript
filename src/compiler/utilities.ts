@@ -2935,6 +2935,14 @@ namespace ts {
             return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
 
+        const flags = getModifierFlagsNoCache(node);
+        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
+        return flags;
+    }
+
+    /* @internal */
+    export function getModifierFlagsNoCache(node: Node): ModifierFlags {
+
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {
@@ -2946,7 +2954,6 @@ namespace ts {
             flags |= ModifierFlags.Export;
         }
 
-        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
         return flags;
     }
 
@@ -3235,27 +3242,76 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache: string[] = [];
-
-    export function formatSyntaxKind(kind: SyntaxKind): string {
-        const syntaxKindEnum = (<any>ts).SyntaxKind;
-        if (syntaxKindEnum) {
-            const cached = syntaxKindCache[kind];
-            if (cached !== undefined) {
-                return cached;
-            }
-
-            for (const name in syntaxKindEnum) {
-                if (syntaxKindEnum[name] === kind) {
-                    const result = `${kind} (${name})`;
-                    syntaxKindCache[kind] = result;
-                    return result;
+    /**
+     * Formats an enum value as a string for debugging and debug assertions.
+     */
+    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
+        const members = getEnumMembers(enumObject);
+        if (value === 0) {
+            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
+        }
+        if (isFlags) {
+            let result = "";
+            let remainingFlags = value;
+            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
+                const [enumValue, enumName] = members[i];
+                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                    remainingFlags &= ~enumValue;
+                    result = `${enumName}${result ? ", " : ""}${result}`;
                 }
+            }
+            if (remainingFlags === 0) {
+                return result;
             }
         }
         else {
-            return kind.toString();
+            for (const [enumValue, enumName] of members) {
+                if (enumValue === value) {
+                    return enumName;
+                }
+            }
         }
+        return value.toString();
+    }
+
+    function getEnumMembers(enumObject: any) {
+        const result: [number, string][] = [];
+        for (const name in enumObject) {
+            const value = enumObject[name];
+            if (typeof value === "number") {
+                result.push([value, name]);
+            }
+        }
+
+        return stableSort(result, (x, y) => compareValues(x[0], y[0]));
+    }
+
+    export function formatSyntaxKind(kind: SyntaxKind): string {
+        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
+    }
+
+    export function formatModifierFlags(flags: ModifierFlags): string {
+        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
+    }
+
+    export function formatTransformFlags(flags: TransformFlags): string {
+        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
+    }
+
+    export function formatEmitFlags(flags: EmitFlags): string {
+        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
+    }
+
+    export function formatSymbolFlags(flags: SymbolFlags): string {
+        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
+    }
+
+    export function formatTypeFlags(flags: TypeFlags): string {
+        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
+    }
+
+    export function formatObjectFlags(flags: ObjectFlags): string {
+        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
     export function getRangePos(range: TextRange | undefined) {

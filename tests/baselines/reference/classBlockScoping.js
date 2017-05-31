@@ -62,9 +62,9 @@ function f(b) {
             Foo.prototype.m = function () {
                 new Foo();
             };
+            Foo.y = new Foo();
             return Foo;
         }());
-        Foo_1.y = new Foo_1();
         new Foo_1();
     }
     var _a;

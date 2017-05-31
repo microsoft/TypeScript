@@ -37,27 +37,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var A = (function () {
     function A() {
     }
+    A = __decorate([
+        dec
+    ], A);
     return A;
 }());
-A = __decorate([
-    dec
-], A);
 var B = (function () {
     function B(x) {
     }
+    B = __decorate([
+        dec,
+        __metadata("design:paramtypes", [Number])
+    ], B);
     return B;
 }());
-B = __decorate([
-    dec,
-    __metadata("design:paramtypes", [Number])
-], B);
 var C = (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }(A));
-C = __decorate([
-    dec
-], C);

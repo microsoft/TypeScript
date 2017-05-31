@@ -2376,11 +2376,11 @@ var Harness;
                 errorHandlerStack[errorHandlerStack.length - 1](e);
             }
         };
+        // The current stack of Runnable objects
+        Runnable.currentStack = [];
+        Runnable.errorHandlerStack = [];
         return Runnable;
     }());
-    // The current stack of Runnable objects
-    Runnable.currentStack = [];
-    Runnable.errorHandlerStack = [];
     Harness.Runnable = Runnable;
     var TestCase = (function (_super) {
         __extends(TestCase, _super);

@@ -16,8 +16,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var C = (function () {
     function C() {
     }
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }());
-C = __decorate([
-    dec
-], C);
