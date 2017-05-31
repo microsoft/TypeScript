@@ -20,21 +20,30 @@ const x = (a) => a + 1;
 x(1);
 >x : Symbol(x, Decl(0.js, 9, 5))
 
+/** @type {function} */
+const y = (a) => a + 1;
+>y : Symbol(y, Decl(0.js, 13, 5))
+>a : Symbol(a, Decl(0.js, 13, 11))
+>a : Symbol(a, Decl(0.js, 13, 11))
+
+x(1);
+>x : Symbol(x, Decl(0.js, 9, 5))
+
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
->x1 : Symbol(x1, Decl(0.js, 13, 5))
->a : Symbol(a, Decl(0.js, 13, 12))
->a : Symbol(a, Decl(0.js, 13, 12))
+>x1 : Symbol(x1, Decl(0.js, 17, 5))
+>a : Symbol(a, Decl(0.js, 17, 12))
+>a : Symbol(a, Decl(0.js, 17, 12))
 
 x1(0);
->x1 : Symbol(x1, Decl(0.js, 13, 5))
+>x1 : Symbol(x1, Decl(0.js, 17, 5))
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
->x2 : Symbol(x2, Decl(0.js, 17, 5))
->a : Symbol(a, Decl(0.js, 17, 12))
->a : Symbol(a, Decl(0.js, 17, 12))
+>x2 : Symbol(x2, Decl(0.js, 21, 5))
+>a : Symbol(a, Decl(0.js, 21, 12))
+>a : Symbol(a, Decl(0.js, 21, 12))
 
 x2(0);
->x2 : Symbol(x2, Decl(0.js, 17, 5))
+>x2 : Symbol(x2, Decl(0.js, 21, 5))
 

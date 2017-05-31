@@ -4122,7 +4122,7 @@ namespace ts {
                 // This elementType will be used if the specific property corresponding to this index is not
                 // present (aka the tuple element property). This call also checks that the parentType is in
                 // fact an iterable or array (depending on target language).
-                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
+                const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
                 if (declaration.dotDotDotToken) {
                     // Rest element has an array type with the same element type as the parent type
                     type = createArrayType(elementType);
@@ -6861,6 +6861,7 @@ namespace ts {
                     case "Object":
                         return anyType;
                     case "Function":
+                    case "function":
                         return globalFunctionType;
                     case "Array":
                     case "array":
@@ -7959,23 +7960,14 @@ namespace ts {
             return mapper;
         }
 
-        function getInferenceMapper(context: InferenceContext): TypeMapper {
-            if (!context.mapper) {
-                const mapper: TypeMapper = t => {
-                    const typeParameters = context.signature.typeParameters;
-                    for (let i = 0; i < typeParameters.length; i++) {
-                        if (t === typeParameters[i]) {
-                            context.inferences[i].isFixed = true;
-                            return getInferredType(context, i);
-                        }
-                    }
-                    return t;
-                };
-                mapper.mappedTypes = context.signature.typeParameters;
-                mapper.context = context;
-                context.mapper = mapper;
-            }
-            return context.mapper;
+        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
+            return !!(<InferenceContext>mapper).signature;
+        }
+
+        function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
+            return mapper && isInferenceContext(mapper) ?
+                createInferenceContext(mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.inferences) :
+                mapper;
         }
 
         function identityMapper(type: Type): Type {
@@ -10171,23 +10163,45 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(signature: Signature, inferUnionTypes: boolean, useAnyForNoInferences: boolean): InferenceContext {
-            const inferences = map(signature.typeParameters, createTypeInferencesObject);
+        function createInferenceContext(signature: Signature, flags: InferenceFlags, baseInferences?: InferenceInfo[]): InferenceContext {
+            const inferences = baseInferences ? map(baseInferences, cloneInferenceInfo) : map(signature.typeParameters, createInferenceInfo);
+            const context = mapper as InferenceContext;
+            context.mappedTypes = signature.typeParameters;
+            context.signature = signature;
+            context.inferences = inferences;
+            context.flags = flags;
+            return context;
+
+            function mapper(t: Type): Type {
+                for (let i = 0; i < inferences.length; i++) {
+                    if (t === inferences[i].typeParameter) {
+                        inferences[i].isFixed = true;
+                        return getInferredType(context, i);
+                    }
+                }
+                return t;
+            }
+        }
+
+        function createInferenceInfo(typeParameter: TypeParameter): InferenceInfo {
             return {
-                signature,
-                inferUnionTypes,
-                inferences,
-                inferredTypes: new Array(signature.typeParameters.length),
-                useAnyForNoInferences
+                typeParameter,
+                candidates: undefined,
+                inferredType: undefined,
+                priority: undefined,
+                topLevel: true,
+                isFixed: false
             };
         }
 
-        function createTypeInferencesObject(): TypeInferences {
+        function cloneInferenceInfo(inference: InferenceInfo): InferenceInfo {
             return {
-                primary: undefined,
-                secondary: undefined,
-                topLevel: true,
-                isFixed: false,
+                typeParameter: inference.typeParameter,
+                candidates: inference.candidates && inference.candidates.slice(),
+                inferredType: inference.inferredType,
+                priority: inference.priority,
+                topLevel: inference.topLevel,
+                isFixed: inference.isFixed
             };
         }
 
@@ -10224,10 +10238,9 @@ namespace ts {
             if (properties.length === 0 && !indexInfo) {
                 return undefined;
             }
-            const typeVariable = <TypeVariable>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
-            const typeVariableArray = [typeVariable];
-            const typeInferences = createTypeInferencesObject();
-            const typeInferencesArray = [typeInferences];
+            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+            const inference = createInferenceInfo(typeParameter);
+            const inferences = [inference];
             const templateType = getTemplateTypeFromMappedType(target);
             const readonlyMask = target.declaration.readonlyToken ? false : true;
             const optionalMask = target.declaration.questionToken ? 0 : SymbolFlags.Optional;
@@ -10253,22 +10266,15 @@ namespace ts {
             return createAnonymousType(undefined, members, emptyArray, emptyArray, indexInfo, undefined);
 
             function inferTargetType(sourceType: Type): Type {
-                typeInferences.primary = undefined;
-                typeInferences.secondary = undefined;
-                inferTypes(typeVariableArray, typeInferencesArray, sourceType, templateType);
-                const inferences = typeInferences.primary || typeInferences.secondary;
-                return inferences && getUnionType(inferences, /*subtypeReduction*/ true);
+                inference.candidates = undefined;
+                inferTypes(inferences, sourceType, templateType);
+                return inference.candidates && getUnionType(inference.candidates, /*subtypeReduction*/ true);
             }
         }
 
-        function inferTypesWithContext(context: InferenceContext, originalSource: Type, originalTarget: Type) {
-            inferTypes(context.signature.typeParameters, context.inferences, originalSource, originalTarget);
-        }
-
-        function inferTypes(typeVariables: TypeVariable[], typeInferences: TypeInferences[], originalSource: Type, originalTarget: Type) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
-            let inferiority = 0;
             inferFromTypes(originalSource, originalTarget);
 
             function inferFromTypes(source: Type, target: Type) {
@@ -10328,32 +10334,26 @@ namespace ts {
                     // Because the anyFunctionType is internal, it should not be exposed to the user by adding
                     // it as an inference candidate. Hopefully, a better candidate will come along that does
                     // not contain anyFunctionType when we come back to this argument for its second round
-                    // of inference.
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType) {
+                    // of inference. Also, we exclude inferences for silentNeverType which is used as a wildcard
+                    // when constructing types from type parameters that had no inference candidates.
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
                         return;
                     }
-                    for (let i = 0; i < typeVariables.length; i++) {
-                        if (target === typeVariables[i]) {
-                            const inferences = typeInferences[i];
-                            if (!inferences.isFixed) {
-                                // Any inferences that are made to a type parameter in a union type are inferior
-                                // to inferences made to a flat (non-union) type. This is because if we infer to
-                                // T | string[], we really don't know if we should be inferring to T or not (because
-                                // the correct constituent on the target side could be string[]). Therefore, we put
-                                // such inferior inferences into a secondary bucket, and only use them if the primary
-                                // bucket is empty.
-                                const candidates = inferiority ?
-                                    inferences.secondary || (inferences.secondary = []) :
-                                    inferences.primary || (inferences.primary = []);
-                                if (!contains(candidates, source)) {
-                                    candidates.push(source);
-                                }
-                                if (target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
-                                    inferences.topLevel = false;
-                                }
+                    const inference = getInferenceInfoForType(target);
+                    if (inference) {
+                        if (!inference.isFixed) {
+                            if (!inference.candidates || priority < inference.priority) {
+                                inference.candidates = [source];
+                                inference.priority = priority;
                             }
-                            return;
+                            else if (priority === inference.priority) {
+                                inference.candidates.push(source);
+                            }
+                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                                inference.topLevel = false;
+                            }
                         }
+                        return;
                     }
                 }
                 else if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
@@ -10371,7 +10371,7 @@ namespace ts {
                     let typeVariable: TypeVariable;
                     // First infer to each type in union or intersection that isn't a type variable
                     for (const t of targetTypes) {
-                        if (t.flags & TypeFlags.TypeVariable && contains(typeVariables, t)) {
+                        if (getInferenceInfoForType(t)) {
                             typeVariable = <TypeVariable>t;
                             typeVariableCount++;
                         }
@@ -10383,9 +10383,10 @@ namespace ts {
                     // variable. This gives meaningful results for union types in co-variant positions and intersection
                     // types in contra-variant positions (such as callback parameters).
                     if (typeVariableCount === 1) {
-                        inferiority++;
+                        const savePriority = priority;
+                        priority |= InferencePriority.NakedTypeVariable;
                         inferFromTypes(source, typeVariable);
-                        inferiority--;
+                        priority = savePriority;
                     }
                 }
                 else if (source.flags & TypeFlags.UnionOrIntersection) {
@@ -10425,6 +10426,17 @@ namespace ts {
                 }
             }
 
+            function getInferenceInfoForType(type: Type) {
+                if (type.flags & TypeFlags.TypeVariable) {
+                    for (const inference of inferences) {
+                        if (type === inference.typeParameter) {
+                            return inference;
+                        }
+                    }
+                }
+                return undefined;
+            }
+
             function inferFromObjectTypes(source: Type, target: Type) {
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
@@ -10433,13 +10445,14 @@ namespace ts {
                         // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                         // type and then make a secondary inference from that type to T. We make a secondary inference
                         // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                        const index = indexOf(typeVariables, (<IndexType>constraintType).type);
-                        if (index >= 0 && !typeInferences[index].isFixed) {
+                        const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                        if (inference && !inference.isFixed) {
                             const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
                             if (inferredType) {
-                                inferiority++;
-                                inferFromTypes(inferredType, typeVariables[index]);
-                                inferiority--;
+                                const savePriority = priority;
+                                priority |= InferencePriority.MappedType;
+                                inferFromTypes(inferredType, inference.typeParameter);
+                                priority = savePriority;
                             }
                         }
                         return;
@@ -10538,66 +10551,68 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
         }
 
-        function getInferenceCandidates(context: InferenceContext, index: number): Type[] {
-            const inferences = context.inferences[index];
-            return inferences.primary || inferences.secondary || emptyArray;
-        }
-
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
         function getInferredType(context: InferenceContext, index: number): Type {
-            let inferredType = context.inferredTypes[index];
+            const inference = context.inferences[index];
+            let inferredType = inference.inferredType;
             let inferenceSucceeded: boolean;
             if (!inferredType) {
-                const inferences = getInferenceCandidates(context, index);
-                if (inferences.length) {
+                if (inference.candidates) {
                     // We widen inferred literal types if
                     // all inferences were made to top-level ocurrences of the type parameter, and
                     // the type parameter has no constraint or its constraint includes no primitive or literal types, and
                     // the type parameter was fixed during inference or does not occur at top-level in the return type.
                     const signature = context.signature;
-                    const widenLiteralTypes = context.inferences[index].topLevel &&
-                        !hasPrimitiveConstraint(signature.typeParameters[index]) &&
-                        (context.inferences[index].isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), signature.typeParameters[index]));
-                    const baseInferences = widenLiteralTypes ? sameMap(inferences, getWidenedLiteralType) : inferences;
-                    // Infer widened union or supertype, or the unknown type for no common supertype
-                    const unionOrSuperType = context.inferUnionTypes ? getUnionType(baseInferences, /*subtypeReduction*/ true) : getCommonSupertype(baseInferences);
+                    const widenLiteralTypes = inference.topLevel &&
+                        !hasPrimitiveConstraint(inference.typeParameter) &&
+                        (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+                    const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
+                    // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
+                    // for inferences coming from return types in order to avoid common supertype failures.
+                    const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
+                        getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
                     inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
                     inferenceSucceeded = !!unionOrSuperType;
                 }
                 else {
-                    // Infer either the default or the empty object type when no inferences were
-                    // made. It is important to remember that in this case, inference still
-                    // succeeds, meaning there is no error for not having inference candidates. An
-                    // inference error only occurs when there are *conflicting* candidates, i.e.
-                    // candidates with no common supertype.
-                    const defaultType = getDefaultFromTypeParameter(context.signature.typeParameters[index]);
-                    if (defaultType) {
-                        // Instantiate the default type. Any forward reference to a type
-                        // parameter should be instantiated to the empty object type.
-                        inferredType = instantiateType(defaultType,
-                            combineTypeMappers(
-                                createBackreferenceMapper(context.signature.typeParameters, index),
-                                getInferenceMapper(context)));
+                    if (context.flags & InferenceFlags.NoDefault) {
+                        // We use silentNeverType as the wildcard that signals no inferences.
+                        inferredType = silentNeverType;
                     }
                     else {
-                        inferredType = context.useAnyForNoInferences ? anyType : emptyObjectType;
+                        // Infer either the default or the empty object type when no inferences were
+                        // made. It is important to remember that in this case, inference still
+                        // succeeds, meaning there is no error for not having inference candidates. An
+                        // inference error only occurs when there are *conflicting* candidates, i.e.
+                        // candidates with no common supertype.
+                        const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                        if (defaultType) {
+                            // Instantiate the default type. Any forward reference to a type
+                            // parameter should be instantiated to the empty object type.
+                            inferredType = instantiateType(defaultType,
+                                combineTypeMappers(
+                                    createBackreferenceMapper(context.signature.typeParameters, index),
+                                    context));
+                        }
+                        else {
+                            inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
+                        }
                     }
-
                     inferenceSucceeded = true;
                 }
-                context.inferredTypes[index] = inferredType;
+                inference.inferredType = inferredType;
 
                 // Only do the constraint check if inference succeeded (to prevent cascading errors)
                 if (inferenceSucceeded) {
                     const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
                     if (constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, getInferenceMapper(context));
+                        const instantiatedConstraint = instantiateType(constraint, context);
                         if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                            context.inferredTypes[index] = inferredType = instantiatedConstraint;
+                            inference.inferredType = inferredType = instantiatedConstraint;
                         }
                     }
                 }
@@ -10612,10 +10627,11 @@ namespace ts {
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
-            for (let i = 0; i < context.inferredTypes.length; i++) {
-                getInferredType(context, i);
+            const result: Type[] = [];
+            for (let i = 0; i < context.inferences.length; i++) {
+                result.push(getInferredType(context, i));
             }
-            return context.inferredTypes;
+            return result;
         }
 
         // EXPRESSION TYPE CHECKING
@@ -10878,12 +10894,12 @@ namespace ts {
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
             return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index) ||
-                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) ||
+                checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
                 unknownType;
         }
 
         function getTypeOfDestructuredSpreadExpression(type: Type) {
-            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType);
+            return createArrayType(checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType);
         }
 
         function getAssignedTypeOfBinaryExpression(node: BinaryExpression): Type {
@@ -12857,7 +12873,7 @@ namespace ts {
                 const index = indexOf(arrayLiteral.elements, node);
                 return getTypeOfPropertyOfContextualType(type, "" + index)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
-                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
+                    || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
             }
             return undefined;
         }
@@ -13095,7 +13111,7 @@ namespace ts {
             }
 
             const arrayOrIterableType = checkExpression(node.expression, checkMode);
-            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterable*/ false);
+            return checkIteratedTypeOrElementType(arrayOrIterableType, node.expression, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
         }
 
         function hasDefaultValue(node: BindingElement | Expression): boolean {
@@ -13124,7 +13140,7 @@ namespace ts {
                     // if there is no index type / iterated type.
                     const restArrayType = checkExpression((<SpreadElement>e).expression, checkMode);
                     const restElementType = getIndexTypeOfType(restArrayType, IndexKind.Number) ||
-                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterable*/ false, /*checkAssignability*/ false);
+                        getIteratedTypeOrElementType(restArrayType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
                     if (restElementType) {
                         elementTypes.push(restElementType);
                     }
@@ -14871,26 +14887,25 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, /*inferUnionTypes*/ true, /*useAnyForNoInferences*/ false);
+            const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypesWithContext(context, instantiateType(source, contextualMapper), target);
+                inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): void {
-            const typeParameters = signature.typeParameters;
-            const inferenceMapper = getInferenceMapper(context);
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
+            const inferences = context.inferences;
 
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
-            for (let i = 0; i < typeParameters.length; i++) {
+            for (let i = 0; i < inferences.length; i++) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
                 // for type parameters that have already been fixed on the previous call to inferTypeArguments.
                 // It would be just as correct to reset all of them. But then we'd be repeating the same work
                 // for the type parameters that were fixed, namely the work done by getInferredType.
-                if (!context.inferences[i].isFixed) {
-                    context.inferredTypes[i] = undefined;
+                if (!inferences[i].isFixed) {
+                    inferences[i].inferredType = undefined;
                 }
             }
 
@@ -14905,11 +14920,29 @@ namespace ts {
                 context.failedTypeParameterIndex = undefined;
             }
 
+            // If a contextual type is available, infer from that type to the return type of the call expression. For
+            // example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
+            // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
+            // return type of 'wrap'.
+            if (isExpression(node)) {
+                const contextualType = getContextualType(node);
+                if (contextualType) {
+                    // We clone the contextual mapper to avoid disturbing a resolution in progress for an
+                    // outer call expression. Effectively we just want a snapshot of whatever has been
+                    // inferred for any outer call expression so far.
+                    const mapper = cloneTypeMapper(getContextualMapper(node));
+                    const instantiatedType = instantiateType(contextualType, mapper);
+                    const returnType = getReturnTypeOfSignature(signature);
+                    // Inferences made from return types have lower priority than all other inferences.
+                    inferTypes(context.inferences, instantiatedType, returnType, InferencePriority.ReturnType);
+                }
+            }
+
             const thisType = getThisTypeOfSignature(signature);
             if (thisType) {
                 const thisArgumentNode = getThisArgumentOfCall(node);
                 const thisArgumentType = thisArgumentNode ? checkExpression(thisArgumentNode) : voidType;
-                inferTypesWithContext(context, thisArgumentType, thisType);
+                inferTypes(context.inferences, thisArgumentType, thisType);
             }
 
             // We perform two passes over the arguments. In the first pass we infer from all arguments, but use
@@ -14927,11 +14960,11 @@ namespace ts {
                     if (argType === undefined) {
                         // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                         // context sensitive function expressions as wildcards
-                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : inferenceMapper;
+                        const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
                         argType = checkExpressionWithContextualType(arg, paramType, mapper);
                     }
 
-                    inferTypesWithContext(context, argType, paramType);
+                    inferTypes(context.inferences, argType, paramType);
                 }
             }
 
@@ -14946,12 +14979,11 @@ namespace ts {
                     if (excludeArgument[i] === false) {
                         const arg = args[i];
                         const paramType = getTypeAtPosition(signature, i);
-                        inferTypesWithContext(context, checkExpressionWithContextualType(arg, paramType, inferenceMapper), paramType);
+                        inferTypes(context.inferences, checkExpressionWithContextualType(arg, paramType, context), paramType);
                     }
                 }
             }
-
-            getInferredTypes(context);
+            return getInferredTypes(context);
         }
 
         function checkTypeArguments(signature: Signature, typeArgumentNodes: TypeNode[], typeArgumentTypes: Type[], reportErrors: boolean, headMessage?: DiagnosticMessage): boolean {
@@ -15533,7 +15565,7 @@ namespace ts {
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
                     const failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
-                    const inferenceCandidates = getInferenceCandidates(resultOfFailedInference, resultOfFailedInference.failedTypeParameterIndex);
+                    const inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex].candidates;
 
                     let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
@@ -15606,7 +15638,7 @@ namespace ts {
                     let candidate: Signature;
                     let typeArgumentsAreValid: boolean;
                     const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*inferUnionTypes*/ false, /*useAnyForNoInferences*/ isInJavaScriptFile(node))
+                        ? createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0)
                         : undefined;
 
                     while (true) {
@@ -15618,8 +15650,7 @@ namespace ts {
                                 typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
                             }
                             else {
-                                inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentTypes = inferenceContext.inferredTypes;
+                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                                 typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
                             }
                             if (!typeArgumentsAreValid) {
@@ -16193,7 +16224,7 @@ namespace ts {
                 for (let i = 0; i < len; i++) {
                     const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                     if (declaration.type) {
-                        inferTypesWithContext(mapper.context, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
+                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -16279,7 +16310,7 @@ namespace ts {
                 // T in the second overload so that we do not infer Base as a candidate for T
                 // (inferring Base would make type argument inference inconsistent between the two
                 // overloads).
-                inferTypesWithContext(mapper.context, links.type, instantiateType(contextualType, mapper));
+                inferTypes((<InferenceContext>mapper).inferences, links.type, instantiateType(contextualType, mapper));
             }
         }
 
@@ -16962,7 +16993,7 @@ namespace ts {
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
-            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(sourceType, node, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
             const elements = node.elements;
             for (let i = 0; i < elements.length; i++) {
                 checkArrayLiteralDestructuringElementAssignment(node, sourceType, i, elementType, checkMode);
@@ -20106,12 +20137,12 @@ namespace ts {
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
         }
 
-        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean): Type {
+        function checkIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterables: boolean): Type {
             if (isTypeAny(inputType)) {
                 return inputType;
             }
 
-            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, allowAsyncIterable, /*checkAssignability*/ true) || anyType;
+            return getIteratedTypeOrElementType(inputType, errorNode, allowStringInput, allowAsyncIterables, /*checkAssignability*/ true) || anyType;
         }
 
         /**
@@ -20119,16 +20150,16 @@ namespace ts {
          * we want to get the iterated type of an iterable for ES2015 or later, or the iterated type
          * of a iterable (if defined globally) or element type of an array like for ES2015 or earlier.
          */
-        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterable: boolean, checkAssignability: boolean): Type {
+        function getIteratedTypeOrElementType(inputType: Type, errorNode: Node, allowStringInput: boolean, allowAsyncIterables: boolean, checkAssignability: boolean): Type {
             const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
             const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
 
             // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
             // or higher, when inside of an async generator or for-await-if, or when
             // downlevelIteration is requested.
-            if (uplevelIteration || downlevelIteration || allowAsyncIterable) {
+            if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
                 // We only report errors for an invalid iterable type in ES2015 or higher.
-                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterable, allowAsyncIterable, checkAssignability);
+                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
                 if (iteratedType || uplevelIteration) {
                     return iteratedType;
                 }
@@ -20242,79 +20273,75 @@ namespace ts {
          * For a **for-await-of** statement or a `yield*` in an async generator we will look for
          * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          */
-        function getIteratedTypeOfIterable(type: Type, errorNode: Node | undefined, isAsyncIterable: boolean, allowNonAsyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+        function getIteratedTypeOfIterable(type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: boolean): Type | undefined {
             if (isTypeAny(type)) {
                 return undefined;
             }
 
-            const typeAsIterable = <IterableOrIteratorType>type;
-            if (isAsyncIterable ? typeAsIterable.iteratedTypeOfAsyncIterable : typeAsIterable.iteratedTypeOfIterable) {
-                return isAsyncIterable ? typeAsIterable.iteratedTypeOfAsyncIterable : typeAsIterable.iteratedTypeOfIterable;
-            }
+            return mapType(type, getIteratedType);
 
-            if (isAsyncIterable) {
-                // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
-                // or the global `AsyncIterableIterator<T>` then just grab its type argument.
-                if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
-                    isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
-                    return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
+            function getIteratedType(type: Type) {
+                const typeAsIterable = <IterableOrIteratorType>type;
+                if (allowAsyncIterables) {
+                    if (typeAsIterable.iteratedTypeOfAsyncIterable) {
+                        return typeAsIterable.iteratedTypeOfAsyncIterable;
+                    }
+
+                    // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
+                    // or the global `AsyncIterableIterator<T>` then just grab its type argument.
+                    if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
+                        isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
+                        return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0];
+                    }
                 }
-            }
 
-            if (!isAsyncIterable || allowNonAsyncIterables) {
-                // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
-                // `IterableIterator<T>` then just grab its type argument.
-                if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
-                    isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                    return isAsyncIterable
-                        ? typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments[0]
-                        : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
+                if (allowSyncIterables) {
+                    if (typeAsIterable.iteratedTypeOfIterable) {
+                        return typeAsIterable.iteratedTypeOfIterable;
+                    }
+
+                    // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
+                    // `IterableIterator<T>` then just grab its type argument.
+                    if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                        isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                        return typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments[0];
+                    }
                 }
-            }
 
-            let iteratorMethodSignatures: Signature[];
-            let isNonAsyncIterable = false;
-            if (isAsyncIterable) {
-                const iteratorMethod = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("asyncIterator"));
-                if (isTypeAny(iteratorMethod)) {
+                const asyncMethodType = allowAsyncIterables && getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("asyncIterator"));
+                const methodType = asyncMethodType || (allowSyncIterables && getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator")));
+                if (isTypeAny(methodType)) {
                     return undefined;
                 }
-                iteratorMethodSignatures = iteratorMethod && getSignaturesOfType(iteratorMethod, SignatureKind.Call);
-            }
 
-            if (!isAsyncIterable || (allowNonAsyncIterables && !some(iteratorMethodSignatures))) {
-                const iteratorMethod = getTypeOfPropertyOfType(type, getPropertyNameForKnownSymbolName("iterator"));
-                if (isTypeAny(iteratorMethod)) {
+                const signatures = methodType && getSignaturesOfType(methodType, SignatureKind.Call);
+                if (!some(signatures)) {
+                    if (errorNode) {
+                        error(errorNode,
+                            allowAsyncIterables
+                                ? Diagnostics.Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
+                                : Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
+                        // only report on the first error
+                        errorNode = undefined;
+                    }
                     return undefined;
                 }
-                iteratorMethodSignatures = iteratorMethod && getSignaturesOfType(iteratorMethod, SignatureKind.Call);
-                isNonAsyncIterable = true;
-            }
 
-            if (some(iteratorMethodSignatures)) {
-                const iteratorMethodReturnType = getUnionType(map(iteratorMethodSignatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
-                const iteratedType = getIteratedTypeOfIterator(iteratorMethodReturnType, errorNode, /*isAsyncIterator*/ !isNonAsyncIterable);
+                const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), /*subtypeReduction*/ true);
+                const iteratedType = getIteratedTypeOfIterator(returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
                 if (checkAssignability && errorNode && iteratedType) {
                     // If `checkAssignability` was specified, we were called from
                     // `checkIteratedTypeOrElementType`. As such, we need to validate that
                     // the type passed in is actually an Iterable.
-                    checkTypeAssignableTo(type, isNonAsyncIterable
-                        ? createIterableType(iteratedType)
-                        : createAsyncIterableType(iteratedType), errorNode);
+                    checkTypeAssignableTo(type, asyncMethodType
+                        ? createAsyncIterableType(iteratedType)
+                        : createIterableType(iteratedType), errorNode);
                 }
-                return isAsyncIterable
+
+                return asyncMethodType
                     ? typeAsIterable.iteratedTypeOfAsyncIterable = iteratedType
                     : typeAsIterable.iteratedTypeOfIterable = iteratedType;
             }
-
-            if (errorNode) {
-                error(errorNode,
-                    isAsyncIterable
-                        ? Diagnostics.Type_must_have_a_Symbol_asyncIterator_method_that_returns_an_async_iterator
-                        : Diagnostics.Type_must_have_a_Symbol_iterator_method_that_returns_an_iterator);
-            }
-
-            return undefined;
         }
 
         /**
@@ -20414,7 +20441,7 @@ namespace ts {
                 return undefined;
             }
 
-            return getIteratedTypeOfIterable(returnType, /*errorNode*/ undefined, isAsyncGenerator, /*allowNonAsyncIterables*/ false, /*checkAssignability*/ false)
+            return getIteratedTypeOfIterable(returnType, /*errorNode*/ undefined, /*allowAsyncIterables*/ isAsyncGenerator, /*allowSyncIterables*/ !isAsyncGenerator, /*checkAssignability*/ false)
                 || getIteratedTypeOfIterator(returnType, /*errorNode*/ undefined, isAsyncGenerator);
         }
 
@@ -21059,10 +21086,6 @@ namespace ts {
                     }
                 }
             }
-        }
-
-        function isAccessor(kind: SyntaxKind): boolean {
-            return kind === SyntaxKind.GetAccessor || kind === SyntaxKind.SetAccessor;
         }
 
         function checkInheritedPropertiesAreIdentical(type: InterfaceType, typeNode: Node): boolean {
@@ -22624,7 +22647,7 @@ namespace ts {
             Debug.assert(expr.parent.kind === SyntaxKind.ArrayLiteralExpression);
             //    [{ property1: p1, property2 }] = elems;
             const typeOfArrayLiteral = getTypeOfArrayLiteralOrObjectLiteralDestructuringAssignment(<Expression>expr.parent);
-            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterable*/ false) || unknownType;
+            const elementType = checkIteratedTypeOrElementType(typeOfArrayLiteral || unknownType, expr.parent, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) || unknownType;
             return checkArrayLiteralDestructuringElementAssignment(<ArrayLiteralExpression>expr.parent, typeOfArrayLiteral,
                 indexOf((<ArrayLiteralExpression>expr.parent).elements, expr), elementType || unknownType);
         }
@@ -24534,7 +24557,7 @@ namespace ts {
         function checkGrammarStatementInAmbientContext(node: Node): boolean {
             if (isInAmbientContext(node)) {
                 // An accessors is already reported about the ambient context
-                if (isAccessor(node.parent.kind)) {
+                if (isAccessor(node.parent)) {
                     return getNodeLinks(node).hasReportedStatementInAmbientContext = true;
                 }
 

@@ -34,7 +34,7 @@
                 "end": 30,
                 "text": "name1"
             },
-            "parameterName": {
+            "name": {
                 "kind": "Identifier",
                 "pos": 25,
                 "end": 30,
