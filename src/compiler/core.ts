@@ -953,7 +953,7 @@ namespace ts {
      * @param map A map-like.
      * @param key A property key.
      */
-    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
+    export function hasProperty(map: MapLike<any>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
@@ -2478,21 +2478,24 @@ namespace ts {
         }
         Debug.fail(`File ${path} has unknown extension.`);
     }
+
+    export function isAnySupportedFileExtension(path: string): boolean {
+        return tryGetExtensionFromPath(path) !== undefined;
+    }
+
+    const allExtensions = [Extension.Dts, Extension.Ts, Extension.Tsx, Extension.Js, Extension.Jsx];
+
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        if (fileExtensionIs(path, ".d.ts")) {
-            return Extension.Dts;
-        }
-        if (fileExtensionIs(path, ".ts")) {
-            return Extension.Ts;
-        }
-        if (fileExtensionIs(path, ".tsx")) {
-            return Extension.Tsx;
-        }
-        if (fileExtensionIs(path, ".js")) {
-            return Extension.Js;
-        }
-        if (fileExtensionIs(path, ".jsx")) {
-            return Extension.Jsx;
+        return ts.find(allExtensions, ext => fileExtensionIs(path, extensionText(ext)));
+    }
+
+    export function extensionText(ext: Extension): string {
+        switch (ext) {
+            case Extension.Dts: return ".d.ts";
+            case Extension.Ts: return ".ts";
+            case Extension.Tsx: return ".tsx";
+            case Extension.Js: return ".js";
+            case Extension.Jsx: return ".jsx";
         }
     }
 

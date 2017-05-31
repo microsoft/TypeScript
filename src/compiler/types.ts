@@ -2282,6 +2282,21 @@ namespace ts {
         /* @internal */ path: Path;
         text: string;
 
+        /**
+         * If two source files are for the same version of the same package, one will redirect to the other.
+         * (See `createRedirectSourceFile` in program.ts.)
+         * The redirect will have this set. The other will not have anything set, but see Program#sourceFileIsRedirectedTo.
+         */
+        /* @internal */ redirect?: {
+            /** Source file this redirects to. */
+            readonly redirectTo: SourceFile,
+            /**
+             * Source file for the duplicate package. This will not be used by the Program,
+             * but we need to keep this around so we can watch for changes in underlying.
+             */
+            readonly underlying: SourceFile,
+        } | undefined;
+
         amdDependencies: AmdDependency[];
         moduleName: string;
         referencedFiles: FileReference[];
@@ -2440,6 +2455,11 @@ namespace ts {
         /* @internal */ structureIsReused?: StructureIsReused;
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
+
+        /** Given a source file, get the PackageId it was imported from. */
+        /* @internal */ getPackageIdOfSourceFile(sourceFile: SourceFile): PackageId | undefined;
+        /** True if some other source file redirects to this one. */
+        /* @internal */ sourceFileIsRedirectedTo(sourceFile: SourceFile): boolean;
     }
 
     /* @internal */
@@ -3849,6 +3869,7 @@ namespace ts {
     /**
      * ResolvedModule with an explicitly provided `extension` property.
      * Prefer this over `ResolvedModule`.
+     * If changing this, remember to change `moduleResolutionIsEqualTo`.
      */
     export interface ResolvedModuleFull extends ResolvedModule {
         /**
@@ -3856,6 +3877,22 @@ namespace ts {
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
         extension: Extension;
+        packageId?: PackageId;
+    }
+
+    /**
+     * Unique identifier with a package name and version.
+     * If changing this, remember to change `packageIdIsEqual`.
+     */
+    export interface PackageId {
+        /**
+         * Name of the package.
+         * Should not include `@types`.
+         * If accessing a non-index file, this should include its name e.g. "foo/bar".
+         */
+        name: string;
+        /** Version of the package, e.g. "1.2.3" */
+        version: string;
     }
 
     export enum Extension {
