@@ -755,15 +755,16 @@ namespace ts {
     /**
      * Appends a range of value to an array, returning the array.
      *
-     * @param to The array to which `value` is to be appended. If `to` is `undefined`, a new array
-     * is created if `value` was appended.
-     * @param from The values to append to the array. If `from` is `undefined`, nothing is
-     * appended. If an element of `from` is `undefined`, that element is not appended.
+     * @param to The array to which values are to be appended. If `to` is `undefined` and `from` is non-empty, a new array will be created.
+     * @param from The values to append to the array. If `from` is `undefined`, nothing is appended.
+     * @param sliceStart Index of the first element in `from` to append. (inclusive)
+     * @param sliceEnd Index after the last element in `from` to append. (exclusive)
      */
-    export function addRange<T>(to: T[] | undefined, from: T[] | undefined): T[] | undefined {
-        if (from === undefined) return to;
-        for (const v of from) {
-            to = append(to, v);
+    export function addRange<T>(to: T[] | undefined, from: T[] | undefined, sliceStart = 0, sliceEnd = from && from.length): T[] | undefined {
+        if (from === undefined || from.length === 0) return to;
+        to = to || [];
+        for (let i = sliceStart; i < sliceEnd; i++) {
+            to.push(from[i]);
         }
         return to;
     }
