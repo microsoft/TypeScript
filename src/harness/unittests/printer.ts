@@ -12,9 +12,10 @@ namespace ts {
             };
         }
 
-        it("printFile", () => {
+        describe("printFile", () => {
             const printsCorrectly = makePrintsCorrectly("printsFileCorrectly");
-            const sourceFile = createSourceFile("source.ts", `
+            // Avoid eagerly creating the sourceFile so that `createSourceFile` doesn't run unless one of these tests is run.
+            const sourceFile = memoize(() => createSourceFile("source.ts", `
                 interface A<T> {
                     // comment1
                     readonly prop?: T;
@@ -48,18 +49,18 @@ namespace ts {
 
                 // comment10
                 function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
-            `, ScriptTarget.ES2015);
+            `, ScriptTarget.ES2015));
 
-            printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
-            printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
+            printsCorrectly("default", {}, printer => printer.printFile(sourceFile()));
+            printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile()));
 
             // github #14948
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
         });
 
-        it("printBundle", () => {
+        describe("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
-            const bundle = createBundle([
+            const bundle = memoize(() => createBundle([
                 createSourceFile("a.ts", `
                     /*! [a.ts] */
 
@@ -72,14 +73,14 @@ namespace ts {
                     // comment1
                     const b = 2;
                 `, ScriptTarget.ES2015)
-            ]);
-            printsCorrectly("default", {}, printer => printer.printBundle(bundle));
-            printsCorrectly("removeComments", { removeComments: true }, printer => printer.printBundle(bundle));
+            ]));
+            printsCorrectly("default", {}, printer => printer.printBundle(bundle()));
+            printsCorrectly("removeComments", { removeComments: true }, printer => printer.printBundle(bundle()));
         });
 
-        it("printNode", () => {
+        describe("printNode", () => {
             const printsCorrectly = makePrintsCorrectly("printsNodeCorrectly");
-            const sourceFile = createSourceFile("source.ts", "", ScriptTarget.ES2015);
+            const sourceFile = memoize(() => createSourceFile("source.ts", "", ScriptTarget.ES2015));
             // tslint:disable boolean-trivia
             const syntheticNode = createClassDeclaration(
                 undefined,
@@ -130,11 +131,11 @@ namespace ts {
             );
 
             // tslint:enable boolean-trivia
-            printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile));
+            printsCorrectly("class", {}, printer => printer.printNode(EmitHint.Unspecified, syntheticNode, sourceFile()));
 
-            printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(EmitHint.Unspecified, createNamespaceExportDeclaration("B"), sourceFile));
+            printsCorrectly("namespaceExportDeclaration", {}, printer => printer.printNode(EmitHint.Unspecified, createNamespaceExportDeclaration("B"), sourceFile()));
 
-            printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(EmitHint.Unspecified, classWithOptionalMethodAndProperty, sourceFile));
+            printsCorrectly("classWithOptionalMethodAndProperty", {}, printer => printer.printNode(EmitHint.Unspecified, classWithOptionalMethodAndProperty, sourceFile()));
         });
     });
 }
