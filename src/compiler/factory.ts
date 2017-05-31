@@ -303,7 +303,7 @@ namespace ts {
             : node;
     }
 
-    export function createProperty(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression) {
+    export function createProperty(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         const node = <PropertyDeclaration>createSynthesizedNode(SyntaxKind.PropertyDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -314,7 +314,7 @@ namespace ts {
         return node;
     }
 
-    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression) {
+    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -984,10 +984,10 @@ namespace ts {
         return node;
     }
 
-    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression) {
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, node.operatorToken, right), node)
+            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
             : node;
     }
 
@@ -1502,19 +1502,23 @@ namespace ts {
             : node;
     }
 
-    export function createTypeAliasDeclaration(name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+    export function createTypeAliasDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
         const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
         node.name = asName(name);
         node.typeParameters = asNodeArray(typeParameters);
         node.type = type;
         return node;
     }
 
-    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
-        return node.name !== name
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
             || node.typeParameters !== typeParameters
             || node.type !== type
-            ? updateNode(createTypeAliasDeclaration(name, typeParameters, type), node)
+            ? updateNode(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
             : node;
     }
 
@@ -1627,14 +1631,14 @@ namespace ts {
             : node;
     }
 
-    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause {
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = <ImportClause>createSynthesizedNode(SyntaxKind.ImportClause);
         node.name = name;
         node.namedBindings = namedBindings;
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
         return node.name !== name
             || node.namedBindings !== namedBindings
             ? updateNode(createImportClause(name, namedBindings), node)

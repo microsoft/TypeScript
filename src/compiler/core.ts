@@ -521,6 +521,18 @@ namespace ts {
         return result || array;
     }
 
+    export function mapDefined<T>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => T | undefined): ReadonlyArray<T> {
+        const result: T[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const item = array[i];
+            const mapped = mapFn(item, i);
+            if (mapped !== undefined) {
+                result.push(mapped);
+            }
+        }
+        return result;
+    }
+
     /**
      * Computes the first matching span of elements and returns a tuple of the first span
      * and the remaining elements.
@@ -1800,6 +1812,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function removePrefix(str: string, prefix: string): string {
+        return startsWith(str, prefix) ? str.substr(prefix.length) : str;
+    }
+
+    /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -1813,7 +1830,8 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+    /* @internal */
+    export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
                 return true;
@@ -2013,7 +2031,7 @@ namespace ts {
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);

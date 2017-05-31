@@ -1,0 +1,21 @@
+tests/cases/conformance/salsa/0.js(5,4): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'number'.
+tests/cases/conformance/salsa/0.js(12,1): error TS2322: Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/conformance/salsa/0.js (2 errors) ====
+    // @ts-check
+    
+    /** @type {function (number)} */
+    const x1 = (a) => a + 1;
+    x1("string");
+       ~~~~~~~~
+!!! error TS2345: Argument of type '"string"' is not assignable to parameter of type 'number'.
+    
+    /** @type {function (number): number} */
+    const x2 = (a) => a + 1;
+    
+    /** @type {string} */
+    var a;
+    a = x2(0);
+    ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.

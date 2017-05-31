@@ -1,7 +1,7 @@
-tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(10,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(20,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(23,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(25,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(10,1): error TS2554: Expected 1-2 arguments, but got 3.
+tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(20,1): error TS2554: Expected 1-2 arguments, but got 3.
+tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(23,1): error TS2554: Expected 2 arguments, but got 1.
+tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(25,1): error TS2554: Expected 2 arguments, but got 3.
 
 
 ==== tests/cases/conformance/types/union/unionTypeCallSignatures4.ts (4 errors) ====
@@ -16,7 +16,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(25,1): error TS2
     f12("a", "b");
     f12("a", "b", "c");  // error
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 3.
     
     var f34: F3 | F4;
     f34("a");
@@ -28,14 +28,14 @@ tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(25,1): error TS2
     f1234("a", "b");
     f1234("a", "b", "c");  // error
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 3.
     
     var f12345: F1 | F2 | F3 | F4 | F5;
     f12345("a");  // error
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 1.
     f12345("a", "b");
     f12345("a", "b", "c");  // error
     ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 2 arguments, but got 3.
     

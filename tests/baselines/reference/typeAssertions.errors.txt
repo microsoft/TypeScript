@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(5,5): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(5,5): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeBase'.
   Property 'p' is missing in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2352: Type 'SomeOther' cannot be converted to type 'SomeDerived'.
@@ -30,7 +30,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     
     fn1(fn2<string>(4)); // Error
         ~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 0 type arguments, but got 1.
     
     var a: any;
     var s: string;

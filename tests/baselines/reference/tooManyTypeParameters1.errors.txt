@@ -1,6 +1,6 @@
-tests/cases/compiler/tooManyTypeParameters1.ts(2,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/tooManyTypeParameters1.ts(5,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/tooManyTypeParameters1.ts(8,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/tooManyTypeParameters1.ts(2,1): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/compiler/tooManyTypeParameters1.ts(5,1): error TS2558: Expected 1 type arguments, but got 2.
+tests/cases/compiler/tooManyTypeParameters1.ts(8,9): error TS2558: Expected 1 type arguments, but got 2.
 tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 
 
@@ -8,17 +8,17 @@ tests/cases/compiler/tooManyTypeParameters1.ts(11,8): error TS2314: Generic type
     function f<T>() { }
     f<string, string>();
     ~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1 type arguments, but got 2.
     
     var x = <T>() => {};
     x<number,number>();
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1 type arguments, but got 2.
     
     class C<T> {}
     var c = new C<Date,Date>();
             ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 1 type arguments, but got 2.
     
     interface I<T> {}
     var i: I<number,number>;

@@ -892,6 +892,8 @@ namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
 
+    export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments | JSDocTypeReference;
+
     export interface TypeReferenceNode extends TypeNode {
         kind: SyntaxKind.TypeReference;
         typeName: EntityName;
@@ -2100,6 +2102,7 @@ namespace ts {
     }
 
     export interface JSDocTag extends Node {
+        parent: JSDoc;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2130,6 +2133,7 @@ namespace ts {
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2138,9 +2142,15 @@ namespace ts {
     }
 
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
+        /** the parameter name, if provided *before* the type (TypeScript-style) */
+        preParameterName?: Identifier;
+        /** the parameter name, if provided *after* the type (JSDoc-standard) */
+        postParameterName?: Identifier;
         typeExpression: JSDocTypeExpression;
+        isBracketed: boolean;
     }
 
     export interface JSDocTypeLiteral extends JSDocType {
@@ -2157,7 +2167,7 @@ namespace ts {
         /** the parameter name, if provided *after* the type (JSDoc-standard) */
         postParameterName?: Identifier;
         /** the parameter name, regardless of the location it was provided */
-        parameterName: Identifier;
+        name: Identifier;
         isBracketed: boolean;
     }
 
@@ -2425,6 +2435,8 @@ namespace ts {
         /* @internal */ isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         // For testing purposes only.
         /* @internal */ structureIsReused?: StructureIsReused;
+
+        /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
     }
 
     /* @internal */
@@ -2504,10 +2516,10 @@ namespace ts {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
-        getPropertyOfType(type: Type, propertyName: string): Symbol;
-        getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo;
+        getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
+        getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): Signature[];
-        getIndexTypeOfType(type: Type, kind: IndexKind): Type;
+        getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
         getBaseTypeOfLiteralType(type: Type): Type;
         getWidenedType(type: Type): Type;
@@ -2649,24 +2661,25 @@ namespace ts {
         // with import statements it previously saw (but chose not to emit).
         trackSymbol(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): void;
         reportInaccessibleThisError(): void;
-        reportIllegalExtends(): void;
+        reportPrivateInBaseOfClassExpression(propertyName: string): void;
     }
 
     export const enum TypeFormatFlags {
-        None                            = 0x00000000,
-        WriteArrayAsGenericType         = 0x00000001,  // Write Array<T> instead T[]
-        UseTypeOfFunction               = 0x00000002,  // Write typeof instead of function type literal
-        NoTruncation                    = 0x00000004,  // Don't truncate typeToString result
-        WriteArrowStyleSignature        = 0x00000008,  // Write arrow style signature
-        WriteOwnNameForAnyLike          = 0x00000010,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
-        WriteTypeArgumentsOfSignature   = 0x00000020,  // Write the type arguments instead of type parameters of the signature
-        InElementType                   = 0x00000040,  // Writing an array or union element type
-        UseFullyQualifiedType           = 0x00000080,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
-        InFirstTypeArgument             = 0x00000100,  // Writing first type argument of the instantiated type
-        InTypeAlias                     = 0x00000200,  // Writing type in type alias declaration
-        UseTypeAliasValue               = 0x00000400,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
-        SuppressAnyReturnType           = 0x00000800,  // If the return type is any-like, don't offer a return type.
-        AddUndefined                    = 0x00001000,  // Add undefined to types of initialized, non-optional parameters
+        None                            = 0,
+        WriteArrayAsGenericType         = 1 << 0,  // Write Array<T> instead T[]
+        UseTypeOfFunction               = 1 << 2,  // Write typeof instead of function type literal
+        NoTruncation                    = 1 << 3,  // Don't truncate typeToString result
+        WriteArrowStyleSignature        = 1 << 4,  // Write arrow style signature
+        WriteOwnNameForAnyLike          = 1 << 5,  // Write symbol's own name instead of 'any' for any like types (eg. unknown, __resolving__ etc)
+        WriteTypeArgumentsOfSignature   = 1 << 6,  // Write the type arguments instead of type parameters of the signature
+        InElementType                   = 1 << 7,  // Writing an array or union element type
+        UseFullyQualifiedType           = 1 << 8,  // Write out the fully qualified type name (eg. Module.Type, instead of Type)
+        InFirstTypeArgument             = 1 << 9,  // Writing first type argument of the instantiated type
+        InTypeAlias                     = 1 << 10,  // Writing type in type alias declaration
+        UseTypeAliasValue               = 1 << 11,  // Serialize the type instead of using type-alias. This is needed when we emit declaration file.
+        SuppressAnyReturnType           = 1 << 12,  // If the return type is any-like, don't offer a return type.
+        AddUndefined                    = 1 << 13,  // Add undefined to types of initialized, non-optional parameters
+        WriteClassExpressionAsTypeLiteral = 1 << 14, // Write a type literal instead of (Anonymous class)
     }
 
     export const enum SymbolFormatFlags {
@@ -3291,7 +3304,7 @@ namespace ts {
 
     export interface Signature {
         declaration: SignatureDeclaration;  // Originating declaration
-        typeParameters?: TypeParameter[];    // Type parameters (undefined if non-generic)
+        typeParameters?: TypeParameter[];   // Type parameters (undefined if non-generic)
         parameters: Symbol[];               // Parameters
         /* @internal */
         thisParameter?: Symbol;             // symbol of this-type parameter
@@ -3335,30 +3348,36 @@ namespace ts {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
-        context?: InferenceContext; // The inference context this mapper was created from.
-                                    // Only inference mappers have this set (in createInferenceMapper).
-                                    // The identity mapper and regular instantiation mappers do not need it.
+    }
+
+    export const enum InferencePriority {
+        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 1,  // Reverse inference for mapped type
+        ReturnType        = 1 << 2,  // Inference made from return type of generic function
+    }
+
+    export interface InferenceInfo {
+        typeParameter: TypeParameter;
+        candidates: Type[];
+        inferredType: Type;
+        priority: InferencePriority;
+        topLevel: boolean;
+        isFixed: boolean;
+    }
+
+    export const enum InferenceFlags {
+        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
+        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
     /* @internal */
-    export interface TypeInferences {
-        primary: Type[];    // Inferences made directly to a type parameter
-        secondary: Type[];  // Inferences made to a type parameter in a union type
-        topLevel: boolean;  // True if all inferences were made from top-level (not nested in object type) locations
-        isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
-                            // If a type parameter is fixed, no more inferences can be made for the type parameter
-    }
-
-    /* @internal */
-    export interface InferenceContext {
+    export interface InferenceContext extends TypeMapper {
         signature: Signature;               // Generic signature for which inferences are made
-        inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
-        inferences: TypeInferences[];       // Inferences made for each type parameter
-        inferredTypes: Type[];              // Inferred type for each type parameter
-        mapper?: TypeMapper;                // Type mapper for this inference context
+        inferences: InferenceInfo[];        // Inferences made for each type parameter
+        flags: InferenceFlags;              // Inference flags
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
-        useAnyForNoInferences?: boolean;    // Use any instead of {} for no inferences
     }
 
     /* @internal */
@@ -3414,7 +3433,7 @@ namespace ts {
     export enum DiagnosticCategory {
         Warning,
         Error,
-        Message,
+        Message
     }
 
     export enum ModuleResolutionKind {
@@ -4272,6 +4291,8 @@ namespace ts {
         /*@internal*/ onSetSourceFile?: (node: SourceFile) => void;
         /*@internal*/ onBeforeEmitNodeArray?: (nodes: NodeArray<any>) => void;
         /*@internal*/ onAfterEmitNodeArray?: (nodes: NodeArray<any>) => void;
+        /*@internal*/ onBeforeEmitToken?: (node: Node) => void;
+        /*@internal*/ onAfterEmitToken?: (node: Node) => void;
     }
 
     export interface PrinterOptions {

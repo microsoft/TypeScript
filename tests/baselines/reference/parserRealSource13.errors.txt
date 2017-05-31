@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(8,35): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(9,39): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(10,34): error TS2304: Cannot find name 'AST'.
@@ -121,7 +121,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error 
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript.AstWalkerWithDetailCallback {
