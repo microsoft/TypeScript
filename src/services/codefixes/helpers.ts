@@ -130,7 +130,7 @@ namespace ts.codefix {
         }
 
         function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
-            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration);
+            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
             if (signatureDeclaration) {
                 signatureDeclaration.decorators = undefined;
                 signatureDeclaration.modifiers = modifiers;

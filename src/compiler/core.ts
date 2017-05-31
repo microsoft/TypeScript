@@ -230,6 +230,8 @@ namespace ts {
      * If no such value is found, it applies the callback until the parent pointer is undefined or the callback returns "quit"
      * At that point findAncestor returns undefined.
      */
+    export function findAncestor<T extends Node>(node: Node, callback: (element: Node) => element is T): T | undefined;
+    export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node | undefined;
     export function findAncestor(node: Node, callback: (element: Node) => boolean | "quit"): Node {
         while (node) {
             const result = callback(node);
@@ -485,6 +487,47 @@ namespace ts {
                         result.push(v);
                     }
                 }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Maps an array. If the mapped value is an array, it is spread into the result.
+     * Avoids allocation if all elements map to themselves.
+     *
+     * @param array The array to map.
+     * @param mapfn The callback used to map the result into one or more values.
+     */
+    export function sameFlatMap<T>(array: T[], mapfn: (x: T, i: number) => T | T[]): T[] {
+        let result: T[];
+        if (array) {
+            for (let i = 0; i < array.length; i++) {
+                const item = array[i];
+                const mapped = mapfn(item, i);
+                if (result || item !== mapped || isArray(mapped)) {
+                    if (!result) {
+                        result = array.slice(0, i);
+                    }
+                    if (isArray(mapped)) {
+                        addRange(result, mapped);
+                    }
+                    else {
+                        result.push(mapped);
+                    }
+                }
+            }
+        }
+        return result || array;
+    }
+
+    export function mapDefined<T>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => T | undefined): ReadonlyArray<T> {
+        const result: T[] = [];
+        for (let i = 0; i < array.length; i++) {
+            const item = array[i];
+            const mapped = mapFn(item, i);
+            if (mapped !== undefined) {
+                result.push(mapped);
             }
         }
         return result;
@@ -1734,6 +1777,11 @@ namespace ts {
     }
 
     /* @internal */
+    export function removePrefix(str: string, prefix: string): string {
+        return startsWith(str, prefix) ? str.substr(prefix.length) : str;
+    }
+
+    /* @internal */
     export function endsWith(str: string, suffix: string): boolean {
         const expectedPos = str.length - suffix.length;
         return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
@@ -1747,7 +1795,8 @@ namespace ts {
         return path.length > extension.length && endsWith(path, extension);
     }
 
-    export function fileExtensionIsAny(path: string, extensions: string[]): boolean {
+    /* @internal */
+    export function fileExtensionIsOneOf(path: string, extensions: string[]): boolean {
         for (const extension of extensions) {
             if (fileExtensionIs(path, extension)) {
                 return true;
@@ -1947,7 +1996,7 @@ namespace ts {
             for (const current of files) {
                 const name = combinePaths(path, current);
                 const absoluteName = combinePaths(absolutePath, current);
-                if (extensions && !fileExtensionIsAny(name, extensions)) continue;
+                if (extensions && !fileExtensionIsOneOf(name, extensions)) continue;
                 if (excludeRegex && excludeRegex.test(absoluteName)) continue;
                 if (!includeFileRegexes) {
                     results[0].push(name);

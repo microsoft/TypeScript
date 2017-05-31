@@ -10,26 +10,26 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(62,97): er
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(63,110): error TS2322: Type '{ wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(66,6): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,1): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
   Types of property 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): error TS2684: The 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(75,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(75,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(76,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(77,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(78,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(77,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(78,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(79,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(80,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(81,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(80,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(81,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(82,20): error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(83,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(83,1): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(86,5): error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'void' is not assignable to type '{ y: number; }'.
@@ -187,13 +187,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
     
     ok.f(); // not enough arguments
     ~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     ok.f('wrong type');
          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
     ok.f(13, 'too many arguments');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     wrongPropertyType.f(13);
     ~~~~~~~~~~~~~~~~~
 !!! error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
@@ -207,40 +207,40 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(175,35): e
     let c = new C();
     c.explicitC(); // not enough arguments
     ~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     c.explicitC('wrong type');
                 ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
     c.explicitC(13, 'too many arguments');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     c.explicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
     c.explicitThis(14, 'too many arguments 2');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     c.implicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     c.implicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
     c.implicitThis(14, 'too many arguments 2');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitProperty(); // not enough arguments
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     c.explicitProperty('wrong type 3');
                        ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
     c.explicitProperty(15, 'too many arguments 3');
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     
     // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
     let specifiedToVoid: (this: void, x: number) => number = explicitStructural;

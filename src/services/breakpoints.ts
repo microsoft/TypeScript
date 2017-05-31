@@ -14,7 +14,7 @@ namespace ts.BreakpointResolver {
             return undefined;
         }
 
-        let tokenAtLocation = getTokenAtPosition(sourceFile, position);
+        let tokenAtLocation = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
         const lineOfPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
         if (sourceFile.getLineAndCharacterOfPosition(tokenAtLocation.getStart(sourceFile)).line > lineOfPosition) {
             // Get previous token if the token is returned starts on new line

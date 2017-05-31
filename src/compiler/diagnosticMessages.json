@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -1072,7 +1076,7 @@
         "category": "Error",
         "code": 2345
     },
-    "Supplied parameters do not match any signature of call target.": {
+    "Call target does not contain any signatures.": {
         "category": "Error",
         "code": 2346
     },
@@ -1860,6 +1864,30 @@
         "category": "Error",
         "code": 2552
     },
+    "Computed values are not permitted in an enum with string valued members.": {
+        "category": "Error",
+        "code": 2553
+    },
+    "Expected {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2554
+    },
+    "Expected at least {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2555
+    },
+    "Expected {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2556
+    },
+    "Expected at least {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2557
+    },
+    "Expected {0} type arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2558
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2445,9 +2473,9 @@
         "category": "Error",
         "code": 4092
     },
-    "'extends' clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
+    "Property '{0}' of exported class expression may not be private or protected.": {
         "category": "Error",
-        "code": 4093
+        "code": 4094
     },
 
     "The current host does not support the '{0}' option.": {
@@ -3050,6 +3078,10 @@
         "category": "Message",
         "code": 6136
     },
+    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
+        "category": "Error",
+        "code": 6137
+    },
     "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6138
@@ -3567,6 +3599,15 @@
     "Change spelling to '{0}'.": {
         "category": "Message",
         "code": 90022
+    },
+
+    "Convert function to an ES2015 class": {
+        "category": "Message",
+        "code": 95001
+    },
+    "Convert function '{0}' to class": {
+        "category": "Message",
+        "code": 95002
     },
 
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {

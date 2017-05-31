@@ -120,6 +120,11 @@ function f6() {
     x!.slice();
 }
 
+function f7() {
+    let x: string;
+    x!.slice();
+}
+
 
 //// [typeGuardsAsAssertions.js]
 "use strict";
@@ -225,5 +230,9 @@ function f6() {
     x = "";
     x.slice();
     x = "";
+    x.slice();
+}
+function f7() {
+    var x;
     x.slice();
 }
