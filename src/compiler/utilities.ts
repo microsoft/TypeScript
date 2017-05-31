@@ -1651,7 +1651,7 @@ namespace ts {
         }
         else if (param.name.kind === SyntaxKind.Identifier) {
             const name = (param.name as Identifier).text;
-            return filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag && tag.parameterName.text === name);
+            return filter(tags, tag => tag.kind === SyntaxKind.JSDocParameterTag && tag.name.text === name);
         }
         else {
             // TODO: it's a destructured parameter, so it should look up an "object type" series of multiple lines
@@ -1662,7 +1662,7 @@ namespace ts {
 
     /** Does the opposite of `getJSDocParameterTags`: given a JSDoc parameter, finds the parameter corresponding to it. */
     export function getParameterFromJSDoc(node: JSDocParameterTag): ParameterDeclaration | undefined {
-        const name = node.parameterName.text;
+        const name = node.name.text;
         const grandParent = node.parent!.parent!;
         Debug.assert(node.parent!.kind === SyntaxKind.JSDocComment);
         if (!isFunctionLike(grandParent)) {
