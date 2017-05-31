@@ -12,7 +12,7 @@ namespace ts {
             };
         }
 
-        describe("printFile", () => {
+        it("printFile", () => {
             const printsCorrectly = makePrintsCorrectly("printsFileCorrectly");
             const sourceFile = createSourceFile("source.ts", `
                 interface A<T> {
@@ -57,7 +57,7 @@ namespace ts {
             printsCorrectly("templateLiteral", {}, printer => printer.printFile(createSourceFile("source.ts", "let greeting = `Hi ${name}, how are you?`;", ScriptTarget.ES2017)));
         });
 
-        describe("printBundle", () => {
+        it("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
             const bundle = createBundle([
                 createSourceFile("a.ts", `
@@ -77,7 +77,7 @@ namespace ts {
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printBundle(bundle));
         });
 
-        describe("printNode", () => {
+        it("printNode", () => {
             const printsCorrectly = makePrintsCorrectly("printsNodeCorrectly");
             const sourceFile = createSourceFile("source.ts", "", ScriptTarget.ES2015);
             // tslint:disable boolean-trivia
