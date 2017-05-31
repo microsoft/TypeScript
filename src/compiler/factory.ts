@@ -3966,7 +3966,7 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
             return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -4034,7 +4034,7 @@ namespace ts {
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
