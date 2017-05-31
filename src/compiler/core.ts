@@ -1529,7 +1529,7 @@ namespace ts {
     }
 
     export function getEmitScriptTarget(compilerOptions: CompilerOptions) {
-        return compilerOptions.target || ScriptTarget.ES3;
+        return compilerOptions.target || ScriptTarget.ES5;
     }
 
     export function getEmitModuleKind(compilerOptions: CompilerOptions) {

@@ -558,13 +558,13 @@ namespace ts.projectSystem {
 
             const expectedEmittedFileName = "/a/b/f1.js";
             assert.isTrue(host.fileExists(expectedEmittedFileName));
-            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nexports.__esModule = true;\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
+            assert.equal(host.readFile(expectedEmittedFileName), `"use strict";\r\nObject.defineProperty(exports, "__esModule", { value: true });\r\nfunction Foo() { return 10; }\r\nexports.Foo = Foo;\r\n`);
         });
 
-        it("shoud not emit js files in external projects", () => {
+        it("should not emit js files in external projects", () => {
             const file1 = {
                 path: "/a/b/file1.ts",
-                content: "consonle.log('file1');"
+                content: "console.log('file1');"
             };
             // file2 has errors. The emitting should not be blocked.
             const file2 = {
