@@ -66,7 +66,7 @@ var Derived2 = (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         var _this = this;
-        var r2 = function () { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
+        var r2 = function r2() { return _this = _super.call(this) || this; }; // error for misplaced super call (nested function)
         return _this;
     }
     return Derived2;
@@ -75,7 +75,7 @@ var Derived3 = (function (_super) {
     __extends(Derived3, _super);
     function Derived3() {
         var _this = this;
-        var r = function () { _this = _super.call(this) || this; }; // error
+        var r = function r() { _this = _super.call(this) || this; }; // error
         return _this;
     }
     return Derived3;

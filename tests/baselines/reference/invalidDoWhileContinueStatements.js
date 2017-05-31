@@ -48,12 +48,12 @@ ONE: do
 while (true);
 // continue from inside function
 TWO: do {
-    var x = function () {
+    var x = function x() {
         continue TWO;
     };
 } while (true);
 THREE: do {
-    var fn = function () {
+    var fn = function fn() {
         continue THREE;
     };
 } while (true);

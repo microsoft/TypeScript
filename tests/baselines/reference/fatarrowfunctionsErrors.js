@@ -30,10 +30,10 @@ var y = x, number;
 x * x;
 false ? (function () { return null; }) : null;
 // missing fatarrow
-var x1 = function () { };
-var x2 = function (a) { };
-var x3 = function (a) { };
-var x4 = function () {
+var x1 = function x1() { };
+var x2 = function x2(a) { };
+var x3 = function x3(a) { };
+var x4 = function x4() {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         a[_i] = arguments[_i];

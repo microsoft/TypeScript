@@ -8,7 +8,7 @@ var x2: (a: any) => void = function f<T>(x: T) {
 };
 
 //// [noImplicitAnyFunctionExpressionAssignment.js]
-var x = function (x) {
+var x = function x(x) {
     return null;
 };
 var x2 = function f(x) {

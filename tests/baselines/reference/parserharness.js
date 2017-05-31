@@ -2609,7 +2609,7 @@ var Harness;
             if (f === void 0) { f = benchmark.bench; }
             var t = new Timer();
             t.start();
-            var subBenchmark = function (name, f) {
+            var subBenchmark = function subBenchmark(name, f) {
                 timeFunction(benchmark, description, name, f);
             };
             f.call(benchmark, subBenchmark);
@@ -3278,7 +3278,7 @@ var Harness;
             }
             else {
                 var addedFiles = [];
-                var precompile = function () {
+                var precompile = function precompile() {
                     // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
                     // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
                     dependencies.forEach(function (dep) {
@@ -3286,7 +3286,7 @@ var Harness;
                         addedFiles.push(dep.name);
                     });
                 };
-                var postcompile = function () {
+                var postcompile = function postcompile() {
                     addedFiles.forEach(function (file) {
                         updateUnit('', file);
                     });

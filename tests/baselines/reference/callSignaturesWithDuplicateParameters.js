@@ -42,14 +42,14 @@ var b = {
 // Duplicate parameter names are always an error
 function foo(x, x) { }
 var f = function foo(x, x) { };
-var f2 = function (x, x) { };
-var f3 = function (x, x) { };
-var f4 = function (x, x) { };
+var f2 = function f2(x, x) { };
+var f3 = function f3(x, x) { };
+var f4 = function f4(x, x) { };
 function foo2(x, x) { }
 var f5 = function foo(x, x) { };
-var f6 = function (x, x) { };
-var f7 = function (x, x) { };
-var f8 = function (x, y) { };
+var f6 = function f6(x, x) { };
+var f7 = function f7(x, x) { };
+var f8 = function f8(x, y) { };
 var C = (function () {
     function C() {
     }

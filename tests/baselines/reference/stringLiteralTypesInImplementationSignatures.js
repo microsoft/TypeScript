@@ -30,7 +30,7 @@ var b = {
 // String literal types are only valid in overload signatures
 function foo(x) { }
 var f = function foo(x) { };
-var f2 = function (x, y) { };
+var f2 = function f2(x, y) { };
 var C = (function () {
     function C() {
     }

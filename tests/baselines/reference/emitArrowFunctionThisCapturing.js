@@ -16,10 +16,10 @@ foo(() => {
 
 //// [emitArrowFunctionThisCapturing.js]
 var _this = this;
-var f1 = function () {
+var f1 = function f1() {
     _this.age = 10;
 };
-var f2 = function (x) {
+var f2 = function f2(x) {
     _this.name = x;
 };
 function foo(func) { }

@@ -5,7 +5,7 @@ var a = function () {
     };
 
 //// [variableDeclarator1.js]
-var a = function () {
+var a = function a() {
     var c = 1;
     return c;
 };

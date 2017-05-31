@@ -3779,6 +3779,22 @@ namespace ts {
             || kind === SyntaxKind.OmittedExpression;
     }
 
+    export function isArrowFunction(node?: Node): node is ArrowFunction {
+        if (node) {
+            return node.kind === SyntaxKind.ArrowFunction;
+        }
+
+        return false;
+    }
+
+    export function isFunctionExpression(node?: Node): node is FunctionExpression {
+        if (node) {
+            return node.kind === SyntaxKind.FunctionExpression;
+        }
+
+        return false;
+    }
+
 
     /**
      * Determines whether the BindingOrAssignmentElement is a BindingElement-like declaration

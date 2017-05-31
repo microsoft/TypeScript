@@ -63,7 +63,7 @@ function foo(x) {
 var f = function foo(x) {
     if (x === void 0) { x = 1; }
 };
-var f2 = function (x, y) {
+var f2 = function f2(x, y) {
     if (y === void 0) { y = 1; }
 };
 foo(1);

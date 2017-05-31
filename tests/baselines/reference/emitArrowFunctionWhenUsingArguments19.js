@@ -18,7 +18,7 @@ function f() {
     function g() {
         var _arguments = 10; // No capture in 'g', so no conflict.
         function h() {
-            var capture = function () { return arguments; }; // Should trigger an '_arguments' capture into function 'h'
+            var capture = function capture() { return arguments; }; // Should trigger an '_arguments' capture into function 'h'
             foo(_arguments); // Error as this does not resolve to the user defined '_arguments'
         }
     }

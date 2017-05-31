@@ -48,7 +48,7 @@ var Red = (function (_super) {
     }
     Red.prototype.shade = function () {
         var _this = this;
-        var getHue = function () { return _this.hue(); };
+        var getHue = function getHue() { return _this.hue(); };
         return getHue() + " red";
     };
     return Red;
@@ -67,7 +67,7 @@ var Blue = (function (_super) {
     }
     Blue.prototype.shade = function () {
         var _this = this;
-        var getHue = function () { return _this.hue(); };
+        var getHue = function getHue() { return _this.hue(); };
         return getHue() + " blue";
     };
     return Blue;

@@ -14,7 +14,7 @@ var c = (function () {
     }
     c.prototype.n = function () {
         var _this = this;
-        var k = function () {
+        var k = function k() {
             var s = _this.n();
         };
     };

@@ -196,7 +196,7 @@ function f10() {
         x = "hello";
     }
     var y = x; // string | number | undefined
-    var f = function () {
+    var f = function f() {
         var z = x; // any
     };
 }

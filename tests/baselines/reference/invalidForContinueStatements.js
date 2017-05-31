@@ -46,12 +46,12 @@ ONE: for (;;)
     continue TWO;
 // continue from inside function
 TWO: for (;;) {
-    var x = function () {
+    var x = function x() {
         continue TWO;
     };
 }
 THREE: for (;;) {
-    var fn = function () {
+    var fn = function fn() {
         continue THREE;
     };
 }

@@ -975,7 +975,7 @@ var TypeScript;
     ///
     function getAstPathToPosition(script, pos, options) {
         if (options === void 0) { options = GetAstPathOptions.Default; }
-        var lookInComments = function (comments) {
+        var lookInComments = function lookInComments(comments) {
             if (comments && comments.length > 0) {
                 for (var i = 0; i < comments.length; i++) {
                     var minChar = comments[i].minChar;
@@ -989,7 +989,7 @@ var TypeScript;
                 }
             }
         };
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             if (isValidAstNode(cur)) {
                 // Add "cur" to the stack if it contains our position
                 // For "identifier" nodes, we need a special case: A position equal to "limChar" is
@@ -1039,7 +1039,7 @@ var TypeScript;
     //
     function getTokenizationOffset(script, position) {
         var bestOffset = 0;
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             if (TypeScript.isValidAstNode(cur)) {
                 // Did we find a closer offset?
                 if (cur.minChar <= position) {
@@ -1060,13 +1060,13 @@ var TypeScript;
     /// Simple function to Walk an AST using a simple callback function.
     ///
     function walkAST(ast, callback) {
-        var pre = function (cur, parent, walker) {
+        var pre = function pre(cur, parent, walker) {
             var path = walker.state;
             path.push(cur);
             callback(path, walker);
             return cur;
         };
-        var post = function (cur, parent, walker) {
+        var post = function post(cur, parent, walker) {
             var path = walker.state;
             path.pop();
             return cur;

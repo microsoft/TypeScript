@@ -22,7 +22,7 @@ var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 //// [specializationsShouldNotAffectEachOther.js]
 var series;
 function foo() {
-    var seriesExtent = function (series) { return null; };
+    var seriesExtent = function seriesExtent(series) { return null; };
     var series2;
     series2.map(seriesExtent);
     return null;

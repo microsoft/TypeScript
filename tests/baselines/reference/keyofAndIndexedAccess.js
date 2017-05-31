@@ -842,7 +842,7 @@ function f1(thing) {
     var x4 = path.apply(void 0, [thing].concat(['a', 'x'])); // any
 }
 // Repro from comment in #12114
-var assignTo2 = function (object, key1, key2) {
+var assignTo2 = function assignTo2(object, key1, key2) {
     return function (value) { return object[key1][key2] = value; };
 };
 var empty = one(function () { }); // inferred as {}, expected

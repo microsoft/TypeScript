@@ -10,27 +10,27 @@ var z = (function (num: number, boo = false, ...rest) { })(10)
 
 
 //// [emitDefaultParametersFunctionExpression.js]
-var lambda1 = function (y) {
+var lambda1 = function lambda1(y) {
     if (y === void 0) { y = "hello"; }
 };
-var lambda2 = function (x, y) {
+var lambda2 = function lambda2(x, y) {
     if (y === void 0) { y = "hello"; }
 };
-var lambda3 = function (x, y) {
+var lambda3 = function lambda3(x, y) {
     if (y === void 0) { y = "hello"; }
     var rest = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         rest[_i - 2] = arguments[_i];
     }
 };
-var lambda4 = function (y) {
+var lambda4 = function lambda4(y) {
     if (y === void 0) { y = "hello"; }
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         rest[_i - 1] = arguments[_i];
     }
 };
-var x = function (str) {
+var x = function x(str) {
     if (str === void 0) { str = "hello"; }
     var rest = [];
     for (var _i = 1; _i < arguments.length; _i++) {

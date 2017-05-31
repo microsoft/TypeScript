@@ -8,9 +8,9 @@ var greeter = function (person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression1.js]
-var greeter = function (person, person2) {
+var greeter = function greeter(person, person2) {
     var unused = 20;
-    var maker = function (child) {
+    var maker = function maker(child) {
         var unused2 = 22;
     };
     person2 = "dummy value";

@@ -1425,14 +1425,14 @@ sourceFile:sourceMapValidationStatements.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >}
 1 >Emitted(80, 1) Source(78, 1) + SourceIndex(0)
 2 >Emitted(80, 2) Source(78, 2) + SourceIndex(0)
 ---
->>>var b = function () {
+>>>var b = function b() {
 1->
 2 >^^^^
 3 >    ^

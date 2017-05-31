@@ -113,7 +113,7 @@ var A;
         return 2;
     }
     var array = null;
-    var fn = function (s) {
+    var fn = function fn(s) {
         return 'hello ' + s;
     };
     var ol = { s: 'hello', id: 2, isvalid: true };

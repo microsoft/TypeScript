@@ -113,7 +113,7 @@ var SomeDerivedClass = (function (_super) {
         var _this = this;
         var x = _super.prototype.func.call(this);
         var x;
-        var y = function () { return _super.prototype.func.call(_this); };
+        var y = function y() { return _super.prototype.func.call(_this); };
     };
     Object.defineProperty(SomeDerivedClass.prototype, "a", {
         get: function () {

@@ -104,7 +104,7 @@ for (var b;;) { }
 for (var b = new C();;) { }
 for (var b = new C2();;) { }
 for (var f = F;;) { }
-for (var f = function (x) { return ''; };;) { }
+for (var f = function f(x) { return ''; };;) { }
 for (var arr;;) { }
 for (var arr = [1, 2, 3, 4];;) { }
 for (var arr = [new C(), new C2(), new D()];;) { }

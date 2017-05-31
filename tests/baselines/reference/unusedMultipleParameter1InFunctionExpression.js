@@ -5,7 +5,7 @@ var func = function(person: string, person2: string) {
 }
 
 //// [unusedMultipleParameter1InFunctionExpression.js]
-var func = function (person, person2) {
+var func = function func(person, person2) {
     var unused = 20;
     person2 = "Dummy value";
 };

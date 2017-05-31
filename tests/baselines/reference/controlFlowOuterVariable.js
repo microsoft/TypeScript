@@ -20,6 +20,6 @@ var CONFIG = {
         CONFIG.foo = foo;
     }
 };
-var helper = function (t) {
+var helper = function helper(t) {
     helper(t.slice(1));
 };

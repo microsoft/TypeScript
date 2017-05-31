@@ -251,7 +251,7 @@ var g1 = applySpec({
 // Infers g2: (...args: any[]) => { foo: { bar: { baz: boolean } } }
 var g2 = applySpec({ foo: { bar: { baz: function (x) { return true; } } } });
 // Repro from #12633
-var foo = function (object, partial) { return object; };
+var foo = function foo(object, partial) { return object; };
 var o = { a: 5, b: 7 };
 foo(o, { b: 9 });
 o = foo(o, { b: 9 });

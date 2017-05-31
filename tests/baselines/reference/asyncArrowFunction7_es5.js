@@ -7,11 +7,11 @@ var bar = async (): Promise<void> => {
 
 //// [asyncArrowFunction7_es5.js]
 var _this = this;
-var bar = function () { return __awaiter(_this, void 0, void 0, function () {
+var bar = function bar() { return __awaiter(_this, void 0, void 0, function () {
     var _this = this;
     var foo;
     return __generator(this, function (_a) {
-        foo = function (a) {
+        foo = function foo(a) {
             if (a === void 0) { a = yield ; }
             return __awaiter(_this, void 0, void 0, function () {
                 return __generator(this, function (_a) {

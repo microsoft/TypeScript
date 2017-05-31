@@ -75,54 +75,54 @@ module m {
 
 
 //// [disallowLineTerminatorBeforeArrow.js]
-var f1 = function () { };
-var f2 = function (x, y) { };
-var f3 = function (x, y) {
+var f1 = function f1() { };
+var f2 = function f2(x, y) { };
+var f3 = function f3(x, y) {
     var rest = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         rest[_i - 2] = arguments[_i];
     }
 };
-var f4 = function (x, y) {
+var f4 = function f4(x, y) {
     var rest = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         rest[_i - 2] = arguments[_i];
     }
 };
-var f5 = function () {
+var f5 = function f5() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 };
-var f6 = function () {
+var f6 = function f6() {
     var rest = [];
     for (var _i = 0; _i < arguments.length; _i++) {
         rest[_i] = arguments[_i];
     }
 };
-var f7 = function (x, y, z) {
+var f7 = function f7(x, y, z) {
     if (z === void 0) { z = 10; }
 };
-var f8 = function (x, y, z) {
+var f8 = function f8(x, y, z) {
     if (z === void 0) { z = 10; }
 };
-var f9 = function (a) { return a; };
-var f10 = function (a) { return a; };
-var f11 = function (a) { return a; };
-var f12 = function (a) { return a; };
+var f9 = function f9(a) { return a; };
+var f10 = function f10(a) { return a; };
+var f11 = function f11(a) { return a; };
+var f12 = function f12(a) { return a; };
 // Should be valid.
-var f11 = function (a) { return a; };
+var f11 = function f11(a) { return a; };
 // Should be valid.
-var f12 = function (a) { return a; };
+var f12 = function f12(a) { return a; };
 // Should be valid.
-var f13 = function (a) { return a; };
+var f13 = function f13(a) { return a; };
 // Should be valid.
-var f14 = function () { };
+var f14 = function f14() { };
 // Should be valid.
-var f15 = function (a) { return a; };
+var f15 = function f15(a) { return a; };
 // Should be valid.
-var f16 = function (a, b) {
+var f16 = function f16(a, b) {
     if (b === void 0) { b = 10; }
     return a + b;
 };

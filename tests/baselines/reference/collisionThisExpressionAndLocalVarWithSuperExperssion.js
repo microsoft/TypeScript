@@ -44,7 +44,7 @@ var b = (function (_super) {
     b.prototype.foo = function () {
         var _this = this;
         var _this = 10;
-        var f = function () { return _super.prototype.foo.call(_this); };
+        var f = function f() { return _super.prototype.foo.call(_this); };
     };
     return b;
 }(a));
@@ -55,7 +55,7 @@ var b2 = (function (_super) {
     }
     b2.prototype.foo = function () {
         var _this = this;
-        var f = function () {
+        var f = function f() {
             var _this = 10;
             return _super.prototype.foo.call(_this);
         };

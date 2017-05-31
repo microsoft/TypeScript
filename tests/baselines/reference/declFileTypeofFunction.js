@@ -44,10 +44,10 @@ function foo() {
 }
 var foo1;
 var foo2 = foo;
-var foo3 = function () {
+var foo3 = function foo3() {
     return foo3;
 };
-var x = function () {
+var x = function x() {
     return x;
 };
 function foo5(x) {

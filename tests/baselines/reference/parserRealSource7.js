@@ -919,7 +919,7 @@ var TypeScript;
             case NodeType.Name:
                 var name = alias.text;
                 var isDynamic = isQuoted(name);
-                var findSym = function (id) {
+                var findSym = function findSym(id) {
                     if (context.members) {
                         return context.members.lookup(name);
                     }

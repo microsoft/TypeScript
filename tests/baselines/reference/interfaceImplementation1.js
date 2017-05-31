@@ -59,7 +59,7 @@ var C2 = (function () {
     }
     return C2;
 }());
-var a = function () {
+var a = function a() {
     return new C2();
 };
 new a();

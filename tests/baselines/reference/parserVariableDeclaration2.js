@@ -11,9 +11,9 @@
 
 //// [parserVariableDeclaration2.js]
 (function () {
-    var check = function () {
+    var check = function check() {
     };
-    var checkNot = function () {
+    var checkNot = function checkNot() {
     };
     MUnit.test(a);
 })();

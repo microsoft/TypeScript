@@ -164,7 +164,7 @@ function f() {
     eval("y");
     return;
 }
-var b = function () {
+var b = function b() {
     var x = 10;
     x = x + 1;
 };

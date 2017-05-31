@@ -15,8 +15,8 @@ load(function(z?) {}) // this shouldn't be an error
 
 //// [multiCallOverloads.js]
 function load(f) { }
-var f1 = function (z) { };
-var f2 = function (z) { };
+var f1 = function f1(z) { };
+var f2 = function f2(z) { };
 load(f1); // ok
 load(f2); // ok
 load(function () { }); // this shouldn’t be an error

@@ -46,12 +46,12 @@ ONE: for (;;)
     break TWO;
 // break from inside function
 TWO: for (;;) {
-    var x = function () {
+    var x = function x() {
         break TWO;
     };
 }
 THREE: for (;;) {
-    var fn = function () {
+    var fn = function fn() {
         break THREE;
     };
 }

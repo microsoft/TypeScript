@@ -173,14 +173,14 @@ function f(a) {
 }
 f(0);
 // function expression paramter
-var fexp = function (a) {
+var fexp = function fexp(a) {
     defered(function () {
         a;
     });
 };
 fexp(1);
 // arrow function paramter
-var farrow = function (a) {
+var farrow = function farrow(a) {
     defered(function () {
         a;
     });

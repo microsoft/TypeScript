@@ -61,6 +61,6 @@ SEVEN: for (var x in {})
         for (var x in {})
             continue SEVEN;
 EIGHT: for (var x in {}) {
-    var fn = function () { };
+    var fn = function fn() { };
     continue EIGHT;
 }

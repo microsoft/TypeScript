@@ -69,7 +69,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var f1 = function () {
+var f1 = function f1() {
     return __asyncGenerator(this, arguments, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/];
@@ -116,7 +116,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var f2 = function () {
+var f2 = function f2() {
     return __asyncGenerator(this, arguments, function () {
         var x;
         return __generator(this, function (_a) {
@@ -169,7 +169,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var f3 = function () {
+var f3 = function f3() {
     return __asyncGenerator(this, arguments, function () {
         var x;
         return __generator(this, function (_a) {
@@ -242,7 +242,7 @@ var __values = (this && this.__values) || function (o) {
         }
     };
 };
-var f4 = function () {
+var f4 = function f4() {
     return __asyncGenerator(this, arguments, function () {
         var x;
         return __generator(this, function (_a) {
@@ -316,7 +316,7 @@ var __values = (this && this.__values) || function (o) {
         }
     };
 };
-var f5 = function () {
+var f5 = function f5() {
     return __asyncGenerator(this, arguments, function () {
         var x;
         return __generator(this, function (_a) {
@@ -377,7 +377,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var f6 = function () {
+var f6 = function f6() {
     return __asyncGenerator(this, arguments, function () {
         var x;
         return __generator(this, function (_a) {
@@ -430,7 +430,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
-var f7 = function () {
+var f7 = function f7() {
     return __asyncGenerator(this, arguments, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/, 1];

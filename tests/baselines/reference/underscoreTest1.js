@@ -963,7 +963,7 @@ _.range(0, 30, 5);
 _.range(0, 30, 5);
 _.range(0);
 ///////////////////////////////////////////////////////////////////////////////////////
-var func = function (greeting) { return greeting + ': ' + this.name; };
+var func = function func(greeting) { return greeting + ': ' + this.name; };
 // need a second var otherwise typescript thinks func signature is the above func type,
 // instead of the newly returned _bind => func type.
 var func2 = _.bind(func, { name: 'moe' }, 'hi');
@@ -986,25 +986,25 @@ var log = _.bind(function (message) {
 }, Date);
 _.delay(log, 1000, 'logged later');
 _.defer(function () { alert('deferred'); });
-var updatePosition = function () { return alert('updating position...'); };
+var updatePosition = function updatePosition() { return alert('updating position...'); };
 var throttled = _.throttle(updatePosition, 100);
 $(null).scroll(throttled);
-var calculateLayout = function () { return alert('calculating layout...'); };
+var calculateLayout = function calculateLayout() { return alert('calculating layout...'); };
 var lazyLayout = _.debounce(calculateLayout, 300);
 $(null).resize(lazyLayout);
-var createApplication = function () { return alert('creating application...'); };
+var createApplication = function createApplication() { return alert('creating application...'); };
 var initialize = _.once(createApplication);
 initialize();
 initialize();
 var notes;
-var render = function () { return alert("rendering..."); };
+var render = function render() { return alert("rendering..."); };
 var renderNotes = _.after(notes.length, render);
 _.each(notes, function (note) { return note.asyncSave({ success: renderNotes }); });
-var hello = function (name) { return "hello: " + name; };
+var hello = function hello(name) { return "hello: " + name; };
 hello = _.wrap(hello, function (func, arg) { return "before, " + func(arg) + ", after"; });
 hello("moe");
-var greet = function (name) { return "hi: " + name; };
-var exclaim = function (statement) { return statement + "!"; };
+var greet = function greet(name) { return "hi: " + name; };
+var exclaim = function exclaim(statement) { return statement + "!"; };
 var welcome = _.compose(exclaim, greet);
 welcome('moe');
 ///////////////////////////////////////////////////////////////////////////////////////

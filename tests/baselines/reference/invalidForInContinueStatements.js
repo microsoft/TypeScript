@@ -47,12 +47,12 @@ ONE: for (var x in {})
     continue TWO;
 // continue from inside function
 TWO: for (var x in {}) {
-    var fn = function () {
+    var fn = function fn() {
         continue TWO;
     };
 }
 THREE: for (var x in {}) {
-    var fn = function () {
+    var fn = function fn() {
         continue THREE;
     };
 }

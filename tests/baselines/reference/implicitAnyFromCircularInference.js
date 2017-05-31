@@ -61,11 +61,11 @@ function f() { return f; }
 // Error expected
 function g() { return g(); }
 // Error expected
-var f1 = function () {
+var f1 = function f1() {
     return f1();
 };
 // Error expected
-var f2 = function () { return f2(); };
+var f2 = function f2() { return f2(); };
 // Error expected
 function h() {
     return foo();

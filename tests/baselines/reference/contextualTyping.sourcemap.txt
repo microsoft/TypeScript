@@ -361,7 +361,7 @@ sourceFile:contextualTyping.ts
 4 >        ^^^
 5 >           ^^
 6 >             ^
-7 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+7 >              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >var 
@@ -376,177 +376,177 @@ sourceFile:contextualTyping.ts
 5 >Emitted(22, 14) Source(32, 24) + SourceIndex(0)
 6 >Emitted(22, 15) Source(32, 25) + SourceIndex(0)
 ---
->>>var c3t4 = function () { return ({}); };
+>>>var c3t4 = function c3t4() { return ({}); };
 1->
 2 >^^^^
 3 >    ^^^^
 4 >        ^^^
-5 >           ^^^^^^^^^^^^^^
-6 >                         ^^^^^^
-7 >                               ^
-8 >                                ^
-9 >                                 ^^
-10>                                   ^
-11>                                    ^
-12>                                     ^
-13>                                      ^
-14>                                       ^
-15>                                        ^^->
+5 >           ^^^^^^^^^^^^^^^^^^
+6 >                             ^^^^^^
+7 >                                   ^
+8 >                                    ^
+9 >                                     ^^
+10>                                       ^
+11>                                        ^
+12>                                         ^
+13>                                          ^
+14>                                           ^
+15>                                            ^^->
 1->
   >
 2 >var 
 3 >    c3t4
 4 >        : () => IFoo = 
 5 >           function() { 
-6 >                         return
-7 >                                <IFoo>
-8 >                                (
-9 >                                 {}
-10>                                   )
-11>                                    
-12>                                      
-13>                                      }
-14>                                       ;
+6 >                             return
+7 >                                    <IFoo>
+8 >                                    (
+9 >                                     {}
+10>                                       )
+11>                                        
+12>                                          
+13>                                          }
+14>                                           ;
 1->Emitted(23, 1) Source(33, 1) + SourceIndex(0)
 2 >Emitted(23, 5) Source(33, 5) + SourceIndex(0)
 3 >Emitted(23, 9) Source(33, 9) + SourceIndex(0)
 4 >Emitted(23, 12) Source(33, 24) + SourceIndex(0)
-5 >Emitted(23, 26) Source(33, 37) + SourceIndex(0)
-6 >Emitted(23, 32) Source(33, 43) + SourceIndex(0)
-7 >Emitted(23, 33) Source(33, 50) + SourceIndex(0)
-8 >Emitted(23, 34) Source(33, 51) + SourceIndex(0)
-9 >Emitted(23, 36) Source(33, 53) + SourceIndex(0)
-10>Emitted(23, 37) Source(33, 54) + SourceIndex(0)
-11>Emitted(23, 38) Source(33, 54) + SourceIndex(0)
-12>Emitted(23, 39) Source(33, 55) + SourceIndex(0)
-13>Emitted(23, 40) Source(33, 56) + SourceIndex(0)
-14>Emitted(23, 41) Source(33, 57) + SourceIndex(0)
+5 >Emitted(23, 30) Source(33, 37) + SourceIndex(0)
+6 >Emitted(23, 36) Source(33, 43) + SourceIndex(0)
+7 >Emitted(23, 37) Source(33, 50) + SourceIndex(0)
+8 >Emitted(23, 38) Source(33, 51) + SourceIndex(0)
+9 >Emitted(23, 40) Source(33, 53) + SourceIndex(0)
+10>Emitted(23, 41) Source(33, 54) + SourceIndex(0)
+11>Emitted(23, 42) Source(33, 54) + SourceIndex(0)
+12>Emitted(23, 43) Source(33, 55) + SourceIndex(0)
+13>Emitted(23, 44) Source(33, 56) + SourceIndex(0)
+14>Emitted(23, 45) Source(33, 57) + SourceIndex(0)
 ---
->>>var c3t5 = function (n) { return ({}); };
+>>>var c3t5 = function c3t5(n) { return ({}); };
 1->
 2 >^^^^
 3 >    ^^^^
 4 >        ^^^
-5 >           ^^^^^^^^^^
-6 >                     ^
-7 >                      ^^^^
-8 >                          ^^^^^^
-9 >                                ^
-10>                                 ^
-11>                                  ^^
-12>                                    ^
-13>                                     ^
-14>                                      ^
-15>                                       ^
-16>                                        ^
-17>                                         ^^^^->
+5 >           ^^^^^^^^^^^^^^
+6 >                         ^
+7 >                          ^^^^
+8 >                              ^^^^^^
+9 >                                    ^
+10>                                     ^
+11>                                      ^^
+12>                                        ^
+13>                                         ^
+14>                                          ^
+15>                                           ^
+16>                                            ^
+17>                                             ^^^^->
 1->
   >
 2 >var 
 3 >    c3t5
 4 >        : (n: number) => IFoo = 
 5 >           function(
-6 >                     n
-7 >                      ) { 
-8 >                          return
-9 >                                 <IFoo>
-10>                                 (
-11>                                  {}
-12>                                    )
-13>                                     
-14>                                       
-15>                                       }
-16>                                        ;
+6 >                         n
+7 >                          ) { 
+8 >                              return
+9 >                                     <IFoo>
+10>                                     (
+11>                                      {}
+12>                                        )
+13>                                         
+14>                                           
+15>                                           }
+16>                                            ;
 1->Emitted(24, 1) Source(34, 1) + SourceIndex(0)
 2 >Emitted(24, 5) Source(34, 5) + SourceIndex(0)
 3 >Emitted(24, 9) Source(34, 9) + SourceIndex(0)
 4 >Emitted(24, 12) Source(34, 33) + SourceIndex(0)
-5 >Emitted(24, 22) Source(34, 42) + SourceIndex(0)
-6 >Emitted(24, 23) Source(34, 43) + SourceIndex(0)
-7 >Emitted(24, 27) Source(34, 47) + SourceIndex(0)
-8 >Emitted(24, 33) Source(34, 53) + SourceIndex(0)
-9 >Emitted(24, 34) Source(34, 60) + SourceIndex(0)
-10>Emitted(24, 35) Source(34, 61) + SourceIndex(0)
-11>Emitted(24, 37) Source(34, 63) + SourceIndex(0)
-12>Emitted(24, 38) Source(34, 64) + SourceIndex(0)
-13>Emitted(24, 39) Source(34, 64) + SourceIndex(0)
-14>Emitted(24, 40) Source(34, 65) + SourceIndex(0)
-15>Emitted(24, 41) Source(34, 66) + SourceIndex(0)
-16>Emitted(24, 42) Source(34, 67) + SourceIndex(0)
+5 >Emitted(24, 26) Source(34, 42) + SourceIndex(0)
+6 >Emitted(24, 27) Source(34, 43) + SourceIndex(0)
+7 >Emitted(24, 31) Source(34, 47) + SourceIndex(0)
+8 >Emitted(24, 37) Source(34, 53) + SourceIndex(0)
+9 >Emitted(24, 38) Source(34, 60) + SourceIndex(0)
+10>Emitted(24, 39) Source(34, 61) + SourceIndex(0)
+11>Emitted(24, 41) Source(34, 63) + SourceIndex(0)
+12>Emitted(24, 42) Source(34, 64) + SourceIndex(0)
+13>Emitted(24, 43) Source(34, 64) + SourceIndex(0)
+14>Emitted(24, 44) Source(34, 65) + SourceIndex(0)
+15>Emitted(24, 45) Source(34, 66) + SourceIndex(0)
+16>Emitted(24, 46) Source(34, 67) + SourceIndex(0)
 ---
->>>var c3t6 = function (n, s) { return ({}); };
+>>>var c3t6 = function c3t6(n, s) { return ({}); };
 1->
 2 >^^^^
 3 >    ^^^^
 4 >        ^^^
-5 >           ^^^^^^^^^^
-6 >                     ^
-7 >                      ^^
-8 >                        ^
-9 >                         ^^^^
-10>                             ^^^^^^
-11>                                   ^
-12>                                    ^
-13>                                     ^^
-14>                                       ^
-15>                                        ^
-16>                                         ^
-17>                                          ^
-18>                                           ^
+5 >           ^^^^^^^^^^^^^^
+6 >                         ^
+7 >                          ^^
+8 >                            ^
+9 >                             ^^^^
+10>                                 ^^^^^^
+11>                                       ^
+12>                                        ^
+13>                                         ^^
+14>                                           ^
+15>                                            ^
+16>                                             ^
+17>                                              ^
+18>                                               ^
 1->
   >
 2 >var 
 3 >    c3t6
 4 >        : (n: number, s: string) => IFoo = 
 5 >           function(
-6 >                     n
-7 >                      , 
-8 >                        s
-9 >                         ) { 
-10>                             return
-11>                                    <IFoo>
-12>                                    (
-13>                                     {}
-14>                                       )
-15>                                        
-16>                                          
-17>                                          }
-18>                                           ;
+6 >                         n
+7 >                          , 
+8 >                            s
+9 >                             ) { 
+10>                                 return
+11>                                        <IFoo>
+12>                                        (
+13>                                         {}
+14>                                           )
+15>                                            
+16>                                              
+17>                                              }
+18>                                               ;
 1->Emitted(25, 1) Source(35, 1) + SourceIndex(0)
 2 >Emitted(25, 5) Source(35, 5) + SourceIndex(0)
 3 >Emitted(25, 9) Source(35, 9) + SourceIndex(0)
 4 >Emitted(25, 12) Source(35, 44) + SourceIndex(0)
-5 >Emitted(25, 22) Source(35, 53) + SourceIndex(0)
-6 >Emitted(25, 23) Source(35, 54) + SourceIndex(0)
-7 >Emitted(25, 25) Source(35, 56) + SourceIndex(0)
-8 >Emitted(25, 26) Source(35, 57) + SourceIndex(0)
-9 >Emitted(25, 30) Source(35, 61) + SourceIndex(0)
-10>Emitted(25, 36) Source(35, 67) + SourceIndex(0)
-11>Emitted(25, 37) Source(35, 74) + SourceIndex(0)
-12>Emitted(25, 38) Source(35, 75) + SourceIndex(0)
-13>Emitted(25, 40) Source(35, 77) + SourceIndex(0)
-14>Emitted(25, 41) Source(35, 78) + SourceIndex(0)
-15>Emitted(25, 42) Source(35, 78) + SourceIndex(0)
-16>Emitted(25, 43) Source(35, 79) + SourceIndex(0)
-17>Emitted(25, 44) Source(35, 80) + SourceIndex(0)
-18>Emitted(25, 45) Source(35, 81) + SourceIndex(0)
+5 >Emitted(25, 26) Source(35, 53) + SourceIndex(0)
+6 >Emitted(25, 27) Source(35, 54) + SourceIndex(0)
+7 >Emitted(25, 29) Source(35, 56) + SourceIndex(0)
+8 >Emitted(25, 30) Source(35, 57) + SourceIndex(0)
+9 >Emitted(25, 34) Source(35, 61) + SourceIndex(0)
+10>Emitted(25, 40) Source(35, 67) + SourceIndex(0)
+11>Emitted(25, 41) Source(35, 74) + SourceIndex(0)
+12>Emitted(25, 42) Source(35, 75) + SourceIndex(0)
+13>Emitted(25, 44) Source(35, 77) + SourceIndex(0)
+14>Emitted(25, 45) Source(35, 78) + SourceIndex(0)
+15>Emitted(25, 46) Source(35, 78) + SourceIndex(0)
+16>Emitted(25, 47) Source(35, 79) + SourceIndex(0)
+17>Emitted(25, 48) Source(35, 80) + SourceIndex(0)
+18>Emitted(25, 49) Source(35, 81) + SourceIndex(0)
 ---
->>>var c3t7 = function (n) { return n; };
+>>>var c3t7 = function c3t7(n) { return n; };
 1 >
 2 >^^^^
 3 >    ^^^^
 4 >        ^^^
-5 >           ^^^^^^^^^^
-6 >                     ^
-7 >                      ^^^^
-8 >                          ^^^^^^
-9 >                                ^
-10>                                 ^
-11>                                  ^
-12>                                   ^
-13>                                    ^
-14>                                     ^
-15>                                      ^->
+5 >           ^^^^^^^^^^^^^^
+6 >                         ^
+7 >                          ^^^^
+8 >                              ^^^^^^
+9 >                                    ^
+10>                                     ^
+11>                                      ^
+12>                                       ^
+13>                                        ^
+14>                                         ^
+15>                                          ^->
 1 >
   >
 2 >var 
@@ -556,45 +556,45 @@ sourceFile:contextualTyping.ts
   >            (s1: string): number;
   >        } = 
 5 >           function(
-6 >                     n
-7 >                      ) { 
-8 >                          return
-9 >                                 
-10>                                 n
-11>                                  ;
-12>                                    
-13>                                    }
-14>                                     ;
+6 >                         n
+7 >                          ) { 
+8 >                              return
+9 >                                     
+10>                                     n
+11>                                      ;
+12>                                        
+13>                                        }
+14>                                         ;
 1 >Emitted(26, 1) Source(36, 1) + SourceIndex(0)
 2 >Emitted(26, 5) Source(36, 5) + SourceIndex(0)
 3 >Emitted(26, 9) Source(36, 9) + SourceIndex(0)
 4 >Emitted(26, 12) Source(39, 5) + SourceIndex(0)
-5 >Emitted(26, 22) Source(39, 14) + SourceIndex(0)
-6 >Emitted(26, 23) Source(39, 15) + SourceIndex(0)
-7 >Emitted(26, 27) Source(39, 19) + SourceIndex(0)
-8 >Emitted(26, 33) Source(39, 25) + SourceIndex(0)
-9 >Emitted(26, 34) Source(39, 26) + SourceIndex(0)
-10>Emitted(26, 35) Source(39, 27) + SourceIndex(0)
-11>Emitted(26, 36) Source(39, 28) + SourceIndex(0)
-12>Emitted(26, 37) Source(39, 29) + SourceIndex(0)
-13>Emitted(26, 38) Source(39, 30) + SourceIndex(0)
-14>Emitted(26, 39) Source(39, 31) + SourceIndex(0)
+5 >Emitted(26, 26) Source(39, 14) + SourceIndex(0)
+6 >Emitted(26, 27) Source(39, 15) + SourceIndex(0)
+7 >Emitted(26, 31) Source(39, 19) + SourceIndex(0)
+8 >Emitted(26, 37) Source(39, 25) + SourceIndex(0)
+9 >Emitted(26, 38) Source(39, 26) + SourceIndex(0)
+10>Emitted(26, 39) Source(39, 27) + SourceIndex(0)
+11>Emitted(26, 40) Source(39, 28) + SourceIndex(0)
+12>Emitted(26, 41) Source(39, 29) + SourceIndex(0)
+13>Emitted(26, 42) Source(39, 30) + SourceIndex(0)
+14>Emitted(26, 43) Source(39, 31) + SourceIndex(0)
 ---
->>>var c3t8 = function (n) { return n; };
+>>>var c3t8 = function c3t8(n) { return n; };
 1->
 2 >^^^^
 3 >    ^^^^
 4 >        ^^^
-5 >           ^^^^^^^^^^
-6 >                     ^
-7 >                      ^^^^
-8 >                          ^^^^^^
-9 >                                ^
-10>                                 ^
-11>                                  ^
-12>                                   ^
-13>                                    ^
-14>                                     ^
+5 >           ^^^^^^^^^^^^^^
+6 >                         ^
+7 >                          ^^^^
+8 >                              ^^^^^^
+9 >                                    ^
+10>                                     ^
+11>                                      ^
+12>                                       ^
+13>                                        ^
+14>                                         ^
 1->
   >
   >
@@ -602,29 +602,29 @@ sourceFile:contextualTyping.ts
 3 >    c3t8
 4 >        : (n: number, s: string) => number = 
 5 >           function(
-6 >                     n
-7 >                      ) { 
-8 >                          return
-9 >                                 
-10>                                 n
-11>                                  ;
-12>                                    
-13>                                    }
-14>                                     ;
+6 >                         n
+7 >                          ) { 
+8 >                              return
+9 >                                     
+10>                                     n
+11>                                      ;
+12>                                        
+13>                                        }
+14>                                         ;
 1->Emitted(27, 1) Source(41, 1) + SourceIndex(0)
 2 >Emitted(27, 5) Source(41, 5) + SourceIndex(0)
 3 >Emitted(27, 9) Source(41, 9) + SourceIndex(0)
 4 >Emitted(27, 12) Source(41, 46) + SourceIndex(0)
-5 >Emitted(27, 22) Source(41, 55) + SourceIndex(0)
-6 >Emitted(27, 23) Source(41, 56) + SourceIndex(0)
-7 >Emitted(27, 27) Source(41, 60) + SourceIndex(0)
-8 >Emitted(27, 33) Source(41, 66) + SourceIndex(0)
-9 >Emitted(27, 34) Source(41, 67) + SourceIndex(0)
-10>Emitted(27, 35) Source(41, 68) + SourceIndex(0)
-11>Emitted(27, 36) Source(41, 69) + SourceIndex(0)
-12>Emitted(27, 37) Source(41, 70) + SourceIndex(0)
-13>Emitted(27, 38) Source(41, 71) + SourceIndex(0)
-14>Emitted(27, 39) Source(41, 72) + SourceIndex(0)
+5 >Emitted(27, 26) Source(41, 55) + SourceIndex(0)
+6 >Emitted(27, 27) Source(41, 56) + SourceIndex(0)
+7 >Emitted(27, 31) Source(41, 60) + SourceIndex(0)
+8 >Emitted(27, 37) Source(41, 66) + SourceIndex(0)
+9 >Emitted(27, 38) Source(41, 67) + SourceIndex(0)
+10>Emitted(27, 39) Source(41, 68) + SourceIndex(0)
+11>Emitted(27, 40) Source(41, 69) + SourceIndex(0)
+12>Emitted(27, 41) Source(41, 70) + SourceIndex(0)
+13>Emitted(27, 42) Source(41, 71) + SourceIndex(0)
+14>Emitted(27, 43) Source(41, 72) + SourceIndex(0)
 ---
 >>>var c3t9 = [[], []];
 1 >
@@ -2218,7 +2218,7 @@ sourceFile:contextualTyping.ts
 >>>// CONTEXT: Return statement
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-3 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 >                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
@@ -2226,74 +2226,74 @@ sourceFile:contextualTyping.ts
 1->Emitted(91, 1) Source(151, 1) + SourceIndex(0)
 2 >Emitted(91, 29) Source(151, 29) + SourceIndex(0)
 ---
->>>var c10t5 = function () { return function (n) { return ({}); }; };
+>>>var c10t5 = function c10t5() { return function (n) { return ({}); }; };
 1->
 2 >^^^^
 3 >    ^^^^^
 4 >         ^^^
-5 >            ^^^^^^^^^^^^^^
-6 >                          ^^^^^^
-7 >                                ^
-8 >                                 ^^^^^^^^^^
-9 >                                           ^
-10>                                            ^^^^
-11>                                                ^^^^^^
-12>                                                      ^
-13>                                                       ^
-14>                                                        ^^
-15>                                                          ^
-16>                                                           ^
-17>                                                            ^
-18>                                                             ^
-19>                                                              ^
-20>                                                               ^
-21>                                                                ^
-22>                                                                 ^
+5 >            ^^^^^^^^^^^^^^^^^^^
+6 >                               ^^^^^^
+7 >                                     ^
+8 >                                      ^^^^^^^^^^
+9 >                                                ^
+10>                                                 ^^^^
+11>                                                     ^^^^^^
+12>                                                           ^
+13>                                                            ^
+14>                                                             ^^
+15>                                                               ^
+16>                                                                ^
+17>                                                                 ^
+18>                                                                  ^
+19>                                                                   ^
+20>                                                                    ^
+21>                                                                     ^
+22>                                                                      ^
 1->
   >
 2 >var 
 3 >    c10t5
 4 >         : () => (n: number) => IFoo = 
 5 >            function() { 
-6 >                          return
-7 >                                 
-8 >                                 function(
-9 >                                           n
-10>                                            ) { 
-11>                                                return
-12>                                                       <IFoo>
-13>                                                       (
-14>                                                        {}
-15>                                                          )
-16>                                                           
-17>                                                             
-18>                                                             }
-19>                                                              
-20>                                                                
-21>                                                                }
-22>                                                                 ;
+6 >                               return
+7 >                                      
+8 >                                      function(
+9 >                                                n
+10>                                                 ) { 
+11>                                                     return
+12>                                                            <IFoo>
+13>                                                            (
+14>                                                             {}
+15>                                                               )
+16>                                                                
+17>                                                                  
+18>                                                                  }
+19>                                                                   
+20>                                                                     
+21>                                                                     }
+22>                                                                      ;
 1->Emitted(92, 1) Source(152, 1) + SourceIndex(0)
 2 >Emitted(92, 5) Source(152, 5) + SourceIndex(0)
 3 >Emitted(92, 10) Source(152, 10) + SourceIndex(0)
 4 >Emitted(92, 13) Source(152, 40) + SourceIndex(0)
-5 >Emitted(92, 27) Source(152, 53) + SourceIndex(0)
-6 >Emitted(92, 33) Source(152, 59) + SourceIndex(0)
-7 >Emitted(92, 34) Source(152, 60) + SourceIndex(0)
-8 >Emitted(92, 44) Source(152, 69) + SourceIndex(0)
-9 >Emitted(92, 45) Source(152, 70) + SourceIndex(0)
-10>Emitted(92, 49) Source(152, 74) + SourceIndex(0)
-11>Emitted(92, 55) Source(152, 80) + SourceIndex(0)
-12>Emitted(92, 56) Source(152, 87) + SourceIndex(0)
-13>Emitted(92, 57) Source(152, 88) + SourceIndex(0)
-14>Emitted(92, 59) Source(152, 90) + SourceIndex(0)
-15>Emitted(92, 60) Source(152, 91) + SourceIndex(0)
-16>Emitted(92, 61) Source(152, 91) + SourceIndex(0)
-17>Emitted(92, 62) Source(152, 92) + SourceIndex(0)
-18>Emitted(92, 63) Source(152, 93) + SourceIndex(0)
-19>Emitted(92, 64) Source(152, 93) + SourceIndex(0)
-20>Emitted(92, 65) Source(152, 94) + SourceIndex(0)
-21>Emitted(92, 66) Source(152, 95) + SourceIndex(0)
-22>Emitted(92, 67) Source(152, 96) + SourceIndex(0)
+5 >Emitted(92, 32) Source(152, 53) + SourceIndex(0)
+6 >Emitted(92, 38) Source(152, 59) + SourceIndex(0)
+7 >Emitted(92, 39) Source(152, 60) + SourceIndex(0)
+8 >Emitted(92, 49) Source(152, 69) + SourceIndex(0)
+9 >Emitted(92, 50) Source(152, 70) + SourceIndex(0)
+10>Emitted(92, 54) Source(152, 74) + SourceIndex(0)
+11>Emitted(92, 60) Source(152, 80) + SourceIndex(0)
+12>Emitted(92, 61) Source(152, 87) + SourceIndex(0)
+13>Emitted(92, 62) Source(152, 88) + SourceIndex(0)
+14>Emitted(92, 64) Source(152, 90) + SourceIndex(0)
+15>Emitted(92, 65) Source(152, 91) + SourceIndex(0)
+16>Emitted(92, 66) Source(152, 91) + SourceIndex(0)
+17>Emitted(92, 67) Source(152, 92) + SourceIndex(0)
+18>Emitted(92, 68) Source(152, 93) + SourceIndex(0)
+19>Emitted(92, 69) Source(152, 93) + SourceIndex(0)
+20>Emitted(92, 70) Source(152, 94) + SourceIndex(0)
+21>Emitted(92, 71) Source(152, 95) + SourceIndex(0)
+22>Emitted(92, 72) Source(152, 96) + SourceIndex(0)
 ---
 >>>// CONTEXT: Newing a class
 1 >

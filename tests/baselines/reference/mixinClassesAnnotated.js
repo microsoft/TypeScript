@@ -93,7 +93,7 @@ var Derived = (function (_super) {
     }
     return Derived;
 }(Base));
-var Printable = function (superClass) { return _a = (function (_super) {
+var Printable = function Printable(superClass) { return _a = (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;

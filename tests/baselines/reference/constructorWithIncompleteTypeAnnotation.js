@@ -502,7 +502,7 @@ var CLASS = (function () {
         return 0;
     };
     CLASS.prototype.Foo = function () {
-        var myEvent = function () { return 1; };
+        var myEvent = function myEvent() { return 1; };
         if (myEvent() == 1)
             return true ?
                 :

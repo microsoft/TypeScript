@@ -20,7 +20,7 @@ var B = (function () {
 }());
 var x;
 x.foo(1); // no error
-var f = function (x) { return x.foo(1); }; // error
-var f2 = function (x) { return x.foo(1); }; // error
-var f3 = function (x) { return x.foo(1); }; // error
-var f4 = function (x) { return x.foo(1); }; // no error
+var f = function f(x) { return x.foo(1); }; // error
+var f2 = function f2(x) { return x.foo(1); }; // error
+var f3 = function f3(x) { return x.foo(1); }; // error
+var f4 = function f4(x) { return x.foo(1); }; // no error

@@ -119,4 +119,4 @@ function bar() {
 var o1 = { e: 0, f: 0 };
 var a1 = [{ e: 0, f: 0 }, { e: 0, f: 0 }, { e: 0, g: 0 }];
 var i1c1 = 5;
-var fp1 = function (a) { return 0; };
+var fp1 = function fp1(a) { return 0; };

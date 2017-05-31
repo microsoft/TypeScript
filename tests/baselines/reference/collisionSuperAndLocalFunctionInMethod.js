@@ -71,7 +71,7 @@ var c = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     c.prototype.foo = function () {
-        var x = function () {
+        var x = function x() {
             function _super() {
             }
         };

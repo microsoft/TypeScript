@@ -244,7 +244,7 @@ var TypeScript;
     TypeScript.timeFunction = timeFunction;
     function stringToLiteral(value, length) {
         var result = "";
-        var addChar = function (index) {
+        var addChar = function addChar(index) {
             var ch = value.charCodeAt(index);
             switch (ch) {
                 case 0x09:// tab

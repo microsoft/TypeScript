@@ -155,11 +155,11 @@ var TypeScript;
     var AstWalkerWithDetailCallback;
     (function (AstWalkerWithDetailCallback) {
         function walk(script, callback) {
-            var pre = function (cur, parent) {
+            var pre = function pre(cur, parent) {
                 walker.options.goChildren = AstWalkerCallback(true, cur, callback);
                 return cur;
             };
-            var post = function (cur, parent) {
+            var post = function post(cur, parent) {
                 AstWalkerCallback(false, cur, callback);
                 return cur;
             };

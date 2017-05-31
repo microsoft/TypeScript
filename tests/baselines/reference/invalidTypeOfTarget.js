@@ -10,7 +10,7 @@ var x8: typeof /123/;
 
 //// [invalidTypeOfTarget.js]
 var x1 = {};
-var x2 = function () { return ; };
+var x2 = function x2() { return ; };
 var x3 = 1;
 var x4 = '';
 var x5;
