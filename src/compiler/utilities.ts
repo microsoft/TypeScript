@@ -4574,7 +4574,7 @@ namespace ts {
         return node.kind === SyntaxKind.JSDocThisType;
     }
 
-    export function isJSDocComment(node: Node): node is JSDoc {
+    export function isJSDoc(node: Node): node is JSDoc {
         return node.kind === SyntaxKind.JSDocComment;
     }
 
