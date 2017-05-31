@@ -1,6 +1,7 @@
 // @filename: input.js
 // @out: output.js
 // @allowJs: true
+// @lib: es5
 function C() {
     this.m = null;
 }

@@ -1,5 +1,6 @@
 // @allowJS: true
 // @suppressOutputPathCheck: true
+// @lib: es5
 
 // @filename: myFile02.js
 /**

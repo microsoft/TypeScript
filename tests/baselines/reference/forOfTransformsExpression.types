@@ -23,11 +23,11 @@ for (var item of items.sort((a, b) => a.name.localeCompare(b.name))) {
 >a : { name: string; }
 >b : { name: string; }
 >a.name.localeCompare(b.name) : number
->a.name.localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
+>a.name.localeCompare : { (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string): number; }
 >a.name : string
 >a : { name: string; }
 >name : string
->localeCompare : { (that: string): number; (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; }
+>localeCompare : { (that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; (that: string): number; }
 >b.name : string
 >b : { name: string; }
 >name : string

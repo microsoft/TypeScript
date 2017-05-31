@@ -1,3 +1,4 @@
+// @lib: es5
 // Repro from #10586
 
 interface A1 {

@@ -831,12 +831,12 @@ namespace Harness {
         const carriageReturnLineFeed = "\r\n";
         const lineFeed = "\n";
 
-        export const defaultLibFileName = "lib.d.ts";
+        export const defaultLibFileName = "lib.es3.full.d.ts";
         export const es2015DefaultLibFileName = "lib.es2015.d.ts";
 
         // Cache of lib files from "built/local"
         const libFileNameSourceFileMap = ts.createMapFromTemplate<ts.SourceFile>({
-            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es5.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
+            [defaultLibFileName]: createSourceFileAndAssertInvariants(defaultLibFileName, IO.readFile(libFolder + "lib.es3.d.ts"), /*languageVersion*/ ts.ScriptTarget.Latest)
         });
 
         // Cache of lib files from  "tests/lib/"
@@ -863,9 +863,11 @@ namespace Harness {
                     return "lib.es2016.d.ts";
                 case ts.ScriptTarget.ES2015:
                     return es2015DefaultLibFileName;
+                case ts.ScriptTarget.ES5:
+                    return "lib.es5.d.ts";
 
                 default:
-                    return defaultLibFileName;
+                    return "lib.es3.d.ts";
             }
         }
 

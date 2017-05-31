@@ -1,3 +1,4 @@
+// @lib: es5
 var x: Object;
 var y: RegExp;
 y = x;

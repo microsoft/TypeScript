@@ -1,3 +1,4 @@
+// @lib: es5
 declare class MyArray<T> implements Array<T> {
     toString(): string;
     toLocaleString(): string;

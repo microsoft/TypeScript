@@ -4319,9 +4319,11 @@ namespace ts {
             case ScriptTarget.ES2016:
                 return "lib.es2016.full.d.ts";
             case ScriptTarget.ES2015:
-                return "lib.es6.d.ts";  // We don't use lib.es2015.full.d.ts due to breaking change.
-            default:
+                return "lib.es6.d.ts"; // We don't use lib.es2015.full.d.ts due to breaking change.
+            case ScriptTarget.ES5:
                 return "lib.d.ts";
+            default:
+                return "lib.es3.full.d.ts";
         }
     }
 

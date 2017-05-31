@@ -353,6 +353,33 @@ namespace FourSlash {
                         this.languageServiceAdapterHost.addScript(fileName, file, /*isRootFile*/ true);
                     }
                 });
+
+                const libs: ts.SourceFile[] = [];
+                if (compilationOptions.lib) {
+                    for (const lib of compilationOptions.lib) {
+                        const sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(lib);
+                        this.languageServiceAdapterHost.addScript(lib, sourceFile.text, /*isRootFile*/ false);
+                        libs.push(sourceFile);
+                    }
+                }
+                else {
+                    const lib = Harness.Compiler.getDefaultLibFileName(compilationOptions);
+                    const sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(lib);
+                    this.languageServiceAdapterHost.addScript(lib, sourceFile.text, /*isRootFile*/ false);
+                    const fullLib = ts.getDefaultLibFileName(compilationOptions);
+                    this.languageServiceAdapterHost.addScript(fullLib, sourceFile.text, /*isRootFile*/ false);
+                    libs.push(sourceFile);
+                }
+                for (const lib of libs) {
+                    const resolvedResult = ts.preProcessFile(lib.text, /*readImportFiles*/ false, /*detectJavaScriptImports*/ false);
+                    const referencedFiles: ts.FileReference[] = resolvedResult.referencedFiles;
+
+                    for (const referenced of referencedFiles) {
+                        this.languageServiceAdapterHost.addScript(referenced.fileName,
+                            Harness.Compiler.getDefaultLibrarySourceFile(referenced.fileName).text, /*isRootFile*/ false);
+                    }
+                }
+
                 this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
                     Harness.Compiler.getDefaultLibrarySourceFile().text, /*isRootFile*/ false);
             }
@@ -969,9 +996,9 @@ namespace FourSlash {
             }
 
             for (const reference of expectedReferences) {
-                const {fileName, start, end} = reference;
+                const { fileName, start, end } = reference;
                 if (reference.marker && reference.marker.data) {
-                    const {isWriteAccess, isDefinition} = reference.marker.data;
+                    const { isWriteAccess, isDefinition } = reference.marker.data;
                     this.verifyReferencesWorker(actualReferences, fileName, start, end, isWriteAccess, isDefinition);
                 }
                 else {
@@ -1175,7 +1202,7 @@ namespace FourSlash {
             displayParts: ts.SymbolDisplayPart[],
             documentation: ts.SymbolDisplayPart[],
             tags: ts.JSDocTagInfo[]
-            ) {
+        ) {
 
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             assert.equal(actualQuickInfo.kind, kind, this.messageAtLastKnownMarker("QuickInfo kind"));
@@ -1898,7 +1925,7 @@ namespace FourSlash {
             this.goToPosition(len);
         }
 
-        public goToRangeStart({fileName, start}: Range) {
+        public goToRangeStart({ fileName, start }: Range) {
             this.openFile(fileName);
             this.goToPosition(start);
         }
@@ -2072,7 +2099,7 @@ namespace FourSlash {
             return result;
         }
 
-        private rangeText({fileName, start, end}: Range): string {
+        private rangeText({ fileName, start, end }: Range): string {
             return this.getFileContent(fileName).slice(start, end);
         }
 

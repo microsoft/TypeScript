@@ -1,3 +1,4 @@
+// @lib: es5
 var x = { one: 1 };
 var y: { [index: string]: any };
 var z: { [index: number]: any };

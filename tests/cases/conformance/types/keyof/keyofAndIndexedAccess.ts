@@ -1,5 +1,6 @@
 // @strictNullChecks: true
 // @declaration: true
+// @lib: es5
 
 class Shape {
     name: string;

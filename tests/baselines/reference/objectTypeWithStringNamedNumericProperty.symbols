@@ -8,19 +8,19 @@ class C {
 
     "0.1": void;
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 }
 
 var c: C;
@@ -114,19 +114,19 @@ interface I {
 
     "0.1": void;
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 }
 
 var i: I;
@@ -220,19 +220,19 @@ var a: {
 
     "0.1": void;
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "1": number;
     "1.": string;
     "1..": boolean;
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 }
 
 var r1 = a['0.1'];
@@ -322,17 +322,17 @@ var b = {
 
     "0.1": <void>null,
     ".1": new Object(),
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "1": 1,
     "1.": "",
     "1..": true,
     "1.0": new Date(),
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
     "-1.0": /123/,
     "-1": Date
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es3.d.ts, --, --), Decl(lib.es3.d.ts, --, --))
 
 };
 

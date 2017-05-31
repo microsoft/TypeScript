@@ -1,4 +1,5 @@
 // @allowUnreachableCode: true
+// @lib: es5
 
 let x: string | number | boolean | RegExp;
 let cond: boolean;

@@ -1,3 +1,4 @@
+// @lib: es5
 // arrow
 (jake => { })("build");
 // function expression

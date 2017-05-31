@@ -1,7 +1,7 @@
 // @experimentalDecorators: true
 // @emitDecoratorMetadata: true
 // @target: es5
-// @includeBuiltFile: lib.d.ts
+// @includeBuiltFile: lib.es3.full.d.ts
 
 // @filename: event.ts
 export interface Event { title: string };

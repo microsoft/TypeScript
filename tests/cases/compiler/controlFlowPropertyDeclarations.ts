@@ -1,3 +1,4 @@
+// @lib: es5
 // Repro from ##8913
 
 declare var require:any;

@@ -1,4 +1,4 @@
-
+// @lib: es5
 interface Series  {
     data: string[];
 }

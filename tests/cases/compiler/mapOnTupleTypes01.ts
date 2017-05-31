@@ -1,6 +1,7 @@
 // @declaration: true
 // @noImplicitAny: true
 // @strictNullChecks: true
+// @lib: es5
 
 export let mapOnLooseArrayLiteral = [1, 2, 3, 4].map(n => n * n);
 

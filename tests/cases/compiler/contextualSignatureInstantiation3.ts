@@ -1,3 +1,4 @@
+// @lib: es5
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
     return items.map(f);
 }

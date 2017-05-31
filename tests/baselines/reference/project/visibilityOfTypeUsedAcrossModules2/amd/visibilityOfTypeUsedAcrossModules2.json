@@ -5,7 +5,7 @@
         "main.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es3.d.ts",
         "main.ts"
     ],
     "emittedFiles": [

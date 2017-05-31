@@ -1,3 +1,4 @@
+// @lib: es5
 function suggest(){ 
 	var TypeScriptKeywords:string[];  
 	var result:any;	

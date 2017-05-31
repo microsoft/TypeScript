@@ -1,3 +1,4 @@
+// @lib: es5
 declare var document: Document;
 interface Document {
     getElementById(elementId: string): HTMLElement;

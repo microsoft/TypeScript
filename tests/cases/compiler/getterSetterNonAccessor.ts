@@ -1,3 +1,4 @@
+// @lib: es5
 function getFunc():any{return 0;}
 function setFunc(v){}          
 

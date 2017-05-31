@@ -118,7 +118,7 @@ namespace ts {
             {
                 let fileExistsIsCalled = false;
                 serverHost.fileExists = (fileName): boolean => {
-                    if (fileName === "lib.d.ts") {
+                    if (Harness.isDefaultLibraryFile(fileName)) {
                         return false;
                     }
                     fileExistsIsCalled = true;
@@ -142,7 +142,7 @@ namespace ts {
             {
                 let fileExistsCalled = false;
                 serverHost.fileExists = (fileName): boolean => {
-                    if (fileName === "lib.d.ts") {
+                    if (Harness.isDefaultLibraryFile(fileName)) {
                         return false;
                     }
                     fileExistsCalled = true;

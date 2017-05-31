@@ -1,3 +1,4 @@
+// @lib: es5
             var obj = {};
             Object.defineProperty(obj, "accProperty", <PropertyDescriptor>({
                 get: function () {

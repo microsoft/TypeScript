@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @lib: es5
 
 var e1 = Object.create(1);               // Error
 var e2 = Object.create("string");        // Error

@@ -1,3 +1,4 @@
+// @lib: es5
 module M1 {
     export function reduce<A>(ar, f, e?): Array<A> {
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);

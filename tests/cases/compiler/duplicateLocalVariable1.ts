@@ -1,4 +1,4 @@
-
+// @lib: es5
 // @allowUnreachableCode: true
 / /@module: commonjs
 

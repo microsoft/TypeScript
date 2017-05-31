@@ -2,6 +2,7 @@
 // @includebuiltfile: typescript_standalone.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
+// @lib: es5
 
 /*
  * Note: This test is a public API sample. The sample sources can be found

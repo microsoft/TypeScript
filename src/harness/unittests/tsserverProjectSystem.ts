@@ -46,6 +46,10 @@ namespace ts.projectSystem {
 
     export const { content: libFileContent } = Harness.getDefaultLibraryFile(Harness.IO);
     export const libFile: FileOrFolder = {
+        path: "/a/lib/lib.es3.full.d.ts",
+        content: libFileContent
+    };
+    export const es5LibFile: FileOrFolder = {
         path: "/a/lib/lib.d.ts",
         content: libFileContent
     };
@@ -658,7 +662,7 @@ namespace ts.projectSystem {
                 path: "/a/b/c/module.d.ts",
                 content: `export let x: number`
             };
-            const host = createServerHost([appFile, moduleFile, libFile]);
+            const host = createServerHost([appFile, moduleFile, es5LibFile]);
             const projectService = createProjectService(host);
             const { configFileName } = projectService.openClientFile(appFile.path);
 
@@ -668,7 +672,7 @@ namespace ts.projectSystem {
 
             const project = projectService.inferredProjects[0];
 
-            checkFileNames("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
+            checkFileNames("inferred project", project.getFileNames(), [appFile.path, es5LibFile.path, moduleFile.path]);
             checkWatchedDirectories(host, ["/a/b/c", "/a/b", "/a"]);
         });
 
@@ -1137,7 +1141,7 @@ namespace ts.projectSystem {
                 content: "let x =1;"
             };
 
-            const host = createServerHost([file1, file2, file3, libFile]);
+            const host = createServerHost([file1, file2, file3, es5LibFile]);
             const projectService = createProjectService(host, { useSingleInferredProject: true });
             projectService.openClientFile(file1.path);
             projectService.openClientFile(file2.path);
@@ -1145,7 +1149,7 @@ namespace ts.projectSystem {
 
             checkNumberOfConfiguredProjects(projectService, 0);
             checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, es5LibFile.path]);
 
 
             host.reloadFS([file1, configFile, file2, file3, libFile]);
@@ -1153,7 +1157,7 @@ namespace ts.projectSystem {
 
             checkNumberOfConfiguredProjects(projectService, 1);
             checkNumberOfInferredProjects(projectService, 1);
-            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, es5LibFile.path]);
         });
 
         it("should close configured project after closing last open file", () => {
@@ -3471,7 +3475,7 @@ namespace ts.projectSystem {
                 path: "/a/b/f1.js",
                 content: "function test1() { }"
             };
-            const host = createServerHost([f1, libFile]);
+            const host = createServerHost([f1, es5LibFile]);
             const session = createSession(host);
             openFilesForSession([f1], session);
 
@@ -3491,7 +3495,7 @@ namespace ts.projectSystem {
                 type: "request",
                 command: server.CommandNames.CompilerOptionsForInferredProjects,
                 seq: 3,
-                arguments: { options: { module: ModuleKind.CommonJS } }
+                arguments: { options: { module: ModuleKind.CommonJS, target: ScriptTarget.ES5 } }
             });
             const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
                 type: "request",
@@ -3499,6 +3503,7 @@ namespace ts.projectSystem {
                 seq: 4,
                 arguments: { projectFileName: projectName }
             }).response;
+            console.log(diagsAfterUpdate);
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
 

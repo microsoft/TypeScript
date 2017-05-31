@@ -1,3 +1,4 @@
+// @lib: es5
 type TreeNode = {
     name: string;
     parent: TreeNode;

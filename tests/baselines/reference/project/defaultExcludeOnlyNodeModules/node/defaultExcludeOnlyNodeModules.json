@@ -4,7 +4,8 @@
     "baselineCheck": true,
     "declaration": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
+        "lib.es3.d.ts",
         "a.ts"
     ],
     "emittedFiles": [

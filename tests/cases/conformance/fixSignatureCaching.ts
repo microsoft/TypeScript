@@ -1,3 +1,4 @@
+// @lib: es5
 // Repro from #10697
 
 (function (define, undefined) {
