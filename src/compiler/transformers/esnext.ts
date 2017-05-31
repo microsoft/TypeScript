@@ -667,7 +667,7 @@ namespace ts {
             const trailingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                addRange(statements, block.statements.slice(statementOffset));
+                addRange(statements, block.statements, statementOffset);
                 addRange(statements, trailingStatements);
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
