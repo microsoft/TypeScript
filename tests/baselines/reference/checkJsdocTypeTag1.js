@@ -1,7 +1,14 @@
 //// [0.js]
 // @ts-check
+/** @type {String} */
+var S = "hello world";
+
+/** @type {number} */
+var n = 10;
+
 /** @type {*} */
 var anyT = 2;
+anyT = "hello";
 
 /** @type {?} */
 var anyT1 = 2;
@@ -25,8 +32,13 @@ x2(0);
 
 //// [0.js]
 // @ts-check
+/** @type {String} */
+var S = "hello world";
+/** @type {number} */
+var n = 10;
 /** @type {*} */
 var anyT = 2;
+anyT = "hello";
 /** @type {?} */
 var anyT1 = 2;
 anyT1 = "hi";

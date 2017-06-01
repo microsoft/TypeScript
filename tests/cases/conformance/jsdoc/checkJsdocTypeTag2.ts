@@ -3,25 +3,23 @@
 
 // @filename: 0.js
 // @ts-check
-/** @type {*} */
-var anyT = 2;
+/** @type {String} */
+var S = true;
 
-/** @type {?} */
-var anyT1 = 2;
-anyT1 = "hi";
-
-/** @type {Function} */
-const x = (a) => a + 1;
-x(1);
-
-/** @type {function} */
-const y = (a) => a + 1;
-x(1);
+/** @type {number} */
+var n = "hello";
 
 /** @type {function (number)} */
 const x1 = (a) => a + 1;
-x1(0);
+x1("string");
 
 /** @type {function (number): number} */
 const x2 = (a) => a + 1;
+
+/** @type {string} */
+var a;
+a = x2(0);
+
+/** @type {function (number): number} */
+const x2 = (a) => a.concat("hi");
 x2(0);
