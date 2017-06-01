@@ -2283,7 +2283,7 @@ namespace FourSlash {
          */
         public getAndApplyCodeActions(errorCode?: number, index?: number) {
             const fileName = this.activeFile.fileName;
-            this.applyCodeAction(fileName, this.getCodeFixActions(fileName, errorCode), index);
+            this.applyCodeActions(this.getCodeFixActions(fileName, errorCode), index);
         }
 
         public verifyRangeIs(expectedText: string, includeWhiteSpace?: boolean) {
@@ -2307,9 +2307,6 @@ namespace FourSlash {
          * Compares expected text to the text that would be in the sole range
          * (ie: [|...|]) in the file after applying the codefix sole codefix
          * in the source file.
-         *
-         * Because codefixes are only applied on the working file, it is unsafe
-         * to apply this more than once (consider a refactoring across files).
          */
         public verifyRangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number) {
             this.getAndApplyCodeActions(errorCode, index);
@@ -2328,7 +2325,7 @@ namespace FourSlash {
         public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            this.applyCodeAction(fileName, this.getCodeFixActions(fileName));
+            this.applyCodeActions(this.getCodeFixActions(fileName));
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
@@ -2366,7 +2363,7 @@ namespace FourSlash {
             return actions;
         }
 
-        private applyCodeAction(fileName: string, actions: ts.CodeAction[], index?: number): void {
+        private applyCodeActions(actions: ts.CodeAction[], index?: number): void {
             if (index === undefined) {
                 if (!(actions && actions.length === 1)) {
                     this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found.`);
@@ -2379,12 +2376,11 @@ namespace FourSlash {
                 }
             }
 
-            const fileChanges = ts.find(actions[index].changes, change => change.fileName === fileName);
-            if (!fileChanges) {
-                this.raiseError("The CodeFix found doesn't provide any changes in this file.");
-            }
+            const changes = actions[index].changes;
 
-            this.applyEdits(fileChanges.fileName, fileChanges.textChanges, /*isFormattingEdit*/ false);
+            for (const change of changes) {
+                this.applyEdits(change.fileName, change.textChanges, /*isFormattingEdit*/ false);
+            }
         }
 
         public verifyImportFixAtPosition(expectedTextArray: string[], errorCode?: number) {
@@ -2769,7 +2765,7 @@ namespace FourSlash {
 
             const codeActions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply);
 
-            this.applyCodeAction(this.activeFile.fileName, codeActions);
+            this.applyCodeActions(codeActions);
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
