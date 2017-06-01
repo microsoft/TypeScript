@@ -9,7 +9,9 @@
 ////}
 ////|]
 
-verify.rangeAfterCodeFix(`class C {
+verify.applyCodeFix(/*errorCode*/ undefined, /*index*/ 2)
+verify.currentFileContentIs(`class C {
     static p = ()=>{ this.foo === 10 };
 }
-C.foo = undefined;`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 2);
+C.foo = undefined;
+`);

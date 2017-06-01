@@ -82,15 +82,19 @@ namespace ts.codefix {
 
                 const className = classDeclaration.name.getText();
 
+                const staticInitialization = createStatement(createAssignment(
+                    createPropertyAccess(createIdentifier(className), tokenName),
+                    createIdentifier("undefined")));
+
+                const staticInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                staticInitializationChangeTracker.insertNodeAfter(
+                    classDeclarationSourceFile,
+                    classDeclaration,
+                    staticInitialization,
+                    { suffix: context.newLineCharacter });
                 const initializeStaticAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
-                    changes: [{
-                        fileName: classDeclarationSourceFile.fileName,
-                        textChanges: [{
-                            span: { start: classDeclaration.getEnd(), length: 0 },
-                            newText: `${context.newLineCharacter}${className}.${tokenName} = undefined;${context.newLineCharacter}`
-                        }]
-                    }]
+                    changes: staticInitializationChangeTracker.getChanges()
                 };
 
                 (actions || (actions = [])).push(initializeStaticAction);
@@ -102,15 +106,20 @@ namespace ts.codefix {
                     return actions;
                 }
 
+                const propertyInitialization = createStatement(createAssignment(
+                    createPropertyAccess(createThis(), tokenName),
+                    createIdentifier("undefined")));
+
+                const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                propertyInitializationChangeTracker.insertNodeAt(
+                    classDeclarationSourceFile,
+                    classConstructor.body.getEnd() - 1,
+                    propertyInitialization,
+                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+
                 const initializeAction = {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]),
-                    changes: [{
-                        fileName: classDeclarationSourceFile.fileName,
-                        textChanges: [{
-                            span: { start: classConstructor.body.getEnd() - 1, length: 0 },
-                            newText: `this.${tokenName} = undefined;${context.newLineCharacter}`
-                        }]
-                    }]
+                    changes: propertyInitializationChangeTracker.getChanges()
                 };
 
                 (actions || (actions = [])).push(initializeAction);
