@@ -707,7 +707,7 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDocComment?: boolean): Node {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
@@ -738,7 +738,7 @@ namespace ts {
                 // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
-                    const start = child.getStart(sourceFile);
+                    const start = child.getStart(sourceFile, includeJsDocComment);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
