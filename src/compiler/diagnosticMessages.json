@@ -3555,11 +3555,11 @@
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'.": {
+    "Declare property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'.": {
+    "Add index signature for property '{0}'.": {
         "category": "Message",
         "code": 90017
     },
@@ -3583,9 +3583,13 @@
         "category": "Message",
         "code": 90022
     },
-    "Add declaration for missing method '{0}'.": {
+    "Declare method '{0}'.": {
         "category": "Message",
         "code": 90023
+    },
+    "Declare static method '{0}'.": {
+        "category": "Message",
+        "code": 90024
     },
     
     "Convert function to an ES2015 class": {

@@ -25,10 +25,10 @@ verify.applyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
 export class C {
-    m1() {
+    m1(): any {
         throw new Error("Method not implemented.");
     }
-    static m0(arg0, arg1, arg2) {
+    static m0(arg0: any, arg1: any, arg2: any): any {
         throw new Error("Method not implemented.");
     }
     x: number;

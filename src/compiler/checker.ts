@@ -110,6 +110,7 @@ namespace ts {
             getParameterType: getTypeAtPosition,
             getReturnTypeOfSignature,
             getNonNullableType,
+            getBaseTypeVariableOfClass,
             typeToTypeNode: nodeBuilder.typeToTypeNode,
             indexInfoToIndexSignatureDeclaration: nodeBuilder.indexInfoToIndexSignatureDeclaration,
             signatureToSignatureDeclaration: nodeBuilder.signatureToSignatureDeclaration,
@@ -679,10 +680,6 @@ namespace ts {
         function getNodeLinks(node: Node): NodeLinks {
             const nodeId = getNodeId(node);
             return nodeLinks[nodeId] || (nodeLinks[nodeId] = { flags: 0 });
-        }
-
-        function getObjectFlags(type: Type): ObjectFlags {
-            return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
         }
 
         function isGlobalSourceFile(node: Node) {
@@ -2282,7 +2279,7 @@ namespace ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
-            Debug.assert(typeNode !== undefined, "should always get typenode?");
+            Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
             const writer = createTextWriter("");
             const printer = createPrinter(options, writer);
