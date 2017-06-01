@@ -1,0 +1,56 @@
+=== tests/cases/compiler/index.js ===
+var Person = function (firstNameOrPojo, lastName) {
+>Person : Symbol(Person, Decl(index.js, 0, 3))
+>firstNameOrPojo : Symbol(firstNameOrPojo, Decl(index.js, 0, 23))
+>lastName : Symbol(lastName, Decl(index.js, 0, 39))
+
+    if (typeof firstNameOrPojo === "string") {
+>firstNameOrPojo : Symbol(firstNameOrPojo, Decl(index.js, 0, 23))
+
+        this.firstName = firstNameOrPojo;
+>firstName : Symbol(Person.firstName, Decl(index.js, 2, 46))
+>firstNameOrPojo : Symbol(firstNameOrPojo, Decl(index.js, 0, 23))
+
+        this.lastName = lastName;
+>lastName : Symbol(Person.lastName, Decl(index.js, 3, 41))
+>lastName : Symbol(lastName, Decl(index.js, 0, 39))
+
+    } else {
+        return new Person(firstNameOrPojo.firstName, firstNameOrPojo.lastName);
+>Person : Symbol(Person, Decl(index.js, 0, 3))
+>firstNameOrPojo : Symbol(firstNameOrPojo, Decl(index.js, 0, 23))
+>firstNameOrPojo : Symbol(firstNameOrPojo, Decl(index.js, 0, 23))
+    }
+};
+
+Person.prototype.greet = function greet() {
+>Person.prototype : Symbol(Person.greet, Decl(index.js, 8, 2))
+>Person : Symbol(Person, Decl(index.js, 0, 3))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>greet : Symbol(Person.greet, Decl(index.js, 8, 2))
+>greet : Symbol(greet, Decl(index.js, 10, 24))
+
+    return `Hello, I am ${this.firstName} ${this.lastName}.`;
+>this.firstName : Symbol(Person.firstName, Decl(index.js, 2, 46))
+>this : Symbol(Person, Decl(index.js, 0, 12))
+>firstName : Symbol(Person.firstName, Decl(index.js, 2, 46))
+>this.lastName : Symbol(Person.lastName, Decl(index.js, 3, 41))
+>this : Symbol(Person, Decl(index.js, 0, 12))
+>lastName : Symbol(Person.lastName, Decl(index.js, 3, 41))
+
+};
+
+var fred = new Person({ firstName: "Fred", lastName: "Flintstone" });
+>fred : Symbol(fred, Decl(index.js, 14, 3))
+>Person : Symbol(Person, Decl(index.js, 0, 3))
+>firstName : Symbol(firstName, Decl(index.js, 14, 23))
+>lastName : Symbol(lastName, Decl(index.js, 14, 42))
+
+console.log(fred.greet());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>fred.greet : Symbol(Person.greet, Decl(index.js, 8, 2))
+>fred : Symbol(fred, Decl(index.js, 14, 3))
+>greet : Symbol(Person.greet, Decl(index.js, 8, 2))
+
