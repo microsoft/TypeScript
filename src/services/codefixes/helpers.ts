@@ -147,7 +147,7 @@ namespace ts.codefix {
 
         let typeParameters: TypeParameterDeclaration[];
         if (includeTypeScriptSyntax) {
-            const typeArgCount = callExpression.typeArguments ? callExpression.typeArguments.length : 0;
+            const typeArgCount = length(callExpression.typeArguments);
             for (let i = 0; i < typeArgCount; i++) {
                 const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
                 const typeParameter = createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined);
