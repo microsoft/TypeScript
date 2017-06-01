@@ -1,14 +1,14 @@
 === tests/cases/compiler/simpleArrowFunctionParameterReferencedInObjectLiteral1.ts ===
 [].map(() => [].map(p => ({ X: p })));
 >[].map(() => [].map(p => ({ X: p }))) : { X: any; }[][]
->[].map : { <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U): U[]; <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg: Z): U[]; }
+>[].map : <U, Z = void>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg?: Z) => U[]
 >[] : undefined[]
->map : { <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U): U[]; <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg: Z): U[]; }
+>map : <U, Z = void>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg?: Z) => U[]
 >() => [].map(p => ({ X: p })) : () => { X: any; }[]
 >[].map(p => ({ X: p })) : { X: any; }[]
->[].map : { <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U): U[]; <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg: Z): U[]; }
+>[].map : <U, Z = void>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg?: Z) => U[]
 >[] : undefined[]
->map : { <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U): U[]; <U>(callbackfn: (this: void, value: any, index: number, array: any[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg: Z): U[]; }
+>map : <U, Z = void>(callbackfn: (this: Z, value: any, index: number, array: any[]) => U, thisArg?: Z) => U[]
 >p => ({ X: p }) : (this: void, p: any) => { X: any; }
 >p : any
 >({ X: p }) : { X: any; }

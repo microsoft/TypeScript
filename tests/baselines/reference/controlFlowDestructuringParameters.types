@@ -4,12 +4,12 @@
 
 [{ x: 1 }].map(
 >[{ x: 1 }].map(  ({ x }) => x) : number[]
->[{ x: 1 }].map : { <U>(callbackfn: (this: void, value: { x: number; }, index: number, array: { x: number; }[]) => U): U[]; <U>(callbackfn: (this: void, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg: Z): U[]; }
+>[{ x: 1 }].map : <U, Z = void>(callbackfn: (this: Z, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: Z | undefined) => U[]
 >[{ x: 1 }] : { x: number; }[]
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
->map : { <U>(callbackfn: (this: void, value: { x: number; }, index: number, array: { x: number; }[]) => U): U[]; <U>(callbackfn: (this: void, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg: Z): U[]; }
+>map : <U, Z = void>(callbackfn: (this: Z, value: { x: number; }, index: number, array: { x: number; }[]) => U, thisArg?: Z | undefined) => U[]
 
   ({ x }) => x
 >({ x }) => x : (this: void, { x }: { x: number; }) => number

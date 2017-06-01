@@ -7,9 +7,9 @@ var regexMatchList = ['', ''];
 
 regexMatchList.forEach(match => ''.replace(match, ''));
 >regexMatchList.forEach(match => ''.replace(match, '')) : void
->regexMatchList.forEach : { (callbackfn: (this: void, value: string, index: number, array: string[]) => void): void; (callbackfn: (this: void, value: string, index: number, array: string[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg: Z): void; }
+>regexMatchList.forEach : <Z = void>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg?: Z) => void
 >regexMatchList : string[]
->forEach : { (callbackfn: (this: void, value: string, index: number, array: string[]) => void): void; (callbackfn: (this: void, value: string, index: number, array: string[]) => void, thisArg: undefined): void; <Z>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg: Z): void; }
+>forEach : <Z = void>(callbackfn: (this: Z, value: string, index: number, array: string[]) => void, thisArg?: Z) => void
 >match => ''.replace(match, '') : (this: void, match: string) => string
 >match : string
 >''.replace(match, '') : string
