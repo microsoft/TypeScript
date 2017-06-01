@@ -733,10 +733,6 @@ namespace ts {
         return false;
     }
 
-    export function getObjectFlags(type: Type): ObjectFlags {
-        return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
-    }
-
     export function isChildOfNodeWithKind(node: Node, kind: SyntaxKind): boolean {
         while (node) {
             if (node.kind === kind) {
