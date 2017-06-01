@@ -6,8 +6,8 @@ export NVM_DIR="/home/dotnet-bot/.nvm"
 
 nvm install $1
 
-npm uninstall typescript --no-save
-npm uninstall tslint --no-save
+npm uninstall typescript
+npm uninstall tslint
 npm install
 npm update
 npm test
