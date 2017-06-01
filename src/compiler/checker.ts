@@ -8701,7 +8701,7 @@ namespace ts {
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
-            let disableWeakTypeErrors = false;
+            let disableWeakTypeCheckingForIntersectionConstituents = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -8981,20 +8981,27 @@ namespace ts {
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
-                const saveDisableWeakTypeErrors = disableWeakTypeErrors;
-                disableWeakTypeErrors = true;
+                const saveDisableWeakTypeCheckingForIntersectionConstituents = disableWeakTypeCheckingForIntersectionConstituents;
+                disableWeakTypeCheckingForIntersectionConstituents = true;
                 for (const targetType of targetTypes) {
                     const related = isRelatedTo(source, targetType, reportErrors);
                     if (!related) {
-                        disableWeakTypeErrors = saveDisableWeakTypeErrors;
+                        disableWeakTypeCheckingForIntersectionConstituents = saveDisableWeakTypeCheckingForIntersectionConstituents;
                         return Ternary.False;
                     }
                     result &= related;
                 }
-                disableWeakTypeErrors = saveDisableWeakTypeErrors;
+                disableWeakTypeCheckingForIntersectionConstituents = saveDisableWeakTypeCheckingForIntersectionConstituents;
                 return reportAssignmentToWeakIntersection(source, target, reportErrors) ? Ternary.False : result;
             }
 
+            /**
+             * An intersection is weak if all of its constituents are weak. Report an error on assignment to a weak intersection
+             * of a type that doesn't share any property names with it.
+             *
+             * Note: This function could create an anonymous type of the flattened intersection properties and call isRelatedTo,
+             * but this makes React's already-bad weak type errors even more confusing.
+             */
             function reportAssignmentToWeakIntersection(source: Type, target: IntersectionType, reportErrors: boolean) {
                 const needsWeakTypeCheck = source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeakType);
                 if (!needsWeakTypeCheck) {
@@ -9352,10 +9359,10 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                            const saveDisableWeakTypeErrors = disableWeakTypeErrors;
-                            disableWeakTypeErrors = false;
+                            const saveDisableWeakTypeCheckingForIntersectionConstituents = disableWeakTypeCheckingForIntersectionConstituents;
+                            disableWeakTypeCheckingForIntersectionConstituents = false;
                             const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
-                            disableWeakTypeErrors = saveDisableWeakTypeErrors;
+                            disableWeakTypeCheckingForIntersectionConstituents = saveDisableWeakTypeCheckingForIntersectionConstituents;
                             if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
@@ -9381,7 +9388,10 @@ namespace ts {
                         }
                     }
                 }
-                if (!foundMatchingProperty && !disableWeakTypeErrors && source !== globalObjectType && getPropertiesOfType(source).length > 0)  {
+                if (!foundMatchingProperty &&
+                    !disableWeakTypeCheckingForIntersectionConstituents &&
+                    source !== globalObjectType &&
+                    getPropertiesOfType(source).length > 0)  {
                     if (reportErrors) {
                         reportError(Diagnostics.Weak_type_0_has_no_properties_in_common_with_1, typeToString(target), typeToString(source));
                     }
