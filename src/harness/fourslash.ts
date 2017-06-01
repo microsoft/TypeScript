@@ -3816,7 +3816,7 @@ namespace FourSlashInterface {
             this.state.verifyRangeIs(expectedText, includeWhiteSpace);
         }
 
-        public applyCodeFix(errorCode?: number, index?: number): void {
+        public getAndApplyCodeFix(errorCode?: number, index?: number): void {
             this.state.getAndApplyCodeActions(errorCode, index);
         }
 

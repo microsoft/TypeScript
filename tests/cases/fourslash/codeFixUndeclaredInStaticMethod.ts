@@ -9,10 +9,10 @@
 ////     }
 //// }
 
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
     static prop2: string;

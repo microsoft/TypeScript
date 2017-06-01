@@ -10,9 +10,9 @@
 ////     }
 //// }
 
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
     foo3<T0, T1, T2, T3, T4, T5, T6, T7>(): any {

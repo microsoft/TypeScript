@@ -17,10 +17,10 @@
 ////     static y: string;
 //// }
 
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
     y: { [x: string]: any; };

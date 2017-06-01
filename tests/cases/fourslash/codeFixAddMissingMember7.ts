@@ -9,7 +9,7 @@
 ////}
 ////|]
 
-verify.applyCodeFix(/*errorCode*/ undefined, /*index*/ 2)
+verify.getAndApplyCodeFix(/*errorCode*/ undefined, /*index*/ 2)
 verify.currentFileContentIs(`class C {
     static p = ()=>{ this.foo === 10 };
 }

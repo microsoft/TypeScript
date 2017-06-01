@@ -18,10 +18,10 @@
 ////     constructor() { }
 //// }|]
 
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
-verify.applyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
+verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
 export class C {
