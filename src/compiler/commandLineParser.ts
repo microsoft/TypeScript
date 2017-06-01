@@ -1042,7 +1042,15 @@ namespace ts {
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
                 const description = descriptionColumn[i];
-                result.push(tab + tab + optionName + makePadding(marginLength - optionName.length + 2) + description);
+                if (optionName === "" && description === "") {
+                    result.push("");
+                }
+                else if (optionName !== "" && description === "") {
+                    result.push(tab + tab + optionName);
+                }
+                else {
+                    result.push(tab + tab + optionName + makePadding(marginLength - optionName.length + 2) + description);
+                }
             }
             if (configurations.files && configurations.files.length) {
                 result.push(`${tab}},`);
