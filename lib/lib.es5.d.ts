@@ -38,7 +38,7 @@ declare function eval(x: string): any;
   * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal.
   * All other strings are considered decimal.
   */
-declare function parseInt(s: string, radix?: number): number;
+declare function parseInt(s: string | number, radix?: number): number;
 
 /**
   * Converts a string to a floating-point number.
