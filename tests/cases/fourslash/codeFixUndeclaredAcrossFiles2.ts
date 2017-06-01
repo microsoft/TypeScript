@@ -13,10 +13,10 @@
 
 // @Filename: f1.js
 //// [|export class C {
-////     x: number;
-////     static y: string;
 ////     constructor() { }
-//// }|]
+//// }
+////
+//// |]
 
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
@@ -25,16 +25,15 @@ verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
 export class C {
-    m1(): any {
+    m1() {
         throw new Error("Method not implemented.");
     }
-    static m0(arg0: any, arg1: any, arg2: any): any {
+    static m0(arg0, arg1, arg2) {
         throw new Error("Method not implemented.");
     }
-    x: number;
-    static y: string;
     constructor() {
         this.y = undefined;
     }
 }
+C.x = undefined;
 `);

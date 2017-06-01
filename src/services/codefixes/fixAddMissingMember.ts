@@ -70,7 +70,7 @@ namespace ts.codefix {
         function getActionsForAddMissingMemberInJavaScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
             let actions: CodeAction[];
 
-            const methodCodeAction = getActionForMethodDeclaration();
+            const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ false);
             if (methodCodeAction) {
                 actions = [methodCodeAction];
             }
@@ -130,7 +130,7 @@ namespace ts.codefix {
         function getActionsForAddMissingMemberInTypeScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
             let actions: CodeAction[];
 
-            const methodCodeAction = getActionForMethodDeclaration();
+            const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ true);
             if (methodCodeAction) {
                 actions = [methodCodeAction];
             }
@@ -189,10 +189,10 @@ namespace ts.codefix {
             return actions;
         }
 
-        function getActionForMethodDeclaration(): CodeAction | undefined {
+        function getActionForMethodDeclaration(includeTypeScriptSyntax: boolean): CodeAction | undefined {
             if (token.parent.parent.kind === SyntaxKind.CallExpression) {
                 const callExpression = <CallExpression>token.parent.parent;
-                const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, /*includeTypeScriptSyntax*/ true, makeStatic);
+                const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
 
                 const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
                 methodDeclarationChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, methodDeclaration, { suffix: context.newLineCharacter });
