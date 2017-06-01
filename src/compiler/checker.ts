@@ -8996,7 +8996,7 @@ namespace ts {
             }
 
             function reportAssignmentToWeakIntersection(source: Type, target: IntersectionType, reportErrors: boolean) {
-                const needsWeakTypeCheck = source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeak);
+                const needsWeakTypeCheck = source !== globalObjectType && getPropertiesOfType(source).length > 0 && every(target.types, isWeakType);
                 if (!needsWeakTypeCheck) {
                     return false;
                 }
@@ -9296,7 +9296,7 @@ namespace ts {
                 let result = Ternary.True;
                 const properties = getPropertiesOfObjectType(target);
                 const requireOptionalProperties = relation === subtypeRelation && !(getObjectFlags(source) & ObjectFlags.ObjectLiteral);
-                let foundMatchingProperty = !isWeak(target);
+                let foundMatchingProperty = !isWeakType(target);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.name);
                     if (sourceProp) {
@@ -9394,7 +9394,7 @@ namespace ts {
              * A type is 'weak' if it is an object type with at least one optional property
              * and no required properties, call/construct signatures or index signatures
              */
-            function isWeak(type: Type) {
+            function isWeakType(type: Type) {
                 const props = getPropertiesOfType(type);
                 return type.flags & TypeFlags.Object &&
                     props.length > 0 &&
