@@ -27,9 +27,9 @@ var C;
     var Name = (function () {
         function Name(parameters) {
         }
+        Name.funcData = A.AA.func();
+        Name.someConst = A.AA.foo;
         return Name;
     }());
-    Name.funcData = A.AA.func();
-    Name.someConst = A.AA.foo;
     C.Name = Name;
 })(C || (C = {}));

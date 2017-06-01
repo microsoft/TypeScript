@@ -21,8 +21,8 @@ branches:
   - release-2.3
 
 install:
-  - npm uninstall typescript
-  - npm uninstall tslint
+  - npm uninstall typescript --no-save
+  - npm uninstall tslint --no-save
   - npm install
 
 cache:
