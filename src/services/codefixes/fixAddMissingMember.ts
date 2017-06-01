@@ -49,7 +49,8 @@ namespace ts.codefix {
                 const symbol = leftExpressionType.symbol;
                 if (symbol.flags & SymbolFlags.Class) {
                     classDeclaration = symbol.declarations && <ClassLikeDeclaration>symbol.declarations[0];
-                    if (getObjectFlags(leftExpressionType) & ObjectFlags.Anonymous && symbol.flags & SymbolFlags.Class && !checker.getBaseTypeVariableOfClass(symbol)) {
+                    if (leftExpressionType !== checker.getDeclaredTypeOfSymbol(symbol)) {
+                        // The expression is a class symbol but the type is not the instance-side.
                         makeStatic = true;
                     }
                 }

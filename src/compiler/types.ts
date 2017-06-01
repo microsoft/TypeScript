@@ -2530,7 +2530,6 @@ namespace ts {
          */
         /* @internal */ getParameterType(signature: Signature, parameterIndex: number): Type;
         getNonNullableType(type: Type): Type;
-        /* @internal */ getBaseTypeVariableOfClass(symbol: Symbol): Type | undefined;
 
         /** Note that the resulting nodes cannot be checked. */
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
