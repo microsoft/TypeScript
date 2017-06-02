@@ -1,5 +1,5 @@
-tests/cases/conformance/es2018/dynamicImport/2.ts(4,24): error TS2532: Object is possibly 'undefined'.
-tests/cases/conformance/es2018/dynamicImport/2.ts(6,24): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/es2018/dynamicImport/2.ts(4,24): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
+tests/cases/conformance/es2018/dynamicImport/2.ts(6,24): error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'null'.
 
 
 ==== tests/cases/conformance/es2018/dynamicImport/0.ts (0 errors) ====
@@ -18,8 +18,8 @@ tests/cases/conformance/es2018/dynamicImport/2.ts(6,24): error TS2531: Object is
     let myModule = import(specify);
     let myModule1 = import(undefined);
                            ~~~~~~~~~
-!!! error TS2532: Object is possibly 'undefined'.
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'undefined'.
     let myModule2 = import(bar() ? "./1" : null);
     let myModule3 = import(null);
                            ~~~~
-!!! error TS2531: Object is possibly 'null'.
+!!! error TS7036: Dynamic import's specifier must be of type 'string', but here has type 'null'.

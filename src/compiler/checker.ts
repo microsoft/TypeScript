@@ -16099,15 +16099,22 @@ namespace ts {
 
         function checkImportCallExpression(node: ImportCall): Type {
             // Check grammar of dynamic import
-            if (checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node)) {
+            checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node);
+
+            if (node.arguments.length === 0) {
                 return createPromiseReturnType(node, anyType);
             }
-
             const specifier = node.arguments[0];
-            const specifierType = checkNonNullExpression(specifier);
-            if (!isTypeAssignableTo(specifierType, stringType)) {
+            const specifierType = checkExpressionCached(specifier);
+            // Even though multiple arugments is grammatically incorrect, type-check extra arguments for completion
+            for (let i = 1; i < node.arguments.length; ++i) {
+                checkExpressionCached(node.arguments[i]);
+            }
+
+            if (specifierType.flags & TypeFlags.Undefined || specifierType.flags & TypeFlags.Null || !isTypeAssignableTo(specifierType, stringType)) {
                 error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
             }
+
             // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
             const moduleSymbol = resolveExternalModuleName(node, specifier);
             if (moduleSymbol) {
