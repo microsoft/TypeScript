@@ -41,13 +41,12 @@ function foo() {
 })(function (require, exports) {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-    var __resolved = new Promise(function (resolve) { resolve(); });
-    __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
-    var p1 = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
+    __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
+    var p1 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_2, reject_2) { require(["./0"], resolve_2, reject_2); });
     p1.then(function (zero) {
         return zero.foo();
     });
     function foo() {
-        var p2 = __syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); });
+        var p2 = __syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_3, reject_3) { require(["./0"], resolve_3, reject_3); });
     }
 });

@@ -29,13 +29,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function backup() { return "backup"; }
 exports.backup = backup;
 //// [2.js]
-var __resolved = new Promise(function (resolve) { resolve(); });
 async function compute(promise) {
     let j = await promise;
     if (!j) {
-        j = await __resolved.then(function () { return require("./1"); });
+        j = await Promise.resolve().then(function () { return require("./1"); });
         return j.backup();
     }
     return j.foo();
 }
-compute(__resolved.then(function () { return require("./0"); }));
+compute(Promise.resolve().then(function () { return require("./0"); }));

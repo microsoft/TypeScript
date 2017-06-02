@@ -45,7 +45,6 @@ foo(import("./0"));
 })(function (require, exports) {
     "use strict";
     var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-    var __resolved = new Promise(function (resolve) { resolve(); });
     // We use Promise<any> for now as there is no way to specify shape of module object
     function foo(x) {
         x.then(value => {
@@ -53,5 +52,5 @@ foo(import("./0"));
             b.print();
         });
     }
-    foo(__syncRequire ? __resolved.then(function () { return require("./0"); }) : new Promise(function (_a, _b) { require(["./0"], _a, _b); }));
+    foo(__syncRequire ? Promise.resolve().then(function () { return require("./0"); }) : new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); }));
 });

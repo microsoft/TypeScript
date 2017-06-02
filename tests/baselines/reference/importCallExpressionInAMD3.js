@@ -26,7 +26,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     async function foo() {
-        class C extends (await new Promise(function (_a, _b) { require(["./0"], _a, _b); })).B {
+        class C extends (await new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); })).B {
         }
         var c = new C();
         c.print();

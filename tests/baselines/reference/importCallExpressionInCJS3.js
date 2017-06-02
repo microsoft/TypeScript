@@ -24,7 +24,6 @@ class B {
 }
 exports.B = B;
 //// [2.js]
-var __resolved = new Promise(function (resolve) { resolve(); });
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x) {
     x.then(value => {
@@ -32,4 +31,4 @@ function foo(x) {
         b.print();
     });
 }
-foo(__resolved.then(function () { return require("./0"); }));
+foo(Promise.resolve().then(function () { return require("./0"); }));

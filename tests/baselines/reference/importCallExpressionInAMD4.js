@@ -48,14 +48,14 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     class C {
         constructor() {
-            this.myModule = new Promise(function (_a, _b) { require(["./0"], _a, _b); });
+            this.myModule = new Promise(function (resolve_1, reject_1) { require(["./0"], resolve_1, reject_1); });
         }
         method() {
             this.myModule.then(Zero => {
                 console.log(Zero.foo());
             }, async (err) => {
                 console.log(err);
-                let one = await new Promise(function (_a, _b) { require(["./1"], _a, _b); });
+                let one = await new Promise(function (resolve_2, reject_2) { require(["./1"], resolve_2, reject_2); });
                 console.log(one.backup());
             });
         }

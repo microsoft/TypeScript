@@ -20,12 +20,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
-var __resolved = new Promise(function (resolve) { resolve(); });
-__resolved.then(function () { return require("./0"); });
-var p1 = __resolved.then(function () { return require("./0"); });
+Promise.resolve().then(function () { return require("./0"); });
+var p1 = Promise.resolve().then(function () { return require("./0"); });
 p1.then(zero => {
     return zero.foo();
 });
 function foo() {
-    const p2 = __resolved.then(function () { return require("./0"); });
+    const p2 = Promise.resolve().then(function () { return require("./0"); });
 }

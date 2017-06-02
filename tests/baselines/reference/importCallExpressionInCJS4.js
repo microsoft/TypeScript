@@ -21,9 +21,8 @@ class B {
 }
 exports.B = B;
 //// [2.js]
-var __resolved = new Promise(function (resolve) { resolve(); });
 async function foo() {
-    class C extends (await __resolved.then(function () { return require("./0"); })).B {
+    class C extends (await Promise.resolve().then(function () { return require("./0"); })).B {
     }
     var c = new C();
     c.print();

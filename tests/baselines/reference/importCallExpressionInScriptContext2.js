@@ -15,6 +15,5 @@ function foo() { return "foo"; }
 exports.foo = foo;
 //// [1.js]
 "use strict";
-var __resolved = new Promise(function (resolve) { resolve(); });
-var p1 = __resolved.then(function () { return require("./0"); });
+var p1 = Promise.resolve().then(function () { return require("./0"); });
 function arguments() { }
