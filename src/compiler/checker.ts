@@ -24680,7 +24680,7 @@ namespace ts {
 
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
-            if (isSpreadExpression(arguments[0])) {
+            if (isSpreadElement(arguments[0])) {
                 return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
             }
         }
