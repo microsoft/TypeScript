@@ -82,12 +82,6 @@
                             "end": 56,
                             "text": "property"
                         },
-                        "name": {
-                            "kind": "Identifier",
-                            "pos": 66,
-                            "end": 69,
-                            "text": "age"
-                        },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
                             "pos": 57,
@@ -97,6 +91,18 @@
                                 "pos": 58,
                                 "end": 64
                             }
+                        },
+                        "postParameterName": {
+                            "kind": "Identifier",
+                            "pos": 66,
+                            "end": 69,
+                            "text": "age"
+                        },
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 66,
+                            "end": 69,
+                            "text": "age"
                         }
                     },
                     {
@@ -114,12 +120,6 @@
                             "end": 83,
                             "text": "property"
                         },
-                        "name": {
-                            "kind": "Identifier",
-                            "pos": 93,
-                            "end": 97,
-                            "text": "name"
-                        },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
                             "pos": 84,
@@ -129,6 +129,18 @@
                                 "pos": 85,
                                 "end": 91
                             }
+                        },
+                        "postParameterName": {
+                            "kind": "Identifier",
+                            "pos": 93,
+                            "end": 97,
+                            "text": "name"
+                        },
+                        "name": {
+                            "kind": "Identifier",
+                            "pos": 93,
+                            "end": 97,
+                            "text": "name"
                         }
                     }
                 ]

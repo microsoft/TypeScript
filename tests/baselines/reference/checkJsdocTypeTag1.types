@@ -1,9 +1,24 @@
-=== tests/cases/conformance/salsa/0.js ===
+=== tests/cases/conformance/jsdoc/0.js ===
 // @ts-check
+/** @type {String} */
+var S = "hello world";
+>S : string
+>"hello world" : "hello world"
+
+/** @type {number} */
+var n = 10;
+>n : number
+>10 : 10
+
 /** @type {*} */
 var anyT = 2;
 >anyT : any
 >2 : 2
+
+anyT = "hello";
+>anyT = "hello" : "hello"
+>anyT : any
+>"hello" : "hello"
 
 /** @type {?} */
 var anyT1 = 2;
@@ -18,6 +33,20 @@ anyT1 = "hi";
 /** @type {Function} */
 const x = (a) => a + 1;
 >x : Function
+>(a) => a + 1 : (a: any) => any
+>a : any
+>a + 1 : any
+>a : any
+>1 : 1
+
+x(1);
+>x(1) : any
+>x : Function
+>1 : 1
+
+/** @type {function} */
+const y = (a) => a + 1;
+>y : Function
 >(a) => a + 1 : (a: any) => any
 >a : any
 >a + 1 : any

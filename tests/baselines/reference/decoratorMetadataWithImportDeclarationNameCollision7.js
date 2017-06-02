@@ -46,10 +46,10 @@ var MyClass = (function () {
         this.db = db;
         this.db.doSomething();
     }
+    MyClass = __decorate([
+        someDecorator,
+        __metadata("design:paramtypes", [Object])
+    ], MyClass);
     return MyClass;
 }());
-MyClass = __decorate([
-    someDecorator,
-    __metadata("design:paramtypes", [Object])
-], MyClass);
 exports.MyClass = MyClass;

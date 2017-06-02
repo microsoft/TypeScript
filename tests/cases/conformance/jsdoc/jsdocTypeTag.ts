@@ -57,7 +57,8 @@ var nullable;
 /** @type {Object} */
 var Obj;
 
-
+/** @type {Function} */
+var Func;
 
 // @filename: b.ts
 var S: string;
@@ -78,3 +79,4 @@ var P: Promise<any>;
 var p: Promise<any>;
 var nullable: number | null;
 var Obj: any;
+var Func: Function;

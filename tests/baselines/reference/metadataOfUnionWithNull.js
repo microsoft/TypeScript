@@ -61,53 +61,53 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "x");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "y");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "z");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", void 0)
+    ], B.prototype, "a");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", void 0)
+    ], B.prototype, "b");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", void 0)
+    ], B.prototype, "c");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "d");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "e");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "f");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "g");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "h");
+    __decorate([
+        PropDeco,
+        __metadata("design:type", Object)
+    ], B.prototype, "j");
     return B;
 }());
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "x");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "y");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "z");
-__decorate([
-    PropDeco,
-    __metadata("design:type", void 0)
-], B.prototype, "a");
-__decorate([
-    PropDeco,
-    __metadata("design:type", void 0)
-], B.prototype, "b");
-__decorate([
-    PropDeco,
-    __metadata("design:type", void 0)
-], B.prototype, "c");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "d");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "e");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "f");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "g");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "h");
-__decorate([
-    PropDeco,
-    __metadata("design:type", Object)
-], B.prototype, "j");

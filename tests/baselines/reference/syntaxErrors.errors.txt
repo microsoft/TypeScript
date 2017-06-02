@@ -1,0 +1,31 @@
+tests/cases/conformance/jsdoc/foo.js(2,15): error TS1005: '}' expected.
+tests/cases/conformance/jsdoc/foo.js(3,19): error TS1005: '}' expected.
+tests/cases/conformance/jsdoc/foo.js(4,18): error TS1003: Identifier expected.
+tests/cases/conformance/jsdoc/foo.js(4,19): error TS1005: '}' expected.
+
+
+==== tests/cases/conformance/jsdoc/foo.js (4 errors) ====
+    /**
+     * @param {(x)=>void} x
+                  ~~
+!!! error TS1005: '}' expected.
+     * @param {typeof String} y
+                      ~~~~~~
+!!! error TS1005: '}' expected.
+     * @param {string & number} z
+                     
+!!! error TS1003: Identifier expected.
+                      ~
+!!! error TS1005: '}' expected.
+     **/
+    function foo(x, y, z) { }
+    
+==== tests/cases/conformance/jsdoc/skipped.js (0 errors) ====
+    // @ts-nocheck
+    /**
+     * @param {(x)=>void} x
+     * @param {typeof String} y
+     * @param {string & number} z
+     **/
+    function bar(x, y, z) { }
+    

@@ -59,9 +59,9 @@ var B = (function (_super) {
         _this = _super.call(this) || this;
         return _this;
     }
+    B.s = 9;
     return B;
 }(A));
-B.s = 9;
 var C = (function (_super) {
     __extends(C, _super);
     function C() {

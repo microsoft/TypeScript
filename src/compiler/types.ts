@@ -2117,6 +2117,7 @@ namespace ts {
     }
 
     export interface JSDocTag extends Node {
+        parent: JSDoc;
         atToken: AtToken;
         tagName: Identifier;
         comment: string | undefined;
@@ -2147,6 +2148,7 @@ namespace ts {
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocTypedefTag;
         fullName?: JSDocNamespaceDeclaration | Identifier;
         name?: Identifier;
@@ -2155,9 +2157,15 @@ namespace ts {
     }
 
     export interface JSDocPropertyTag extends JSDocTag, TypeElement {
+        parent: JSDoc;
         kind: SyntaxKind.JSDocPropertyTag;
         name: Identifier;
+        /** the parameter name, if provided *before* the type (TypeScript-style) */
+        preParameterName?: Identifier;
+        /** the parameter name, if provided *after* the type (JSDoc-standard) */
+        postParameterName?: Identifier;
         typeExpression: JSDocTypeExpression;
+        isBracketed: boolean;
     }
 
     export interface JSDocTypeLiteral extends JSDocType {
@@ -2174,7 +2182,7 @@ namespace ts {
         /** the parameter name, if provided *after* the type (JSDoc-standard) */
         postParameterName?: Identifier;
         /** the parameter name, regardless of the location it was provided */
-        parameterName: Identifier;
+        name: Identifier;
         isBracketed: boolean;
     }
 
@@ -2323,15 +2331,18 @@ namespace ts {
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
 
-        // File level diagnostics reported by the parser (includes diagnostics about /// references
+        // File-level diagnostics reported by the parser (includes diagnostics about /// references
         // as well as code diagnostics).
         /* @internal */ parseDiagnostics: Diagnostic[];
 
-        // Stores additional file level diagnostics reported by the program
-        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
-
-        // File level diagnostics reported by the binder.
+        // File-level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: Diagnostic[];
+
+        // File-level JSDoc diagnostics reported by the JSDoc parser
+        /* @internal */ jsDocDiagnostics?: Diagnostic[];
+
+        // Stores additional file-level diagnostics reported by the program
+        /* @internal */ additionalSyntacticDiagnostics?: Diagnostic[];
 
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
@@ -3094,6 +3105,7 @@ namespace ts {
     export interface Type {
         flags: TypeFlags;                // Flags
         /* @internal */ id: number;      // Unique ID
+        /* @internal */ checker: TypeChecker;
         symbol?: Symbol;                 // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
@@ -3354,30 +3366,36 @@ namespace ts {
         (t: TypeParameter): Type;
         mappedTypes?: Type[];       // Types mapped by this mapper
         instantiations?: Type[];    // Cache of instantiations created using this type mapper.
-        context?: InferenceContext; // The inference context this mapper was created from.
-                                    // Only inference mappers have this set (in createInferenceMapper).
-                                    // The identity mapper and regular instantiation mappers do not need it.
+    }
+
+    export const enum InferencePriority {
+        NakedTypeVariable = 1 << 0,  // Naked type variable in union or intersection type
+        MappedType        = 1 << 1,  // Reverse inference for mapped type
+        ReturnType        = 1 << 2,  // Inference made from return type of generic function
+    }
+
+    export interface InferenceInfo {
+        typeParameter: TypeParameter;
+        candidates: Type[];
+        inferredType: Type;
+        priority: InferencePriority;
+        topLevel: boolean;
+        isFixed: boolean;
+    }
+
+    export const enum InferenceFlags {
+        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
+        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
     /* @internal */
-    export interface TypeInferences {
-        primary: Type[];    // Inferences made directly to a type parameter
-        secondary: Type[];  // Inferences made to a type parameter in a union type
-        topLevel: boolean;  // True if all inferences were made from top-level (not nested in object type) locations
-        isFixed: boolean;   // Whether the type parameter is fixed, as defined in section 4.12.2 of the TypeScript spec
-                            // If a type parameter is fixed, no more inferences can be made for the type parameter
-    }
-
-    /* @internal */
-    export interface InferenceContext {
+    export interface InferenceContext extends TypeMapper {
         signature: Signature;               // Generic signature for which inferences are made
-        inferUnionTypes: boolean;           // Infer union types for disjoint candidates (otherwise undefinedType)
-        inferences: TypeInferences[];       // Inferences made for each type parameter
-        inferredTypes: Type[];              // Inferred type for each type parameter
-        mapper?: TypeMapper;                // Type mapper for this inference context
+        inferences: InferenceInfo[];        // Inferences made for each type parameter
+        flags: InferenceFlags;              // Inference flags
         failedTypeParameterIndex?: number;  // Index of type parameter for which inference failed
         // It is optional because in contextual signature instantiation, nothing fails
-        useAnyForNoInferences?: boolean;    // Use any instead of {} for no inferences
     }
 
     /* @internal */
@@ -4003,34 +4021,34 @@ namespace ts {
     }
 
     export const enum EmitFlags {
-        SingleLine = 1 << 0,                     // The contents of this node should be emitted on a single line.
-        AdviseOnEmitNode = 1 << 1,               // The printer should invoke the onEmitNode callback when printing this node.
-        NoSubstitution = 1 << 2,                 // Disables further substitution of an expression.
-        CapturesThis = 1 << 3,                   // The function captures a lexical `this`
-        NoLeadingSourceMap = 1 << 4,             // Do not emit a leading source map location for this node.
-        NoTrailingSourceMap = 1 << 5,            // Do not emit a trailing source map location for this node.
+        SingleLine = 1 << 0,                    // The contents of this node should be emitted on a single line.
+        AdviseOnEmitNode = 1 << 1,              // The printer should invoke the onEmitNode callback when printing this node.
+        NoSubstitution = 1 << 2,                // Disables further substitution of an expression.
+        CapturesThis = 1 << 3,                  // The function captures a lexical `this`
+        NoLeadingSourceMap = 1 << 4,            // Do not emit a leading source map location for this node.
+        NoTrailingSourceMap = 1 << 5,           // Do not emit a trailing source map location for this node.
         NoSourceMap = NoLeadingSourceMap | NoTrailingSourceMap, // Do not emit a source map location for this node.
-        NoNestedSourceMaps = 1 << 6,             // Do not emit source map locations for children of this node.
-        NoTokenLeadingSourceMaps = 1 << 7,       // Do not emit leading source map location for token nodes.
-        NoTokenTrailingSourceMaps = 1 << 8,      // Do not emit trailing source map location for token nodes.
+        NoNestedSourceMaps = 1 << 6,            // Do not emit source map locations for children of this node.
+        NoTokenLeadingSourceMaps = 1 << 7,      // Do not emit leading source map location for token nodes.
+        NoTokenTrailingSourceMaps = 1 << 8,     // Do not emit trailing source map location for token nodes.
         NoTokenSourceMaps = NoTokenLeadingSourceMaps | NoTokenTrailingSourceMaps, // Do not emit source map locations for tokens of this node.
-        NoLeadingComments = 1 << 9,              // Do not emit leading comments for this node.
-        NoTrailingComments = 1 << 10,            // Do not emit trailing comments for this node.
+        NoLeadingComments = 1 << 9,             // Do not emit leading comments for this node.
+        NoTrailingComments = 1 << 10,           // Do not emit trailing comments for this node.
         NoComments = NoLeadingComments | NoTrailingComments, // Do not emit comments for this node.
         NoNestedComments = 1 << 11,
         HelperName = 1 << 12,
-        ExportName = 1 << 13,                    // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
-        LocalName = 1 << 14,                     // Ensure an export prefix is not added for an identifier that points to an exported declaration.
-        InternalName = 1 << 15,                  // The name is internal to an ES5 class body function.
-        Indented = 1 << 16,                      // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
-        NoIndentation = 1 << 17,                 // Do not indent the node.
+        ExportName = 1 << 13,                   // Ensure an export prefix is added for an identifier that points to an exported declaration with a local name (see SymbolFlags.ExportHasLocal).
+        LocalName = 1 << 14,                    // Ensure an export prefix is not added for an identifier that points to an exported declaration.
+        InternalName = 1 << 15,                 // The name is internal to an ES5 class body function.
+        Indented = 1 << 16,                     // Adds an explicit extra indentation level for class and function bodies when printing (used to match old emitter).
+        NoIndentation = 1 << 17,                // Do not indent the node.
         AsyncFunctionBody = 1 << 18,
-        ReuseTempVariableScope = 1 << 19,        // Reuse the existing temp variable scope during emit.
-        CustomPrologue = 1 << 20,                // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
-        NoHoisting = 1 << 21,                    // Do not hoist this declaration in --module system
-        HasEndOfDeclarationMarker = 1 << 22,     // Declaration has an associated NotEmittedStatement to mark the end of the declaration
-        Iterator = 1 << 23,                      // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
-        NoAsciiEscaping = 1 << 24,               // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
+        ReuseTempVariableScope = 1 << 19,       // Reuse the existing temp variable scope during emit.
+        CustomPrologue = 1 << 20,               // Treat the statement as if it were a prologue directive (NOTE: Prologue directives are *not* transformed).
+        NoHoisting = 1 << 21,                   // Do not hoist this declaration in --module system
+        HasEndOfDeclarationMarker = 1 << 22,    // Declaration has an associated NotEmittedStatement to mark the end of the declaration
+        Iterator = 1 << 23,                     // The expression to a `yield*` should be treated as an Iterator when down-leveling, not an Iterable.
+        NoAsciiEscaping = 1 << 24,              // When synthesizing nodes that lack an original node or textSourceNode, we want to write the text on the node with ASCII escaping substitutions.
     }
 
     export interface EmitHelper {

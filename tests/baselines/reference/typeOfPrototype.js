@@ -11,7 +11,7 @@ var Foo = (function () {
     function Foo() {
         this.bar = 3;
     }
+    Foo.bar = '';
     return Foo;
 }());
-Foo.bar = '';
 Foo.prototype.bar = undefined; // Should be OK

@@ -429,6 +429,7 @@ namespace ts {
               case CharacterCodes.slash:
                   // starts of normal trivia
               case CharacterCodes.lessThan:
+              case CharacterCodes.bar:
               case CharacterCodes.equals:
               case CharacterCodes.greaterThan:
                   // Starts of conflict marker trivia
@@ -496,6 +497,7 @@ namespace ts {
                       break;
 
                   case CharacterCodes.lessThan:
+                  case CharacterCodes.bar:
                   case CharacterCodes.equals:
                   case CharacterCodes.greaterThan:
                       if (isConflictMarkerTrivia(text, pos)) {
@@ -562,12 +564,12 @@ namespace ts {
             }
         }
         else {
-            Debug.assert(ch === CharacterCodes.equals);
-            // Consume everything from the start of the mid-conflict marker to the start of the next
-            // end-conflict marker.
+            Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+            // Consume everything from the start of a ||||||| or ======= marker to the start
+            // of the next ======= or >>>>>>> marker.
             while (pos < len) {
-                const ch = text.charCodeAt(pos);
-                if (ch === CharacterCodes.greaterThan && isConflictMarkerTrivia(text, pos)) {
+                const currentChar = text.charCodeAt(pos);
+                if ((currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch && isConflictMarkerTrivia(text, pos)) {
                     break;
                 }
 
@@ -1562,6 +1564,16 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }

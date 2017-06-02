@@ -23,16 +23,16 @@ class A<P extends Partial<Foo>> {
 >doSomething : Symbol(A.doSomething, Decl(typeVariableTypeGuards.ts, 7, 22))
 
         this.props.foo && this.props.foo()
->this.props.foo : Symbol(foo)
+>this.props.foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
 >this.props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 6, 33))
 >this : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
 >props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 6, 33))
->foo : Symbol(foo)
->this.props.foo : Symbol(foo)
+>foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
+>this.props.foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
 >this.props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 6, 33))
 >this : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
 >props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 6, 33))
->foo : Symbol(foo)
+>foo : Symbol(foo, Decl(typeVariableTypeGuards.ts, 2, 15))
     }
 }
 

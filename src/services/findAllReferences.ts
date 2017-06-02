@@ -386,7 +386,7 @@ namespace ts.FindAllReferences.Core {
         const searchMeaning = getIntersectingMeaningFromDeclarations(getMeaningFromLocation(node), symbol.declarations);
 
         const result: SymbolAndEntries[] = [];
-        const state = createState(sourceFiles, node, checker, cancellationToken, searchMeaning, options, result);
+        const state = new State(sourceFiles, /*isForConstructor*/ node.kind === SyntaxKind.ConstructorKeyword, checker, cancellationToken, searchMeaning, options, result);
         const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: populateSearchSymbolSet(symbol, node, checker, options.implementations) });
 
         // Try to get the smallest valid scope that we can limit our search to;
@@ -446,35 +446,9 @@ namespace ts.FindAllReferences.Core {
      * Holds all state needed for the finding references.
      * Unlike `Search`, there is only one `State`.
      */
-    interface State extends Options {
-        /** True if we're searching for constructor references. */
-        readonly isForConstructor: boolean;
-
-        readonly sourceFiles: SourceFile[];
-        readonly checker: TypeChecker;
-        readonly cancellationToken: CancellationToken;
-        readonly searchMeaning: SemanticMeaning;
-
+    class State {
         /** Cache for `explicitlyinheritsFrom`. */
-        readonly inheritsFromCache: Map<boolean>;
-
-        /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
-        getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult;
-
-        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
-        createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions?: { text?: string, allSearchSymbols?: Symbol[] }): Search;
-
-        /**
-         * Callback to add references for a particular searched symbol.
-         * This initializes a reference group, so only call this if you will add at least one reference.
-         */
-        referenceAdder(searchSymbol: Symbol, searchLocation: Node): (node: Node) => void;
-
-        /** Add a reference with no associated definition. */
-        addStringOrCommentReference(fileName: string, textSpan: TextSpan): void;
-
-        /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
-        markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean;
+        readonly inheritsFromCache = createMap<boolean>();
 
         /**
          * Type nodes can contain multiple references to the same type. For example:
@@ -483,7 +457,7 @@ namespace ts.FindAllReferences.Core {
          * duplicate entries would be returned here as each of the type references is part of
          * the same implementation. For that reason, check before we add a new entry.
          */
-        markSeenContainingTypeReference(containingTypeReference: Node): boolean;
+        readonly markSeenContainingTypeReference = nodeSeenTracker();
 
         /**
          * It's possible that we will encounter the right side of `export { foo as bar } from "x";` more than once.
@@ -496,33 +470,31 @@ namespace ts.FindAllReferences.Core {
          * But another reference to it may appear in the same source file.
          * See `tests/cases/fourslash/transitiveExportImports3.ts`.
          */
-        markSeenReExportRHS(rhs: Identifier): boolean;
-    }
+        readonly markSeenReExportRHS = nodeSeenTracker();
 
-    function createState(sourceFiles: SourceFile[], originalLocation: Node, checker: TypeChecker, cancellationToken: CancellationToken, searchMeaning: SemanticMeaning, options: Options, result: Push<SymbolAndEntries>): State {
-        const symbolIdToReferences: Entry[][] = [];
-        const inheritsFromCache = createMap<boolean>();
-        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
-        const sourceFileToSeenSymbols: Array<Array<true>> = [];
-        const isForConstructor = originalLocation.kind === SyntaxKind.ConstructorKeyword;
-        let importTracker: ImportTracker | undefined;
+        constructor(
+            readonly sourceFiles: SourceFile[],
+            /** True if we're searching for constructor references. */
+            readonly isForConstructor: boolean,
+            readonly checker: TypeChecker,
+            readonly cancellationToken: CancellationToken,
+            readonly searchMeaning: SemanticMeaning,
+            readonly options: Options,
+            private readonly result: Push<SymbolAndEntries>) {}
 
-        return {
-            ...options,
-            sourceFiles, isForConstructor, checker, cancellationToken, searchMeaning, inheritsFromCache, getImportSearches, createSearch, referenceAdder, addStringOrCommentReference,
-            markSearchedSymbol, markSeenContainingTypeReference: nodeSeenTracker(), markSeenReExportRHS: nodeSeenTracker(),
-        };
-
-        function getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
-            if (!importTracker) importTracker = createImportTracker(sourceFiles, checker, cancellationToken);
-            return importTracker(exportSymbol, exportInfo, options.isForRename);
+        private importTracker: ImportTracker | undefined;
+        /** Gets every place to look for references of an exported symbols. See `ImportsResult` in `importTracker.ts` for more documentation. */
+        getImportSearches(exportSymbol: Symbol, exportInfo: ExportInfo): ImportsResult {
+            if (!this.importTracker) this.importTracker = createImportTracker(this.sourceFiles, this.checker, this.cancellationToken);
+            return this.importTracker(exportSymbol, exportInfo, this.options.isForRename);
         }
 
-        function createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
+        /** @param allSearchSymbols set of additinal symbols for use by `includes`. */
+        createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
-            const { text = stripQuotes(getDeclaredName(checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
+            const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
-            const parents = options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, checker);
+            const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return { location, symbol, comingFrom, text, escapedText, parents, includes };
 
             function includes(referenceSymbol: Symbol): boolean {
@@ -530,27 +502,36 @@ namespace ts.FindAllReferences.Core {
             }
         }
 
-        function referenceAdder(referenceSymbol: Symbol, searchLocation: Node): (node: Node) => void {
-            const symbolId = getSymbolId(referenceSymbol);
-            let references = symbolIdToReferences[symbolId];
+        private readonly symbolIdToReferences: Entry[][] = [];
+        /**
+         * Callback to add references for a particular searched symbol.
+         * This initializes a reference group, so only call this if you will add at least one reference.
+         */
+        referenceAdder(searchSymbol: Symbol, searchLocation: Node): (node: Node) => void {
+            const symbolId = getSymbolId(searchSymbol);
+            let references = this.symbolIdToReferences[symbolId];
             if (!references) {
-                references = symbolIdToReferences[symbolId] = [];
-                result.push({ definition: { type: "symbol", symbol: referenceSymbol, node: searchLocation }, references });
+                references = this.symbolIdToReferences[symbolId] = [];
+                this.result.push({ definition: { type: "symbol", symbol: searchSymbol, node: searchLocation }, references });
             }
             return node => references.push(nodeEntry(node));
         }
 
-        function addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
-            result.push({
+        /** Add a reference with no associated definition. */
+        addStringOrCommentReference(fileName: string, textSpan: TextSpan): void {
+            this.result.push({
                 definition: undefined,
                 references: [{ type: "span", fileName, textSpan }]
             });
         }
 
-        function markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
+        // Source file ID → symbol ID → Whether the symbol has been searched for in the source file.
+        private readonly sourceFileToSeenSymbols: Array<Array<true>> = [];
+        /** Returns `true` the first time we search for a symbol in a file and `false` afterwards. */
+        markSearchedSymbol(sourceFile: SourceFile, symbol: Symbol): boolean {
             const sourceId = getNodeId(sourceFile);
             const symbolId = getSymbolId(symbol);
-            const seenSymbols = sourceFileToSeenSymbols[sourceId] || (sourceFileToSeenSymbols[sourceId] = []);
+            const seenSymbols = this.sourceFileToSeenSymbols[sourceId] || (this.sourceFileToSeenSymbols[sourceId] = []);
             return !seenSymbols[symbolId] && (seenSymbols[symbolId] = true);
         }
     }
@@ -580,7 +561,7 @@ namespace ts.FindAllReferences.Core {
                     break;
                 case ExportKind.Default:
                     // Search for a property access to '.default'. This can't be renamed.
-                    indirectSearch = state.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
+                    indirectSearch = state.options.isForRename ? undefined : state.createSearch(exportLocation, exportSymbol, ImportExport.Export, { text: "default" });
                     break;
                 case ExportKind.ExportEquals:
                     break;
@@ -650,10 +631,12 @@ namespace ts.FindAllReferences.Core {
 
         // If this is private property or method, the scope is the containing class
         if (flags & (SymbolFlags.Property | SymbolFlags.Method)) {
-            const privateDeclaration = find(declarations, d => !!(getModifierFlags(d) & ModifierFlags.Private));
+            const privateDeclaration = find(declarations, d => hasModifier(d, ModifierFlags.Private));
             if (privateDeclaration) {
                 return getAncestor(privateDeclaration, SyntaxKind.ClassDeclaration);
             }
+            // Else this is a public property and could be accessed from anywhere.
+            return undefined;
         }
 
         // If symbol is of object binding pattern element without property name we would want to
@@ -666,11 +649,6 @@ namespace ts.FindAllReferences.Core {
         // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
         // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
         if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
-            return undefined;
-        }
-
-        // If this is a synthetic property, it's a property and must be searched for globally.
-        if ((flags & SymbolFlags.Transient && (<TransientSymbol>symbol).checkFlags & CheckFlags.Synthetic)) {
             return undefined;
         }
 
@@ -806,7 +784,8 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ state.findInComments || container.jsDoc !== undefined)) {
+        const fullStart = state.options.findInComments || container.jsDoc !== undefined || forEach(search.symbol.declarations, d => d.kind === ts.SyntaxKind.JSDocTypedefTag);
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, fullStart)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }
@@ -818,7 +797,7 @@ namespace ts.FindAllReferences.Core {
             // This wasn't the start of a token.  Check to see if it might be a
             // match in a comment or string if that's what the caller is asking
             // for.
-            if (!state.implementations && (state.findInStrings && isInString(sourceFile, position) || state.findInComments && isInNonReferenceComment(sourceFile, position))) {
+            if (!state.options.implementations && (state.options.findInStrings && isInString(sourceFile, position) || state.options.findInComments && isInNonReferenceComment(sourceFile, position))) {
                 // In the case where we're looking inside comments/strings, we don't have
                 // an actual definition.  So just use 'undefined' here.  Features like
                 // 'Rename' won't care (as they ignore the definitions), and features like
@@ -884,7 +863,7 @@ namespace ts.FindAllReferences.Core {
                 addRef();
             }
 
-            if (!state.isForRename && state.markSeenReExportRHS(name)) {
+            if (!state.options.isForRename && state.markSeenReExportRHS(name)) {
                 addReference(name, referenceSymbol, name, state);
             }
         }
@@ -895,7 +874,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
-        if (!(referenceLocation === propertyName && state.isForRename)) {
+        if (!(referenceLocation === propertyName && state.options.isForRename)) {
             const exportKind = (referenceLocation as Identifier).originalKeywordKind === ts.SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportInfo = getExportInfo(referenceSymbol, exportKind, state.checker);
             Debug.assert(!!exportInfo);
@@ -937,7 +916,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!state.isForRename || importOrExport.isNamedImport) {
+            if (!state.options.isForRename || importOrExport.isNamedImport) {
                 searchForImportedSymbol(symbol, state);
             }
         }
@@ -963,7 +942,7 @@ namespace ts.FindAllReferences.Core {
 
     function addReference(referenceLocation: Node, relatedSymbol: Symbol, searchLocation: Node, state: State): void {
         const addRef = state.referenceAdder(relatedSymbol, searchLocation);
-        if (state.implementations) {
+        if (state.options.implementations) {
             addImplementationReferences(referenceLocation, addRef, state);
         }
         else {
