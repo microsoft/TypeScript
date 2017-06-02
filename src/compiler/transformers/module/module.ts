@@ -554,7 +554,7 @@ namespace ts {
             //     new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
             const resolve = createUniqueName("resolve");
-            const reject = createUniqueName("reject")
+            const reject = createUniqueName("reject");
             return createNew(
                 createIdentifier("Promise"),
                 /*typeArguments*/ undefined,
