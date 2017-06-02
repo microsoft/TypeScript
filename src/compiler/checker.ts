@@ -24641,23 +24641,23 @@ namespace ts {
         }
 
         function checkGrammarImportCallExpression(node: ImportCall): boolean {
-            const arguments = node.arguments;
-            if (arguments.length !== 1) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            if (modulekind === ModuleKind.ES2015) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
 
             if (node.typeArguments) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_have_type_arguments);
             }
 
+            const arguments = node.arguments;
+            if (arguments.length !== 1) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            }
+
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
             if (isSpreadExpression(arguments[0])) {
                 return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
-            }
-
-            if (modulekind === ModuleKind.ES2015) {
-                grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
             }
         }
     }
