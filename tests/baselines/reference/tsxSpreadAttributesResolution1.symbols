@@ -4,16 +4,16 @@ import React = require('react');
 
 class Poisoned extends React.Component<{}, {}> {
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 0, 32))
->React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->Component : Symbol(React.Component, Decl(react.d.ts, 158, 55))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
 
     render() {
 >render : Symbol(Poisoned.render, Decl(file.tsx, 2, 48))
 
         return <div>Hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
     }
 }
 

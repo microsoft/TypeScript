@@ -1879,6 +1879,10 @@
         "category": "Error",
         "code": 2558
     },
+    "Type '{0}' has no properties in common with type '{1}'.": {
+        "category": "Error",
+        "code": 2559
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

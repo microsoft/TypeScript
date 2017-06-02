@@ -13,8 +13,8 @@ interface Prop {
 
     children: string | JSX.Element
 >children : Symbol(Prop.children, Decl(file.tsx, 4, 14))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 }
 
 function Comp(p: Prop) {
@@ -23,11 +23,11 @@ function Comp(p: Prop) {
 >Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
 
     return <div>{p.b}</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 >p.b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
 >p : Symbol(p, Decl(file.tsx, 8, 14))
 >b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 }
 
 // OK
@@ -59,8 +59,8 @@ let k2 =
 >b : Symbol(b, Decl(file.tsx, 19, 16))
 
         <div>hi hi hi!</div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     </Comp>;
 >Comp : Symbol(Comp, Decl(file.tsx, 6, 1))

@@ -2285,7 +2285,7 @@ namespace ts {
             Debug.assert(typeNode !== undefined, "should always get typenode?");
             const options = { removeComments: true };
             const writer = createTextWriter("");
-            const printer = createPrinter(options, writer);
+            const printer = createPrinter(options);
             const sourceFile = enclosingDeclaration && getSourceFileOfNode(enclosingDeclaration);
             printer.writeNode(EmitHint.Unspecified, typeNode, /*sourceFile*/ sourceFile, writer);
             const result = writer.getText();
@@ -8702,6 +8702,7 @@ namespace ts {
             let expandingFlags: number;
             let depth = 0;
             let overflow = false;
+            let isIntersectionConstituent = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -8784,7 +8785,6 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors?: boolean, headMessage?: DiagnosticMessage): Ternary {
-                let result: Ternary;
                 if (source.flags & TypeFlags.StringOrNumberLiteral && source.flags & TypeFlags.FreshLiteral) {
                     source = (<LiteralType>source).regularType;
                 }
@@ -8816,32 +8816,39 @@ namespace ts {
                     }
                 }
 
+                if (!(source.flags & TypeFlags.UnionOrIntersection) &&
+                    !(target.flags & TypeFlags.Union) &&
+                    !isIntersectionConstituent &&
+                    source !== globalObjectType &&
+                    getPropertiesOfType(source).length > 0 &&
+                    isWeakType(target) &&
+                    !hasCommonProperties(source, target)) {
+                    if (reportErrors) {
+                        reportError(Diagnostics.Type_0_has_no_properties_in_common_with_type_1, typeToString(source), typeToString(target));
+                    }
+                    return Ternary.False;
+                }
+
+                let result = Ternary.False;
                 const saveErrorInfo = errorInfo;
+                const saveIsIntersectionConstituent = isIntersectionConstituent;
+                isIntersectionConstituent = false;
 
                 // Note that these checks are specifically ordered to produce correct results. In particular,
                 // we need to deconstruct unions before intersections (because unions are always at the top),
                 // and we need to handle "each" relations before "some" relations for the same kind of type.
                 if (source.flags & TypeFlags.Union) {
-                    if (relation === comparableRelation) {
-                        result = someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
-                    }
-                    else {
-                        result = eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
-                    }
-                    if (result) {
-                        return result;
-                    }
+                    result = relation === comparableRelation ?
+                        someTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive)) :
+                        eachTypeRelatedToType(source as UnionType, target, reportErrors && !(source.flags & TypeFlags.Primitive));
                 }
                 else {
                     if (target.flags & TypeFlags.Union) {
-                        if (result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive))) {
-                            return result;
-                        }
+                        result = typeRelatedToSomeType(source, <UnionType>target, reportErrors && !(source.flags & TypeFlags.Primitive) && !(target.flags & TypeFlags.Primitive));
                     }
                     else if (target.flags & TypeFlags.Intersection) {
-                        if (result = typeRelatedToEachType(source, target as IntersectionType, reportErrors)) {
-                            return result;
-                        }
+                        isIntersectionConstituent = true;
+                        result = typeRelatedToEachType(source, target as IntersectionType, reportErrors);
                     }
                     else if (source.flags & TypeFlags.Intersection) {
                         // Check to see if any constituents of the intersection are immediately related to the target.
@@ -8857,20 +8864,18 @@ namespace ts {
                         //
                         //    - For a primitive type or type parameter (such as 'number = A & B') there is no point in
                         //          breaking the intersection apart.
-                        if (result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false)) {
-                            return result;
-                        }
+                        result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false);
                     }
-
-                    if (source.flags & TypeFlags.StructuredOrTypeVariable || target.flags & TypeFlags.StructuredOrTypeVariable) {
+                    if (!result && (source.flags & TypeFlags.StructuredOrTypeVariable || target.flags & TypeFlags.StructuredOrTypeVariable)) {
                         if (result = recursiveTypeRelatedTo(source, target, reportErrors)) {
                             errorInfo = saveErrorInfo;
-                            return result;
                         }
                     }
                 }
 
-                if (reportErrors) {
+                isIntersectionConstituent = saveIsIntersectionConstituent;
+
+                if (!result && reportErrors) {
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
@@ -8879,7 +8884,7 @@ namespace ts {
                     }
                     reportRelationError(headMessage, source, target);
                 }
-                return Ternary.False;
+                return result;
             }
 
             function isIdenticalTo(source: Type, target: Type): Ternary {
@@ -8978,7 +8983,7 @@ namespace ts {
                 }
             }
 
-            function typeRelatedToEachType(source: Type, target: UnionOrIntersectionType, reportErrors: boolean): Ternary {
+            function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
                 let result = Ternary.True;
                 const targetTypes = target.types;
                 for (const targetType of targetTypes) {
@@ -9280,7 +9285,6 @@ namespace ts {
                 const requireOptionalProperties = relation === subtypeRelation && !(getObjectFlags(source) & ObjectFlags.ObjectLiteral);
                 for (const targetProp of properties) {
                     const sourceProp = getPropertyOfType(source, targetProp.name);
-
                     if (sourceProp !== targetProp) {
                         if (!sourceProp) {
                             if (!(targetProp.flags & SymbolFlags.Optional) || requireOptionalProperties) {
@@ -9357,6 +9361,34 @@ namespace ts {
                     }
                 }
                 return result;
+            }
+
+            /**
+             * A type is 'weak' if it is an object type with at least one optional property
+             * and no required properties, call/construct signatures or index signatures
+             */
+            function isWeakType(type: Type): boolean {
+                if (type.flags & TypeFlags.Object) {
+                    const resolved = resolveStructuredTypeMembers(<ObjectType>type);
+                    return resolved.callSignatures.length === 0 && resolved.constructSignatures.length === 0 &&
+                        !resolved.stringIndexInfo && !resolved.numberIndexInfo &&
+                        resolved.properties.length > 0 &&
+                        every(resolved.properties, p => !!(p.flags & SymbolFlags.Optional));
+                }
+                if (type.flags & TypeFlags.Intersection) {
+                    return every((<IntersectionType>type).types, isWeakType);
+                }
+                return false;
+            }
+
+            function hasCommonProperties(source: Type, target: Type) {
+                const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
+                for (const prop of getPropertiesOfType(source)) {
+                    if (isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
+                        return true;
+                    }
+                }
+                return false;
             }
 
             function propertiesIdenticalTo(source: Type, target: Type): Ternary {
@@ -14147,8 +14179,10 @@ namespace ts {
         function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
-                if (resolved.stringIndexInfo || resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    getPropertyOfType(targetType, name) || isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
+                if (resolved.stringIndexInfo ||
+                    resolved.numberIndexInfo && isNumericLiteralName(name) ||
+                    getPropertyOfType(targetType, name) ||
+                    isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
                 }
@@ -22704,12 +22738,12 @@ namespace ts {
                 return symbols;
             }
             else if (symbol.flags & SymbolFlags.Transient) {
-                if ((symbol as SymbolLinks).leftSpread) {
-                    const links = symbol as SymbolLinks;
-                    return [...getRootSymbols(links.leftSpread), ...getRootSymbols(links.rightSpread)];
+                const transient = symbol as TransientSymbol;
+                if (transient.leftSpread) {
+                    return [...getRootSymbols(transient.leftSpread), ...getRootSymbols(transient.rightSpread)];
                 }
-                if ((symbol as SymbolLinks).syntheticOrigin) {
-                    return getRootSymbols((symbol as SymbolLinks).syntheticOrigin);
+                if (transient.syntheticOrigin) {
+                    return getRootSymbols(transient.syntheticOrigin);
                 }
 
                 let target: Symbol;
