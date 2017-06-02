@@ -1879,7 +1879,7 @@
         "category": "Error",
         "code": 2558
     },
-    "Weak type '{0}' has no properties in common with '{1}'.": {
+    "Type '{0}' has no properties in common with type '{1}'.": {
         "category": "Error",
         "code": 2559
     },
