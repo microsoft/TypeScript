@@ -1,7 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(16,17): error TS2322: Type '{ a: 10; b: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
-  Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }' has no properties in common with '{ a: 10; b: "hi"; }'.
-tests/cases/conformance/jsx/file.tsx(17,18): error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
-  Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }' has no properties in common with '{ a: "hi"; }'.
+tests/cases/conformance/jsx/file.tsx(16,17): error TS2559: Type '{ a: 10; b: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(17,18): error TS2559: Type '{ a: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -22,9 +20,7 @@ tests/cases/conformance/jsx/file.tsx(17,18): error TS2322: Type '{ a: "hi"; }' i
     // Error
     let x = <MyComp a={10} b="hi" />
                     ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 10; b: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
-!!! error TS2322:   Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }' has no properties in common with '{ a: 10; b: "hi"; }'.
+!!! error TS2559: Type '{ a: 10; b: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
     let x2 = <MyComp a="hi"/>
                      ~~~~~~
-!!! error TS2322: Type '{ a: "hi"; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.
-!!! error TS2322:   Weak type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }' has no properties in common with '{ a: "hi"; }'.
+!!! error TS2559: Type '{ a: "hi"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<{}>> & { children?: ReactNode; }'.

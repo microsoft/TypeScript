@@ -4,12 +4,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Property '1' is missing in type 'B2'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(32,11): error TS2420: Class 'B3' incorrectly implements interface 'A3'.
   Property ''1'' is missing in type 'B3'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(43,11): error TS2420: Class 'B' incorrectly implements interface 'A'.
-  Weak type 'A' has no properties in common with 'B'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(51,11): error TS2420: Class 'B2' incorrectly implements interface 'A2'.
-  Weak type 'A2' has no properties in common with 'B2'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(59,11): error TS2420: Class 'B3' incorrectly implements interface 'A3'.
-  Weak type 'A3' has no properties in common with 'B3'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(43,11): error TS2559: Type 'B' has no properties in common with type 'A'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(51,11): error TS2559: Type 'B2' has no properties in common with type 'A2'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts(59,11): error TS2559: Type 'B3' has no properties in common with type 'A3'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts (6 errors) ====
@@ -66,8 +63,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B implements A {
               ~
-!!! error TS2420: Class 'B' incorrectly implements interface 'A'.
-!!! error TS2420:   Weak type 'A' has no properties in common with 'B'.
+!!! error TS2559: Type 'B' has no properties in common with type 'A'.
             fooo: Derived; // weak type error
         }
     
@@ -77,8 +73,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B2 implements A2 {
               ~~
-!!! error TS2420: Class 'B2' incorrectly implements interface 'A2'.
-!!! error TS2420:   Weak type 'A2' has no properties in common with 'B2'.
+!!! error TS2559: Type 'B2' has no properties in common with type 'A2'.
             2: Derived; // weak type error
         }
     
@@ -88,8 +83,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3 implements A3 {
               ~~
-!!! error TS2420: Class 'B3' incorrectly implements interface 'A3'.
-!!! error TS2420:   Weak type 'A3' has no properties in common with 'B3'.
+!!! error TS2559: Type 'B3' has no properties in common with type 'A3'.
             '1.0': Derived; // weak type error
         }
     }
