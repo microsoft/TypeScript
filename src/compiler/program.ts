@@ -984,16 +984,12 @@ namespace ts {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
-
-            const allDiagnostics: Diagnostic[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
+            return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
                 if (cancellationToken) {
                     cancellationToken.throwIfCancellationRequested();
                 }
-                addRange(allDiagnostics, getDiagnostics(sourceFile, cancellationToken));
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+                return getDiagnostics(sourceFile, cancellationToken);
+            }));
         }
 
         function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1330,16 +1326,13 @@ namespace ts {
         }
 
         function getOptionsDiagnostics(): Diagnostic[] {
-            const allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
-            addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+            return sortAndDeduplicateDiagnostics(concatenate(
+                fileProcessingDiagnostics.getGlobalDiagnostics(),
+                programDiagnostics.getGlobalDiagnostics()));
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            const allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, getDiagnosticsProducingTypeChecker().getGlobalDiagnostics());
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+            return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean) {
