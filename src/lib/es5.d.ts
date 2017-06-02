@@ -972,6 +972,9 @@ interface ReadonlyArray<T> {
       * Returns a string representation of an array.
       */
     toString(): string;
+    /**
+      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      */
     toLocaleString(): string;
     /**
       * Combines two or more arrays.
@@ -1079,6 +1082,9 @@ interface Array<T> {
       * Returns a string representation of an array.
       */
     toString(): string;
+    /**
+      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      */
     toLocaleString(): string;
     /**
       * Appends new elements to an array, and returns the new length of the array.
