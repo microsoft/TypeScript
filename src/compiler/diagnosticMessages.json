@@ -2172,7 +2172,7 @@
         "category": "Error",
         "code": 2710
     },
-    "A dynamic import call must return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+    "A dynamic import call return a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
         "category": "Error",
         "code": 2711
     },

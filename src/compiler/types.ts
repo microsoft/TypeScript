@@ -456,7 +456,7 @@ namespace ts {
         // During editing, if dynamic import is remove, incremental parsing will *NOT* update this flag. This will then causes walking of the tree during module resolution.
         // However, the removal operation should not occur often and in the case of the removal, it is likely that users will add back the import anyway.
         // The advantage of this approach is its simplicity. For the case of batch compilation, we garuntee that users won't have to pay the price of walking the tree if dynamic import isn't used.
-        possiblyContainDynamicImport = 1 << 19,
+        PossiblyContainDynamicImport = 1 << 19,
 
         BlockScoped = Let | Const,
 

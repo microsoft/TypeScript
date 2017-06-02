@@ -1383,7 +1383,7 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if ((file.flags & NodeFlags.possiblyContainDynamicImport) || isJavaScriptFile) {
+                if ((file.flags & NodeFlags.PossiblyContainDynamicImport) || isJavaScriptFile) {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }

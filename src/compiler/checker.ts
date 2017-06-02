@@ -16332,11 +16332,11 @@ namespace ts {
             return emptyObjectType;
         }
 
-        function createPromiseReturnType(func: FunctionLikeDeclaration | CallExpression, promisedType: Type) {
+        function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCall, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
             if (promiseType === emptyObjectType) {
                 error(func, isImportCall(func) ?
-                    Diagnostics.A_dynamic_import_call_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
+                    Diagnostics.A_dynamic_import_call_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
                     Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
@@ -17705,7 +17705,7 @@ namespace ts {
                     if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
                         return checkImportCallExpression(<ImportCall>node);
                     }
-                    /* tslint:disable: no-switch-case-fall-through */
+                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:

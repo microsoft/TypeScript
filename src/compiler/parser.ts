@@ -3700,7 +3700,7 @@ namespace ts {
                 // For example:
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
-                sourceFile.flags |= NodeFlags.possiblyContainDynamicImport;
+                sourceFile.flags |= NodeFlags.PossiblyContainDynamicImport;
                 expression = parseTokenNode<PrimaryExpression>();
             }
             else {
