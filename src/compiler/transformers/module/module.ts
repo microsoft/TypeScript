@@ -553,8 +553,8 @@ namespace ts {
             //     ...
             //     new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
             // });
-            const resolve = createIdentifier("_a");
-            const reject = createIdentifier("_b");
+            const resolve = createUniqueName("resolve");
+            const reject = createUniqueName("reject")
             return createNew(
                 createIdentifier("Promise"),
                 /*typeArguments*/ undefined,
@@ -570,7 +570,7 @@ namespace ts {
                         createCall(
                             createIdentifier("require"),
                             /*typeArguments*/ undefined,
-                            [createArrayLiteral(node.arguments), resolve, reject]
+                            [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
                         ))])
             )]);
         }
@@ -578,16 +578,13 @@ namespace ts {
     function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
             // import("./blah")
             // emit as
-            // var __resolved = new Promise(function (resolve) { resolve(); });
-            //  ....
-            // __resolved.then(function () { return require(x); }) /*CommonJs Require*/
-
-            // Promise.resolve().then(() => require("./blah"));
+            // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
             // We have to wrap require in then callback so that require is done in asynchronously
             // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
-            context.requestEmitHelper(dynamicImportCreateResolvedHelper);
             return createCall(
-                createPropertyAccess(createIdentifier("__resolved"), "then"),
+                createPropertyAccess(
+                    createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
+                    "then"),
                 /*typeArguments*/ undefined,
                 [createFunctionExpression(
                     /*modifiers*/ undefined,
@@ -1609,14 +1606,6 @@ namespace ts {
         name: "typescript:dynamicimport-sync-require",
         scoped: true,
         text: `
-            var __syncRequire = typeof module === "object" && typeof module.exports === "object";
-            var __resolved = new Promise(function (resolve) { resolve(); });`
-    };
-
-    const dynamicImportCreateResolvedHelper: EmitHelper = {
-        name: "typescript:dynamicimport-create-resolved",
-        scoped: false,
-        priority: 1,
-        text: `var __resolved = new Promise(function (resolve) { resolve(); });`
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
     };
 }
