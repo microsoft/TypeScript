@@ -16,10 +16,10 @@ var nodes: TreeNode[];
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
->nodes.map : <U, Z = void>(callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: Z) => U[]
+>nodes.map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
 >nodes : TreeNode[]
->map : <U, Z = void>(callbackfn: (this: Z, value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: Z) => U[]
->n => n.name : (this: void, n: TreeNode) => string
+>map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
+>n => n.name : (n: TreeNode) => string
 >n : TreeNode
 >n.name : string
 >n : TreeNode

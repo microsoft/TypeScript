@@ -27,10 +27,10 @@ var nodes: TreeNodeMiddleman[];
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
->nodes.map : <U, Z = void>(callbackfn: (this: Z, value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: Z) => U[]
+>nodes.map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
 >nodes : TreeNodeMiddleman[]
->map : <U, Z = void>(callbackfn: (this: Z, value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: Z) => U[]
->n => n.name : (this: void, n: TreeNodeMiddleman) => string
+>map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
+>n => n.name : (n: TreeNodeMiddleman) => string
 >n : TreeNodeMiddleman
 >n.name : string
 >n : TreeNodeMiddleman

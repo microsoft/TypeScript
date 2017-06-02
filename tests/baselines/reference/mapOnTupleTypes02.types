@@ -9,10 +9,10 @@ export function increment(point: Point) {
 
   return point.map(d => d + 1);
 >point.map(d => d + 1) : number[]
->point.map : <U, Z = void>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg?: Z | undefined) => U[]
+>point.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >point : [number, number]
->map : <U, Z = void>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg?: Z | undefined) => U[]
->d => d + 1 : (this: void, d: number) => number
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>d => d + 1 : (d: number) => number
 >d : number
 >d + 1 : number
 >d : number

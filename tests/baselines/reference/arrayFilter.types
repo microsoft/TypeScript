@@ -22,10 +22,10 @@ var foo = [
 
 foo.filter(x => x.name); //should accepted all possible types not only boolean! 
 >foo.filter(x => x.name) : { name: string; }[]
->foo.filter : { <S extends { name: string; }, Z = void>(callbackfn: (this: Z, value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: Z): S[]; <Z = void>(callbackfn: (this: Z, value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: Z): { name: string; }[]; }
+>foo.filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any): { name: string; }[]; }
 >foo : { name: string; }[]
->filter : { <S extends { name: string; }, Z = void>(callbackfn: (this: Z, value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: Z): S[]; <Z = void>(callbackfn: (this: Z, value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: Z): { name: string; }[]; }
->x => x.name : (this: void, x: { name: string; }) => string
+>filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any): { name: string; }[]; }
+>x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string
 >x : { name: string; }

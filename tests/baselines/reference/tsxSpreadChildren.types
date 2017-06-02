@@ -63,10 +63,10 @@ function TodoList({ todos }: TodoListProps) {
 
         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
->todos.map : <U, Z = void>(callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: Z) => U[]
+>todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
 >todos : TodoProp[]
->map : <U, Z = void>(callbackfn: (this: Z, value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: Z) => U[]
->todo => <Todo key={todo.id} todo={todo.todo}/> : (this: void, todo: TodoProp) => JSX.Element
+>map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
+>todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
 >todo : TodoProp
 ><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
