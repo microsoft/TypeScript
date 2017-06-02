@@ -957,7 +957,7 @@ namespace ts.server {
         }
 
         getExternalFiles(): string[] {
-            return ts.flatMap(this.plugins, plugin => {
+            return flatMap(this.plugins, plugin => {
                 if (typeof plugin.getExternalFiles !== "function") return;
                 try {
                     return plugin.getExternalFiles(this);
