@@ -8815,7 +8815,8 @@ namespace ts {
                     }
                 }
 
-                if (!(source.flags & TypeFlags.UnionOrIntersection) &&
+                if (relation !== comparableRelation &&
+                    !(source.flags & TypeFlags.UnionOrIntersection) &&
                     !(target.flags & TypeFlags.Union) &&
                     !isIntersectionConstituent &&
                     source !== globalObjectType &&
