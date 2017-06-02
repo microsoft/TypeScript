@@ -321,9 +321,6 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             }
             else {
                 options += " -sourcemap";
-                if (!opts.noMapRoot) {
-                    options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
-                }
             }
         }
         else {
