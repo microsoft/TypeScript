@@ -14959,11 +14959,21 @@ namespace ts {
                     // We clone the contextual mapper to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
-                    const mapper = cloneTypeMapper(getContextualMapper(node));
-                    const instantiatedType = instantiateType(contextualType, mapper);
-                    const returnType = getReturnTypeOfSignature(signature);
-                    // Inferences made from return types have lower priority than all other inferences.
-                    inferTypes(context.inferences, instantiatedType, returnType, InferencePriority.ReturnType);
+                    const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node)));
+                    // If the contextual type is a generic pure function type, we instantiate the type with
+                    // its own type parameters and type arguments. This ensures that the type parameters are
+                    // not erased to type any during type inference such that they can be inferred as actual
+                    // types from the contextual type. For example:
+                    //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
+                    //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
+                    // Above, the type of the 'value' parameter is inferred to be 'A'.
+                    const contextualSignature = getSingleCallSignature(instantiatedType);
+                    const inferenceSourceType = contextualSignature && contextualSignature.typeParameters ?
+                        getOrCreateTypeFromSignature(getSignatureInstantiation(contextualSignature, contextualSignature.typeParameters)) :
+                        instantiatedType;
+                    const inferenceTargetType = getReturnTypeOfSignature(signature);
+                     // Inferences made from return types have lower priority than all other inferences.
+                    inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
                 }
             }
 
