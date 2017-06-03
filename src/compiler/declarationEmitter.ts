@@ -1888,7 +1888,7 @@ namespace ts {
     /* @internal */
     export function writeDeclarationFile(declarationFilePath: string, sourceFileOrBundle: SourceFile | Bundle, host: EmitHost, resolver: EmitResolver, emitterDiagnostics: DiagnosticCollection, emitOnlyDtsFiles: boolean) {
         const emitDeclarationResult = emitDeclarations(host, resolver, emitterDiagnostics, declarationFilePath, sourceFileOrBundle, emitOnlyDtsFiles);
-        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath);
+        const emitSkipped = emitDeclarationResult.reportedDeclarationError || host.isEmitBlocked(declarationFilePath) || host.getCompilerOptions().noEmit;
         if (!emitSkipped) {
             const sourceFiles = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle.sourceFiles : [sourceFileOrBundle];
             const declarationOutput = emitDeclarationResult.referencesOutput

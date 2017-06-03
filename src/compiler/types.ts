@@ -3489,7 +3489,7 @@ namespace ts {
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
-        /*@internal*/noEmitForJsFiles?: boolean;
+        noEmitJs?: boolean;
         noEmitHelpers?: boolean;
         noEmitOnError?: boolean;
         noErrorTruncation?: boolean;

@@ -228,6 +228,13 @@ namespace ts {
             description: Diagnostics.Do_not_emit_outputs,
         },
         {
+            name: "noEmitJs",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Do_not_emit_js_outputs,
+        },
+        {
             name: "importHelpers",
             type: "boolean",
             category: Diagnostics.Basic_Options,

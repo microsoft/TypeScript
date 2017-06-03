@@ -1200,11 +1200,11 @@ namespace Harness {
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string) {
             if (options.declaration && result.errors.length === 0) {
-                // declaration:true will only emit declaration files only when noEmit:true
-                if (options.noEmit && (result.files.length > 0 || result.declFilesCode.length == 0)) {
+                // declaration:true will only emit declaration files only when noEmitJs:true
+                if (options.noEmitJs && (result.files.length > 0 || result.declFilesCode.length == 0)) {
                     throw new Error("Only declaration files should be generated when noEmit:true and declarations:true");
                 }
-                if (!options.noEmit && result.declFilesCode.length !== result.files.length) {
+                if (!options.noEmitJs && result.declFilesCode.length !== result.files.length) {
                     throw new Error("There were no errors and declFiles generated did not match number of js files generated");
                 }
             }

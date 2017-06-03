@@ -918,13 +918,7 @@ namespace ts {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
-                // Allow only emitting of declarations
-                if (options.declaration) {
-                    emitOnlyDtsFiles = true;
-                }
-                else {
-                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-                }
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
             }
 
             // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,

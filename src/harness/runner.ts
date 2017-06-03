@@ -173,8 +173,8 @@ if (testConfigContent !== "") {
 }
 
 if (runners.length === 0) {
-    // compiler
-    runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
+    // // compiler
+    // runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
     runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
 
     // TODO: project tests don't work in the browser yet
@@ -182,12 +182,12 @@ if (runners.length === 0) {
         runners.push(new ProjectRunner());
     }
 
-    // language services
-    runners.push(new FourSlashRunner(FourSlashTestType.Native));
-    runners.push(new FourSlashRunner(FourSlashTestType.Shims));
-    runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
-    runners.push(new FourSlashRunner(FourSlashTestType.Server));
-    // runners.push(new GeneratedFourslashRunner());
+    // // language services
+    // runners.push(new FourSlashRunner(FourSlashTestType.Native));
+    // runners.push(new FourSlashRunner(FourSlashTestType.Shims));
+    // runners.push(new FourSlashRunner(FourSlashTestType.ShimsWithPreprocess));
+    // runners.push(new FourSlashRunner(FourSlashTestType.Server));
+    // // runners.push(new GeneratedFourslashRunner());
 }
 
 if (taskConfigsFolder) {
