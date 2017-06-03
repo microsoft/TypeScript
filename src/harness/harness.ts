@@ -1962,6 +1962,8 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, actual);
                 }
+
+                printDiff(expected, encoded_actual, referencePath(relativeFileName), actualFileName);
                 throw new Error(`The baseline file ${relativeFileName} has changed.`);
             }
         }
@@ -1987,6 +1989,67 @@ namespace Harness {
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
+    /**
+     * Prints a nice diff that is useful for debugging baseline failures
+     * It uses least common subsequence algorithm for a diff
+     * It also emits a `cp tests/baselines/local/<file> tests/baselines/reference/<file>`
+     * Which makes experience of updating basefiles case by case a lot nicer
+     */
+    export function printDiff(expectedText: string, actualText: string, expectedFileName: string, actualFileName: string) {
+        const removedMarker = ` <-|`;
+        const addedMarker = ` ->|`;
+        const sameMarker = `   |`;
+        const expectedLines = expectedText.split(/\r?\n/g);
+        const actualLines = actualText.split(/\r?\n/g);
+        const numExpectedLines = expectedLines.length;
+        const numActualLines = actualLines.length;
+        // Create a matrix of m*n of -1s
+        const lcsLenMatrix: number[][] = Array.apply(null, Array(numExpectedLines + 1))
+                                        .map((_: any) => Array.apply(null, Array(numActualLines + 1)).map((_: any) => -1));
+        let iE = 0, iA = 0;
+
+        // Use recursion rather than iteration because best case is O(n) rather than always being O(m*n)
+        (function lcsLen(iE: number, iA:number) {
+            if (iE >= numExpectedLines || iA >= numActualLines) return 0;
+
+            if (lcsLenMatrix[iE][iA] < 0) {
+                lcsLenMatrix[iE][iA] = (expectedLines[iE] == actualLines[iA]) ?
+                    lcsLen(iE + 1, iA + 1) + 1 : Math.max(lcsLen(iE + 1, iA), lcsLen(iE, iA + 1));
+            }
+
+            return lcsLenMatrix[iE][iA];
+        })(0, 0);
+
+        // Print files names and diff
+        console.log(`\ncp ${actualFileName} ${expectedFileName}`);
+        console.log(`${sameMarker} ${new Array(actualFileName.length).join('=')}`);
+
+        while (iE < numExpectedLines && iA < numActualLines) {
+            if (expectedLines[iE] == actualLines[iA]) {
+                console.log(`${sameMarker} ${expectedLines[iE]}`);
+                iE++; iA++;
+            }
+            else if (lcsLenMatrix[iE + 1][iA] >= lcsLenMatrix[iE][iA + 1]) {
+                console.log(`${removedMarker} ${expectedLines[iE]}`);
+                iE++;
+            }
+            else {
+                console.log(`${addedMarker} ${actualLines[iA]}`);
+                iA++;
+            }
+        }
+
+        // Print removed lines
+        for (; iE < numExpectedLines; iE++) {
+            console.log(`${removedMarker} ${expectedLines[iE]}`);
+        }
+
+        // print added lines
+        for (; iA < numActualLines; iA++) {
+            console.log(`${addedMarker} ${actualLines[iA]}`);
+        }
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;
