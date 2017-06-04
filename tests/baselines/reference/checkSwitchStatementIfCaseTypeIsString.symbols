@@ -12,9 +12,9 @@ class A {
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 
         x.forEach((v) => {
->x.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>x.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 3, 9))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
 >v : Symbol(v, Decl(checkSwitchStatementIfCaseTypeIsString.ts, 4, 19))
 
             switch(v) {

@@ -105,10 +105,10 @@
 >(...numbers) => numbers.every(n => n > 0) : (...numbers: number[]) => boolean
 >numbers : number[]
 >numbers.every(n => n > 0) : boolean
->numbers.every : { (callbackfn: (this: void, value: number, index: number, array: number[]) => boolean): boolean; (callbackfn: (this: void, value: number, index: number, array: number[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: number, index: number, array: number[]) => boolean, thisArg: Z): boolean; }
+>numbers.every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
 >numbers : number[]
->every : { (callbackfn: (this: void, value: number, index: number, array: number[]) => boolean): boolean; (callbackfn: (this: void, value: number, index: number, array: number[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: number, index: number, array: number[]) => boolean, thisArg: Z): boolean; }
->n => n > 0 : (this: void, n: number) => boolean
+>every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
+>n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
 >n : number
@@ -123,10 +123,10 @@
 >(...mixed) => mixed.every(n => !!n) : (...mixed: (string | number)[]) => boolean
 >mixed : (string | number)[]
 >mixed.every(n => !!n) : boolean
->mixed.every : { (callbackfn: (this: void, value: string | number, index: number, array: (string | number)[]) => boolean): boolean; (callbackfn: (this: void, value: string | number, index: number, array: (string | number)[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: string | number, index: number, array: (string | number)[]) => boolean, thisArg: Z): boolean; }
+>mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
 >mixed : (string | number)[]
->every : { (callbackfn: (this: void, value: string | number, index: number, array: (string | number)[]) => boolean): boolean; (callbackfn: (this: void, value: string | number, index: number, array: (string | number)[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: string | number, index: number, array: (string | number)[]) => boolean, thisArg: Z): boolean; }
->n => !!n : (this: void, n: string | number) => boolean
+>every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
+>n => !!n : (n: string | number) => boolean
 >n : string | number
 >!!n : boolean
 >!n : boolean
@@ -141,10 +141,10 @@
 >(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
 >noNumbers : any[]
 >noNumbers.some(n => n > 0) : boolean
->noNumbers.some : { (callbackfn: (this: void, value: any, index: number, array: any[]) => boolean): boolean; (callbackfn: (this: void, value: any, index: number, array: any[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: any, index: number, array: any[]) => boolean, thisArg: Z): boolean; }
+>noNumbers.some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
 >noNumbers : any[]
->some : { (callbackfn: (this: void, value: any, index: number, array: any[]) => boolean): boolean; (callbackfn: (this: void, value: any, index: number, array: any[]) => boolean, thisArg: undefined): boolean; <Z>(callbackfn: (this: Z, value: any, index: number, array: any[]) => boolean, thisArg: Z): boolean; }
->n => n > 0 : (this: void, n: any) => boolean
+>some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
+>n => n > 0 : (n: any) => boolean
 >n : any
 >n > 0 : boolean
 >n : any
@@ -160,10 +160,10 @@
 >first : number
 >[] : undefined[]
 >rest.map(n => n > 0) : boolean[]
->rest.map : { <U>(this: [number, number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U, U, U]; <U>(this: [number, number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [number, number, number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [number, number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U]; <U>(this: [number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U]; <U>(this: [number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U]; <U>(this: [number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: number, index: number, array: number[]) => U): U[]; <U>(callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): U[]; }
+>rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >rest : number[]
->map : { <U>(this: [number, number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U, U, U]; <U>(this: [number, number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [number, number, number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [number, number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U, U]; <U>(this: [number, number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [number, number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U, U]; <U>(this: [number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U): [U, U]; <U>(this: [number, number], callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [number, number], callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: void, value: number, index: number, array: number[]) => U): U[]; <U>(callbackfn: (this: void, value: number, index: number, array: number[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg: Z): U[]; }
->n => n > 0 : (this: void, n: number) => boolean
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
 >n : number
