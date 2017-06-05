@@ -72,6 +72,17 @@
 ////<span>)   </span>;/*closingParenInJsxElement2*/
 ////<Router        routes      =        { 3 }   /      >;/*jsxExpressionSpaces*/
 ////<Router routes={                (3)    } />;/*jsxExpressionSpaces2*/
+////<div>
+////    <div
+////        id="selfClosing"/*multilineSelfClosingElementAttribute*/
+////    />/*multilineSelfClosingElement*/
+////    <div
+////        id="opening"/*multilineOpeningElementAttribute*/
+////    >/*multilineOpeningElement*/
+////        <div/>/*multilineOpeningElementChild*/
+////    </div>/*multilineClosingElement*/
+////</div>
+////
 ////<Router routes={() => {}}/*jsxExpressionSpaces3*/
 /////>;/*jsxDanglingSelfClosingToken*/
 
@@ -147,6 +158,21 @@ goTo.marker("jsxExpressionSpaces");
 verify.currentLineContentIs("<Router routes={3} />;");
 goTo.marker("jsxExpressionSpaces2");
 verify.currentLineContentIs("<Router routes={(3)} />;");
+
+goTo.marker("multilineSelfClosingElementAttribute");
+verify.currentLineContentIs('        id="selfClosing"');
+goTo.marker("multilineSelfClosingElement");
+verify.currentLineContentIs('    />');
+
+goTo.marker("multilineOpeningElementAttribute");
+verify.currentLineContentIs('        id="opening"');
+goTo.marker("multilineOpeningElement");
+verify.currentLineContentIs('    >');
+goTo.marker("multilineOpeningElementChild");
+verify.currentLineContentIs('        <div />');
+goTo.marker("multilineClosingElement");
+verify.currentLineContentIs('    </div>');
+
 goTo.marker("jsxExpressionSpaces3");
 verify.currentLineContentIs("<Router routes={() => { }}");
 goTo.marker("jsxDanglingSelfClosingToken");

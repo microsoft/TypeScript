@@ -512,6 +512,9 @@ namespace ts.formatting {
                         ((<ImportClause>child).namedBindings && (<ImportClause>child).namedBindings.kind !== SyntaxKind.NamedImports);
                 case SyntaxKind.JsxElement:
                     return childKind !== SyntaxKind.JsxClosingElement;
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxOpeningElement:
+                    return childKind !== SyntaxKind.Unknown;
             }
             // No explicit rule for given nodes so the result will follow the default value argument
             return indentByDefault;
