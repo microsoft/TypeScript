@@ -185,7 +185,8 @@ namespace ts.FindAllReferences {
         if (entry.type === "node") {
             const { node } = entry;
             return { textSpan: getTextSpan(node), fileName: node.getSourceFile().fileName, ...implementationKindDisplayParts(node, checker) };
-        } else {
+        }
+        else {
             const { textSpan, fileName } = entry;
             return { textSpan, fileName, kind: ScriptElementKind.unknown, displayParts: [] };
         }

@@ -138,8 +138,23 @@ namespace ts.codefix {
 
         const currentTokenMeaning = getMeaningFromLocation(token);
         if (context.errorCode === Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead.code) {
-            const symbol = checker.getAliasedSymbol(checker.getSymbolAtLocation(token));
-            return getCodeActionForImport(symbol, /*isDefault*/ false, /*isNamespaceImport*/ true);
+            const umdSymbol = checker.getSymbolAtLocation(token);
+            let symbol: ts.Symbol;
+            let symbolName: string;
+            if (umdSymbol.flags & ts.SymbolFlags.Alias) {
+                symbol = checker.getAliasedSymbol(umdSymbol);
+                symbolName = name;
+            }
+            else if (isJsxOpeningLikeElement(token.parent) && token.parent.tagName === token) {
+                // The error wasn't for the symbolAtLocation, it was for the JSX tag itself, which needs access to e.g. `React`.
+                symbol = checker.getAliasedSymbol(checker.resolveNameAtLocation(token, checker.getJsxNamespace(), SymbolFlags.Value));
+                symbolName = symbol.name;
+            }
+            else {
+                Debug.fail("Either the symbol or the JSX namespace should be a UMD global if we got here");
+            }
+
+            return getCodeActionForImport(symbol, symbolName, /*isDefault*/ false, /*isNamespaceImport*/ true);
         }
 
         const candidateModules = checker.getAmbientModules();
@@ -159,7 +174,7 @@ namespace ts.codefix {
                 if (localSymbol && localSymbol.name === name && checkSymbolHasMeaning(localSymbol, currentTokenMeaning)) {
                     // check if this symbol is already used
                     const symbolId = getUniqueSymbolId(localSymbol);
-                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, /*isDefault*/ true));
+                    symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name, /*isDefault*/ true));
                 }
             }
 
@@ -167,7 +182,7 @@ namespace ts.codefix {
             const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExports(name, moduleSymbol);
             if (exportSymbolWithIdenticalName && checkSymbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
                 const symbolId = getUniqueSymbolId(exportSymbolWithIdenticalName);
-                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol));
+                symbolIdActionMap.addActions(symbolId, getCodeActionForImport(moduleSymbol, name));
             }
         }
 
@@ -218,7 +233,7 @@ namespace ts.codefix {
             return declarations ? some(symbol.declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning)) : false;
         }
 
-        function getCodeActionForImport(moduleSymbol: Symbol, isDefault?: boolean, isNamespaceImport?: boolean): ImportCodeAction[] {
+        function getCodeActionForImport(moduleSymbol: Symbol, symbolName: string, isDefault?: boolean, isNamespaceImport?: boolean): ImportCodeAction[] {
             const existingDeclarations = getImportDeclarations(moduleSymbol);
             if (existingDeclarations.length > 0) {
                 // With an existing import statement, there are more than one actions the user can do.
@@ -375,10 +390,10 @@ namespace ts.codefix {
                 const moduleSpecifierWithoutQuotes = stripQuotes(moduleSpecifier || getModuleSpecifierForNewImport());
                 const changeTracker = createChangeTracker();
                 const importClause = isDefault
-                    ? createImportClause(createIdentifier(name), /*namedBindings*/ undefined)
+                    ? createImportClause(createIdentifier(symbolName), /*namedBindings*/ undefined)
                     : isNamespaceImport
-                        ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(name)))
-                        : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(name))]));
+                        ? createImportClause(/*name*/ undefined, createNamespaceImport(createIdentifier(symbolName)))
+                        : createImportClause(/*name*/ undefined, createNamedImports([createImportSpecifier(/*propertyName*/ undefined, createIdentifier(symbolName))]));
                 const importDecl = createImportDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, importClause, createLiteral(moduleSpecifierWithoutQuotes));
                 if (!lastImportDeclaration) {
                     changeTracker.insertNodeAt(sourceFile, sourceFile.getStart(), importDecl, { suffix: `${context.newLineCharacter}${context.newLineCharacter}` });
@@ -392,7 +407,7 @@ namespace ts.codefix {
                 // are there are already a new line seperating code and import statements.
                 return createCodeAction(
                     Diagnostics.Import_0_from_1,
-                    [name, `"${moduleSpecifierWithoutQuotes}"`],
+                    [symbolName, `"${moduleSpecifierWithoutQuotes}"`],
                     changeTracker.getChanges(),
                     "NewImport",
                     moduleSpecifierWithoutQuotes
@@ -412,8 +427,9 @@ namespace ts.codefix {
                         removeFileExtension(getRelativePath(moduleFileName, sourceDirectory));
 
                     function tryGetModuleNameFromAmbientModule(): string {
-                        if (moduleSymbol.valueDeclaration.kind !== SyntaxKind.SourceFile) {
-                            return moduleSymbol.name;
+                        const decl = moduleSymbol.valueDeclaration;
+                        if (isModuleDeclaration(decl) && isStringLiteral(decl.name)) {
+                            return decl.name.text;
                         }
                     }
 

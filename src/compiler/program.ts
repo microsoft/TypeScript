@@ -1479,7 +1479,8 @@ namespace ts {
                     }
                 }
                 return sourceFile;
-            } else {
+            }
+            else {
                 const sourceFileNoExtension = options.allowNonTsExtensions && getSourceFile(fileName);
                 if (sourceFileNoExtension) return sourceFileNoExtension;
 
