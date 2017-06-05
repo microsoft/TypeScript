@@ -3,8 +3,8 @@ tests/cases/conformance/jsx/file.tsx(32,17): error TS2322: Type '{ x: true; }' i
     Type '{ x: true; }' is not assignable to type '{ x: string; }'.
       Types of property 'x' are incompatible.
         Type 'true' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(33,21): error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
-tests/cases/conformance/jsx/file.tsx(34,22): error TS2339: Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(33,21): error TS2559: Type '{ x: 10; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(34,22): error TS2559: Type '{ prop: true; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -48,8 +48,8 @@ tests/cases/conformance/jsx/file.tsx(34,22): error TS2339: Property 'prop' does 
 !!! error TS2322:         Type 'true' is not assignable to type 'string'.
     let b = <PartRCComp x={10} />
                         ~~~~~~
-!!! error TS2339: Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+!!! error TS2559: Type '{ x: 10; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
     let c = <EmptyRCComp prop />;
                          ~~~~
-!!! error TS2339: Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! error TS2559: Type '{ prop: true; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
     
