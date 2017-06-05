@@ -676,7 +676,6 @@ namespace ts {
                 case SyntaxKind.SuperKeyword:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.ThisKeyword:
-                case SyntaxKind.ImportKeyword:
                     writeTokenNode(node);
                     return;
 
