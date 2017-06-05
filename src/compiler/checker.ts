@@ -16191,12 +16191,20 @@ namespace ts {
         }
 
         function checkAssertion(node: AssertionExpression) {
-            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(node.expression)));
+            const rawType = checkExpression(node.expression);
 
             checkSourceElement(node.type);
             const targetType = getTypeFromTypeNode(node.type);
 
             if (produceDiagnostics && targetType !== unknownType) {
+                const rawLiteralFlags = rawType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral | TypeFlags.BooleanLiteral);
+                const check = (type: Type): boolean => !!(type.flags & rawLiteralFlags ||
+                                                          type.flags & TypeFlags.UnionOrIntersection && some((<UnionOrIntersectionType>type).types, check));
+
+                const exprType = rawLiteralFlags && check(targetType)
+                                    ? rawType
+                                    : getRegularTypeOfObjectLiteral(getWidenedLiteralType(rawType));
+
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
                     checkTypeComparableTo(exprType, targetType, node, Diagnostics.Type_0_cannot_be_converted_to_type_1);
