@@ -14522,6 +14522,7 @@ namespace ts {
             const maximumLengthDifference = Math.min(3, name.length * 0.34);
             let bestDistance = Number.MAX_VALUE;
             let bestCandidate = undefined;
+            let justCheckExactMatches = false;
             if (name.length > 30) {
                 return undefined;
             }
@@ -14533,6 +14534,9 @@ namespace ts {
                     const candidateName = candidate.name.toLowerCase();
                     if (candidateName === name) {
                         return candidate;
+                    }
+                    if (justCheckExactMatches) {
+                        continue;
                     }
                     if (candidateName.length < 3 ||
                         name.length < 3 ||
@@ -14549,7 +14553,8 @@ namespace ts {
                         continue;
                     }
                     if (distance < 3) {
-                        return candidate;
+                        justCheckExactMatches = true;
+                        bestCandidate = candidate;
                     }
                     else if (distance < bestDistance) {
                         bestDistance = distance;
