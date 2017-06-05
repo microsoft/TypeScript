@@ -2291,7 +2291,7 @@ namespace ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
-            Debug.assert(typeNode !== undefined, "should always get typenode?");
+            Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
             const writer = createTextWriter("");
             const printer = createPrinter(options);
