@@ -694,7 +694,7 @@ namespace FourSlash {
 
         public verifyCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
             const completions = this.getCompletionListAtCaret();
-            const itemsCount = completions.entries.length;
+            const itemsCount = completions ? completions.entries.length : 0;
 
             if (negative) {
                 if (itemsCount > count) {
@@ -3521,6 +3521,12 @@ namespace FourSlashInterface {
             "constructor",
             "async"
         ];
+        public allowedConstructorParameterKeywords = [
+            "public",
+            "private",
+            "protected",
+            "readonly",
+        ];
 
         constructor(protected state: FourSlash.TestState, private negative = false) {
             if (!negative) {
@@ -3559,6 +3565,12 @@ namespace FourSlashInterface {
 
         public completionListContainsClassElementKeywords() {
             for (const keyword of this.allowedClassElementKeywords) {
+                this.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
+            }
+        }
+
+        public completionListContainsConstructorParameterKeywords() {
+            for (const keyword of this.allowedConstructorParameterKeywords) {
                 this.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
             }
         }
