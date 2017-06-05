@@ -8356,6 +8356,12 @@ namespace ts {
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
+         *
+         * A type S is comparable to a type T if some (but not necessarily all) of the possible values of S are also possible values of T.
+         * It is used to check following cases:
+         *   - the types of the left and right sides of equality/inequality operators (`===`, `!==`, `==`, `!=`).
+         *   - the types of `case` clause expressions and their respective `switch` expressions.
+         *   - the type of an expression in a type assertion with the type being asserted.
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, comparableRelation);
@@ -16158,6 +16164,35 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
+        function checkImportCallExpression(node: ImportCall): Type {
+            // Check grammar of dynamic import
+            checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node);
+
+            if (node.arguments.length === 0) {
+                return createPromiseReturnType(node, anyType);
+            }
+            const specifier = node.arguments[0];
+            const specifierType = checkExpressionCached(specifier);
+            // Even though multiple arugments is grammatically incorrect, type-check extra arguments for completion
+            for (let i = 1; i < node.arguments.length; ++i) {
+                checkExpressionCached(node.arguments[i]);
+            }
+
+            if (specifierType.flags & TypeFlags.Undefined || specifierType.flags & TypeFlags.Null || !isTypeAssignableTo(specifierType, stringType)) {
+                error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
+            }
+
+            // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
+            const moduleSymbol = resolveExternalModuleName(node, specifier);
+            if (moduleSymbol) {
+                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
+                if (esModuleSymbol) {
+                    return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
+                }
+            }
+            return createPromiseReturnType(node, anyType);
+        }
+
         function isCommonJsRequire(node: Node) {
             if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 return false;
@@ -16364,14 +16399,18 @@ namespace ts {
             return emptyObjectType;
         }
 
-        function createPromiseReturnType(func: FunctionLikeDeclaration, promisedType: Type) {
+        function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCall, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
             if (promiseType === emptyObjectType) {
-                error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
+                error(func, isImportCall(func) ?
+                    Diagnostics.A_dynamic_import_call_returns_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
+                    Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
             else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
-                error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                error(func, isImportCall(func) ?
+                    Diagnostics.A_dynamic_import_call_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option :
+                    Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
             return promiseType;
@@ -17730,6 +17769,10 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
+                    if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
+                        return checkImportCallExpression(<ImportCall>node);
+                    }
+                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -24654,6 +24697,27 @@ namespace ts {
                 }
             });
             return result;
+        }
+
+        function checkGrammarImportCallExpression(node: ImportCall): boolean {
+            if (modulekind === ModuleKind.ES2015) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
+            }
+
+            if (node.typeArguments) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_have_type_arguments);
+            }
+
+            const arguments = node.arguments;
+            if (arguments.length !== 1) {
+                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
+            }
+
+            // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
+            // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
+            if (isSpreadElement(arguments[0])) {
+                return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
+            }
         }
     }
 
