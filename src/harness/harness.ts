@@ -1983,5 +1983,10 @@ namespace Harness {
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 
+    export function getNamedDefaultLibraryFile(io: Harness.IO, libName: string): Harness.Compiler.TestFile {
+        const libFile = Harness.userSpecifiedRoot + Harness.libFolder + "lib." + libName + ".d.ts";
+        return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
     if (Error) (<any>Error).stackTraceLimit = 100;
 }

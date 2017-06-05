@@ -148,70 +148,49 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
-var es2015LibrarySources = [
-    "es2015.core.d.ts",
-    "es2015.collection.d.ts",
-    "es2015.generator.d.ts",
-    "es2015.iterable.d.ts",
-    "es2015.promise.d.ts",
-    "es2015.proxy.d.ts",
-    "es2015.reflect.d.ts",
-    "es2015.symbol.d.ts",
-    "es2015.symbol.wellknown.d.ts"
-];
-
-var es2015LibrarySourceMap = es2015LibrarySources.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2016LibrarySource = ["es2016.array.include.d.ts"];
-
-var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var es2017LibrarySource = [
-    "es2017.object.d.ts",
-    "es2017.sharedmemory.d.ts",
-    "es2017.string.d.ts",
-    "es2017.intl.d.ts"
-];
-
-var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var esnextLibrarySource = [
-    "esnext.asynciterable.d.ts"
-];
-
-var esnextLibrarySourceMap = esnextLibrarySource.map(function (source) {
-    return { target: "lib." + source, sources: ["header.d.ts", source] };
-});
-
-var hostsLibrarySources = ["dom.generated.d.ts", "webworker.importscripts.d.ts", "scripthost.d.ts"];
-
 var librarySourceMap = [
-    // Host library
-    { target: "lib.dom.d.ts", sources: ["header.d.ts", "dom.generated.d.ts"] },
-    { target: "lib.dom.iterable.d.ts", sources: ["header.d.ts", "dom.iterable.d.ts"] },
-    { target: "lib.webworker.d.ts", sources: ["header.d.ts", "webworker.generated.d.ts"] },
-    { target: "lib.scripthost.d.ts", sources: ["header.d.ts", "scripthost.d.ts"] },
+    // Host libraries
+    "dom.generated=lib.dom.d.ts",
+    "dom.iterable",
+    "webworker.generated=lib.webworker.d.ts",
+    "webworker.importscripts",
+    "scripthost",
 
-    // JavaScript library
-    { target: "lib.es5.d.ts", sources: ["header.d.ts", "es5.d.ts"] },
-    { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
-    { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
-    { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-    { target: "lib.esnext.d.ts", sources: ["header.d.ts", "esnext.d.ts"] },
+    // Javascript libraries
+    "es5",
+    "es2015",
+    "es2015.core",
+    "es2015.collection",
+    "es2015.generator",
+    "es2015.iterable",
+    "es2015.promise",
+    "es2015.proxy",
+    "es2015.reflect",
+    "es2015.symbol",
+    "es2015.symbol.wellknown",
+    "es2016",
+    "es2016.array.include",
+    "es2017",
+    "es2017.object",
+    "es2017.sharedmemory",
+    "es2017.string",
+    "es2017.intl",
+    "esnext",
+    "esnext.asynciterable",
 
-    // JavaScript + all host library
-    { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
-    { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2016.full.d.ts", sources: ["header.d.ts", "es2016.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.es2017.full.d.ts", sources: ["header.d.ts", "es2017.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-    { target: "lib.esnext.full.d.ts", sources: ["header.d.ts", "esnext.d.ts"].concat(hostsLibrarySources, "dom.iterable.d.ts") },
-].concat(es2015LibrarySourceMap, es2016LibrarySourceMap, es2017LibrarySourceMap, esnextLibrarySourceMap);
+    // Default libraries
+    "default.es5=lib.d.ts",
+    "default.es2015=lib.es6.d.ts",
+    "default.es2016=lib.es2016.full.d.ts",
+    "default.es2017=lib.es2017.full.d.ts",
+    "default.esnext=lib.esnext.full.d.ts",
+].map(function (lib) {
+    var parts = lib.split("=", 2);
+    return {
+        sources: ["header.d.ts", parts[0] + ".d.ts"],
+        target: parts[1] || ("lib." + parts[0] + ".d.ts")
+    };
+});
 
 var libraryTargets = librarySourceMap.map(function (f) {
     return path.join(builtLocalDirectory, f.target);

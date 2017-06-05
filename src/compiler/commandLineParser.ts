@@ -8,8 +8,7 @@ namespace ts {
     /* @internal */
     export const compileOnSaveCommandLineOption: CommandLineOption = { name: "compileOnSave", type: "boolean" };
 
-    /* @internal */
-    export const libMap = createMapFromTemplate({
+    const commandLineLibMap = createMapFromTemplate({
         // JavaScript only
         "es5": "lib.es5.d.ts",
         "es6": "lib.es2015.d.ts",
@@ -42,7 +41,13 @@ namespace ts {
     });
 
     /* @internal */
-    export const libs = arrayFrom(libMap.keys());
+    // We only support "webworker.importscripts" when used as part of a default lib. It's not available
+    // on the command line.
+    export const libMap = cloneMap(commandLineLibMap)
+        .set("webworker.importscripts", "lib.webworker.importscripts.d.ts");
+
+    /* @internal */
+    export const libs = arrayFrom(commandLineLibMap.keys());
 
     /* @internal */
     export const optionDeclarations: CommandLineOption[] = [
@@ -148,7 +153,7 @@ namespace ts {
             type: "list",
             element: {
                 name: "lib",
-                type: libMap,
+                type: commandLineLibMap,
             },
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
