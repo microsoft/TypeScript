@@ -740,6 +740,7 @@ namespace ts {
             if (declarationFile !== useFile) {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
                     (!compilerOptions.outFile && !compilerOptions.out) ||
+                    isInTypeQuery(usage) ||
                     isInAmbientContext(declaration)) {
                     // nodes are in different files and order cannot be determined
                     return true;
