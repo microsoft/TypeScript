@@ -2646,7 +2646,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'es2018'.": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },

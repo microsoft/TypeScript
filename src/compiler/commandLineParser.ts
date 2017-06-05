@@ -100,12 +100,12 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
-                "es2018": ModuleKind.ES2018
+                "es2018": ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_es2015_or_es2018,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_es2015_or_ESNext,
         },
         {
             name: "lib",

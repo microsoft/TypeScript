@@ -3579,7 +3579,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
-        ES2018 = 6
+        ESNext = 6
     }
 
     export const enum JsxEmit {
