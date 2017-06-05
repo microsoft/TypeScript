@@ -596,10 +596,6 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
-    export function isImportCall(n: Node): n is ImportCall {
-        return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
-    }
-
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
