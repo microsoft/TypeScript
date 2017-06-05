@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2018/dynamicImport/0.ts ===
+=== tests/cases/conformance/dynamicImport/0.ts ===
 export class B {
 >B : Symbol(B, Decl(0.ts, 0, 0))
 
@@ -9,11 +9,11 @@ export class B {
 export function foo() { return "foo" }
 >foo : Symbol(foo, Decl(0.ts, 2, 1))
 
-=== tests/cases/conformance/es2018/dynamicImport/1.ts ===
+=== tests/cases/conformance/dynamicImport/1.ts ===
 export function backup() { return "backup"; }
 >backup : Symbol(backup, Decl(1.ts, 0, 0))
 
-=== tests/cases/conformance/es2018/dynamicImport/2.ts ===
+=== tests/cases/conformance/dynamicImport/2.ts ===
 declare var console: any;
 >console : Symbol(console, Decl(2.ts, 0, 11))
 

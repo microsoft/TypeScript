@@ -1,8 +1,8 @@
-=== tests/cases/conformance/es2018/dynamicImport/defaultPath.ts ===
+=== tests/cases/conformance/dynamicImport/defaultPath.ts ===
 export class C {}
 >C : C
 
-=== tests/cases/conformance/es2018/dynamicImport/1.ts ===
+=== tests/cases/conformance/dynamicImport/1.ts ===
 import * as defaultModule from "./defaultPath";
 >defaultModule : typeof defaultModule
 

@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionInCJS5.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionInCJS5.ts] ////
 
 //// [0.ts]
 export class B {

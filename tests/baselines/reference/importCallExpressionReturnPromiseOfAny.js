@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionReturnPromiseOfAny.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionReturnPromiseOfAny.ts] ////
 
 //// [defaultPath.ts]
 export class C {}

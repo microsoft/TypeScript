@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es2018/dynamicImport/importCallExpressionDeclarationEmit1.ts ===
+=== tests/cases/conformance/dynamicImport/importCallExpressionDeclarationEmit1.ts ===
 declare function getSpecifier(): string;
 >getSpecifier : () => string
 

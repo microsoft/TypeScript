@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpressionWithTypeArgument.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpressionWithTypeArgument.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
