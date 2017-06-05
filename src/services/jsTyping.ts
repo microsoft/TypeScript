@@ -192,7 +192,7 @@ namespace ts.JsTyping {
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
             if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => safeList.has(f)));
+                mergeTypings(map(filter(cleanedTypingNames, f => safeList.has(f)), (f => safeList.get(f))));
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
