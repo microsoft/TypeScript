@@ -19,7 +19,7 @@ export interface ButtonProps extends ClickableProps {
     onClick: React.MouseEventHandler<any>;
 >onClick : Symbol(ButtonProps.onClick, Decl(file.tsx, 7, 53))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
->MouseEventHandler : Symbol(React.MouseEventHandler, Decl(react.d.ts, 388, 66))
+>MouseEventHandler : Symbol(React.MouseEventHandler, Decl(react.d.ts, 389, 66))
 }
 
 export interface LinkProps extends ClickableProps {
@@ -60,22 +60,22 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 28, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 29, 27))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
 >hyphenProps : Symbol(hyphenProps, Decl(file.tsx, 30, 27))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : Symbol(MainButton, Decl(file.tsx, 26, 1), Decl(file.tsx, 28, 66), Decl(file.tsx, 29, 62), Decl(file.tsx, 30, 66))
@@ -83,8 +83,8 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 5, 1))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 9, 1))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2352, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2355, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 
     const linkProps = props as LinkProps;
 >linkProps : Symbol(linkProps, Decl(file.tsx, 32, 9))

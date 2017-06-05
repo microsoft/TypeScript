@@ -2,13 +2,10 @@
 import React = require('react');
 >React : typeof React
 
-export function makeP<P>(Ctor: React.ComponentClass<P>): React.ComponentClass<P> {
->makeP : <P>(Ctor: React.ComponentClass<P>) => React.ComponentClass<P>
+export function makeP<P>(Ctor: React.ComponentClass<P>) {
+>makeP : <P>(Ctor: React.ComponentClass<P>) => typeof (Anonymous class)
 >P : P
 >Ctor : React.ComponentClass<P>
->React : any
->ComponentClass : React.ComponentClass<P>
->P : P
 >React : any
 >ComponentClass : React.ComponentClass<P>
 >P : P
@@ -39,3 +36,5 @@ export function makeP<P>(Ctor: React.ComponentClass<P>): React.ComponentClass<P>
 		}
 	};
 }
+
+
