@@ -4810,6 +4810,7 @@ namespace ts {
                 case SyntaxKind.ImportKeyword:
                     return true;
 
+
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
                     return isStartOfDeclaration();
