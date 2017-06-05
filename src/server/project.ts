@@ -976,18 +976,15 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            const items: string[] = [];
-            for (const plugin of this.plugins) {
-                if (typeof plugin.getExternalFiles === "function") {
-                    try {
-                        items.push(...plugin.getExternalFiles(this));
-                    }
-                    catch (e) {
-                        this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
-                    }
+            return toSortedReadonlyArray(flatMap(this.plugins, plugin => {
+                if (typeof plugin.getExternalFiles !== "function") return;
+                try {
+                    return plugin.getExternalFiles(this);
                 }
-            }
-            return toSortedReadonlyArray(items);
+                catch (e) {
+                    this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
+                }
+            }));
         }
 
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
