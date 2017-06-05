@@ -1,4 +1,4 @@
-//// [tests/cases/conformance/es2018/dynamicImport/importCallExpression1ES2018.ts] ////
+//// [tests/cases/conformance/dynamicImport/importCallExpression1ESNext.ts] ////
 
 //// [0.ts]
 export function foo() { return "foo"; }
