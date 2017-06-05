@@ -12,7 +12,7 @@ var C = (function () {
         this.p = 1;
     }
     C.prototype.method = function () { };
+    C.s = 0;
     return C;
 }());
 export default C;
-C.s = 0;

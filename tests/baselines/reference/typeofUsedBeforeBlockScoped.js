@@ -12,8 +12,8 @@ let o = { n: 12 };
 var C = (function () {
     function C() {
     }
+    C.s = 2;
     return C;
 }());
-C.s = 2;
 var o2;
 var o = { n: 12 };

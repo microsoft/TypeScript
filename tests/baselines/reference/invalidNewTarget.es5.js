@@ -56,9 +56,9 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    C.j = function () { return _newTarget; };
     return C;
 }());
-C.j = function () { return _newTarget; };
 var O = (_a = {},
     _a[_newTarget] = undefined,
     _a.k = function () { var _newTarget = void 0; return _newTarget; },

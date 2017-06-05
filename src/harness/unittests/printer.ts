@@ -14,7 +14,9 @@ namespace ts {
 
         describe("printFile", () => {
             const printsCorrectly = makePrintsCorrectly("printsFileCorrectly");
-            const sourceFile = createSourceFile("source.ts", `
+            // Avoid eagerly creating the sourceFile so that `createSourceFile` doesn't run unless one of these tests is run.
+            let sourceFile: SourceFile;
+            before(() => sourceFile = createSourceFile("source.ts", `
                 interface A<T> {
                     // comment1
                     readonly prop?: T;
@@ -48,8 +50,7 @@ namespace ts {
 
                 // comment10
                 function functionWithDefaultArgValue(argument: string = "defaultValue"): void { }
-            `, ScriptTarget.ES2015);
-
+            `, ScriptTarget.ES2015));
             printsCorrectly("default", {}, printer => printer.printFile(sourceFile));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printFile(sourceFile));
 
@@ -59,7 +60,8 @@ namespace ts {
 
         describe("printBundle", () => {
             const printsCorrectly = makePrintsCorrectly("printsBundleCorrectly");
-            const bundle = createBundle([
+            let bundle: Bundle;
+            before(() => bundle = createBundle([
                 createSourceFile("a.ts", `
                     /*! [a.ts] */
 
@@ -72,14 +74,15 @@ namespace ts {
                     // comment1
                     const b = 2;
                 `, ScriptTarget.ES2015)
-            ]);
+            ]));
             printsCorrectly("default", {}, printer => printer.printBundle(bundle));
             printsCorrectly("removeComments", { removeComments: true }, printer => printer.printBundle(bundle));
         });
 
         describe("printNode", () => {
             const printsCorrectly = makePrintsCorrectly("printsNodeCorrectly");
-            const sourceFile = createSourceFile("source.ts", "", ScriptTarget.ES2015);
+            let sourceFile: SourceFile;
+            before(() => sourceFile = createSourceFile("source.ts", "", ScriptTarget.ES2015));
             // tslint:disable boolean-trivia
             const syntheticNode = createClassDeclaration(
                 undefined,

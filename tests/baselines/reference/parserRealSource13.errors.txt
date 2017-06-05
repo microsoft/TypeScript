@@ -113,7 +113,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(123,26): error 
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(123,39): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(128,33): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(132,51): error TS2304: Cannot find name 'AST'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error TS2552: Cannot find name 'NodeType'. Did you mean 'nodeType'?
+tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error TS2304: Cannot find name 'NodeType'.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts (116 errors) ====
@@ -483,7 +483,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource13.ts(135,36): error 
             var nodeType = ast.nodeType;
             var callbackString = (<any>NodeType)._map[nodeType] + "Callback";
                                        ~~~~~~~~
-!!! error TS2552: Cannot find name 'NodeType'. Did you mean 'nodeType'?
+!!! error TS2304: Cannot find name 'NodeType'.
             if (callback[callbackString]) {
                 return callback[callbackString](pre, ast);
             }

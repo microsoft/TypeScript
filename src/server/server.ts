@@ -45,6 +45,8 @@ namespace ts.server {
                     os.tmpdir();
                 return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
             }
+            case "openbsd":
+            case "freebsd":
             case "darwin":
             case "linux":
             case "android": {

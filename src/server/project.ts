@@ -106,6 +106,7 @@ namespace ts.server {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private program: ts.Program;
+        private externalFiles: SortedReadonlyArray<string>;
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -261,8 +262,8 @@ namespace ts.server {
         abstract getProjectRootPath(): string | undefined;
         abstract getTypeAcquisition(): TypeAcquisition;
 
-        getExternalFiles(): string[] {
-            return [];
+        getExternalFiles(): SortedReadonlyArray<string> {
+            return emptyArray as SortedReadonlyArray<string>;
         }
 
         getSourceFile(path: Path) {
@@ -561,6 +562,24 @@ namespace ts.server {
                     }
                 }
             }
+
+            const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
+            this.externalFiles = this.getExternalFiles();
+            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles,
+                // Ensure a ScriptInfo is created for new external files. This is performed indirectly
+                // by the LSHost for files in the program when the program is retrieved above but
+                // the program doesn't contain external files so this must be done explicitly.
+                inserted => {
+                    const scriptInfo = this.projectService.getOrCreateScriptInfo(inserted, /*openedByClient*/ false);
+                    scriptInfo.attachToProject(this);
+                },
+                removed => {
+                    const scriptInfoToDetach = this.projectService.getScriptInfo(removed);
+                    if (scriptInfoToDetach) {
+                        scriptInfoToDetach.detachFromProject(this);
+                    }
+                });
+
             return hasChanges;
         }
 
@@ -646,7 +665,7 @@ namespace ts.server {
 
                 const added: string[] = [];
                 const removed: string[] = [];
-                const updated: string[] = arrayFrom(updatedFileNames.keys());
+                const updated: string[] = updatedFileNames ? arrayFrom(updatedFileNames.keys()) : [];
 
                 forEachKey(currentFiles, id => {
                     if (!lastReportedFileNames.has(id)) {
@@ -956,7 +975,7 @@ namespace ts.server {
             return this.typeAcquisition;
         }
 
-        getExternalFiles(): string[] {
+        getExternalFiles(): SortedReadonlyArray<string> {
             const items: string[] = [];
             for (const plugin of this.plugins) {
                 if (typeof plugin.getExternalFiles === "function") {
@@ -968,7 +987,7 @@ namespace ts.server {
                     }
                 }
             }
-            return items;
+            return toSortedReadonlyArray(items);
         }
 
         watchConfigFile(callback: (project: ConfiguredProject) => void) {
