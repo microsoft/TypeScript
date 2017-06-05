@@ -1,4 +1,4 @@
-// @module: es2018
+// @module: esnext
 // @target: esnext
 // @declaration: true
 

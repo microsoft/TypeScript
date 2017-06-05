@@ -1,4 +1,4 @@
-﻿// @module: es2018
+﻿// @module: esnext
 // @target: esnext
 // @filename: 0.ts
 export function foo() { return "foo"; }

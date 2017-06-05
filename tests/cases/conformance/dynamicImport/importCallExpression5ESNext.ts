@@ -1,4 +1,4 @@
-﻿// @module: es2018
+﻿// @module: esnext
 // @target: esnext
 // @strictNullChecks: true
 // @filename: 0.ts
