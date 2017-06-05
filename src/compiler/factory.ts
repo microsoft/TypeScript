@@ -2503,8 +2503,9 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
-        if (leadingComments) destEmitNode.leadingComments = concatenate(leadingComments, destEmitNode.leadingComments);
-        if (trailingComments) destEmitNode.trailingComments = concatenate(trailingComments, destEmitNode.trailingComments);
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
+        if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+        if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
