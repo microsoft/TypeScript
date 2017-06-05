@@ -100,7 +100,7 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
-                "es2018": ModuleKind.ESNext
+                "esnext": ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
