@@ -605,6 +605,10 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
+    export function isImportCall(n: Node): n is ImportCall {
+        return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
+    }
+
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
@@ -1439,24 +1443,10 @@ namespace ts {
     }
 
     function getJSDocTags(node: Node, kind: SyntaxKind): JSDocTag[] {
-        const docs = getJSDocs(node);
-        if (docs) {
-            const result: JSDocTag[] = [];
-            for (const doc of docs) {
-                if (doc.kind === SyntaxKind.JSDocParameterTag) {
-                    if (doc.kind === kind) {
-                        result.push(doc as JSDocTag);
-                    }
-                }
-                else {
-                    const tags = (doc as JSDoc).tags;
-                    if (tags) {
-                        result.push(...filter(tags, tag => tag.kind === kind));
-                    }
-                }
-            }
-            return result;
-        }
+        return flatMap(getJSDocs(node), doc =>
+            doc.kind === SyntaxKind.JSDocComment
+                ? filter((doc as JSDoc).tags, tag => tag.kind === kind)
+                : doc.kind === kind && doc);
     }
 
     function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {

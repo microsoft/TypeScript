@@ -142,7 +142,7 @@ const librarySourceMap = [
     "default.es2017=lib.es2017.full.d.ts",
     "default.esnext=lib.esnext.full.d.ts",
 ].map(function (lib) {
-    var parts = lib.split("=", 2);
+    const parts = lib.split("=", 2);
     return {
         sources: ["header.d.ts", parts[0] + ".d.ts"],
         target: parts[1] || ("lib." + parts[0] + ".d.ts")

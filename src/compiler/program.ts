@@ -996,16 +996,12 @@ namespace ts {
             if (sourceFile) {
                 return getDiagnostics(sourceFile, cancellationToken);
             }
-
-            const allDiagnostics: Diagnostic[] = [];
-            forEach(program.getSourceFiles(), sourceFile => {
+            return sortAndDeduplicateDiagnostics(flatMap(program.getSourceFiles(), sourceFile => {
                 if (cancellationToken) {
                     cancellationToken.throwIfCancellationRequested();
                 }
-                addRange(allDiagnostics, getDiagnostics(sourceFile, cancellationToken));
-            });
-
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+                return getDiagnostics(sourceFile, cancellationToken);
+            }));
         }
 
         function getSyntacticDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): Diagnostic[] {
@@ -1342,16 +1338,13 @@ namespace ts {
         }
 
         function getOptionsDiagnostics(): Diagnostic[] {
-            const allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, fileProcessingDiagnostics.getGlobalDiagnostics());
-            addRange(allDiagnostics, programDiagnostics.getGlobalDiagnostics());
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+            return sortAndDeduplicateDiagnostics(concatenate(
+                fileProcessingDiagnostics.getGlobalDiagnostics(),
+                programDiagnostics.getGlobalDiagnostics()));
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
-            const allDiagnostics: Diagnostic[] = [];
-            addRange(allDiagnostics, getDiagnosticsProducingTypeChecker().getGlobalDiagnostics());
-            return sortAndDeduplicateDiagnostics(allDiagnostics);
+            return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
         }
 
         function processRootFile(fileName: string, isDefaultLib: boolean, ignoreNoDefaultLib: boolean) {
@@ -1378,6 +1371,7 @@ namespace ts {
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
 
+            // file.imports may not be undefined if there exists dynamic import
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
             let ambientModules: string[];
@@ -1397,8 +1391,8 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if (isJavaScriptFile) {
-                    collectRequireCalls(node);
+                if ((file.flags & NodeFlags.PossiblyContainDynamicImport) || isJavaScriptFile) {
+                    collectDynamicImportOrRequireCalls(node);
                 }
             }
 
@@ -1461,12 +1455,16 @@ namespace ts {
                 }
             }
 
-            function collectRequireCalls(node: Node): void {
+            function collectDynamicImportOrRequireCalls(node: Node): void {
                 if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
+                // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
+                else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                }
                 else {
-                    forEachChild(node, collectRequireCalls);
+                    forEachChild(node, collectDynamicImportOrRequireCalls);
                 }
             }
         }
@@ -1498,7 +1496,8 @@ namespace ts {
                     }
                 }
                 return sourceFile;
-            } else {
+            }
+            else {
                 const sourceFileNoExtension = options.allowNonTsExtensions && getSourceFile(fileName);
                 if (sourceFileNoExtension) return sourceFileNoExtension;
 

@@ -368,7 +368,7 @@ namespace ts {
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
-        _incrementExpressionBrand: any;
+        _updateExpressionBrand: any;
         _unaryExpressionBrand: any;
         _expressionBrand: any;
         /*@internal*/typeArguments: NodeArray<TypeNode>;
@@ -522,6 +522,7 @@ namespace ts {
         private namedDeclarations: Map<Declaration[]>;
         public ambientModuleNames: string[];
         public checkJsDirective: CheckJsDirective | undefined;
+        public possiblyContainDynamicImport: boolean;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             super(kind, pos, end);

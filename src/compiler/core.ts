@@ -473,7 +473,7 @@ namespace ts {
      * @param array The array to map.
      * @param mapfn The callback used to map the result into one or more values.
      */
-    export function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[] {
+    export function flatMap<T, U>(array: T[] | undefined, mapfn: (x: T, i: number) => U | U[] | undefined): U[] | undefined {
         let result: U[];
         if (array) {
             result = [];
