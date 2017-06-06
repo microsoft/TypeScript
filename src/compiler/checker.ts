@@ -7632,11 +7632,9 @@ namespace ts {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
-            left = filterType(left, t => !(t.flags & TypeFlags.Nullable));
             if (left.flags & TypeFlags.Never) {
                 return right;
             }
-            right = filterType(right, t => !(t.flags & TypeFlags.Nullable));
             if (right.flags & TypeFlags.Never) {
                 return left;
             }
