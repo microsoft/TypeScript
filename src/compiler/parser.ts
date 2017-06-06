@@ -1114,8 +1114,8 @@ namespace ts {
             return array;
         }
 
-        function finishNode<T extends Node>(node: T, end = scanner.getStartPos()): T {
-            node.end = end;
+        function finishNode<T extends Node>(node: T, end?: number): T {
+            node.end = end === undefined ? scanner.getStartPos() : end;
 
             if (contextFlags) {
                 node.flags |= contextFlags;
