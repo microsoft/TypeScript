@@ -4792,6 +4792,7 @@ namespace ts {
                 case SyntaxKind.FinallyKeyword:
                     return true;
 
+
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
                 case SyntaxKind.ImportKeyword:
