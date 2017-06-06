@@ -16,13 +16,13 @@
 //// var x1;
 //// /*globalValue*/
 
-interface VeriferCompletionsInJsDoc {
+interface VerifyCompletionsInJsDoc {
     verifyType(symbol: string, kind: string): void;
     verifyValue(symbol: string, kind: string): void;
     verifyTypeMember(symbol: string, kind: string): void;
 }
 
-function verifyCompletionsInJsDocType(marker: string, { verifyType, verifyValue, verifyTypeMember }: VeriferCompletionsInJsDoc) {
+function verifyCompletionsInJsDocType(marker: string, { verifyType, verifyValue, verifyTypeMember }: VerifyCompletionsInJsDoc) {
     goTo.marker(marker);
 
     verifyType("T", "module");
