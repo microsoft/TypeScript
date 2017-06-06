@@ -21,13 +21,13 @@
 /////*globalValue*/
 ////x./*valueMember*/
 
-interface VeriferCompletionsInJsDoc {
+interface VerifyCompletionsInJsDoc {
     verifyValueOrType(symbol: string, kind: string): void;
     verifyValue(symbol: string, kind: string): void;
     verifyValueMember(symbol: string, kind: string): void;
 }
 
-function verifyCompletionsInJsDocType(marker: string, { verifyValueOrType, verifyValue, verifyValueMember }: VeriferCompletionsInJsDoc) {
+function verifyCompletionsInJsDocType(marker: string, { verifyValueOrType, verifyValue, verifyValueMember }: VerifyCompletionsInJsDoc) {
     goTo.marker(marker);
 
     verifyValueOrType("Foo", "class");
