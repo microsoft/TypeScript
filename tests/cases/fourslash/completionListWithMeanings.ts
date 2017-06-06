@@ -11,6 +11,7 @@
 ////var tt = /*valueExpr*/xx;
 ////var yy: /*typeExpr*/point = { x: 4, y: 3 + /*valueExprInObjectLiteral*/tt };
 ////var kk: m3.point3/*membertypeExpr*/ = m3.zz2/*membervalueExpr*/;
+////var zz = </*typeExpr2*/point>{ x: 4, y: 3 };
 
 const markers = test.markerNames();
 
@@ -37,6 +38,7 @@ const values: CompletionInfo[] = [
     ["xx", "var xx: number"],
     ["tt", "var tt: number"],
     ["yy", "var yy: point"],
+    ["zz", "var zz: point"],
     ["m2", "namespace m2"], // With no type side, allowed only in value
 ];
 
