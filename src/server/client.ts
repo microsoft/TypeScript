@@ -732,6 +732,13 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.GetEditsForRefactorRequest>(CommandNames.GetEditsForRefactor, args);
             const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
+
+            if (!response.body) {
+                return {
+                    edits: []
+                };
+            }
+
             const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
 
             const renameFilename: string | undefined = response.body.renameFilename;
