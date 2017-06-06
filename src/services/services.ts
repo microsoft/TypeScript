@@ -1989,15 +1989,16 @@ namespace ts {
             return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
         }
 
-        function getRefactorCodeActions(
+        function getEditsForRefactor(
             fileName: string,
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorName: string): CodeAction[] | undefined {
+            refactorName: string,
+            actionName: string): RefactorEditInfo {
 
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getRefactorCodeActions(getRefactorContext(file, positionOrRange, formatOptions), refactorName);
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName);
         }
 
         return {
@@ -2005,8 +2006,6 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getApplicableRefactors,
-            getRefactorCodeActions,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
@@ -2044,7 +2043,9 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
-            getProgram
+            getProgram,
+            getApplicableRefactors,
+            getEditsForRefactor,
         };
     }
 

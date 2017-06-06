@@ -22,4 +22,4 @@ class fn {
         console.log('hello world');
     }
 }
-`, 'Convert to ES2015 class');
+`, 'Convert to ES2015 class', 'convert');
