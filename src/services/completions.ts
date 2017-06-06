@@ -411,7 +411,7 @@ namespace ts.Completions {
             //     /** @type {number | string} */
             // Completion should work in the brackets
             let insideJsDocTagExpression = false;
-            const tag = getJsDocTagAtPosition(sourceFile, position);
+            const tag = getJsDocTagAtPosition(currentToken, position);
             if (tag) {
                 if (tag.tagName.pos <= position && position <= tag.tagName.end) {
                     request = { kind: "JsDocTagName" };
@@ -1537,8 +1537,32 @@ namespace ts.Completions {
     }
 
     /** Get the corresponding JSDocTag node if the position is in a jsDoc comment */
-    function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag | undefined {
-        const node = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true, /*includeEndPosition*/ true);
-        return findAncestor(node, a => isJSDocTag(a) ? true : isJSDoc(a) ? "quit" : false) as JSDocTag | undefined;
+    function getJsDocTagAtPosition(node: Node, position: number): JSDocTag | undefined {
+        const { jsDoc } = getJsDocHavingNode(node);
+        if (!jsDoc) return undefined;
+
+        for (const { pos, end, tags } of jsDoc) {
+            if (!tags || position < pos || position > end) continue;
+            for (let i = tags.length - 1; i >= 0; i--) {
+                const tag = tags[i];
+                if (position >= tag.pos) {
+                    return tag;
+                }
+            }
+        }
+    }
+
+    function getJsDocHavingNode(node: Node): Node {
+        if (!isToken(node)) return node;
+
+        switch (node.kind) {
+            case SyntaxKind.VarKeyword:
+            case SyntaxKind.LetKeyword:
+            case SyntaxKind.ConstKeyword:
+                // if the current token is var, let or const, skip the VariableDeclarationList
+                return node.parent.parent;
+            default:
+                return node.parent;
+        }
     }
 }

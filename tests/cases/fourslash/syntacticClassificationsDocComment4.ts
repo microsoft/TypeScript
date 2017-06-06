@@ -14,7 +14,7 @@ verify.syntacticClassificationsAre(
     c.punctuation("}"),
     c.comment(" "),
     c.parameterName("p1"),
-    c.comment("*/"),
+    c.comment(" */"),
     c.keyword("function"),
     c.identifier("foo"),
     c.punctuation("("),

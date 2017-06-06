@@ -109,7 +109,7 @@
                     {
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
-                        "end": 100,
+                        "end": 98,
                         "atToken": {
                             "kind": "AtToken",
                             "pos": 74,

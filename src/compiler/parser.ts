@@ -6706,11 +6706,7 @@ namespace ts {
                     result.postParameterName = postName;
                     result.name = postName || preName;
                     result.isBracketed = isBracketed;
-                    // Include trailing whitespace inside the range of the `@param` tag.
-                    // This way we can provide completions after `@param `.
-                    let end = scanner.getStartPos();
-                    while (ts.isWhiteSpaceSingleLine(scanner.getText().charCodeAt(end))) end++;
-                    return finishNode(result, end);
+                    return finishNode(result);
                 }
 
                 function parseReturnTag(atToken: AtToken, tagName: Identifier): JSDocReturnTag {

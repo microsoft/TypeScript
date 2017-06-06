@@ -6,7 +6,7 @@
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
-            "end": 37,
+            "end": 36,
             "atToken": {
                 "kind": "AtToken",
                 "pos": 8,
@@ -45,6 +45,6 @@
         },
         "length": 1,
         "pos": 8,
-        "end": 37
+        "end": 36
     }
 }

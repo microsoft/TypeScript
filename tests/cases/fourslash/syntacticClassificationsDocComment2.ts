@@ -20,7 +20,7 @@ verify.syntacticClassificationsAre(
     c.punctuation(":"),
     c.keyword("string"),
     c.punctuation("}"),
-    c.comment("*/"),
+    c.comment(" */"),
     c.keyword("var"),
     c.identifier("v"),
     c.punctuation(";"));
