@@ -18,7 +18,9 @@ namespace ts.codefix {
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
-                    return deleteIdentifier();
+                    let actions = deleteIdentifier(<Identifier>token);
+                    (actions || (actions = [])).push(prefixIdentifierWithUnderscore(<Identifier>token));
+                    return actions;
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
@@ -40,58 +42,68 @@ namespace ts.codefix {
                 }
             }
 
-            function deleteIdentifier(): CodeAction[] | undefined {
-                switch (token.parent.kind) {
+            function prefixIdentifierWithUnderscore(identifier: Identifier): CodeAction {
+                // TODO: make sure this work with prefixing trivia.
+                const startPosition = identifier.getStart(sourceFile, /*includeJsDocComment*/ false);
+                return {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), { 0: token.getText() }),
+                    changes: [{
+                        fileName: sourceFile.path,
+                        textChanges: [{
+                            span: { start: startPosition, length: 0 },
+                            newText: "_"
+                        }]
+                    }]
+                };
+            }
+
+            function deleteIdentifier(identifier: Identifier): CodeAction[] | undefined {
+                const parent = identifier.parent;
+                switch (parent.kind) {
                     case ts.SyntaxKind.VariableDeclaration:
-                        return deleteVariableDeclaration(<ts.VariableDeclaration>token.parent);
+                        return deleteVariableDeclaration(<ts.VariableDeclaration>parent);
 
                     case SyntaxKind.TypeParameter:
-                        const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
+                        const typeParameters = (<DeclarationWithTypeParameters>parent.parent).typeParameters;
                         if (typeParameters.length === 1) {
                             const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
-                            if (!previousToken || previousToken.kind !== SyntaxKind.LessThanToken) {
-                                return deleteRange(typeParameters);
-                            }
                             const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
-                            if (!nextToken || nextToken.kind !== SyntaxKind.GreaterThanToken) {
-                                return deleteRange(typeParameters);
-                            }
+                            Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
+                            Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
+
                             return deleteNodeRange(previousToken, nextToken);
                         }
                         else {
-                            return deleteNodeInList(token.parent);
+                            return deleteNodeInList(parent);
                         }
 
                     case ts.SyntaxKind.Parameter:
-                        const functionDeclaration = <FunctionDeclaration>token.parent.parent;
-                        if (functionDeclaration.parameters.length === 1) {
-                            return deleteNode(token.parent);
-                        }
-                        else {
-                            return deleteNodeInList(token.parent);
-                        }
+                        const functionDeclaration = <FunctionDeclaration>parent.parent;
+                        return functionDeclaration.parameters.length === 1 ?
+                            deleteNode(parent) :
+                            deleteNodeInList(parent);
 
                     // handle case where 'import a = A;'
                     case SyntaxKind.ImportEqualsDeclaration:
-                        const importEquals = getAncestor(token, SyntaxKind.ImportEqualsDeclaration);
+                        const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
                         return deleteNode(importEquals);
 
                     case SyntaxKind.ImportSpecifier:
-                        const namedImports = <NamedImports>token.parent.parent;
+                        const namedImports = <NamedImports>parent.parent;
                         if (namedImports.elements.length === 1) {
                             // Only 1 import and it is unused. So the entire declaration should be removed.
-                            const importSpec = getAncestor(token, SyntaxKind.ImportDeclaration);
+                            const importSpec = getAncestor(identifier, SyntaxKind.ImportDeclaration);
                             return deleteNode(importSpec);
                         }
                         else {
                             // delete import specifier
-                            return deleteNodeInList(token.parent);
+                            return deleteNodeInList(parent);
                         }
 
                     // handle case where "import d, * as ns from './file'"
                     // or "'import {a, b as ns} from './file'"
                     case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
-                        const importClause = <ImportClause>token.parent;
+                        const importClause = <ImportClause>parent;
                         if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
                             const importDecl = getAncestor(importClause, SyntaxKind.ImportDeclaration);
                             return deleteNode(importDecl);
@@ -110,8 +122,8 @@ namespace ts.codefix {
                         }
 
                     case SyntaxKind.NamespaceImport:
-                        const namespaceImport = <NamespaceImport>token.parent;
-                        if (namespaceImport.name === token && !(<ImportClause>namespaceImport.parent).name) {
+                        const namespaceImport = <NamespaceImport>parent;
+                        if (namespaceImport.name === identifier && !(<ImportClause>namespaceImport.parent).name) {
                             const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
                             return deleteNode(importDecl);
                         }
