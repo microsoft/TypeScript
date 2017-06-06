@@ -941,6 +941,13 @@ namespace ts {
         sourceFile.scriptSnapshot = scriptSnapshot;
     }
 
+    export function overrideCreateupdateLanguageServiceSourceFile(
+        create: (fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind, cheat?: string) => SourceFile,
+        update: (sourceFile: SourceFile, scriptSnapshot: IScriptSnapshot, version: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean, cheat?: string) => SourceFile) {
+        ts.createLanguageServiceSourceFile = create;
+        ts.updateLanguageServiceSourceFile = update;
+    }
+
     export function createLanguageServiceSourceFile(fileName: string, scriptSnapshot: IScriptSnapshot, scriptTarget: ScriptTarget, version: string, setNodeParents: boolean, scriptKind?: ScriptKind): SourceFile {
         const text = scriptSnapshot.getText(0, scriptSnapshot.getLength());
         const sourceFile = createSourceFile(fileName, text, scriptTarget, setNodeParents, scriptKind);

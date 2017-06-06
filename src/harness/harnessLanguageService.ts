@@ -794,6 +794,75 @@ namespace Harness.LanguageService {
                         }),
                         error: undefined
                     };
+                case "mock-vue":
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                const compilerOptions: ts.CompilerOptions = {
+                                    allowNonTsExtensions: true,
+                                    allowJs: true,
+                                    lib: ["lib.dom.d.ts", "lib.es2017.d.ts"],
+                                    target: ts.ScriptTarget.Latest,
+                                    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+                                    module: ts.ModuleKind.CommonJS,
+                                    allowSyntheticDefaultImports: true
+                                };
+                                info.languageServiceHost.resolveModuleNames = (moduleNames, containingFile) =>
+                                    bifilterMap(moduleNames, importInterested,
+                                                name => ({
+                                                    resolvedFileName: containingFile.slice(0, containingFile.lastIndexOf("/")) + "/" + name,
+                                                    extension: ts.Extension.Ts
+                                                }),
+                                                name => ts.resolveModuleName(name, containingFile, compilerOptions, ts.sys).resolvedModule);
+                                const clssf = ts.createLanguageServiceSourceFile;
+                                const ulssf = ts.updateLanguageServiceSourceFile;
+                                ts.overrideCreateupdateLanguageServiceSourceFile(
+                                    (fileName, scriptSnapshot, scriptTarget, version, setNodeParents, scriptKind?) => {
+                                        if (interested(fileName)) {
+                                            const wrapped = scriptSnapshot;
+                                            scriptSnapshot = {
+                                                getChangeRange: old => wrapped.getChangeRange(old),
+                                                getLength: () => wrapped.getLength(),
+                                                getText: (start, end) => parse(wrapped.getText(0, wrapped.getLength())).slice(start, end),
+                                            };
+                                        }
+                                        return clssf(fileName, scriptSnapshot, scriptTarget, version, setNodeParents, scriptKind);
+                                    },
+                                    (sourceFile, scriptSnapshot, version, textChangeRange, aggressiveChecks?) => {
+                                        if (interested(sourceFile.fileName)) {
+                                            const wrapped = scriptSnapshot;
+                                            scriptSnapshot = {
+                                                getChangeRange: old => wrapped.getChangeRange(old),
+                                                getLength: () => wrapped.getLength(),
+                                                getText: (start, end) => parse(wrapped.getText(0, wrapped.getLength())).slice(start, end),
+                                            };
+                                        }
+                                        return ulssf(sourceFile, scriptSnapshot, version, textChangeRange, aggressiveChecks);
+                                    });
+                                return makeDefaultProxy(info);
+
+                                function bifilterMap<T, U>(l: T[], predicate: (t: T) => boolean, yes: (t: T) => U, no: (t: T) => U): U[] {
+                                    const result = [];
+                                    for (const x of l) {
+                                        result.push(predicate(x) ? yes(x) : no(x));
+                                    }
+                                    return result;
+                                }
+                                function interested(fileName: string) {
+                                    return fileName.slice(-4) === ".vue";
+                                }
+                                function parse(text: string) {
+                                    const start = text.indexOf("<script>") + "<script>".length;
+                                    const end = text.indexOf("</script>");
+                                    return text.slice(0, start).replace(/./g, " ") + text.slice(start, end) + text.slice(end).replace(/./g, " ");
+                                }
+                                function importInterested(fileName: string) {
+                                    return fileName.charAt(0) === "." && fileName.slice(-4) === ".vue";
+                                }
+                            }
+                        }),
+                        error: undefined
+                    };
 
                 default:
                     return {
