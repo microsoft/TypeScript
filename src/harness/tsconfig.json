@@ -80,7 +80,7 @@
         "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
-        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/fixUnusedIdentifier.ts",
         "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
