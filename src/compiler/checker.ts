@@ -13042,13 +13042,13 @@ namespace ts {
             return node ? node.contextualMapper : identityMapper;
         }
 
-        // If the given type is an object or union type, if that type has a single signature, and if
-        // that signature is non-generic, return the signature. Otherwise return undefined.
-        function getNonGenericSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
+        // If the given type is an object or union type with a single signature, and if that signature has at
+        // least as many parameters as the given function, return the signature. Otherwise return undefined.
+        function getContextualCallSignature(type: Type, node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
             const signatures = getSignaturesOfStructuredType(type, SignatureKind.Call);
             if (signatures.length === 1) {
                 const signature = signatures[0];
-                if (!signature.typeParameters && !isAritySmaller(signature, node)) {
+                if (!isAritySmaller(signature, node)) {
                     return signature;
                 }
             }
@@ -13099,12 +13099,12 @@ namespace ts {
                 return undefined;
             }
             if (!(type.flags & TypeFlags.Union)) {
-                return getNonGenericSignature(type, node);
+                return getContextualCallSignature(type, node);
             }
             let signatureList: Signature[];
             const types = (<UnionType>type).types;
             for (const current of types) {
-                const signature = getNonGenericSignature(current, node);
+                const signature = getContextualCallSignature(current, node);
                 if (signature) {
                     if (!signatureList) {
                         // This signature will contribute to contextual union signature
