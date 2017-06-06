@@ -21,3 +21,8 @@ as(Foo); // should emit
 >as : Symbol(as, Decl(asOperatorASI.ts, 0, 13))
 >Foo : Symbol(Foo, Decl(asOperatorASI.ts, 0, 0))
 
+var z = 30
+>z : Symbol(z, Decl(asOperatorASI.ts, 11, 3))
+
+as number; // should be a type assertion
+

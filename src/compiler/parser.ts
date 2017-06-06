@@ -3365,7 +3365,7 @@ namespace ts {
                     //    as (Bar)
                     // This should be parsed as an initialized variable, followed
                     // by a function call to 'as' with the argument 'Bar'
-                    if (scanner.hasPrecedingLineBreak()) {
+                    if (scanner.hasPrecedingLineBreak() && !lookAhead(nextTokenIsIdentifierOnSameLine)) {
                         break;
                     }
                     else {
