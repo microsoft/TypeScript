@@ -747,7 +747,7 @@ declare module "convert-source-map" {
     export function fromSource(source: string, largeSource?: boolean): SourceMapConverter;
 }
 
-gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile], (done) => {
+gulp.task("browserify", "Runs browserify on run.js to produce a file suitable for running tests in the browser", [servicesFile, run], (done) => {
     const testProject = tsc.createProject("src/harness/tsconfig.json", getCompilerSettings({ outFile: "../../built/local/bundle.js" }, /*useBuiltCompiler*/ true));
     return testProject.src()
         .pipe(newer("built/local/bundle.js"))

@@ -767,13 +767,9 @@ namespace ts.Completions {
         }
 
         function isContextTokenValueLocation(contextToken: Node) {
-            if (contextToken) {
-                const parentKind = contextToken.parent.kind;
-                switch (contextToken.kind) {
-                    case SyntaxKind.TypeOfKeyword:
-                        return parentKind === SyntaxKind.TypeQuery;
-                }
-            }
+            return contextToken &&
+                contextToken.kind === SyntaxKind.TypeOfKeyword &&
+                contextToken.parent.kind === SyntaxKind.TypeQuery;
         }
 
         function isContextTokenTypeLocation(contextToken: Node) {
