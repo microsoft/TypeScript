@@ -5,4 +5,4 @@
 ////    [|f1<T extends number, U>(a: U)|] {a;}
 //// }
 
-verify.rangeAfterCodeFix("f1<U>(a: U)");
+verify.rangeAfterCodeFix("f1<U>(a: U)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

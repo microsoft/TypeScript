@@ -9,4 +9,4 @@
 ////}
 
 verify.rangeAfterCodeFix(`public function2(){
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

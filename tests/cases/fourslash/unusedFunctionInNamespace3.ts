@@ -9,4 +9,4 @@
 ////} |]
 
 verify.rangeAfterCodeFix(`namespace Validation {
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

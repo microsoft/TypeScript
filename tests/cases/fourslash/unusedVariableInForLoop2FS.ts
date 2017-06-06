@@ -7,4 +7,4 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix("for(var i = 0; ;i++)");
+verify.rangeAfterCodeFix("for(var i = 0; ;i++)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

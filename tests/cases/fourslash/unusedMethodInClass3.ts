@@ -8,4 +8,4 @@
 
 verify.rangeAfterCodeFix(`
 class greeter {
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

@@ -13,4 +13,4 @@ verify.rangeAfterCodeFix(`{
     for (const elem of ["a", "b", "c"]) {
         elem;
     }
-}`, /*includeWhiteSpace*/ true);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

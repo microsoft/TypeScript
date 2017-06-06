@@ -7,4 +7,4 @@
 //// x;
 //// export var y: string;
 
-verify.rangeAfterCodeFix(`var x = function f1() {}`);
+verify.rangeAfterCodeFix(`var x = function f1() {}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

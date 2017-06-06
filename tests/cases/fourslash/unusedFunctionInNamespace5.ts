@@ -25,4 +25,4 @@ verify.rangeAfterCodeFix(`function function3() {
         function1();
     }
 
-    export let a = function3;`);
+    export let a = function3;`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

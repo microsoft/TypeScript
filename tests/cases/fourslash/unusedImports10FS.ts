@@ -12,5 +12,5 @@
 ////     [|import a = A;|]
 //// }
 
-verify.rangeAfterCodeFix("");
+verify.rangeAfterCodeFix("", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

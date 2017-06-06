@@ -20,5 +20,5 @@
 ////
 //// }
 
-verify.rangeAfterCodeFix(`import {/*some comments*/ test, test2} from "./file1"`);
+verify.rangeAfterCodeFix(`import {/*some comments*/ test, test2} from "./file1"`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

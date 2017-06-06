@@ -5,4 +5,4 @@
 ////    x++;
 ////}
 
-verify.rangeAfterCodeFix("greeter(x)");
+verify.rangeAfterCodeFix("greeter(x)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

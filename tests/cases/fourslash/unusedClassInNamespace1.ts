@@ -7,4 +7,4 @@
 //// } |]
 
 verify.rangeAfterCodeFix(`namespace greeter {
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

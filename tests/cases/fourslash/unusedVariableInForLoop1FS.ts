@@ -7,5 +7,5 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix("for(; ;)");
+verify.rangeAfterCodeFix("for(; ;)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

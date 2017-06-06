@@ -13,4 +13,4 @@
 //// export default function test2() {
 //// }
 
-verify.rangeAfterCodeFix('');
+verify.rangeAfterCodeFix('', /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

@@ -5,4 +5,4 @@
 ////    [|constructor(private readonly p2: boolean, p5)|] { p5; }
 //// }
 
-verify.rangeAfterCodeFix("constructor(p5)");
+verify.rangeAfterCodeFix("constructor(p5)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

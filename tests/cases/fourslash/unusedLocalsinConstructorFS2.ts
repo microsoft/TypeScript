@@ -15,4 +15,4 @@ verify.rangeAfterCodeFix(`
         var used = "dummy";
         used = used + "second part";
     }
-`);
+`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

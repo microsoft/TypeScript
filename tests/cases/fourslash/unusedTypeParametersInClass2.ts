@@ -5,4 +5,4 @@
 ////    public a: X;
 ////}
 
-verify.rangeAfterCodeFix("class greeter<X>");
+verify.rangeAfterCodeFix("class greeter<X>", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

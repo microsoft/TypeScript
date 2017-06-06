@@ -8,4 +8,4 @@
 
 verify.rangeAfterCodeFix(`namespace greeter {
     export type nw = "No" | "Way";
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

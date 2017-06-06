@@ -24,4 +24,4 @@ verify.rangeAfterCodeFix(`namespace Validation {
     export class c2 {
 
     }
-}`);
+}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
