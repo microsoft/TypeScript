@@ -6,6 +6,7 @@
 
 namespace ts.server.typingsInstaller {
     interface NpmConfig {
+        version: string;
         devDependencies: MapLike<any>;
     }
 
@@ -192,7 +193,7 @@ namespace ts.server.typingsInstaller {
                 if (this.log.isEnabled()) {
                     this.log.writeLine(`Loaded content of '${packageJson}': ${JSON.stringify(npmConfig)}`);
                 }
-                if (npmConfig.devDependencies) {
+                if (npmConfig.devDependencies && this.areVersionsEqual(npmConfig.version, ts.version)) {
                     for (const key in npmConfig.devDependencies) {
                         // key is @types/<package name>
                         const packageName = getBaseFileName(key);
@@ -286,7 +287,7 @@ namespace ts.server.typingsInstaller {
                     this.log.writeLine(`Npm config file: '${npmConfigPath}' is missing, creating new one...`);
                 }
                 this.ensureDirectoryExists(directory, this.installTypingHost);
-                this.installTypingHost.writeFile(npmConfigPath, "{}");
+                this.installTypingHost.writeFile(npmConfigPath, JSON.stringify({ version: ts.version }));
             }
         }
 
@@ -332,6 +333,9 @@ namespace ts.server.typingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Installed typings ${JSON.stringify(scopedTypings)}`);
                     }
+
+                    this.writePackageVersion(cachePath);
+
                     const installedTypingFiles: string[] = [];
                     for (const packageName of filteredTypings) {
                         const typingFile = typingToFileName(cachePath, packageName, this.installTypingHost, this.log);
@@ -344,6 +348,7 @@ namespace ts.server.typingsInstaller {
                         }
                         installedTypingFiles.push(typingFile);
                     }
+
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Installed typing files ${JSON.stringify(installedTypingFiles)}`);
                     }
@@ -426,6 +431,20 @@ namespace ts.server.typingsInstaller {
             }
         }
 
+        private writePackageVersion(cachePath: string) {
+            const packageJson = combinePaths(cachePath, "package.json");
+            const npmConfig = <NpmConfig>JSON.parse(this.installTypingHost.readFile(packageJson));
+            npmConfig.version = ts.version;
+            this.installTypingHost.writeFile(packageJson, JSON.stringify(npmConfig));
+            if (this.log.isEnabled()) {
+                this.log.writeLine(`Wrote version ${ts.version} to package.json`);
+            }
+        }
+
+        private areVersionsEqual(version1: string, version2: string) {
+            return version1 && version2 && version1.match(/\d+\.\d+/)[0] === version2.match(/\d+\.\d+/)[0];
+        }
+
         protected abstract installWorker(requestId: number, args: string[], cwd: string, onRequestCompleted: RequestCompletedAction): void;
         protected abstract sendResponse(response: SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes): void;
     }
@@ -434,5 +453,6 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
+
     const versionMajorMinor = version.split(".").slice(0, 2).join(".");
 }
