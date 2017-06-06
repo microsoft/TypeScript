@@ -1099,7 +1099,7 @@ namespace ts {
             return ruleProvider;
         }
 
-        function synchronizeHostData(): void {
+        function synchronizeHostData(discoveredMissingFiles?: Path[]): void {
             // perform fast check if host supports it
             if (host.getProjectVersion) {
                 const hostProjectVersion = host.getProjectVersion();
@@ -1171,7 +1171,9 @@ namespace ts {
                 },
                 getDirectories: path => {
                     return host.getDirectories ? host.getDirectories(path) : [];
-                }
+                },
+
+                getDiscoveredMissingFiles: () => discoveredMissingFiles
             };
             if (host.trace) {
                 compilerHost.trace = message => host.trace(message);
@@ -1302,8 +1304,8 @@ namespace ts {
             }
         }
 
-        function getProgram(): Program {
-            synchronizeHostData();
+        function getProgram(discoveredMissingFiles?: Path[]): Program {
+            synchronizeHostData(discoveredMissingFiles);
 
             return program;
         }

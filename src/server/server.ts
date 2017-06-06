@@ -560,7 +560,9 @@ namespace ts.server {
             const file: WatchedFile = {
                 fileName,
                 callback,
-                mtime: getModifiedTime(fileName)
+                mtime: sys.fileExists(fileName)
+                    ? getModifiedTime(fileName)
+                    : new Date(0) // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);

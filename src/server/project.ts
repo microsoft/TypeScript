@@ -107,6 +107,7 @@ namespace ts.server {
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
+        private missingFilesMap: FileMap<FileWatcher> = createFileMap<FileWatcher>();
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -482,10 +483,10 @@ namespace ts.server {
          * Updates set of files that contribute to this project
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
-        updateGraph(): boolean {
+        updateGraph(discoveredMissingFiles?: Path[]): boolean {
             this.lsHost.startRecordingFilesWithChangedResolutions();
 
-            let hasChanges = this.updateGraphWorker();
+            let hasChanges = this.updateGraphWorker(discoveredMissingFiles);
 
             const changedFiles: ReadonlyArray<Path> = this.lsHost.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
@@ -539,9 +540,9 @@ namespace ts.server {
             return true;
         }
 
-        private updateGraphWorker() {
+        private updateGraphWorker(discoveredMissingFiles?: Path[]) {
             const oldProgram = this.program;
-            this.program = this.languageService.getProgram();
+            this.program = this.languageService.getProgram(discoveredMissingFiles);
 
             let hasChanges = false;
             // bump up the version if
@@ -561,6 +562,40 @@ namespace ts.server {
                         }
                     }
                 }
+            }
+
+            if (hasChanges && this.program.getMissingFilePaths) {
+                const missingFilePaths = this.program.getMissingFilePaths() || emptyArray;
+                const missingFilePathsSet = createMap<true>();
+                missingFilePaths.forEach(p => missingFilePathsSet.set(p, true));
+
+                // Files that are no longer missing (e.g. because they are no longer required)
+                // should no longer be watched.
+                this.missingFilesMap.getKeys().forEach(p => {
+                    if (!missingFilePathsSet.has(p)) {
+                        this.missingFilesMap.get(p).close();
+                        this.missingFilesMap.remove(p);
+                    }
+                });
+
+                // Missing files that are not yet watched should be added to the map.
+                missingFilePaths.forEach(p => {
+                    if (!this.missingFilesMap.contains(p)) {
+                        const fileWatcher = ts.sys.watchFile(p, (_filename: string, removed?: boolean) => {
+                            if (removed === false && this.missingFilesMap.contains(p)) {
+                                fileWatcher.close();
+                                this.missingFilesMap.remove(p);
+
+                                // When a missing file is created, we should update the graph.
+                                // CONSIDER: We could likely improve performance by aggregating some or all of
+                                // the files discovered for a given project into a single updateGraph call.
+                                this.markAsDirty();
+                                this.updateGraph(/*discoveredMissingFiles*/ [p]);
+                            }
+                        });
+                        this.missingFilesMap.set(p, fileWatcher);
+                    }
+                });
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;

@@ -2422,6 +2422,12 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /**
+         * Get a list of file names that were passed to 'createProgram' or referenced in a
+         * program source file but could not be located.
+         */
+        getMissingFilePaths?(): Path[];
+
+        /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
          * the JavaScript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the JavaScript and declaration for that
@@ -3922,6 +3928,11 @@ namespace ts {
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
+
+        /*
+         * Return a list of files that have been detected since they were reported missing.
+         */
+        getDiscoveredMissingFiles?(): Path[];
 
         /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of

@@ -523,6 +523,7 @@ namespace ts {
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
+            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)).sort(),
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
@@ -855,6 +856,15 @@ namespace ts {
 
             if (oldProgram.structureIsReused !== StructureIsReused.Completely) {
                 return oldProgram.structureIsReused;
+            }
+
+            // Strictly speaking, we could probably retain more structure based
+            // on our knowledge of the particular files that were discovered.
+            if (host.getDiscoveredMissingFiles) {
+                const discovered = host.getDiscoveredMissingFiles() || emptyArray;
+                if (discovered.length > 0) {
+                    return oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                }
             }
 
             // update fileName -> file mapping
