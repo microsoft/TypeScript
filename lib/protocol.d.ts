@@ -2,51 +2,54 @@
  * Declaration module describing the TypeScript Server protocol
  */
 declare namespace ts.server.protocol {
-    namespace CommandTypes {
-        type Brace = "brace";
-        type BraceCompletion = "braceCompletion";
-        type Change = "change";
-        type Close = "close";
-        type Completions = "completions";
-        type CompletionDetails = "completionEntryDetails";
-        type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
-        type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
-        type Configure = "configure";
-        type Definition = "definition";
-        type Implementation = "implementation";
-        type Exit = "exit";
-        type Format = "format";
-        type Formatonkey = "formatonkey";
-        type Geterr = "geterr";
-        type GeterrForProject = "geterrForProject";
-        type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
-        type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
-        type NavBar = "navbar";
-        type Navto = "navto";
-        type NavTree = "navtree";
-        type NavTreeFull = "navtree-full";
-        type Occurrences = "occurrences";
-        type DocumentHighlights = "documentHighlights";
-        type Open = "open";
-        type Quickinfo = "quickinfo";
-        type References = "references";
-        type Reload = "reload";
-        type Rename = "rename";
-        type Saveto = "saveto";
-        type SignatureHelp = "signatureHelp";
-        type TypeDefinition = "typeDefinition";
-        type ProjectInfo = "projectInfo";
-        type ReloadProjects = "reloadProjects";
-        type Unknown = "unknown";
-        type OpenExternalProject = "openExternalProject";
-        type OpenExternalProjects = "openExternalProjects";
-        type CloseExternalProject = "closeExternalProject";
-        type TodoComments = "todoComments";
-        type Indentation = "indentation";
-        type DocCommentTemplate = "docCommentTemplate";
-        type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
-        type GetCodeFixes = "getCodeFixes";
-        type GetSupportedCodeFixes = "getSupportedCodeFixes";
+    const enum CommandTypes {
+        Brace = "brace",
+        BraceCompletion = "braceCompletion",
+        Change = "change",
+        Close = "close",
+        Completions = "completions",
+        CompletionDetails = "completionEntryDetails",
+        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
+        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
+        Configure = "configure",
+        Definition = "definition",
+        Implementation = "implementation",
+        Exit = "exit",
+        Format = "format",
+        Formatonkey = "formatonkey",
+        Geterr = "geterr",
+        GeterrForProject = "geterrForProject",
+        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
+        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
+        NavBar = "navbar",
+        Navto = "navto",
+        NavTree = "navtree",
+        NavTreeFull = "navtree-full",
+        Occurrences = "occurrences",
+        DocumentHighlights = "documentHighlights",
+        Open = "open",
+        Quickinfo = "quickinfo",
+        References = "references",
+        Reload = "reload",
+        Rename = "rename",
+        Saveto = "saveto",
+        SignatureHelp = "signatureHelp",
+        TypeDefinition = "typeDefinition",
+        ProjectInfo = "projectInfo",
+        ReloadProjects = "reloadProjects",
+        Unknown = "unknown",
+        OpenExternalProject = "openExternalProject",
+        OpenExternalProjects = "openExternalProjects",
+        CloseExternalProject = "closeExternalProject",
+        TodoComments = "todoComments",
+        Indentation = "indentation",
+        DocCommentTemplate = "docCommentTemplate",
+        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
+        GetCodeFixes = "getCodeFixes",
+        GetSupportedCodeFixes = "getSupportedCodeFixes",
+        GetApplicableRefactors = "getApplicableRefactors",
+        GetRefactorCodeActions = "getRefactorCodeActions",
+        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
     }
     /**
      * A TypeScript Server message
@@ -287,6 +290,33 @@ declare namespace ts.server.protocol {
          */
         offset: number;
     }
+    type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
+    interface GetApplicableRefactorsRequest extends Request {
+        command: CommandTypes.GetApplicableRefactors;
+        arguments: GetApplicableRefactorsRequestArgs;
+    }
+    type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
+    interface ApplicableRefactorInfo {
+        name: string;
+        description: string;
+    }
+    interface GetApplicableRefactorsResponse extends Response {
+        body?: ApplicableRefactorInfo[];
+    }
+    interface GetRefactorCodeActionsRequest extends Request {
+        command: CommandTypes.GetRefactorCodeActions;
+        arguments: GetRefactorCodeActionsRequestArgs;
+    }
+    type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
+        refactorName: string;
+    };
+    type RefactorCodeActions = {
+        actions: protocol.CodeAction[];
+        renameLocation?: number;
+    };
+    interface GetRefactorCodeActionsResponse extends Response {
+        body: RefactorCodeActions;
+    }
     /**
      * Request for the available codefixes at a specific position.
      */
@@ -294,10 +324,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
     }
-    /**
-     * Instances of this interface specify errorcodes on a specific location in a sourcefile.
-     */
-    interface CodeFixRequestArgs extends FileRequestArgs {
+    interface FileRangeRequestArgs extends FileRequestArgs {
         /**
          * The line number for the request (1-based).
          */
@@ -314,6 +341,11 @@ declare namespace ts.server.protocol {
          * The character offset (on the line) for the request (1-based).
          */
         endOffset: number;
+    }
+    /**
+     * Instances of this interface specify errorcodes on a specific location in a sourcefile.
+     */
+    interface CodeFixRequestArgs extends FileRangeRequestArgs {
         /**
          * Errorcodes we want to get the fixes for.
          */
@@ -488,10 +520,9 @@ declare namespace ts.server.protocol {
     }
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
-     * Kind is taken from HighlightSpanKind type.
      */
     interface HighlightSpan extends TextSpan {
-        kind: string;
+        kind: HighlightSpanKind;
     }
     /**
      * Represents a set of highligh spans for a give name
@@ -609,7 +640,7 @@ declare namespace ts.server.protocol {
         /**
          * The items's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -957,7 +988,7 @@ declare namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1143,7 +1174,7 @@ declare namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1170,7 +1201,7 @@ declare namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1563,7 +1594,7 @@ declare namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * exact, substring, or prefix.
          */
@@ -1596,7 +1627,7 @@ declare namespace ts.server.protocol {
         /**
          * Kind of symbol's container symbol (if any).
          */
-        containerKind?: string;
+        containerKind?: ScriptElementKind;
     }
     /**
      * Navto response message. Body is an array of navto items.  Each
@@ -1660,7 +1691,7 @@ declare namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: string;
+        kind: ScriptElementKind;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1681,7 +1712,7 @@ declare namespace ts.server.protocol {
     /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
     interface NavigationTree {
         text: string;
-        kind: string;
+        kind: ScriptElementKind;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
@@ -1756,12 +1787,11 @@ declare namespace ts.server.protocol {
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
-    namespace IndentStyle {
-        type None = "None";
-        type Block = "Block";
-        type Smart = "Smart";
+    const enum IndentStyle {
+        None = "None",
+        Block = "Block",
+        Smart = "Smart",
     }
-    type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
     interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
@@ -1782,6 +1812,7 @@ declare namespace ts.server.protocol {
         insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
         insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        insertSpaceAfterTypeAssertion?: boolean;
         insertSpaceBeforeFunctionParenthesis?: boolean;
         placeOpenBraceOnNewLineForFunctions?: boolean;
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
@@ -1854,40 +1885,35 @@ declare namespace ts.server.protocol {
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
-    namespace JsxEmit {
-        type None = "None";
-        type Preserve = "Preserve";
-        type ReactNative = "ReactNative";
-        type React = "React";
+    const enum JsxEmit {
+        None = "None",
+        Preserve = "Preserve",
+        ReactNative = "ReactNative",
+        React = "React",
     }
-    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
-    namespace ModuleKind {
-        type None = "None";
-        type CommonJS = "CommonJS";
-        type AMD = "AMD";
-        type UMD = "UMD";
-        type System = "System";
-        type ES6 = "ES6";
-        type ES2015 = "ES2015";
+    const enum ModuleKind {
+        None = "None",
+        CommonJS = "CommonJS",
+        AMD = "AMD",
+        UMD = "UMD",
+        System = "System",
+        ES6 = "ES6",
+        ES2015 = "ES2015",
     }
-    type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
-    namespace ModuleResolutionKind {
-        type Classic = "Classic";
-        type Node = "Node";
+    const enum ModuleResolutionKind {
+        Classic = "Classic",
+        Node = "Node",
     }
-    type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
-    namespace NewLineKind {
-        type Crlf = "Crlf";
-        type Lf = "Lf";
+    const enum NewLineKind {
+        Crlf = "Crlf",
+        Lf = "Lf",
     }
-    type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
-    namespace ScriptTarget {
-        type ES3 = "ES3";
-        type ES5 = "ES5";
-        type ES6 = "ES6";
-        type ES2015 = "ES2015";
+    const enum ScriptTarget {
+        ES3 = "ES3",
+        ES5 = "ES5",
+        ES6 = "ES6",
+        ES2015 = "ES2015",
     }
-    type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
 declare namespace ts.server.protocol {
 
@@ -1943,6 +1969,8 @@ declare namespace ts.server.protocol {
 }
 declare namespace ts {
     // these types are empty stubs for types from services and should not be used directly
+    export type HighlightSpanKind = never;
+    export type ScriptElementKind = never;
     export type ScriptKind = never;
     export type IndentStyle = never;
     export type JsxEmit = never;
