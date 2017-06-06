@@ -22,7 +22,7 @@ namespace ts.refactor {
             symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
         }
 
-        if (symbol && symbol.flags & SymbolFlags.Function && symbol.members && symbol.members.size > 0) {
+        if (symbol && (symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
             return [
                 {
                     name: convertFunctionToES6Class.name,

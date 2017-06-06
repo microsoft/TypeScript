@@ -415,7 +415,7 @@ namespace ts.server.protocol {
 
     /**
      * Response is a list of available refactorings.
-     * Each refactoring exposes 1 or more "Actions"; a user selects one action to invoke a refactoring
+     * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
      */
     export interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
