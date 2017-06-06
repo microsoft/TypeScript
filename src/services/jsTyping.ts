@@ -143,7 +143,7 @@ namespace ts.JsTyping {
         /**
          * Merge a given list of typingNames to the inferredTypings map
          */
-        function mergeTypings(typingNames: string[]) {
+        function mergeTypings(typingNames: ReadonlyArray<string>) {
             if (!typingNames) {
                 return;
             }
@@ -192,7 +192,7 @@ namespace ts.JsTyping {
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
             if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => safeList.has(f)));
+                mergeTypings(ts.mapDefined(cleanedTypingNames, f => safeList.get(f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
