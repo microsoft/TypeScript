@@ -15890,7 +15890,7 @@ namespace ts {
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray);
-                if (getReturnTypeOfSignature(signature) !== voidType) {
+                if (!isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
                 if (getThisTypeOfSignature(signature) === voidType) {
@@ -16117,10 +16117,30 @@ namespace ts {
             return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
         }
 
+        /**
+         * Indicates whether a declaration can be treated as a constructor in a JavaScript
+         * file.
+         */
+        function isJavaScriptConstructor(node: Declaration): boolean {
+            if (isInJavaScriptFile(node)) {
+                // If the node has a @class tag, treat it like a constructor.
+                if (getJSDocClassTag(node)) return true;
+
+                // If the symbol of the node has members, treat it like a constructor.
+                const symbol = isFunctionDeclaration(node) || isFunctionExpression(node) ? getSymbolOfNode(node) :
+                     isVariableDeclaration(node) && isFunctionExpression(node.initializer) ? getSymbolOfNode(node.initializer) :
+                     undefined;
+
+                return symbol && symbol.members !== undefined;
+            }
+
+            return false;
+        }
+
         function getInferredClassType(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
             if (!links.inferredClassType) {
-                links.inferredClassType = createAnonymousType(symbol, symbol.members, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
+                links.inferredClassType = createAnonymousType(symbol, symbol.members || emptySymbols, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
         }
@@ -16160,7 +16180,7 @@ namespace ts {
                     if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
                         funcSymbol = getSymbolOfNode((<VariableDeclaration>funcSymbol.valueDeclaration).initializer);
                     }
-                    if (funcSymbol && funcSymbol.members && funcSymbol.flags & SymbolFlags.Function) {
+                    if (funcSymbol && funcSymbol.flags & SymbolFlags.Function && (funcSymbol.members || getJSDocClassTag(funcSymbol.valueDeclaration))) {
                         return getInferredClassType(funcSymbol);
                     }
                     else if (noImplicitAny) {
