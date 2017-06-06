@@ -15892,7 +15892,7 @@ namespace ts {
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray);
-                if (!isInJavaScriptFile(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
+                if (!isJavaScriptConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                     error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                 }
                 if (getThisTypeOfSignature(signature) === voidType) {
@@ -16117,6 +16117,26 @@ namespace ts {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
+        }
+
+        /**
+         * Indicates whether a declaration can be treated as a constructor in a JavaScript
+         * file.
+         */
+        function isJavaScriptConstructor(node: Declaration): boolean {
+            if (isInJavaScriptFile(node)) {
+                // If the node has a @class tag, treat it like a constructor.
+                if (getJSDocClassTag(node)) return true;
+
+                // If the symbol of the node has members, treat it like a constructor.
+                const symbol = isFunctionDeclaration(node) || isFunctionExpression(node) ? getSymbolOfNode(node) :
+                     isVariableDeclaration(node) && isFunctionExpression(node.initializer) ? getSymbolOfNode(node.initializer) :
+                     undefined;
+
+                return symbol && symbol.members !== undefined;
+            }
+
+            return false;
         }
 
         function getInferredClassType(symbol: Symbol) {

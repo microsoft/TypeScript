@@ -6533,6 +6533,10 @@ namespace ts {
                             case "augments":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
+                            case "class":
+                            case "constructor":
+                                tag = parseClassTag(atToken, tagName);
+                                break;
                             case "arg":
                             case "argument":
                             case "param":
@@ -6750,6 +6754,13 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = typeExpression;
                     return finishNode(result);
+                }
+
+                function parseClassTag(atToken: AtToken, tagName: Identifier): JSDocClassTag {
+                    const tag = <JSDocClassTag>createNode(SyntaxKind.JSDocClassTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    return finishNode(tag);
                 }
 
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier): JSDocTypedefTag {

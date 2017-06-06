@@ -802,7 +802,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
     var debug = process.env.debug || process.env.d;
     var inspect = process.env.inspect;
-    tests = process.env.test || process.env.tests || process.env.t;
+    var testTimeout = process.env.timeout || defaultTestTimeout;
+    var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
@@ -820,7 +821,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         } while (fs.existsSync(taskConfigsFolder));
         fs.mkdirSync(taskConfigsFolder);
 
-        workerCount = process.env.workerCount || os.cpus().length;
+        workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
     if (tests || light || taskConfigsFolder) {
@@ -925,7 +926,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 }
 
-var testTimeout = 20000;
+var defaultTestTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests('min', /*runInParallel*/ true);
