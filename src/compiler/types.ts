@@ -395,6 +395,7 @@ namespace ts {
 
         // Enum value count
         Count,
+
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
@@ -448,6 +449,14 @@ namespace ts {
         JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+
+        // This flag will be set to true when the parse encounter dynamic import so that post-parsing process of module resolution
+        // will not walk the tree if the flag is not set. However, this flag is just a approximation because once it is set, the flag never get reset.
+        // (hence it is named "possiblyContainDynamicImport").
+        // During editing, if dynamic import is remove, incremental parsing will *NOT* update this flag. This will then causes walking of the tree during module resolution.
+        // However, the removal operation should not occur often and in the case of the removal, it is likely that users will add back the import anyway.
+        // The advantage of this approach is its simplicity. For the case of batch compilation, we garuntee that users won't have to pay the price of walking the tree if dynamic import isn't used.
+        PossiblyContainDynamicImport = 1 << 19,
 
         BlockScoped = Let | Const,
 
@@ -1001,8 +1010,10 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
-    export interface IncrementExpression extends UnaryExpression {
-        _incrementExpressionBrand: any;
+    /** Deprecated, please use UpdateExpression */
+    export type IncrementExpression = UpdateExpression;
+    export interface UpdateExpression extends UnaryExpression {
+        _updateExpressionBrand: any;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
@@ -1013,10 +1024,9 @@ namespace ts {
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.TildeToken
-        | SyntaxKind.ExclamationToken
-        ;
+        | SyntaxKind.ExclamationToken;
 
-    export interface PrefixUnaryExpression extends IncrementExpression {
+    export interface PrefixUnaryExpression extends UpdateExpression {
         kind: SyntaxKind.PrefixUnaryExpression;
         operator: PrefixUnaryOperator;
         operand: UnaryExpression;
@@ -1028,13 +1038,13 @@ namespace ts {
         | SyntaxKind.MinusMinusToken
         ;
 
-    export interface PostfixUnaryExpression extends IncrementExpression {
+    export interface PostfixUnaryExpression extends UpdateExpression {
         kind: SyntaxKind.PostfixUnaryExpression;
         operand: LeftHandSideExpression;
         operator: PostfixUnaryOperator;
     }
 
-    export interface LeftHandSideExpression extends IncrementExpression {
+    export interface LeftHandSideExpression extends UpdateExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1060,6 +1070,10 @@ namespace ts {
 
     export interface SuperExpression extends PrimaryExpression {
         kind: SyntaxKind.SuperKeyword;
+    }
+
+    export interface ImportExpression extends PrimaryExpression {
+        kind: SyntaxKind.ImportKeyword;
     }
 
     export interface DeleteExpression extends UnaryExpression {
@@ -1454,10 +1468,7 @@ namespace ts {
     }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperProperty
-    export type SuperProperty
-        = SuperPropertyAccessExpression
-        | SuperElementAccessExpression
-        ;
+    export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
 
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
@@ -1469,6 +1480,10 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
+    }
+
+    export interface ImportCall extends CallExpression {
+        expression: ImportExpression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
@@ -3572,6 +3587,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
+        ESNext = 6
     }
 
     export const enum JsxEmit {
@@ -3959,6 +3975,11 @@ namespace ts {
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
 
+        ContainsDynamicImport = 1 << 26,
+
+        // Please leave this as 1 << 29.
+        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
+        // It is a good reminder of how much room we have left
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions

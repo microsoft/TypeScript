@@ -857,6 +857,7 @@ namespace Harness {
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
             switch (options.target) {
+                case ts.ScriptTarget.ESNext:
                 case ts.ScriptTarget.ES2017:
                     return "lib.es2017.d.ts";
                 case ts.ScriptTarget.ES2016:

@@ -46,6 +46,7 @@ namespace ts {
         let currentSourceFile: SourceFile; // The current file.
         let currentModuleInfo: ExternalModuleInfo; // The ExternalModuleInfo for the current file.
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
+        let needUMDDynamicImportHelper: boolean;
 
         return transformSourceFile;
 
@@ -55,7 +56,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
+            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
                 return node;
             }
 
@@ -66,9 +67,9 @@ namespace ts {
             // Perform the transformation.
             const transformModule = getTransformModuleDelegate(moduleKind);
             const updated = transformModule(node);
-
             currentSourceFile = undefined;
             currentModuleInfo = undefined;
+            needUMDDynamicImportHelper = false;
             return aggregateTransformFlags(updated);
         }
 
@@ -107,6 +108,7 @@ namespace ts {
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
             }
+            addEmitHelpers(updated, context.readEmitHelpers());
             return updated;
         }
 
@@ -411,6 +413,9 @@ namespace ts {
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(body, exportStarHelper);
             }
+            if (needUMDDynamicImportHelper) {
+                addEmitHelper(body, dynamicImportUMDHelper);
+            }
 
             return body;
         }
@@ -488,10 +493,108 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    // This visitor does not descend into the tree, as export/import statements
-                    // are only transformed at the top level of a file.
-                    return node;
+                    return visitEachChild(node, importCallExpressionVisitor, context);
             }
+        }
+
+        function importCallExpressionVisitor(node: Node): VisitResult<Node> {
+            // This visitor does not need to descend into the tree if there is no dynamic import,
+            // as export/import statements are only transformed at the top level of a file.
+            if (!(node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+                return node;
+            }
+
+            if (isImportCall(node)) {
+                return visitImportCallExpression(<ImportCall>node);
+            }
+            else {
+                return visitEachChild(node, importCallExpressionVisitor, context);
+            }
+        }
+
+        function visitImportCallExpression(node: ImportCall): Expression {
+            switch (compilerOptions.module) {
+                case ModuleKind.CommonJS:
+                    return transformImportCallExpressionCommonJS(node);
+                case ModuleKind.AMD:
+                    return transformImportCallExpressionAMD(node);
+                case ModuleKind.UMD:
+                    return transformImportCallExpressionUMD(node);
+            }
+            Debug.fail("All supported module kind in this transformation step should have been handled");
+        }
+
+        function transformImportCallExpressionUMD(node: ImportCall): Expression {
+            // (function (factory) {
+            //      ... (regular UMD)
+            // }
+            // })(function (require, exports, useSyncRequire) {
+            //      "use strict";
+            //      Object.defineProperty(exports, "__esModule", { value: true });
+            //      var __syncRequire = typeof module === "object" && typeof module.exports === "object";
+            //      var __resolved = new Promise(function (resolve) { resolve(); });
+            //      .....
+            //      __syncRequire
+            //          ? __resolved.then(function () { return require(x); }) /*CommonJs Require*/
+            //          : new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
+            // });
+            needUMDDynamicImportHelper = true;
+            return createConditional(
+                /*condition*/ createIdentifier("__syncRequire"),
+                /*whenTrue*/ transformImportCallExpressionCommonJS(node),
+                /*whenFalse*/ transformImportCallExpressionAMD(node)
+            );
+        }
+
+        function transformImportCallExpressionAMD(node: ImportCall): Expression {
+            // improt("./blah")
+            // emit as
+            // define(["require", "exports", "blah"], function (require, exports) {
+            //     ...
+            //     new Promise(function (_a, _b) { require([x], _a, _b); }); /*Amd Require*/
+            // });
+            const resolve = createUniqueName("resolve");
+            const reject = createUniqueName("reject");
+            return createNew(
+                createIdentifier("Promise"),
+                /*typeArguments*/ undefined,
+                [createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    [createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
+                     createParameter(/*decorator*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)],
+                    /*type*/ undefined,
+                    createBlock([createStatement(
+                        createCall(
+                            createIdentifier("require"),
+                            /*typeArguments*/ undefined,
+                            [createArrayLiteral([firstOrUndefined(node.arguments) || createOmittedExpression()]), resolve, reject]
+                        ))])
+            )]);
+        }
+
+    function transformImportCallExpressionCommonJS(node: ImportCall): Expression {
+            // import("./blah")
+            // emit as
+            // Promise.resolve().then(function () { return require(x); }) /*CommonJs Require*/
+            // We have to wrap require in then callback so that require is done in asynchronously
+            // if we simply do require in resolve callback in Promise constructor. We will execute the loading immediately
+            return createCall(
+                createPropertyAccess(
+                    createCall(createPropertyAccess(createIdentifier("Promise"), "resolve"), /*typeArguments*/ undefined, /*argumentsArray*/ []),
+                    "then"),
+                /*typeArguments*/ undefined,
+                [createFunctionExpression(
+                    /*modifiers*/ undefined,
+                    /*asteriskToken*/ undefined,
+                    /*name*/ undefined,
+                    /*typeParameters*/ undefined,
+                    /*parameters*/ undefined,
+                    /*type*/ undefined,
+                    createBlock([createReturn(createCall(createIdentifier("require"), /*typeArguments*/ undefined, node.arguments))])
+                )]);
         }
 
         /**
@@ -786,9 +889,9 @@ namespace ts {
                                 node.asteriskToken,
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.parameters,
+                                visitNodes(node.parameters, importCallExpressionVisitor),
                                 /*type*/ undefined,
-                                node.body
+                                visitEachChild(node.body, importCallExpressionVisitor, context)
                             ),
                             /*location*/ node
                         ),
@@ -797,7 +900,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -828,7 +931,7 @@ namespace ts {
                                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                                 getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                                 /*typeParameters*/ undefined,
-                                node.heritageClauses,
+                                visitNodes(node.heritageClauses, importCallExpressionVisitor),
                                 node.members
                             ),
                             node
@@ -838,7 +941,7 @@ namespace ts {
                 );
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -890,7 +993,7 @@ namespace ts {
                 }
             }
             else {
-                statements = append(statements, node);
+                statements = append(statements, visitEachChild(node, importCallExpressionVisitor, context));
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -913,7 +1016,7 @@ namespace ts {
         function transformInitializedVariable(node: VariableDeclaration): Expression {
             if (isBindingPattern(node.name)) {
                 return flattenDestructuringAssignment(
-                    node,
+                    visitNode(node, importCallExpressionVisitor),
                     /*visitor*/ undefined,
                     context,
                     FlattenLevel.All,
@@ -930,7 +1033,7 @@ namespace ts {
                         ),
                         /*location*/ node.name
                     ),
-                    node.initializer
+                    visitNode(node.initializer, importCallExpressionVisitor)
                 );
             }
         }
@@ -1496,5 +1599,13 @@ namespace ts {
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
             }`
+    };
+
+    // emit helper for dynamic import
+    const dynamicImportUMDHelper: EmitHelper = {
+        name: "typescript:dynamicimport-sync-require",
+        scoped: true,
+        text: `
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
     };
 }

@@ -13,7 +13,8 @@ namespace ts.projectSystem {
             express: "express",
             jquery: "jquery",
             lodash: "lodash",
-            moment: "moment"
+            moment: "moment",
+            chroma: "chroma-js"
         })
     };
 
@@ -61,7 +62,6 @@ namespace ts.projectSystem {
             super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
         }
 
-        safeFileList = safeList.path;
         protected postExecActions: PostExecAction[] = [];
 
         executePendingCommands() {
