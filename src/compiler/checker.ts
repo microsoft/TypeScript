@@ -17630,7 +17630,7 @@ namespace ts {
                 if (signature && signature.typeParameters) {
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
-                        const contextualSignature = getSingleCallSignature(contextualType);
+                        const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
                             return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, getContextualMapper(node)));
                         }
