@@ -1359,6 +1359,7 @@ namespace ts {
             const isJavaScriptFile = isSourceFileJavaScript(file);
             const isExternalModuleFile = isExternalModule(file);
 
+            // file.imports may not be undefined if there exists dynamic import
             let imports: LiteralExpression[];
             let moduleAugmentations: LiteralExpression[];
             let ambientModules: string[];
@@ -1378,8 +1379,8 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if (isJavaScriptFile) {
-                    collectRequireCalls(node);
+                if ((file.flags & NodeFlags.PossiblyContainDynamicImport) || isJavaScriptFile) {
+                    collectDynamicImportOrRequireCalls(node);
                 }
             }
 
@@ -1442,12 +1443,16 @@ namespace ts {
                 }
             }
 
-            function collectRequireCalls(node: Node): void {
+            function collectDynamicImportOrRequireCalls(node: Node): void {
                 if (isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                     (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
                 }
+                // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
+                else if (isImportCall(node) && node.arguments.length === 1 && node.arguments[0].kind === SyntaxKind.StringLiteral) {
+                    (imports || (imports = [])).push(<StringLiteral>(<CallExpression>node).arguments[0]);
+                }
                 else {
-                    forEachChild(node, collectRequireCalls);
+                    forEachChild(node, collectDynamicImportOrRequireCalls);
                 }
             }
         }
