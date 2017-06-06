@@ -136,14 +136,6 @@ namespace ts.server.typingsInstaller {
                 this.log.writeLine(`Got install request ${JSON.stringify(req)}`);
             }
 
-            // load existing typing information from the cache
-            if (req.cachePath) {
-                if (this.log.isEnabled()) {
-                    this.log.writeLine(`Request specifies cache path '${req.cachePath}', loading cached information...`);
-                }
-                this.processCacheLocation(req.cachePath);
-            }
-
             const discoverTypingsResult = JsTyping.discoverTypings(
                 this.installTypingHost,
                 req.fileNames,
@@ -165,7 +157,7 @@ namespace ts.server.typingsInstaller {
 
             // install typings
             if (discoverTypingsResult.newTypingNames.length) {
-                this.installTypings(req, req.cachePath || this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
+                this.installTypings(req, this.globalCachePath, discoverTypingsResult.cachedTypingPaths, discoverTypingsResult.newTypingNames);
             }
             else {
                 if (this.log.isEnabled()) {

@@ -35,7 +35,6 @@ declare namespace ts.server {
         readonly compilerOptions: ts.CompilerOptions;
         readonly typeAcquisition: ts.TypeAcquisition;
         readonly unresolvedImports: SortedReadonlyArray<string>;
-        readonly cachePath?: string;
         readonly kind: "discover";
     }
 

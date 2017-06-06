@@ -46,7 +46,7 @@ namespace ts.server {
         }
     }
 
-    export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
+    export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
             fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
@@ -54,7 +54,6 @@ namespace ts.server {
             typeAcquisition,
             unresolvedImports,
             projectRootPath: getProjectRootPath(project),
-            cachePath,
             kind: "discover"
         };
     }
