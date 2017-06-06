@@ -1,0 +1,18 @@
+=== tests/cases/compiler/thisExpressionInCallExpressionWithTypeArguments.ts ===
+class C {
+>C : C
+
+    public foo() { [1,2,3].map<any,any>((x) => { return this; })}
+>foo : () => void
+>[1,2,3].map<any,any>((x) => { return this; }) : any[]
+>[1,2,3].map : <U, Z = void>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg?: Z) => U[]
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>map : <U, Z = void>(callbackfn: (this: Z, value: number, index: number, array: number[]) => U, thisArg?: Z) => U[]
+>(x) => { return this; } : (this: any, x: number) => this
+>x : number
+>this : this
+}
+

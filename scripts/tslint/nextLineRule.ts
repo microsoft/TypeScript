@@ -18,7 +18,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 function walk(ctx: Lint.WalkContext<void>, checkCatch: boolean, checkElse: boolean): void {
     const { sourceFile } = ctx;
-    function recur(node: ts.Node): void {
+    ts.forEachChild(sourceFile, function recur(node) {
         switch (node.kind) {
             case ts.SyntaxKind.IfStatement:
                 checkIf(node as ts.IfStatement);
@@ -28,7 +28,7 @@ function walk(ctx: Lint.WalkContext<void>, checkCatch: boolean, checkElse: boole
                 break;
         }
         ts.forEachChild(node, recur);
-    }
+    });
 
     function checkIf(node: ts.IfStatement): void {
         const { thenStatement, elseStatement } = node;

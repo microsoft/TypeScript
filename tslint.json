@@ -1,7 +1,7 @@
 {
     "rulesDirectory": "built/local/tslint",
     "rules": {
-        "no-bom": true,
+        "boolean-trivia": true,
         "class-name": true,
         "comment-format": [true,
             "check-space"
@@ -9,25 +9,35 @@
         "indent": [true,
             "spaces"
         ],
+        "jsdoc-format": true,
         "linebreak-style": [true, "CRLF"],
+        "next-line": [true,
+            "check-catch",
+            "check-else"
+        ],
+        "no-bom": true,
+        "no-in-operator": true,
+        "no-increment-decrement": true,
+        "no-inferrable-types": true,
+        "no-internal-module": true,
+        "no-null-keyword": true,
+        "no-switch-case-fall-through": true,
+        "no-trailing-whitespace": [true, "ignore-template-strings"],
+        "no-type-assertion-whitespace": true,
+        "no-var-keyword": true,
+        "object-literal-surrounding-space": true,
         "one-line": [true,
             "check-open-brace",
             "check-whitespace"
         ],
-        "no-var-keyword": true,
+        "prefer-const": true,
         "quotemark": [true,
             "double",
             "avoid-escape"
         ],
         "semicolon": [true, "always", "ignore-bound-class-methods"],
-        "whitespace": [true,
-            "check-branch",
-            "check-decl",
-            "check-operator",
-            "check-module",
-            "check-separator",
-            "check-type"
-        ],
+        "triple-equals": true,
+        "type-operator-spacing": true,
         "typedef-whitespace": [
             true,
             {
@@ -45,23 +55,13 @@
                 "variable-declaration": "onespace"
             }
         ],
-        "next-line": [true,
-            "check-catch",
-            "check-else"
-        ],
-        "no-internal-module": true,
-        "no-trailing-whitespace": [true, "ignore-template-strings"],
-        "no-inferrable-types": true,
-        "no-null-keyword": true,
-        "boolean-trivia": true,
-        "type-operator-spacing": true,
-        "prefer-const": true,
-        "no-increment-decrement": true,
-        "object-literal-surrounding-space": true,
-        "no-type-assertion-whitespace": true,
-        "no-in-operator": true,
-        "no-switch-case-fall-through": true,
-        "triple-equals": true,
-        "jsdoc-format": true
-    }
+        "whitespace": [true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-module",
+            "check-separator",
+            "check-type"
+        ]	
+	}
 }

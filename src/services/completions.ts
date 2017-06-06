@@ -20,6 +20,22 @@ namespace ts.Completions {
 
         const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, requestJsDocTagName, requestJsDocTag, hasFilteredClassMemberKeywords } = completionData;
 
+        if (sourceFile.languageVariant === LanguageVariant.JSX &&
+            location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
+            // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
+            // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
+            // For example:
+            //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
+            const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
+            return { isGlobalCompletion: false, isMemberCompletion: true, isNewIdentifierLocation: false,
+                entries: [{
+                    name: (<JsxTagNameExpression>tagName).getFullText(),
+                    kind: ScriptElementKind.classElement,
+                    kindModifiers: undefined,
+                    sortText: "0",
+                }]};
+        }
+
         if (requestJsDocTagName) {
             // If the current position is a jsDoc tag name, only tag names should be provided for completion
             return { isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, entries: JsDoc.getJSDocTagNameCompletions() };
@@ -38,21 +54,7 @@ namespace ts.Completions {
         }
         else {
             if (!symbols || symbols.length === 0) {
-                if (sourceFile.languageVariant === LanguageVariant.JSX &&
-                    location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
-                    // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
-                    // instead of simply giving unknown value, the completion will return the tag-name of an associated opening-element.
-                    // For example:
-                    //     var x = <div> </ /*1*/>  completion list at "1" will contain "div" with type any
-                    const tagName = (<JsxElement>location.parent.parent).openingElement.tagName;
-                    entries.push({
-                        name: (<Identifier>tagName).text,
-                        kind: undefined,
-                        kindModifiers: undefined,
-                        sortText: "0",
-                    });
-                }
-                else if (!hasFilteredClassMemberKeywords) {
+                if (!hasFilteredClassMemberKeywords) {
                     return undefined;
                 }
             }
@@ -495,7 +497,7 @@ namespace ts.Completions {
                             // It has a left-hand side, so we're not in an opening JSX tag.
                             break;
                         }
-                        // falls through
+                    // falls through
 
                     case SyntaxKind.JsxSelfClosingElement:
                     case SyntaxKind.JsxElement:
@@ -1050,7 +1052,7 @@ namespace ts.Completions {
                     default:
                         if (isFromClassElementDeclaration(contextToken) &&
                             (isClassMemberCompletionKeyword(contextToken.kind) ||
-                            isClassMemberCompletionKeywordText(contextToken.getText()))) {
+                                isClassMemberCompletionKeywordText(contextToken.getText()))) {
                             return contextToken.parent.parent as ClassLikeDeclaration;
                         }
                 }
@@ -1213,7 +1215,7 @@ namespace ts.Completions {
                     if (isFromClassElementDeclaration(contextToken)) {
                         return false;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.EnumKeyword:
                 case SyntaxKind.InterfaceKeyword:

@@ -1,0 +1,30 @@
+tests/cases/conformance/dynamicImport/1.ts(4,5): error TS2322: Type 'Promise<typeof "tests/cases/conformance/dynamicImport/defaultPath">' is not assignable to type 'Promise<typeof "tests/cases/conformance/dynamicImport/anotherModule">'.
+  Type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"' is not assignable to type 'typeof "tests/cases/conformance/dynamicImport/anotherModule"'.
+    Property 'D' is missing in type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"'.
+tests/cases/conformance/dynamicImport/1.ts(5,10): error TS2352: Type 'Promise<typeof "tests/cases/conformance/dynamicImport/defaultPath">' cannot be converted to type 'Promise<typeof "tests/cases/conformance/dynamicImport/anotherModule">'.
+  Type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"' is not comparable to type 'typeof "tests/cases/conformance/dynamicImport/anotherModule"'.
+    Property 'D' is missing in type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"'.
+
+
+==== tests/cases/conformance/dynamicImport/anotherModule.ts (0 errors) ====
+    export class D{}
+    
+==== tests/cases/conformance/dynamicImport/defaultPath.ts (0 errors) ====
+    export class C {}
+    
+==== tests/cases/conformance/dynamicImport/1.ts (2 errors) ====
+    import * as defaultModule from "./defaultPath";
+    import * as anotherModule from "./anotherModule";
+    
+    let p1: Promise<typeof anotherModule> = import("./defaultPath");
+        ~~
+!!! error TS2322: Type 'Promise<typeof "tests/cases/conformance/dynamicImport/defaultPath">' is not assignable to type 'Promise<typeof "tests/cases/conformance/dynamicImport/anotherModule">'.
+!!! error TS2322:   Type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"' is not assignable to type 'typeof "tests/cases/conformance/dynamicImport/anotherModule"'.
+!!! error TS2322:     Property 'D' is missing in type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"'.
+    let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2352: Type 'Promise<typeof "tests/cases/conformance/dynamicImport/defaultPath">' cannot be converted to type 'Promise<typeof "tests/cases/conformance/dynamicImport/anotherModule">'.
+!!! error TS2352:   Type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"' is not comparable to type 'typeof "tests/cases/conformance/dynamicImport/anotherModule"'.
+!!! error TS2352:     Property 'D' is missing in type 'typeof "tests/cases/conformance/dynamicImport/defaultPath"'.
+    let p3: Promise<any> = import("./defaultPath");
+    
