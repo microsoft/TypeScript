@@ -50,7 +50,7 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile || !(isExternalModule(node) || compilerOptions.isolatedModules)) {
                 return node;
             }
 
@@ -646,7 +646,7 @@ namespace ts {
                 return undefined;
             }
 
-            const expression = visitNode(node.expression, destructuringAndImportCallVisitor, isExpression);
+            const expression = visitNode(node.expression, destructuringVisitor, isExpression);
             const original = node.original;
             if (original && hasAssociatedEndOfDeclarationMarker(original)) {
                 // Defer exports until we encounter an EndOfDeclarationMarker node
@@ -673,12 +673,12 @@ namespace ts {
                         node.asteriskToken,
                         getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                         /*typeParameters*/ undefined,
-                        visitNodes(node.parameters, destructuringAndImportCallVisitor, isParameterDeclaration),
+                        visitNodes(node.parameters, destructuringVisitor, isParameterDeclaration),
                         /*type*/ undefined,
-                        visitNode(node.body, destructuringAndImportCallVisitor, isBlock)));
+                        visitNode(node.body, destructuringVisitor, isBlock)));
             }
             else {
-                hoistedStatements = append(hoistedStatements, visitEachChild(node, destructuringAndImportCallVisitor, context));
+                hoistedStatements = append(hoistedStatements, node);
             }
 
             if (hasAssociatedEndOfDeclarationMarker(node)) {
@@ -716,8 +716,8 @@ namespace ts {
                                     /*modifiers*/ undefined,
                                     node.name,
                                     /*typeParameters*/ undefined,
-                                    visitNodes(node.heritageClauses, destructuringAndImportCallVisitor, isHeritageClause),
-                                    visitNodes(node.members, destructuringAndImportCallVisitor, isClassElement)
+                                    visitNodes(node.heritageClauses, destructuringVisitor, isHeritageClause),
+                                    visitNodes(node.members, destructuringVisitor, isClassElement)
                                 ),
                                 node
                             )
@@ -747,7 +747,7 @@ namespace ts {
          */
         function visitVariableStatement(node: VariableStatement): VisitResult<Statement> {
             if (!shouldHoistVariableDeclarationList(node.declarationList)) {
-                return visitNode(node, destructuringAndImportCallVisitor, isStatement);
+                return visitNode(node, destructuringVisitor, isStatement);
             }
 
             let expressions: Expression[];
@@ -820,13 +820,13 @@ namespace ts {
             return isBindingPattern(node.name)
                 ? flattenDestructuringAssignment(
                     node,
-                    destructuringAndImportCallVisitor,
+                    destructuringVisitor,
                     context,
                     FlattenLevel.All,
                     /*needsValue*/ false,
                     createAssignment
                 )
-                : createAssignment(node.name, visitNode(node.initializer, destructuringAndImportCallVisitor, isExpression));
+                : createAssignment(node.name, visitNode(node.initializer, destructuringVisitor, isExpression));
         }
 
         /**
@@ -1204,7 +1204,7 @@ namespace ts {
                     return visitEndOfDeclarationMarker(<EndOfDeclarationMarker>node);
 
                 default:
-                    return destructuringAndImportCallVisitor(node);
+                    return destructuringVisitor(node);
             }
         }
 
@@ -1220,8 +1220,8 @@ namespace ts {
             node = updateFor(
                 node,
                 visitForInitializer(node.initializer),
-                visitNode(node.condition, destructuringAndImportCallVisitor, isExpression),
-                visitNode(node.incrementor, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.condition, destructuringVisitor, isExpression),
+                visitNode(node.incrementor, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement)
             );
 
@@ -1241,7 +1241,7 @@ namespace ts {
             node = updateForIn(
                 node,
                 visitForInitializer(node.initializer),
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
@@ -1262,7 +1262,7 @@ namespace ts {
                 node,
                 node.awaitModifier,
                 visitForInitializer(node.initializer),
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
 
@@ -1313,7 +1313,7 @@ namespace ts {
             return updateDo(
                 node,
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock),
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression)
+                visitNode(node.expression, destructuringVisitor, isExpression)
             );
         }
 
@@ -1325,7 +1325,7 @@ namespace ts {
         function visitWhileStatement(node: WhileStatement): VisitResult<Statement> {
             return updateWhile(
                 node,
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
@@ -1351,7 +1351,7 @@ namespace ts {
         function visitWithStatement(node: WithStatement): VisitResult<Statement> {
             return updateWith(
                 node,
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.statement, nestedElementVisitor, isStatement, liftToBlock)
             );
         }
@@ -1364,7 +1364,7 @@ namespace ts {
         function visitSwitchStatement(node: SwitchStatement): VisitResult<Statement> {
             return updateSwitch(
                 node,
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNode(node.caseBlock, nestedElementVisitor, isCaseBlock)
             );
         }
@@ -1395,7 +1395,7 @@ namespace ts {
         function visitCaseClause(node: CaseClause): VisitResult<CaseOrDefaultClause> {
             return updateCaseClause(
                 node,
-                visitNode(node.expression, destructuringAndImportCallVisitor, isExpression),
+                visitNode(node.expression, destructuringVisitor, isExpression),
                 visitNodes(node.statements, nestedElementVisitor, isStatement)
             );
         }
@@ -1461,41 +1461,17 @@ namespace ts {
          *
          * @param node The node to visit.
          */
-        function destructuringAndImportCallVisitor(node: Node): VisitResult<Node> {
+        function destructuringVisitor(node: Node): VisitResult<Node> {
             if (node.transformFlags & TransformFlags.DestructuringAssignment
                 && node.kind === SyntaxKind.BinaryExpression) {
                 return visitDestructuringAssignment(<DestructuringAssignment>node);
             }
-            else if (isImportCall(node)) {
-                return visitImportCallExpression(node);
-            }
-            else if ((node.transformFlags & TransformFlags.ContainsDestructuringAssignment) || (node.transformFlags & TransformFlags.ContainsDynamicImport)) {
-                return visitEachChild(node, destructuringAndImportCallVisitor, context);
+            else if (node.transformFlags & TransformFlags.ContainsDestructuringAssignment) {
+                return visitEachChild(node, destructuringVisitor, context);
             }
             else {
                 return node;
             }
-        }
-
-        function visitImportCallExpression(node: ImportCall): Expression {
-            // import("./blah")
-            // emit as
-            // System.register([], function (_export, _context) {
-            //     return {
-            //         setters: [],
-            //         execute: () => {
-            //             _context.import('./blah');
-            //         }
-            //     };
-            // });
-            return createCall(
-                createPropertyAccess(
-                    contextObject,
-                    createIdentifier("import")
-                ),
-                /*typeArguments*/ undefined,
-                node.arguments
-            );
         }
 
         /**
@@ -1507,14 +1483,14 @@ namespace ts {
             if (hasExportedReferenceInDestructuringTarget(node.left)) {
                 return flattenDestructuringAssignment(
                     node,
-                    destructuringAndImportCallVisitor,
+                    destructuringVisitor,
                     context,
                     FlattenLevel.All,
                     /*needsValue*/ true
                 );
             }
 
-            return visitEachChild(node, destructuringAndImportCallVisitor, context);
+            return visitEachChild(node, destructuringVisitor, context);
         }
 
         /**

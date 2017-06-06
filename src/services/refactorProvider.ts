@@ -52,18 +52,8 @@ namespace ts {
         }
 
         export function getRefactorCodeActions(context: RefactorContext, refactorName: string): CodeAction[] | undefined {
-
-            let result: CodeAction[];
             const refactor = refactors.get(refactorName);
-            if (!refactor) {
-                return undefined;
-            }
-
-            const codeActions = refactor.getCodeActions(context);
-            if (codeActions) {
-                addRange((result || (result = [])), codeActions);
-            }
-            return result;
+            return refactor && refactor.getCodeActions(context);
         }
     }
 }

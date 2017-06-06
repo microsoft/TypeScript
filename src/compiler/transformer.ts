@@ -16,7 +16,6 @@
 namespace ts {
     function getModuleTransformer(moduleKind: ModuleKind): TransformerFactory<SourceFile> {
         switch (moduleKind) {
-            case ModuleKind.ESNext:
             case ModuleKind.ES2015:
                 return transformES2015Module;
             case ModuleKind.System:

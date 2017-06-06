@@ -216,6 +216,11 @@ namespace ts {
             getSuggestionForNonexistentProperty,
             getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
+            getJsxNamespace,
+            resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined {
+                location = getParseTreeNode(location);
+                return resolveName(location, name, meaning, /*nameNotFoundMessage*/ undefined, name);
+            },
         };
 
         const tupleTypes: GenericType[] = [];
@@ -741,6 +746,7 @@ namespace ts {
             if (declarationFile !== useFile) {
                 if ((modulekind && (declarationFile.externalModuleIndicator || useFile.externalModuleIndicator)) ||
                     (!compilerOptions.outFile && !compilerOptions.out) ||
+                    isInTypeQuery(usage) ||
                     isInAmbientContext(declaration)) {
                     // nodes are in different files and order cannot be determined
                     return true;
@@ -853,7 +859,7 @@ namespace ts {
             location: Node | undefined,
             name: string,
             meaning: SymbolFlags,
-            nameNotFoundMessage: DiagnosticMessage,
+            nameNotFoundMessage: DiagnosticMessage | undefined,
             nameArg: string | Identifier,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
@@ -1370,6 +1376,9 @@ namespace ts {
         // An 'import { Point } from "graphics"' needs to create a symbol that combines the value side 'Point'
         // property with the type/namespace side interface 'Point'.
         function combineValueAndTypeSymbols(valueSymbol: Symbol, typeSymbol: Symbol): Symbol {
+            if (valueSymbol === unknownSymbol && typeSymbol === unknownSymbol) {
+                return unknownSymbol;
+            }
             if (valueSymbol.flags & (SymbolFlags.Type | SymbolFlags.Namespace)) {
                 return valueSymbol;
             }
@@ -2288,7 +2297,7 @@ namespace ts {
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
             const typeNode = nodeBuilder.typeToTypeNode(type, enclosingDeclaration, toNodeBuilderFlags(flags) | NodeBuilderFlags.IgnoreErrors | NodeBuilderFlags.WriteTypeParametersInQualifiedName);
-            Debug.assert(typeNode !== undefined, "should always get typenode?");
+            Debug.assert(typeNode !== undefined, "should always get typenode");
             const options = { removeComments: true };
             const writer = createTextWriter("");
             const printer = createPrinter(options);
@@ -5847,7 +5856,8 @@ namespace ts {
                     }
                 }
                 return arrayFrom(props.values());
-            } else {
+            }
+            else {
                 return getPropertiesOfType(type);
             }
         }
@@ -8362,12 +8372,6 @@ namespace ts {
         /**
          * This is *not* a bi-directional relationship.
          * If one needs to check both directions for comparability, use a second call to this function or 'checkTypeComparableTo'.
-         *
-         * A type S is comparable to a type T if some (but not necessarily all) of the possible values of S are also possible values of T.
-         * It is used to check following cases:
-         *   - the types of the left and right sides of equality/inequality operators (`===`, `!==`, `==`, `!=`).
-         *   - the types of `case` clause expressions and their respective `switch` expressions.
-         *   - the type of an expression in a type assertion with the type being asserted.
          */
         function isTypeComparableTo(source: Type, target: Type): boolean {
             return isTypeRelatedTo(source, target, comparableRelation);
@@ -14163,7 +14167,7 @@ namespace ts {
             checkJsxPreconditions(node);
             // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
             // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const reactRefErr = compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
             const reactNamespace = getJsxNamespace();
             const reactSym = resolveName(node.tagName, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace);
             if (reactSym) {
@@ -14534,6 +14538,7 @@ namespace ts {
             const maximumLengthDifference = Math.min(3, name.length * 0.34);
             let bestDistance = Number.MAX_VALUE;
             let bestCandidate = undefined;
+            let justCheckExactMatches = false;
             if (name.length > 30) {
                 return undefined;
             }
@@ -14545,6 +14550,9 @@ namespace ts {
                     const candidateName = candidate.name.toLowerCase();
                     if (candidateName === name) {
                         return candidate;
+                    }
+                    if (justCheckExactMatches) {
+                        continue;
                     }
                     if (candidateName.length < 3 ||
                         name.length < 3 ||
@@ -14561,7 +14569,8 @@ namespace ts {
                         continue;
                     }
                     if (distance < 3) {
-                        return candidate;
+                        justCheckExactMatches = true;
+                        bestCandidate = candidate;
                     }
                     else if (distance < bestDistance) {
                         bestDistance = distance;
@@ -16170,35 +16179,6 @@ namespace ts {
             return getReturnTypeOfSignature(signature);
         }
 
-        function checkImportCallExpression(node: ImportCall): Type {
-            // Check grammar of dynamic import
-            checkGrammarArguments(node, node.arguments) || checkGrammarImportCallExpression(node);
-
-            if (node.arguments.length === 0) {
-                return createPromiseReturnType(node, anyType);
-            }
-            const specifier = node.arguments[0];
-            const specifierType = checkExpressionCached(specifier);
-            // Even though multiple arugments is grammatically incorrect, type-check extra arguments for completion
-            for (let i = 1; i < node.arguments.length; ++i) {
-                checkExpressionCached(node.arguments[i]);
-            }
-
-            if (specifierType.flags & TypeFlags.Undefined || specifierType.flags & TypeFlags.Null || !isTypeAssignableTo(specifierType, stringType)) {
-                error(specifier, Diagnostics.Dynamic_import_s_specifier_must_be_of_type_string_but_here_has_type_0, typeToString(specifierType));
-            }
-
-            // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal
-            const moduleSymbol = resolveExternalModuleName(node, specifier);
-            if (moduleSymbol) {
-                const esModuleSymbol = resolveESModuleSymbol(moduleSymbol, specifier, /*dontRecursivelyResolve*/ true);
-                if (esModuleSymbol) {
-                    return createPromiseReturnType(node, getTypeOfSymbol(esModuleSymbol));
-                }
-            }
-            return createPromiseReturnType(node, anyType);
-        }
-
         function isCommonJsRequire(node: Node) {
             if (!isRequireCall(node, /*checkArgumentIsStringLiteral*/ true)) {
                 return false;
@@ -16405,18 +16385,14 @@ namespace ts {
             return emptyObjectType;
         }
 
-        function createPromiseReturnType(func: FunctionLikeDeclaration | ImportCall, promisedType: Type) {
+        function createPromiseReturnType(func: FunctionLikeDeclaration, promisedType: Type) {
             const promiseType = createPromiseType(promisedType);
             if (promiseType === emptyObjectType) {
-                error(func, isImportCall(func) ?
-                    Diagnostics.A_dynamic_import_call_returns_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option :
-                    Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
+                error(func, Diagnostics.An_async_function_or_method_must_return_a_Promise_Make_sure_you_have_a_declaration_for_Promise_or_include_ES2015_in_your_lib_option);
                 return unknownType;
             }
             else if (!getGlobalPromiseConstructorSymbol(/*reportErrors*/ true)) {
-                error(func, isImportCall(func) ?
-                    Diagnostics.A_dynamic_import_call_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option :
-                    Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
+                error(func, Diagnostics.An_async_function_or_method_in_ES5_SlashES3_requires_the_Promise_constructor_Make_sure_you_have_a_declaration_for_the_Promise_constructor_or_include_ES2015_in_your_lib_option);
             }
 
             return promiseType;
@@ -17775,10 +17751,6 @@ namespace ts {
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
-                    if ((<CallExpression>node).expression.kind === SyntaxKind.ImportKeyword) {
-                        return checkImportCallExpression(<ImportCall>node);
-                    }
-                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return checkCallExpression(<CallExpression>node);
                 case SyntaxKind.TaggedTemplateExpression:
@@ -24703,27 +24675,6 @@ namespace ts {
                 }
             });
             return result;
-        }
-
-        function checkGrammarImportCallExpression(node: ImportCall): boolean {
-            if (modulekind === ModuleKind.ES2015) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_be_used_when_targeting_ECMAScript_2015_modules);
-            }
-
-            if (node.typeArguments) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_cannot_have_type_arguments);
-            }
-
-            const arguments = node.arguments;
-            if (arguments.length !== 1) {
-                return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
-            }
-
-            // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
-            // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
-            if (isSpreadElement(arguments[0])) {
-                return grammarErrorOnNode(arguments[0], Diagnostics.Specifier_of_dynamic_import_cannot_be_spread_element);
-            }
         }
     }
 
