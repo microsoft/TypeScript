@@ -2782,8 +2782,9 @@ namespace ts {
                 case SyntaxKind.SlashToken:
                 case SyntaxKind.SlashEqualsToken:
                 case SyntaxKind.Identifier:
-                case SyntaxKind.ImportKeyword:
                     return true;
+                case SyntaxKind.ImportKeyword:
+                    return lookAhead(nextTokenIsOpenParenOrLessThan);
                 default:
                     return isIdentifier();
             }
@@ -3695,7 +3696,7 @@ namespace ts {
             // 3)we have a MemberExpression which either completes the LeftHandSideExpression,
             // or starts the beginning of the first four CallExpression productions.
             let expression: MemberExpression;
-            if (token() === SyntaxKind.ImportKeyword && lookAhead(nextTokenIsOpenParenOrLessThan)) {
+            if (token() === SyntaxKind.ImportKeyword) {
                 // We don't want to eagerly consume all import keyword as import call expression so we look a head to find "("
                 // For example:
                 //      var foo3 = require("subfolder
@@ -4807,8 +4808,10 @@ namespace ts {
                 // however, we say they are here so that we may gracefully parse them and error later.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
-                case SyntaxKind.ImportKeyword:
                     return true;
+
+                case SyntaxKind.ImportKeyword:
+                    return isStartOfDeclaration() || lookAhead(nextTokenIsOpenParenOrLessThan);
 
                 case SyntaxKind.ConstKeyword:
                 case SyntaxKind.ExportKeyword:
