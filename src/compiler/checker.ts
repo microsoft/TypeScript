@@ -8599,6 +8599,7 @@ namespace ts {
 
         function isEmptyObjectType(type: Type): boolean {
             return type.flags & TypeFlags.Object ? isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>type)) :
+                type.flags & TypeFlags.NonPrimitive ? true :
                 type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isEmptyObjectType) :
                 type.flags & TypeFlags.Intersection ? !forEach((<UnionType>type).types, t => !isEmptyObjectType(t)) :
                 false;
