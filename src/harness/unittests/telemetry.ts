@@ -252,7 +252,8 @@ namespace ts.projectSystem {
         }
 
         getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"], mayBeMore = false): T["data"] {
-            if (mayBeMore) assert(this.events.length !== 0); else assert.equal(this.events.length, 1);
+            if (mayBeMore) { assert(this.events.length !== 0); }
+            else { assert.equal(this.events.length, 1); }
             const event = this.events.shift();
             assert.equal(event.eventName, eventName);
             return event.data;

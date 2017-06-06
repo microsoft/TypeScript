@@ -42,7 +42,7 @@ module Optional {
     }
 
     class B implements A {
-        fooo: Derived; // ok
+        fooo: Derived; // weak type error
     }
 
     interface A2 {
@@ -50,7 +50,7 @@ module Optional {
     }
 
     class B2 implements A2 {
-        2: Derived; // ok
+        2: Derived; // weak type error
     }
 
     interface A3 {
@@ -58,9 +58,10 @@ module Optional {
     }
 
     class B3 implements A3 {
-        '1.0': Derived; // ok
+        '1.0': Derived; // weak type error
     }
 }
+
 
 //// [subtypingWithObjectMembers5.js]
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M

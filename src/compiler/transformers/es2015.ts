@@ -2095,9 +2095,9 @@ namespace ts {
                     enableSubstitutionsForBlockScopedBindings();
                 }
 
-                const declarations = flatten(map(node.declarations, node.flags & NodeFlags.Let
+                const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
                     ? visitVariableDeclarationInLetDeclarationList
-                    : visitVariableDeclaration));
+                    : visitVariableDeclaration);
 
                 const declarationList = createVariableDeclarationList(declarations);
                 setOriginalNode(declarationList, node);
