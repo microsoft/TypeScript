@@ -473,10 +473,10 @@ namespace ts {
 
         // Map from a stringified PackageId to the source file with that id.
         // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
-        // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageId` and `isSourceFileTargetOfRedirect` are kept around.
+        // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageName` and `isSourceFileTargetOfRedirect` are kept around.
         const packageIdToSourceFile = createMap<SourceFile>();
-        // Maps from a SourceFile's `.path` to the packageId it was imported with.
-        let sourceFileToPackageId = createMap<PackageId>();
+        // Maps from a SourceFile's `.path` to the name of the package it was imported with.
+        let sourceFileToPackageName = createMap<string>();
         // See `sourceFileIsRedirectedTo`.
         let isSourceFileTargetOfRedirect = createMap<true>();
 
@@ -553,7 +553,7 @@ namespace ts {
             isSourceFileFromExternalLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
-            sourceFileToPackageId,
+            sourceFileToPackageName,
             isSourceFileTargetOfRedirect,
         };
 
@@ -808,16 +808,16 @@ namespace ts {
                 newSourceFile.path = oldSourceFile.path;
                 filePaths.push(newSourceFile.path);
 
-                const packageId = oldProgram.sourceFileToPackageId.get(oldSourceFile.path);
-                if (packageId) {
+                const packageName = oldProgram.sourceFileToPackageName.get(oldSourceFile.path);
+                if (packageName !== undefined) {
                     // If there are 2 different source files for the same package name and at least one of them changes,
                     // they might become redirects. So we must rebuild the program.
-                    const prevKind = seenPackageNames.get(packageId.name);
+                    const prevKind = seenPackageNames.get(packageName);
                     const newKind = oldSourceFile === newSourceFile ? SeenPackageName.Exists : SeenPackageName.Modified;
                     if (prevKind !== undefined && newKind === SeenPackageName.Modified || prevKind === SeenPackageName.Modified) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
-                    seenPackageNames.set(packageId.name, newKind);
+                    seenPackageNames.set(packageName, newKind);
                 }
 
                 if (oldSourceFile !== newSourceFile) {
@@ -913,7 +913,7 @@ namespace ts {
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
 
-            sourceFileToPackageId = oldProgram.sourceFileToPackageId;
+            sourceFileToPackageName = oldProgram.sourceFileToPackageName;
             isSourceFileTargetOfRedirect = oldProgram.isSourceFileTargetOfRedirect;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
@@ -1639,14 +1639,14 @@ namespace ts {
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
                     isSourceFileTargetOfRedirect.set(fileFromPackageId.path, true);
                     filesByName.set(path, dupFile);
-                    sourceFileToPackageId.set(path, packageId);
+                    sourceFileToPackageName.set(path, packageId.name);
                     files.push(dupFile);
                     return dupFile;
                 }
                 else if (file) {
                     // This is the first source file to have this packageId.
                     packageIdToSourceFile.set(packageIdKey, file);
-                    sourceFileToPackageId.set(path, packageId);
+                    sourceFileToPackageName.set(path, packageId.name);
                 }
             }
 

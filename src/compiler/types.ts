@@ -2476,8 +2476,8 @@ namespace ts {
 
         /* @internal */ getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined;
 
-        /** Given a source file, get the PackageId it was imported from. */
-        /* @internal */ sourceFileToPackageId: Map<PackageId>;
+        /** Given a source file, get the name of the package it was imported from. */
+        /* @internal */ sourceFileToPackageName: Map<string>;
         /** True if some other source file redirects to this one. */
         /* @internal */ isSourceFileTargetOfRedirect: Map<true>;
     }
