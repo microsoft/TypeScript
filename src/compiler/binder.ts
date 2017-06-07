@@ -2101,7 +2101,8 @@ namespace ts {
                 case SyntaxKind.Constructor:
                     return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.Constructor, /*symbolExcludes:*/ SymbolFlags.None);
                 case SyntaxKind.GetAccessor:
-                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor, SymbolFlags.GetAccessorExcludes);
+                    return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.GetAccessor | ((<AccessorDeclaration>node).questionToken ? SymbolFlags.Optional : SymbolFlags.None),
+                        SymbolFlags.GetAccessorExcludes);
                 case SyntaxKind.SetAccessor:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.SetAccessor, SymbolFlags.SetAccessorExcludes);
                 case SyntaxKind.FunctionType:

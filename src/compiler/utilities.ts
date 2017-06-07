@@ -1411,6 +1411,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
+                case SyntaxKind.GetAccessor:
                 case SyntaxKind.ShorthandPropertyAssignment:
                 case SyntaxKind.PropertyAssignment:
                 case SyntaxKind.PropertyDeclaration:

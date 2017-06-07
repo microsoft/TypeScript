@@ -1393,6 +1393,9 @@ namespace ts {
                 emitJsDocComments(accessors.setAccessor);
                 emitClassMemberDeclarationFlags(getModifierFlags(node) | (accessors.setAccessor ? 0 : ModifierFlags.Readonly));
                 writeTextOfNode(currentText, node.name);
+                if (hasQuestionToken(accessors.getAccessor)) {
+                    write("?");
+                }
                 if (!hasModifier(node, ModifierFlags.Private)) {
                     accessorWithTypeAnnotation = node;
                     let type = getTypeAnnotationFromAccessor(node);

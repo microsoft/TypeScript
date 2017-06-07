@@ -4263,12 +4263,12 @@ namespace ts {
             return finishNode(node);
         }
 
-        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
+        function tryParseAccessorDeclaration(fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>, allowQuestionToken: boolean): AccessorDeclaration {
             if (parseContextualModifier(SyntaxKind.GetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers);
+                return parseAccessorDeclaration(SyntaxKind.GetAccessor, fullStart, decorators, modifiers, allowQuestionToken);
             }
             else if (parseContextualModifier(SyntaxKind.SetKeyword)) {
-                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, decorators, modifiers);
+                return parseAccessorDeclaration(SyntaxKind.SetAccessor, fullStart, decorators, modifiers, /* allowQuestionToken */ false);
             }
 
             return undefined;
@@ -4285,7 +4285,7 @@ namespace ts {
             const decorators = parseDecorators();
             const modifiers = parseModifiers();
 
-            const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
+            const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers, /* allowQuestionToken */ false);
             if (accessor) {
                 return accessor;
             }
@@ -5193,11 +5193,14 @@ namespace ts {
             return parseInitializer(/*inParameter*/ false);
         }
 
-        function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>): AccessorDeclaration {
+        function parseAccessorDeclaration(kind: SyntaxKind, fullStart: number, decorators: NodeArray<Decorator>, modifiers: NodeArray<Modifier>, allowQuestionToken: boolean): AccessorDeclaration {
             const node = <AccessorDeclaration>createNode(kind, fullStart);
             node.decorators = decorators;
             node.modifiers = modifiers;
             node.name = parsePropertyName();
+            if (allowQuestionToken) {
+                node.questionToken = parseOptionalToken(SyntaxKind.QuestionToken);
+            }
             fillSignature(SyntaxKind.ColonToken, /*yieldContext*/ false, /*awaitContext*/ false, /*requireCompleteParameterList*/ false, node);
             node.body = parseFunctionBlockOrSemicolon(/*isGenerator*/ false, /*isAsync*/ false);
             return addJSDocComment(finishNode(node));
@@ -5373,7 +5376,7 @@ namespace ts {
             const decorators = parseDecorators();
             const modifiers = parseModifiers(/*permitInvalidConstAsModifier*/ true);
 
-            const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers);
+            const accessor = tryParseAccessorDeclaration(fullStart, decorators, modifiers, /* allowQuestionToken */ true);
             if (accessor) {
                 return accessor;
             }

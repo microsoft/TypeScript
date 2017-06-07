@@ -4588,7 +4588,7 @@ namespace ts {
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
                 }
-                links.type = type;
+                links.type = getter ? addOptionality(type, /*optional*/ !!getter.questionToken) : type;
             }
             return links.type;
         }
@@ -24280,7 +24280,7 @@ namespace ts {
             else if (isInAmbientContext(accessor)) {
                 return grammarErrorOnNode(accessor.name, Diagnostics.An_accessor_cannot_be_declared_in_an_ambient_context);
             }
-            else if (accessor.body === undefined && !(getModifierFlags(accessor) & ModifierFlags.Abstract)) {
+            else if (accessor.body === undefined && !hasQuestionToken(accessor) && !(getModifierFlags(accessor) & ModifierFlags.Abstract)) {
                 return grammarErrorAtPos(getSourceFileOfNode(accessor), accessor.end - 1, ";".length, Diagnostics._0_expected, "{");
             }
             else if (accessor.body && getModifierFlags(accessor) & ModifierFlags.Abstract) {
