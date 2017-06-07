@@ -259,8 +259,9 @@ namespace Utils {
                         return true;
                     }
                     else if ((f & v) > 0) {
-                        if (result.length)
+                        if (result.length) {
                             result += " | ";
+                        }
                         result += flags[v];
                         return false;
                     }

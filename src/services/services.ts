@@ -684,8 +684,9 @@ namespace ts {
                             forEachChild(decl.name, visit);
                             break;
                         }
-                        if (decl.initializer)
+                        if (decl.initializer) {
                             visit(decl.initializer);
+                        }
                     }
                         // falls through
                     case SyntaxKind.EnumMember:

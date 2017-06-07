@@ -1036,21 +1036,27 @@ namespace FourSlash {
                     fail(`Expected ${expected}, got ${actual}`);
                 }
 
-                for (const key in actual) if (ts.hasProperty(actual as any, key)) {
-                    const ak = actual[key], ek = expected[key];
-                    if (typeof ak === "object" && typeof ek === "object") {
-                        recur(ak, ek, path ? path + "." + key : key);
-                    }
-                    else if (ak !== ek) {
-                        fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                for (const key in actual) {
+                    if (ts.hasProperty(actual as any, key)) {
+                        const ak = actual[key], ek = expected[key];
+                        if (typeof ak === "object" && typeof ek === "object") {
+                            recur(ak, ek, path ? path + "." + key : key);
+                        }
+                        else if (ak !== ek) {
+                            fail(`Expected '${key}' to be '${ek}', got '${ak}'`);
+                        }
                     }
                 }
-                for (const key in expected) if (ts.hasProperty(expected as any, key)) {
-                    if (!ts.hasProperty(actual as any, key)) {
-                        fail(`${msgPrefix}Missing property '${key}'`);
+
+                for (const key in expected) {
+                    if (ts.hasProperty(expected as any, key)) {
+                        if (!ts.hasProperty(actual as any, key)) {
+                            fail(`${msgPrefix}Missing property '${key}'`);
+                        }
                     }
                 }
             };
+
             if (fullActual === undefined || fullExpected === undefined) {
                 if (fullActual === fullExpected) {
                     return;
@@ -1132,15 +1138,17 @@ namespace FourSlash {
         }
 
         public verifyQuickInfos(namesAndTexts: { [name: string]: string | [string, string] }) {
-            for (const name in namesAndTexts) if (ts.hasProperty(namesAndTexts, name)) {
-                const text = namesAndTexts[name];
-                if (ts.isArray(text)) {
-                    assert(text.length === 2);
-                    const [expectedText, expectedDocumentation] = text;
-                    this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
-                }
-                else {
-                    this.verifyQuickInfoAt(name, text);
+            for (const name in namesAndTexts) {
+                if (ts.hasProperty(namesAndTexts, name)) {
+                    const text = namesAndTexts[name];
+                    if (ts.isArray(text)) {
+                        assert(text.length === 2);
+                        const [expectedText, expectedDocumentation] = text;
+                        this.verifyQuickInfoAt(name, expectedText, expectedDocumentation);
+                    }
+                    else {
+                        this.verifyQuickInfoAt(name, text);
+                    }
                 }
             }
         }
@@ -1149,7 +1157,6 @@ namespace FourSlash {
             if (expectedDocumentation === "") {
                 throw new Error("Use 'undefined' instead");
             }
-
             const actualQuickInfo = this.languageService.getQuickInfoAtPosition(this.activeFile.fileName, this.currentCaretPosition);
             const actualQuickInfoText = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.displayParts) : "";
             const actualQuickInfoDocumentation = actualQuickInfo ? ts.displayPartsToString(actualQuickInfo.documentation) : "";

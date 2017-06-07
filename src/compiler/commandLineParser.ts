@@ -1626,10 +1626,12 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) if (hasProperty(wildcardDirectories, key)) {
-                for (const recursiveKey of recursiveKeys) {
-                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+            for (const key in wildcardDirectories) {
+                if (hasProperty(wildcardDirectories, key)) {
+                    for (const recursiveKey of recursiveKeys) {
+                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                            delete wildcardDirectories[key];
+                        }
                     }
                 }
             }
@@ -1717,10 +1719,12 @@ namespace ts {
     /* @internal */
     export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
         const out: ts.CompilerOptions = {};
-        for (const key in opts) if (opts.hasOwnProperty(key)) {
-            const type = getOptionFromName(key);
-            if (type !== undefined) { // Ignore unknown options
-                out[key] = getOptionValueWithEmptyStrings(opts[key], type);
+        for (const key in opts) {
+            if (opts.hasOwnProperty(key)) {
+                const type = getOptionFromName(key);
+                if (type !== undefined) { // Ignore unknown options
+                    out[key] = getOptionValueWithEmptyStrings(opts[key], type);
+                }
             }
         }
         return out;
