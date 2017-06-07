@@ -2825,6 +2825,17 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                if (isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) {
+                    // special-case synthetic rest parameters in JS files
+                    return createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        parameterSymbol.isRestParameter ? createToken(SyntaxKind.DotDotDotToken) : undefined,
+                        "args",
+                        /*questionToken*/ undefined,
+                        typeToTypeNodeHelper(anyArrayType, context),
+                        /*initializer*/ undefined);
+                }
                 const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration.name ?
@@ -6384,8 +6395,17 @@ namespace ts {
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
+                // JS functions get a free rest parameter if they reference `arguments`
+                let hasRestLikeParameter = hasRestParameter(declaration);
+                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration) && containsArgumentsReference(declaration)) {
+                    hasRestLikeParameter = true;
+                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args");
+                    syntheticArgsSymbol.type = anyArrayType;
+                    syntheticArgsSymbol.isRestParameter = true;
+                    parameters.push(syntheticArgsSymbol);
+                }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasLiteralTypes);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
         }
@@ -6420,14 +6440,14 @@ namespace ts {
             }
         }
 
-        function containsArgumentsReference(declaration: FunctionLikeDeclaration): boolean {
+        function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
             const links = getNodeLinks(declaration);
             if (links.containsArgumentsReference === undefined) {
                 if (links.flags & NodeCheckFlags.CaptureArguments) {
                     links.containsArgumentsReference = true;
                 }
                 else {
-                    links.containsArgumentsReference = traverse(declaration.body);
+                    links.containsArgumentsReference = traverse((declaration as FunctionLikeDeclaration).body);
                 }
             }
             return links.containsArgumentsReference;
@@ -15479,21 +15499,6 @@ namespace ts {
                 // We already perform checking on the type arguments on the class declaration itself.
                 if ((<CallExpression>node).expression.kind !== SyntaxKind.SuperKeyword) {
                     forEach(typeArguments, checkSourceElement);
-                }
-            }
-
-            if (signatures.length === 1) {
-                const declaration = signatures[0].declaration;
-                if (declaration && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration)) {
-                    if (containsArgumentsReference(<FunctionLikeDeclaration>declaration)) {
-                        const signatureWithRest = cloneSignature(signatures[0]);
-                        const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args");
-                        syntheticArgsSymbol.type = anyArrayType;
-                        syntheticArgsSymbol.isRestParameter = true;
-                        signatureWithRest.parameters = concatenate(signatureWithRest.parameters, [syntheticArgsSymbol]);
-                        signatureWithRest.hasRestParameter = true;
-                        signatures = [signatureWithRest];
-                    }
                 }
             }
 
