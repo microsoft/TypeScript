@@ -280,7 +280,7 @@ namespace ts {
     }
 
     /** Works like Array.prototype.find, returning `undefined` if no element satisfying the predicate is found. */
-    export function find<T>(array: T[], predicate: (element: T, index: number) => boolean): T | undefined {
+    export function find<T>(array: ReadonlyArray<T>, predicate: (element: T, index: number) => boolean): T | undefined {
         for (let i = 0; i < array.length; i++) {
             const value = array[i];
             if (predicate(value, i)) {
