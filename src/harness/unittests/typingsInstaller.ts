@@ -973,9 +973,9 @@ namespace ts.projectSystem {
                     typeScriptVersion: ts.version,
                     devDependencies: { "@types/jquery": "^2.0.46" }
                 })
-            }
+            };
             const host = createServerHost([jquery, packageJson, jqueryDTS, jqueryPackageJson]);
-            let testTypingsInstaller = (class extends Installer {
+            const testTypingsInstaller = (class extends Installer {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/cache", typesRegistry: createTypesRegistry("jquery") });
                 }
@@ -985,9 +985,9 @@ namespace ts.projectSystem {
             projectService.openClientFile(jquery.path);
             installer.installAll(/*expectedCount*/ 0);
 
-            // Update the typescript version in the root package.json to something outdated, 
+            // Update the typescript version in the root package.json to something outdated,
             // then test again with a new instance of the typings installer
-            let newPackageJson = <any>JSON.parse(host.readFile(packageJson.path));
+            const newPackageJson = <any>JSON.parse(host.readFile(packageJson.path));
             newPackageJson.typeScriptVersion = "1.1";
             host.writeFile(packageJson.path, JSON.stringify(newPackageJson));
 

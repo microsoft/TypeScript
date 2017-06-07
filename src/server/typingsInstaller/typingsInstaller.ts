@@ -203,7 +203,7 @@ namespace ts.server.typingsInstaller {
                             // If typeScriptVersion field doesn't match the current version, don't add the package to cache
                             const typingPackageJson = combinePaths(getDirectoryPath(typingFile), "package.json");
                             const typingTypeScriptVersion = (<NpmConfig>JSON.parse(this.installTypingHost.readFile(typingPackageJson))).typeScriptVersion;
-                            if(!this.areVersionsEqualMajorMinor(typingTypeScriptVersion, ts.version)) {
+                            if (!this.areVersionsEqualMajorMinor(typingTypeScriptVersion, ts.version)) {
                                 if (this.log.isEnabled()) {
                                     this.log.writeLine(`Not adding ${typingFile} to cache because of typeScriptVersion mismatch`);
                                 }
