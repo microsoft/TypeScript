@@ -6,6 +6,7 @@
         "comment-format": [true,
             "check-space"
         ],
+        "curly":[true, "ignore-same-line"],
         "indent": [true,
             "spaces"
         ],
