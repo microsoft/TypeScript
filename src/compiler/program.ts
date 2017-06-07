@@ -777,6 +777,8 @@ namespace ts {
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
             const oldSourceFiles = oldProgram.getSourceFiles();
+            const seenPackageNames = createMap<true>();
+
             for (const oldSourceFile of oldSourceFiles) {
                 const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
@@ -809,19 +811,12 @@ namespace ts {
 
                 if (oldSourceFile !== newSourceFile) {
                     if (packageId) {
-                        // If this has a package id, and some other source file has the same package id, they are candidates to become redirects.
-                        // In that case we must rebuild the program.
-                        const hasDuplicate = oldSourceFiles.some(o => {
-                            if (o !== oldSourceFile) return false;
-                            const id = oldProgram.sourceFileToPackageId.get(o.path);
-                            return id && id.name === packageId.name;
-                        });
-                        if (hasDuplicate) {
-                            // There exist 2 different source files with the same package id.
-                            // (As in, /a/node_modules/x/index.d.ts and /b/node_modules/x/index.d.ts, where the package.json versions are identical.)
+                        if (seenPackageNames.has(packageId.name)) {
+                            // There exist 2 different source files with the same package name.
                             // One of them changed. These might now become redirects. So we must rebuild the program.
                             return oldProgram.structureIsReused = StructureIsReused.Not;
                         }
+                        seenPackageNames.set(packageId.name, true);
                     }
 
                     // The `newSourceFile` object was created for the new program.
