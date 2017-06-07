@@ -462,12 +462,15 @@ namespace ts.FindAllReferences {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
                 }
+                // If we are in `export = a;`, `parent` is the export assignment.
                 else if (isExportAssignment(parent)) {
                     return getExportAssignmentExport(parent);
                 }
+                // If we are in `export = class A {};` at `A`, `parent.parent` is the export assignment.
                 else if (isExportAssignment(parent.parent)) {
                     return getExportAssignmentExport(parent.parent);
                 }
+                // Similar for `module.exports =` and `exports.A =`.
                 else if (isBinaryExpression(parent)) {
                     return getSpecialPropertyExport(parent, /*useLhsSymbol*/ true);
                 }
