@@ -16,10 +16,10 @@ var f2: {
 };
 
 f2 = (x, y) => { return x }
->f2 = (x, y) => { return x } : (x: any, y: any) => any
+>f2 = (x, y) => { return x } : (x: T, y: U) => T
 >f2 : <T, U>(x: T, y: U) => T
->(x, y) => { return x } : (x: any, y: any) => any
->x : any
->y : any
->x : any
+>(x, y) => { return x } : (x: T, y: U) => T
+>x : T
+>y : U
+>x : T
 
