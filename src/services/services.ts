@@ -1791,12 +1791,17 @@ namespace ts {
 
         function getIsInMultiLineComment(_fileName: string, position: number): boolean {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(_fileName);
-            const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ true);
-            const _triviaWidth = token.getLeadingTriviaWidth(sourceFile); _triviaWidth;
-            const _text = token.getText(sourceFile); _text;
-            const _fullText = token.getFullText(sourceFile); _fullText;
-            // TODO: distinguish multi-line and single line comments...
-            return token.getFullStart() <= position && position < token.getStart(sourceFile, /*includeJsDocComment*/ false);
+            const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+            const leadingCommentRanges = getLeadingCommentRangesOfNode(token, sourceFile);
+
+            for (const range of leadingCommentRanges) {
+                // We need to extend the range when in an unclosed multi-line comment.
+                if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
+                    return range.kind === SyntaxKind.MultiLineCommentTrivia;
+                }
+            }
+
+            return false;
         }
 
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
