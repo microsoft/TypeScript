@@ -9427,7 +9427,7 @@ namespace ts {
             function hasCommonProperties(source: Type, target: Type) {
                 const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
                 for (const prop of getPropertiesOfType(source)) {
-                    if (isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
+                    if (isKnownProperty(target, prop.name, isComparingJsxAttributes, /*skipGlobalObject*/ true)) {
                         return true;
                     }
                 }
@@ -14221,12 +14221,12 @@ namespace ts {
          * @param name a property name to search
          * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
          */
-        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
+        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean, skipGlobalObject?: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    getPropertyOfType(targetType, name) ||
+                    (skipGlobalObject ? getPropertyOfObjectType(targetType, name) : getPropertyOfType(targetType, name)) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
