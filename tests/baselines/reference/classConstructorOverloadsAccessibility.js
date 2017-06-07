@@ -1,5 +1,4 @@
 //// [classConstructorOverloadsAccessibility.ts]
-
 class A {
 	public constructor(a: boolean) // error
 	protected constructor(a: number) // error
@@ -60,7 +59,7 @@ var D = (function () {
 declare class A {
     constructor(a: boolean);
     protected constructor(a: number);
-    private constructor(a);
+    private constructor();
 }
 declare class B {
     protected constructor(a: number);

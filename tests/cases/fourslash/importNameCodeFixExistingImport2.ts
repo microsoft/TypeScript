@@ -12,5 +12,5 @@ verify.importFixAtPosition([
 import { f1 } from "./module";
 f1();`,
 `import * as ns from "./module";
-ns.f1();`
+ns.f1();`,
 ]);

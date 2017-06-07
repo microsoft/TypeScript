@@ -9,7 +9,6 @@ tests/cases/compiler/file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
            ~
 !!! error TS2503: Cannot find namespace 'x'.
 ==== tests/cases/compiler/file1.d.ts (0 errors) ====
-    
     declare module "file1" {
         var x: number;
         export = x;

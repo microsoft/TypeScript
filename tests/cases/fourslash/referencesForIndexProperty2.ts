@@ -3,6 +3,6 @@
 // References to a unknown index property
 
 ////var a;
-////a["[|blah|]"];
+////a["[|{| "isInString": true |}blah|]"];
 
 verify.singleReferenceGroup('"blah"');

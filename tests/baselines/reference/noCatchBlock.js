@@ -1,5 +1,4 @@
 //// [noCatchBlock.ts]
-
 try {
  // ...
 } finally {

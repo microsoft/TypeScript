@@ -1,38 +1,34 @@
-tests/cases/conformance/jsx/file.tsx(7,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(8,25): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(16,33): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(17,34): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/jsx/file.tsx(18,33): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/jsx/file.tsx(15,14): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+  Property 'render' is missing in type 'Element'.
+tests/cases/conformance/jsx/file.tsx(15,15): error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate '"hello"'.
+tests/cases/conformance/jsx/file.tsx(16,42): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
-    
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     import React = require('react')
     
-    // Error, can only spread object type
     declare function Component<U>(l: U): JSX.Element;
     function createComponent<T extends { prop: number }>(arg: T) {
         let a1 = <Component {...arg} />;
-                            ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a2 = <Component {...arg} prop1 />;
-                            ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
     }
     
     declare function ComponentSpecific<U>(l: { prop: U }): JSX.Element;
     declare function ComponentSpecific1<U>(l: { prop: U, "ignore-prop": number }): JSX.Element;
     
-    // Error, can only spread object type
     function Bar<T extends { prop: number }>(arg: T) {
         let a1 = <ComponentSpecific {...arg} ignore-prop="hi" />;  // U is number
-                                    ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a2 = <ComponentSpecific1 {...arg} ignore-prop={10} />;  // U is number
-                                     ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
         let a3 = <ComponentSpecific {...arg} prop="hello" />;   // U is "hello"
-                                    ~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
+!!! error TS2605:   Property 'render' is missing in type 'Element'.
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2453: The type argument for type parameter 'U' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
+!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate '"hello"'.
+        let a4 = <ComponentSpecific {...arg} prop1="hello" />;   // U is "hello"
+                                             ~~~~~~~~~~~~~
+!!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & { prop: number; }'.
     }
     

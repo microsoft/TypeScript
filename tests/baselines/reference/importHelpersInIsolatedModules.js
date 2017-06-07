@@ -56,20 +56,18 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec
-], C);
 //// [script.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
 var A = (function () {
     function A() {
@@ -88,14 +86,14 @@ var C = (function () {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec
-], C);

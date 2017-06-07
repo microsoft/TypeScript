@@ -2,15 +2,14 @@
 
 //// abstract class A {
 ////    abstract x: number;
-////    abstract foo(): number;
+////    abstract y: this;
+////    abstract z: A;
 //// }
 ////
-//// class C extends A {[|
-//// |]}
+//// class C extends A {[| |]}
 
 verify.rangeAfterCodeFix(`
     x: number;
-    foo(): number {
-        throw new Error('Method not implemented.');
-    }
+    y: this;
+    z: A;
 `);

@@ -47,7 +47,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -125,6 +125,7 @@ namespace ts {
                 visitNodes(node.modifiers, visitor, isModifier),
                 node.asteriskToken,
                 node.name,
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -221,7 +222,7 @@ namespace ts {
 
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
-                const statementOffset = addPrologueDirectives(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
+                const statementOffset = addPrologue(statements, (<Block>node.body).statements, /*ensureUseStrict*/ false, visitor);
                 statements.push(
                     createReturn(
                         createAwaiterHelper(

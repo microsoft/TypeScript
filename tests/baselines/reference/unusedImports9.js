@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports9.ts] ////
 
 //// [file1.ts]
-
 export class Calculator {
     handleChar() {}
 }

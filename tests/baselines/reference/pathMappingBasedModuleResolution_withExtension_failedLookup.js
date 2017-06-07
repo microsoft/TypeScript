@@ -1,5 +1,4 @@
 //// [a.ts]
-
 import { foo } from "foo";
 
 

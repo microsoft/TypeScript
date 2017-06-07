@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/decoratorInstantiateModulesInFunctionBodies.ts] ////
 
 //// [a.ts]
-
 // from #3108
 export var test = 'abc';
 
@@ -47,8 +46,8 @@ var Wat = (function () {
     Wat.whatever = function () {
         // ...
     };
+    __decorate([
+        filter(function () { return a_1.test == 'abc'; })
+    ], Wat, "whatever", null);
     return Wat;
 }());
-__decorate([
-    filter(function () { return a_1.test == 'abc'; })
-], Wat, "whatever", null);

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/metadataOfEventAlias.ts] ////
 
 //// [event.ts]
-
 export interface Event { title: string };
 
 //// [test.ts]
@@ -31,10 +30,10 @@ function Input(target, key) { }
 var SomeClass = (function () {
     function SomeClass() {
     }
+    __decorate([
+        Input,
+        __metadata("design:type", Object)
+    ], SomeClass.prototype, "event", void 0);
     return SomeClass;
 }());
-__decorate([
-    Input,
-    __metadata("design:type", Object)
-], SomeClass.prototype, "event", void 0);
 exports.SomeClass = SomeClass;

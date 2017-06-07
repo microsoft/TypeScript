@@ -9,50 +9,56 @@ export class Rule extends Lint.Rules.AbstractRule {
     public static ELSE_FAILURE_STRING = "'else' should not be on the same line as the preceeding block's curly brace";
 
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        return this.applyWithWalker(new NextLineWalker(sourceFile, this.getOptions()));
+        const options = this.getOptions().ruleArguments;
+        const checkCatch = options.indexOf(OPTION_CATCH) !== -1;
+        const checkElse = options.indexOf(OPTION_ELSE) !== -1;
+        return this.applyWithFunction(sourceFile, ctx => walk(ctx, checkCatch, checkElse));
     }
 }
 
-class NextLineWalker extends Lint.RuleWalker {
-    public visitIfStatement(node: ts.IfStatement) {
-        const sourceFile = node.getSourceFile();
-        const thenStatement = node.thenStatement;
+function walk(ctx: Lint.WalkContext<void>, checkCatch: boolean, checkElse: boolean): void {
+    const { sourceFile } = ctx;
+    ts.forEachChild(sourceFile, function recur(node) {
+        switch (node.kind) {
+            case ts.SyntaxKind.IfStatement:
+                checkIf(node as ts.IfStatement);
+                break;
+            case ts.SyntaxKind.TryStatement:
+                checkTry(node as ts.TryStatement);
+                break;
+        }
+        ts.forEachChild(node, recur);
+    });
 
-        const elseStatement = node.elseStatement;
-        if (!!elseStatement) {
-            // find the else keyword
-            const elseKeyword = getFirstChildOfKind(node, ts.SyntaxKind.ElseKeyword);
-            if (this.hasOption(OPTION_ELSE) && !!elseKeyword) {
-                const thenStatementEndLoc = sourceFile.getLineAndCharacterOfPosition(thenStatement.getEnd());
-                const elseKeywordLoc = sourceFile.getLineAndCharacterOfPosition(elseKeyword.getStart(sourceFile));
-                if (thenStatementEndLoc.line === elseKeywordLoc.line) {
-                    const failure = this.createFailure(elseKeyword.getStart(sourceFile), elseKeyword.getWidth(sourceFile), Rule.ELSE_FAILURE_STRING);
-                    this.addFailure(failure);
-                }
-            }
+    function checkIf(node: ts.IfStatement): void {
+        const { thenStatement, elseStatement } = node;
+        if (!elseStatement) {
+            return;
         }
 
-        super.visitIfStatement(node);
+        // find the else keyword
+        const elseKeyword = getFirstChildOfKind(node, ts.SyntaxKind.ElseKeyword);
+        if (checkElse && !!elseKeyword) {
+            const thenStatementEndLoc = sourceFile.getLineAndCharacterOfPosition(thenStatement.getEnd());
+            const elseKeywordLoc = sourceFile.getLineAndCharacterOfPosition(elseKeyword.getStart(sourceFile));
+            if (thenStatementEndLoc.line === elseKeywordLoc.line) {
+                ctx.addFailureAtNode(elseKeyword, Rule.ELSE_FAILURE_STRING);
+            }
+        }
     }
 
-    public visitTryStatement(node: ts.TryStatement) {
-        const sourceFile = node.getSourceFile();
-        const catchClause = node.catchClause;
-
-        // "visit" try block
-        const tryBlock = node.tryBlock;
-
-        if (this.hasOption(OPTION_CATCH) && !!catchClause) {
-            const tryClosingBrace = tryBlock.getLastToken(sourceFile);
-            const catchKeyword = catchClause.getFirstToken(sourceFile);
-            const tryClosingBraceLoc = sourceFile.getLineAndCharacterOfPosition(tryClosingBrace.getEnd());
-            const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart(sourceFile));
-            if (tryClosingBraceLoc.line === catchKeywordLoc.line) {
-                const failure = this.createFailure(catchKeyword.getStart(sourceFile), catchKeyword.getWidth(sourceFile), Rule.CATCH_FAILURE_STRING);
-                this.addFailure(failure);
-            }
+    function checkTry({ tryBlock, catchClause }: ts.TryStatement): void {
+        if (!checkCatch || !catchClause) {
+            return;
         }
-        super.visitTryStatement(node);
+
+        const tryClosingBrace = tryBlock.getLastToken(sourceFile);
+        const catchKeyword = catchClause.getFirstToken(sourceFile);
+        const tryClosingBraceLoc = sourceFile.getLineAndCharacterOfPosition(tryClosingBrace.getEnd());
+        const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart(sourceFile));
+        if (tryClosingBraceLoc.line === catchKeywordLoc.line) {
+            ctx.addFailureAtNode(catchKeyword, Rule.CATCH_FAILURE_STRING);
+        }
     }
 }
 

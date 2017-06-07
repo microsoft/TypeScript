@@ -1,5 +1,5 @@
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(8,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,1): error TS2554: Expected 1 arguments, but got 2.
 
 
 ==== tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts (2 errors) ====
@@ -12,9 +12,9 @@ tests/cases/conformance/expressions/functionCalls/grammarAmbiguities.ts(9,1): er
     f(g<A, B>(7));
     f(g < A, B > 7); // Should error
     ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     f(g < A, B > +(7)); // Should error
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     
     

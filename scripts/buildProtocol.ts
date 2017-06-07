@@ -113,7 +113,7 @@ class DeclarationsWalker {
     } 
 }
 
-function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string): string {
+function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
     const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: true, types: <string[]>[], stripInternal: true };
 
     /**
@@ -163,14 +163,17 @@ function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string)
     protocolDts += "\nimport protocol = ts.server.protocol;";
     protocolDts += "\nexport = protocol;";
     protocolDts += "\nexport as namespace protocol;";
+
     // do sanity check and try to compile generated text as standalone program
     const sanityCheckProgram = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ false);
     const diagnostics = [...sanityCheckProgram.getSyntacticDiagnostics(), ...sanityCheckProgram.getSemanticDiagnostics(), ...sanityCheckProgram.getGlobalDiagnostics()];
+
+    ts.sys.writeFile(outputFile, protocolDts);
+
     if (diagnostics.length) {
         const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file.fileName} line ${d.start}`).join("\n");
         throw new Error(`Unexpected errors during sanity check: ${flattenedDiagnostics}`);
     }
-    return protocolDts;
 }
 
 if (process.argv.length < 5) {
@@ -181,5 +184,4 @@ if (process.argv.length < 5) {
 const protocolTs = process.argv[2];
 const typeScriptServicesDts = process.argv[3];
 const outputFile = process.argv[4];
-const generatedProtocolDts = generateProtocolFile(protocolTs, typeScriptServicesDts);
-ts.sys.writeFile(outputFile, generatedProtocolDts);
+writeProtocolFile(outputFile, protocolTs, typeScriptServicesDts);

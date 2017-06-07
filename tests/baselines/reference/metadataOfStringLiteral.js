@@ -20,9 +20,9 @@ function PropDeco(target, propKey) { }
 var Foo = (function () {
     function Foo() {
     }
+    __decorate([
+        PropDeco,
+        __metadata("design:type", String)
+    ], Foo.prototype, "foo");
     return Foo;
 }());
-__decorate([
-    PropDeco,
-    __metadata("design:type", String)
-], Foo.prototype, "foo");

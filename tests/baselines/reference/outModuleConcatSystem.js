@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatSystem.ts] ////
 
 //// [a.ts]
-
 export class A { }
 
 //// [b.ts]

@@ -1,5 +1,4 @@
 === tests/cases/conformance/jsx/tsxSpreadChildren.tsx ===
-
 declare module JSX {
 >JSX : any
 
@@ -54,7 +53,7 @@ function Todo(prop: { key: number, todo: string }) {
 >div : any
 }
 function TodoList({ todos }: TodoListProps) {
->TodoList : ({todos}: TodoListProps) => JSX.Element
+>TodoList : ({ todos }: TodoListProps) => JSX.Element
 >todos : TodoProp[]
 >TodoListProps : TodoListProps
 
@@ -64,9 +63,9 @@ function TodoList({ todos }: TodoListProps) {
 
         {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
->todos.map : { <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): U[]; }
+>todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
 >todos : TodoProp[]
->map : { <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [TodoProp, TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U, U]; <U>(this: [TodoProp, TodoProp], callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
 >todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
 >todo : TodoProp
 ><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
@@ -89,6 +88,6 @@ let x: TodoListProps;
 
     <TodoList {...x}/>
 ><TodoList {...x}/> : JSX.Element
->TodoList : ({todos}: TodoListProps) => JSX.Element
+>TodoList : ({ todos }: TodoListProps) => JSX.Element
 >x : TodoListProps
 

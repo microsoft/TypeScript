@@ -4,7 +4,7 @@
 
 
 // @Filename: declaration.ts
-////enum Test { "[|{| "isDefinition": true |}42|]" = 1 };
+////enum Test { "[|{| "isWriteAccess": true, "isDefinition": true |}42|]" = 1 };
 
 // @Filename: expression.ts
 ////(Test[[|42|]]);

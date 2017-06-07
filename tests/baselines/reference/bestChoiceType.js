@@ -1,5 +1,4 @@
 //// [bestChoiceType.ts]
-
 // Repro from #10041
 
 (''.match(/ /) || []).map(s => s.toLowerCase());

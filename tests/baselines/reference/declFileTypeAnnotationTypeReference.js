@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationTypeReference.ts]
-
 class c {
 }
 module m {

@@ -241,6 +241,18 @@ namespace ts {
   */`);
 
 
+                parsesCorrectly("argSynonymForParamTag",
+`/**
+  * @arg {number} name1 Description
+  */`);
+
+
+                parsesCorrectly("argumentSynonymForParamTag",
+`/**
+  * @argument {number} name1 Description
+  */`);
+
+
                 parsesCorrectly("templateTag",
 `/**
   * @template T

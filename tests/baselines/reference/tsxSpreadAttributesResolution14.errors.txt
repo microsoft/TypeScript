@@ -1,0 +1,29 @@
+tests/cases/conformance/jsx/file.tsx(11,38): error TS2339: Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    interface ComponentProps {
+        property1: string;
+        property2: number;
+    }
+    
+    export default function Component(props: ComponentProps) {
+        return (
+            // Error extra property
+            <AnotherComponent {...props} Property1/>
+                                         ~~~~~~~~~
+!!! error TS2339: Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
+        );
+    }
+    
+    interface AnotherComponentProps {
+        property1: string;
+    }
+    
+    function AnotherComponent({ property1 }: AnotherComponentProps) {
+        return (
+            <span>{property1}</span>
+        );
+    }

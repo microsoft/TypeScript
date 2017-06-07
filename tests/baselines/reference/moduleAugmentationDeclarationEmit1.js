@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationDeclarationEmit1.ts] ////
 
 //// [map.ts]
-
 import { Observable } from "./observable"
 
 (<any>Observable.prototype).map = function() { }

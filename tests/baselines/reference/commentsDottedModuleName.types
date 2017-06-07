@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsDottedModuleName.ts ===
-
 /** this is multi declare module*/
 export module outerModule.InnerModule {
 >outerModule : typeof outerModule

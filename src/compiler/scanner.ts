@@ -23,6 +23,8 @@ namespace ts {
         isIdentifier(): boolean;
         isReservedWord(): boolean;
         isUnterminated(): boolean;
+        /* @internal */
+        getNumericLiteralFlags(): NumericLiteralFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
         reScanTemplateToken(): SyntaxKind;
@@ -284,7 +286,7 @@ namespace ts {
 
     const tokenStrings = makeReverseMap(textToToken);
 
-    export function tokenToString(t: SyntaxKind): string {
+    export function tokenToString(t: SyntaxKind): string | undefined {
         return tokenStrings[t];
     }
 
@@ -306,6 +308,7 @@ namespace ts {
                     if (text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     result.push(lineStart);
                     lineStart = pos;
@@ -333,7 +336,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function getLineStarts(sourceFile: SourceFile): number[] {
+    export function getLineStarts(sourceFile: SourceFileLike): number[] {
         return sourceFile.lineMap || (sourceFile.lineMap = computeLineStarts(sourceFile.text));
     }
 
@@ -360,11 +363,11 @@ namespace ts {
         };
     }
 
-    export function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter {
+    export function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter {
         return computeLineAndCharacterOfPosition(getLineStarts(sourceFile), position);
     }
 
-    export function isWhiteSpace(ch: number): boolean {
+    export function isWhiteSpaceLike(ch: number): boolean {
         return isWhiteSpaceSingleLine(ch) || isLineBreak(ch);
     }
 
@@ -426,6 +429,7 @@ namespace ts {
               case CharacterCodes.slash:
                   // starts of normal trivia
               case CharacterCodes.lessThan:
+              case CharacterCodes.bar:
               case CharacterCodes.equals:
               case CharacterCodes.greaterThan:
                   // Starts of conflict marker trivia
@@ -452,6 +456,7 @@ namespace ts {
                       if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                           pos++;
                       }
+                      // falls through
                   case CharacterCodes.lineFeed:
                       pos++;
                       if (stopAfterLineBreak) {
@@ -492,6 +497,7 @@ namespace ts {
                       break;
 
                   case CharacterCodes.lessThan:
+                  case CharacterCodes.bar:
                   case CharacterCodes.equals:
                   case CharacterCodes.greaterThan:
                       if (isConflictMarkerTrivia(text, pos)) {
@@ -508,7 +514,7 @@ namespace ts {
                       break;
 
                   default:
-                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                      if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                           pos++;
                           continue;
                       }
@@ -558,12 +564,12 @@ namespace ts {
             }
         }
         else {
-            Debug.assert(ch === CharacterCodes.equals);
-            // Consume everything from the start of the mid-conflict marker to the start of the next
-            // end-conflict marker.
+            Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+            // Consume everything from the start of a ||||||| or ======= marker to the start
+            // of the next ======= or >>>>>>> marker.
             while (pos < len) {
-                const ch = text.charCodeAt(pos);
-                if (ch === CharacterCodes.greaterThan && isConflictMarkerTrivia(text, pos)) {
+                const currentChar = text.charCodeAt(pos);
+                if ((currentChar === CharacterCodes.equals || currentChar === CharacterCodes.greaterThan) && currentChar !== ch && isConflictMarkerTrivia(text, pos)) {
                     break;
                 }
 
@@ -623,6 +629,7 @@ namespace ts {
                     if (text.charCodeAt(pos + 1) === CharacterCodes.lineFeed) {
                         pos++;
                     }
+                    // falls through
                 case CharacterCodes.lineFeed:
                     pos++;
                     if (trailing) {
@@ -689,7 +696,7 @@ namespace ts {
                     }
                     break scan;
                 default:
-                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpace(ch))) {
+                    if (ch > CharacterCodes.maxAsciiCharacter && (isWhiteSpaceLike(ch))) {
                         if (hasPendingCommentRange && isLineBreak(ch)) {
                             pendingHasTrailingNewLine = true;
                         }
@@ -707,11 +714,11 @@ namespace ts {
         return accumulator;
     }
 
-    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+    export function forEachLeadingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
         return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ false, cb, state);
     }
 
-    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T) {
+    export function forEachTrailingCommentRange<T, U>(text: string, pos: number, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T) => U, state?: T): U | undefined {
         return iterateCommentRanges(/*reduce*/ false, text, pos, /*trailing*/ true, cb, state);
     }
 
@@ -733,18 +740,19 @@ namespace ts {
     }
 
     export function getLeadingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachLeadingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     export function getTrailingCommentRanges(text: string, pos: number): CommentRange[] | undefined {
-        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, undefined, undefined);
+        return reduceEachTrailingCommentRange(text, pos, appendCommentRange, /*state*/ undefined, /*initial*/ undefined);
     }
 
     /** Optionally, get the shebang */
-    export function getShebang(text: string): string {
-        return shebangTriviaRegex.test(text)
-            ? shebangTriviaRegex.exec(text)[0]
-            : undefined;
+    export function getShebang(text: string): string | undefined {
+        const match = shebangTriviaRegex.exec(text);
+        if (match) {
+            return match[0];
+        }
     }
 
     export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
@@ -799,6 +807,7 @@ namespace ts {
         let precedingLineBreak: boolean;
         let hasExtendedUnicodeEscape: boolean;
         let tokenIsUnterminated: boolean;
+        let numericLiteralFlags: NumericLiteralFlags;
 
         setText(text, start, length);
 
@@ -814,6 +823,7 @@ namespace ts {
             isIdentifier: () => token === SyntaxKind.Identifier || token > SyntaxKind.LastReservedWord,
             isReservedWord: () => token >= SyntaxKind.FirstReservedWord && token <= SyntaxKind.LastReservedWord,
             isUnterminated: () => tokenIsUnterminated,
+            getNumericLiteralFlags: () => numericLiteralFlags,
             reScanGreaterToken,
             reScanSlashToken,
             reScanTemplateToken,
@@ -850,6 +860,7 @@ namespace ts {
             let end = pos;
             if (text.charCodeAt(pos) === CharacterCodes.E || text.charCodeAt(pos) === CharacterCodes.e) {
                 pos++;
+                numericLiteralFlags = NumericLiteralFlags.Scientific;
                 if (text.charCodeAt(pos) === CharacterCodes.plus || text.charCodeAt(pos) === CharacterCodes.minus) pos++;
                 if (isDigit(text.charCodeAt(pos))) {
                     pos++;
@@ -1067,7 +1078,7 @@ namespace ts {
                     if (pos < end && text.charCodeAt(pos) === CharacterCodes.lineFeed) {
                         pos++;
                     }
-                    // fall through
+                    // falls through
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.lineSeparator:
                 case CharacterCodes.paragraphSeparator:
@@ -1221,6 +1232,7 @@ namespace ts {
             hasExtendedUnicodeEscape = false;
             precedingLineBreak = false;
             tokenIsUnterminated = false;
+            numericLiteralFlags = 0;
             while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
@@ -1419,6 +1431,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.HexSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
@@ -1429,6 +1442,7 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.BinarySpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
@@ -1439,16 +1453,19 @@ namespace ts {
                                 value = 0;
                             }
                             tokenValue = "" + value;
+                            numericLiteralFlags = NumericLiteralFlags.OctalSpecifier;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // Try to parse as an octal
                         if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
                             tokenValue = "" + scanOctalDigits();
+                            numericLiteralFlags = NumericLiteralFlags.Octal;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         // This fall-through is a deviation from the EcmaScript grammar. The grammar says that a leading zero
                         // can only be followed by an octal digit, a dot, or the end of the number literal. However, we are being
                         // permissive and allowing decimal digits of the form 08* and 09* (which many browsers also do).
+                        // falls through
                     case CharacterCodes._1:
                     case CharacterCodes._2:
                     case CharacterCodes._3:
@@ -1547,6 +1564,16 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.OpenBraceToken;
                     case CharacterCodes.bar:
+                        if (isConflictMarkerTrivia(text, pos)) {
+                            pos = scanConflictMarkerTrivia(text, pos, error);
+                            if (skipTrivia) {
+                                continue;
+                            }
+                            else {
+                                return token = SyntaxKind.ConflictMarkerTrivia;
+                            }
+                        }
+
                         if (text.charCodeAt(pos + 1) === CharacterCodes.bar) {
                             return pos += 2, token = SyntaxKind.BarBarToken;
                         }
@@ -1713,14 +1740,40 @@ namespace ts {
                 return token = SyntaxKind.OpenBraceToken;
             }
 
+            // First non-whitespace character on this line.
+            let firstNonWhitespace = 0;
+            // These initial values are special because the first line is:
+            // firstNonWhitespace = 0 to indicate that we want leading whitspace,
+
             while (pos < end) {
-                pos++;
                 char = text.charCodeAt(pos);
-                if ((char === CharacterCodes.openBrace) || (char === CharacterCodes.lessThan)) {
+                if (char === CharacterCodes.openBrace) {
                     break;
                 }
+                if (char === CharacterCodes.lessThan) {
+                    if (isConflictMarkerTrivia(text, pos)) {
+                        pos = scanConflictMarkerTrivia(text, pos, error);
+                        return token = SyntaxKind.ConflictMarkerTrivia;
+                    }
+                    break;
+                }
+
+                // FirstNonWhitespace is 0, then we only see whitespaces so far. If we see a linebreak, we want to ignore that whitespaces.
+                // i.e (- : whitespace)
+                //      <div>----
+                //      </div> becomes <div></div>
+                //
+                //      <div>----</div> becomes <div>----</div>
+                if (isLineBreak(char) && firstNonWhitespace === 0) {
+                    firstNonWhitespace = -1;
+                }
+                else if (!isWhiteSpaceLike(char)) {
+                    firstNonWhitespace = pos;
+                }
+                pos++;
             }
-            return token = SyntaxKind.JsxText;
+
+            return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
         // Scans a JSX identifier; these differ from normal identifiers in that

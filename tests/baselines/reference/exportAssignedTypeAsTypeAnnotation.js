@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportAssignedTypeAsTypeAnnotation.ts] ////
 
 //// [exportAssignedTypeAsTypeAnnotation_0.ts]
-
 interface x {
     (): Date;
     foo: string;

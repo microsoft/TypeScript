@@ -160,14 +160,14 @@ interface ObjectConstructor {
       * Creates an object that has the specified prototype or that has null prototype.
       * @param o Object to use as a prototype. May be null.
       */
-    create<T extends object>(o: T | null): T | object;
+    create(o: object | null): any;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: object | null, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -175,14 +175,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -345,53 +345,27 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): RegExpMatchArray | null;
-
-    /**
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags.
-      */
-    match(regexp: RegExp): RegExpMatchArray | null;
+    match(regexp: string | RegExp): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(searchValue: string, replaceValue: string): string;
+    replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
-    replace(searchValue: RegExp, replaceValue: string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replacer A function that returns the replacement text.
-      */
-    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
       * @param regexp The regular expression pattern and applicable flags.
       */
-    search(regexp: string): number;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags.
-      */
-    search(regexp: RegExp): number;
+    search(regexp: string | RegExp): number;
 
     /**
       * Returns a section of a string.
@@ -406,14 +380,7 @@ interface String {
       * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(separator: string, limit?: number): string[];
-
-    /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
-    split(separator: RegExp, limit?: number): string[];
+    split(separator: string | RegExp, limit?: number): string[];
 
     /**
       * Returns the substring at the specified location within a String object.
@@ -543,7 +510,7 @@ interface NumberConstructor {
 declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
-    readonly raw: ReadonlyArray<string>
+    readonly raw: ReadonlyArray<string>;
 }
 
 interface Math {
@@ -881,9 +848,9 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp): RegExp;
+    new (pattern: RegExp | string): RegExp;
     new (pattern: string, flags?: string): RegExp;
-    (pattern: RegExp): RegExp;
+    (pattern: RegExp | string): RegExp;
     (pattern: string, flags?: string): RegExp;
     readonly prototype: RegExp;
 
@@ -1070,37 +1037,49 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: Z): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => boolean, thisArg: Z): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => void): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => void, thisArg: Z): void;
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => U, thisArg?: any): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => U): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => U, thisArg: undefined): U[];
+    map<Z, U>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => U, thisArg: Z): U[];
     /**
      * Returns the elements of an array that meet the condition specified in a callback function.
      * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
      */
-    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg?: any): S[];
+    filter<S extends T>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => value is S): S[];
+    filter<S extends T>(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg: undefined): S[];
+    filter<Z, S extends T>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => value is S, thisArg: Z): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: ReadonlyArray<T>) => any, thisArg: undefined): T[];
+    filter<Z>(callbackfn: (this: Z, value: T, index: number, array: ReadonlyArray<T>) => any, thisArg: Z): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1217,55 +1196,73 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The every method calls the callbackfn function for each element in array1 until the callbackfn returns false, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean): boolean;
+    every(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => boolean, thisArg: Z): boolean;
     /**
       * Determines whether the specified callback function returns true for any element of an array.
       * @param callbackfn A function that accepts up to three arguments. The some method calls the callbackfn function for each element in array1 until the callbackfn returns true, or until the end of the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean): boolean;
+    some(callbackfn: (this: void, value: T, index: number, array: T[]) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => boolean, thisArg: Z): boolean;
     /**
       * Performs the specified action for each element in an array.
       * @param callbackfn  A function that accepts up to three arguments. forEach calls the callbackfn function one time for each element in the array.
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: T[]) => void): void;
+    forEach(callbackfn: (this: void, value: T, index: number, array: T[]) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => void, thisArg: Z): void;
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U];
+    map<U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U, U];
+    map<U>(this: [T, T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U];
+    map<Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U];
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U];
+    map<U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U, U];
+    map<U>(this: [T, T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U];
+    map<Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U];
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U];
+    map<U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U, U];
+    map<U>(this: [T, T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U];
+    map<Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U];
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U];
+    map<U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U): [U, U];
+    map<U>(this: [T, T], callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U];
+    map<Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U];
     /**
       * Calls a defined callback function on each element of an array, and returns an array that contains the results.
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U): U[];
+    map<U>(callbackfn: (this: void, value: T, index: number, array: T[]) => U, thisArg: undefined): U[];
+    map<Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: T[]) => any): T[];
+    filter(callbackfn: (this: void, value: T, index: number, array: T[]) => any, thisArg: undefined): T[];
+    filter<Z>(callbackfn: (this: Z, value: T, index: number, array: T[]) => any, thisArg: Z): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
       * @param callbackfn A function that accepts up to four arguments. The reduce method calls the callbackfn function one time for each element in the array.
@@ -1377,14 +1374,19 @@ type Readonly<T> = {
  */
 type Pick<T, K extends keyof T> = {
     [P in K]: T[P];
-}
+};
 
 /**
  * Construct a type with a set of properties K of type T
  */
 type Record<K extends string, T> = {
     [P in K]: T;
-}
+};
+
+/**
+ * Marker for contextual 'this' type
+ */
+interface ThisType<T> { }
 
 /**
   * Represents a raw buffer of binary data, which is used to store data for the
@@ -1401,8 +1403,16 @@ interface ArrayBuffer {
     /**
       * Returns a section of an ArrayBuffer.
       */
-    slice(begin:number, end?:number): ArrayBuffer;
+    slice(begin: number, end?: number): ArrayBuffer;
 }
+
+/**
+ * Allowed ArrayBuffer types for the buffer of an ArrayBufferView and related Typed Arrays.
+ */
+interface ArrayBufferTypes {
+    ArrayBuffer: ArrayBuffer;
+}
+type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
@@ -1415,7 +1425,7 @@ interface ArrayBufferView {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    buffer: ArrayBuffer;
+    buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1557,7 +1567,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+    new (buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
 declare const DataView: DataViewConstructor;
 
@@ -1574,7 +1584,7 @@ interface Int8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1605,7 +1615,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1624,7 +1636,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int8Array) => any, thisArg?: any): Int8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int8Array) => any): Int8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int8Array) => any, thisArg: undefined): Int8Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => any, thisArg: Z): Int8Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1635,7 +1649,9 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -1646,7 +1662,9 @@ interface Int8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1655,7 +1673,9 @@ interface Int8Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int8Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int8Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int8Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1693,7 +1713,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number): Int8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number, thisArg: undefined): Int8Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => number, thisArg: Z): Int8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1750,13 +1772,6 @@ interface Int8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -1777,7 +1792,9 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int8Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int8Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int8Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -1810,7 +1827,7 @@ interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
     new (length: number): Int8Array;
     new (array: ArrayLike<number>): Int8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -1829,7 +1846,11 @@ interface Int8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int8Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int8Array;
+
+    from(arrayLike: ArrayLike<number>): Int8Array;
 
 }
 declare const Int8Array: Int8ArrayConstructor;
@@ -1847,7 +1868,7 @@ interface Uint8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1878,7 +1899,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -1897,7 +1920,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8Array) => any, thisArg?: any): Uint8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => any): Uint8Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => any, thisArg: undefined): Uint8Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => any, thisArg: Z): Uint8Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -1908,7 +1933,9 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -1919,7 +1946,9 @@ interface Uint8Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -1928,7 +1957,9 @@ interface Uint8Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint8Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -1966,7 +1997,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number): Uint8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number, thisArg: undefined): Uint8Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => number, thisArg: Z): Uint8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2023,13 +2056,6 @@ interface Uint8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2050,7 +2076,9 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2084,7 +2112,7 @@ interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
     new (length: number): Uint8Array;
     new (array: ArrayLike<number>): Uint8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2103,7 +2131,11 @@ interface Uint8ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint8Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8Array;
+
+    from(arrayLike: ArrayLike<number>): Uint8Array;
 
 }
 declare const Uint8Array: Uint8ArrayConstructor;
@@ -2121,7 +2153,7 @@ interface Uint8ClampedArray {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2152,7 +2184,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2171,7 +2205,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => any, thisArg?: any): Uint8ClampedArray;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => any): Uint8ClampedArray;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => any, thisArg: undefined): Uint8ClampedArray;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => any, thisArg: Z): Uint8ClampedArray;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2182,7 +2218,9 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2193,7 +2231,9 @@ interface Uint8ClampedArray {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2202,7 +2242,9 @@ interface Uint8ClampedArray {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2240,7 +2282,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number): Uint8ClampedArray;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number, thisArg: undefined): Uint8ClampedArray;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => number, thisArg: Z): Uint8ClampedArray;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2297,17 +2341,10 @@ interface Uint8ClampedArray {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8ClampedArray, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /**
       * Returns a section of an array.
@@ -2324,7 +2361,9 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint8ClampedArray) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2358,7 +2397,7 @@ interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
     new (length: number): Uint8ClampedArray;
     new (array: ArrayLike<number>): Uint8ClampedArray;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
       * The size in bytes of each element in the array.
@@ -2377,7 +2416,11 @@ interface Uint8ClampedArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint8ClampedArray;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint8ClampedArray;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint8ClampedArray;
+
+    from(arrayLike: ArrayLike<number>): Uint8ClampedArray;
 }
 declare const Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
@@ -2394,7 +2437,7 @@ interface Int16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2425,7 +2468,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2444,7 +2489,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any): Int16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any, thisArg: undefined): Int16Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => any, thisArg: Z): Int16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2455,7 +2502,9 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2466,7 +2515,9 @@ interface Int16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2475,7 +2526,9 @@ interface Int16Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int16Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int16Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2513,7 +2566,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number): Int16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number, thisArg: undefined): Int16Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => number, thisArg: Z): Int16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2570,13 +2625,6 @@ interface Int16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2597,7 +2645,9 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int16Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int16Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int16Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2631,7 +2681,7 @@ interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
     new (length: number): Int16Array;
     new (array: ArrayLike<number>): Int16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2650,7 +2700,11 @@ interface Int16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int16Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int16Array;
+
+    from(arrayLike: ArrayLike<number>): Int16Array;
 
 }
 declare const Int16Array: Int16ArrayConstructor;
@@ -2668,7 +2722,7 @@ interface Uint16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2699,7 +2753,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2718,7 +2774,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint16Array) => any, thisArg?: any): Uint16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => any): Uint16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => any, thisArg: undefined): Uint16Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => any, thisArg: Z): Uint16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2729,7 +2787,9 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -2740,7 +2800,9 @@ interface Uint16Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -2749,7 +2811,9 @@ interface Uint16Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint16Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -2787,7 +2851,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number): Uint16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number, thisArg: undefined): Uint16Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => number, thisArg: Z): Uint16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2844,13 +2910,6 @@ interface Uint16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2871,7 +2930,9 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint16Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint16Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -2905,7 +2966,7 @@ interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
     new (length: number): Uint16Array;
     new (array: ArrayLike<number>): Uint16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2924,7 +2985,11 @@ interface Uint16ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint16Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint16Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint16Array;
+
+    from(arrayLike: ArrayLike<number>): Uint16Array;
 
 }
 declare const Uint16Array: Uint16ArrayConstructor;
@@ -2941,7 +3006,7 @@ interface Int32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2972,7 +3037,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -2991,7 +3058,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int32Array) => any, thisArg?: any): Int32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int32Array) => any): Int32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int32Array) => any, thisArg: undefined): Int32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => any, thisArg: Z): Int32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3002,7 +3071,9 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3013,7 +3084,9 @@ interface Int32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3022,7 +3095,9 @@ interface Int32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Int32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Int32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3060,7 +3135,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int32Array) => number, thisArg?: any): Int32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int32Array) => number): Int32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int32Array) => number, thisArg: undefined): Int32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => number, thisArg: Z): Int32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3117,13 +3194,6 @@ interface Int32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3144,7 +3214,9 @@ interface Int32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Int32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Int32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Int32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3178,7 +3250,7 @@ interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
     new (length: number): Int32Array;
     new (array: ArrayLike<number>): Int32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3197,7 +3269,11 @@ interface Int32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Int32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Int32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Int32Array;
+
+    from(arrayLike: ArrayLike<number>): Int32Array;
 }
 declare const Int32Array: Int32ArrayConstructor;
 
@@ -3214,7 +3290,7 @@ interface Uint32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3245,7 +3321,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3264,7 +3342,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Uint32Array) => any, thisArg?: any): Uint32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => any): Uint32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => any, thisArg: undefined): Uint32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => any, thisArg: Z): Uint32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3275,7 +3355,9 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3286,7 +3368,9 @@ interface Uint32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3295,7 +3379,9 @@ interface Uint32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3333,7 +3419,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number): Uint32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number, thisArg: undefined): Uint32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => number, thisArg: Z): Uint32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3390,13 +3478,6 @@ interface Uint32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3417,7 +3498,9 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Uint32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Uint32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3451,7 +3534,7 @@ interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
     new (length: number): Uint32Array;
     new (array: ArrayLike<number>): Uint32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3470,7 +3553,11 @@ interface Uint32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Uint32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Uint32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Uint32Array;
+
+    from(arrayLike: ArrayLike<number>): Uint32Array;
 }
 declare const Uint32Array: Uint32ArrayConstructor;
 
@@ -3487,7 +3574,7 @@ interface Float32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3518,7 +3605,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3537,7 +3626,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float32Array) => any, thisArg?: any): Float32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float32Array) => any): Float32Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float32Array) => any, thisArg: undefined): Float32Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => any, thisArg: Z): Float32Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3548,7 +3639,9 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3559,7 +3652,9 @@ interface Float32Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3568,7 +3663,9 @@ interface Float32Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Float32Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float32Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float32Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3606,7 +3703,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number): Float32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number, thisArg: undefined): Float32Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => number, thisArg: Z): Float32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3663,13 +3762,6 @@ interface Float32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3690,7 +3782,9 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float32Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float32Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Float32Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3724,7 +3818,7 @@ interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
     new (length: number): Float32Array;
     new (array: ArrayLike<number>): Float32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3743,7 +3837,11 @@ interface Float32ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Float32Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float32Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float32Array;
+
+    from(arrayLike: ArrayLike<number>): Float32Array;
 
 }
 declare const Float32Array: Float32ArrayConstructor;
@@ -3761,7 +3859,7 @@ interface Float64Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3792,7 +3890,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    every(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean): boolean;
+    every(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean, thisArg: undefined): boolean;
+    every<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => boolean, thisArg: Z): boolean;
 
     /**
         * Returns the this object after filling the section identified by start and end with value
@@ -3811,7 +3911,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Float64Array) => any, thisArg?: any): Float64Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float64Array) => any): Float64Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Float64Array) => any, thisArg: undefined): Float64Array;
+    filter<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => any, thisArg: Z): Float64Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -3822,7 +3924,9 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    find(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number | undefined;
+    find(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number | undefined;
+    find<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number | undefined;
 
     /**
       * Returns the index of the first element in the array where predicate is true, and -1
@@ -3833,7 +3937,9 @@ interface Float64Array {
       * @param thisArg If provided, it will be used as the this value for each invocation of
       * predicate. If it is not provided, undefined is used instead.
       */
-    findIndex(predicate: (value: number, index: number, obj: Array<number>) => boolean, thisArg?: any): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean): number;
+    findIndex(predicate: (this: void, value: number, index: number, obj: Array<number>) => boolean, thisArg: undefined): number;
+    findIndex<Z>(predicate: (this: Z, value: number, index: number, obj: Array<number>) => boolean, thisArg: Z): number;
 
     /**
       * Performs the specified action for each element in an array.
@@ -3842,7 +3948,9 @@ interface Float64Array {
       * @param thisArg  An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    forEach(callbackfn: (value: number, index: number, array: Float64Array) => void, thisArg?: any): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float64Array) => void): void;
+    forEach(callbackfn: (this: void, value: number, index: number, array: Float64Array) => void, thisArg: undefined): void;
+    forEach<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => void, thisArg: Z): void;
 
     /**
       * Returns the index of the first occurrence of a value in an array.
@@ -3880,7 +3988,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number): Float64Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number, thisArg: undefined): Float64Array;
+    map<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => number, thisArg: Z): Float64Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3937,13 +4047,6 @@ interface Float64Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3964,7 +4067,9 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    some(callbackfn: (value: number, index: number, array: Float64Array) => boolean, thisArg?: any): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean): boolean;
+    some(callbackfn: (this: void, value: number, index: number, array: Float64Array) => boolean, thisArg: undefined): boolean;
+    some<Z>(callbackfn: (this: Z, value: number, index: number, array: Float64Array) => boolean, thisArg: Z): boolean;
 
     /**
       * Sorts an array.
@@ -3998,7 +4103,7 @@ interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
     new (length: number): Float64Array;
     new (array: ArrayLike<number>): Float64Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
+    new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -4017,7 +4122,11 @@ interface Float64ArrayConstructor {
       * @param mapfn A mapping function to call on every element of the array.
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
-    from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number): Float64Array;
+    from(arrayLike: ArrayLike<number>, mapfn: (this: void, v: number, k: number) => number, thisArg: undefined): Float64Array;
+    from<Z>(arrayLike: ArrayLike<number>, mapfn: (this: Z, v: number, k: number) => number, thisArg: Z): Float64Array;
+
+    from(arrayLike: ArrayLike<number>): Float64Array;
 }
 declare const Float64Array: Float64ArrayConstructor;
 
@@ -4025,7 +4134,7 @@ declare const Float64Array: Float64ArrayConstructor;
 /// ECMAScript Internationalization API
 /////////////////////////////
 
-declare module Intl {
+declare namespace Intl {
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;
@@ -4053,7 +4162,7 @@ declare module Intl {
         new (locales?: string | string[], options?: CollatorOptions): Collator;
         (locales?: string | string[], options?: CollatorOptions): Collator;
         supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
-    }
+    };
 
     interface NumberFormatOptions {
         localeMatcher?: string;
@@ -4090,7 +4199,7 @@ declare module Intl {
         new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
-    }
+    };
 
     interface DateTimeFormatOptions {
         localeMatcher?: string;
@@ -4133,7 +4242,7 @@ declare module Intl {
         new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
-    }
+    };
 }
 
 interface String {
@@ -4258,8 +4367,8 @@ interface ConstrainLongRange extends LongRange {
 }
 
 interface ConstrainVideoFacingModeParameters {
-    exact?: string | string[];
-    ideal?: string | string[];
+    exact?: VideoFacingModeEnum | VideoFacingModeEnum[];
+    ideal?: VideoFacingModeEnum | VideoFacingModeEnum[];
 }
 
 interface CustomEventInit extends EventInit {
@@ -4488,7 +4597,7 @@ interface MSAudioSendSignal {
 }
 
 interface MSConnectivity {
-    iceType?: string;
+    iceType?: MSIceType;
     iceWarningFlags?: MSIceWarningFlags;
     relayAddress?: MSRelayAddress;
 }
@@ -4498,11 +4607,11 @@ interface MSCredentialFilter {
 }
 
 interface MSCredentialParameters {
-    type?: string;
+    type?: MSCredentialType;
 }
 
 interface MSCredentialSpec {
-    type?: string;
+    type?: MSCredentialType;
     id?: string;
 }
 
@@ -4513,7 +4622,7 @@ interface MSDelay {
 
 interface MSDescription extends RTCStats {
     connectivity?: MSConnectivity;
-    transport?: string;
+    transport?: RTCIceProtocol;
     networkconnectivity?: MSNetworkConnectivityInfo;
     localAddr?: MSIPAddressInfo;
     remoteAddr?: MSIPAddressInfo;
@@ -4637,11 +4746,11 @@ interface MSTransportDiagnosticsStats extends RTCStats {
     numConsentRespReceived?: number;
     interfaces?: MSNetworkInterfaceType;
     baseInterface?: MSNetworkInterfaceType;
-    protocol?: string;
+    protocol?: RTCIceProtocol;
     localInterface?: MSNetworkInterfaceType;
-    localAddrType?: string;
-    remoteAddrType?: string;
-    iceRole?: string;
+    localAddrType?: MSIceAddrType;
+    remoteAddrType?: MSIceAddrType;
+    iceRole?: RTCIceRole;
     rtpRtcpMux?: boolean;
     allocationTimeInMs?: number;
     msRtcEngineVersion?: string;
@@ -4714,7 +4823,7 @@ interface MediaEncryptedEventInit extends EventInit {
 }
 
 interface MediaKeyMessageEventInit extends EventInit {
-    messageType?: string;
+    messageType?: MediaKeyMessageType;
     message?: ArrayBuffer;
 }
 
@@ -4722,8 +4831,8 @@ interface MediaKeySystemConfiguration {
     initDataTypes?: string[];
     audioCapabilities?: MediaKeySystemMediaCapability[];
     videoCapabilities?: MediaKeySystemMediaCapability[];
-    distinctiveIdentifier?: string;
-    persistentState?: string;
+    distinctiveIdentifier?: MediaKeysRequirement;
+    persistentState?: MediaKeysRequirement;
 }
 
 interface MediaKeySystemMediaCapability {
@@ -4847,7 +4956,7 @@ interface MutationObserverInit {
 }
 
 interface NotificationOptions {
-    dir?: string;
+    dir?: NotificationDirection;
     lang?: string;
     body?: string;
     tag?: string;
@@ -4946,8 +5055,8 @@ interface PushSubscriptionOptionsInit {
 
 interface RTCConfiguration {
     iceServers?: RTCIceServer[];
-    iceTransportPolicy?: string;
-    bundlePolicy?: string;
+    iceTransportPolicy?: RTCIceTransportPolicy;
+    bundlePolicy?: RTCBundlePolicy;
     peerIdentity?: string;
 }
 
@@ -4961,7 +5070,7 @@ interface RTCDtlsFingerprint {
 }
 
 interface RTCDtlsParameters {
-    role?: string;
+    role?: RTCDtlsRole;
     fingerprints?: RTCDtlsFingerprint[];
 }
 
@@ -4969,7 +5078,7 @@ interface RTCIceCandidateAttributes extends RTCStats {
     ipAddress?: string;
     portNumber?: number;
     transport?: string;
-    candidateType?: string;
+    candidateType?: RTCStatsIceCandidateType;
     priority?: number;
     addressSourceUrl?: string;
 }
@@ -4981,10 +5090,10 @@ interface RTCIceCandidateDictionary {
     foundation?: string;
     priority?: number;
     ip?: string;
-    protocol?: string;
+    protocol?: RTCIceProtocol;
     port?: number;
-    type?: string;
-    tcpType?: string;
+    type?: RTCIceCandidateType;
+    tcpType?: RTCIceTcpCandidateType;
     relatedAddress?: string;
     relatedPort?: number;
     msMTurnSessionId?: string;
@@ -5005,7 +5114,7 @@ interface RTCIceCandidatePairStats extends RTCStats {
     transportId?: string;
     localCandidateId?: string;
     remoteCandidateId?: string;
-    state?: string;
+    state?: RTCStatsIceCandidatePairState;
     priority?: number;
     nominated?: boolean;
     writable?: boolean;
@@ -5018,7 +5127,7 @@ interface RTCIceCandidatePairStats extends RTCStats {
 }
 
 interface RTCIceGatherOptions {
-    gatherPolicy?: string;
+    gatherPolicy?: RTCIceGatherPolicy;
     iceservers?: RTCIceServer[];
     portRange?: MSPortRange;
 }
@@ -5183,7 +5292,7 @@ interface RTCRtpParameters {
     headerExtensions?: RTCRtpHeaderExtensionParameters[];
     encodings?: RTCRtpEncodingParameters[];
     rtcp?: RTCRtcpParameters;
-    degradationPreference?: string;
+    degradationPreference?: RTCDegradationPreference;
 }
 
 interface RTCRtpRtxParameters {
@@ -5197,7 +5306,7 @@ interface RTCRtpUnhandled {
 }
 
 interface RTCSessionDescriptionInit {
-    type?: string;
+    type?: RTCSdpType;
     sdp?: string;
 }
 
@@ -5223,9 +5332,9 @@ interface RTCSsrcRange {
 
 interface RTCStats {
     timestamp?: number;
-    type?: string;
+    type?: RTCStatsType;
     id?: string;
-    msType?: string;
+    msType?: MSStatsType;
 }
 
 interface RTCStatsReport {
@@ -5250,11 +5359,11 @@ interface RequestInit {
     headers?: any;
     body?: any;
     referrer?: string;
-    referrerPolicy?: string;
-    mode?: string;
-    credentials?: string;
-    cache?: string;
-    redirect?: string;
+    referrerPolicy?: ReferrerPolicy;
+    mode?: RequestMode;
+    credentials?: RequestCredentials;
+    cache?: RequestCache;
+    redirect?: RequestRedirect;
     integrity?: string;
     keepalive?: boolean;
     window?: any;
@@ -5267,9 +5376,9 @@ interface ResponseInit {
 }
 
 interface ScopedCredentialDescriptor {
-    type?: string;
+    type?: ScopedCredentialType;
     id?: any;
-    transports?: string[];
+    transports?: Transport[];
 }
 
 interface ScopedCredentialOptions {
@@ -5280,7 +5389,7 @@ interface ScopedCredentialOptions {
 }
 
 interface ScopedCredentialParameters {
-    type?: string;
+    type?: ScopedCredentialType;
     algorithm?: string | Algorithm;
 }
 
@@ -5510,7 +5619,7 @@ interface AudioContextBase extends EventTarget {
     readonly listener: AudioListener;
     onstatechange: (this: AudioContext, ev: Event) => any;
     readonly sampleRate: number;
-    readonly state: string;
+    readonly state: AudioContextState;
     close(): Promise<void>;
     createAnalyser(): AnalyserNode;
     createBiquadFilter(): BiquadFilterNode;
@@ -5570,12 +5679,13 @@ declare var AudioListener: {
 
 interface AudioNode extends EventTarget {
     channelCount: number;
-    channelCountMode: string;
-    channelInterpretation: string;
+    channelCountMode: ChannelCountMode;
+    channelInterpretation: ChannelInterpretation;
     readonly context: AudioContext;
     readonly numberOfInputs: number;
     readonly numberOfOutputs: number;
     connect(destination: AudioNode, output?: number, input?: number): AudioNode;
+    connect(destination: AudioParam, output?: number): void;
     disconnect(output?: number): void;
     disconnect(destination: AudioNode, output?: number, input?: number): void;
     disconnect(destination: AudioParam, output?: number): void;
@@ -5673,7 +5783,7 @@ interface BiquadFilterNode extends AudioNode {
     readonly detune: AudioParam;
     readonly frequency: AudioParam;
     readonly gain: AudioParam;
-    type: string;
+    type: BiquadFilterType;
     getFrequencyResponse(frequencyHz: Float32Array, magResponse: Float32Array, phaseResponse: Float32Array): void;
 }
 
@@ -6313,7 +6423,7 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     lineJoin: string;
     lineWidth: number;
     miterLimit: number;
-    msFillRule: string;
+    msFillRule: CanvasFillRule;
     shadowBlur: number;
     shadowColor: string;
     shadowOffsetX: number;
@@ -6326,19 +6436,21 @@ interface CanvasRenderingContext2D extends Object, CanvasPathMethods {
     oImageSmoothingEnabled: boolean;
     beginPath(): void;
     clearRect(x: number, y: number, w: number, h: number): void;
-    clip(fillRule?: string): void;
+    clip(fillRule?: CanvasFillRule): void;
     createImageData(imageDataOrSw: number | ImageData, sh?: number): ImageData;
     createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
     createPattern(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, repetition: string): CanvasPattern;
     createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
     drawFocusIfNeeded(element: Element): void;
-    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement, offsetX: number, offsetY: number, width?: number, height?: number, canvasOffsetX?: number, canvasOffsetY?: number, canvasImageWidth?: number, canvasImageHeight?: number): void;
-    fill(fillRule?: string): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, dstX: number, dstY: number): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, dstX: number, dstY: number, dstW: number, dstH: number): void;
+    drawImage(image: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | ImageBitmap, srcX: number, srcY: number, srcW: number, srcH: number, dstX: number, dstY: number, dstW: number, dstH: number): void;
+    fill(fillRule?: CanvasFillRule): void;
     fillRect(x: number, y: number, w: number, h: number): void;
     fillText(text: string, x: number, y: number, maxWidth?: number): void;
     getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
     getLineDash(): number[];
-    isPointInPath(x: number, y: number, fillRule?: string): boolean;
+    isPointInPath(x: number, y: number, fillRule?: CanvasFillRule): boolean;
     measureText(text: string): TextMetrics;
     putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX?: number, dirtyY?: number, dirtyWidth?: number, dirtyHeight?: number): void;
     restore(): void;
@@ -6629,10 +6741,10 @@ declare var DOMException: {
 }
 
 interface DOMImplementation {
-    createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType): Document;
+    createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType | null): Document;
     createDocumentType(qualifiedName: string, publicId: string, systemId: string): DocumentType;
     createHTMLDocument(title: string): Document;
-    hasFeature(): boolean;
+    hasFeature(feature: string | null, version: string | null): boolean;
 }
 
 declare var DOMImplementation: {
@@ -6715,6 +6827,7 @@ interface DataTransfer {
     clearData(format?: string): boolean;
     getData(format: string): string;
     setData(format: string, data: string): boolean;
+    setDragImage(image: Element, x: number, y: number): void;
 }
 
 declare var DataTransfer: {
@@ -6751,7 +6864,7 @@ declare var DataTransferItemList: {
 
 interface DeferredPermissionRequest {
     readonly id: number;
-    readonly type: string;
+    readonly type: MSWebViewPermissionType;
     readonly uri: string;
     allow(): void;
     deny(): void;
@@ -7369,7 +7482,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Contains the title of the document.
       */
     title: string;
-    readonly visibilityState: string;
+    readonly visibilityState: VisibilityState;
     /** 
       * Sets or gets the color of the links that the user has visited.
       */
@@ -7384,7 +7497,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Gets or sets the version attribute specified in the declaration of an XML document.
       */
     xmlVersion: string | null;
-    adoptNode(source: Node): Node;
+    adoptNode<T extends Node>(source: T): T;
     captureEvents(): void;
     caretRangeFromPoint(x: number, y: number): Range;
     clear(): void;
@@ -7561,7 +7674,7 @@ interface Document extends Node, GlobalEventHandlers, NodeSelector, DocumentEven
       * Gets a value indicating whether the object currently has focus.
       */
     hasFocus(): boolean;
-    importNode(importedNode: Node, deep: boolean): Node;
+    importNode<T extends Node>(importedNode: T, deep: boolean): T;
     msElementsFromPoint(x: number, y: number): NodeListOf<Element>;
     msElementsFromRect(left: number, top: number, width: number, height: number): NodeListOf<Element>;
     /**
@@ -7629,6 +7742,7 @@ declare var Document: {
 }
 
 interface DocumentFragment extends Node, NodeSelector, ParentNode {
+    getElementById(elementId: string): HTMLElement | null;
 }
 
 declare var DocumentFragment: {
@@ -7876,9 +7990,9 @@ declare var Event: {
 }
 
 interface EventTarget {
-    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    addEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     dispatchEvent(evt: Event): boolean;
-    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+    removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 }
 
 declare var EventTarget: {
@@ -7957,7 +8071,7 @@ declare var FocusEvent: {
 }
 
 interface FocusNavigationEvent extends Event {
-    readonly navigationReason: string;
+    readonly navigationReason: NavigationReason;
     readonly originHeight: number;
     readonly originLeft: number;
     readonly originTop: number;
@@ -7971,7 +8085,12 @@ declare var FocusNavigationEvent: {
 }
 
 interface FormData {
-    append(name: any, value: any, blobName?: string): void;
+    append(name: string, value: string | Blob, fileName?: string): void;
+    delete(name: string): void;
+    get(name: string): FormDataEntryValue | null;
+    getAll(name: string): FormDataEntryValue[];
+    has(name: string): boolean;
+    set(name: string, value: string | Blob, fileName?: string): void;
 }
 
 declare var FormData: {
@@ -11133,7 +11252,7 @@ declare var History: {
 }
 
 interface IDBCursor {
-    readonly direction: string;
+    readonly direction: IDBCursorDirection;
     key: IDBKeyRange | IDBValidKey;
     readonly primaryKey: any;
     source: IDBObjectStore | IDBIndex;
@@ -11285,7 +11404,7 @@ interface IDBRequest extends EventTarget {
     readonly error: DOMError;
     onerror: (this: IDBRequest, ev: Event) => any;
     onsuccess: (this: IDBRequest, ev: Event) => any;
-    readonly readyState: string;
+    readonly readyState: IDBRequestReadyState;
     readonly result: any;
     source: IDBObjectStore | IDBIndex | IDBCursor;
     readonly transaction: IDBTransaction;
@@ -11307,7 +11426,7 @@ interface IDBTransactionEventMap {
 interface IDBTransaction extends EventTarget {
     readonly db: IDBDatabase;
     readonly error: DOMError;
-    readonly mode: string;
+    readonly mode: IDBTransactionMode;
     onabort: (this: IDBTransaction, ev: Event) => any;
     oncomplete: (this: IDBTransaction, ev: Event) => any;
     onerror: (this: IDBTransaction, ev: Event) => any;
@@ -11425,7 +11544,7 @@ declare var KeyboardEvent: {
 
 interface ListeningStateChangedEvent extends Event {
     readonly label: string;
-    readonly state: string;
+    readonly state: ListeningState;
 }
 
 declare var ListeningStateChangedEvent: {
@@ -11516,7 +11635,7 @@ declare var MSAppAsyncOperation: {
 
 interface MSAssertion {
     readonly id: string;
-    readonly type: string;
+    readonly type: MSCredentialType;
 }
 
 declare var MSAssertion: {
@@ -11548,7 +11667,7 @@ interface MSFIDOCredentialAssertion extends MSAssertion {
     readonly algorithm: string | Algorithm;
     readonly attestation: any;
     readonly publicKey: string;
-    readonly transportHints: string[];
+    readonly transportHints: MSTransportType[];
 }
 
 declare var MSFIDOCredentialAssertion: {
@@ -11652,7 +11771,7 @@ interface MSHTMLWebViewElement extends HTMLElement {
     goForward(): void;
     invokeScriptAsync(scriptName: string, ...args: any[]): MSWebViewAsyncOperation;
     navigate(uri: string): void;
-    navigateFocus(navigationReason: string, origin: FocusNavigationOrigin): void;
+    navigateFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
     navigateToLocalStreamUri(source: string, streamResolver: any): void;
     navigateToString(contents: string): void;
     navigateWithHttpRequestMessage(requestMessage: any): void;
@@ -11907,7 +12026,7 @@ declare var MSWebViewSettings: {
 interface MediaDeviceInfo {
     readonly deviceId: string;
     readonly groupId: string;
-    readonly kind: string;
+    readonly kind: MediaDeviceKind;
     readonly label: string;
 }
 
@@ -11974,7 +12093,7 @@ declare var MediaError: {
 
 interface MediaKeyMessageEvent extends Event {
     readonly message: ArrayBuffer;
-    readonly messageType: string;
+    readonly messageType: MediaKeyMessageType;
 }
 
 declare var MediaKeyMessageEvent: {
@@ -12002,7 +12121,7 @@ declare var MediaKeySession: {
 interface MediaKeyStatusMap {
     readonly size: number;
     forEach(callback: ForEachCallback): void;
-    get(keyId: any): string;
+    get(keyId: any): MediaKeyStatus;
     has(keyId: any): boolean;
 }
 
@@ -12023,7 +12142,7 @@ declare var MediaKeySystemAccess: {
 }
 
 interface MediaKeys {
-    createSession(sessionType?: string): MediaKeySession;
+    createSession(sessionType?: MediaKeySessionType): MediaKeySession;
     setServerCertificate(serverCertificate: any): Promise<void>;
 }
 
@@ -12161,7 +12280,7 @@ interface MediaStreamTrack extends EventTarget {
     onoverconstrained: (this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any;
     onunmute: (this: MediaStreamTrack, ev: Event) => any;
     readonly readonly: boolean;
-    readonly readyState: string;
+    readonly readyState: MediaStreamTrackState;
     readonly remote: boolean;
     applyConstraints(constraints: MediaTrackConstraints): Promise<void>;
     clone(): MediaStreamTrack;
@@ -12382,7 +12501,7 @@ declare var NavigationEventWithReferrer: {
 interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorContentUtils, NavigatorStorageUtils, NavigatorGeolocation, MSNavigatorDoNotTrack, MSFileSaver, NavigatorBeacon, NavigatorConcurrentHardware, NavigatorUserMedia {
     readonly authentication: WebAuthentication;
     readonly cookieEnabled: boolean;
-    gamepadInputEmulation: string;
+    gamepadInputEmulation: GamepadInputEmulationType;
     readonly language: string;
     readonly maxTouchPoints: number;
     readonly mimeTypes: MimeTypeArray;
@@ -12429,15 +12548,15 @@ interface Node extends EventTarget {
     contains(child: Node): boolean;
     hasAttributes(): boolean;
     hasChildNodes(): boolean;
-    insertBefore(newChild: Node, refChild: Node | null): Node;
+    insertBefore<T extends Node>(newChild: T, refChild: Node | null): T;
     isDefaultNamespace(namespaceURI: string | null): boolean;
     isEqualNode(arg: Node): boolean;
     isSameNode(other: Node): boolean;
     lookupNamespaceURI(prefix: string | null): string | null;
     lookupPrefix(namespaceURI: string | null): string | null;
     normalize(): void;
-    removeChild(oldChild: Node): Node;
-    replaceChild(newChild: Node, oldChild: Node): Node;
+    removeChild<T extends Node>(oldChild: T): T;
+    replaceChild<T extends Node>(newChild: Node, oldChild: T): T;
     readonly ATTRIBUTE_NODE: number;
     readonly CDATA_SECTION_NODE: number;
     readonly COMMENT_NODE: number;
@@ -12539,14 +12658,14 @@ interface NotificationEventMap {
 
 interface Notification extends EventTarget {
     readonly body: string;
-    readonly dir: string;
+    readonly dir: NotificationDirection;
     readonly icon: string;
     readonly lang: string;
     onclick: (this: Notification, ev: Event) => any;
     onclose: (this: Notification, ev: Event) => any;
     onerror: (this: Notification, ev: Event) => any;
     onshow: (this: Notification, ev: Event) => any;
-    readonly permission: string;
+    readonly permission: NotificationPermission;
     readonly tag: string;
     readonly title: string;
     close(): void;
@@ -12557,7 +12676,7 @@ interface Notification extends EventTarget {
 declare var Notification: {
     prototype: Notification;
     new(title: string, options?: NotificationOptions): Notification;
-    requestPermission(callback?: NotificationPermissionCallback): Promise<string>;
+    requestPermission(callback?: NotificationPermissionCallback): Promise<NotificationPermission>;
 }
 
 interface OES_element_index_uint {
@@ -12647,7 +12766,7 @@ interface OscillatorNode extends AudioNode {
     readonly detune: AudioParam;
     readonly frequency: AudioParam;
     onended: (this: OscillatorNode, ev: MediaStreamErrorEvent) => any;
-    type: string;
+    type: OscillatorType;
     setPeriodicWave(periodicWave: PeriodicWave): void;
     start(when?: number): void;
     stop(when?: number): void;
@@ -12690,9 +12809,9 @@ interface PannerNode extends AudioNode {
     coneInnerAngle: number;
     coneOuterAngle: number;
     coneOuterGain: number;
-    distanceModel: string;
+    distanceModel: DistanceModelType;
     maxDistance: number;
-    panningModel: string;
+    panningModel: PanningModelType;
     refDistance: number;
     rolloffFactor: number;
     setOrientation(x: number, y: number, z: number): void;
@@ -12743,7 +12862,7 @@ interface PaymentRequest extends EventTarget {
     onshippingoptionchange: (this: PaymentRequest, ev: Event) => any;
     readonly shippingAddress: PaymentAddress | null;
     readonly shippingOption: string | null;
-    readonly shippingType: string | null;
+    readonly shippingType: PaymentShippingType | null;
     abort(): Promise<void>;
     show(): Promise<PaymentResponse>;
     addEventListener<K extends keyof PaymentRequestEventMap>(type: K, listener: (this: PaymentRequest, ev: PaymentRequestEventMap[K]) => any, useCapture?: boolean): void;
@@ -12772,7 +12891,7 @@ interface PaymentResponse {
     readonly payerPhone: string | null;
     readonly shippingAddress: PaymentAddress | null;
     readonly shippingOption: string | null;
-    complete(result?: string): Promise<void>;
+    complete(result?: PaymentComplete): Promise<void>;
     toJSON(): any;
 }
 
@@ -12900,7 +13019,7 @@ interface PerformanceNavigationTiming extends PerformanceEntry {
     readonly requestStart: number;
     readonly responseEnd: number;
     readonly responseStart: number;
-    readonly type: string;
+    readonly type: NavigationType;
     readonly unloadEventEnd: number;
     readonly unloadEventStart: number;
 }
@@ -12969,7 +13088,7 @@ declare var PeriodicWave: {
 }
 
 interface PermissionRequest extends DeferredPermissionRequest {
-    readonly state: string;
+    readonly state: MSWebViewPermissionState;
     defer(): void;
 }
 
@@ -13099,7 +13218,7 @@ declare var ProgressEvent: {
 
 interface PushManager {
     getSubscription(): Promise<PushSubscription>;
-    permissionState(options?: PushSubscriptionOptionsInit): Promise<string>;
+    permissionState(options?: PushSubscriptionOptionsInit): Promise<PushPermissionState>;
     subscribe(options?: PushSubscriptionOptionsInit): Promise<PushSubscription>;
 }
 
@@ -13111,7 +13230,7 @@ declare var PushManager: {
 interface PushSubscription {
     readonly endpoint: USVString;
     readonly options: PushSubscriptionOptions;
-    getKey(name: string): ArrayBuffer | null;
+    getKey(name: PushEncryptionKeyName): ArrayBuffer | null;
     toJSON(): any;
     unsubscribe(): Promise<boolean>;
 }
@@ -13148,7 +13267,7 @@ interface RTCDtlsTransportEventMap {
 interface RTCDtlsTransport extends RTCStatsProvider {
     ondtlsstatechange: ((this: RTCDtlsTransport, ev: RTCDtlsTransportStateChangedEvent) => any) | null;
     onerror: ((this: RTCDtlsTransport, ev: Event) => any) | null;
-    readonly state: string;
+    readonly state: RTCDtlsTransportState;
     readonly transport: RTCIceTransport;
     getLocalParameters(): RTCDtlsParameters;
     getRemoteCertificates(): ArrayBuffer[];
@@ -13165,7 +13284,7 @@ declare var RTCDtlsTransport: {
 }
 
 interface RTCDtlsTransportStateChangedEvent extends Event {
-    readonly state: string;
+    readonly state: RTCDtlsTransportState;
 }
 
 declare var RTCDtlsTransportStateChangedEvent: {
@@ -13221,7 +13340,7 @@ interface RTCIceGathererEventMap {
 }
 
 interface RTCIceGatherer extends RTCStatsProvider {
-    readonly component: string;
+    readonly component: RTCIceComponent;
     onerror: ((this: RTCIceGatherer, ev: Event) => any) | null;
     onlocalcandidate: ((this: RTCIceGatherer, ev: RTCIceGathererEvent) => any) | null;
     createAssociatedGatherer(): RTCIceGatherer;
@@ -13251,19 +13370,19 @@ interface RTCIceTransportEventMap {
 }
 
 interface RTCIceTransport extends RTCStatsProvider {
-    readonly component: string;
+    readonly component: RTCIceComponent;
     readonly iceGatherer: RTCIceGatherer | null;
     oncandidatepairchange: ((this: RTCIceTransport, ev: RTCIceCandidatePairChangedEvent) => any) | null;
     onicestatechange: ((this: RTCIceTransport, ev: RTCIceTransportStateChangedEvent) => any) | null;
-    readonly role: string;
-    readonly state: string;
+    readonly role: RTCIceRole;
+    readonly state: RTCIceTransportState;
     addRemoteCandidate(remoteCandidate: RTCIceCandidateDictionary | RTCIceCandidateComplete): void;
     createAssociatedTransport(): RTCIceTransport;
     getNominatedCandidatePair(): RTCIceCandidatePair | null;
     getRemoteCandidates(): RTCIceCandidateDictionary[];
     getRemoteParameters(): RTCIceParameters | null;
     setRemoteCandidates(remoteCandidates: RTCIceCandidateDictionary[]): void;
-    start(gatherer: RTCIceGatherer, remoteParameters: RTCIceParameters, role?: string): void;
+    start(gatherer: RTCIceGatherer, remoteParameters: RTCIceParameters, role?: RTCIceRole): void;
     stop(): void;
     addEventListener<K extends keyof RTCIceTransportEventMap>(type: K, listener: (this: RTCIceTransport, ev: RTCIceTransportEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -13275,7 +13394,7 @@ declare var RTCIceTransport: {
 }
 
 interface RTCIceTransportStateChangedEvent extends Event {
-    readonly state: string;
+    readonly state: RTCIceTransportState;
 }
 
 declare var RTCIceTransportStateChangedEvent: {
@@ -13295,8 +13414,8 @@ interface RTCPeerConnectionEventMap {
 
 interface RTCPeerConnection extends EventTarget {
     readonly canTrickleIceCandidates: boolean | null;
-    readonly iceConnectionState: string;
-    readonly iceGatheringState: string;
+    readonly iceConnectionState: RTCIceConnectionState;
+    readonly iceGatheringState: RTCIceGatheringState;
     readonly localDescription: RTCSessionDescription | null;
     onaddstream: (this: RTCPeerConnection, ev: MediaStreamEvent) => any;
     onicecandidate: (this: RTCPeerConnection, ev: RTCPeerConnectionIceEvent) => any;
@@ -13306,7 +13425,7 @@ interface RTCPeerConnection extends EventTarget {
     onremovestream: (this: RTCPeerConnection, ev: MediaStreamEvent) => any;
     onsignalingstatechange: (this: RTCPeerConnection, ev: Event) => any;
     readonly remoteDescription: RTCSessionDescription | null;
-    readonly signalingState: string;
+    readonly signalingState: RTCSignalingState;
     addIceCandidate(candidate: RTCIceCandidate, successCallback?: VoidFunction, failureCallback?: RTCPeerConnectionErrorCallback): Promise<void>;
     addStream(stream: MediaStream): void;
     close(): void;
@@ -13389,7 +13508,7 @@ declare var RTCRtpSender: {
 
 interface RTCSessionDescription {
     sdp: string | null;
-    type: string | null;
+    type: RTCSdpType | null;
     toJSON(): any;
 }
 
@@ -13448,7 +13567,7 @@ interface Range {
     createContextualFragment(fragment: string): DocumentFragment;
     deleteContents(): void;
     detach(): void;
-    expand(Unit: string): boolean;
+    expand(Unit: ExpandGranularity): boolean;
     extractContents(): DocumentFragment;
     getBoundingClientRect(): ClientRect;
     getClientRects(): ClientRectList;
@@ -13501,18 +13620,18 @@ declare var ReadableStreamReader: {
 }
 
 interface Request extends Object, Body {
-    readonly cache: string;
-    readonly credentials: string;
-    readonly destination: string;
+    readonly cache: RequestCache;
+    readonly credentials: RequestCredentials;
+    readonly destination: RequestDestination;
     readonly headers: Headers;
     readonly integrity: string;
     readonly keepalive: boolean;
     readonly method: string;
-    readonly mode: string;
-    readonly redirect: string;
+    readonly mode: RequestMode;
+    readonly redirect: RequestRedirect;
     readonly referrer: string;
-    readonly referrerPolicy: string;
-    readonly type: string;
+    readonly referrerPolicy: ReferrerPolicy;
+    readonly type: RequestType;
     readonly url: string;
     clone(): Request;
 }
@@ -13528,7 +13647,7 @@ interface Response extends Object, Body {
     readonly ok: boolean;
     readonly status: number;
     readonly statusText: string;
-    readonly type: string;
+    readonly type: ResponseType;
     readonly url: string;
     clone(): Response;
 }
@@ -15328,7 +15447,7 @@ declare var SVGZoomEvent: {
 
 interface ScopedCredential {
     readonly id: ArrayBuffer;
-    readonly type: string;
+    readonly type: ScopedCredentialType;
 }
 
 declare var ScopedCredential: {
@@ -15445,7 +15564,7 @@ interface ServiceWorkerEventMap extends AbstractWorkerEventMap {
 interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: (this: ServiceWorker, ev: Event) => any;
     readonly scriptURL: USVString;
-    readonly state: string;
+    readonly state: ServiceWorkerState;
     postMessage(message: any, transfer?: any[]): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, useCapture?: boolean): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, useCapture?: boolean): void;
@@ -15521,7 +15640,7 @@ interface SourceBuffer extends EventTarget {
     appendWindowStart: number;
     readonly audioTracks: AudioTrackList;
     readonly buffered: TimeRanges;
-    mode: string;
+    mode: AppendMode;
     timestampOffset: number;
     readonly updating: boolean;
     readonly videoTracks: VideoTrackList;
@@ -15757,7 +15876,7 @@ interface Text extends CharacterData {
 
 declare var Text: {
     prototype: Text;
-    new(): Text;
+    new(data?: string): Text;
 }
 
 interface TextEvent extends UIEvent {
@@ -15940,7 +16059,7 @@ interface TouchEvent extends UIEvent {
 
 declare var TouchEvent: {
     prototype: TouchEvent;
-    new(): TouchEvent;
+    new(type: string, touchEventInit?: TouchEventInit): TouchEvent;
 }
 
 interface TouchList {
@@ -16017,7 +16136,7 @@ interface URL {
     protocol: string;
     search: string;
     username: string;
-    readonly searchparams: URLSearchParams;
+    readonly searchParams: URLSearchParams;
     toString(): string;
 }
 
@@ -16146,7 +16265,7 @@ declare var WEBGL_depth_texture: {
 
 interface WaveShaperNode extends AudioNode {
     curve: Float32Array | null;
-    oversample: string;
+    oversample: OverSampleType;
 }
 
 declare var WaveShaperNode: {
@@ -16341,12 +16460,12 @@ interface WebGLRenderingContext {
     stencilMaskSeparate(face: number, mask: number): void;
     stencilOp(fail: number, zfail: number, zpass: number): void;
     stencilOpSeparate(face: number, fail: number, zfail: number, zpass: number): void;
-    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels?: ArrayBufferView): void;
-    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
+    texImage2D(target: number, level: number, internalformat: number, width: number, height: number, border: number, format: number, type: number, pixels: ArrayBufferView | null): void;
+    texImage2D(target: number, level: number, internalformat: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     texParameterf(target: number, pname: number, param: number): void;
     texParameteri(target: number, pname: number, param: number): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels?: ArrayBufferView): void;
-    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels?: ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ArrayBufferView | null): void;
+    texSubImage2D(target: number, level: number, xoffset: number, yoffset: number, format: number, type: number, pixels: ImageBitmap | ImageData | HTMLVideoElement | HTMLImageElement | HTMLCanvasElement): void;
     uniform1f(location: WebGLUniformLocation | null, x: number): void;
     uniform1fv(location: WebGLUniformLocation, v: Float32Array | number[]): void;
     uniform1i(location: WebGLUniformLocation | null, x: number): void;
@@ -17407,6 +17526,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     readonly top: Window;
     readonly window: Window;
     URL: typeof URL;
+    URLSearchParams: typeof URLSearchParams;
     Blob: typeof Blob;
     customElements: CustomElementRegistry;
     alert(message?: any): void;
@@ -17415,7 +17535,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     captureEvents(): void;
     close(): void;
     confirm(message?: string): boolean;
-    departFocus(navigationReason: string, origin: FocusNavigationOrigin): void;
+    departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
     focus(): void;
     getComputedStyle(elt: Element, pseudoElt?: string): CSSStyleDeclaration;
     getMatchedCSSRules(elt: Element, pseudoElt?: string): CSSRuleList;
@@ -17440,6 +17560,8 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
     webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+    createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+    createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
     scroll(options?: ScrollToOptions): void;
     scrollTo(options?: ScrollToOptions): void;
     scrollBy(options?: ScrollToOptions): void;
@@ -17488,7 +17610,7 @@ interface XMLHttpRequest extends EventTarget, XMLHttpRequestEventTarget {
     readonly readyState: number;
     readonly response: any;
     readonly responseText: string;
-    responseType: string;
+    responseType: XMLHttpRequestResponseType;
     readonly responseURL: string;
     readonly responseXML: Document | null;
     readonly status: number;
@@ -17653,6 +17775,7 @@ interface Body {
     blob(): Promise<Blob>;
     json(): Promise<any>;
     text(): Promise<string>;
+    formData(): Promise<FormData>;
 }
 
 interface CanvasPathMethods {
@@ -18015,6 +18138,21 @@ interface Canvas2DContextAttributes {
     [attribute: string]: boolean | string | undefined;
 }
 
+interface ImageBitmapOptions {
+    imageOrientation?: "none" | "flipY";
+    premultiplyAlpha?: "none" | "premultiply" | "default";
+    colorSpaceConversion?: "none" | "default";
+    resizeWidth?: number;
+    resizeHeight?: number;
+    resizeQuality?: "pixelated" | "low" | "medium" | "high";
+}
+
+interface ImageBitmap {
+    readonly width: number;
+    readonly height: number;
+    close(): void;
+}
+
 interface URLSearchParams {
     /**
       * Appends a specified key/value pair as a new search parameter.
@@ -18059,6 +18197,7 @@ interface NodeListOf<TNode extends Node> extends NodeList {
 interface HTMLCollectionOf<T extends Element> extends HTMLCollection {
     item(index: number): T;
     namedItem(name: string): T;
+    [index: number]: T;
 }
 
 interface BlobPropertyBag {
@@ -18328,6 +18467,21 @@ interface PromiseRejectionEventInit extends EventInit {
     reason?: any;
 }
 
+interface EventListenerOptions {
+    capture?: boolean;
+}
+
+interface AddEventListenerOptions extends EventListenerOptions {
+    passive?: boolean;
+    once?: boolean;
+}
+
+interface TouchEventInit extends EventModifierInit {
+    touches?: Touch[];
+    targetTouches?: Touch[];
+    changedTouches?: Touch[];
+}
+
 declare type EventListenerOrEventListenerObject = EventListener | EventListenerObject;
 
 interface ErrorEventHandler {
@@ -18385,10 +18539,10 @@ interface NavigatorUserMediaErrorCallback {
     (error: MediaStreamError): void;
 }
 interface ForEachCallback {
-    (keyId: any, status: string): void;
+    (keyId: any, status: MediaKeyStatus): void;
 }
 interface NotificationPermissionCallback {
-    (permission: string): void;
+    (permission: NotificationPermission): void;
 }
 interface IntersectionObserverCallback {
     (entries: IntersectionObserverEntry[], observer: IntersectionObserver): void;
@@ -18995,7 +19149,7 @@ declare function cancelAnimationFrame(handle: number): void;
 declare function captureEvents(): void;
 declare function close(): void;
 declare function confirm(message?: string): boolean;
-declare function departFocus(navigationReason: string, origin: FocusNavigationOrigin): void;
+declare function departFocus(navigationReason: NavigationReason, origin: FocusNavigationOrigin): void;
 declare function focus(): void;
 declare function getComputedStyle(elt: Element, pseudoElt?: string): CSSStyleDeclaration;
 declare function getMatchedCSSRules(elt: Element, pseudoElt?: string): CSSRuleList;
@@ -19020,12 +19174,14 @@ declare function webkitCancelAnimationFrame(handle: number): void;
 declare function webkitConvertPointFromNodeToPage(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitConvertPointFromPageToNode(node: Node, pt: WebKitPoint): WebKitPoint;
 declare function webkitRequestAnimationFrame(callback: FrameRequestCallback): number;
+declare function createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, options?: ImageBitmapOptions): Promise<ImageBitmap>;
+declare function createImageBitmap(image: HTMLImageElement | SVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | ImageData | Blob, sx: number, sy: number, sw: number, sh: number, options?: ImageBitmapOptions): Promise<ImageBitmap>;
 declare function scroll(options?: ScrollToOptions): void;
 declare function scrollTo(options?: ScrollToOptions): void;
 declare function scrollBy(options?: ScrollToOptions): void;
 declare function toString(): string;
 declare function dispatchEvent(evt: Event): boolean;
-declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, useCapture?: boolean): void;
+declare function removeEventListener(type: string, listener?: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
 declare function clearInterval(handle: number): void;
 declare function clearTimeout(handle: number): void;
 declare function setInterval(handler: (...args: any[]) => void, timeout: number): number;
@@ -19095,12 +19251,84 @@ type IDBValidKey = number | string | Date | IDBArrayKey;
 type BufferSource = ArrayBuffer | ArrayBufferView;
 type MouseWheelEvent = WheelEvent;
 type ScrollRestoration = "auto" | "manual";
+type FormDataEntryValue = string | File;
+type AppendMode = "segments" | "sequence";
+type AudioContextState = "suspended" | "running" | "closed";
+type BiquadFilterType = "lowpass" | "highpass" | "bandpass" | "lowshelf" | "highshelf" | "peaking" | "notch" | "allpass";
+type CanvasFillRule = "nonzero" | "evenodd";
+type ChannelCountMode = "max" | "clamped-max" | "explicit";
+type ChannelInterpretation = "speakers" | "discrete";
+type DistanceModelType = "linear" | "inverse" | "exponential";
+type ExpandGranularity = "character" | "word" | "sentence" | "textedit";
+type GamepadInputEmulationType = "mouse" | "keyboard" | "gamepad";
+type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
+type IDBRequestReadyState = "pending" | "done";
+type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type ListeningState = "inactive" | "active" | "disambiguation";
+type MSCredentialType = "FIDO_2_0";
+type MSIceAddrType = "os" | "stun" | "turn" | "peer-derived";
+type MSIceType = "failed" | "direct" | "relay";
+type MSStatsType = "description" | "localclientevent" | "inbound-network" | "outbound-network" | "inbound-payload" | "outbound-payload" | "transportdiagnostics";
+type MSTransportType = "Embedded" | "USB" | "NFC" | "BT";
+type MSWebViewPermissionState = "unknown" | "defer" | "allow" | "deny";
+type MSWebViewPermissionType = "geolocation" | "unlimitedIndexedDBQuota" | "media" | "pointerlock" | "webnotifications";
+type MediaDeviceKind = "audioinput" | "audiooutput" | "videoinput";
+type MediaKeyMessageType = "license-request" | "license-renewal" | "license-release" | "individualization-request";
+type MediaKeySessionType = "temporary" | "persistent-license" | "persistent-release-message";
+type MediaKeyStatus = "usable" | "expired" | "output-downscaled" | "output-not-allowed" | "status-pending" | "internal-error";
+type MediaKeysRequirement = "required" | "optional" | "not-allowed";
+type MediaStreamTrackState = "live" | "ended";
+type NavigationReason = "up" | "down" | "left" | "right";
+type NavigationType = "navigate" | "reload" | "back_forward" | "prerender";
+type NotificationDirection = "auto" | "ltr" | "rtl";
+type NotificationPermission = "default" | "denied" | "granted";
+type OscillatorType = "sine" | "square" | "sawtooth" | "triangle" | "custom";
+type OverSampleType = "none" | "2x" | "4x";
+type PanningModelType = "equalpower";
+type PaymentComplete = "success" | "fail" | "";
+type PaymentShippingType = "shipping" | "delivery" | "pickup";
+type PushEncryptionKeyName = "p256dh" | "auth";
+type PushPermissionState = "granted" | "denied" | "prompt";
+type RTCBundlePolicy = "balanced" | "max-compat" | "max-bundle";
+type RTCDegradationPreference = "maintain-framerate" | "maintain-resolution" | "balanced";
+type RTCDtlsRole = "auto" | "client" | "server";
+type RTCDtlsTransportState = "new" | "connecting" | "connected" | "closed";
+type RTCIceCandidateType = "host" | "srflx" | "prflx" | "relay";
+type RTCIceComponent = "RTP" | "RTCP";
+type RTCIceConnectionState = "new" | "checking" | "connected" | "completed" | "failed" | "disconnected" | "closed";
+type RTCIceGatherPolicy = "all" | "nohost" | "relay";
+type RTCIceGathererState = "new" | "gathering" | "complete";
+type RTCIceGatheringState = "new" | "gathering" | "complete";
+type RTCIceProtocol = "udp" | "tcp";
+type RTCIceRole = "controlling" | "controlled";
+type RTCIceTcpCandidateType = "active" | "passive" | "so";
+type RTCIceTransportPolicy = "none" | "relay" | "all";
+type RTCIceTransportState = "new" | "checking" | "connected" | "completed" | "disconnected" | "closed";
+type RTCSdpType = "offer" | "pranswer" | "answer";
+type RTCSignalingState = "stable" | "have-local-offer" | "have-remote-offer" | "have-local-pranswer" | "have-remote-pranswer" | "closed";
+type RTCStatsIceCandidatePairState = "frozen" | "waiting" | "inprogress" | "failed" | "succeeded" | "cancelled";
+type RTCStatsIceCandidateType = "host" | "serverreflexive" | "peerreflexive" | "relayed";
+type RTCStatsType = "inboundrtp" | "outboundrtp" | "session" | "datachannel" | "track" | "transport" | "candidatepair" | "localcandidate" | "remotecandidate";
+type ReferrerPolicy = "" | "no-referrer" | "no-referrer-when-downgrade" | "origin-only" | "origin-when-cross-origin" | "unsafe-url";
+type RequestCache = "default" | "no-store" | "reload" | "no-cache" | "force-cache";
+type RequestCredentials = "omit" | "same-origin" | "include";
+type RequestDestination = "" | "document" | "sharedworker" | "subresource" | "unknown" | "worker";
+type RequestMode = "navigate" | "same-origin" | "no-cors" | "cors";
+type RequestRedirect = "follow" | "error" | "manual";
+type RequestType = "" | "audio" | "font" | "image" | "script" | "style" | "track" | "video";
+type ResponseType = "basic" | "cors" | "default" | "error" | "opaque" | "opaqueredirect";
+type ScopedCredentialType = "ScopedCred";
+type ServiceWorkerState = "installing" | "installed" | "activating" | "activated" | "redundant";
+type Transport = "usb" | "nfc" | "ble";
+type VideoFacingModeEnum = "user" | "environment" | "left" | "right";
+type VisibilityState = "hidden" | "visible" | "prerender" | "unloaded";
+type XMLHttpRequestResponseType = "" | "arraybuffer" | "blob" | "document" | "json" | "text";
 
 
 /////////////////////////////
-/// WorkerGlobalScope APIs 
+/// WorkerGlobalScope APIs
 /////////////////////////////
-// These are only available in a Web Worker 
+// These are only available in a Web Worker
 declare function importScripts(...urls: string[]): void;
 
 
@@ -19135,7 +19363,7 @@ interface TextStreamBase {
 
     /**
      * Closes a text stream.
-     * It is not necessary to close standard streams; they close automatically when the process ends. If 
+     * It is not necessary to close standard streams; they close automatically when the process ends. If
      * you close a standard stream, be aware that any other pointers to that standard stream become invalid.
      */
     Close(): void;
@@ -19205,9 +19433,9 @@ interface TextStreamReader extends TextStreamBase {
 
 declare var WScript: {
     /**
-    * Outputs text to either a message box (under WScript.exe) or the command console window followed by
-    * a newline (under CScript.exe).
-    */
+     * Outputs text to either a message box (under WScript.exe) or the command console window followed by
+     * a newline (under CScript.exe).
+     */
     Echo(s: any): void;
 
     /**

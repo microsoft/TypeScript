@@ -1,12 +1,7 @@
-tests/cases/conformance/es6/for-ofStatements/for-of15.ts(2,11): error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.
+tests/cases/conformance/es6/for-ofStatements/for-of15.ts(11,11): error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of15.ts (1 errors) ====
-    var v: string;
-    for (v of new StringIterator) { } // Should fail
-              ~~~~~~~~~~~~~~~~~~
-!!! error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.
-    
     class StringIterator {
         next() {
             return "";
@@ -15,3 +10,8 @@ tests/cases/conformance/es6/for-ofStatements/for-of15.ts(2,11): error TS2490: Th
             return this;
         }
     }
+    
+    var v: string;
+    for (v of new StringIterator) { } // Should fail
+              ~~~~~~~~~~~~~~~~~~
+!!! error TS2490: The type returned by the 'next()' method of an iterator must have a 'value' property.

@@ -1,4 +1,4 @@
-﻿/// <reference path="program.ts"/>
+/// <reference path="program.ts"/>
 /// <reference path="commandLineParser.ts"/>
 
 namespace ts {
@@ -30,7 +30,7 @@ namespace ts {
     }
 
     function reportEmittedFiles(files: string[]): void {
-        if (!files || files.length == 0) {
+        if (!files || files.length === 0) {
             return;
         }
 
@@ -60,93 +60,8 @@ namespace ts {
         sys.write(ts.formatDiagnostics([diagnostic], host));
     }
 
-    const redForegroundEscapeSequence = "\u001b[91m";
-    const yellowForegroundEscapeSequence = "\u001b[93m";
-    const blueForegroundEscapeSequence = "\u001b[93m";
-    const gutterStyleSequence = "\u001b[100;30m";
-    const gutterSeparator = " ";
-    const resetEscapeSequence = "\u001b[0m";
-    const ellipsis = "...";
-    function getCategoryFormat(category: DiagnosticCategory): string {
-        switch (category) {
-            case DiagnosticCategory.Warning: return yellowForegroundEscapeSequence;
-            case DiagnosticCategory.Error: return redForegroundEscapeSequence;
-            case DiagnosticCategory.Message: return blueForegroundEscapeSequence;
-        }
-    }
-
-    function formatAndReset(text: string, formatStyle: string) {
-        return formatStyle + text + resetEscapeSequence;
-    }
-
     function reportDiagnosticWithColorAndContext(diagnostic: Diagnostic, host: FormatDiagnosticsHost): void {
-        let output = "";
-
-        if (diagnostic.file) {
-            const { start, length, file } = diagnostic;
-            const { line: firstLine, character: firstLineChar } = getLineAndCharacterOfPosition(file, start);
-            const { line: lastLine, character: lastLineChar } = getLineAndCharacterOfPosition(file, start + length);
-            const lastLineInFile = getLineAndCharacterOfPosition(file, file.text.length).line;
-            const relativeFileName = host ? convertToRelativePath(file.fileName, host.getCurrentDirectory(), fileName => host.getCanonicalFileName(fileName)) : file.fileName;
-
-            const hasMoreThanFiveLines = (lastLine - firstLine) >= 4;
-            let gutterWidth = (lastLine + 1 + "").length;
-            if (hasMoreThanFiveLines) {
-                gutterWidth = Math.max(ellipsis.length, gutterWidth);
-            }
-
-            output += sys.newLine;
-            for (let i = firstLine; i <= lastLine; i++) {
-                // If the error spans over 5 lines, we'll only show the first 2 and last 2 lines,
-                // so we'll skip ahead to the second-to-last line.
-                if (hasMoreThanFiveLines && firstLine + 1 < i && i < lastLine - 1) {
-                    output += formatAndReset(padLeft(ellipsis, gutterWidth), gutterStyleSequence) + gutterSeparator + sys.newLine;
-                    i = lastLine - 1;
-                }
-
-                const lineStart = getPositionOfLineAndCharacter(file, i, 0);
-                const lineEnd = i < lastLineInFile ? getPositionOfLineAndCharacter(file, i + 1, 0) : file.text.length;
-                let lineContent = file.text.slice(lineStart, lineEnd);
-                lineContent = lineContent.replace(/\s+$/g, "");  // trim from end
-                lineContent = lineContent.replace("\t", " ");    // convert tabs to single spaces
-
-                // Output the gutter and the actual contents of the line.
-                output += formatAndReset(padLeft(i + 1 + "", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                output += lineContent + sys.newLine;
-
-                // Output the gutter and the error span for the line using tildes.
-                output += formatAndReset(padLeft("", gutterWidth), gutterStyleSequence) + gutterSeparator;
-                output += redForegroundEscapeSequence;
-                if (i === firstLine) {
-                    // If we're on the last line, then limit it to the last character of the last line.
-                    // Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
-                    const lastCharForLine = i === lastLine ? lastLineChar : undefined;
-
-                    output += lineContent.slice(0, firstLineChar).replace(/\S/g, " ");
-                    output += lineContent.slice(firstLineChar, lastCharForLine).replace(/./g, "~");
-                }
-                else if (i === lastLine) {
-                    output += lineContent.slice(0, lastLineChar).replace(/./g, "~");
-                }
-                else {
-                    // Squiggle the entire line.
-                    output += lineContent.replace(/./g, "~");
-                }
-                output += resetEscapeSequence;
-
-                output += sys.newLine;
-            }
-
-            output += sys.newLine;
-            output += `${ relativeFileName }(${ firstLine + 1 },${ firstLineChar + 1 }): `;
-        }
-
-        const categoryColor = getCategoryFormat(diagnostic.category);
-        const category = DiagnosticCategory[diagnostic.category].toLowerCase();
-        output += `${ formatAndReset(category, categoryColor) } TS${ diagnostic.code }: ${ flattenDiagnosticMessageText(diagnostic.messageText, sys.newLine) }`;
-        output += sys.newLine + sys.newLine;
-
-        sys.write(output);
+        sys.write(ts.formatDiagnosticsWithColorAndContext([diagnostic], host) + sys.newLine + sys.newLine);
     }
 
     function reportWatchDiagnostic(diagnostic: Diagnostic) {
@@ -225,9 +140,9 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        if (commandLine.options.help) {
+        if (commandLine.options.help || commandLine.options.all) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -264,7 +179,7 @@ namespace ts {
 
         if (commandLine.fileNames.length === 0 && !configFileName) {
             printVersion();
-            printHelp();
+            printHelp(commandLine.options.all);
             return sys.exit(ExitStatus.Success);
         }
 
@@ -282,7 +197,7 @@ namespace ts {
                     // When the configFileName is just "tsconfig.json", the watched directory should be
                     // the current directory; if there is a given "project" parameter, then the configFileName
                     // is an absolute file name.
-                    directory == "" ? "." : directory,
+                    directory === "" ? "." : directory,
                     watchedDirectoryChanged, /*recursive*/ true);
             }
         }
@@ -334,9 +249,9 @@ namespace ts {
                         // When the configFileName is just "tsconfig.json", the watched directory should be
                         // the current directory; if there is a given "project" parameter, then the configFileName
                         // is an absolute file name.
-                        directory == "" ? "." : directory,
+                        directory === "" ? "." : directory,
                         watchedDirectoryChanged, /*recursive*/ true);
-                };
+                }
             }
             return configParseResult;
         }
@@ -618,7 +533,7 @@ namespace ts {
         sys.write(getDiagnosticText(Diagnostics.Version_0, ts.version) + sys.newLine);
     }
 
-    function printHelp() {
+    function printHelp(showAllOptions: boolean) {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
@@ -643,8 +558,9 @@ namespace ts {
         output.push(getDiagnosticText(Diagnostics.Options_Colon) + sys.newLine);
 
         // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
-        const optsList = filter(optionDeclarations.slice(), v => !v.experimental);
-        optsList.sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase()));
+        const optsList = showAllOptions ?
+            optionDeclarations.slice().sort((a, b) => compareValues<string>(a.name.toLowerCase(), b.name.toLowerCase())) :
+            filter(optionDeclarations.slice(), v => v.showInSimplifiedHelpView);
 
         // We want our descriptions to align at the same column in our output,
         // so we keep track of the longest option usage string.
@@ -738,7 +654,7 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file), /* host */ undefined);
         }
         else {
-            sys.writeFile(file, JSON.stringify(generateTSConfig(options, fileNames), undefined, 4));
+            sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.Successfully_created_a_tsconfig_json_file), /* host */ undefined);
         }
 

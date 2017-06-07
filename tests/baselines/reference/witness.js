@@ -1,8 +1,4 @@
 //// [witness.ts]
-
-
-
-
 // Initializers
 var varInit = varInit; // any
 var pInit: any;
@@ -262,9 +258,9 @@ var c2inst;
 var C3 = (function () {
     function C3() {
     }
+    C3.q = C3.q;
     return C3;
 }());
-C3.q = C3.q;
 var qq = C3.q;
 var qq;
 // Parentheses - tested a bunch above

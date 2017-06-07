@@ -1,10 +1,11 @@
-﻿namespace ts {
+namespace ts {
     export interface TranspileOptions {
         compilerOptions?: CompilerOptions;
         fileName?: string;
         reportDiagnostics?: boolean;
         moduleName?: string;
         renamedDependencies?: MapLike<string>;
+        transformers?: CustomTransformers;
     }
 
     export interface TranspileOutput {
@@ -103,7 +104,7 @@
             addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
         }
         // Emit
-        program.emit();
+        program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
 
         Debug.assert(outputText !== undefined, "Output generation failed");
 

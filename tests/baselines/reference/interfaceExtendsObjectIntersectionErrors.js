@@ -1,5 +1,4 @@
 //// [interfaceExtendsObjectIntersectionErrors.ts]
-
 type T1 = { a: number };
 type T2 = T1 & { b: number };
 type T3 = number[];

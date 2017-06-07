@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importHelpersInAmbientContext.ts] ////
 
 //// [a.d.ts]
-
 export { };
 
 // Extends

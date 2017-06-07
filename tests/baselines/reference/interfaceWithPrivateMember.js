@@ -1,5 +1,4 @@
 //// [interfaceWithPrivateMember.ts]
-
 // interfaces do not permit private members, these are errors
 
 interface I {

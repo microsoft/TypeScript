@@ -1,0 +1,394 @@
+=== tests/cases/conformance/salsa/a.ts ===
+import b = require("./b.js");
+>b : typeof b
+
+b.func1;
+>b.func1 : () => void
+>b : typeof b
+>func1 : () => void
+
+b.func2;
+>b.func2 : () => void
+>b : typeof b
+>func2 : () => void
+
+b.func3;
+>b.func3 : () => void
+>b : typeof b
+>func3 : () => void
+
+b.func4;
+>b.func4 : () => void
+>b : typeof b
+>func4 : () => void
+
+b.func5;
+>b.func5 : () => void
+>b : typeof b
+>func5 : () => void
+
+b.func6;
+>b.func6 : () => void
+>b : typeof b
+>func6 : () => void
+
+b.func7;
+>b.func7 : () => void
+>b : typeof b
+>func7 : () => void
+
+b.func8;
+>b.func8 : () => void
+>b : typeof b
+>func8 : () => void
+
+b.func9;
+>b.func9 : () => void
+>b : typeof b
+>func9 : () => void
+
+b.func10;
+>b.func10 : () => void
+>b : typeof b
+>func10 : () => void
+
+b.func11;
+>b.func11 : () => void
+>b : typeof b
+>func11 : () => void
+
+b.func12;
+>b.func12 : () => void
+>b : typeof b
+>func12 : () => void
+
+b.func13;
+>b.func13 : () => void
+>b : typeof b
+>func13 : () => void
+
+b.func14;
+>b.func14 : () => void
+>b : typeof b
+>func14 : () => void
+
+b.func15;
+>b.func15 : () => void
+>b : typeof b
+>func15 : () => void
+
+b.func16;
+>b.func16 : () => void
+>b : typeof b
+>func16 : () => void
+
+b.func17;
+>b.func17 : () => void
+>b : typeof b
+>func17 : () => void
+
+b.func18;
+>b.func18 : () => void
+>b : typeof b
+>func18 : () => void
+
+b.func19;
+>b.func19 : () => void
+>b : typeof b
+>func19 : () => void
+
+b.func20;
+>b.func20 : () => void
+>b : typeof b
+>func20 : () => void
+
+
+=== tests/cases/conformance/salsa/b.js ===
+var exportsAlias = exports;
+>exportsAlias : any
+>exports : any
+
+exportsAlias.func1 = function () { };
+>exportsAlias.func1 = function () { } : () => void
+>exportsAlias.func1 : any
+>exportsAlias : any
+>func1 : any
+>function () { } : () => void
+
+exports.func2 = function () { };
+>exports.func2 = function () { } : () => void
+>exports.func2 : any
+>exports : any
+>func2 : any
+>function () { } : () => void
+
+var moduleExportsAlias = module.exports;
+>moduleExportsAlias : any
+>module.exports : any
+>module : any
+>exports : any
+
+moduleExportsAlias.func3 = function () { };
+>moduleExportsAlias.func3 = function () { } : () => void
+>moduleExportsAlias.func3 : any
+>moduleExportsAlias : any
+>func3 : any
+>function () { } : () => void
+
+module.exports.func4 = function () { };
+>module.exports.func4 = function () { } : () => void
+>module.exports.func4 : any
+>module.exports : any
+>module : any
+>exports : any
+>func4 : any
+>function () { } : () => void
+
+var multipleDeclarationAlias1 = exports = module.exports;
+>multipleDeclarationAlias1 : any
+>exports = module.exports : any
+>exports : any
+>module.exports : any
+>module : any
+>exports : any
+
+multipleDeclarationAlias1.func5 = function () { };
+>multipleDeclarationAlias1.func5 = function () { } : () => void
+>multipleDeclarationAlias1.func5 : any
+>multipleDeclarationAlias1 : any
+>func5 : any
+>function () { } : () => void
+
+var multipleDeclarationAlias2 = module.exports = exports;
+>multipleDeclarationAlias2 : any
+>module.exports = exports : any
+>module.exports : any
+>module : any
+>exports : any
+>exports : any
+
+multipleDeclarationAlias2.func6 = function () { };
+>multipleDeclarationAlias2.func6 = function () { } : () => void
+>multipleDeclarationAlias2.func6 : any
+>multipleDeclarationAlias2 : any
+>func6 : any
+>function () { } : () => void
+
+var someOtherVariable;
+>someOtherVariable : any
+
+var multipleDeclarationAlias3 = someOtherVariable = exports;
+>multipleDeclarationAlias3 : any
+>someOtherVariable = exports : any
+>someOtherVariable : any
+>exports : any
+
+multipleDeclarationAlias3.func7 = function () { };
+>multipleDeclarationAlias3.func7 = function () { } : () => void
+>multipleDeclarationAlias3.func7 : any
+>multipleDeclarationAlias3 : any
+>func7 : any
+>function () { } : () => void
+
+var multipleDeclarationAlias4 = someOtherVariable = module.exports;
+>multipleDeclarationAlias4 : any
+>someOtherVariable = module.exports : any
+>someOtherVariable : any
+>module.exports : any
+>module : any
+>exports : any
+
+multipleDeclarationAlias4.func8 = function () { };
+>multipleDeclarationAlias4.func8 = function () { } : () => void
+>multipleDeclarationAlias4.func8 : any
+>multipleDeclarationAlias4 : any
+>func8 : any
+>function () { } : () => void
+
+var multipleDeclarationAlias5 = module.exports = exports = {};
+>multipleDeclarationAlias5 : {}
+>module.exports = exports = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>exports = {} : {}
+>exports : any
+>{} : {}
+
+multipleDeclarationAlias5.func9 = function () { };
+>multipleDeclarationAlias5.func9 = function () { } : () => void
+>multipleDeclarationAlias5.func9 : any
+>multipleDeclarationAlias5 : {}
+>func9 : any
+>function () { } : () => void
+
+var multipleDeclarationAlias6 = exports = module.exports = {};
+>multipleDeclarationAlias6 : { [x: string]: any; }
+>exports = module.exports = {} : { [x: string]: any; }
+>exports : any
+>module.exports = {} : { [x: string]: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{} : { [x: string]: any; }
+
+multipleDeclarationAlias6.func10 = function () { };
+>multipleDeclarationAlias6.func10 = function () { } : () => void
+>multipleDeclarationAlias6.func10 : any
+>multipleDeclarationAlias6 : { [x: string]: any; }
+>func10 : any
+>function () { } : () => void
+
+exports = module.exports = someOtherVariable = {};
+>exports = module.exports = someOtherVariable = {} : {}
+>exports : any
+>module.exports = someOtherVariable = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>someOtherVariable = {} : {}
+>someOtherVariable : any
+>{} : {}
+
+exports.func11 = function () { };
+>exports.func11 = function () { } : () => void
+>exports.func11 : any
+>exports : any
+>func11 : any
+>function () { } : () => void
+
+module.exports.func12 = function () { };
+>module.exports.func12 = function () { } : () => void
+>module.exports.func12 : any
+>module.exports : any
+>module : any
+>exports : any
+>func12 : any
+>function () { } : () => void
+
+exports = module.exports = someOtherVariable = {};
+>exports = module.exports = someOtherVariable = {} : {}
+>exports : any
+>module.exports = someOtherVariable = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>someOtherVariable = {} : {}
+>someOtherVariable : any
+>{} : {}
+
+exports.func11 = function () { };
+>exports.func11 = function () { } : () => void
+>exports.func11 : any
+>exports : any
+>func11 : any
+>function () { } : () => void
+
+module.exports.func12 = function () { };
+>module.exports.func12 = function () { } : () => void
+>module.exports.func12 : any
+>module.exports : any
+>module : any
+>exports : any
+>func12 : any
+>function () { } : () => void
+
+exports = module.exports = {};
+>exports = module.exports = {} : { [x: string]: any; }
+>exports : any
+>module.exports = {} : { [x: string]: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{} : { [x: string]: any; }
+
+exports.func13 = function () { };
+>exports.func13 = function () { } : () => void
+>exports.func13 : any
+>exports : any
+>func13 : any
+>function () { } : () => void
+
+module.exports.func14 = function () { };
+>module.exports.func14 = function () { } : () => void
+>module.exports.func14 : any
+>module.exports : any
+>module : any
+>exports : any
+>func14 : any
+>function () { } : () => void
+
+exports = module.exports = {};
+>exports = module.exports = {} : { [x: string]: any; }
+>exports : any
+>module.exports = {} : { [x: string]: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{} : { [x: string]: any; }
+
+exports.func15 = function () { };
+>exports.func15 = function () { } : () => void
+>exports.func15 : any
+>exports : any
+>func15 : any
+>function () { } : () => void
+
+module.exports.func16 = function () { };
+>module.exports.func16 = function () { } : () => void
+>module.exports.func16 : any
+>module.exports : any
+>module : any
+>exports : any
+>func16 : any
+>function () { } : () => void
+
+module.exports = exports = {};
+>module.exports = exports = {} : {}
+>module.exports : any
+>module : any
+>exports : any
+>exports = {} : {}
+>exports : any
+>{} : {}
+
+exports.func17 = function () { };
+>exports.func17 = function () { } : () => void
+>exports.func17 : any
+>exports : any
+>func17 : any
+>function () { } : () => void
+
+module.exports.func18 = function () { };
+>module.exports.func18 = function () { } : () => void
+>module.exports.func18 : any
+>module.exports : any
+>module : any
+>exports : any
+>func18 : any
+>function () { } : () => void
+
+module.exports = {};
+>module.exports = {} : { [x: string]: any; }
+>module.exports : any
+>module : any
+>exports : any
+>{} : { [x: string]: any; }
+
+exports.func19 = function () { };
+>exports.func19 = function () { } : () => void
+>exports.func19 : any
+>exports : any
+>func19 : any
+>function () { } : () => void
+
+module.exports.func20 = function () { };
+>module.exports.func20 = function () { } : () => void
+>module.exports.func20 : any
+>module.exports : any
+>module : any
+>exports : any
+>func20 : any
+>function () { } : () => void
+
+

@@ -1,5 +1,4 @@
 //// [unusedTypeParameterInFunction2.ts]
-
 function f1<X, Y>() {
     var a: X;
     a;

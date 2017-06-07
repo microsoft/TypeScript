@@ -1,5 +1,4 @@
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern7.ts]
-
 var [x = 20, j] = [1, 2];
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern7.js]

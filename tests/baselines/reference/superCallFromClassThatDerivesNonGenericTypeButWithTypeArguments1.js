@@ -1,5 +1,4 @@
 //// [superCallFromClassThatDerivesNonGenericTypeButWithTypeArguments1.ts]
-
 class A {
     constructor(private map: (value: number) => string) {
 

@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationBuiltInType.ts]
-
 // string
 function foo(): string {
     return "";

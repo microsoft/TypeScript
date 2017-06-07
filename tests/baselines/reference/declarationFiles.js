@@ -1,5 +1,4 @@
 //// [declarationFiles.ts]
-
 class C1 {
     x: this;
     f(x: this): this { return undefined; }

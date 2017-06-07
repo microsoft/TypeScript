@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals4.ts] ////
 
 //// [file1.ts]
-
 class foo {}
 namespace foo {
     export var v = 1;

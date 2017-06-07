@@ -1,4 +1,4 @@
-﻿/// <reference path="../factory.ts" />
+/// <reference path="../factory.ts" />
 /// <reference path="../visitor.ts" />
 
 // Transforms generator functions into a compatible ES5 representation with similar runtime
@@ -293,8 +293,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)
-                || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
+            if (node.isDeclarationFile || (node.transformFlags & TransformFlags.ContainsGenerator) === 0) {
                 return node;
             }
 
@@ -587,7 +586,7 @@ namespace ts {
             // Build the generator
             resumeLexicalEnvironment();
 
-            const statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
 
             transformAndEmitStatements(body.statements, statementOffset);
 
@@ -939,7 +938,10 @@ namespace ts {
             const resumeLabel = defineLabel();
             const expression = visitNode(node.expression, visitor, isExpression);
             if (node.asteriskToken) {
-                emitYieldStar(createValuesHelper(context, expression, /*location*/ node), /*location*/ node);
+                const iterator = (getEmitFlags(node.expression) & EmitFlags.Iterator) === 0
+                    ? createValuesHelper(context, expression, /*location*/ node)
+                    : expression;
+                emitYieldStar(iterator, /*location*/ node);
             }
             else {
                 emitYield(expression, /*location*/ node);
@@ -1478,7 +1480,7 @@ namespace ts {
             }
 
             const initializer = node.initializer;
-            if (isVariableDeclarationList(initializer)) {
+            if (initializer && isVariableDeclarationList(initializer)) {
                 for (const variable of initializer.declarations) {
                     hoistVariableDeclaration(<Identifier>variable.name);
                 }
@@ -1942,7 +1944,7 @@ namespace ts {
         }
 
         function substituteExpressionIdentifier(node: Identifier) {
-            if (renamedCatchVariables && renamedCatchVariables.has(node.text)) {
+            if (!isGeneratedIdentifier(node) && renamedCatchVariables && renamedCatchVariables.has(node.text)) {
                 const original = getOriginalNode(node);
                 if (isIdentifier(original) && original.parent) {
                     const declaration = resolver.getReferencedValueDeclaration(original);
@@ -2108,17 +2110,24 @@ namespace ts {
         function beginCatchBlock(variable: VariableDeclaration): void {
             Debug.assert(peekBlockKind() === CodeBlockKind.Exception);
 
-            const text = (<Identifier>variable.name).text;
-            const name = declareLocal(text);
-
-            if (!renamedCatchVariables) {
-                renamedCatchVariables = createMap<boolean>();
-                renamedCatchVariableDeclarations = [];
-                context.enableSubstitution(SyntaxKind.Identifier);
+            // generated identifiers should already be unique within a file
+            let name: Identifier;
+            if (isGeneratedIdentifier(variable.name)) {
+                name = variable.name;
+                hoistVariableDeclaration(variable.name);
             }
+            else {
+                const text = (<Identifier>variable.name).text;
+                name = declareLocal(text);
+                if (!renamedCatchVariables) {
+                    renamedCatchVariables = createMap<boolean>();
+                    renamedCatchVariableDeclarations = [];
+                    context.enableSubstitution(SyntaxKind.Identifier);
+                }
 
-            renamedCatchVariables.set(text, true);
-            renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+                renamedCatchVariables.set(text, true);
+                renamedCatchVariableDeclarations[getOriginalNodeId(variable)] = name;
+            }
 
             const exception = <ExceptionBlock>peekBlock();
             Debug.assert(exception.state < ExceptionBlockState.Catch);

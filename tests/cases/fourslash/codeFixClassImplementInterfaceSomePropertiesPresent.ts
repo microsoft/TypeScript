@@ -6,8 +6,8 @@
 ////     z: number & { __iBrand: any };
 //// }
 ////
-//// class C implements I {[|   |]
-////    constructor(public x: number) { }
+//// class C implements I {[|
+////    |]constructor(public x: number) { }
 ////    y: number;
 //// }
 

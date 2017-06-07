@@ -1,5 +1,4 @@
 === tests/cases/compiler/classExpressionWithStaticProperties3.ts ===
-
 declare var console: any;
 >console : any
 

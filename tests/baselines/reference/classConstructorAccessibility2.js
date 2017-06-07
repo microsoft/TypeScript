@@ -1,5 +1,4 @@
 //// [classConstructorAccessibility2.ts]
-
 class BaseA {
     public constructor(public x: number) { }
     createInstance() { new BaseA(1); }
@@ -136,7 +135,7 @@ declare class BaseB {
 }
 declare class BaseC {
     x: number;
-    private constructor(x);
+    private constructor();
     createInstance(): void;
     static staticInstance(): void;
 }

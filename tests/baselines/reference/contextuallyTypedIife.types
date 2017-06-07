@@ -160,9 +160,9 @@
 >first : number
 >[] : undefined[]
 >rest.map(n => n > 0) : boolean[]
->rest.map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >rest : number[]
->map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
@@ -175,8 +175,8 @@
 // destructuring parameters (with defaults too!)
 (({ q }) => q)({ q : 13 });
 >(({ q }) => q)({ q : 13 }) : number
->(({ q }) => q) : ({q}: { q: number; }) => number
->({ q }) => q : ({q}: { q: number; }) => number
+>(({ q }) => q) : ({ q }: { q: number; }) => number
+>({ q }) => q : ({ q }: { q: number; }) => number
 >q : number
 >q : number
 >{ q : 13 } : { q: number; }
@@ -185,8 +185,8 @@
 
 (({ p = 14 }) => p)({ p : 15 });
 >(({ p = 14 }) => p)({ p : 15 }) : number
->(({ p = 14 }) => p) : ({p}: { p: number; }) => number
->({ p = 14 }) => p : ({p}: { p: number; }) => number
+>(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
+>({ p = 14 }) => p : ({ p }: { p: number; }) => number
 >p : number
 >14 : 14
 >p : number
@@ -196,8 +196,8 @@
 
 (({ r = 17 } = { r: 18 }) => r)({r : 19});
 >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
->(({ r = 17 } = { r: 18 }) => r) : ({r}?: { r: number; }) => number
->({ r = 17 } = { r: 18 }) => r : ({r}?: { r: number; }) => number
+>(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
+>({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
 >r : number
 >17 : 17
 >{ r: 18 } : { r: number; }
@@ -210,8 +210,8 @@
 
 (({ u = 22 } = { u: 23 }) => u)();
 >(({ u = 22 } = { u: 23 }) => u)() : number
->(({ u = 22 } = { u: 23 }) => u) : ({u}?: { u?: number; }) => number
->({ u = 22 } = { u: 23 }) => u : ({u}?: { u?: number; }) => number
+>(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+>({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
 >u : number
 >22 : 22
 >{ u: 23 } : { u?: number; }

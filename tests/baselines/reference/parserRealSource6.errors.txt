@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(4,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
+tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(4,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(8,24): error TS2304: Cannot find name 'Script'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,41): error TS2304: Cannot find name 'ScopeChain'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(10,69): error TS2304: Cannot find name 'TypeChecker'.
@@ -66,7 +66,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(215,20): error T
     // See LICENSE.txt in the project root for complete license information.
     
     ///<reference path='typescript.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/typescript.ts' not found.
     
     module TypeScript {

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationsBundledOutput1.ts] ////
 
 //// [m1.ts]
-
 export class Cls {
 }
 

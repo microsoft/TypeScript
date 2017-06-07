@@ -1,5 +1,4 @@
 //// [unusedLocalsAndObjectSpread2.ts]
-
 declare let props: any;
 const {
     children, // here!

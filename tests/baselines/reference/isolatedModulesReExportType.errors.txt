@@ -1,0 +1,38 @@
+/user.ts(2,10): error TS1205: Cannot re-export a type when the '--isolatedModules' flag is provided.
+/user.ts(17,10): error TS1205: Cannot re-export a type when the '--isolatedModules' flag is provided.
+
+
+==== /user.ts (2 errors) ====
+    // Error, can't re-export something that's only a type.
+    export { T } from "./exportT";
+             ~
+!!! error TS1205: Cannot re-export a type when the '--isolatedModules' flag is provided.
+    export import T2 = require("./exportEqualsT");
+    
+    // OK, has a value side
+    export { C } from "./exportValue";
+    
+    // OK, even though the namespace it exports is only types.
+    import * as NS from "./exportT";
+    export { NS };
+    
+    // OK, syntactically clear that a type is being re-exported.
+    export type T3 = T;
+    
+    // Error, not clear (to an isolated module) whether `T4` is a type.
+    import { T } from "./exportT";
+    export { T as T4 };
+             ~~~~~~~
+!!! error TS1205: Cannot re-export a type when the '--isolatedModules' flag is provided.
+    
+==== /exportT.ts (0 errors) ====
+    export type T = number;
+    
+==== /exportValue.ts (0 errors) ====
+    export class C {}
+    
+==== /exportEqualsT.ts (0 errors) ====
+    declare type T = number;
+    export = T;
+    
+    

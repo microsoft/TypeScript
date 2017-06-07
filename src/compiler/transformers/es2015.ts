@@ -295,7 +295,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -315,7 +315,7 @@ namespace ts {
          * Sets the `HierarchyFacts` for this node prior to visiting this node's subtree, returning the facts set prior to modification.
          * @param excludeFacts The existing `HierarchyFacts` to reset before visiting the subtree.
          * @param includeFacts The new `HierarchyFacts` to set before visiting the subtree.
-         **/
+         */
         function enterSubtree(excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             const ancestorFacts = hierarchyFacts;
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.AncestorFactsMask;
@@ -328,7 +328,7 @@ namespace ts {
          * @param ancestorFacts The `HierarchyFacts` of the ancestor to restore after visiting the subtree.
          * @param excludeFacts The existing `HierarchyFacts` of the subtree that should not be propagated.
          * @param includeFacts The new `HierarchyFacts` of the subtree that should be propagated.
-         **/
+         */
         function exitSubtree(ancestorFacts: HierarchyFacts, excludeFacts: HierarchyFacts, includeFacts: HierarchyFacts) {
             hierarchyFacts = (hierarchyFacts & ~excludeFacts | includeFacts) & HierarchyFacts.SubtreeFactsMask | ancestorFacts;
         }
@@ -339,11 +339,64 @@ namespace ts {
                 && !(<ReturnStatement>node).expression;
         }
 
+        function isClassLikeVariableStatement(node: Node) {
+            if (!isVariableStatement(node)) return false;
+            const variable = singleOrUndefined((<VariableStatement>node).declarationList.declarations);
+            return variable
+                && variable.initializer
+                && isIdentifier(variable.name)
+                && (isClassLike(variable.initializer)
+                    || (isAssignmentExpression(variable.initializer)
+                        && isIdentifier(variable.initializer.left)
+                        && isClassLike(variable.initializer.right)));
+        }
+
+        function isTypeScriptClassWrapper(node: Node) {
+            const call = tryCast(node, isCallExpression);
+            if (!call || isParseTreeNode(call) ||
+                some(call.typeArguments) ||
+                some(call.arguments)) {
+                return false;
+            }
+
+            const func = tryCast(skipOuterExpressions(call.expression), isFunctionExpression);
+            if (!func || isParseTreeNode(func) ||
+                some(func.typeParameters) ||
+                some(func.parameters) ||
+                func.type ||
+                !func.body) {
+                return false;
+            }
+
+            const statements = func.body.statements;
+            if (statements.length < 2) {
+                return false;
+            }
+
+            const firstStatement = statements[0];
+            if (isParseTreeNode(firstStatement) ||
+                !isClassLike(firstStatement) &&
+                !isClassLikeVariableStatement(firstStatement)) {
+                return false;
+            }
+
+            const lastStatement = elementAt(statements, -1);
+            const returnStatement = tryCast(isVariableStatement(lastStatement) ? elementAt(statements, -2) : lastStatement, isReturnStatement);
+            if (!returnStatement ||
+                !returnStatement.expression ||
+                !isIdentifier(skipOuterExpressions(returnStatement.expression))) {
+                return false;
+            }
+
+            return true;
+        }
+
         function shouldVisitNode(node: Node): boolean {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
                 || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && isStatement(node))
-                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node));
+                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
+                || isTypeScriptClassWrapper(node);
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -466,6 +519,12 @@ namespace ts {
                 case SyntaxKind.TemplateTail:
                     return visitTemplateLiteral(<LiteralExpression>node);
 
+                case SyntaxKind.StringLiteral:
+                    return visitStringLiteral(<StringLiteral>node);
+
+                case SyntaxKind.NumericLiteral:
+                    return visitNumericLiteral(<NumericLiteral>node);
+
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(<TaggedTemplateExpression>node);
 
@@ -509,8 +568,9 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            const statementOffset = addPrologueDirectives(statements, node.statements, /*ensureUseStrict*/ false, visitor);
+            let statementOffset = addStandardPrologue(statements, node.statements, /*ensureUseStrict*/ false);
             addCaptureThisForNodeIfNeeded(statements, node);
+            statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             addRange(statements, endLexicalEnvironment());
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
@@ -806,7 +866,7 @@ namespace ts {
 
             // Create a synthetic text range for the return statement.
             const closingBraceLocation = createTokenRange(skipTrivia(currentText, node.members.end), SyntaxKind.CloseBraceToken);
-            const localName = getLocalName(node);
+            const localName = getInternalName(node);
 
             // The following partially-emitted expression exists purely to align our sourcemap
             // emit with the original emitter.
@@ -863,7 +923,7 @@ namespace ts {
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,
-                getDeclarationName(node),
+                getInternalName(node),
                 /*typeParameters*/ undefined,
                 transformConstructorParameters(constructor, hasSynthesizedSuper),
                 /*type*/ undefined,
@@ -918,13 +978,16 @@ namespace ts {
                 statementOffset = 0;
             }
             else if (constructor) {
-                // Otherwise, try to emit all potential prologue directives first.
-                statementOffset = addPrologueDirectives(statements, constructor.body.statements, /*ensureUseStrict*/ false, visitor);
+                statementOffset = addStandardPrologue(statements, constructor.body.statements, /*ensureUseStrict*/ false);
             }
 
             if (constructor) {
                 addDefaultValueAssignmentsIfNeeded(statements, constructor);
                 addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+                if (!hasSynthesizedSuper) {
+                    // If no super call has been synthesized, emit custom prologue directives.
+                    statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
+                }
                 Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
 
             }
@@ -1815,8 +1878,8 @@ namespace ts {
             resumeLexicalEnvironment();
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
-                // addPrologueDirectives will simply put already-existing directives at the beginning of the target statement-array
-                statementOffset = addPrologueDirectives(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+                // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
+                statementOffset = addStandardPrologue(statements, body.statements, /*ensureUseStrict*/ false);
             }
 
             addCaptureThisForNodeIfNeeded(statements, node);
@@ -1829,6 +1892,9 @@ namespace ts {
             }
 
             if (isBlock(body)) {
+                // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor);
+
                 statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
 
@@ -1996,13 +2062,14 @@ namespace ts {
                         }
                         else {
                             assignment = createBinary(<Identifier>decl.name, SyntaxKind.EqualsToken, visitNode(decl.initializer, visitor, isExpression));
+                            setTextRange(assignment, decl);
                         }
 
                         assignments = append(assignments, assignment);
                     }
                 }
                 if (assignments) {
-                    updated = setTextRange(createStatement(reduceLeft(assignments, (acc, v) => createBinary(v, SyntaxKind.CommaToken, acc))), node);
+                    updated = setTextRange(createStatement(inlineExpressions(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -2028,9 +2095,9 @@ namespace ts {
                     enableSubstitutionsForBlockScopedBindings();
                 }
 
-                const declarations = flatten(map(node.declarations, node.flags & NodeFlags.Let
+                const declarations = flatMap(node.declarations, node.flags & NodeFlags.Let
                     ? visitVariableDeclarationInLetDeclarationList
-                    : visitVariableDeclaration));
+                    : visitVariableDeclaration);
 
                 const declarationList = createVariableDeclarationList(declarations);
                 setOriginalNode(declarationList, node);
@@ -2690,7 +2757,7 @@ namespace ts {
                 if (loopOutParameters.length) {
                     copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
                 }
-                addRange(statements, lexicalEnvironment)
+                addRange(statements, lexicalEnvironment);
                 loopBody = createBlock(statements, /*multiline*/ true);
             }
 
@@ -2701,9 +2768,8 @@ namespace ts {
                 loopBody = createBlock([loopBody], /*multiline*/ true);
             }
 
-            const isAsyncBlockContainingAwait =
-                hierarchyFacts & HierarchyFacts.AsyncFunctionBody
-                && (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
+            const isAsyncBlockContainingAwait = containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0;
 
             let loopBodyFlags: EmitFlags = 0;
             if (currentState.containsLexicalThis) {
@@ -2726,7 +2792,7 @@ namespace ts {
                                     setEmitFlags(
                                         createFunctionExpression(
                                             /*modifiers*/ undefined,
-                                            isAsyncBlockContainingAwait ? createToken(SyntaxKind.AsteriskToken) : undefined,
+                                            containsYield ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
                                             loopParameters,
@@ -2820,7 +2886,7 @@ namespace ts {
                 ));
             }
 
-            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, isAsyncBlockContainingAwait);
+            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, containsYield);
 
             let loop: Statement;
             if (convert) {
@@ -2869,7 +2935,12 @@ namespace ts {
                 !state.labeledNonLocalContinues;
 
             const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
-            const callResult = isAsyncBlockContainingAwait ? createYield(createToken(SyntaxKind.AsteriskToken), call) : call;
+            const callResult = isAsyncBlockContainingAwait
+                ? createYield(
+                    createToken(SyntaxKind.AsteriskToken),
+                    setEmitFlags(call, EmitFlags.Iterator)
+                )
+                : call;
             if (isSimpleLoop) {
                 statements.push(createStatement(callResult));
                 copyOutParameters(state.loopOutParameters, CopyDirection.ToOriginal, statements);
@@ -3103,7 +3174,7 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.BlockScopeExcludes, HierarchyFacts.BlockScopeIncludes);
             let updated: CatchClause;
             if (isBindingPattern(node.variableDeclaration.name)) {
-                const temp = createTempVariable(undefined);
+                const temp = createTempVariable(/*recordTempVariable*/ undefined);
                 const newVariableDeclaration = createVariableDeclaration(temp);
                 setTextRange(newVariableDeclaration, node.variableDeclaration);
                 const vars = flattenDestructuringBinding(
@@ -3163,7 +3234,20 @@ namespace ts {
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
-            const updated = visitEachChild(node, visitor, context);
+            let updated: AccessorDeclaration;
+            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) {
+                const parameters = visitParameterList(node.parameters, visitor, context);
+                const body = transformFunctionBody(node);
+                if (node.kind === SyntaxKind.GetAccessor) {
+                    updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
+                }
+                else {
+                    updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
+                }
+            }
+            else {
+                updated = visitEachChild(node, visitor, context);
+            }
             exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
@@ -3220,6 +3304,10 @@ namespace ts {
          * @param node a CallExpression.
          */
         function visitCallExpression(node: CallExpression) {
+            if (isTypeScriptClassWrapper(node)) {
+                return visitTypeScriptClassWrapper(node);
+            }
+
             if (node.transformFlags & TransformFlags.ES2015) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
@@ -3228,6 +3316,163 @@ namespace ts {
                 visitNode(node.expression, callExpressionVisitor, isExpression),
                 /*typeArguments*/ undefined,
                 visitNodes(node.arguments, visitor, isExpression)
+            );
+        }
+
+        function visitTypeScriptClassWrapper(node: CallExpression) {
+            // This is a call to a class wrapper function (an IIFE) created by the 'ts' transformer.
+            // The wrapper has a form similar to:
+            //
+            //  (function() {
+            //      class C { // 1
+            //      }
+            //      C.x = 1; // 2
+            //      return C;
+            //  }())
+            //
+            // When we transform the class, we end up with something like this:
+            //
+            //  (function () {
+            //      var C = (function () { // 3
+            //          function C() {
+            //          }
+            //          return C; // 4
+            //      }());
+            //      C.x = 1;
+            //      return C;
+            //  }())
+            //
+            // We want to simplify the two nested IIFEs to end up with something like this:
+            //
+            //  (function () {
+            //      function C() {
+            //      }
+            //      C.x = 1;
+            //      return C;
+            //  }())
+
+            // We skip any outer expressions in a number of places to get to the innermost
+            // expression, but we will restore them later to preserve comments and source maps.
+            const body = cast(skipOuterExpressions(node.expression), isFunctionExpression).body;
+
+            // The class statements are the statements generated by visiting the first statement of the
+            // body (1), while all other statements are added to remainingStatements (2)
+            const classStatements = visitNodes(body.statements, visitor, isStatement, 0, 1);
+            const remainingStatements = visitNodes(body.statements, visitor, isStatement, 1, body.statements.length - 1);
+            const varStatement = cast(firstOrUndefined(classStatements), isVariableStatement);
+
+            // We know there is only one variable declaration here as we verified this in an
+            // earlier call to isTypeScriptClassWrapper
+            const variable = varStatement.declarationList.declarations[0];
+            const initializer = skipOuterExpressions(variable.initializer);
+
+            // Under certain conditions, the 'ts' transformer may introduce a class alias, which
+            // we see as an assignment, for example:
+            //
+            //  (function () {
+            //      var C = C_1 = (function () {
+            //          function C() {
+            //          }
+            //          C.x = function () { return C_1; }
+            //          return C;
+            //      }());
+            //      C = C_1 = __decorate([dec], C);
+            //      return C;
+            //      var C_1;
+            //  }())
+            //
+            const aliasAssignment = tryCast(initializer, isAssignmentExpression);
+
+            // The underlying call (3) is another IIFE that may contain a '_super' argument.
+            const call = cast(aliasAssignment ? skipOuterExpressions(aliasAssignment.right) : initializer, isCallExpression);
+            const func = cast(skipOuterExpressions(call.expression), isFunctionExpression);
+
+            const funcStatements = func.body.statements;
+            let classBodyStart = 0;
+            let classBodyEnd = -1;
+
+            const statements: Statement[] = [];
+            if (aliasAssignment) {
+                // If we have a class alias assignment, we need to move it to the down-level constructor
+                // function we generated for the class.
+                const extendsCall = tryCast(funcStatements[classBodyStart], isExpressionStatement);
+                if (extendsCall) {
+                    statements.push(extendsCall);
+                    classBodyStart++;
+                }
+
+                // We reuse the comment and source-map positions from the original variable statement
+                // and class alias, while converting the function declaration for the class constructor
+                // into an expression.
+                statements.push(
+                    updateVariableStatement(
+                        varStatement,
+                        /*modifiers*/ undefined,
+                        updateVariableDeclarationList(varStatement.declarationList, [
+                            updateVariableDeclaration(variable,
+                                variable.name,
+                                /*type*/ undefined,
+                                updateBinary(aliasAssignment,
+                                    aliasAssignment.left,
+                                    convertFunctionDeclarationToExpression(
+                                        cast(funcStatements[classBodyStart], isFunctionDeclaration)
+                                    )
+                                )
+                            )
+                        ])
+                    )
+                );
+                classBodyStart++;
+            }
+
+            // Find the trailing 'return' statement (4)
+            while (!isReturnStatement(elementAt(funcStatements, classBodyEnd))) {
+                classBodyEnd--;
+            }
+
+            // When we extract the statements of the inner IIFE, we exclude the 'return' statement (4)
+            // as we already have one that has been introduced by the 'ts' transformer.
+            addRange(statements, funcStatements, classBodyStart, classBodyEnd);
+
+            if (classBodyEnd < -1) {
+                // If there were any hoisted declarations following the return statement, we should
+                // append them.
+                addRange(statements, funcStatements, classBodyEnd + 1);
+            }
+
+            // Add the remaining statements of the outer wrapper.
+            addRange(statements, remainingStatements);
+
+            // The 'es2015' class transform may add an end-of-declaration marker. If so we will add it
+            // after the remaining statements from the 'ts' transformer.
+            addRange(statements, classStatements, /*start*/ 1);
+
+            // Recreate any outer parentheses or partially-emitted expressions to preserve source map
+            // and comment locations.
+            return recreateOuterExpressions(node.expression,
+                recreateOuterExpressions(variable.initializer,
+                    recreateOuterExpressions(aliasAssignment && aliasAssignment.right,
+                        updateCall(call,
+                            recreateOuterExpressions(call.expression,
+                                updateFunctionExpression(
+                                    func,
+                                    /*modifiers*/ undefined,
+                                    /*asteriskToken*/ undefined,
+                                    /*name*/ undefined,
+                                    /*typeParameters*/ undefined,
+                                    func.parameters,
+                                    /*type*/ undefined,
+                                    updateBlock(
+                                        func.body,
+                                        statements
+                                    )
+                                )
+                            ),
+                            /*typeArguments*/ undefined,
+                            call.arguments
+                        )
+                    )
+                )
             );
         }
 
@@ -3365,7 +3610,7 @@ namespace ts {
             else {
                 if (segments.length === 1) {
                     const firstElement = elements[0];
-                    return needsUniqueCopy && isSpreadExpression(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
+                    return needsUniqueCopy && isSpreadElement(firstElement) && firstElement.expression.kind !== SyntaxKind.ArrayLiteralExpression
                         ? createArraySlice(segments[0])
                         : segments[0];
                 }
@@ -3376,7 +3621,7 @@ namespace ts {
         }
 
         function partitionSpread(node: Expression) {
-            return isSpreadExpression(node)
+            return isSpreadElement(node)
                 ? visitSpanOfSpreads
                 : visitSpanOfNonSpreads;
         }
@@ -3412,6 +3657,30 @@ namespace ts {
          */
         function visitTemplateLiteral(node: LiteralExpression): LeftHandSideExpression {
             return setTextRange(createLiteral(node.text), node);
+        }
+
+        /**
+         * Visits a string literal with an extended unicode escape.
+         *
+         * @param node A string literal.
+         */
+        function visitStringLiteral(node: StringLiteral) {
+            if (node.hasExtendedUnicodeEscape) {
+                return setTextRange(createLiteral(node.text), node);
+            }
+            return node;
+        }
+
+        /**
+         * Visits a binary or octal (ES6) numeric literal.
+         *
+         * @param node A string literal.
+         */
+        function visitNumericLiteral(node: NumericLiteral) {
+            if (node.numericLiteralFlags & NumericLiteralFlags.BinaryOrOctalSpecifier) {
+                return setTextRange(createNumericLiteral(node.text), node);
+            }
+            return node;
         }
 
         /**
@@ -3671,7 +3940,7 @@ namespace ts {
         function substituteIdentifier(node: Identifier) {
             // Only substitute the identifier if we have enabled substitutions for block-scoped
             // bindings.
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const original = getParseTreeNode(node, isIdentifier);
                 if (original && isNameOfDeclarationWithCollidingName(original)) {
                     return setTextRange(getGeneratedNameForNode(original), node);
@@ -3694,7 +3963,7 @@ namespace ts {
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.EnumDeclaration:
                 case SyntaxKind.VariableDeclaration:
-                    return (<Declaration>parent).name === node
+                    return (<NamedDeclaration>parent).name === node
                         && resolver.isDeclarationWithCollidingName(<Declaration>parent);
             }
 
@@ -3724,14 +3993,38 @@ namespace ts {
          * @param node An Identifier node.
          */
         function substituteExpressionIdentifier(node: Identifier): Identifier {
-            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings) {
+            if (enabledSubstitutions & ES2015SubstitutionFlags.BlockScopedBindings && !isInternalName(node)) {
                 const declaration = resolver.getReferencedDeclarationWithCollidingName(node);
-                if (declaration) {
-                    return setTextRange(getGeneratedNameForNode(declaration.name), node);
+                if (declaration && !(isClassLike(declaration) && isPartOfClassBody(declaration, node))) {
+                    return setTextRange(getGeneratedNameForNode(getNameOfDeclaration(declaration)), node);
                 }
             }
 
             return node;
+        }
+
+        function isPartOfClassBody(declaration: ClassLikeDeclaration, node: Identifier) {
+            let currentNode = getParseTreeNode(node);
+            if (!currentNode || currentNode === declaration || currentNode.end <= declaration.pos || currentNode.pos >= declaration.end) {
+                // if the node has no correlation to a parse tree node, its definitely not
+                // part of the body.
+                // if the node is outside of the document range of the declaration, its
+                // definitely not part of the body.
+                return false;
+            }
+            const blockScope = getEnclosingBlockScopeContainer(declaration);
+            while (currentNode) {
+                if (currentNode === blockScope || currentNode === declaration) {
+                    // if we are in the enclosing block scope of the declaration, we are definitely
+                    // not inside the class body.
+                    return false;
+                }
+                if (isClassElement(currentNode) && currentNode.parent === declaration) {
+                    return true;
+                }
+                currentNode = currentNode.parent;
+            }
+            return false;
         }
 
         /**
@@ -3748,8 +4041,9 @@ namespace ts {
         }
 
         function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
-            const expression = getLocalName(node);
-            return hasModifier(member, ModifierFlags.Static) ? expression : createPropertyAccess(expression, "prototype");
+            return hasModifier(member, ModifierFlags.Static)
+                ? getInternalName(node)
+                : createPropertyAccess(getInternalName(node), "prototype");
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {

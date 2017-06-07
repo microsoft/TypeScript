@@ -1,5 +1,4 @@
 //// [genericDefaultsErrors.ts]
-
 declare const x: any;
 
 declare function f03<T extends string = number>(): void; // error

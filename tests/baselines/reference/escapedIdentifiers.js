@@ -1,5 +1,4 @@
 //// [escapedIdentifiers.ts]
-
 /*
     0 .. \u0030
     9 .. \u0039

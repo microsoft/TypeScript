@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarForValues10.ts] ////
 
 //// [file0.ts]
-
 export var v = 1;
 
 //// [file1.ts]

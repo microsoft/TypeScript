@@ -164,13 +164,16 @@ namespace ts.server {
     }
 
     export interface ProjectOptions {
+        configHasExtendsProperty: boolean;
         /**
          * true if config file explicitly listed files
-         **/
-        configHasFilesProperty?: boolean;
+         */
+        configHasFilesProperty: boolean;
+        configHasIncludeProperty: boolean;
+        configHasExcludeProperty: boolean;
         /**
          * these fields can be present in the project file
-         **/
+         */
         files?: string[];
         wildcardDirectories?: Map<WatchDirectoryFlags>;
         compilerOptions?: CompilerOptions;
@@ -190,6 +193,37 @@ namespace ts.server {
     export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
         arr.sort();
         return <any>arr;
+    }
+
+    export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
+        compare = compare || ts.compareValues;
+        let aIndex = 0;
+        let bIndex = 0;
+        const aLen = a.length;
+        const bLen = b.length;
+        while (aIndex < aLen && bIndex < bLen) {
+            const aItem = a[aIndex];
+            const bItem = b[bIndex];
+            const compareResult = compare(aItem, bItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(aItem);
+                aIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(bItem);
+                bIndex++;
+            }
+            else {
+                aIndex++;
+                bIndex++;
+            }
+        }
+        while (aIndex < aLen) {
+            inserted(a[aIndex++]);
+        }
+        while (bIndex < bLen) {
+            deleted(b[bIndex++]);
+        }
     }
 
     export class ThrottledOperations {
@@ -219,7 +253,7 @@ namespace ts.server {
         }
 
         public scheduleCollect() {
-            if (!this.host.gc || this.timerId != undefined) {
+            if (!this.host.gc || this.timerId !== undefined) {
                 // no global.gc or collection was already scheduled - skip this request
                 return;
             }

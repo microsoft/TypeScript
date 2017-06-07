@@ -81,6 +81,6 @@ class D {
 >PropDeco : (target: Object, propKey: string | symbol) => void
 
     d: E | number;
->d : number | E
+>d : number
 >E : E
 }

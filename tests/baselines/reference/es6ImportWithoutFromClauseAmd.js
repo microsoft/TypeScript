@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportWithoutFromClauseAmd.ts] ////
 
 //// [es6ImportWithoutFromClauseAmd_0.ts]
-
 export var a = 10;
 
 //// [es6ImportWithoutFromClauseAmd_1.ts]

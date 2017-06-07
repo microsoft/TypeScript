@@ -1,5 +1,4 @@
 //// [decoratorChecksFunctionBodies.ts]
-
 // from #2971
 function func(s: string): void {
 }
@@ -30,12 +29,12 @@ var A = (function () {
     }
     A.prototype.m = function () {
     };
+    __decorate([
+        (function (x, p) {
+            var a = 3;
+            func(a);
+            return x;
+        })
+    ], A.prototype, "m", null);
     return A;
 }());
-__decorate([
-    (function (x, p) {
-        var a = 3;
-        func(a);
-        return x;
-    })
-], A.prototype, "m", null);

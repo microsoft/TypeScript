@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts.codefix {
     registerCodeFix({
         errorCodes: [
@@ -9,187 +9,186 @@ namespace ts.codefix {
             const sourceFile = context.sourceFile;
             const start = context.span.start;
 
-            let token = getTokenAtPosition(sourceFile, start);
+            let token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
 
             // this handles var ["computed"] = 12;
             if (token.kind === SyntaxKind.OpenBracketToken) {
-                token = getTokenAtPosition(sourceFile, start + 1);
+                token = getTokenAtPosition(sourceFile, start + 1, /*includeJsDocComment*/ false);
             }
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
-                    switch (token.parent.kind) {
-                        case ts.SyntaxKind.VariableDeclaration:
-                            switch (token.parent.parent.parent.kind) {
-                                case SyntaxKind.ForStatement:
-                                    const forStatement = <ForStatement>token.parent.parent.parent;
-                                    const forInitializer = <VariableDeclarationList>forStatement.initializer;
-                                    if (forInitializer.declarations.length === 1) {
-                                        return createCodeFixToRemoveNode(forInitializer);
-                                    }
-                                    else {
-                                        return removeSingleItem(forInitializer.declarations, token);
-                                    }
-
-                                case SyntaxKind.ForOfStatement:
-                                    const forOfStatement = <ForOfStatement>token.parent.parent.parent;
-                                    if (forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList) {
-                                        const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
-                                        return createCodeFix("{}", forOfInitializer.declarations[0].getStart(), forOfInitializer.declarations[0].getWidth());
-                                    }
-                                    break;
-
-                                case SyntaxKind.ForInStatement:
-                                    // There is no valid fix in the case of:
-                                    //  for .. in
-                                    return undefined;
-
-                                case SyntaxKind.CatchClause:
-                                    const catchClause = <CatchClause>token.parent.parent;
-                                    const parameter = catchClause.variableDeclaration.getChildren()[0];
-                                    return createCodeFixToRemoveNode(parameter);
-
-                                default:
-                                    const variableStatement = <VariableStatement>token.parent.parent.parent;
-                                    if (variableStatement.declarationList.declarations.length === 1) {
-                                        return createCodeFixToRemoveNode(variableStatement);
-                                    }
-                                    else {
-                                        const declarations = variableStatement.declarationList.declarations;
-                                        return removeSingleItem(declarations, token);
-                                    }
-                            }
-
-                        case SyntaxKind.TypeParameter:
-                            const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
-                            if (typeParameters.length === 1) {
-                                return createCodeFix("", token.parent.pos - 1, token.parent.end - token.parent.pos + 2);
-                            }
-                            else {
-                                return removeSingleItem(typeParameters, token);
-                            }
-
-                        case ts.SyntaxKind.Parameter:
-                            const functionDeclaration = <FunctionDeclaration>token.parent.parent;
-                            if (functionDeclaration.parameters.length === 1) {
-                                return createCodeFixToRemoveNode(token.parent);
-                            }
-                            else {
-                                return removeSingleItem(functionDeclaration.parameters, token);
-                            }
-
-                        // handle case where 'import a = A;'
-                        case SyntaxKind.ImportEqualsDeclaration:
-                            const importEquals = findImportDeclaration(token);
-                            return createCodeFixToRemoveNode(importEquals);
-
-                        case SyntaxKind.ImportSpecifier:
-                            const namedImports = <NamedImports>token.parent.parent;
-                            if (namedImports.elements.length === 1) {
-                                // Only 1 import and it is unused. So the entire declaration should be removed.
-                                const importSpec = findImportDeclaration(token);
-                                return createCodeFixToRemoveNode(importSpec);
-                            }
-                            else {
-                                return removeSingleItem(namedImports.elements, token);
-                            }
-
-                        // handle case where "import d, * as ns from './file'"
-                        // or "'import {a, b as ns} from './file'"
-                        case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
-                            const importClause = <ImportClause>token.parent;
-                            if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
-                                const importDecl = findImportDeclaration(importClause);
-                                return createCodeFixToRemoveNode(importDecl);
-                            }
-                            else {
-                                // import |d,| * as ns from './file'
-                                const start = importClause.name.getStart();
-                                let end = findFirstNonSpaceCharPosStarting(importClause.name.end);
-                                if (sourceFile.text.charCodeAt(end) === CharacterCodes.comma) {
-                                    end = findFirstNonSpaceCharPosStarting(end + 1);
-                                }
-
-                                return createCodeFix("", start, end - start);
-                            }
-
-                        case SyntaxKind.NamespaceImport:
-                            const namespaceImport = <NamespaceImport>token.parent;
-                            if (namespaceImport.name == token && !(<ImportClause>namespaceImport.parent).name) {
-                                const importDecl = findImportDeclaration(namespaceImport);
-                                return createCodeFixToRemoveNode(importDecl);
-                            }
-                            else {
-                                const start = (<ImportClause>namespaceImport.parent).name.end;
-                                return createCodeFix("", start, (<ImportClause>namespaceImport.parent).namedBindings.end - start);
-                            }
-                    }
-                    break;
+                    return deleteIdentifier();
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
-                    return createCodeFixToRemoveNode(token.parent);
-            }
-            if (isDeclarationName(token)) {
-                return createCodeFixToRemoveNode(token.parent);
-            }
-            else if (isLiteralComputedPropertyDeclarationName(token)) {
-                return createCodeFixToRemoveNode(token.parent.parent);
-            }
-            else {
-                return undefined;
+                    return deleteNode(token.parent);
+
+                default:
+                    return deleteDefault();
             }
 
-            function findImportDeclaration(token: Node): Node {
-                let importDecl = token;
-                while (importDecl.kind != SyntaxKind.ImportDeclaration && importDecl.parent) {
-                    importDecl = importDecl.parent;
+            function deleteDefault() {
+                if (isDeclarationName(token)) {
+                    return deleteNode(token.parent);
                 }
-
-                return importDecl;
-            }
-
-            function createCodeFixToRemoveNode(node: Node) {
-                let end = node.getEnd();
-                const endCharCode = sourceFile.text.charCodeAt(end);
-                const afterEndCharCode = sourceFile.text.charCodeAt(end + 1);
-                if (isLineBreak(endCharCode)) {
-                    end += 1;
-                }
-                // in the case of CR LF, you could have two consecutive new line characters for one new line.
-                // this needs to be differenciated from two LF LF chars that actually mean two new lines.
-                if (isLineBreak(afterEndCharCode) && endCharCode !== afterEndCharCode) {
-                    end += 1;
-                }
-
-                const start = node.getStart();
-                return createCodeFix("", start, end - start);
-            }
-
-            function findFirstNonSpaceCharPosStarting(start: number) {
-                while (isWhiteSpace(sourceFile.text.charCodeAt(start))) {
-                    start += 1;
-                }
-                return start;
-            }
-
-            function createCodeFix(newText: string, start: number, length: number): CodeAction[] {
-                return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), { 0: token.getText() }),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: [{ newText, span: { start, length } }]
-                    }]
-                }];
-            }
-
-            function removeSingleItem<T extends Node>(elements: NodeArray<T>, token: T): CodeAction[] {
-                if (elements[0] === token.parent) {
-                    return createCodeFix("", token.parent.pos, token.parent.end - token.parent.pos + 1);
+                else if (isLiteralComputedPropertyDeclarationName(token)) {
+                    return deleteNode(token.parent.parent);
                 }
                 else {
-                    return createCodeFix("", token.parent.pos - 1, token.parent.end - token.parent.pos + 1);
+                    return undefined;
                 }
+            }
+
+            function deleteIdentifier(): CodeAction[] | undefined {
+                switch (token.parent.kind) {
+                    case ts.SyntaxKind.VariableDeclaration:
+                        return deleteVariableDeclaration(<ts.VariableDeclaration>token.parent);
+
+                    case SyntaxKind.TypeParameter:
+                        const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
+                        if (typeParameters.length === 1) {
+                            const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
+                            if (!previousToken || previousToken.kind !== SyntaxKind.LessThanToken) {
+                                return deleteRange(typeParameters);
+                            }
+                            const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
+                            if (!nextToken || nextToken.kind !== SyntaxKind.GreaterThanToken) {
+                                return deleteRange(typeParameters);
+                            }
+                            return deleteNodeRange(previousToken, nextToken);
+                        }
+                        else {
+                            return deleteNodeInList(token.parent);
+                        }
+
+                    case ts.SyntaxKind.Parameter:
+                        const functionDeclaration = <FunctionDeclaration>token.parent.parent;
+                        if (functionDeclaration.parameters.length === 1) {
+                            return deleteNode(token.parent);
+                        }
+                        else {
+                            return deleteNodeInList(token.parent);
+                        }
+
+                    // handle case where 'import a = A;'
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        const importEquals = getAncestor(token, SyntaxKind.ImportEqualsDeclaration);
+                        return deleteNode(importEquals);
+
+                    case SyntaxKind.ImportSpecifier:
+                        const namedImports = <NamedImports>token.parent.parent;
+                        if (namedImports.elements.length === 1) {
+                            // Only 1 import and it is unused. So the entire declaration should be removed.
+                            const importSpec = getAncestor(token, SyntaxKind.ImportDeclaration);
+                            return deleteNode(importSpec);
+                        }
+                        else {
+                            // delete import specifier
+                            return deleteNodeInList(token.parent);
+                        }
+
+                    // handle case where "import d, * as ns from './file'"
+                    // or "'import {a, b as ns} from './file'"
+                    case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
+                        const importClause = <ImportClause>token.parent;
+                        if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
+                            const importDecl = getAncestor(importClause, SyntaxKind.ImportDeclaration);
+                            return deleteNode(importDecl);
+                        }
+                        else {
+                            // import |d,| * as ns from './file'
+                            const start = importClause.name.getStart(sourceFile);
+                            const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
+                            if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
+                                // shift first non-whitespace position after comma to the start position of the node
+                                return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) });
+                            }
+                            else {
+                                return deleteNode(importClause.name);
+                            }
+                        }
+
+                    case SyntaxKind.NamespaceImport:
+                        const namespaceImport = <NamespaceImport>token.parent;
+                        if (namespaceImport.name === token && !(<ImportClause>namespaceImport.parent).name) {
+                            const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
+                            return deleteNode(importDecl);
+                        }
+                        else {
+                            const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1, /*includeJsDocComment*/ false);
+                            if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
+                                const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
+                                return deleteRange({ pos: startPosition, end: namespaceImport.end });
+                            }
+                            return deleteRange(namespaceImport);
+                        }
+
+                    default:
+                        return deleteDefault();
+                }
+            }
+
+            // token.parent is a variableDeclaration
+            function deleteVariableDeclaration(varDecl: ts.VariableDeclaration): CodeAction[] | undefined {
+                switch (varDecl.parent.parent.kind) {
+                    case SyntaxKind.ForStatement:
+                        const forStatement = <ForStatement>varDecl.parent.parent;
+                        const forInitializer = <VariableDeclarationList>forStatement.initializer;
+                        if (forInitializer.declarations.length === 1) {
+                            return deleteNode(forInitializer);
+                        }
+                        else {
+                            return deleteNodeInList(varDecl);
+                        }
+
+                    case SyntaxKind.ForOfStatement:
+                        const forOfStatement = <ForOfStatement>varDecl.parent.parent;
+                        Debug.assert(forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList);
+                        const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
+                        return replaceNode(forOfInitializer.declarations[0], createObjectLiteral());
+
+                    case SyntaxKind.ForInStatement:
+                        // There is no valid fix in the case of:
+                        //  for .. in
+                        return undefined;
+
+                    default:
+                        const variableStatement = <VariableStatement>varDecl.parent.parent;
+                        if (variableStatement.declarationList.declarations.length === 1) {
+                            return deleteNode(variableStatement);
+                        }
+                        else {
+                            return deleteNodeInList(varDecl);
+                        }
+                }
+            }
+
+            function deleteNode(n: Node) {
+                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNode(sourceFile, n));
+            }
+
+            function deleteRange(range: TextRange) {
+                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteRange(sourceFile, range));
+            }
+
+            function deleteNodeInList(n: Node) {
+                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeInList(sourceFile, n));
+            }
+
+            function deleteNodeRange(start: Node, end: Node) {
+                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).deleteNodeRange(sourceFile, start, end));
+            }
+
+            function replaceNode(n: Node, newNode: Node) {
+                return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).replaceNode(sourceFile, n, newNode));
+            }
+
+            function makeChange(changeTracker: textChanges.ChangeTracker) {
+                return [{
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), { 0: token.getText() }),
+                    changes: changeTracker.getChanges()
+                }];
             }
         }
     });

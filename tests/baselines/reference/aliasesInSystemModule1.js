@@ -1,5 +1,4 @@
 //// [aliasesInSystemModule1.ts]
-
 import alias = require('foo');
 import cls = alias.Class;
 export import cls2 = alias.Class;

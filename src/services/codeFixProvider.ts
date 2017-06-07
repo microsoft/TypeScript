@@ -1,4 +1,4 @@
-﻿/* @internal */
+/* @internal */
 namespace ts {
     export interface CodeFix {
         errorCodes: number[];
@@ -13,19 +13,20 @@ namespace ts {
         newLineCharacter: string;
         host: LanguageServiceHost;
         cancellationToken: CancellationToken;
+        rulesProvider: formatting.RulesProvider;
     }
 
     export namespace codefix {
         const codeFixes: CodeFix[][] = [];
 
-        export function registerCodeFix(action: CodeFix) {
-            forEach(action.errorCodes, error => {
+        export function registerCodeFix(codeFix: CodeFix) {
+            forEach(codeFix.errorCodes, error => {
                 let fixes = codeFixes[error];
                 if (!fixes) {
                     fixes = [];
                     codeFixes[error] = fixes;
                 }
-                fixes.push(action);
+                fixes.push(codeFix);
             });
         }
 

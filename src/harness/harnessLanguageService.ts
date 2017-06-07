@@ -169,9 +169,9 @@ namespace Harness.LanguageService {
         }
 
         /**
-          * @param line 0 based index
-          * @param col 0 based index
-          */
+         * @param line 0 based index
+         * @param col 0 based index
+         */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.getScriptInfo(fileName);
             assert.isOk(script);
@@ -210,7 +210,7 @@ namespace Harness.LanguageService {
         }
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
             return ts.matchFiles(path, extensions, exclude, include,
-            /*useCaseSensitiveFileNames*/false,
+                /*useCaseSensitiveFileNames*/ false,
                 this.getCurrentDirectory(),
                 (p) => this.virtualFileSystem.getAccessibleFileSystemEntries(p));
         }
@@ -487,6 +487,15 @@ namespace Harness.LanguageService {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
         getCodeFixesAtPosition(): ts.CodeAction[] {
+            throw new Error("Not supported on the shim.");
+        }
+        getCodeFixDiagnostics(): ts.Diagnostic[] {
+            throw new Error("Not supported on the shim.");
+        }
+        getEditsForRefactor(): ts.RefactorEditInfo {
+            throw new Error("Not supported on the shim.");
+        }
+        getApplicableRefactors(): ts.ApplicableRefactorInfo[] {
             throw new Error("Not supported on the shim.");
         }
         getEmitOutput(fileName: string): ts.EmitOutput {
@@ -779,7 +788,7 @@ namespace Harness.LanguageService {
                                         start: 0
                                     });
                                     return prev;
-                                }
+                                };
                                 return proxy;
                             }
                         }),
@@ -795,7 +804,7 @@ namespace Harness.LanguageService {
 
             function makeDefaultProxy(info: ts.server.PluginCreateInfo) {
                 // tslint:disable-next-line:no-null-keyword
-                const proxy = Object.create(null);
+                const proxy = Object.create(/*prototype*/ null);
                 const langSvc: any = info.languageService;
                 for (const k of Object.keys(langSvc)) {
                     proxy[k] = function () {
@@ -818,13 +827,17 @@ namespace Harness.LanguageService {
             // This host is just a proxy for the clientHost, it uses the client
             // host to answer server queries about files on disk
             const serverHost = new SessionServerHost(clientHost);
-            const server = new ts.server.Session(serverHost,
-                ts.server.nullCancellationToken,
-                /*useOneInferredProject*/ false,
-                /*typingsInstaller*/ undefined,
-                Utils.byteLength,
-                process.hrtime, serverHost,
-                /*canUseEvents*/ true);
+            const opts: ts.server.SessionOptions = {
+                host: serverHost,
+                cancellationToken: ts.server.nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: undefined,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: serverHost,
+                canUseEvents: true
+            };
+            const server = new ts.server.Session(opts);
 
             // Fake the connection between the client and the server
             serverHost.writeMessage = client.onMessage.bind(client);

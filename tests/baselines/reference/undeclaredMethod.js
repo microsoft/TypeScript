@@ -1,5 +1,4 @@
 //// [undeclaredMethod.ts]
-
 module M {
     export class C {
         public salt() {}
