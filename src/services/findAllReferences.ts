@@ -496,11 +496,10 @@ namespace ts.FindAllReferences.Core {
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
-            return { location, symbol, comingFrom, text, escapedText, parents, includes };
-
-            function includes(referenceSymbol: Symbol): boolean {
-                return allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol;
-            }
+            return {
+                location, symbol, comingFrom, text, escapedText, parents,
+                includes: referenceSymbol => allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol,
+            };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];

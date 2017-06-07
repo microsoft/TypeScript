@@ -30,6 +30,7 @@
                 "end": 18,
                 "text": "foo"
             },
+            "isBracketed": false,
             "comment": ""
         },
         "length": 1,

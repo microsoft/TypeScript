@@ -259,8 +259,9 @@ namespace Utils {
                         return true;
                     }
                     else if ((f & v) > 0) {
-                        if (result.length)
+                        if (result.length) {
                             result += " | ";
+                        }
                         result += flags[v];
                         return false;
                     }
@@ -857,6 +858,7 @@ namespace Harness {
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
             switch (options.target) {
+                case ts.ScriptTarget.ESNext:
                 case ts.ScriptTarget.ES2017:
                     return "lib.es2017.d.ts";
                 case ts.ScriptTarget.ES2016:

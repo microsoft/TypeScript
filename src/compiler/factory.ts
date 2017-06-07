@@ -2314,15 +2314,24 @@ namespace ts {
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined) {
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+
+    /**
+     * Create an external source map source file reference
+     */
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
+        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined {
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
@@ -2331,7 +2340,7 @@ namespace ts {
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined) {
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
@@ -2503,8 +2512,9 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
-        if (leadingComments) destEmitNode.leadingComments = concatenate(leadingComments, destEmitNode.leadingComments);
-        if (trailingComments) destEmitNode.trailingComments = concatenate(trailingComments, destEmitNode.trailingComments);
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
+        if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
+        if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
         if (commentRange) destEmitNode.commentRange = commentRange;
         if (sourceMapRange) destEmitNode.sourceMapRange = sourceMapRange;
