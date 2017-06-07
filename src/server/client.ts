@@ -672,6 +672,10 @@ namespace ts.server {
             return notImplemented();
         }
 
+        getIsInMultiLineComment(_fileName: string, _position: number): boolean {
+            return notImplemented();
+        }
+
         isValidBraceCompletionAtPosition(_fileName: string, _position: number, _openingBrace: number): boolean {
             return notImplemented();
         }

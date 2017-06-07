@@ -85,6 +85,7 @@ namespace ts.server.protocol {
         TodoComments = "todoComments",
         Indentation = "indentation",
         DocCommentTemplate = "docCommentTemplate",
+        IsInMultiLineComment = "isInMultiLineComment",
         /* @internal */
         CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
         /* @internal */
@@ -236,6 +237,20 @@ namespace ts.server.protocol {
      */
     export interface TodoCommentsResponse extends Response {
         body?: TodoComment[];
+    }
+
+    /**
+     * A request to determine if the caret is inside a multi-line comment.
+     */
+    export interface IsInMultiLineCommentRequest extends FileLocationRequest {
+        command: CommandTypes.IsInMultiLineComment;
+    }
+
+    /**
+     * Response for TodoCommentRequest request.
+     */
+    export interface IsInMultiLineCommentResponse extends Response {
+        body?: { isInMultiLineComment: boolean };
     }
 
     /**

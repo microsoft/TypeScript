@@ -2427,6 +2427,16 @@ namespace FourSlash {
             }
         }
 
+        public verifyIsInMultiLineComment(negative: boolean) {
+            const expected = !negative;
+            const position = this.currentCaretPosition;
+            const fileName = this.activeFile.fileName;
+            const actual = this.languageService.getIsInMultiLineComment(fileName, position);
+            if (expected !== actual) {
+                this.raiseError(`verifyIsInDocComment failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
+            }
+        }
+
         private clarifyNewlines(str: string) {
             return str.replace(/\r?\n/g, lineEnding => {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
@@ -3575,6 +3585,10 @@ namespace FourSlashInterface {
 
         public codeFixAvailable() {
             this.state.verifyCodeFixAvailable(this.negative);
+        }
+
+        public isInMultiLineComment() {
+            this.state.verifyIsInMultiLineComment(this.negative);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {

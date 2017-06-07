@@ -248,6 +248,11 @@ namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): string;
 
         /**
+         * Returns JSON-encoded value of the type TextInsertion.
+         */
+        getIsInMultiLineComment(fileName: string, position: number): string;
+
+        /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
          * at the current position.
          * E.g. we don't want brace completion inside string-literals, comments, etc.
@@ -932,6 +937,13 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
+            );
+        }
+
+        public getIsInMultiLineComment(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getIsInMultiLineComment('${fileName}', ${position})`,
+                () => this.languageService.getIsInMultiLineComment(fileName, position)
             );
         }
 
