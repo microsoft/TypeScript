@@ -2503,6 +2503,7 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;

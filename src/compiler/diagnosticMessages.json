@@ -883,6 +883,23 @@
         "category": "Error",
         "code": 1322
     },
+    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+        "category": "Error",
+        "code": 1323
+    },
+    "Dynamic import must have one specifier as an argument.": {
+        "category": "Error",
+        "code": 1324
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1325
+    },
+    "Dynamic import cannot have type arguments": {
+        "category": "Error",
+        "code": 1326
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1927,10 +1944,6 @@
         "category": "Error",
         "code": 2649
     },
-    "Cannot emit namespaced JSX elements in React.": {
-        "category": "Error",
-        "code": 2650
-    },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
@@ -2162,6 +2175,14 @@
     "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
         "category": "Error",
         "code": 2710
+    },
+    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2711
+    },
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2712
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2629,7 +2650,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'.": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -3365,6 +3386,11 @@
         "category": "Error",
         "code": 7035
     },
+    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+        "category": "Error",
+        "code": 7036
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -3559,11 +3585,11 @@
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'.": {
+    "Declare property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'.": {
+    "Add index signature for property '{0}'.": {
         "category": "Message",
         "code": 90017
     },
@@ -3587,7 +3613,15 @@
         "category": "Message",
         "code": 90022
     },
-
+    "Declare method '{0}'.": {
+        "category": "Message",
+        "code": 90023
+    },
+    "Declare static method '{0}'.": {
+        "category": "Message",
+        "code": 90024
+    },
+    
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

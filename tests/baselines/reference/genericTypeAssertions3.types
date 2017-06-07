@@ -6,9 +6,9 @@ var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find
 >x : T
 >T : T
 >T : T
->((x) => { return null; }) : (x: any) => any
->(x) => { return null; } : (x: any) => any
->x : any
+>((x) => { return null; }) : (x: T) => any
+>(x) => { return null; } : (x: T) => any
+>x : T
 >null : null
 
 var s = < <T>(x: T) => T > ((x: any) => { return null; }); // no error

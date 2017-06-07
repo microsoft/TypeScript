@@ -232,14 +232,11 @@ namespace Playback {
                 // different entry).
                 // TODO (yuisu): We can certainly remove these once we recapture the RWC using new API
                 const normalizedPath = ts.normalizePath(path).toLowerCase();
-                const result: string[] = [];
-                 for (const directory of replayLog.directoriesRead) {
+                return ts.flatMap(replayLog.directoriesRead, directory => {
                     if (ts.normalizeSlashes(directory.path).toLowerCase() === normalizedPath) {
-                        result.push(...directory.result);
+                        return directory.result;
                     }
-                }
-
-                return result;
+                });
             });
 
         wrapper.writeFile = recordReplay(wrapper.writeFile, underlying)(
