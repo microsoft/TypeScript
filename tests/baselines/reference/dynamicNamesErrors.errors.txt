@@ -1,6 +1,6 @@
-tests/cases/compiler/dynamicNamesErrors.ts(5,5): error TS2712: Duplicate declaration '[c0]'.
-tests/cases/compiler/dynamicNamesErrors.ts(6,5): error TS2712: Duplicate declaration '[c0]'.
-tests/cases/compiler/dynamicNamesErrors.ts(19,5): error TS2711: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
+tests/cases/compiler/dynamicNamesErrors.ts(5,5): error TS2714: Duplicate declaration '[c0]'.
+tests/cases/compiler/dynamicNamesErrors.ts(6,5): error TS2714: Duplicate declaration '[c0]'.
+tests/cases/compiler/dynamicNamesErrors.ts(19,5): error TS2713: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
 tests/cases/compiler/dynamicNamesErrors.ts(24,1): error TS2322: Type 'T2' is not assignable to type 'T1'.
   Types of property '[c0]' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -17,10 +17,10 @@ tests/cases/compiler/dynamicNamesErrors.ts(28,6): error TS4033: Property '[c0]' 
     interface T0 {
         [c0]: number;
         ~~~~
-!!! error TS2712: Duplicate declaration '[c0]'.
+!!! error TS2714: Duplicate declaration '[c0]'.
         1: number;
         ~
-!!! error TS2712: Duplicate declaration '[c0]'.
+!!! error TS2714: Duplicate declaration '[c0]'.
     }
     
     interface T1 {
@@ -35,7 +35,7 @@ tests/cases/compiler/dynamicNamesErrors.ts(28,6): error TS4033: Property '[c0]' 
         [c0]: number;
         [c1]: string;
         ~~~~
-!!! error TS2711: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
+!!! error TS2713: Subsequent property declarations must have the same type.  Property '[c1]' must be of type 'number', but here has type 'string'.
     }
     
     let t1: T1;

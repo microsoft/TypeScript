@@ -2,7 +2,7 @@ tests/cases/compiler/classWithDuplicateIdentifier.ts(3,5): error TS2300: Duplica
 tests/cases/compiler/classWithDuplicateIdentifier.ts(6,5): error TS2300: Duplicate identifier 'b'.
 tests/cases/compiler/classWithDuplicateIdentifier.ts(7,5): error TS2300: Duplicate identifier 'b'.
 tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2300: Duplicate identifier 'c'.
-tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2711: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
+tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2713: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
 
 
 ==== tests/cases/compiler/classWithDuplicateIdentifier.ts (5 errors) ====
@@ -26,6 +26,6 @@ tests/cases/compiler/classWithDuplicateIdentifier.ts(11,5): error TS2711: Subseq
         ~
 !!! error TS2300: Duplicate identifier 'c'.
         ~
-!!! error TS2711: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
+!!! error TS2713: Subsequent property declarations must have the same type.  Property 'c' must be of type 'number', but here has type 'string'.
     }
     

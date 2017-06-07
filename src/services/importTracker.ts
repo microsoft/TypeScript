@@ -530,7 +530,8 @@ namespace ts.FindAllReferences {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
             const p = parent as ts.VariableDeclaration;
             return p.parent.kind === ts.SyntaxKind.CatchClause ? undefined : p.parent.parent.kind === SyntaxKind.VariableStatement ? p.parent.parent : undefined;
-        } else {
+        }
+        else {
             return parent;
         }
     }

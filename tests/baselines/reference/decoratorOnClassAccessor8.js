@@ -48,13 +48,13 @@ var A = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Number])
+    ], A.prototype, "x", null);
     return A;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Number])
-], A.prototype, "x", null);
 var B = (function () {
     function B() {
     }
@@ -64,13 +64,13 @@ var B = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], B.prototype, "x", null);
     return B;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [Number])
-], B.prototype, "x", null);
 var C = (function () {
     function C() {
     }
@@ -80,13 +80,13 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], C.prototype, "x", null);
     return C;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [Number])
-], C.prototype, "x", null);
 var D = (function () {
     function D() {
     }
@@ -96,13 +96,13 @@ var D = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Number])
+    ], D.prototype, "x", null);
     return D;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Number])
-], D.prototype, "x", null);
 var E = (function () {
     function E() {
     }
@@ -111,13 +111,13 @@ var E = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [])
+    ], E.prototype, "x", null);
     return E;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [])
-], E.prototype, "x", null);
 var F = (function () {
     function F() {
     }
@@ -126,10 +126,10 @@ var F = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        dec,
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], F.prototype, "x", null);
     return F;
 }());
-__decorate([
-    dec,
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [Number])
-], F.prototype, "x", null);

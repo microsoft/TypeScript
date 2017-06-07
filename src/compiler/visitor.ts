@@ -1517,57 +1517,80 @@ namespace ts {
     }
 
     export namespace Debug {
+        if (isDebugging) {
+            // Add additional properties in debug mode to assist with debugging.
+            Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
+                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+            });
+
+            Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
+                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
+                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
+            });
+
+            for (const ctor of [objectAllocator.getNodeConstructor(), objectAllocator.getIdentifierConstructor(), objectAllocator.getTokenConstructor(), objectAllocator.getSourceFileConstructor()]) {
+                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                    Object.defineProperties(ctor.prototype, {
+                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
+                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
+                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                        "__debugGetText": { value(this: Node, includeTrivia?: boolean) {
+                            if (nodeIsSynthesized(this)) return "";
+                            const parseNode = getParseTreeNode(this);
+                            const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                            return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                        } }
+                    });
+                }
+            }
+        }
+
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string) => assert(false, message || "Unexpected node.", () => `Node ${formatSyntaxKind(node.kind)} was unexpected.`)
+            ? (node: Node, message?: string): void => fail(
+                `${message || "Unexpected node."}\r\nNode ${formatSyntaxKind(node.kind)} was unexpected.`,
+                failBadSyntaxKind)
             : noop;
 
         export const assertEachNode = shouldAssert(AssertionLevel.Normal)
-            ? (nodes: Node[], test: (node: Node) => boolean, message?: string) => assert(
-                    test === undefined || every(nodes, test),
-                    message || "Unexpected node.",
-                    () => `Node array did not pass test '${getFunctionName(test)}'.`)
+            ? (nodes: Node[], test: (node: Node) => boolean, message?: string): void => assert(
+                test === undefined || every(nodes, test),
+                message || "Unexpected node.",
+                () => `Node array did not pass test '${getFunctionName(test)}'.`,
+                assertEachNode)
             : noop;
 
         export const assertNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
-                    test === undefined || test(node),
-                    message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(
+                test === undefined || test(node),
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`,
+                assertNode)
             : noop;
 
         export const assertOptionalNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, test: (node: Node) => boolean, message?: string) => assert(
-                    test === undefined || node === undefined || test(node),
-                    message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`)
+            ? (node: Node, test: (node: Node) => boolean, message?: string): void => assert(
+                test === undefined || node === undefined || test(node),
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node.kind)} did not pass test '${getFunctionName(test)}'.`,
+                assertOptionalNode)
             : noop;
 
         export const assertOptionalToken = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, kind: SyntaxKind, message?: string) => assert(
-                    kind === undefined || node === undefined || node.kind === kind,
-                    message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`)
+            ? (node: Node, kind: SyntaxKind, message?: string): void => assert(
+                kind === undefined || node === undefined || node.kind === kind,
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node.kind)} was not a '${formatSyntaxKind(kind)}' token.`,
+                assertOptionalToken)
             : noop;
 
         export const assertMissingNode = shouldAssert(AssertionLevel.Normal)
-            ? (node: Node, message?: string) => assert(
-                    node === undefined,
-                    message || "Unexpected node.",
-                    () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`)
+            ? (node: Node, message?: string): void => assert(
+                node === undefined,
+                message || "Unexpected node.",
+                () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`,
+                assertMissingNode)
             : noop;
-
-        function getFunctionName(func: Function) {
-            if (typeof func !== "function") {
-                return "";
-            }
-            else if (func.hasOwnProperty("name")) {
-                return (<any>func).name;
-            }
-            else {
-                const text = Function.prototype.toString.call(func);
-                const match = /^function\s+([\w\$]+)\s*\(/.exec(text);
-                return match ? match[1] : "";
-            }
-        }
     }
 }

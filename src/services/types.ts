@@ -71,6 +71,10 @@ namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
+    export interface SourceMapSource {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    }
+
     /**
      * Represents an immutable snapshot of a script at a specified time.Once acquired, the
      * snapshot is observably immutable. i.e. the same calls with the same parameters will return

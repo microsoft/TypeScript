@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(11,21): error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(11,21): error TS2559: Type '{ prop1: "hello"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -14,7 +14,7 @@ tests/cases/conformance/jsx/file.tsx(11,21): error TS2339: Property 'prop1' does
     // Error
     let a = <BigGreeter prop1="hello" />
                         ~~~~~~~~~~~~~
-!!! error TS2339: Property 'prop1' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
+!!! error TS2559: Type '{ prop1: "hello"; }' has no properties in common with type 'IntrinsicAttributes & IntrinsicClassAttributes<BigGreeter> & { children?: ReactNode; }'.
     
     // OK
     let b = <BigGreeter ref={(input) => { this.textInput = input; }} />

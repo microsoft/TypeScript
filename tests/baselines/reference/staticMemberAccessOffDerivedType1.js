@@ -33,6 +33,6 @@ var P = (function (_super) {
     function P() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    P.SomeNumber = P.GetNumber();
     return P;
 }(SomeBase));
-P.SomeNumber = P.GetNumber();

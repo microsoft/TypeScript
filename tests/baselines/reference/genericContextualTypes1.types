@@ -1,0 +1,362 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericContextualTypes1.ts ===
+type Box<T> = { value: T };
+>Box : Box<T>
+>T : T
+>value : T
+>T : T
+
+declare function wrap<A, B>(f: (a: A) => B): (a: A) => B;
+>wrap : <A, B>(f: (a: A) => B) => (a: A) => B
+>A : A
+>B : B
+>f : (a: A) => B
+>a : A
+>A : A
+>B : B
+>a : A
+>A : A
+>B : B
+
+declare function compose<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C;
+>compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
+>A : A
+>B : B
+>C : C
+>f : (a: A) => B
+>a : A
+>A : A
+>B : B
+>g : (b: B) => C
+>b : B
+>B : B
+>C : C
+>a : A
+>A : A
+>C : C
+
+declare function list<T>(a: T): T[];
+>list : <T>(a: T) => T[]
+>T : T
+>a : T
+>T : T
+>T : T
+
+declare function unlist<T>(a: T[]): T;
+>unlist : <T>(a: T[]) => T
+>T : T
+>a : T[]
+>T : T
+>T : T
+
+declare function box<V>(x: V): Box<V>;
+>box : <V>(x: V) => Box<V>
+>V : V
+>x : V
+>V : V
+>Box : Box<T>
+>V : V
+
+declare function unbox<W>(x: Box<W>): W;
+>unbox : <W>(x: Box<W>) => W
+>W : W
+>x : Box<W>
+>Box : Box<T>
+>W : W
+>W : W
+
+declare function map<T, U>(a: T[], f: (x: T) => U): U[];
+>map : <T, U>(a: T[], f: (x: T) => U) => U[]
+>T : T
+>U : U
+>a : T[]
+>T : T
+>f : (x: T) => U
+>x : T
+>T : T
+>U : U
+>U : U
+
+declare function identity<T>(x: T): T;
+>identity : <T>(x: T) => T
+>T : T
+>x : T
+>T : T
+>T : T
+
+declare function zip<A, B>(a: A, b: B): [A, B];
+>zip : <A, B>(a: A, b: B) => [A, B]
+>A : A
+>B : B
+>a : A
+>A : A
+>b : B
+>B : B
+>A : A
+>B : B
+
+declare function flip<X, Y, Z>(f: (x: X, y: Y) => Z): (y: Y, x: X) => Z;
+>flip : <X, Y, Z>(f: (x: X, y: Y) => Z) => (y: Y, x: X) => Z
+>X : X
+>Y : Y
+>Z : Z
+>f : (x: X, y: Y) => Z
+>x : X
+>X : X
+>y : Y
+>Y : Y
+>Z : Z
+>y : Y
+>Y : Y
+>x : X
+>X : X
+>Z : Z
+
+const f00: <A>(x: A) => A[] = list;
+>f00 : <A>(x: A) => A[]
+>A : A
+>x : A
+>A : A
+>A : A
+>list : <T>(a: T) => T[]
+
+const f01: <A>(x: A) => A[] = x => [x];
+>f01 : <A>(x: A) => A[]
+>A : A
+>x : A
+>A : A
+>A : A
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
+
+const f02: <A>(x: A) => A[] = wrap(list);
+>f02 : <A>(x: A) => A[]
+>A : A
+>x : A
+>A : A
+>A : A
+>wrap(list) : (a: A) => A[]
+>wrap : <A, B>(f: (a: A) => B) => (a: A) => B
+>list : <T>(a: T) => T[]
+
+const f03: <A>(x: A) => A[] = wrap(x => [x]);
+>f03 : <A>(x: A) => A[]
+>A : A
+>x : A
+>A : A
+>A : A
+>wrap(x => [x]) : (a: A) => A[]
+>wrap : <A, B>(f: (a: A) => B) => (a: A) => B
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
+
+const f10: <T>(x: T) => Box<T[]> = compose(a => list(a), b => box(b));
+>f10 : <T>(x: T) => Box<T[]>
+>T : T
+>x : T
+>T : T
+>Box : Box<T>
+>T : T
+>compose(a => list(a), b => box(b)) : (a: T) => Box<T[]>
+>compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
+>a => list(a) : (a: T) => T[]
+>a : T
+>list(a) : T[]
+>list : <T>(a: T) => T[]
+>a : T
+>b => box(b) : (b: T[]) => Box<T[]>
+>b : T[]
+>box(b) : Box<T[]>
+>box : <V>(x: V) => Box<V>
+>b : T[]
+
+const f11: <T>(x: T) => Box<T[]> = compose(list, box);
+>f11 : <T>(x: T) => Box<T[]>
+>T : T
+>x : T
+>T : T
+>Box : Box<T>
+>T : T
+>compose(list, box) : (a: T) => Box<T[]>
+>compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
+>list : <T>(a: T) => T[]
+>box : <V>(x: V) => Box<V>
+
+const f12: <T>(x: Box<T[]>) => T = compose(a => unbox(a), b => unlist(b));
+>f12 : <T>(x: Box<T[]>) => T
+>T : T
+>x : Box<T[]>
+>Box : Box<T>
+>T : T
+>T : T
+>compose(a => unbox(a), b => unlist(b)) : (a: Box<T[]>) => T
+>compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
+>a => unbox(a) : (a: Box<T[]>) => T[]
+>a : Box<T[]>
+>unbox(a) : T[]
+>unbox : <W>(x: Box<W>) => W
+>a : Box<T[]>
+>b => unlist(b) : (b: T[]) => T
+>b : T[]
+>unlist(b) : T
+>unlist : <T>(a: T[]) => T
+>b : T[]
+
+const f13: <T>(x: Box<T[]>) => T = compose(unbox, unlist);
+>f13 : <T>(x: Box<T[]>) => T
+>T : T
+>x : Box<T[]>
+>Box : Box<T>
+>T : T
+>T : T
+>compose(unbox, unlist) : (a: Box<T[]>) => T
+>compose : <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A) => C
+>unbox : <W>(x: Box<W>) => W
+>unlist : <T>(a: T[]) => T
+
+const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
+>arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+><T, U>(f: (x: T) => U) => (a: T[]) => a.map(f) : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+>T : T
+>U : U
+>f : (x: T) => U
+>x : T
+>T : T
+>U : U
+>(a: T[]) => a.map(f) : (a: T[]) => U[]
+>a : T[]
+>T : T
+>a.map(f) : U[]
+>a.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>a : T[]
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>f : (x: T) => U
+
+const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
+>arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
+><T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f) : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
+>T : T
+>f : (x: T) => boolean
+>x : T
+>T : T
+>(a: T[]) => a.filter(f) : (a: T[]) => T[]
+>a : T[]
+>T : T
+>a.filter(f) : T[]
+>a.filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; }
+>a : T[]
+>filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; }
+>f : (x: T) => boolean
+
+const f20: (a: string[]) => number[] = arrayMap(x => x.length);
+>f20 : (a: string[]) => number[]
+>a : string[]
+>arrayMap(x => x.length) : (a: string[]) => number[]
+>arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+const f21: <A>(a: A[]) => A[][] = arrayMap(x => [x]);
+>f21 : <A>(a: A[]) => A[][]
+>A : A
+>a : A[]
+>A : A
+>A : A
+>arrayMap(x => [x]) : (a: A[]) => A[][]
+>arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+>x => [x] : (x: A) => A[]
+>x : A
+>[x] : A[]
+>x : A
+
+const f22: <A>(a: A[]) => A[] = arrayMap(identity);
+>f22 : <A>(a: A[]) => A[]
+>A : A
+>a : A[]
+>A : A
+>A : A
+>arrayMap(identity) : (a: A[]) => A[]
+>arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+>identity : <T>(x: T) => T
+
+const f23: <A>(a: A[]) => Box<A>[] = arrayMap(value => ({ value }));
+>f23 : <A>(a: A[]) => Box<A>[]
+>A : A
+>a : A[]
+>A : A
+>Box : Box<T>
+>A : A
+>arrayMap(value => ({ value })) : (a: A[]) => { value: A; }[]
+>arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
+>value => ({ value }) : (value: A) => { value: A; }
+>value : A
+>({ value }) : { value: A; }
+>{ value } : { value: A; }
+>value : A
+
+const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
+>f30 : (a: string[]) => string[]
+>a : string[]
+>arrayFilter(x => x.length > 10) : (a: string[]) => string[]
+>arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
+>x => x.length > 10 : (x: string) => boolean
+>x : string
+>x.length > 10 : boolean
+>x.length : number
+>x : string
+>length : number
+>10 : 10
+
+const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 10);
+>f31 : <T extends Box<number>>(a: T[]) => T[]
+>T : T
+>Box : Box<T>
+>a : T[]
+>T : T
+>T : T
+>arrayFilter(x => x.value > 10) : (a: T[]) => T[]
+>arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
+>x => x.value > 10 : (x: T) => boolean
+>x : T
+>x.value > 10 : boolean
+>x.value : number
+>x : T
+>value : number
+>10 : 10
+
+const f40: <A, B>(b: B, a: A) => [A, B] = flip(zip);
+>f40 : <A, B>(b: B, a: A) => [A, B]
+>A : A
+>B : B
+>b : B
+>B : B
+>a : A
+>A : A
+>A : A
+>B : B
+>flip(zip) : (y: B, x: A) => [A, B]
+>flip : <X, Y, Z>(f: (x: X, y: Y) => Z) => (y: Y, x: X) => Z
+>zip : <A, B>(a: A, b: B) => [A, B]
+
+// Repro from #16293
+
+type fn = <A>(a: A) => A;
+>fn : fn
+>A : A
+>a : A
+>A : A
+>A : A
+
+const fn: fn = a => a;
+>fn : fn
+>fn : fn
+>a => a : (a: A) => A
+>a : A
+>a : A
+

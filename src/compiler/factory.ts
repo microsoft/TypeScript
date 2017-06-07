@@ -2134,6 +2134,24 @@ namespace ts {
 
     // Compound nodes
 
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
+
     export function createComma(left: Expression, right: Expression) {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
     }
@@ -2296,15 +2314,24 @@ namespace ts {
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined) {
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+
+    /**
+     * Create an external source map source file reference
+     */
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
+        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined {
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
@@ -2313,7 +2340,7 @@ namespace ts {
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined) {
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
@@ -2485,6 +2512,7 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
@@ -3216,6 +3244,26 @@ namespace ts {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
     }
 
+    export function convertFunctionDeclarationToExpression(node: FunctionDeclaration) {
+        Debug.assert(!!node.body);
+        const updated = createFunctionExpression(
+            node.modifiers,
+            node.asteriskToken,
+            node.name,
+            node.typeParameters,
+            node.parameters,
+            node.type,
+            node.body
+        );
+        setOriginalNode(updated, node);
+        setTextRange(updated, node);
+        if (node.startsOnNewLine) {
+            updated.startsOnNewLine = true;
+        }
+        aggregateTransformFlags(updated);
+        return updated;
+    }
+
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
         return (node.expression as StringLiteral).text === "use strict";
     }
@@ -3614,7 +3662,7 @@ namespace ts {
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 const mutableCall = getMutableClone(emittedExpression);
                 mutableCall.expression = setTextRange(createParen(callee), callee);
-                return recreatePartiallyEmittedExpressions(expression, mutableCall);
+                return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
         else {
@@ -3654,22 +3702,6 @@ namespace ts {
 
             return nodeArray;
         }
-    }
-
-    /**
-     * Clones a series of not-emitted expressions with a new inner expression.
-     *
-     * @param originalOuterExpression The original outer expression.
-     * @param newInnerExpression The new inner expression.
-     */
-    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
-        if (isPartiallyEmittedExpression(originalOuterExpression)) {
-            const clone = getMutableClone(originalOuterExpression);
-            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
-            return clone;
-        }
-
-        return newInnerExpression;
     }
 
     function getLeftmostExpression(node: Expression): Expression {
@@ -3718,6 +3750,22 @@ namespace ts {
         All = Parentheses | Assertions | PartiallyEmittedExpressions
     }
 
+    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | NonNullExpression | PartiallyEmittedExpression;
+
+    export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
+        switch (node.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return (kinds & OuterExpressionKinds.Parentheses) !== 0;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.NonNullExpression:
+                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+            case SyntaxKind.PartiallyEmittedExpression:
+                return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
+        }
+        return false;
+    }
+
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
     export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
     export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
@@ -3754,8 +3802,8 @@ namespace ts {
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
+        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
+            node = (<AssertionExpression | NonNullExpression>node).expression;
         }
 
         return node;
@@ -3769,6 +3817,26 @@ namespace ts {
         }
 
         return node;
+    }
+
+    function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
+        switch (outerExpression.kind) {
+            case SyntaxKind.ParenthesizedExpression: return updateParen(outerExpression, expression);
+            case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
+            case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
+            case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
+        }
+    }
+
+    export function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
+        if (outerExpression && isOuterExpression(outerExpression, kinds)) {
+            return updateOuterExpression(
+                outerExpression,
+                recreateOuterExpressions(outerExpression.expression, innerExpression)
+            );
+        }
+        return innerExpression;
     }
 
     export function startOnNewLine<T extends Node>(node: T): T {
@@ -3908,7 +3976,7 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
             return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3976,7 +4044,7 @@ namespace ts {
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }

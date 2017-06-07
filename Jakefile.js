@@ -268,7 +268,6 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.preserveConstEnums: true if compiler should keep const enums in code
     * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
-    * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
     * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
     * @param {Array} opts.types: array of types to include in compilation
     * @param callback: a function to execute after the compilation process ends
@@ -321,9 +320,6 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
             }
             else {
                 options += " -sourcemap";
-                if (!opts.noMapRoot) {
-                    options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
-                }
             }
         }
         else {
@@ -527,7 +523,7 @@ task("importDefinitelyTypedTests", [importDefinitelyTypedTestsJs], function () {
 
 // Local target to build the compiler and services
 var tscFile = path.join(builtLocalDirectory, compilerFilename);
-compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false, { noMapRoot: true });
+compileFile(tscFile, compilerSources, [builtLocalDirectory, copyright].concat(compilerSources), [copyright], /*useBuiltCompiler:*/ false);
 
 var servicesFile = path.join(builtLocalDirectory, "typescriptServices.js");
 var servicesFileInBrowserTest = path.join(builtLocalDirectory, "typescriptServicesInBrowserTest.js");
@@ -582,7 +578,6 @@ compileFile(
         keepComments: true,
         noResolve: false,
         stripInternal: true,
-        noMapRoot: true,
         inlineSourceMap: true
     });
 
@@ -807,7 +802,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
     var debug = process.env.debug || process.env.d;
     var inspect = process.env.inspect;
-    tests = process.env.test || process.env.tests || process.env.t;
+    var testTimeout = process.env.timeout || defaultTestTimeout;
+    var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
@@ -825,7 +821,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         } while (fs.existsSync(taskConfigsFolder));
         fs.mkdirSync(taskConfigsFolder);
 
-        workerCount = process.env.workerCount || os.cpus().length;
+        workerCount = process.env.workerCount || process.env.p || os.cpus().length;
     }
 
     if (tests || light || taskConfigsFolder) {
@@ -930,7 +926,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 }
 
-var testTimeout = 20000;
+var defaultTestTimeout = 22000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests('min', /*runInParallel*/ true);
