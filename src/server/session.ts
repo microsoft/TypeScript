@@ -194,6 +194,7 @@ namespace ts.server {
         export const TodoComments: protocol.CommandTypes.TodoComments = "todoComments";
         export const Indentation: protocol.CommandTypes.Indentation = "indentation";
         export const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate = "docCommentTemplate";
+        export const IsInMultiLineComment: protocol.CommandTypes.IsInMultiLineComment = "isInMultiLineComment";
         /* @internal */
         export const CompilerOptionsDiagnosticsFull: protocol.CommandTypes.CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
         /* @internal */
@@ -1049,6 +1050,13 @@ namespace ts.server {
             return project.getLanguageService(/*ensureSynchronized*/ false).getDocCommentTemplateAtPosition(file, position);
         }
 
+        private getIsInMultiLineComment(args: protocol.FileLocationRequestArgs) {
+            const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
+            const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const position = this.getPosition(args, scriptInfo);
+            return project.getLanguageService(/*ensureSynchronized*/ false).getIsInMultiLineComment(file, position);
+        }
+
         private getIndentation(args: protocol.IndentationRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const position = this.getPosition(args, project.getScriptInfoForNormalizedPath(file));
@@ -1781,6 +1789,9 @@ namespace ts.server {
             },
             [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
+            },
+            [CommandNames.IsInMultiLineComment]: (request: protocol.IsInMultiLineCommentRequest) => {
+                return this.requiredResponse(this.getIsInMultiLineComment(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));

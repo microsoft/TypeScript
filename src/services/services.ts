@@ -1779,6 +1779,16 @@ namespace ts {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
+        function getIsInMultiLineComment(_fileName: string, position: number): boolean {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(_fileName);
+            const token = getTokenAtPosition(sourceFile, position);
+            const _triviaWidth = token.getLeadingTriviaWidth(sourceFile); _triviaWidth;
+            const _text = token.getText(sourceFile); _text;
+            const _fullText = token.getFullText(sourceFile); _fullText;
+            // TODO: distinguish multi-line and single line comments...
+            return token.getFullStart() <= position && position < token.getStart(sourceFile, /*includeJsDocComment*/ false);
+        }
+
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
@@ -2030,6 +2040,7 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
+            getIsInMultiLineComment,
             isValidBraceCompletionAtPosition,
             getCodeFixesAtPosition,
             getEmitOutput,

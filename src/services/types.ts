@@ -257,6 +257,7 @@ namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
+        getIsInMultiLineComment(fileName: string, position: number): boolean;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
 

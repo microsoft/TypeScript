@@ -483,6 +483,9 @@ namespace Harness.LanguageService {
         getDocCommentTemplateAtPosition(fileName: string, position: number): ts.TextInsertion {
             return unwrapJSONCallResult(this.shim.getDocCommentTemplateAtPosition(fileName, position));
         }
+        getIsInMultiLineComment(fileName: string, position: number): boolean {
+            return unwrapJSONCallResult(this.shim.getIsInMultiLineComment(fileName, position));
+        }
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
