@@ -1562,6 +1562,10 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
     }
 
+    export function getJSDocClassTag(node: Node): JSDocClassTag {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
+    }
+
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
