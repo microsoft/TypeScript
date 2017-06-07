@@ -143,8 +143,9 @@ namespace ts.JsDoc {
 
             const name = param.name.text;
             if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
-                || nameThusFar !== undefined && !startsWith(name, nameThusFar))
+                || nameThusFar !== undefined && !startsWith(name, nameThusFar)) {
                 return undefined;
+            }
 
             return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
         });
