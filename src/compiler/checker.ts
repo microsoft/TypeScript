@@ -6814,57 +6814,56 @@ namespace ts {
             return undefined;
         }
 
-        function resolveTypeReferenceName(node: TypeReferenceType, typeReferenceName: EntityNameExpression | EntityName) {
+        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName, meaning: SymbolFlags) {
             if (!typeReferenceName) {
                 return unknownSymbol;
             }
-
-            const meaning = node.kind === SyntaxKind.JSDocTypeReference
-                ? SymbolFlags.Type | SymbolFlags.Value
-                : SymbolFlags.Type;
 
             return resolveEntityName(typeReferenceName, meaning) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
-            let secondPass = false;
-            let fallbackType: Type = unknownType;
-            while (true) {
-                if (symbol === unknownSymbol) {
-                    return fallbackType;
-                }
+            if (symbol === unknownSymbol) {
+                return unknownType;
+            }
 
-                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                    return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
-                }
+            const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
+            if (type) {
+                return type;
+            }
 
-                if (symbol.flags & SymbolFlags.TypeAlias) {
-                    return getTypeFromTypeAliasReference(node, symbol, typeArguments);
-                }
-
-                if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                    // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
-                    // the symbol is a constructor function, return the inferred class type; otherwise,
-                    // the type of this reference is just the type of the value we resolved to.
-                    if (symbol.flags & SymbolFlags.Function && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
-                        return getInferredClassType(symbol);
+            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
+                // the symbol is a constructor function, return the inferred class type; otherwise,
+                // the type of this reference is just the type of the value we resolved to.
+                const valueType = getTypeOfSymbol(symbol);
+                if (valueType.symbol && !isInferredClassType(valueType)) {
+                    const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+                    if (referenceType) {
+                        return referenceType;
                     }
-
-                    // Stop if this is the second pass
-                    if (secondPass) {
-                        return fallbackType;
-                    }
-
-                    // Try to use the symbol of the type (if present) to get a better type on the
-                    // second pass.
-                    fallbackType = getTypeOfSymbol(symbol);
-                    symbol = fallbackType.symbol || unknownSymbol;
-                    secondPass = true;
-                    continue;
                 }
 
-                return getTypeFromNonGenericTypeReference(node, symbol);
+                // Resolve the type reference as a Type for the purpose of reporting errors.
+                resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
+                return valueType;
+            }
+
+            return getTypeFromNonGenericTypeReference(node, symbol);
+        }
+
+        function getTypeReferenceTypeWorker(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type | undefined {
+            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+            }
+
+            if (symbol.flags & SymbolFlags.TypeAlias) {
+                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
+            }
+
+            if (symbol.flags & SymbolFlags.Function && node.kind === SyntaxKind.JSDocTypeReference && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
+                return getInferredClassType(symbol);
             }
         }
 
@@ -6908,11 +6907,13 @@ namespace ts {
             if (!links.resolvedType) {
                 let symbol: Symbol;
                 let type: Type;
+                let meaning = SymbolFlags.Type;
                 if (node.kind === SyntaxKind.JSDocTypeReference) {
                     type = getPrimitiveTypeFromJSDocTypeReference(node);
+                    meaning |= SymbolFlags.Value;
                 }
                 if (!type) {
-                    symbol = resolveTypeReferenceName(node, getTypeReferenceName(node));
+                    symbol = resolveTypeReferenceName(getTypeReferenceName(node), meaning);
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
@@ -16153,6 +16154,12 @@ namespace ts {
                 links.inferredClassType = createAnonymousType(symbol, symbol.members || emptySymbols, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
+        }
+
+        function isInferredClassType(type: Type) {
+            return type.symbol
+                && getObjectFlags(type) & ObjectFlags.Anonymous
+                && getSymbolLinks(type.symbol).inferredClassType === type;
         }
 
         /**
