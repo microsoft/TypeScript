@@ -6814,37 +6814,53 @@ namespace ts {
             return undefined;
         }
 
-        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName) {
+        function resolveTypeReferenceName(node: TypeReferenceType, typeReferenceName: EntityNameExpression | EntityName) {
             if (!typeReferenceName) {
                 return unknownSymbol;
             }
 
-            return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
+            const meaning = node.kind === SyntaxKind.JSDocTypeReference
+                ? SymbolFlags.Type | SymbolFlags.Value
+                : SymbolFlags.Type;
+
+            return resolveEntityName(typeReferenceName, meaning) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
+            let fallbackType: Type = unknownType;
+            while (true) {
+                if (symbol === unknownSymbol) {
+                    return fallbackType;
+                }
 
-            if (symbol === unknownSymbol) {
-                return unknownType;
+                if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
+                    return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
+                }
+
+                if (symbol.flags & SymbolFlags.TypeAlias) {
+                    return getTypeFromTypeAliasReference(node, symbol, typeArguments);
+                }
+
+                if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                    // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
+                    // the value has a construct signature, we use the return type of the construct
+                    // signature as the type; otherwise, the type of this reference is just the type
+                    // of the value we resolved to.
+                    if (symbol.flags & SymbolFlags.Function && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
+                        return getInferredClassType(symbol);
+                    }
+
+                    fallbackType = getTypeOfSymbol(symbol);
+
+                    // Try to use the symbol of the type (if present) to get a better type on the
+                    // next pass.
+                    symbol = fallbackType.symbol || unknownSymbol;
+                    continue;
+                }
+
+                return getTypeFromNonGenericTypeReference(node, symbol);
             }
-
-            if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
-            }
-
-            if (symbol.flags & SymbolFlags.TypeAlias) {
-                return getTypeFromTypeAliasReference(node, symbol, typeArguments);
-            }
-
-            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In
-                // that case, the type of this reference is just the type of the value we resolved
-                // to.
-                return getTypeOfSymbol(symbol);
-            }
-
-            return getTypeFromNonGenericTypeReference(node, symbol);
         }
 
         function getPrimitiveTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
@@ -6888,21 +6904,10 @@ namespace ts {
                 let symbol: Symbol;
                 let type: Type;
                 if (node.kind === SyntaxKind.JSDocTypeReference) {
-                    type = getPrimitiveTypeFromJSDocTypeReference(<JSDocTypeReference>node);
-                    if (!type) {
-                        const typeReferenceName = getTypeReferenceName(node);
-                        symbol = resolveTypeReferenceName(typeReferenceName);
-                        type = getTypeReferenceType(node, symbol);
-                    }
+                    type = getPrimitiveTypeFromJSDocTypeReference(node);
                 }
-                else {
-                    // We only support expressions that are simple qualified names. For other expressions this produces undefined.
-                    const typeNameOrExpression: EntityNameOrEntityNameExpression = node.kind === SyntaxKind.TypeReference
-                        ? (<TypeReferenceNode>node).typeName
-                        : isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)
-                            ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
-                            : undefined;
-                    symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
+                if (!type) {
+                    symbol = resolveTypeReferenceName(node, getTypeReferenceName(node));
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
@@ -19367,8 +19372,8 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
-
+                checkFunctionOrMethodDeclaration(node);
+                checkGrammarForGenerator(node);
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithCapturedNewTargetVariable(node, node.name);
