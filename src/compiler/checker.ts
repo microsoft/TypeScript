@@ -6828,7 +6828,7 @@ namespace ts {
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
-            let secondPass = true;
+            let secondPass = false;
             let fallbackType: Type = unknownType;
             while (true) {
                 if (symbol === unknownSymbol) {
