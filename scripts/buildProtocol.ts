@@ -113,7 +113,7 @@ class DeclarationsWalker {
     } 
 }
 
-function generateProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
+function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
     const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: true, types: <string[]>[], stripInternal: true };
 
     /**
@@ -184,4 +184,4 @@ if (process.argv.length < 5) {
 const protocolTs = process.argv[2];
 const typeScriptServicesDts = process.argv[3];
 const outputFile = process.argv[4];
-generateProtocolFile(outputFile, protocolTs, typeScriptServicesDts);
+writeProtocolFile(outputFile, protocolTs, typeScriptServicesDts);
