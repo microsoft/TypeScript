@@ -12094,7 +12094,7 @@ namespace ts {
 
             // We only narrow variables and parameters occurring in a non-assignment position. For all other
             // entities we simply return the declared type.
-            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || assignmentKind === AssignmentKind.Definite || !declaration) {
+            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || assignmentKind === AssignmentKind.Definite || assignmentKind === AssignmentKind.NarrowingTypeCompund || !declaration) {
                 return type;
             }
             // The declaration container is the innermost function that encloses the declaration of the variable
@@ -17327,8 +17327,16 @@ namespace ts {
                         return silentNeverType;
                     }
 
-                    leftType = checkNonNullType(leftType, left);
-                    rightType = checkNonNullType(rightType, right);
+                    const leftBarZero = (rightType.flags & TypeFlags.NumberLiteral)
+                        && (<LiteralType>rightType).text === "0"
+                        && (operator === SyntaxKind.BarToken || operator === SyntaxKind.BarEqualsToken);
+                    if (leftBarZero) {
+                        leftType = getNonNullableType(leftType);
+                    }
+                    else {
+                        leftType = checkNonNullType(leftType, left);
+                        rightType = checkNonNullType(rightType, right);
+                    }
 
                     let suggestedOperator: SyntaxKind;
                     // if a user tries to apply a bitwise operator to 2 boolean operands

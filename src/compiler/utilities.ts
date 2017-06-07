@@ -1598,7 +1598,7 @@ namespace ts {
     }
 
     export const enum AssignmentKind {
-        None, Definite, Compound
+        None, Definite, Compound, NarrowingTypeCompund
     }
 
     export function getAssignmentTargetKind(node: Node): AssignmentKind {
@@ -1607,9 +1607,16 @@ namespace ts {
             switch (parent.kind) {
                 case SyntaxKind.BinaryExpression:
                     const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
-                        binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
-                        AssignmentKind.None;
+                    if (!isAssignmentOperator(binaryOperator) || (<BinaryExpression>parent).left !== node) {
+                        return AssignmentKind.None;
+                    }
+                    if (binaryOperator === SyntaxKind.EqualsToken) {
+                        return AssignmentKind.Definite;
+                    }
+                    if (binaryOperator === SyntaxKind.BarEqualsToken || binaryOperator === SyntaxKind.PlusEqualsToken) {
+                        return AssignmentKind.NarrowingTypeCompund;
+                    }
+                    return AssignmentKind.Compound;
                 case SyntaxKind.PrefixUnaryExpression:
                 case SyntaxKind.PostfixUnaryExpression:
                     const unaryOperator = (<PrefixUnaryExpression | PostfixUnaryExpression>parent).operator;
