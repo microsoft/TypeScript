@@ -6828,6 +6828,7 @@ namespace ts {
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
+            let secondPass = true;
             let fallbackType: Type = unknownType;
             while (true) {
                 if (symbol === unknownSymbol) {
@@ -6844,18 +6845,22 @@ namespace ts {
 
                 if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
                     // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
-                    // the value has a construct signature, we use the return type of the construct
-                    // signature as the type; otherwise, the type of this reference is just the type
-                    // of the value we resolved to.
+                    // the symbol is a constructor function, return the inferred class type; otherwise,
+                    // the type of this reference is just the type of the value we resolved to.
                     if (symbol.flags & SymbolFlags.Function && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
                         return getInferredClassType(symbol);
                     }
 
-                    fallbackType = getTypeOfSymbol(symbol);
+                    // Stop if this is the second pass
+                    if (secondPass) {
+                        return fallbackType;
+                    }
 
                     // Try to use the symbol of the type (if present) to get a better type on the
-                    // next pass.
+                    // second pass.
+                    fallbackType = getTypeOfSymbol(symbol);
                     symbol = fallbackType.symbol || unknownSymbol;
+                    secondPass = true;
                     continue;
                 }
 
