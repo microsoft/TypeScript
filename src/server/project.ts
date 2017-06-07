@@ -25,7 +25,7 @@ namespace ts.server {
                     result.jsx += 1;
                     break;
                 case ScriptKind.TS:
-                    fileExtensionIs(info.fileName, ".d.ts")
+                    fileExtensionIs(info.fileName, Extension.Dts)
                         ? result.dts += 1
                         : result.ts += 1;
                     break;

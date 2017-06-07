@@ -1569,7 +1569,7 @@ namespace ts.server {
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
                     if (!info.isScriptOpen()) {
-                        if (fileNameInProject.indexOf(".d.ts") > 0) {
+                        if (fileNameInProject.indexOf(Extension.Dts) > 0) {
                             veryLowPriorityFiles.push(fileNameInProject);
                         }
                         else {

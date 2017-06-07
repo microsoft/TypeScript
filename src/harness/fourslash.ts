@@ -1459,7 +1459,7 @@ namespace FourSlash {
             let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
             if (!baselineFile) {
                 baselineFile = this.activeFile.fileName.replace(this.basePath + "/breakpointValidation", "bpSpan");
-                baselineFile = baselineFile.replace(".ts", ".baseline");
+                baselineFile = baselineFile.replace(ts.Extension.Ts, ".baseline");
 
             }
             Harness.Baseline.runBaseline(
@@ -1529,7 +1529,7 @@ namespace FourSlash {
         public baselineQuickInfo() {
             let baselineFile = this.testData.globalOptions[metadataOptionNames.baselineFile];
             if (!baselineFile) {
-                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(".ts", ".baseline");
+                baselineFile = ts.getBaseFileName(this.activeFile.fileName).replace(ts.Extension.Ts, ".baseline");
             }
 
             Harness.Baseline.runBaseline(

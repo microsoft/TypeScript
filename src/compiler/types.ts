@@ -3881,13 +3881,12 @@ namespace ts {
         extension: Extension;
     }
 
-    export enum Extension {
-        Ts,
-        Tsx,
-        Dts,
-        Js,
-        Jsx,
-        LastTypeScriptExtension = Dts
+    export const enum Extension {
+        Ts = ".ts",
+        Tsx = ".tsx",
+        Dts = ".d.ts",
+        Js = ".js",
+        Jsx = ".jsx"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {

@@ -1249,7 +1249,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
 
                 return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
             }
@@ -1465,7 +1465,7 @@ namespace Harness {
                 // When calling this function from rwc-runner, the baselinePath will have no extension.
                 // As rwc test- file is stored in json which ".json" will get stripped off.
                 // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
-                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
                     baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
                 Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
@@ -1563,7 +1563,7 @@ namespace Harness {
             }
 
             // check js output
-            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js"), () => {
+            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
                 let tsCode = "";
                 const tsSources = otherFiles.concat(toBeCompiled);
                 if (tsSources.length > 1) {
@@ -1651,22 +1651,22 @@ namespace Harness {
         }
 
         export function isTS(fileName: string) {
-            return ts.endsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ts.Extension.Ts);
         }
 
         export function isTSX(fileName: string) {
-            return ts.endsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ts.Extension.Tsx);
         }
 
         export function isDTS(fileName: string) {
-            return ts.endsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ts.Extension.Dts);
         }
 
         export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ".js");
+            return ts.endsWith(fileName, ts.Extension.Js);
         }
         export function isJSX(fileName: string) {
-            return ts.endsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ts.Extension.Jsx);
         }
 
         export function isJSMap(fileName: string) {
@@ -1973,7 +1973,7 @@ namespace Harness {
     export function isDefaultLibraryFile(filePath: string): boolean {
         // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
         const fileName = ts.getBaseFileName(ts.normalizeSlashes(filePath));
-        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ts.Extension.Dts);
     }
 
     export function isBuiltFile(filePath: string): boolean {
