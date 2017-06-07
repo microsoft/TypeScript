@@ -240,8 +240,8 @@ namespace ts.server {
                 CommandNames.GetCodeFixesFull,
                 CommandNames.GetSupportedCodeFixes,
                 CommandNames.GetApplicableRefactors,
-                CommandNames.GetRefactorCodeActions,
-                CommandNames.GetRefactorCodeActionsFull,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

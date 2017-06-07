@@ -2741,6 +2741,7 @@ namespace FourSlash {
             markerName: string,
             expectedContent: string,
             refactorNameToApply: string,
+            actionName: string,
             formattingOptions?: ts.FormatCodeSettings) {
 
             formattingOptions = formattingOptions || this.formatCodeSettings;
@@ -2753,9 +2754,11 @@ namespace FourSlash {
                 this.raiseError(`The expected refactor: ${refactorNameToApply} is not available at the marker location.`);
             }
 
-            const codeActions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName);
 
-            this.applyCodeActions(codeActions);
+            for (const edit of editInfo.edits) {
+                this.applyEdits(edit.fileName, edit.textChanges);
+            }
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
             if (this.normalizeNewlines(actualContent) !== this.normalizeNewlines(expectedContent)) {
@@ -3798,8 +3801,8 @@ namespace FourSlashInterface {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
         }
 
-        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, formattingOptions?: ts.FormatCodeSettings): void {
-            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, formattingOptions);
+        public fileAfterApplyingRefactorAtMarker(markerName: string, expectedContent: string, refactorNameToApply: string, actionName: string, formattingOptions?: ts.FormatCodeSettings): void {
+            this.state.verifyFileAfterApplyingRefactorAtMarker(markerName, expectedContent, refactorNameToApply, actionName, formattingOptions);
         }
 
         public rangeIs(expectedText: string, includeWhiteSpace?: boolean): void {
