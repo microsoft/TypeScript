@@ -8038,7 +8038,7 @@ namespace ts {
             const result = createSignature(signature.declaration, freshTypeParameters,
                 signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
-                instantiateType(signature.resolvedReturnType, mapper),
+                /*resolvedReturnType*/ undefined,
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
             result.target = signature;
@@ -16347,37 +16347,40 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
         }
 
-        function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper, checkMode: CheckMode) {
+        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
-            if (checkMode === CheckMode.Inferential) {
-                for (let i = 0; i < len; i++) {
-                    const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
-                    if (declaration.type) {
-                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
-                    }
+            for (let i = 0; i < len; i++) {
+                const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
+                if (declaration.type) {
+                    inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(declaration.type), getTypeAtPosition(context, i));
                 }
             }
+        }
+
+        function assignContextualParameterTypes(signature: Signature, context: Signature) {
+            signature.typeParameters = context.typeParameters;
             if (context.thisParameter) {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     if (!parameter) {
                         signature.thisParameter = createSymbolWithType(context.thisParameter, /*type*/ undefined);
                     }
-                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter));
                 }
             }
+            const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
                 if (!(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     const contextualParameterType = getTypeAtPosition(context, i);
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
                 const parameter = lastOrUndefined(signature.parameters);
                 if (!(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
         }
@@ -16397,10 +16400,10 @@ namespace ts {
             }
         }
 
-        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper, checkMode: CheckMode) {
+        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type) {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
-                links.type = instantiateType(contextualType, mapper);
+                links.type = contextualType;
                 const name = getNameOfDeclaration(parameter.valueDeclaration);
                 // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                 if (links.type === emptyObjectType &&
@@ -16408,38 +16411,6 @@ namespace ts {
                     links.type = getTypeFromBindingPattern(<BindingPattern>name);
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
-            }
-            else if (checkMode === CheckMode.Inferential) {
-                // Even if the parameter already has a type, it might be because it was given a type while
-                // processing the function as an argument to a prior signature during overload resolution.
-                // If this was the case, it may have caused some type parameters to be fixed. So here,
-                // we need to ensure that type parameters at the same positions get fixed again. This is
-                // done by calling instantiateType to attach the mapper to the contextualType, and then
-                // calling inferTypes to force a walk of contextualType so that all the correct fixing
-                // happens. The choice to pass in links.type may seem kind of arbitrary, but it serves
-                // to make sure that all the correct positions in contextualType are reached by the walk.
-                // Here is an example:
-                //
-                //      interface Base {
-                //          baseProp;
-                //      }
-                //      interface Derived extends Base {
-                //          toBase(): Base;
-                //      }
-                //
-                //      var derived: Derived;
-                //
-                //      declare function foo<T>(x: T, func: (p: T) => T): T;
-                //      declare function foo<T>(x: T, func: (p: T) => T): T;
-                //
-                //      var result = foo(derived, d => d.toBase());
-                //
-                // We are typing d while checking the second overload. But we've already given d
-                // a type (Derived) from the first overload. However, we still want to fix the
-                // T in the second overload so that we do not infer Base as a candidate for T
-                // (inferring Base would make type argument inference inconsistent between the two
-                // overloads).
-                inferTypes((<InferenceContext>mapper).inferences, links.type, instantiateType(contextualType, mapper));
             }
         }
 
@@ -16739,7 +16710,13 @@ namespace ts {
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (contextSensitive) {
-                            assignContextualParameterTypes(signature, contextualSignature, getContextualMapper(node), checkMode);
+                            const contextualMapper = getContextualMapper(node);
+                            if (checkMode === CheckMode.Inferential) {
+                                inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
+                            }
+                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
+                                contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
+                            assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
                         if (mightFixTypeParameters || !node.type && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
