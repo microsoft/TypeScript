@@ -1,0 +1,102 @@
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(1,15): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ readonly a: void; }' has no compatible call signatures.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(2,10): error TS1005: '(' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(2,11): error TS1136: Property assignment expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(2,14): error TS1005: ',' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(3,16): error TS1005: ':' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(3,17): error TS1005: ',' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(4,5): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(5,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(11,10): error TS1005: '(' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(11,12): error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(11,24): error TS1005: '=>' expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(12,1): error TS1128: Declaration or statement expected.
+tests/cases/conformance/types/namedTypes/optionalClassGetters.ts(34,14): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/types/namedTypes/optionalClassGetters.ts (13 errors) ====
+    const test1 = {
+                  ~
+        get a?() { // Object literal getters may not be marked optional
+    ~~~~~~~~~~~~
+!!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{ readonly a: void; }' has no compatible call signatures.
+             ~
+!!! error TS1005: '(' expected.
+              ~
+!!! error TS1136: Property assignment expected.
+                 ~
+!!! error TS1005: ',' expected.
+            return 2;
+                   ~
+!!! error TS1005: ':' expected.
+                    ~
+!!! error TS1005: ',' expected.
+        }
+        ~
+!!! error TS1128: Declaration or statement expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class Foo {
+        get a? () {
+            return 1;
+        }
+        set a? (v: number) { } // Setters may not be marked optional
+             ~
+!!! error TS1005: '(' expected.
+               ~
+!!! error TS1068: Unexpected token. A constructor, method, accessor, or property was expected.
+                           ~
+!!! error TS1005: '=>' expected.
+    }
+    ~
+!!! error TS1128: Declaration or statement expected.
+    
+    class Bar {
+        get a() {
+            return 1;
+        }
+        get b?(): string;  // Body of optional getter can be omitted
+        get c?() {
+            return 'foo';
+        }
+        get d?() {
+            return 'bar';
+        }
+    }
+    
+    function test2(x: Bar) {
+        x.a;
+        x.b;
+        x.c;
+        x.d;
+        let a1 = x.a;
+        let b1 = x.b;
+        let c1 = x.c.toString();
+                 ~~~
+!!! error TS2532: Object is possibly 'undefined'.
+        let d1 = x.d && x.d.toString();
+    }
+    
+    class Base {
+        get f?(): number;
+    }
+    
+    class Derived extends Base {
+        get f(): number { return 1; }
+    }
+    
+    class Person {
+        firstName: string;
+        lastName: string;
+    
+        get fullName?() {
+            return this.firstName + ' ' + this.lastName;
+        }
+    }
+    
+    const person: Person = {
+        firstName: 'foo',
+        lastName: 'bar'
+    }
+    
