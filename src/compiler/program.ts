@@ -1567,8 +1567,6 @@ namespace ts {
         }
 
         function createRedirectSourceFile(redirectTo: SourceFile, underlying: SourceFile, fileName: string, path: Path): SourceFile {
-            isSourceFileTargetOfRedirect.set(redirectTo.path, true);
-
             const redirect: SourceFile = Object.create(redirectTo);
             redirect.fileName = fileName;
             redirect.path = path;
@@ -1637,6 +1635,7 @@ namespace ts {
                     // Some other SourceFile already exists with this package name and version.
                     // Instead of creating a duplicate, just redirect to the existing one.
                     const dupFile = createRedirectSourceFile(fileFromPackageId, file, fileName, path);
+                    isSourceFileTargetOfRedirect.set(fileFromPackageId.path, true);
                     filesByName.set(path, dupFile);
                     sourceFileToPackageId.set(path, packageId);
                     files.push(dupFile);
