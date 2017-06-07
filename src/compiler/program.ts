@@ -473,11 +473,12 @@ namespace ts {
 
         // Map from a stringified PackageId to the source file with that id.
         // Only one source file may have a given packageId. Others become redirects (see createRedirectSourceFile).
+        // `packageIdToSourceFile` is only used while building the program, while `sourceFileToPackageId` and `isSourceFileTargetOfRedirect` are kept around.
         const packageIdToSourceFile = createMap<SourceFile>();
         // Maps from a SourceFile's `.path` to the packageId it was imported with.
-        const sourceFileToPackageId = createMap<PackageId>();
+        let sourceFileToPackageId = createMap<PackageId>();
         // See `sourceFileIsRedirectedTo`.
-        const sourceFileIsRedirectedToSet = createMap<true>();
+        let isSourceFileTargetOfRedirect = createMap<true>();
 
         const filesByName = createFileMap<SourceFile>();
         // stores 'filename -> file association' ignoring case
@@ -552,8 +553,8 @@ namespace ts {
             isSourceFileFromExternalLibrary,
             dropDiagnosticsProducingTypeChecker,
             getSourceFileFromReference,
-            getPackageIdOfSourceFile: ({ path }) => sourceFileToPackageId.get(path),
-            sourceFileIsRedirectedTo: ({ path }) => !!sourceFileIsRedirectedToSet.get(path),
+            sourceFileToPackageId,
+            isSourceFileTargetOfRedirect,
         };
 
         verifyCompilerOptions();
@@ -780,9 +781,9 @@ namespace ts {
                 const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
+                Debug.assert(!newSourceFile.redirect, "Host should not return a redirect source file from `getSourceFile`");
 
-                const packageId = oldProgram.getPackageIdOfSourceFile(oldSourceFile);
-                if (packageId) sourceFileToPackageId.set(newSourceFile.path, packageId);
+                const packageId = oldProgram.sourceFileToPackageId.get(oldSourceFile.path);
 
                 if (oldSourceFile.redirect) {
                     // We got `newSourceFile` by path, so it is actually for the underlying file.
@@ -798,13 +799,12 @@ namespace ts {
                         continue;
                     }
                 }
-                else if (oldProgram.sourceFileIsRedirectedTo(oldSourceFile)) {
+                else if (oldProgram.isSourceFileTargetOfRedirect.has(oldSourceFile.path)) {
                     // This is similar to the above case. If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
                     else {
-                        sourceFileIsRedirectedToSet.set(oldSourceFile.path, true);
                         filePaths.push(oldSourceFile.path);
                         newSourceFiles.push(oldSourceFile);
                         continue;
@@ -824,7 +824,7 @@ namespace ts {
                         // In that case we must rebuild the program.
                         const hasDuplicate = oldSourceFiles.some(o => {
                             if (o !== oldSourceFile) return false;
-                            const id = oldProgram.getPackageIdOfSourceFile(o);
+                            const id = oldProgram.sourceFileToPackageId.get(o.path);
                             return id && id.name === packageId.name;
                         });
                         if (hasDuplicate) {
@@ -926,6 +926,9 @@ namespace ts {
                 fileProcessingDiagnostics.reattachFileDiagnostics(modifiedFile.newFile);
             }
             resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
+
+            sourceFileToPackageId = oldProgram.sourceFileToPackageId;
+            isSourceFileTargetOfRedirect = oldProgram.isSourceFileTargetOfRedirect;
 
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
@@ -1575,7 +1578,7 @@ namespace ts {
         }
 
         function createRedirectSourceFile(redirectTo: SourceFile, underlying: SourceFile, fileName: string, path: Path): SourceFile {
-            sourceFileIsRedirectedToSet.set(redirectTo.path, true);
+            isSourceFileTargetOfRedirect.set(redirectTo.path, true);
 
             const redirect: SourceFile = Object.create(redirectTo);
             redirect.fileName = fileName;
