@@ -132,6 +132,24 @@ namespace ts.JsDoc {
         }));
     }
 
+    export function getJSDocParameterNameCompletions(tag: JSDocParameterTag): CompletionEntry[] {
+        const nameThusFar = tag.name.text;
+        const jsdoc = tag.parent;
+        const fn = jsdoc.parent;
+        if (!ts.isFunctionLike(fn)) return [];
+
+        return mapDefined(fn.parameters, param => {
+            if (!isIdentifier(param.name)) return undefined;
+
+            const name = param.name.text;
+            if (jsdoc.tags.some(t => t !== tag && isJSDocParameterTag(t) && t.name.text === name)
+                || nameThusFar !== undefined && !startsWith(name, nameThusFar))
+                return undefined;
+
+            return { name, kind: ScriptElementKind.parameterElement, kindModifiers: "", sortText: "0" };
+        });
+    }
+
     /**
      * Checks if position points to a valid position to add JSDoc comments, and if so,
      * returns the appropriate template. Otherwise returns an empty string.
