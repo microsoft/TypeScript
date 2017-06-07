@@ -788,26 +788,15 @@ namespace ts {
                 if (oldSourceFile.redirect) {
                     // We got `newSourceFile` by path, so it is actually for the underlying file.
                     // This lets us know if the underlying file has changed. If it has we should break the redirect.
-                    const { underlying } = oldSourceFile.redirect;
-                    if (newSourceFile !== underlying) {
+                    if (newSourceFile !== oldSourceFile.redirect.underlying) {
                         // Underlying file has changed. Might not redirect anymore. Must rebuild program.
                         return oldProgram.structureIsReused = StructureIsReused.Not;
-                    }
-                    else {
-                        filePaths.push(oldSourceFile.path);
-                        newSourceFiles.push(oldSourceFile);
-                        continue;
                     }
                 }
                 else if (oldProgram.isSourceFileTargetOfRedirect.has(oldSourceFile.path)) {
                     // This is similar to the above case. If a redirected-to source file changes, the redirect may be broken.
                     if (newSourceFile !== oldSourceFile) {
                         return oldProgram.structureIsReused = StructureIsReused.Not;
-                    }
-                    else {
-                        filePaths.push(oldSourceFile.path);
-                        newSourceFiles.push(oldSourceFile);
-                        continue;
                     }
                 }
 
