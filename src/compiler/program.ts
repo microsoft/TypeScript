@@ -777,15 +777,14 @@ namespace ts {
             oldProgram.structureIsReused = StructureIsReused.Completely;
 
             const oldSourceFiles = oldProgram.getSourceFiles();
-            const seenPackageNames = createMap<true>();
+            const enum SeenPackageName { Exists, Modified }
+            const seenPackageNames = createMap<SeenPackageName>();
 
             for (const oldSourceFile of oldSourceFiles) {
                 const newSourceFile = host.getSourceFileByPath
                     ? host.getSourceFileByPath(oldSourceFile.fileName, oldSourceFile.path, options.target)
                     : host.getSourceFile(oldSourceFile.fileName, options.target);
-                Debug.assert(!newSourceFile.redirect, "Host should not return a redirect source file from `getSourceFile`");
-
-                const packageId = oldProgram.sourceFileToPackageId.get(oldSourceFile.path);
+                Debug.assert(!(newSourceFile && newSourceFile.redirect), "Host should not return a redirect source file from `getSourceFile`");
 
                 if (oldSourceFile.redirect) {
                     // We got `newSourceFile` by path, so it is actually for the underlying file.
@@ -809,16 +808,19 @@ namespace ts {
                 newSourceFile.path = oldSourceFile.path;
                 filePaths.push(newSourceFile.path);
 
-                if (oldSourceFile !== newSourceFile) {
-                    if (packageId) {
-                        if (seenPackageNames.has(packageId.name)) {
-                            // There exist 2 different source files with the same package name.
-                            // One of them changed. These might now become redirects. So we must rebuild the program.
-                            return oldProgram.structureIsReused = StructureIsReused.Not;
-                        }
-                        seenPackageNames.set(packageId.name, true);
+                const packageId = oldProgram.sourceFileToPackageId.get(oldSourceFile.path);
+                if (packageId) {
+                    // If there are 2 different source files for the same package name and at least one of them changes,
+                    // they might become redirects. So we must rebuild the program.
+                    const prevKind = seenPackageNames.get(packageId.name);
+                    const newKind = oldSourceFile === newSourceFile ? SeenPackageName.Exists : SeenPackageName.Modified;
+                    if (prevKind !== undefined && newKind === SeenPackageName.Modified || prevKind === SeenPackageName.Modified) {
+                        return oldProgram.structureIsReused = StructureIsReused.Not;
                     }
+                    seenPackageNames.set(packageId.name, newKind);
+                }
 
+                if (oldSourceFile !== newSourceFile) {
                     // The `newSourceFile` object was created for the new program.
 
                     if (oldSourceFile.hasNoDefaultLib !== newSourceFile.hasNoDefaultLib) {
