@@ -461,6 +461,10 @@ namespace ts.formatting {
                 else {
                     indentation = parentDynamicIndentation.getIndentation() + parentDynamicIndentation.getDelta(node);
                 }
+                if (node.kind === SyntaxKind.OpenParenToken) {
+                    // if an open paren is on a different line from the call expression, indent the arguments one level deeper
+                    delta = options.indentSize;
+                }
             }
 
             return {
