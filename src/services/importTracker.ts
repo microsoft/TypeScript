@@ -436,8 +436,8 @@ namespace ts.FindAllReferences {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
-                    return symbol.declarations.some(d => d === parent) && parent.parent.kind === ts.SyntaxKind.BinaryExpression
-                        ? getSpecialPropertyExport(parent.parent as ts.BinaryExpression, /*useLhsSymbol*/ false)
+                    return symbol.declarations.some(d => d === parent) && isBinaryExpression(parent.parent)
+                        ? getSpecialPropertyExport(parent.parent, /*useLhsSymbol*/ false)
                         : undefined;
                 }
                 else {
@@ -449,31 +449,41 @@ namespace ts.FindAllReferences {
             else {
                 const exportNode = getExportNode(parent);
                 if (exportNode && hasModifier(exportNode, ModifierFlags.Export)) {
-                    if (exportNode.kind === SyntaxKind.ImportEqualsDeclaration && (exportNode as ImportEqualsDeclaration).moduleReference === node) {
+                    if (isImportEqualsDeclaration(exportNode) && exportNode.moduleReference === node) {
                         // We're at `Y` in `export import X = Y`. This is not the exported symbol, the left-hand-side is. So treat this as an import statement.
                         if (comingFromExport) {
                             return undefined;
                         }
 
-                        const lhsSymbol = checker.getSymbolAtLocation((exportNode as ImportEqualsDeclaration).name);
+                        const lhsSymbol = checker.getSymbolAtLocation(exportNode.name);
                         return { kind: ImportExport.Import, symbol: lhsSymbol, isNamedImport: false };
                     }
                     else {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
                     }
                 }
-                else if (parent.kind === SyntaxKind.ExportAssignment) {
-                    // Get the symbol for the `export =` node; its parent is the module it's the export of.
-                    const exportingModuleSymbol = parent.symbol.parent;
-                    Debug.assert(!!exportingModuleSymbol);
-                    return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind: ExportKind.ExportEquals } };
+                // If we are in `export = a;`, `parent` is the export assignment.
+                else if (isExportAssignment(parent)) {
+                    return getExportAssignmentExport(parent);
                 }
-                else if (parent.kind === ts.SyntaxKind.BinaryExpression) {
-                    return getSpecialPropertyExport(parent as ts.BinaryExpression, /*useLhsSymbol*/ true);
+                // If we are in `export = class A {};` at `A`, `parent.parent` is the export assignment.
+                else if (isExportAssignment(parent.parent)) {
+                    return getExportAssignmentExport(parent.parent);
                 }
-                else if (parent.parent.kind === SyntaxKind.BinaryExpression) {
-                    return getSpecialPropertyExport(parent.parent as ts.BinaryExpression, /*useLhsSymbol*/ true);
+                // Similar for `module.exports =` and `exports.A =`.
+                else if (isBinaryExpression(parent)) {
+                    return getSpecialPropertyExport(parent, /*useLhsSymbol*/ true);
                 }
+                else if (isBinaryExpression(parent.parent)) {
+                    return getSpecialPropertyExport(parent.parent, /*useLhsSymbol*/ true);
+                }
+            }
+
+            function getExportAssignmentExport(ex: ExportAssignment): ExportedSymbol {
+                // Get the symbol for the `export =` node; its parent is the module it's the export of.
+                const exportingModuleSymbol = ex.symbol.parent;
+                Debug.assert(!!exportingModuleSymbol);
+                return { kind: ImportExport.Export, symbol, exportInfo: { exportingModuleSymbol, exportKind: ExportKind.ExportEquals } };
             }
 
             function getSpecialPropertyExport(node: ts.BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
@@ -496,21 +506,21 @@ namespace ts.FindAllReferences {
 
         function getImport(): ImportedSymbol | undefined {
             const isImport = isNodeImport(node);
-            if (!isImport) return;
+            if (!isImport) return undefined;
 
             // A symbol being imported is always an alias. So get what that aliases to find the local symbol.
             let importedSymbol = checker.getImmediateAliasedSymbol(symbol);
-            if (importedSymbol) {
-                // Search on the local symbol in the exporting module, not the exported symbol.
-                importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
-                // Similarly, skip past the symbol for 'export ='
-                if (importedSymbol.name === "export=") {
-                    importedSymbol = checker.getImmediateAliasedSymbol(importedSymbol);
-                }
+            if (!importedSymbol) return undefined;
 
-                if (symbolName(importedSymbol) === symbol.name) { // If this is a rename import, do not continue searching.
-                    return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
-                }
+            // Search on the local symbol in the exporting module, not the exported symbol.
+            importedSymbol = skipExportSpecifierSymbol(importedSymbol, checker);
+            // Similarly, skip past the symbol for 'export ='
+            if (importedSymbol.name === "export=") {
+                importedSymbol = getExportEqualsLocalSymbol(importedSymbol, checker);
+            }
+
+            if (symbolName(importedSymbol) === symbol.name) { // If this is a rename import, do not continue searching.
+                return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
             }
         }
 
@@ -525,6 +535,22 @@ namespace ts.FindAllReferences {
         }
     }
 
+    function getExportEqualsLocalSymbol(importedSymbol: Symbol, checker: TypeChecker): Symbol {
+        if (importedSymbol.flags & SymbolFlags.Alias) {
+            return checker.getImmediateAliasedSymbol(importedSymbol);
+        }
+
+        const decl = importedSymbol.valueDeclaration;
+        if (isExportAssignment(decl)) { // `export = class {}`
+            return decl.expression.symbol;
+        }
+        else if (isBinaryExpression(decl)) { // `module.exports = class {}`
+            return decl.right.symbol;
+        }
+        Debug.fail();
+    }
+
+    // If a reference is a class expression, the exported node would be its parent.
     // If a reference is a variable declaration, the exported node would be the variable statement.
     function getExportNode(parent: Node): Node | undefined {
         if (parent.kind === SyntaxKind.VariableDeclaration) {
