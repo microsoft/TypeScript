@@ -74,6 +74,10 @@ function measure(marker) {
     console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
 }
 
+function removeConstModifierFromEnumDeclarations(text) {
+     return text.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+}
+
 var compilerSources = filesFromConfig("./src/compiler/tsconfig.json");
 var servicesSources = filesFromConfig("./src/services/tsconfig.json");
 var cancellationTokenSources = filesFromConfig(path.join(serverDirectory, "cancellationToken/tsconfig.json"));
@@ -551,7 +555,7 @@ compileFile(servicesFile, servicesSources, [builtLocalDirectory, copyright].conc
         // Stanalone/web definition file using global 'ts' namespace
         jake.cpR(standaloneDefinitionsFile, nodeDefinitionsFile, { silent: true });
         var definitionFileContents = fs.readFileSync(nodeDefinitionsFile).toString();
-        definitionFileContents = definitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+        definitionFileContents = removeConstModifierFromEnumDeclarations(definitionFileContents)
         fs.writeFileSync(standaloneDefinitionsFile, definitionFileContents);
 
         // Official node package definition file, pointed to by 'typings' in package.json
@@ -611,7 +615,7 @@ compileFile(
             fs.readFileSync(tsserverLibraryDefinitionFile).toString() +
             "\r\nexport = ts;" +
             "\r\nexport as namespace ts;";
-        tsserverLibraryDefinitionFileContents = tsserverLibraryDefinitionFileContents.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, '$1$2enum $3 {$4');
+        tsserverLibraryDefinitionFileContents = removeConstModifierFromEnumDeclarations(tsserverLibraryDefinitionFileContents);
 
         fs.writeFileSync(tsserverLibraryDefinitionFile, tsserverLibraryDefinitionFileContents);
     });
