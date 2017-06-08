@@ -13,7 +13,8 @@ namespace ts.projectSystem {
             express: "express",
             jquery: "jquery",
             lodash: "lodash",
-            moment: "moment"
+            moment: "moment",
+            chroma: "chroma-js"
         })
     };
 
@@ -61,7 +62,6 @@ namespace ts.projectSystem {
             super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
         }
 
-        safeFileList = safeList.path;
         protected postExecActions: PostExecAction[] = [];
 
         executePendingCommands() {
@@ -337,6 +337,7 @@ namespace ts.projectSystem {
             this.map[timeoutId] = cb.bind(/*this*/ undefined, ...args);
             return timeoutId;
         }
+
         unregister(id: any) {
             if (typeof id === "number") {
                 delete this.map[id];
@@ -352,10 +353,13 @@ namespace ts.projectSystem {
         }
 
         invoke() {
+            // Note: invoking a callback may result in new callbacks been queued,
+            // so do not clear the entire callback list regardless. Only remove the
+            // ones we have invoked.
             for (const key in this.map) {
                 this.map[key]();
+                delete this.map[key];
             }
-            this.map = [];
         }
     }
 
@@ -2230,7 +2234,7 @@ namespace ts.projectSystem {
 
             let lastEvent: server.ProjectLanguageServiceStateEvent;
             const session = createSession(host, /*typingsInstaller*/ undefined, e => {
-                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent) {
+                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ContextEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
                     return;
                 }
                 assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
@@ -2280,7 +2284,7 @@ namespace ts.projectSystem {
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
             let lastEvent: server.ProjectLanguageServiceStateEvent;
             const session = createSession(host, /*typingsInstaller*/ undefined, e => {
-                if (e.eventName === server.ConfigFileDiagEvent) {
+                if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectInfoTelemetryEvent) {
                     return;
                 }
                 assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
@@ -3204,6 +3208,122 @@ namespace ts.projectSystem {
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(dTsFileGetErrRequest).response;
             assert.isTrue(errorResult.length === 0);
         });
+
+        it("should not report bind errors for declaration files with skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: "let x = 1;"
+            };
+            const dTsFile1 = {
+                path: "/a/dTsFile1.d.ts",
+                content: `
+                declare var x: number;`
+            };
+            const dTsFile2 = {
+                path: "/a/dTsFile2.d.ts",
+                content: `
+                declare var x: string;`
+            };
+            const host = createServerHost([jsconfigFile, jsFile, dTsFile1, dTsFile2]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const dTsFile1GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile1.path }
+            );
+            const error1Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile1GetErrRequest).response;
+            assert.isTrue(error1Result.length === 0);
+
+             const dTsFile2GetErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: dTsFile2.path }
+            );
+            const error2Result = <protocol.Diagnostic[]>session.executeCommand(dTsFile2GetErrRequest).response;
+            assert.isTrue(error2Result.length === 0);
+        });
+
+        it("should report semanitc errors for loose JS files with '// @ts-check' and skipLibCheck=true", () => {
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `
+                // @ts-check
+                let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
+
+        it("should report semanitc errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: "{}"
+            };
+
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `
+                // @ts-check
+                let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsconfigFile, jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
+
+        it("should report semanitc errors for configured js project with checkJs=true and skipLibCheck=true", () => {
+            const jsconfigFile = {
+                path: "/a/jsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        checkJs: true,
+                        skipLibCheck: true
+                    },
+                })
+            };
+            const jsFile = {
+                path: "/a/jsFile.js",
+                content: `let x = 1;
+                x === "string";`
+            };
+
+            const host = createServerHost([jsconfigFile, jsFile]);
+            const session = createSession(host);
+            openFilesForSession([jsFile], session);
+
+            const getErrRequest = makeSessionRequest<protocol.SemanticDiagnosticsSyncRequestArgs>(
+                CommandNames.SemanticDiagnosticsSync,
+                { file: jsFile.path }
+            );
+            const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.isTrue(errorResult.length === 1);
+            assert.equal(errorResult[0].code, Diagnostics.Operator_0_cannot_be_applied_to_types_1_and_2.code);
+        });
     });
 
     describe("non-existing directories listed in config file input array", () => {
@@ -3228,7 +3348,7 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 1);
 
             const configuredProject = projectService.configuredProjects[0];
-            assert.isTrue(configuredProject.getFileNames().length == 0);
+            assert.isTrue(configuredProject.getFileNames().length === 0);
 
             const inferredProject = projectService.inferredProjects[0];
             assert.isTrue(inferredProject.containsFile(<server.NormalizedPath>file1.path));
@@ -3493,6 +3613,30 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("searching for config file", () => {
+        it("should stop at projectRootPath if given", () => {
+            const f1 = {
+                path: "/a/file1.ts",
+                content: ""
+            };
+            const configFile = {
+                path: "/tsconfig.json",
+                content: "{}"
+            };
+            const host = createServerHost([f1, configFile]);
+            const service = createProjectService(host);
+            service.openClientFile(f1.path, /*fileContent*/ undefined, /*scriptKind*/ undefined, "/a");
+
+            checkNumberOfConfiguredProjects(service, 0);
+            checkNumberOfInferredProjects(service, 1);
+
+            service.closeClientFile(f1.path);
+            service.openClientFile(f1.path);
+            checkNumberOfConfiguredProjects(service, 1);
+            checkNumberOfInferredProjects(service, 0);
+        });
+    });
+
     describe("cancellationToken", () => {
         it("is attached to request", () => {
             const f1 = {
@@ -3603,7 +3747,7 @@ namespace ts.projectSystem {
 
                 // run first step
                 host.runQueuedTimeoutCallbacks();
-                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
@@ -3625,11 +3769,12 @@ namespace ts.projectSystem {
 
                 // run first step
                 host.runQueuedTimeoutCallbacks();
-                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();
 
+                // the semanticDiag message
                 host.runQueuedImmediateCallbacks();
                 assert.equal(host.getOutput().length, 2, "expect 2 messages");
                 const e2 = <protocol.Event>getMessage(0);
@@ -3647,7 +3792,7 @@ namespace ts.projectSystem {
                 assert.equal(host.getOutput().length, 0, "expect 0 messages");
                 // run first step
                 host.runQueuedTimeoutCallbacks();
-                assert.equal(host.getOutput().length, 1, "expect 1 messages");
+                assert.equal(host.getOutput().length, 1, "expect 1 message");
                 const e1 = <protocol.Event>getMessage(0);
                 assert.equal(e1.event, "syntaxDiag");
                 host.clearOutput();

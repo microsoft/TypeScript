@@ -107,13 +107,25 @@ namespace ts {
 
     // Identifiers
 
-    export function createIdentifier(text: string): Identifier {
+    export function createIdentifier(text: string): Identifier;
+    /* @internal */
+    export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
+    export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
         node.text = escapeIdentifier(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
+        if (typeArguments) {
+            node.typeArguments = createNodeArray(typeArguments);
+        }
         return node;
+    }
+
+    export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
+        return node.typeArguments !== typeArguments
+        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -214,236 +226,14 @@ namespace ts {
             : node;
     }
 
-    // Type Elements
+    // Signature elements
 
-    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        const signatureDeclaration = createSynthesizedNode(kind) as SignatureDeclaration;
-        signatureDeclaration.typeParameters = asNodeArray(typeParameters);
-        signatureDeclaration.parameters = asNodeArray(parameters);
-        signatureDeclaration.type = type;
-        return signatureDeclaration;
-    }
-
-    function updateSignatureDeclaration(node: SignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return node.typeParameters !== typeParameters
-            || node.parameters !== parameters
-            || node.type !== type
-            ? updateNode(createSignatureDeclaration(node.kind, typeParameters, parameters, type), node)
-            : node;
-    }
-
-    export function createFunctionTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        return createSignatureDeclaration(SyntaxKind.FunctionType, typeParameters, parameters, type) as FunctionTypeNode;
-    }
-
-    export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <FunctionTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createConstructorTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        return createSignatureDeclaration(SyntaxKind.ConstructorType, typeParameters, parameters, type) as ConstructorTypeNode;
-    }
-
-    export function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <ConstructorTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createCallSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        return createSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type) as CallSignatureDeclaration;
-    }
-
-    export function updateCallSignatureDeclaration(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <CallSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createConstructSignatureDeclaration(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
-        return createSignatureDeclaration(SyntaxKind.ConstructSignature, typeParameters, parameters, type) as ConstructSignatureDeclaration;
-    }
-
-    export function updateConstructSignatureDeclaration(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
-        return <ConstructSignatureDeclaration>updateSignatureDeclaration(node, typeParameters, parameters, type);
-    }
-
-    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined) {
-        const methodSignature = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
-        methodSignature.name = asName(name);
-        methodSignature.questionToken = questionToken;
-        return methodSignature;
-    }
-
-    export function updateMethodSignature(node: MethodSignature, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name: PropertyName, questionToken: QuestionToken | undefined) {
-        return node.typeParameters !== typeParameters
-            || node.parameters !== parameters
-            || node.type !== type
-            || node.name !== name
-            || node.questionToken !== questionToken
-            ? updateNode(createMethodSignature(typeParameters, parameters, type, name, questionToken), node)
-            : node;
-    }
-
-    // Types
-
-    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]) {
-        return <KeywordTypeNode>createSynthesizedNode(kind);
-    }
-
-    export function createThisTypeNode() {
-        return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
-    }
-
-    export function createLiteralTypeNode(literal: Expression) {
-        const literalTypeNode = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
-        literalTypeNode.literal = literal;
-        return literalTypeNode;
-    }
-
-    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
-        return node.literal !== literal
-            ? updateNode(createLiteralTypeNode(literal), node)
-            : node;
-    }
-
-    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
-        const typeReference = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
-        typeReference.typeName = asName(typeName);
-        typeReference.typeArguments = asNodeArray(typeArguments);
-        return typeReference;
-    }
-
-    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
-        return node.typeName !== typeName
-            || node.typeArguments !== typeArguments
-            ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
-            : node;
-    }
-
-    export function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
-        const typePredicateNode = createSynthesizedNode(SyntaxKind.TypePredicate) as TypePredicateNode;
-        typePredicateNode.parameterName = asName(parameterName);
-        typePredicateNode.type = type;
-        return typePredicateNode;
-    }
-
-    export function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
-        return node.parameterName !== parameterName
-            || node.type !== type
-            ? updateNode(createTypePredicateNode(parameterName, type), node)
-            : node;
-    }
-
-    export function createTypeQueryNode(exprName: EntityName) {
-        const typeQueryNode = createSynthesizedNode(SyntaxKind.TypeQuery) as TypeQueryNode;
-        typeQueryNode.exprName = exprName;
-        return typeQueryNode;
-    }
-
-    export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
-        return node.exprName !== exprName ? updateNode(createTypeQueryNode(exprName), node) : node;
-    }
-
-    export function createArrayTypeNode(elementType: TypeNode) {
-        const arrayTypeNode = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
-        arrayTypeNode.elementType = elementType;
-        return arrayTypeNode;
-    }
-
-    export function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
-        return node.elementType !== elementType
-            ? updateNode(createArrayTypeNode(elementType), node)
-            : node;
-    }
-
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType, types: TypeNode[]): UnionTypeNode;
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.IntersectionType, types: TypeNode[]): IntersectionTypeNode;
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]): UnionOrIntersectionTypeNode;
-    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
-        const unionTypeNode = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
-        unionTypeNode.types = createNodeArray(types);
-        return unionTypeNode;
-    }
-
-    export function updateUnionOrIntersectionTypeNode(node: UnionOrIntersectionTypeNode, types: NodeArray<TypeNode>) {
-        return node.types !== types
-            ? updateNode(createUnionOrIntersectionTypeNode(node.kind, types), node)
-            : node;
-    }
-
-    export function createTypeLiteralNode(members: TypeElement[]) {
-        const typeLiteralNode = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
-        typeLiteralNode.members = createNodeArray(members);
-        return typeLiteralNode;
-    }
-
-    export function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>) {
-        return node.members !== members
-            ? updateNode(createTypeLiteralNode(members), node)
-            : node;
-    }
-
-    export function createTupleTypeNode(elementTypes: TypeNode[]) {
-        const tupleTypeNode = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
-        tupleTypeNode.elementTypes = createNodeArray(elementTypes);
-        return tupleTypeNode;
-    }
-
-    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: TypeNode[]) {
-        return node.elementTypes !== elementTypes
-            ? updateNode(createTupleTypeNode(elementTypes), node)
-            : node;
-    }
-
-    export function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
-        const mappedTypeNode = createSynthesizedNode(SyntaxKind.MappedType) as MappedTypeNode;
-        mappedTypeNode.readonlyToken = readonlyToken;
-        mappedTypeNode.typeParameter = typeParameter;
-        mappedTypeNode.questionToken = questionToken;
-        mappedTypeNode.type = type;
-        return mappedTypeNode;
-    }
-
-    export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
-        return node.readonlyToken !== readonlyToken
-            || node.typeParameter !== typeParameter
-            || node.questionToken !== questionToken
-            || node.type !== type
-            ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
-            : node;
-    }
-
-    export function createTypeOperatorNode(type: TypeNode) {
-        const typeOperatorNode = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
-        typeOperatorNode.operator = SyntaxKind.KeyOfKeyword;
-        typeOperatorNode.type = type;
-        return typeOperatorNode;
-    }
-
-    export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
-        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
-    }
-
-    export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
-        const indexedAccessTypeNode = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
-        indexedAccessTypeNode.objectType = objectType;
-        indexedAccessTypeNode.indexType = indexType;
-        return indexedAccessTypeNode;
-    }
-
-    export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
-        return node.objectType !== objectType
-            || node.indexType !== indexType
-            ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
-            : node;
-    }
-
-    // Type Declarations
-
-    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
-        const typeParameter = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
-        typeParameter.name = asName(name);
-        typeParameter.constraint = constraint;
-        typeParameter.default = defaultType;
-
-        return typeParameter;
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
+        node.name = asName(name);
+        node.constraint = constraint;
+        node.default = defaultType;
+        return node;
     }
 
     export function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
@@ -453,46 +243,6 @@ namespace ts {
             ? updateNode(createTypeParameterDeclaration(name, constraint, defaultType), node)
             : node;
     }
-
-    // Signature elements
-
-    export function createPropertySignature(name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
-        const propertySignature = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
-        propertySignature.name = asName(name);
-        propertySignature.questionToken = questionToken;
-        propertySignature.type = type;
-        propertySignature.initializer = initializer;
-        return propertySignature;
-    }
-
-    export function updatePropertySignature(node: PropertySignature, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
-        return node.name !== name
-            || node.questionToken !== questionToken
-            || node.type !== type
-            || node.initializer !== initializer
-            ? updateNode(createPropertySignature(name, questionToken, type, initializer), node)
-            : node;
-    }
-
-    export function createIndexSignatureDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
-        const indexSignature = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
-        indexSignature.decorators = asNodeArray(decorators);
-        indexSignature.modifiers = asNodeArray(modifiers);
-        indexSignature.parameters = createNodeArray(parameters);
-        indexSignature.type = type;
-        return indexSignature;
-    }
-
-    export function updateIndexSignatureDeclaration(node: IndexSignatureDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode) {
-        return node.parameters !== parameters
-            || node.type !== type
-            || node.decorators !== decorators
-            || node.modifiers !== modifiers
-            ? updateNode(createIndexSignatureDeclaration(decorators, modifiers, parameters, type), node)
-            : node;
-    }
-
-    // Signature elements
 
     export function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression) {
         const node = <ParameterDeclaration>createSynthesizedNode(SyntaxKind.Parameter);
@@ -530,9 +280,30 @@ namespace ts {
             : node;
     }
 
-    // Type members
 
-    export function createProperty(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression) {
+    // Type Elements
+
+    export function createPropertySignature(modifiers: Modifier[] | undefined, name: PropertyName | string, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): PropertySignature {
+        const node = createSynthesizedNode(SyntaxKind.PropertySignature) as PropertySignature;
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.questionToken = questionToken;
+        node.type = type;
+        node.initializer = initializer;
+        return node;
+    }
+
+    export function updatePropertySignature(node: PropertySignature, modifiers: Modifier[] | undefined, name: PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
+        return node.modifiers !== modifiers
+            || node.name !== name
+            || node.questionToken !== questionToken
+            || node.type !== type
+            || node.initializer !== initializer
+            ? updateNode(createPropertySignature(modifiers, name, questionToken, type, initializer), node)
+            : node;
+    }
+
+    export function createProperty(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         const node = <PropertyDeclaration>createSynthesizedNode(SyntaxKind.PropertyDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -543,7 +314,7 @@ namespace ts {
         return node;
     }
 
-    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression) {
+    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
@@ -553,7 +324,24 @@ namespace ts {
             : node;
     }
 
-    export function createMethodDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
+    export function createMethodSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined) {
+        const node = createSignatureDeclaration(SyntaxKind.MethodSignature, typeParameters, parameters, type) as MethodSignature;
+        node.name = asName(name);
+        node.questionToken = questionToken;
+        return node;
+    }
+
+    export function updateMethodSignature(node: MethodSignature, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined, name: PropertyName, questionToken: QuestionToken | undefined) {
+        return node.typeParameters !== typeParameters
+            || node.parameters !== parameters
+            || node.type !== type
+            || node.name !== name
+            || node.questionToken !== questionToken
+            ? updateNode(createMethodSignature(typeParameters, parameters, type, name, questionToken), node)
+            : node;
+    }
+
+    export function createMethod(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         const node = <MethodDeclaration>createSynthesizedNode(SyntaxKind.MethodDeclaration);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
@@ -576,7 +364,7 @@ namespace ts {
             || node.parameters !== parameters
             || node.type !== type
             || node.body !== body
-            ? updateNode(createMethodDeclaration(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
+            ? updateNode(createMethod(decorators, modifiers, asteriskToken, name, questionToken, typeParameters, parameters, type, body), node)
             : node;
     }
 
@@ -644,6 +432,254 @@ namespace ts {
             : node;
     }
 
+    export function createCallSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.CallSignature, typeParameters, parameters, type) as CallSignatureDeclaration;
+    }
+
+    export function updateCallSignature(node: CallSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createConstructSignature(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.ConstructSignature, typeParameters, parameters, type) as ConstructSignatureDeclaration;
+    }
+
+    export function updateConstructSignature(node: ConstructSignatureDeclaration, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createIndexSignature(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode): IndexSignatureDeclaration {
+        const node = createSynthesizedNode(SyntaxKind.IndexSignature) as IndexSignatureDeclaration;
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.parameters = createNodeArray(parameters);
+        node.type = type;
+        return node;
+    }
+
+    export function updateIndexSignature(node: IndexSignatureDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, parameters: ParameterDeclaration[], type: TypeNode) {
+        return node.parameters !== parameters
+            || node.type !== type
+            || node.decorators !== decorators
+            || node.modifiers !== modifiers
+            ? updateNode(createIndexSignature(decorators, modifiers, parameters, type), node)
+            : node;
+    }
+
+    /* @internal */
+    export function createSignatureDeclaration(kind: SyntaxKind, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        const node = createSynthesizedNode(kind) as SignatureDeclaration;
+        node.typeParameters = asNodeArray(typeParameters);
+        node.parameters = asNodeArray(parameters);
+        node.type = type;
+        return node;
+    }
+
+    function updateSignatureDeclaration<T extends SignatureDeclaration>(node: T, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): T {
+        return node.typeParameters !== typeParameters
+            || node.parameters !== parameters
+            || node.type !== type
+            ? updateNode(<T>createSignatureDeclaration(node.kind, typeParameters, parameters, type), node)
+            : node;
+    }
+
+    // Types
+
+    export function createKeywordTypeNode(kind: KeywordTypeNode["kind"]) {
+        return <KeywordTypeNode>createSynthesizedNode(kind);
+    }
+
+    export function createTypePredicateNode(parameterName: Identifier | ThisTypeNode | string, type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.TypePredicate) as TypePredicateNode;
+        node.parameterName = asName(parameterName);
+        node.type = type;
+        return node;
+    }
+
+    export function updateTypePredicateNode(node: TypePredicateNode, parameterName: Identifier | ThisTypeNode, type: TypeNode) {
+        return node.parameterName !== parameterName
+            || node.type !== type
+            ? updateNode(createTypePredicateNode(parameterName, type), node)
+            : node;
+    }
+
+    export function createTypeReferenceNode(typeName: string | EntityName, typeArguments: TypeNode[] | undefined) {
+        const node = createSynthesizedNode(SyntaxKind.TypeReference) as TypeReferenceNode;
+        node.typeName = asName(typeName);
+        node.typeArguments = typeArguments && parenthesizeTypeParameters(typeArguments);
+        return node;
+    }
+
+    export function updateTypeReferenceNode(node: TypeReferenceNode, typeName: EntityName, typeArguments: NodeArray<TypeNode> | undefined) {
+        return node.typeName !== typeName
+            || node.typeArguments !== typeArguments
+            ? updateNode(createTypeReferenceNode(typeName, typeArguments), node)
+            : node;
+    }
+
+    export function createFunctionTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.FunctionType, typeParameters, parameters, type) as FunctionTypeNode;
+    }
+
+    export function updateFunctionTypeNode(node: FunctionTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <FunctionTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createConstructorTypeNode(typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined) {
+        return createSignatureDeclaration(SyntaxKind.ConstructorType, typeParameters, parameters, type) as ConstructorTypeNode;
+    }
+
+    export function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined) {
+        return <ConstructorTypeNode>updateSignatureDeclaration(node, typeParameters, parameters, type);
+    }
+
+    export function createTypeQueryNode(exprName: EntityName) {
+        const node = createSynthesizedNode(SyntaxKind.TypeQuery) as TypeQueryNode;
+        node.exprName = exprName;
+        return node;
+    }
+
+    export function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName) {
+        return node.exprName !== exprName
+            ? updateNode(createTypeQueryNode(exprName), node)
+            : node;
+    }
+
+    export function createTypeLiteralNode(members: TypeElement[]) {
+        const node = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
+        node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>) {
+        return node.members !== members
+            ? updateNode(createTypeLiteralNode(members), node)
+            : node;
+    }
+
+    export function createArrayTypeNode(elementType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.ArrayType) as ArrayTypeNode;
+        node.elementType = parenthesizeElementTypeMember(elementType);
+        return node;
+    }
+
+    export function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode {
+        return node.elementType !== elementType
+            ? updateNode(createArrayTypeNode(elementType), node)
+            : node;
+    }
+
+    export function createTupleTypeNode(elementTypes: TypeNode[]) {
+        const node = createSynthesizedNode(SyntaxKind.TupleType) as TupleTypeNode;
+        node.elementTypes = createNodeArray(elementTypes);
+        return node;
+    }
+
+    export function updateTypleTypeNode(node: TupleTypeNode, elementTypes: TypeNode[]) {
+        return node.elementTypes !== elementTypes
+            ? updateNode(createTupleTypeNode(elementTypes), node)
+            : node;
+    }
+
+    export function createUnionTypeNode(types: TypeNode[]): UnionTypeNode {
+        return <UnionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.UnionType, types);
+    }
+
+    export function updateUnionTypeNode(node: UnionTypeNode, types: NodeArray<TypeNode>) {
+        return updateUnionOrIntersectionTypeNode(node, types);
+    }
+
+    export function createIntersectionTypeNode(types: TypeNode[]): IntersectionTypeNode {
+        return <IntersectionTypeNode>createUnionOrIntersectionTypeNode(SyntaxKind.IntersectionType, types);
+    }
+
+    export function updateIntersectionTypeNode(node: IntersectionTypeNode, types: NodeArray<TypeNode>) {
+        return updateUnionOrIntersectionTypeNode(node, types);
+    }
+
+    export function createUnionOrIntersectionTypeNode(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, types: TypeNode[]) {
+        const node = createSynthesizedNode(kind) as UnionTypeNode | IntersectionTypeNode;
+        node.types = parenthesizeElementTypeMembers(types);
+        return node;
+    }
+
+    function updateUnionOrIntersectionTypeNode<T extends UnionOrIntersectionTypeNode>(node: T, types: NodeArray<TypeNode>): T {
+        return node.types !== types
+            ? updateNode(<T>createUnionOrIntersectionTypeNode(node.kind, types), node)
+            : node;
+    }
+
+    export function createParenthesizedType(type: TypeNode) {
+        const node = <ParenthesizedTypeNode>createSynthesizedNode(SyntaxKind.ParenthesizedType);
+        node.type = type;
+        return node;
+    }
+
+    export function updateParenthesizedType(node: ParenthesizedTypeNode, type: TypeNode) {
+        return node.type !== type
+            ? updateNode(createParenthesizedType(type), node)
+            : node;
+    }
+
+    export function createThisTypeNode() {
+        return <ThisTypeNode>createSynthesizedNode(SyntaxKind.ThisType);
+    }
+
+    export function createTypeOperatorNode(type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
+        node.operator = SyntaxKind.KeyOfKeyword;
+        node.type = parenthesizeElementTypeMember(type);
+        return node;
+    }
+
+    export function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode) {
+        return node.type !== type ? updateNode(createTypeOperatorNode(type), node) : node;
+    }
+
+    export function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.IndexedAccessType) as IndexedAccessTypeNode;
+        node.objectType = parenthesizeElementTypeMember(objectType);
+        node.indexType = indexType;
+        return node;
+    }
+
+    export function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode) {
+        return node.objectType !== objectType
+            || node.indexType !== indexType
+            ? updateNode(createIndexedAccessTypeNode(objectType, indexType), node)
+            : node;
+    }
+
+    export function createMappedTypeNode(readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        const node = createSynthesizedNode(SyntaxKind.MappedType) as MappedTypeNode;
+        node.readonlyToken = readonlyToken;
+        node.typeParameter = typeParameter;
+        node.questionToken = questionToken;
+        node.type = type;
+        return node;
+    }
+
+    export function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | undefined, type: TypeNode | undefined): MappedTypeNode {
+        return node.readonlyToken !== readonlyToken
+            || node.typeParameter !== typeParameter
+            || node.questionToken !== questionToken
+            || node.type !== type
+            ? updateNode(createMappedTypeNode(readonlyToken, typeParameter, questionToken, type), node)
+            : node;
+    }
+
+    export function createLiteralTypeNode(literal: Expression) {
+        const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
+        node.literal = literal;
+        return node;
+    }
+
+    export function updateLiteralTypeNode(node: LiteralTypeNode, literal: Expression) {
+        return node.literal !== literal
+            ? updateNode(createLiteralTypeNode(literal), node)
+            : node;
+    }
+
     // Binding Patterns
 
     export function createObjectBindingPattern(elements: BindingElement[]) {
@@ -693,10 +729,7 @@ namespace ts {
     export function createArrayLiteral(elements?: Expression[], multiLine?: boolean) {
         const node = <ArrayLiteralExpression>createSynthesizedNode(SyntaxKind.ArrayLiteralExpression);
         node.elements = parenthesizeListElements(createNodeArray(elements));
-        if (multiLine) {
-            node.multiLine = true;
-        }
-
+        if (multiLine) node.multiLine = true;
         return node;
     }
 
@@ -709,9 +742,7 @@ namespace ts {
     export function createObjectLiteral(properties?: ObjectLiteralElementLike[], multiLine?: boolean) {
         const node = <ObjectLiteralExpression>createSynthesizedNode(SyntaxKind.ObjectLiteralExpression);
         node.properties = createNodeArray(properties);
-        if (multiLine) {
-            node.multiLine = true;
-        }
+        if (multiLine) node.multiLine = true;
         return node;
     }
 
@@ -761,9 +792,9 @@ namespace ts {
     }
 
     export function updateCall(node: CallExpression, expression: Expression, typeArguments: TypeNode[] | undefined, argumentsArray: Expression[]) {
-        return expression !== node.expression
-            || typeArguments !== node.typeArguments
-            || argumentsArray !== node.arguments
+        return node.expression !== expression
+            || node.typeArguments !== typeArguments
+            || node.arguments !== argumentsArray
             ? updateNode(createCall(expression, typeArguments, argumentsArray), node)
             : node;
     }
@@ -953,10 +984,10 @@ namespace ts {
         return node;
     }
 
-    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression) {
+    export function updateBinary(node: BinaryExpression, left: Expression, right: Expression, operator?: BinaryOperator | BinaryOperatorToken) {
         return node.left !== left
             || node.right !== right
-            ? updateNode(createBinary(left, node.operatorToken, right), node)
+            ? updateNode(createBinary(left, operator || node.operatorToken, right), node)
             : node;
     }
 
@@ -1087,6 +1118,19 @@ namespace ts {
             : node;
     }
 
+    export function createMetaProperty(keywordToken: MetaProperty["keywordToken"], name: Identifier) {
+        const node = <MetaProperty>createSynthesizedNode(SyntaxKind.MetaProperty);
+        node.keywordToken = keywordToken;
+        node.name = name;
+        return node;
+    }
+
+    export function updateMetaProperty(node: MetaProperty, name: Identifier) {
+        return node.name !== name
+            ? updateNode(createMetaProperty(node.keywordToken, name), node)
+            : node;
+    }
+
     // Misc
 
     export function createTemplateSpan(expression: Expression, literal: TemplateMiddle | TemplateTail) {
@@ -1103,6 +1147,10 @@ namespace ts {
             : node;
     }
 
+    export function createSemicolonClassElement() {
+        return <SemicolonClassElement>createSynthesizedNode(SyntaxKind.SemicolonClassElement);
+    }
+
     // Element
 
     export function createBlock(statements: Statement[], multiLine?: boolean): Block {
@@ -1113,7 +1161,7 @@ namespace ts {
     }
 
     export function updateBlock(node: Block, statements: Statement[]) {
-        return statements !== node.statements
+        return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
             : node;
     }
@@ -1130,35 +1178,6 @@ namespace ts {
         return node.modifiers !== modifiers
             || node.declarationList !== declarationList
             ? updateNode(createVariableStatement(modifiers, declarationList), node)
-            : node;
-    }
-
-    export function createVariableDeclarationList(declarations: VariableDeclaration[], flags?: NodeFlags) {
-        const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
-        node.flags |= flags;
-        node.declarations = createNodeArray(declarations);
-        return node;
-    }
-
-    export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]) {
-        return node.declarations !== declarations
-            ? updateNode(createVariableDeclarationList(declarations, node.flags), node)
-            : node;
-    }
-
-    export function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
-        const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
-        node.name = asName(name);
-        node.type = type;
-        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
-        return node;
-    }
-
-    export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
-        return node.name !== name
-            || node.type !== type
-            || node.initializer !== initializer
-            ? updateNode(createVariableDeclaration(name, type, initializer), node)
             : node;
     }
 
@@ -1380,6 +1399,39 @@ namespace ts {
             : node;
     }
 
+    export function createDebuggerStatement() {
+        return <DebuggerStatement>createSynthesizedNode(SyntaxKind.DebuggerStatement);
+    }
+
+    export function createVariableDeclaration(name: string | BindingName, type?: TypeNode, initializer?: Expression) {
+        const node = <VariableDeclaration>createSynthesizedNode(SyntaxKind.VariableDeclaration);
+        node.name = asName(name);
+        node.type = type;
+        node.initializer = initializer !== undefined ? parenthesizeExpressionForList(initializer) : undefined;
+        return node;
+    }
+
+    export function updateVariableDeclaration(node: VariableDeclaration, name: BindingName, type: TypeNode | undefined, initializer: Expression | undefined) {
+        return node.name !== name
+            || node.type !== type
+            || node.initializer !== initializer
+            ? updateNode(createVariableDeclaration(name, type, initializer), node)
+            : node;
+    }
+
+    export function createVariableDeclarationList(declarations: VariableDeclaration[], flags?: NodeFlags) {
+        const node = <VariableDeclarationList>createSynthesizedNode(SyntaxKind.VariableDeclarationList);
+        node.flags |= flags & NodeFlags.BlockScoped;
+        node.declarations = createNodeArray(declarations);
+        return node;
+    }
+
+    export function updateVariableDeclarationList(node: VariableDeclarationList, declarations: VariableDeclaration[]) {
+        return node.declarations !== declarations
+            ? updateNode(createVariableDeclarationList(declarations, node.flags), node)
+            : node;
+    }
+
     export function createFunctionDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, asteriskToken: AsteriskToken | undefined, name: string | Identifier | undefined, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], type: TypeNode | undefined, body: Block | undefined) {
         const node = <FunctionDeclaration>createSynthesizedNode(SyntaxKind.FunctionDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1428,6 +1480,48 @@ namespace ts {
             : node;
     }
 
+    export function createInterfaceDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        const node = <InterfaceDeclaration>createSynthesizedNode(SyntaxKind.InterfaceDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.heritageClauses = asNodeArray(heritageClauses);
+        node.members = createNodeArray(members);
+        return node;
+    }
+
+    export function updateInterfaceDeclaration(node: InterfaceDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, heritageClauses: HeritageClause[] | undefined, members: TypeElement[]) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.heritageClauses !== heritageClauses
+            || node.members !== members
+            ? updateNode(createInterfaceDeclaration(decorators, modifiers, name, typeParameters, heritageClauses, members), node)
+            : node;
+    }
+
+    export function createTypeAliasDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        const node = <TypeAliasDeclaration>createSynthesizedNode(SyntaxKind.TypeAliasDeclaration);
+        node.decorators = asNodeArray(decorators);
+        node.modifiers = asNodeArray(modifiers);
+        node.name = asName(name);
+        node.typeParameters = asNodeArray(typeParameters);
+        node.type = type;
+        return node;
+    }
+
+    export function updateTypeAliasDeclaration(node: TypeAliasDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: Identifier, typeParameters: TypeParameterDeclaration[] | undefined, type: TypeNode) {
+        return node.decorators !== decorators
+            || node.modifiers !== modifiers
+            || node.name !== name
+            || node.typeParameters !== typeParameters
+            || node.type !== type
+            ? updateNode(createTypeAliasDeclaration(decorators, modifiers, name, typeParameters, type), node)
+            : node;
+    }
+
     export function createEnumDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, members: EnumMember[]) {
         const node = <EnumDeclaration>createSynthesizedNode(SyntaxKind.EnumDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1448,7 +1542,7 @@ namespace ts {
 
     export function createModuleDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: ModuleName, body: ModuleBody | undefined, flags?: NodeFlags) {
         const node = <ModuleDeclaration>createSynthesizedNode(SyntaxKind.ModuleDeclaration);
-        node.flags |= flags;
+        node.flags |= flags & (NodeFlags.Namespace | NodeFlags.NestedNamespace | NodeFlags.GlobalAugmentation);
         node.decorators = asNodeArray(decorators);
         node.modifiers = asNodeArray(modifiers);
         node.name = name;
@@ -1489,6 +1583,18 @@ namespace ts {
             : node;
     }
 
+    export function createNamespaceExportDeclaration(name: string | Identifier) {
+        const node = <NamespaceExportDeclaration>createSynthesizedNode(SyntaxKind.NamespaceExportDeclaration);
+        node.name = asName(name);
+        return node;
+    }
+
+    export function updateNamespaceExportDeclaration(node: NamespaceExportDeclaration, name: Identifier) {
+        return node.name !== name
+            ? updateNode(createNamespaceExportDeclaration(name), node)
+            : node;
+    }
+
     export function createImportEqualsDeclaration(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | Identifier, moduleReference: ModuleReference) {
         const node = <ImportEqualsDeclaration>createSynthesizedNode(SyntaxKind.ImportEqualsDeclaration);
         node.decorators = asNodeArray(decorators);
@@ -1519,19 +1625,20 @@ namespace ts {
     export function updateImportDeclaration(node: ImportDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
-            || node.importClause !== importClause || node.moduleSpecifier !== moduleSpecifier
+            || node.importClause !== importClause
+            || node.moduleSpecifier !== moduleSpecifier
             ? updateNode(createImportDeclaration(decorators, modifiers, importClause, moduleSpecifier), node)
             : node;
     }
 
-    export function createImportClause(name: Identifier, namedBindings: NamedImportBindings): ImportClause {
+    export function createImportClause(name: Identifier | undefined, namedBindings: NamedImportBindings | undefined): ImportClause {
         const node = <ImportClause>createSynthesizedNode(SyntaxKind.ImportClause);
         node.name = name;
         node.namedBindings = namedBindings;
         return node;
     }
 
-    export function updateImportClause(node: ImportClause, name: Identifier, namedBindings: NamedImportBindings) {
+    export function updateImportClause(node: ImportClause, name: Identifier | undefined, namedBindings: NamedImportBindings | undefined) {
         return node.name !== name
             || node.namedBindings !== namedBindings
             ? updateNode(createImportClause(name, namedBindings), node)
@@ -1709,19 +1816,6 @@ namespace ts {
             : node;
     }
 
-    export function createJsxAttributes(properties: JsxAttributeLike[]) {
-        const jsxAttributes = <JsxAttributes>createSynthesizedNode(SyntaxKind.JsxAttributes);
-        jsxAttributes.properties = createNodeArray(properties);
-        return jsxAttributes;
-    }
-
-    export function updateJsxAttributes(jsxAttributes: JsxAttributes, properties: JsxAttributeLike[]) {
-        if (jsxAttributes.properties !== properties) {
-            return updateNode(createJsxAttributes(properties), jsxAttributes);
-        }
-        return jsxAttributes;
-    }
-
     export function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression) {
         const node = <JsxAttribute>createSynthesizedNode(SyntaxKind.JsxAttribute);
         node.name = name;
@@ -1733,6 +1827,18 @@ namespace ts {
         return node.name !== name
             || node.initializer !== initializer
             ? updateNode(createJsxAttribute(name, initializer), node)
+            : node;
+    }
+
+    export function createJsxAttributes(properties: JsxAttributeLike[]) {
+        const node = <JsxAttributes>createSynthesizedNode(SyntaxKind.JsxAttributes);
+        node.properties = createNodeArray(properties);
+        return node;
+    }
+
+    export function updateJsxAttributes(node: JsxAttributes, properties: JsxAttributeLike[]) {
+        return node.properties !== properties
+            ? updateNode(createJsxAttributes(properties), node)
             : node;
     }
 
@@ -1763,20 +1869,6 @@ namespace ts {
 
     // Clauses
 
-    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
-        const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
-        node.token = token;
-        node.types = createNodeArray(types);
-        return node;
-    }
-
-    export function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]) {
-        if (node.types !== types) {
-            return updateNode(createHeritageClause(node.token, types), node);
-        }
-        return node;
-    }
-
     export function createCaseClause(expression: Expression, statements: Statement[]) {
         const node = <CaseClause>createSynthesizedNode(SyntaxKind.CaseClause);
         node.expression = parenthesizeExpressionForList(expression);
@@ -1785,10 +1877,10 @@ namespace ts {
     }
 
     export function updateCaseClause(node: CaseClause, expression: Expression, statements: Statement[]) {
-        if (node.expression !== expression || node.statements !== statements) {
-            return updateNode(createCaseClause(expression, statements), node);
-        }
-        return node;
+        return node.expression !== expression
+            || node.statements !== statements
+            ? updateNode(createCaseClause(expression, statements), node)
+            : node;
     }
 
     export function createDefaultClause(statements: Statement[]) {
@@ -1798,10 +1890,22 @@ namespace ts {
     }
 
     export function updateDefaultClause(node: DefaultClause, statements: Statement[]) {
-        if (node.statements !== statements) {
-            return updateNode(createDefaultClause(statements), node);
-        }
+        return node.statements !== statements
+            ? updateNode(createDefaultClause(statements), node)
+            : node;
+    }
+
+    export function createHeritageClause(token: HeritageClause["token"], types: ExpressionWithTypeArguments[]) {
+        const node = <HeritageClause>createSynthesizedNode(SyntaxKind.HeritageClause);
+        node.token = token;
+        node.types = createNodeArray(types);
         return node;
+    }
+
+    export function updateHeritageClause(node: HeritageClause, types: ExpressionWithTypeArguments[]) {
+        return node.types !== types
+            ? updateNode(createHeritageClause(node.token, types), node)
+            : node;
     }
 
     export function createCatchClause(variableDeclaration: string | VariableDeclaration, block: Block) {
@@ -1812,10 +1916,10 @@ namespace ts {
     }
 
     export function updateCatchClause(node: CatchClause, variableDeclaration: VariableDeclaration, block: Block) {
-        if (node.variableDeclaration !== variableDeclaration || node.block !== block) {
-            return updateNode(createCatchClause(variableDeclaration, block), node);
-        }
-        return node;
+        return node.variableDeclaration !== variableDeclaration
+            || node.block !== block
+            ? updateNode(createCatchClause(variableDeclaration, block), node)
+            : node;
     }
 
     // Property assignments
@@ -1829,10 +1933,10 @@ namespace ts {
     }
 
     export function updatePropertyAssignment(node: PropertyAssignment, name: PropertyName, initializer: Expression) {
-        if (node.name !== name || node.initializer !== initializer) {
-            return updateNode(createPropertyAssignment(name, initializer), node);
-        }
-        return node;
+        return node.name !== name
+            || node.initializer !== initializer
+            ? updateNode(createPropertyAssignment(name, initializer), node)
+            : node;
     }
 
     export function createShorthandPropertyAssignment(name: string | Identifier, objectAssignmentInitializer?: Expression) {
@@ -1843,10 +1947,10 @@ namespace ts {
     }
 
     export function updateShorthandPropertyAssignment(node: ShorthandPropertyAssignment, name: Identifier, objectAssignmentInitializer: Expression | undefined) {
-        if (node.name !== name || node.objectAssignmentInitializer !== objectAssignmentInitializer) {
-            return updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer), node);
-        }
-        return node;
+        return node.name !== name
+            || node.objectAssignmentInitializer !== objectAssignmentInitializer
+            ? updateNode(createShorthandPropertyAssignment(name, objectAssignmentInitializer), node)
+            : node;
     }
 
     export function createSpreadAssignment(expression: Expression) {
@@ -1856,10 +1960,9 @@ namespace ts {
     }
 
     export function updateSpreadAssignment(node: SpreadAssignment, expression: Expression) {
-        if (node.expression !== expression) {
-            return updateNode(createSpreadAssignment(expression), node);
-        }
-        return node;
+        return node.expression !== expression
+            ? updateNode(createSpreadAssignment(expression), node)
+            : node;
     }
 
     // Enum
@@ -1992,6 +2095,30 @@ namespace ts {
         return node;
     }
 
+    function flattenCommaElements(node: Expression): Expression | Expression[] {
+        if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
+            if (node.kind === SyntaxKind.CommaListExpression) {
+                return (<CommaListExpression>node).elements;
+            }
+            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+                return [node.left, node.right];
+            }
+        }
+        return node;
+    }
+
+    export function createCommaList(elements: Expression[]) {
+        const node = <CommaListExpression>createSynthesizedNode(SyntaxKind.CommaListExpression);
+        node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
+        return node;
+    }
+
+    export function updateCommaList(node: CommaListExpression, elements: Expression[]) {
+        return node.elements !== elements
+            ? updateNode(createCommaList(elements), node)
+            : node;
+    }
+
     export function createBundle(sourceFiles: SourceFile[]) {
         const node = <Bundle>createNode(SyntaxKind.Bundle);
         node.sourceFiles = sourceFiles;
@@ -2006,6 +2133,24 @@ namespace ts {
     }
 
     // Compound nodes
+
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[]): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param: ParameterDeclaration, paramValue: Expression): CallExpression;
+    export function createImmediatelyInvokedFunctionExpression(statements: Statement[], param?: ParameterDeclaration, paramValue?: Expression) {
+        return createCall(
+            createFunctionExpression(
+                /*modifiers*/ undefined,
+                /*asteriskToken*/ undefined,
+                /*name*/ undefined,
+                /*typeParameters*/ undefined,
+                /*parameters*/ param ? [param] : [],
+                /*type*/ undefined,
+                createBlock(statements, /*multiLine*/ true)
+            ),
+            /*typeArguments*/ undefined,
+            /*argumentsArray*/ paramValue ? [paramValue] : []
+        );
+    }
 
     export function createComma(left: Expression, right: Expression) {
         return <Expression>createBinary(left, SyntaxKind.CommaToken, right);
@@ -2169,15 +2314,24 @@ namespace ts {
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined) {
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+
+    /**
+     * Create an external source map source file reference
+     */
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
+        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined {
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
@@ -2186,7 +2340,7 @@ namespace ts {
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined) {
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
@@ -2248,7 +2402,7 @@ namespace ts {
     /**
      * Sets the constant value to emit for an expression.
      */
-    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: number) {
+    export function setConstantValue(node: PropertyAccessExpression | ElementAccessExpression, value: string | number) {
         const emitNode = getOrCreateEmitNode(node);
         emitNode.constantValue = value;
         return node;
@@ -2358,6 +2512,7 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
@@ -2380,6 +2535,25 @@ namespace ts {
 
 /* @internal */
 namespace ts {
+    export const nullTransformationContext: TransformationContext = {
+        enableEmitNotification: noop,
+        enableSubstitution: noop,
+        endLexicalEnvironment: () => undefined,
+        getCompilerOptions: notImplemented,
+        getEmitHost: notImplemented,
+        getEmitResolver: notImplemented,
+        hoistFunctionDeclaration: noop,
+        hoistVariableDeclaration: noop,
+        isEmitNotificationEnabled: notImplemented,
+        isSubstitutionEnabled: notImplemented,
+        onEmitNode: noop,
+        onSubstituteNode: notImplemented,
+        readEmitHelpers: notImplemented,
+        requestEmitHelper: noop,
+        resumeLexicalEnvironment: noop,
+        startLexicalEnvironment: noop,
+        suspendLexicalEnvironment: noop
+    };
 
     // Compound nodes
 
@@ -2780,7 +2954,11 @@ namespace ts {
     }
 
     export function inlineExpressions(expressions: Expression[]) {
-        return reduceLeft(expressions, createComma);
+        // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
+        // stack size exceeded" errors.
+        return expressions.length > 10
+            ? createCommaList(expressions)
+            : reduceLeft(expressions, createComma);
     }
 
     export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
@@ -2938,6 +3116,28 @@ namespace ts {
     }
 
     /**
+     * Gets the internal name of a declaration. This is primarily used for declarations that can be
+     * referred to by name in the body of an ES5 class function body. An internal name will *never*
+     * be prefixed with an module or namespace export modifier like "exports." when emitted as an
+     * expression. An internal name will also *never* be renamed due to a collision with a block
+     * scoped variable.
+     *
+     * @param node The declaration.
+     * @param allowComments A value indicating whether comments may be emitted for the name.
+     * @param allowSourceMaps A value indicating whether source maps may be emitted for the name.
+     */
+    export function getInternalName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean) {
+        return getName(node, allowComments, allowSourceMaps, EmitFlags.LocalName | EmitFlags.InternalName);
+    }
+
+    /**
+     * Gets whether an identifier should only be referred to by its internal name.
+     */
+    export function isInternalName(node: Identifier) {
+        return (getEmitFlags(node) & EmitFlags.InternalName) !== 0;
+    }
+
+    /**
      * Gets the local name of a declaration. This is primarily used for declarations that can be
      * referred to by name in the declaration's immediate scope (classes, enums, namespaces). A
      * local name will *never* be prefixed with an module or namespace export modifier like
@@ -2992,9 +3192,10 @@ namespace ts {
     }
 
     function getName(node: Declaration, allowComments?: boolean, allowSourceMaps?: boolean, emitFlags?: EmitFlags) {
-        if (node.name && isIdentifier(node.name) && !isGeneratedIdentifier(node.name)) {
-            const name = getMutableClone(node.name);
-            emitFlags |= getEmitFlags(node.name);
+        const nodeName = getNameOfDeclaration(node);
+        if (nodeName && isIdentifier(nodeName) && !isGeneratedIdentifier(nodeName)) {
+            const name = getMutableClone(nodeName);
+            emitFlags |= getEmitFlags(nodeName);
             if (!allowSourceMaps) emitFlags |= EmitFlags.NoSourceMap;
             if (!allowComments) emitFlags |= EmitFlags.NoComments;
             if (emitFlags) setEmitFlags(name, emitFlags);
@@ -3041,6 +3242,26 @@ namespace ts {
 
     export function convertToFunctionBody(node: ConciseBody, multiLine?: boolean) {
         return isBlock(node) ? node : setTextRange(createBlock([setTextRange(createReturn(node), node)], multiLine), node);
+    }
+
+    export function convertFunctionDeclarationToExpression(node: FunctionDeclaration) {
+        Debug.assert(!!node.body);
+        const updated = createFunctionExpression(
+            node.modifiers,
+            node.asteriskToken,
+            node.name,
+            node.typeParameters,
+            node.parameters,
+            node.type,
+            node.body
+        );
+        setOriginalNode(updated, node);
+        setTextRange(updated, node);
+        if (node.startsOnNewLine) {
+            updated.startsOnNewLine = true;
+        }
+        aggregateTransformFlags(updated);
+        return updated;
     }
 
     function isUseStrictPrologue(node: ExpressionStatement): boolean {
@@ -3151,16 +3372,6 @@ namespace ts {
         }
 
         return statements;
-    }
-
-    export function parenthesizeConditionalHead(condition: Expression) {
-        const conditionalPrecedence = getOperatorPrecedence(SyntaxKind.ConditionalExpression, SyntaxKind.QuestionToken);
-        const emittedCondition = skipPartiallyEmittedExpressions(condition);
-        const conditionPrecedence = getExpressionPrecedence(emittedCondition);
-        if (compareValues(conditionPrecedence, conditionalPrecedence) === Comparison.LessThan) {
-            return createParen(condition);
-        }
-        return condition;
     }
 
     /**
@@ -3451,7 +3662,7 @@ namespace ts {
             if (kind === SyntaxKind.FunctionExpression || kind === SyntaxKind.ArrowFunction) {
                 const mutableCall = getMutableClone(emittedExpression);
                 mutableCall.expression = setTextRange(createParen(callee), callee);
-                return recreatePartiallyEmittedExpressions(expression, mutableCall);
+                return recreateOuterExpressions(expression, mutableCall, OuterExpressionKinds.PartiallyEmittedExpressions);
             }
         }
         else {
@@ -3464,20 +3675,33 @@ namespace ts {
         return expression;
     }
 
-    /**
-     * Clones a series of not-emitted expressions with a new inner expression.
-     *
-     * @param originalOuterExpression The original outer expression.
-     * @param newInnerExpression The new inner expression.
-     */
-    function recreatePartiallyEmittedExpressions(originalOuterExpression: Expression, newInnerExpression: Expression) {
-        if (isPartiallyEmittedExpression(originalOuterExpression)) {
-            const clone = getMutableClone(originalOuterExpression);
-            clone.expression = recreatePartiallyEmittedExpressions(clone.expression, newInnerExpression);
-            return clone;
+    export function parenthesizeElementTypeMember(member: TypeNode) {
+        switch (member.kind) {
+            case SyntaxKind.UnionType:
+            case SyntaxKind.IntersectionType:
+            case SyntaxKind.FunctionType:
+            case SyntaxKind.ConstructorType:
+                return createParenthesizedType(member);
         }
+        return member;
+    }
 
-        return newInnerExpression;
+    export function parenthesizeElementTypeMembers(members: TypeNode[]) {
+        return createNodeArray(sameMap(members, parenthesizeElementTypeMember));
+    }
+
+    export function parenthesizeTypeParameters(typeParameters: TypeNode[]) {
+        if (some(typeParameters)) {
+            const nodeArray = createNodeArray() as NodeArray<TypeNode>;
+            for (let i = 0; i < typeParameters.length; ++i) {
+                const entry = typeParameters[i];
+                nodeArray.push(i === 0 && isFunctionOrConstructorTypeNode(entry) && entry.typeParameters ?
+                    createParenthesizedType(entry) :
+                    entry);
+            }
+
+            return nodeArray;
+        }
     }
 
     function getLeftmostExpression(node: Expression): Expression {
@@ -3526,6 +3750,22 @@ namespace ts {
         All = Parentheses | Assertions | PartiallyEmittedExpressions
     }
 
+    export type OuterExpression = ParenthesizedExpression | TypeAssertion | AsExpression | NonNullExpression | PartiallyEmittedExpression;
+
+    export function isOuterExpression(node: Node, kinds = OuterExpressionKinds.All): node is OuterExpression {
+        switch (node.kind) {
+            case SyntaxKind.ParenthesizedExpression:
+                return (kinds & OuterExpressionKinds.Parentheses) !== 0;
+            case SyntaxKind.TypeAssertionExpression:
+            case SyntaxKind.AsExpression:
+            case SyntaxKind.NonNullExpression:
+                return (kinds & OuterExpressionKinds.Assertions) !== 0;
+            case SyntaxKind.PartiallyEmittedExpression:
+                return (kinds & OuterExpressionKinds.PartiallyEmittedExpressions) !== 0;
+        }
+        return false;
+    }
+
     export function skipOuterExpressions(node: Expression, kinds?: OuterExpressionKinds): Expression;
     export function skipOuterExpressions(node: Node, kinds?: OuterExpressionKinds): Node;
     export function skipOuterExpressions(node: Node, kinds = OuterExpressionKinds.All) {
@@ -3562,8 +3802,8 @@ namespace ts {
     export function skipAssertions(node: Expression): Expression;
     export function skipAssertions(node: Node): Node;
     export function skipAssertions(node: Node): Node {
-        while (isAssertionExpression(node)) {
-            node = (<AssertionExpression>node).expression;
+        while (isAssertionExpression(node) || node.kind === SyntaxKind.NonNullExpression) {
+            node = (<AssertionExpression | NonNullExpression>node).expression;
         }
 
         return node;
@@ -3579,6 +3819,26 @@ namespace ts {
         return node;
     }
 
+    function updateOuterExpression(outerExpression: OuterExpression, expression: Expression) {
+        switch (outerExpression.kind) {
+            case SyntaxKind.ParenthesizedExpression: return updateParen(outerExpression, expression);
+            case SyntaxKind.TypeAssertionExpression: return updateTypeAssertion(outerExpression, outerExpression.type, expression);
+            case SyntaxKind.AsExpression: return updateAsExpression(outerExpression, expression, outerExpression.type);
+            case SyntaxKind.NonNullExpression: return updateNonNullExpression(outerExpression, expression);
+            case SyntaxKind.PartiallyEmittedExpression: return updatePartiallyEmittedExpression(outerExpression, expression);
+        }
+    }
+
+    export function recreateOuterExpressions(outerExpression: Expression | undefined, innerExpression: Expression, kinds = OuterExpressionKinds.All): Expression {
+        if (outerExpression && isOuterExpression(outerExpression, kinds)) {
+            return updateOuterExpression(
+                outerExpression,
+                recreateOuterExpressions(outerExpression.expression, innerExpression)
+            );
+        }
+        return innerExpression;
+    }
+
     export function startOnNewLine<T extends Node>(node: T): T {
         node.startsOnNewLine = true;
         return node;
@@ -3590,22 +3850,33 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
-        if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
                 return externalHelpersModuleName;
             }
 
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const parseNode = getOriginalNode(node, isSourceFile);
-                        const emitNode = getOrCreateEmitNode(parseNode);
-                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            let create = hasExportStarsToExportValues
+                && moduleKind !== ModuleKind.System
+                && moduleKind !== ModuleKind.ES2015;
+            if (!create) {
+                const helpers = getEmitHelpers(node);
+                if (helpers) {
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            create = true;
+                            break;
+                        }
                     }
                 }
+            }
+
+            if (create) {
+                const parseNode = getOriginalNode(node, isSourceFile);
+                const emitNode = getOrCreateEmitNode(parseNode);
+                return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
             }
         }
     }
@@ -3670,7 +3941,7 @@ namespace ts {
         if (file.moduleName) {
             return createLiteral(file.moduleName);
         }
-        if (!isDeclarationFile(file) && (options.out || options.outFile)) {
+        if (!file.isDeclarationFile && (options.out || options.outFile)) {
             return createLiteral(getExternalModuleNameFromPath(host, file.fileName));
         }
         return undefined;
@@ -3716,7 +3987,7 @@ namespace ts {
             return bindingElement.right;
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // Recovery consistent with existing emit.
             return getInitializerOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3784,7 +4055,7 @@ namespace ts {
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.left);
         }
 
-        if (isSpreadExpression(bindingElement)) {
+        if (isSpreadElement(bindingElement)) {
             // `a` in `[...a] = ...`
             return getTargetOfBindingOrAssignmentElement(<BindingOrAssignmentElement>bindingElement.expression);
         }
@@ -3989,17 +4260,6 @@ namespace ts {
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
-        if (externalHelpersImportDeclaration) {
-            externalImports.push(externalHelpersImportDeclaration);
-        }
-
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -4108,6 +4368,17 @@ namespace ts {
                     }
                     break;
             }
+        }
+
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues);
+        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+            createLiteral(externalHelpersModuleNameText));
+
+        if (externalHelpersImportDeclaration) {
+            externalImports.unshift(externalHelpersImportDeclaration);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };

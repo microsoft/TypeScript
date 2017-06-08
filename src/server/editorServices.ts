@@ -13,6 +13,7 @@ namespace ts.server {
     export const ContextEvent = "context";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
+    export const ProjectInfoTelemetryEvent = "projectInfo";
 
     export interface ContextEvent {
         eventName: typeof ContextEvent;
@@ -29,7 +30,52 @@ namespace ts.server {
         data: { project: Project, languageServiceEnabled: boolean };
     }
 
-    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent;
+    /** This will be converted to the payload of a protocol.TelemetryEvent in session.defaultEventHandler. */
+    export interface ProjectInfoTelemetryEvent {
+        readonly eventName: typeof ProjectInfoTelemetryEvent;
+        readonly data: ProjectInfoTelemetryEventData;
+    }
+
+    export interface ProjectInfoTelemetryEventData {
+        /** Count of file extensions seen in the project. */
+        readonly fileStats: FileStats;
+        /**
+         * Any compiler options that might contain paths will be taken out.
+         * Enum compiler options will be converted to strings.
+         */
+        readonly compilerOptions: ts.CompilerOptions;
+        // "extends", "files", "include", or "exclude" will be undefined if an external config is used.
+        // Otherwise, we will use "true" if the property is present and "false" if it is missing.
+        readonly extends: boolean | undefined;
+        readonly files: boolean | undefined;
+        readonly include: boolean | undefined;
+        readonly exclude: boolean | undefined;
+        readonly compileOnSave: boolean;
+        readonly typeAcquisition: ProjectInfoTypeAcquisitionData;
+
+        readonly configFileName: "tsconfig.json" | "jsconfig.json" | "other";
+        readonly projectType: "external" | "configured";
+        readonly languageServiceEnabled: boolean;
+        /** TypeScript version used by the server. */
+        readonly version: string;
+    }
+
+    export interface ProjectInfoTypeAcquisitionData {
+        readonly enable: boolean;
+        // Actual values of include/exclude entries are scrubbed.
+        readonly include: boolean;
+        readonly exclude: boolean;
+    }
+
+    export interface FileStats {
+        readonly js: number;
+        readonly jsx: number;
+        readonly ts: number;
+        readonly tsx: number;
+        readonly dts: number;
+    }
+
+    export type ProjectServiceEvent = ContextEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent;
 
     export interface ProjectServiceEventHandler {
         (event: ProjectServiceEvent): void;
@@ -257,7 +303,7 @@ namespace ts.server {
         startWatchingContainingDirectoriesForFile(fileName: string, project: InferredProject, callback: (fileName: string) => void) {
             let currentPath = getDirectoryPath(fileName);
             let parentPath = getDirectoryPath(currentPath);
-            while (currentPath != parentPath) {
+            while (currentPath !== parentPath) {
                 if (!this.directoryWatchersForTsconfig.has(currentPath)) {
                     this.projectService.logger.info(`Add watcher for: ${currentPath}`);
                     this.directoryWatchersForTsconfig.set(currentPath, this.projectService.host.watchDirectory(currentPath, callback));
@@ -283,6 +329,7 @@ namespace ts.server {
         throttleWaitMilliseconds?: number;
         globalPlugins?: string[];
         pluginProbeLocations?: string[];
+        allowLocalPluginLoads?: boolean;
     }
 
     export class ProjectService {
@@ -342,6 +389,10 @@ namespace ts.server {
 
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
+        public readonly allowLocalPluginLoads: boolean;
+
+        /** Tracks projects that we have already sent telemetry for. */
+        private readonly seenProjects = createMap<true>();
 
         constructor(opts: ProjectServiceOptions) {
             this.host = opts.host;
@@ -353,6 +404,7 @@ namespace ts.server {
             this.eventHandler = opts.eventHandler;
             this.globalPlugins = opts.globalPlugins || emptyArray;
             this.pluginProbeLocations = opts.pluginProbeLocations || emptyArray;
+            this.allowLocalPluginLoads = !!opts.allowLocalPluginLoads;
 
             Debug.assert(!!this.host.createHash, "'ServerHost.createHash' is required for ProjectService");
 
@@ -618,7 +670,7 @@ namespace ts.server {
          */
         private onConfigFileAddedForInferredProject(fileName: string) {
             // TODO: check directory separators
-            if (getBaseFileName(fileName) != "tsconfig.json") {
+            if (getBaseFileName(fileName) !== "tsconfig.json") {
                 this.logger.info(`${fileName} is not tsconfig.json`);
                 return;
             }
@@ -787,12 +839,12 @@ namespace ts.server {
          * we first detect if there is already a configured project created for it: if so, we re-read
          * the tsconfig file content and update the project; otherwise we create a new one.
          */
-        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath): OpenConfiguredProjectResult {
+        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             const searchPath = getDirectoryPath(fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
-            const configFileName = this.findConfigFile(asNormalizedPath(searchPath));
+            const configFileName = this.findConfigFile(asNormalizedPath(searchPath), projectRootPath);
             if (!configFileName) {
                 this.logger.info("No config files found.");
                 return {};
@@ -826,8 +878,8 @@ namespace ts.server {
         // current directory (the directory in which tsc was invoked).
         // The server must start searching from the directory containing
         // the newly opened file.
-        private findConfigFile(searchPath: NormalizedPath): NormalizedPath {
-            while (true) {
+        private findConfigFile(searchPath: NormalizedPath, projectRootPath?: NormalizedPath): NormalizedPath {
+            while (!projectRootPath || searchPath.indexOf(projectRootPath) >= 0) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
                 if (this.host.fileExists(tsconfigFileName)) {
                     return tsconfigFileName;
@@ -931,7 +983,10 @@ namespace ts.server {
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasFilesProperty: config["files"] !== undefined,
+                configHasExtendsProperty: config.extends !== undefined,
+                configHasFilesProperty: config.files !== undefined,
+                configHasIncludeProperty: config.include !== undefined,
+                configHasExcludeProperty: config.exclude !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
@@ -981,7 +1036,51 @@ namespace ts.server {
 
             this.addFilesToProjectAndUpdateGraph(project, files, externalFilePropertyReader, /*clientFileName*/ undefined, typeAcquisition, /*configFileErrors*/ undefined);
             this.externalProjects.push(project);
+            this.sendProjectTelemetry(project.externalProjectName, project);
             return project;
+        }
+
+        private sendProjectTelemetry(projectKey: string, project: server.ExternalProject | server.ConfiguredProject, projectOptions?: ProjectOptions): void {
+            if (this.seenProjects.has(projectKey)) {
+                return;
+            }
+            this.seenProjects.set(projectKey, true);
+
+            if (!this.eventHandler) return;
+
+            const data: ProjectInfoTelemetryEventData = {
+                fileStats: countEachFileTypes(project.getScriptInfos()),
+                compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
+                typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
+                extends: projectOptions && projectOptions.configHasExtendsProperty,
+                files: projectOptions && projectOptions.configHasFilesProperty,
+                include: projectOptions && projectOptions.configHasIncludeProperty,
+                exclude: projectOptions && projectOptions.configHasExcludeProperty,
+                compileOnSave: project.compileOnSaveEnabled,
+                configFileName: configFileName(),
+                projectType: project instanceof server.ExternalProject ? "external" : "configured",
+                languageServiceEnabled: project.languageServiceEnabled,
+                version: ts.version,
+            };
+            this.eventHandler({ eventName: ProjectInfoTelemetryEvent, data });
+
+            function configFileName(): ProjectInfoTelemetryEventData["configFileName"] {
+                if (!(project instanceof server.ConfiguredProject)) {
+                    return "other";
+                }
+
+                const configFilePath = project instanceof server.ConfiguredProject && project.getConfigFilePath();
+                const base = ts.getBaseFileName(configFilePath);
+                return base === "tsconfig.json" || base === "jsconfig.json" ? base : "other";
+            }
+
+            function convertTypeAcquisition({ enable, include, exclude }: TypeAcquisition): ProjectInfoTypeAcquisitionData {
+                return {
+                    enable,
+                    include: include !== undefined && include.length !== 0,
+                    exclude: exclude !== undefined && exclude.length !== 0,
+                };
+            }
         }
 
         private reportConfigFileDiagnostics(configFileName: string, diagnostics: Diagnostic[], triggerFile: string) {
@@ -1017,6 +1116,7 @@ namespace ts.server {
             project.watchTypeRoots((project, path) => this.onTypeRootFileChanged(project, path));
 
             this.configuredProjects.push(project);
+            this.sendProjectTelemetry(project.getConfigFilePath(), project, projectOptions);
             return project;
         }
 
@@ -1033,7 +1133,7 @@ namespace ts.server {
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName == rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
                 else {
@@ -1049,7 +1149,7 @@ namespace ts.server {
             const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
             const projectOptions: ProjectOptions = conversionResult.success
                 ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {}, typeAcquisition: { enable: false } };
+                : { files: [], compilerOptions: {}, configHasExtendsProperty: false, configHasFilesProperty: false, configHasIncludeProperty: false, configHasExcludeProperty: false, typeAcquisition: { enable: false } };
             const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
             return {
                 success: conversionResult.success,
@@ -1326,17 +1426,17 @@ namespace ts.server {
          * @param filename is absolute pathname
          * @param fileContent is a known version of the file content that is more up to date than the one on disk
          */
-        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind): OpenConfiguredProjectResult {
-            return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind);
+        openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult {
+            return this.openClientFileWithNormalizedPath(toNormalizedPath(fileName), fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath ? toNormalizedPath(projectRootPath) : undefined);
         }
 
-        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): OpenConfiguredProjectResult {
+        openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
             let configFileName: NormalizedPath;
             let configFileErrors: Diagnostic[];
 
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
-                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName));
+                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName, projectRootPath));
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                 }

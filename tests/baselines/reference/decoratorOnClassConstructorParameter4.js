@@ -18,8 +18,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 var C = (function () {
     function C(public, p) {
     }
+    C = __decorate([
+        __param(1, dec)
+    ], C);
     return C;
 }());
-C = __decorate([
-    __param(1, dec)
-], C);

@@ -7,6 +7,9 @@ async function * inferReturnType1() {
 async function * inferReturnType2() {
     yield* inferReturnType2();
 }
+async function * inferReturnType3() {
+    yield* Promise.resolve([1, 2]);
+}
 const assignability1: () => AsyncIterableIterator<number> = async function * () {
     yield "a";
 };

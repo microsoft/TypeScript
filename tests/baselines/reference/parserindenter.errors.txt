@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(16,1): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
+tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(16,21): error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(20,38): error TS2304: Cannot find name 'ILineIndenationResolver'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(22,33): error TS2304: Cannot find name 'IndentationBag'.
 tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(24,42): error TS2304: Cannot find name 'Dictionary_int_int'.
@@ -145,7 +145,7 @@ tests/cases/conformance/parser/ecmascript5/RealWorld/parserindenter.ts(736,38): 
     //
     
     ///<reference path='formatting.ts' />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        ~~~~~~~~~~~~~
 !!! error TS6053: File 'tests/cases/conformance/parser/ecmascript5/RealWorld/formatting.ts' not found.
     
     

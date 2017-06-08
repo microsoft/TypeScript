@@ -8,7 +8,7 @@ namespace ts.GoToDefinition {
             if (referenceFile) {
                 return [getDefinitionInfoForFileReference(comment.fileName, referenceFile.fileName)];
             }
-            return undefined;
+            // Might still be on jsdoc, so keep looking.
         }
 
         // Type reference directives
@@ -19,7 +19,7 @@ namespace ts.GoToDefinition {
                 [getDefinitionInfoForFileReference(typeReferenceDirective.fileName, referenceFile.resolvedFileName)];
         }
 
-        const node = getTouchingPropertyName(sourceFile, position);
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         if (node === sourceFile) {
             return undefined;
         }
@@ -50,19 +50,10 @@ namespace ts.GoToDefinition {
         // get the aliased symbol instead. This allows for goto def on an import e.g.
         //   import {A, B} from "mod";
         // to jump to the implementation directly.
-        if (symbol.flags & SymbolFlags.Alias) {
-            const declaration = symbol.declarations[0];
-
-            // Go to the original declaration for cases:
-            //
-            //   (1) when the aliased symbol was declared in the location(parent).
-            //   (2) when the aliased symbol is originating from a named import.
-            //
-            if (node.kind === SyntaxKind.Identifier &&
-                (node.parent === declaration ||
-                (declaration.kind === SyntaxKind.ImportSpecifier && declaration.parent && declaration.parent.kind === SyntaxKind.NamedImports))) {
-
-                symbol = typeChecker.getAliasedSymbol(symbol);
+        if (symbol.flags & SymbolFlags.Alias && shouldSkipAlias(node, symbol.declarations[0])) {
+            const aliased = typeChecker.getAliasedSymbol(symbol);
+            if (aliased.declarations) {
+                symbol = aliased;
             }
         }
 
@@ -85,17 +76,6 @@ namespace ts.GoToDefinition {
                 declaration => createDefinitionInfo(declaration, shorthandSymbolKind, shorthandSymbolName, shorthandContainerName));
         }
 
-        if (isJsxOpeningLikeElement(node.parent)) {
-            // If there are errors when trying to figure out stateless component function, just return the first declaration
-            // For example:
-            //      declare function /*firstSource*/MainButton(buttonProps: ButtonProps): JSX.Element;
-            //      declare function /*secondSource*/MainButton(linkProps: LinkProps): JSX.Element;
-            //      declare function /*thirdSource*/MainButton(props: ButtonProps | LinkProps): JSX.Element;
-            //      let opt = <Main/*firstTarget*/Button />;  // Error - We get undefined for resolved signature indicating an error, then just return the first declaration
-            const {symbolName, symbolKind, containerName} = getSymbolInfo(typeChecker, symbol, node);
-            return [createDefinitionInfo(symbol.valueDeclaration, symbolKind, symbolName, containerName)];
-        }
-
         // If the current location we want to find its definition is in an object literal, try to get the contextual type for the
         // object literal, lookup the property symbol in the contextual type, and use this for goto-definition.
         // For example
@@ -106,22 +86,16 @@ namespace ts.GoToDefinition {
         //      function Foo(arg: Props) {}
         //      Foo( { pr/*1*/op1: 10, prop2: true })
         const element = getContainingObjectLiteralElement(node);
-        if (element) {
-            if (typeChecker.getContextualType(element.parent as Expression)) {
-                const result: DefinitionInfo[] = [];
-                const propertySymbols = getPropertySymbolsFromContextualType(typeChecker, element);
-                for (const propertySymbol of propertySymbols) {
-                    result.push(...getDefinitionFromSymbol(typeChecker, propertySymbol, node));
-                }
-                return result;
-            }
+        if (element && typeChecker.getContextualType(element.parent as Expression)) {
+            return flatMap(getPropertySymbolsFromContextualType(typeChecker, element), propertySymbol =>
+                getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
         return getDefinitionFromSymbol(typeChecker, symbol, node);
     }
 
     /// Goto type
     export function getTypeDefinitionAtPosition(typeChecker: TypeChecker, sourceFile: SourceFile, position: number): DefinitionInfo[] {
-        const node = getTouchingPropertyName(sourceFile, position);
+        const node = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
         if (node === sourceFile) {
             return undefined;
         }
@@ -153,6 +127,29 @@ namespace ts.GoToDefinition {
         return getDefinitionFromSymbol(typeChecker, type.symbol, node);
     }
 
+    // Go to the original declaration for cases:
+    //
+    //   (1) when the aliased symbol was declared in the location(parent).
+    //   (2) when the aliased symbol is originating from an import.
+    //
+    function shouldSkipAlias(node: Node, declaration: Node): boolean {
+        if (node.kind !== SyntaxKind.Identifier) {
+            return false;
+        }
+        if (node.parent === declaration) {
+            return true;
+        }
+        switch (declaration.kind) {
+            case SyntaxKind.ImportClause:
+            case SyntaxKind.ImportEqualsDeclaration:
+                return true;
+            case SyntaxKind.ImportSpecifier:
+                return declaration.parent.kind === SyntaxKind.NamedImports;
+            default:
+                return false;
+        }
+    }
+
     function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node): DefinitionInfo[] {
         const result: DefinitionInfo[] = [];
         const declarations = symbol.getDeclarations();
@@ -168,7 +165,7 @@ namespace ts.GoToDefinition {
 
         return result;
 
-        function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddConstructSignature(symbol: Symbol, location: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             // Applicable only if we are in a new expression, or we are on a constructor declaration
             // and in either case the symbol has a construct signature definition, i.e. class
             if (isNewExpressionTarget(location) || location.kind === SyntaxKind.ConstructorKeyword) {
@@ -176,12 +173,8 @@ namespace ts.GoToDefinition {
                     // Find the first class-like declaration and try to get the construct signature.
                     for (const declaration of symbol.getDeclarations()) {
                         if (isClassLike(declaration)) {
-                            return tryAddSignature(declaration.members,
-                                                    /*selectConstructors*/ true,
-                                                    symbolKind,
-                                                    symbolName,
-                                                    containerName,
-                                                    result);
+                            return tryAddSignature(
+                                declaration.members, /*selectConstructors*/ true, symbolKind, symbolName, containerName, result);
                         }
                     }
 
@@ -191,14 +184,14 @@ namespace ts.GoToDefinition {
             return false;
         }
 
-        function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddCallSignature(symbol: Symbol, location: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             if (isCallExpressionTarget(location) || isNewExpressionTarget(location) || isNameOfFunctionDeclaration(location)) {
                 return tryAddSignature(symbol.declarations, /*selectConstructors*/ false, symbolKind, symbolName, containerName, result);
             }
             return false;
         }
 
-        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: string, symbolName: string, containerName: string, result: DefinitionInfo[]) {
+        function tryAddSignature(signatureDeclarations: Declaration[] | undefined, selectConstructors: boolean, symbolKind: ScriptElementKind, symbolName: string, containerName: string, result: DefinitionInfo[]) {
             if (!signatureDeclarations) {
                 return false;
             }
@@ -234,12 +227,12 @@ namespace ts.GoToDefinition {
     }
 
     /** Creates a DefinitionInfo from a Declaration, using the declaration's name if possible. */
-    function createDefinitionInfo(node: Declaration, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
-        return createDefinitionInfoFromName(node.name || node, symbolKind, symbolName, containerName);
+    function createDefinitionInfo(node: Declaration, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
+        return createDefinitionInfoFromName(getNameOfDeclaration(node) || node, symbolKind, symbolName, containerName);
     }
 
     /** Creates a DefinitionInfo directly from the name of a declaration. */
-    function createDefinitionInfoFromName(name: Node, symbolKind: string, symbolName: string, containerName: string): DefinitionInfo {
+    function createDefinitionInfoFromName(name: Node, symbolKind: ScriptElementKind, symbolName: string, containerName: string): DefinitionInfo {
         const sourceFile = name.getSourceFile();
         return {
             fileName: sourceFile.fileName,
@@ -266,7 +259,7 @@ namespace ts.GoToDefinition {
 
     function findReferenceInPosition(refs: FileReference[], pos: number): FileReference {
         for (const ref of refs) {
-            if (ref.pos <= pos && pos < ref.end) {
+            if (ref.pos <= pos && pos <= ref.end) {
                 return ref;
             }
         }

@@ -224,7 +224,7 @@ namespace ts.server {
                         return { name, kind, kindModifiers, sortText, replacementSpan: convertedSpan };
                     }
 
-                    return entry as { name: string, kind: string, kindModifiers: string, sortText: string };
+                    return entry as { name: string, kind: ScriptElementKind, kindModifiers: string, sortText: string };
                 })
             };
         }
@@ -265,7 +265,7 @@ namespace ts.server {
                 return {
                     name: entry.name,
                     containerName: entry.containerName || "",
-                    containerKind: entry.containerKind || "",
+                    containerKind: entry.containerKind || ScriptElementKind.unknown,
                     kind: entry.kind,
                     kindModifiers: entry.kindModifiers,
                     matchKind: entry.matchKind,
@@ -330,11 +330,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });
@@ -356,11 +356,11 @@ namespace ts.server {
                 const start = this.lineOffsetToPosition(fileName, entry.start);
                 const end = this.lineOffsetToPosition(fileName, entry.end);
                 return {
-                    containerKind: "",
+                    containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: fileName,
                     textSpan: ts.createTextSpanFromBounds(start, end),
-                    kind: "",
+                    kind: ScriptElementKind.unknown,
                     name: ""
                 };
             });
@@ -693,6 +693,75 @@ namespace ts.server {
             const response = this.processResponse<protocol.CodeFixResponse>(request);
 
             return response.body.map(entry => this.convertCodeActions(entry, fileName));
+        }
+
+        private createFileLocationOrRangeRequestArgs(positionOrRange: number | TextRange, fileName: string): protocol.FileLocationOrRangeRequestArgs {
+            if (typeof positionOrRange === "number") {
+                const { line, offset } = this.positionToOneBasedLineOffset(fileName, positionOrRange);
+                return <protocol.FileLocationRequestArgs>{ file: fileName, line, offset };
+            }
+            const { line: startLine, offset: startOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.pos);
+            const { line: endLine, offset: endOffset } = this.positionToOneBasedLineOffset(fileName, positionOrRange.end);
+            return <protocol.FileRangeRequestArgs>{
+                file: fileName,
+                startLine,
+                startOffset,
+                endLine,
+                endOffset
+            };
+        }
+
+        getApplicableRefactors(fileName: string, positionOrRange: number | TextRange): ApplicableRefactorInfo[] {
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName);
+
+            const request = this.processRequest<protocol.GetApplicableRefactorsRequest>(CommandNames.GetApplicableRefactors, args);
+            const response = this.processResponse<protocol.GetApplicableRefactorsResponse>(request);
+            return response.body;
+        }
+
+        getEditsForRefactor(
+            fileName: string,
+            _formatOptions: FormatCodeSettings,
+            positionOrRange: number | TextRange,
+            refactorName: string,
+            actionName: string): RefactorEditInfo {
+
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+            args.refactor = refactorName;
+            args.action = actionName;
+
+            const request = this.processRequest<protocol.GetEditsForRefactorRequest>(CommandNames.GetEditsForRefactor, args);
+            const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
+
+            if (!response.body) {
+                return {
+                    edits: []
+                };
+            }
+
+            const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
+
+            const renameFilename: string | undefined = response.body.renameFilename;
+            let renameLocation: number | undefined = undefined;
+            if (renameFilename !== undefined) {
+                renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
+            }
+
+            return {
+                edits,
+                renameFilename,
+                renameLocation
+            };
+        }
+
+        private convertCodeEditsToTextChanges(edits: ts.server.protocol.FileCodeEdits[]): FileTextChanges[] {
+            return edits.map(edit => {
+                const fileName = edit.fileName;
+                return {
+                    fileName,
+                    textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName))
+                };
+            });
         }
 
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {

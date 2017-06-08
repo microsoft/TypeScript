@@ -17,9 +17,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var C = (function () {
     function C() {
     }
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }());
-C = __decorate([
-    dec
-], C);
 exports.C = C;

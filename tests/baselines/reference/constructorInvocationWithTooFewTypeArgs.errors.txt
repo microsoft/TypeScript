@@ -1,4 +1,4 @@
-tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts(9,9): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts(9,9): error TS2558: Expected 2 type arguments, but got 1.
 
 
 ==== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts (1 errors) ====
@@ -12,5 +12,5 @@ tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts(9,9): error TS23
      
     var d = new D<number>();
             ~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2558: Expected 2 type arguments, but got 1.
     

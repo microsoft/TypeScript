@@ -8,13 +8,13 @@
 // @Filename: foo.d.ts
 ////declare const /*foo_value_declaration*/foo: number;
 ////declare module "foo_module" {
-////    interface I { x: number; y: number }
+////    interface /*foo_type_declaration*/I { x: number; y: number }
 ////    export = I;
 ////}
 
 // @Filename: foo_user.ts
 ///////<reference path="foo.d.ts" />
-////import /*foo_type_declaration*/foo = require("foo_module");
+////import foo = require("foo_module");
 ////const x = foo/*foo_value*/;
 ////const i: foo/*foo_type*/ = { x: 1, y: 2 };
 
@@ -39,13 +39,13 @@ verify.goToDefinitionIs("foo_type_declaration");
 // @Filename: bar.d.ts
 ////declare interface /*bar_type_declaration*/bar { x: number; y: number }
 ////declare module "bar_module" {
-////    const x: number;
+////    const /*bar_value_declaration*/x: number;
 ////    export = x;
 ////}
 
 // @Filename: bar_user.ts
 ///////<reference path="bar.d.ts" />
-////import /*bar_value_declaration*/bar = require("bar_module");
+////import bar = require("bar_module");
 ////const x = bar/*bar_value*/;
 ////const i: bar/*bar_type*/ = { x: 1, y: 2 };
 

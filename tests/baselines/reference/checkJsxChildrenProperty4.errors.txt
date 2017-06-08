@@ -1,0 +1,61 @@
+tests/cases/conformance/jsx/file.tsx(24,28): error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
+tests/cases/conformance/jsx/file.tsx(32,9): error TS2322: Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FetchUser> & IFetchUserProps & { children?: ReactNode; }'.
+  Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
+    Types of property 'children' are incompatible.
+      Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
+        Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
+    import React = require('react');
+    
+    interface IUser {
+        Name: string;
+    }
+    
+    interface IFetchUserProps {
+        children: (user: IUser) => JSX.Element;
+    }
+    
+    class FetchUser extends React.Component<IFetchUserProps, any> {
+        render() {
+            return this.state
+                ? this.props.children(this.state.result)
+                : null;
+        }
+    }
+    
+    // Error
+    function UserName() {
+        return (
+            <FetchUser>
+                { user => (
+                    <h1>{ user.NAme }</h1>
+                               ~~~~
+!!! error TS2551: Property 'NAme' does not exist on type 'IUser'. Did you mean 'Name'?
+                ) }
+            </FetchUser>
+        );
+    }
+    
+    function UserName1() {
+        return (
+            <FetchUser>
+            ~~~~~~~~~~~
+!!! error TS2322: Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FetchUser> & IFetchUserProps & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{ children: ((user: IUser) => Element)[]; }' is not assignable to type 'IFetchUserProps'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '((user: IUser) => Element)[]' is not assignable to type '(user: IUser) => Element'.
+!!! error TS2322:         Type '((user: IUser) => Element)[]' provides no match for the signature '(user: IUser): Element'.
+    
+    
+                
+                { user => (
+                    <h1>{ user.Name }</h1>
+                ) }
+                { user => (
+                    <h1>{ user.Name }</h1>
+                ) }
+            </FetchUser>
+        );
+    }

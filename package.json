@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "http://typescriptlang.org/",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -39,7 +39,6 @@
         "@types/gulp-help": "latest",
         "@types/gulp-newer": "latest",
         "@types/gulp-sourcemaps": "latest",
-        "@types/gulp-typescript": "latest",
         "@types/merge2": "latest",
         "@types/minimatch": "latest",
         "@types/minimist": "latest",
@@ -60,7 +59,7 @@
         "gulp-insert": "latest",
         "gulp-newer": "latest",
         "gulp-sourcemaps": "latest",
-        "gulp-typescript": "3.1.5",
+        "gulp-typescript": "latest",
         "into-stream": "latest",
         "istanbul": "latest",
         "jake": "latest",
@@ -75,7 +74,7 @@
         "through2": "latest",
         "travis-fold": "latest",
         "ts-node": "latest",
-        "tslint": "next",
+        "tslint": "latest",
         "typescript": "next"
     },
     "scripts": {

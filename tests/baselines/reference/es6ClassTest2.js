@@ -288,9 +288,9 @@ var Statics = (function () {
     Statics.baz = function () {
         return "";
     };
+    Statics.foo = 1;
     return Statics;
 }());
-Statics.foo = 1;
 var stat = new Statics();
 var ImplementsInterface = (function () {
     function ImplementsInterface() {

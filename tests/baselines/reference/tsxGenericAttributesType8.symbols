@@ -1,0 +1,34 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+declare function Component<T>(props: T) : JSX.Element;
+>Component : Symbol(Component, Decl(file.tsx, 0, 32))
+>T : Symbol(T, Decl(file.tsx, 2, 27))
+>props : Symbol(props, Decl(file.tsx, 2, 30))
+>T : Symbol(T, Decl(file.tsx, 2, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+const decorator = function <U>(props: U) {
+>decorator : Symbol(decorator, Decl(file.tsx, 3, 5))
+>U : Symbol(U, Decl(file.tsx, 3, 28))
+>props : Symbol(props, Decl(file.tsx, 3, 31))
+>U : Symbol(U, Decl(file.tsx, 3, 28))
+
+    return <Component {...props} />;
+>Component : Symbol(Component, Decl(file.tsx, 0, 32))
+>props : Symbol(props, Decl(file.tsx, 3, 31))
+}
+
+const decorator1 = function <U extends {x: string}>(props: U) {
+>decorator1 : Symbol(decorator1, Decl(file.tsx, 7, 5))
+>U : Symbol(U, Decl(file.tsx, 7, 29))
+>x : Symbol(x, Decl(file.tsx, 7, 40))
+>props : Symbol(props, Decl(file.tsx, 7, 52))
+>U : Symbol(U, Decl(file.tsx, 7, 29))
+
+    return <Component {...props} />;
+>Component : Symbol(Component, Decl(file.tsx, 0, 32))
+>props : Symbol(props, Decl(file.tsx, 7, 52))
+}

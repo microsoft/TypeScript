@@ -44,7 +44,7 @@ namespace ts.projectSystem {
         });
     }
 
-    import typingsName = server.typingsInstaller.typingsName;
+    import typingsName = TI.typingsName;
 
     describe("local module", () => {
         it("should not be picked up", () => {
@@ -73,7 +73,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("config"), globalTypingsCacheLocation: typesCache });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: TI.RequestCompletedAction) {
                     assert(false, "should not be called");
                 }
             })();
@@ -121,7 +121,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -165,7 +165,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jquery];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -672,7 +672,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -718,7 +718,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -765,7 +765,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("jquery") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/jquery"];
                     const typingFiles = [jqueryDTS];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -808,7 +808,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/commander"];
                     const typingFiles = [commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -849,7 +849,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/node", "@types/commander"];
                     const typingFiles = [node, commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -888,7 +888,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp", typesRegistry: createTypesRegistry("foo") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     executeCommand(this, host, ["foo"], [], cb);
                 }
             })();
@@ -996,7 +996,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: "/tmp" }, { isEnabled: () => true, writeLine: msg => messages.push(msg) });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, _cb: TI.RequestCompletedAction) {
                     assert(false, "runCommand should not be invoked");
                 }
             })();
@@ -1009,6 +1009,26 @@ namespace ts.projectSystem {
     });
 
     describe("discover typings", () => {
+        it("should use mappings from safe list", () => {
+            const app = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const jquery = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+            const chroma = {
+                path: "/a/b/chroma.min.js",
+                content: ""
+            };
+            const cache = createMap<string>();
+
+            const host = createServerHost([app, jquery, chroma]);
+            const result = JsTyping.discoverTypings(host, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), /*safeListPath*/ undefined, cache, { enable: true }, []);
+            assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
+        });
+
         it("should return node for core modules", () => {
             const f = {
                 path: "/a/b/app.js",
@@ -1016,6 +1036,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f]);
             const cache = createMap<string>();
+
             for (const name of JsTyping.nodeCoreModuleList) {
                 const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, [name, "somename"]);
                 assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
@@ -1040,7 +1061,7 @@ namespace ts.projectSystem {
     });
 
     describe("telemetry events", () => {
-        it ("should be received", () => {
+        it("should be received", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""
@@ -1060,7 +1081,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/commander"];
                     const typingFiles = [commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1089,7 +1110,7 @@ namespace ts.projectSystem {
     });
 
     describe("progress notifications", () => {
-        it ("should be sent for success", () => {
+        it("should be sent for success", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""
@@ -1110,7 +1131,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     const installedTypings = ["@types/commander"];
                     const typingFiles = [commander];
                     executeCommand(this, host, installedTypings, typingFiles, cb);
@@ -1140,7 +1161,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
         });
 
-        it ("should be sent for error", () => {
+        it("should be sent for error", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""
@@ -1157,7 +1178,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("commander") });
                 }
-                installWorker(_requestId: number, _args: string[], _cwd: string, cb: server.typingsInstaller.RequestCompletedAction) {
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
                     executeCommand(this, host, "", [], cb);
                 }
                 sendResponse(response: server.SetTypings | server.InvalidateCachedTypings | server.BeginInstallTypes | server.EndInstallTypes) {

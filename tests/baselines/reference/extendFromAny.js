@@ -30,9 +30,9 @@ var C = (function (_super) {
         _this.known = 1;
         return _this;
     }
+    C.sknown = 2;
     return C;
 }(Base));
-C.sknown = 2;
 var c = new C();
 c.known.length; // error, 'known' has no 'length' property
 C.sknown.length; // error, 'sknown' has no 'length' property

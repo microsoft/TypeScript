@@ -218,8 +218,8 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >o : { a: number; b: string; }
 
 var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
->noContextualType : ({aNumber, ...notEmptyObject}: { [x: string]: any; aNumber?: number; }) => any
->({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({aNumber, ...notEmptyObject}: { [x: string]: any; aNumber?: number; }) => any
+>noContextualType : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
+>({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
 >aNumber : number
 >12 : 12
 >notEmptyObject : { [x: string]: any; }

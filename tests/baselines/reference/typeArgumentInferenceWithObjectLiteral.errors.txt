@@ -1,10 +1,8 @@
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts(30,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'E1' is not a valid type argument because it is not a supertype of candidate '0'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts(35,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
   Type argument candidate 'E1' is not a valid type argument because it is not a supertype of candidate 'E2'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts (2 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjectLiteral.ts (1 errors) ====
     interface Computed<T> {
         read(): T;
         write(value: T);
@@ -35,9 +33,6 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithObjec
     var v1 = f1({ w: x => x, r: () => 0 }, 0);
     var v1 = f1({ w: x => x, r: () => 0 }, E1.X);
     var v1 = f1({ w: x => x, r: () => E1.X }, 0);
-             ~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'E1' is not a valid type argument because it is not a supertype of candidate '0'.
     
     var v2: E1;
     var v2 = f1({ w: x => x, r: () => E1.X }, E1.X);
