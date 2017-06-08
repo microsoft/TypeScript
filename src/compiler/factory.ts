@@ -228,7 +228,7 @@ namespace ts {
 
     // Signature elements
 
-    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
         node.name = asName(name);
         node.constraint = constraint;
@@ -3850,22 +3850,33 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
-        if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
                 return externalHelpersModuleName;
             }
 
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const parseNode = getOriginalNode(node, isSourceFile);
-                        const emitNode = getOrCreateEmitNode(parseNode);
-                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            let create = hasExportStarsToExportValues
+                && moduleKind !== ModuleKind.System
+                && moduleKind !== ModuleKind.ES2015;
+            if (!create) {
+                const helpers = getEmitHelpers(node);
+                if (helpers) {
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            create = true;
+                            break;
+                        }
                     }
                 }
+            }
+
+            if (create) {
+                const parseNode = getOriginalNode(node, isSourceFile);
+                const emitNode = getOrCreateEmitNode(parseNode);
+                return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
             }
         }
     }
@@ -4249,17 +4260,6 @@ namespace ts {
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
-        if (externalHelpersImportDeclaration) {
-            externalImports.push(externalHelpersImportDeclaration);
-        }
-
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -4368,6 +4368,17 @@ namespace ts {
                     }
                     break;
             }
+        }
+
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues);
+        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+            createLiteral(externalHelpersModuleNameText));
+
+        if (externalHelpersImportDeclaration) {
+            externalImports.unshift(externalHelpersImportDeclaration);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };

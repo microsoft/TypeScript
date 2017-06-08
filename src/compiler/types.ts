@@ -425,7 +425,7 @@ namespace ts {
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocLiteralType,
-        FirstJSDocTagNode = JSDocComment,
+        FirstJSDocTagNode = JSDocTag,
         LastJSDocTagNode = JSDocLiteralType
     }
 
@@ -4097,6 +4097,7 @@ namespace ts {
         AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
         AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
         AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,       // __exportStar (used by CommonJS/AMD/UMD module transformation)
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -4114,7 +4115,7 @@ namespace ts {
         SpreadIncludes = Read | Spread,
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = AsyncValues
+        LastEmitHelper = ExportStar
     }
 
     export const enum EmitHint {

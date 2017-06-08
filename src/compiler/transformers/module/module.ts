@@ -103,7 +103,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(updated, exportStarHelper);
@@ -408,7 +408,7 @@ namespace ts {
             addRange(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
-            if (currentModuleInfo.hasExportStarsToExportValues) {
+            if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
                 // If we have any `export * from ...` declarations
                 // we need to inform the emitter to add the __export helper.
                 addEmitHelper(body, exportStarHelper);
@@ -833,15 +833,7 @@ namespace ts {
                 // export * from "mod";
                 return setTextRange(
                     createStatement(
-                        createCall(
-                            createIdentifier("__export"),
-                            /*typeArguments*/ undefined,
-                            [
-                                moduleKind !== ModuleKind.AMD
-                                    ? createRequireCall(node)
-                                    : generatedName
-                            ]
-                        )
+                        createExportStarHelper(context, moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
                     ),
                     node
                 );
@@ -1598,8 +1590,16 @@ namespace ts {
         text: `
             function __export(m) {
                 for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-            }`
+            }
+        `
     };
+
+    function createExportStarHelper(context: TransformationContext, module: Expression) {
+        const compilerOptions = context.getCompilerOptions();
+        return compilerOptions.importHelpers
+            ? createCall(getHelperName("__exportStar"), /*typeArguments*/ undefined, [module, createIdentifier("exports")])
+            : createCall(createIdentifier("__export"), /*typeArguments*/ undefined, [module]);
+    }
 
     // emit helper for dynamic import
     const dynamicImportUMDHelper: EmitHelper = {

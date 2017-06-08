@@ -2832,6 +2832,17 @@ namespace ts {
 
             function symbolToParameterDeclaration(parameterSymbol: Symbol, context: NodeBuilderContext): ParameterDeclaration {
                 const parameterDeclaration = getDeclarationOfKind<ParameterDeclaration>(parameterSymbol, SyntaxKind.Parameter);
+                if (isTransientSymbol(parameterSymbol) && parameterSymbol.isRestParameter) {
+                    // special-case synthetic rest parameters in JS files
+                    return createParameter(
+                        /*decorators*/ undefined,
+                        /*modifiers*/ undefined,
+                        parameterSymbol.isRestParameter ? createToken(SyntaxKind.DotDotDotToken) : undefined,
+                        "args",
+                        /*questionToken*/ undefined,
+                        typeToTypeNodeHelper(anyArrayType, context),
+                        /*initializer*/ undefined);
+                }
                 const modifiers = parameterDeclaration.modifiers && parameterDeclaration.modifiers.map(getSynthesizedClone);
                 const dotDotDotToken = isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.DotDotDotToken) : undefined;
                 const name = parameterDeclaration.name ?
@@ -6391,8 +6402,17 @@ namespace ts {
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
                     undefined;
+                // JS functions get a free rest parameter if they reference `arguments`
+                let hasRestLikeParameter = hasRestParameter(declaration);
+                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration) && containsArgumentsReference(declaration)) {
+                    hasRestLikeParameter = true;
+                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args");
+                    syntheticArgsSymbol.type = anyArrayType;
+                    syntheticArgsSymbol.isRestParameter = true;
+                    parameters.push(syntheticArgsSymbol);
+                }
 
-                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestParameter(declaration), hasLiteralTypes);
+                links.resolvedSignature = createSignature(declaration, typeParameters, thisParameter, parameters, returnType, typePredicate, minArgumentCount, hasRestLikeParameter, hasLiteralTypes);
             }
             return links.resolvedSignature;
         }
@@ -6427,14 +6447,14 @@ namespace ts {
             }
         }
 
-        function containsArgumentsReference(declaration: FunctionLikeDeclaration): boolean {
+        function containsArgumentsReference(declaration: SignatureDeclaration): boolean {
             const links = getNodeLinks(declaration);
             if (links.containsArgumentsReference === undefined) {
                 if (links.flags & NodeCheckFlags.CaptureArguments) {
                     links.containsArgumentsReference = true;
                 }
                 else {
-                    links.containsArgumentsReference = traverse(declaration.body);
+                    links.containsArgumentsReference = traverse((declaration as FunctionLikeDeclaration).body);
                 }
             }
             return links.containsArgumentsReference;
@@ -6821,21 +6841,46 @@ namespace ts {
             return undefined;
         }
 
-        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName) {
+        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName, meaning: SymbolFlags) {
             if (!typeReferenceName) {
                 return unknownSymbol;
             }
 
-            return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
+            return resolveEntityName(typeReferenceName, meaning) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
-
             if (symbol === unknownSymbol) {
                 return unknownType;
             }
 
+            const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
+            if (type) {
+                return type;
+            }
+
+            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
+                // the symbol is a constructor function, return the inferred class type; otherwise,
+                // the type of this reference is just the type of the value we resolved to.
+                const valueType = getTypeOfSymbol(symbol);
+                if (valueType.symbol && !isInferredClassType(valueType)) {
+                    const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+                    if (referenceType) {
+                        return referenceType;
+                    }
+                }
+
+                // Resolve the type reference as a Type for the purpose of reporting errors.
+                resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
+                return valueType;
+            }
+
+            return getTypeFromNonGenericTypeReference(node, symbol);
+        }
+
+        function getTypeReferenceTypeWorker(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
@@ -6844,14 +6889,9 @@ namespace ts {
                 return getTypeFromTypeAliasReference(node, symbol, typeArguments);
             }
 
-            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In
-                // that case, the type of this reference is just the type of the value we resolved
-                // to.
-                return getTypeOfSymbol(symbol);
+            if (symbol.flags & SymbolFlags.Function && node.kind === SyntaxKind.JSDocTypeReference && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
+                return getInferredClassType(symbol);
             }
-
-            return getTypeFromNonGenericTypeReference(node, symbol);
         }
 
         function getPrimitiveTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
@@ -6894,22 +6934,13 @@ namespace ts {
             if (!links.resolvedType) {
                 let symbol: Symbol;
                 let type: Type;
+                let meaning = SymbolFlags.Type;
                 if (node.kind === SyntaxKind.JSDocTypeReference) {
-                    type = getPrimitiveTypeFromJSDocTypeReference(<JSDocTypeReference>node);
-                    if (!type) {
-                        const typeReferenceName = getTypeReferenceName(node);
-                        symbol = resolveTypeReferenceName(typeReferenceName);
-                        type = getTypeReferenceType(node, symbol);
-                    }
+                    type = getPrimitiveTypeFromJSDocTypeReference(node);
+                    meaning |= SymbolFlags.Value;
                 }
-                else {
-                    // We only support expressions that are simple qualified names. For other expressions this produces undefined.
-                    const typeNameOrExpression: EntityNameOrEntityNameExpression = node.kind === SyntaxKind.TypeReference
-                        ? (<TypeReferenceNode>node).typeName
-                        : isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)
-                            ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
-                            : undefined;
-                    symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
+                if (!type) {
+                    symbol = resolveTypeReferenceName(getTypeReferenceName(node), meaning);
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
@@ -15501,21 +15532,6 @@ namespace ts {
                 }
             }
 
-            if (signatures.length === 1) {
-                const declaration = signatures[0].declaration;
-                if (declaration && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration)) {
-                    if (containsArgumentsReference(<FunctionLikeDeclaration>declaration)) {
-                        const signatureWithRest = cloneSignature(signatures[0]);
-                        const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args");
-                        syntheticArgsSymbol.type = anyArrayType;
-                        syntheticArgsSymbol.isRestParameter = true;
-                        signatureWithRest.parameters = concatenate(signatureWithRest.parameters, [syntheticArgsSymbol]);
-                        signatureWithRest.hasRestParameter = true;
-                        signatures = [signatureWithRest];
-                    }
-                }
-            }
-
             const candidates = candidatesOutArray || [];
             // reorderCandidates fills up the candidates array directly
             reorderCandidates(signatures, candidates);
@@ -16162,6 +16178,12 @@ namespace ts {
                 links.inferredClassType = createAnonymousType(symbol, symbol.members || emptySymbols, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
+        }
+
+        function isInferredClassType(type: Type) {
+            return type.symbol
+                && getObjectFlags(type) & ObjectFlags.Anonymous
+                && getSymbolLinks(type.symbol).inferredClassType === type;
         }
 
         /**
@@ -16831,8 +16853,9 @@ namespace ts {
                     (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
                     // Look for if this is the constructor for the class that `symbol` is a property of.
                     const func = getContainingFunction(expr);
-                    if (!(func && func.kind === SyntaxKind.Constructor))
+                    if (!(func && func.kind === SyntaxKind.Constructor)) {
                         return true;
+                    }
                     // If func.parent is a class and symbol is a (readonly) property of that class, or
                     // if func is a constructor and symbol is a (readonly) parameter property declared in it,
                     // then symbol is writeable here.
@@ -19386,8 +19409,8 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
-
+                checkFunctionOrMethodDeclaration(node);
+                checkGrammarForGenerator(node);
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithCapturedNewTargetVariable(node, node.name);
@@ -21864,6 +21887,10 @@ namespace ts {
                     if (moduleSymbol && hasExportAssignmentSymbol(moduleSymbol)) {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
+
+                    if (modulekind !== ModuleKind.System && modulekind !== ModuleKind.ES2015) {
+                        checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
+                    }
                 }
             }
         }
@@ -23538,7 +23565,8 @@ namespace ts {
                 case ExternalEmitHelpers.AsyncGenerator: return "__asyncGenerator";
                 case ExternalEmitHelpers.AsyncDelegator: return "__asyncDelegator";
                 case ExternalEmitHelpers.AsyncValues: return "__asyncValues";
-                default: Debug.fail("Unrecognized helper.");
+                case ExternalEmitHelpers.ExportStar: return "__exportStar";
+                default: Debug.fail("Unrecognized helper");
             }
         }
 
