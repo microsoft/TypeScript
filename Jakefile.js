@@ -1007,6 +1007,10 @@ task("tests-debug", ["setDebugMode", "tests"]);
 desc("Makes the most recent test results the new baseline, overwriting the old baseline");
 task("baseline-accept", function () {
     acceptBaseline(localBaseline, refBaseline);
+    // accept baselines from subdirs too
+    ["transpile", "JSDocParsing"].forEach(function(folder) {
+        acceptBaseline(localBaseline + folder, refBaseline + folder);
+    });
 });
 
 function acceptBaseline(sourceFolder, targetFolder) {
