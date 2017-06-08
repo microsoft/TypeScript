@@ -10660,7 +10660,7 @@ namespace ts {
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 if (inference.candidates) {
-                    const baseCandidates = widenInferenceCandidates(inference, context.signature)
+                    const baseCandidates = widenInferenceCandidates(inference, context.signature);
                     // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
                     // for inferences coming from return types in order to avoid common supertype failures.
                     const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
