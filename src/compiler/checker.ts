@@ -2854,7 +2854,7 @@ namespace ts {
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
                 if (isRequiredInitializedParameter(parameterDeclaration)) {
-                    parameterType = getNullableType(parameterType, TypeFlags.Undefined);
+                    parameterType = getOptionalType(parameterType);
                 }
                 const parameterTypeNode = typeToTypeNodeHelper(parameterType, context);
 
@@ -3619,7 +3619,7 @@ namespace ts {
 
                 let type = getTypeOfSymbol(p);
                 if (parameterNode && isRequiredInitializedParameter(parameterNode)) {
-                    type = getNullableType(type, TypeFlags.Undefined);
+                    type = getOptionalType(type);
                 }
                 buildTypeDisplay(type, writer, enclosingDeclaration, flags, symbolStack);
             }
@@ -4195,7 +4195,7 @@ namespace ts {
         }
 
         function addOptionality(type: Type, optional: boolean): Type {
-            return strictNullChecks && optional ? getNullableType(type, TypeFlags.Undefined) : type;
+            return strictNullChecks && optional ? getOptionalType(type) : type;
         }
 
         // Return the inferred type for a variable, parameter, or property declaration
@@ -4622,7 +4622,7 @@ namespace ts {
                         links.type = baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
                     }
                     else {
-                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getNullableType(type, TypeFlags.Undefined) : type;
+                        links.type = strictNullChecks && symbol.flags & SymbolFlags.Optional ? getOptionalType(type) : type;
                     }
                 }
             }
@@ -10019,12 +10019,21 @@ namespace ts {
                 neverType;
         }
 
+        /** Add undefined to a type */
+        function getOptionalType(type: Type): Type {
+            return type.flags & TypeFlags.Undefined ? type : getUnionType([type, undefinedType]);
+        }
+
+        /** Add undefined, null or void to a type as requested by flags */
         function getNullableType(type: Type, flags: TypeFlags): Type {
-            const missing = (flags & ~type.flags) & (TypeFlags.Undefined | TypeFlags.Null);
-            return missing === 0 ? type :
-                missing === TypeFlags.Undefined ? getUnionType([type, undefinedType]) :
-                missing === TypeFlags.Null ? getUnionType([type, nullType]) :
-                getUnionType([type, undefinedType, nullType]);
+            if ((getFalsyFlags(type) & flags) === flags) {
+                return type;
+            }
+            const types = [type];
+            if (flags & TypeFlags.Void) types.push(voidType);
+            if (flags & TypeFlags.Undefined) types.push(undefinedType);
+            if (flags & TypeFlags.Null) types.push(nullType);
+            return getUnionType(types);
         }
 
         function getNonNullableType(type: Type): Type {
@@ -12153,7 +12162,7 @@ namespace ts {
                 isInAmbientContext(declaration);
             const initialType = assumeInitialized ? (isParameter ? removeOptionalityFromDeclaredType(type, getRootDeclaration(declaration) as VariableLikeDeclaration) : type) :
                 type === autoType || type === autoArrayType ? undefinedType :
-                    getNullableType(type, TypeFlags.Undefined);
+                    getOptionalType(type);
             const flowType = getFlowTypeOfReference(node, type, initialType, flowContainer, !assumeInitialized);
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
@@ -16342,7 +16351,7 @@ namespace ts {
             if (strictNullChecks) {
                 const declaration = symbol.valueDeclaration;
                 if (declaration && (<VariableLikeDeclaration>declaration).initializer) {
-                    return getNullableType(type, TypeFlags.Undefined);
+                    return getOptionalType(type);
                 }
             }
             return type;
@@ -23249,7 +23258,7 @@ namespace ts {
                 ? getWidenedLiteralType(getTypeOfSymbol(symbol))
                 : unknownType;
             if (flags & TypeFormatFlags.AddUndefined) {
-                type = getNullableType(type, TypeFlags.Undefined);
+                type = getOptionalType(type);
             }
             getSymbolDisplayBuilder().buildTypeDisplay(type, writer, enclosingDeclaration, flags);
         }
