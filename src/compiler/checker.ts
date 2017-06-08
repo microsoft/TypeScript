@@ -16693,23 +16693,18 @@ namespace ts {
 
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
-            const contextSensitive = isContextSensitive(node);
-            const mightFixTypeParameters = contextSensitive && checkMode === CheckMode.Inferential;
 
             // Check if function expression is contextually typed and assign parameter types if so.
-            // See the comment in assignTypeToParameterAndFixTypeParameters to understand why we need to
-            // check mightFixTypeParameters.
-            if (mightFixTypeParameters || !(links.flags & NodeCheckFlags.ContextChecked)) {
+            if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                 const contextualSignature = getContextualSignature(node);
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
                 // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
                 // already assigned contextual types.
-                const contextChecked = !!(links.flags & NodeCheckFlags.ContextChecked);
-                if (mightFixTypeParameters || !contextChecked) {
+                if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
-                        if (contextSensitive) {
+                        if (isContextSensitive(node)) {
                             const contextualMapper = getContextualMapper(node);
                             if (checkMode === CheckMode.Inferential) {
                                 inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
@@ -16718,18 +16713,15 @@ namespace ts {
                                 contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
-                        if (mightFixTypeParameters || !node.type && !signature.resolvedReturnType) {
+                        if (!node.type && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
                     }
-
-                    if (!contextChecked) {
-                        checkSignatureDeclaration(node);
-                        checkNodeDeferred(node);
-                    }
+                    checkSignatureDeclaration(node);
+                    checkNodeDeferred(node);
                 }
             }
 
