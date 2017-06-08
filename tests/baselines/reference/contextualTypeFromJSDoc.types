@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/contextualTypes/jsdoc/index.js ===
+/** @type {Array<[string, {x?:number, y?:number}]>} */
+const arr = [
+>arr : [string, { x?: number; y?: number; }][]
+>[    ['a', { x: 1 }],    ['b', { y: 2 }]] : ([string, { x: number; }] | [string, { y: number; }])[]
+
+    ['a', { x: 1 }],
+>['a', { x: 1 }] : [string, { x: number; }]
+>'a' : "a"
+>{ x: 1 } : { x: number; }
+>x : number
+>1 : 1
+
+    ['b', { y: 2 }]
+>['b', { y: 2 }] : [string, { y: number; }]
+>'b' : "b"
+>{ y: 2 } : { y: number; }
+>y : number
+>2 : 2
+
+];

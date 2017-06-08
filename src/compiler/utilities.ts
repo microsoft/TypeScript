@@ -1570,6 +1570,11 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
     }
 
+    export function getJSDocReturnType(node: Node): JSDocType {
+        const returnTag = getJSDocReturnTag(node);
+        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
+    }
+
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
         return getFirstJSDocTag(node, SyntaxKind.JSDocTemplateTag) as JSDocTemplateTag;
     }
@@ -2615,11 +2620,19 @@ namespace ts {
         });
     }
 
-    /** Get the type annotaion for the value parameter. */
-    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+    /** Get the type annotation for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration, includeJSDocType?: boolean): TypeNode {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
-            return accessor.parameters[hasThis ? 1 : 0].type;
+            const parameter = accessor.parameters[hasThis ? 1 : 0];
+            if (parameter) {
+                if (parameter.type) {
+                    return parameter.type;
+                }
+                if (includeJSDocType && parameter.flags & NodeFlags.JavaScriptFile) {
+                    return getJSDocType(parameter);
+                }
+            }
         }
     }
 

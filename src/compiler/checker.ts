@@ -12744,6 +12744,10 @@ namespace ts {
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
+                const jsDocType = isInJavaScriptFile(declaration) && getTypeForDeclarationFromJSDocComment(declaration);
+                if (jsDocType) {
+                    return jsDocType;
+                }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                     if (type) {
@@ -12816,8 +12820,9 @@ namespace ts {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             if (functionDecl.type ||
+                (isInJavaScriptFile(functionDecl) && getJSDocReturnType(functionDecl)) ||
                 functionDecl.kind === SyntaxKind.Constructor ||
-                functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(functionDecl.symbol, SyntaxKind.SetAccessor))) {
+                functionDecl.kind === SyntaxKind.GetAccessor && getSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(functionDecl.symbol, SyntaxKind.SetAccessor), /*includeJSDocType*/ true)) {
                 return getReturnTypeOfSignature(getSignatureFromDeclaration(functionDecl));
             }
 
@@ -16437,11 +16442,10 @@ namespace ts {
         }
 
         function getReturnTypeFromJSDocComment(func: SignatureDeclaration | FunctionDeclaration): Type {
-            const returnTag = getJSDocReturnTag(func);
-            if (returnTag && returnTag.typeExpression) {
-                return getTypeFromTypeNode(returnTag.typeExpression.type);
+            const jsdocType = getJSDocReturnType(func);
+            if (jsdocType) {
+                return getTypeFromTypeNode(jsdocType);
             }
-
             return undefined;
         }
 
