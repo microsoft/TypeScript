@@ -25,6 +25,8 @@ var LKGDirectory = "lib/";
 var copyright = "CopyrightNotice.txt";
 var thirdParty = "ThirdPartyNoticeText.txt";
 
+var defaultTestTimeout = 40000;
+
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
@@ -800,8 +802,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
         cleanTestDirs();
     }
 
-    var debug = process.env.debug || process.env.d;
-    var inspect = process.env.inspect;
+    var debug = process.env.debug || process.env["debug-brk"] || process.env.d;
+    var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
     var tests = process.env.test || process.env.tests || process.env.t;
     var light = process.env.light || false;
@@ -842,12 +844,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     if (!runInParallel) {
         var startTime = mark();
         var args = [];
-        if (inspect) {
-            args.push("--inspect");
-        }
-        if (inspect || debug) {
-            args.push("--debug-brk");
-        }
         args.push("-R", reporter);
         if (tests) {
             args.push("-g", `"${tests}"`);
@@ -861,7 +857,15 @@ function runConsoleTests(defaultReporter, runInParallel) {
         if (bail) {
             args.push("--bail");
         }
-        args.push("-t", testTimeout);
+        if (inspect) {
+            args.unshift("--inspect-brk");
+        }
+        else if (debug) {
+            args.unshift("--debug-brk");
+        }
+        else {
+            args.push("-t", testTimeout);
+        }
         args.push(run);
 
         var cmd = "mocha " + args.join(" ");
@@ -926,7 +930,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 }
 
-var defaultTestTimeout = 22000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
     runConsoleTests('min', /*runInParallel*/ true);
@@ -939,6 +942,7 @@ task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
 
 desc("Generates code coverage data via instanbul");
 task("generate-code-coverage", ["tests", builtLocalDirectory], function () {
+    var testTimeout = process.env.timeout || defaultTestTimeout;
     var cmd = 'istanbul cover node_modules/mocha/bin/_mocha -- -R min -t ' + testTimeout + ' ' + run;
     console.log(cmd);
     exec(cmd);
