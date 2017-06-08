@@ -1668,7 +1668,6 @@ namespace ts {
             if (ambientModule) {
                 return ambientModule;
             }
-            const isRelative = isExternalModuleNameRelative(moduleName);
             const resolvedModule = getResolvedModule(getSourceFileOfNode(location), moduleReference);
             const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule);
             const sourceFile = resolvedModule && !resolutionDiagnostic && host.getSourceFile(resolvedModule.resolvedFileName);
@@ -1692,7 +1691,7 @@ namespace ts {
             }
 
             // May be an untyped module. If so, ignore resolutionDiagnostic.
-            if (!isRelative && resolvedModule && !extensionIsTypeScript(resolvedModule.extension)) {
+            if (resolvedModule && resolvedModule.isExternalLibraryImport && !extensionIsTypeScript(resolvedModule.extension)) {
                 if (isForAugmentation) {
                     const diag = Diagnostics.Invalid_module_name_in_augmentation_Module_0_resolves_to_an_untyped_module_at_1_which_cannot_be_augmented;
                     error(errorNode, diag, moduleReference, resolvedModule.resolvedFileName);
