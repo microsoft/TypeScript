@@ -1,5 +1,5 @@
 
-// @filename: /node_modules/@types/foo-bar/index.d.ts
+// @filename: node_modules/@types/foo-bar/index.d.ts
 export interface Foo {
     bar: string;
 }
