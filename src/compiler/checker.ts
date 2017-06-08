@@ -12744,9 +12744,11 @@ namespace ts {
                 if (declaration.type) {
                     return getTypeFromTypeNode(declaration.type);
                 }
-                const jsDocType = isInJavaScriptFile(declaration) && getTypeForDeclarationFromJSDocComment(declaration);
-                if (jsDocType) {
-                    return jsDocType;
+                if (isInJavaScriptFile(declaration)) {
+                    const jsDocType = getTypeForDeclarationFromJSDocComment(declaration);
+                    if (jsDocType) {
+                        return jsDocType;
+                    }
                 }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);

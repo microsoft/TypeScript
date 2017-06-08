@@ -2625,13 +2625,11 @@ namespace ts {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
             const parameter = accessor.parameters[hasThis ? 1 : 0];
-            if (parameter) {
-                if (parameter.type) {
-                    return parameter.type;
-                }
-                if (includeJSDocType && parameter.flags & NodeFlags.JavaScriptFile) {
-                    return getJSDocType(parameter);
-                }
+            if (parameter.type) {
+                return parameter.type;
+            }
+            if (includeJSDocType && parameter.flags & NodeFlags.JavaScriptFile) {
+                return getJSDocType(parameter);
             }
         }
     }
