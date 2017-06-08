@@ -6841,21 +6841,46 @@ namespace ts {
             return undefined;
         }
 
-        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName) {
+        function resolveTypeReferenceName(typeReferenceName: EntityNameExpression | EntityName, meaning: SymbolFlags) {
             if (!typeReferenceName) {
                 return unknownSymbol;
             }
 
-            return resolveEntityName(typeReferenceName, SymbolFlags.Type) || unknownSymbol;
+            return resolveEntityName(typeReferenceName, meaning) || unknownSymbol;
         }
 
         function getTypeReferenceType(node: TypeReferenceType, symbol: Symbol) {
             const typeArguments = typeArgumentsFromTypeReferenceNode(node); // Do unconditionally so we mark type arguments as referenced.
-
             if (symbol === unknownSymbol) {
                 return unknownType;
             }
 
+            const type = getTypeReferenceTypeWorker(node, symbol, typeArguments);
+            if (type) {
+                return type;
+            }
+
+            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
+                // A JSDocTypeReference may have resolved to a value (as opposed to a type). If
+                // the symbol is a constructor function, return the inferred class type; otherwise,
+                // the type of this reference is just the type of the value we resolved to.
+                const valueType = getTypeOfSymbol(symbol);
+                if (valueType.symbol && !isInferredClassType(valueType)) {
+                    const referenceType = getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+                    if (referenceType) {
+                        return referenceType;
+                    }
+                }
+
+                // Resolve the type reference as a Type for the purpose of reporting errors.
+                resolveTypeReferenceName(getTypeReferenceName(node), SymbolFlags.Type);
+                return valueType;
+            }
+
+            return getTypeFromNonGenericTypeReference(node, symbol);
+        }
+
+        function getTypeReferenceTypeWorker(node: TypeReferenceType, symbol: Symbol, typeArguments: Type[]): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
                 return getTypeFromClassOrInterfaceReference(node, symbol, typeArguments);
             }
@@ -6864,14 +6889,9 @@ namespace ts {
                 return getTypeFromTypeAliasReference(node, symbol, typeArguments);
             }
 
-            if (symbol.flags & SymbolFlags.Value && node.kind === SyntaxKind.JSDocTypeReference) {
-                // A JSDocTypeReference may have resolved to a value (as opposed to a type). In
-                // that case, the type of this reference is just the type of the value we resolved
-                // to.
-                return getTypeOfSymbol(symbol);
+            if (symbol.flags & SymbolFlags.Function && node.kind === SyntaxKind.JSDocTypeReference && (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
+                return getInferredClassType(symbol);
             }
-
-            return getTypeFromNonGenericTypeReference(node, symbol);
         }
 
         function getPrimitiveTypeFromJSDocTypeReference(node: JSDocTypeReference): Type {
@@ -6914,22 +6934,13 @@ namespace ts {
             if (!links.resolvedType) {
                 let symbol: Symbol;
                 let type: Type;
+                let meaning = SymbolFlags.Type;
                 if (node.kind === SyntaxKind.JSDocTypeReference) {
-                    type = getPrimitiveTypeFromJSDocTypeReference(<JSDocTypeReference>node);
-                    if (!type) {
-                        const typeReferenceName = getTypeReferenceName(node);
-                        symbol = resolveTypeReferenceName(typeReferenceName);
-                        type = getTypeReferenceType(node, symbol);
-                    }
+                    type = getPrimitiveTypeFromJSDocTypeReference(node);
+                    meaning |= SymbolFlags.Value;
                 }
-                else {
-                    // We only support expressions that are simple qualified names. For other expressions this produces undefined.
-                    const typeNameOrExpression: EntityNameOrEntityNameExpression = node.kind === SyntaxKind.TypeReference
-                        ? (<TypeReferenceNode>node).typeName
-                        : isEntityNameExpression((<ExpressionWithTypeArguments>node).expression)
-                            ? <EntityNameExpression>(<ExpressionWithTypeArguments>node).expression
-                            : undefined;
-                    symbol = typeNameOrExpression && resolveEntityName(typeNameOrExpression, SymbolFlags.Type) || unknownSymbol;
+                if (!type) {
+                    symbol = resolveTypeReferenceName(getTypeReferenceName(node), meaning);
                     type = getTypeReferenceType(node, symbol);
                 }
                 // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
@@ -8058,7 +8069,7 @@ namespace ts {
             const result = createSignature(signature.declaration, freshTypeParameters,
                 signature.thisParameter && instantiateSymbol(signature.thisParameter, mapper),
                 instantiateList(signature.parameters, mapper, instantiateSymbol),
-                instantiateType(signature.resolvedReturnType, mapper),
+                /*resolvedReturnType*/ undefined,
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
             result.target = signature;
@@ -16176,6 +16187,12 @@ namespace ts {
             return links.inferredClassType;
         }
 
+        function isInferredClassType(type: Type) {
+            return type.symbol
+                && getObjectFlags(type) & ObjectFlags.Anonymous
+                && getSymbolLinks(type.symbol).inferredClassType === type;
+        }
+
         /**
          * Syntactically and semantically checks a call or new expression.
          * @param node The call/new expression to be checked.
@@ -19398,8 +19415,8 @@ namespace ts {
 
         function checkFunctionDeclaration(node: FunctionDeclaration): void {
             if (produceDiagnostics) {
-                checkFunctionOrMethodDeclaration(node) || checkGrammarForGenerator(node);
-
+                checkFunctionOrMethodDeclaration(node);
+                checkGrammarForGenerator(node);
                 checkCollisionWithCapturedSuperVariable(node, node.name);
                 checkCollisionWithCapturedThisVariable(node, node.name);
                 checkCollisionWithCapturedNewTargetVariable(node, node.name);
