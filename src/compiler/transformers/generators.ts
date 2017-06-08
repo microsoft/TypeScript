@@ -640,10 +640,13 @@ namespace ts {
                     return undefined;
                 }
 
-                return createStatement(
-                    inlineExpressions(
-                        map(variables, transformInitializedVariable)
-                    )
+                return setSourceMapRange(
+                    createStatement(
+                        inlineExpressions(
+                            map(variables, transformInitializedVariable)
+                        )
+                    ),
+                    node
                 );
             }
         }
@@ -1281,9 +1284,12 @@ namespace ts {
         }
 
         function transformInitializedVariable(node: VariableDeclaration) {
-            return createAssignment(
-                <Identifier>getSynthesizedClone(node.name),
-                visitNode(node.initializer, visitor, isExpression)
+            return setSourceMapRange(
+                createAssignment(
+                    setSourceMapRange(<Identifier>getSynthesizedClone(node.name), node.name),
+                    visitNode(node.initializer, visitor, isExpression)
+                ),
+                node
             );
         }
 
