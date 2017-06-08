@@ -95,9 +95,16 @@ namespace ts {
         function tryConsumeImport(): boolean {
             let token = scanner.getToken();
             if (token === SyntaxKind.ImportKeyword) {
-
                 token = nextToken();
-                if (token === SyntaxKind.StringLiteral) {
+                if (token === SyntaxKind.OpenParenToken) {
+                    token = nextToken();
+                    if (token === SyntaxKind.StringLiteral) {
+                        // import("mod");
+                        recordModuleName();
+                        return true;
+                    }
+                }
+                else if (token === SyntaxKind.StringLiteral) {
                     // import "mod";
                     recordModuleName();
                     return true;
@@ -297,7 +304,8 @@ namespace ts {
             //    import * as NS  from "mod"
             //    import d, {a, b as B} from "mod"
             //    import i = require("mod");
-            //
+            //    import("mod");
+
             //    export * from "mod"
             //    export {a as b} from "mod"
             //    export import i = require("mod")
