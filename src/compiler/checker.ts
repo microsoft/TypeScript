@@ -8964,6 +8964,13 @@ namespace ts {
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
                         return false;
                     }
+                    if (target.flags & TypeFlags.Union) {
+                        const discriminantType = findMatchingDiscriminantType(source, target as UnionType);
+                        if (discriminantType)  {
+                            // check excess properties against discriminant type only, not the entire union
+                            return hasExcessProperties(source, discriminantType, reportErrors);
+                        }
+                    }
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (!isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
                             if (reportErrors) {
