@@ -5319,7 +5319,7 @@ namespace ts {
     }
 
     /** True if node is of a kind that may contain comment text. */
-    export function isJSDocComentContainingNode(node: Node): boolean {
+    export function isJSDocCommentContainingNode(node: Node): boolean {
         return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
     }
 

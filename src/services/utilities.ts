@@ -758,7 +758,7 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocComentContainingNode(n));
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
