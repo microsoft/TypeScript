@@ -9427,7 +9427,7 @@ namespace ts {
             function hasCommonProperties(source: Type, target: Type) {
                 const isComparingJsxAttributes = !!(source.flags & TypeFlags.JsxAttributes);
                 for (const prop of getPropertiesOfType(source)) {
-                    if (isKnownProperty(target, prop.name, isComparingJsxAttributes, /*skipGlobalObject*/ true)) {
+                    if (isKnownProperty(target, prop.name, isComparingJsxAttributes)) {
                         return true;
                     }
                 }
@@ -14214,19 +14214,23 @@ namespace ts {
 
         /**
          * Check if a property with the given name is known anywhere in the given type. In an object type, a property
-         * is considered known if the object type is empty and the check is for assignability, if the object type has
-         * index signatures, or if the property is actually declared in the object type. In a union or intersection
-         * type, a property is considered known if it is known in any constituent type.
+         * is considered known if
+         * 1. the object type is empty and the check is for assignability, or
+         * 2. if the object type has index signatures, or
+         * 3. if the property is actually declared in the object type
+         *    (this means that 'toString', for example, is not usually a known property).
+         * 4. In a union or intersection type,
+         *    a property is considered known if it is known in any constituent type.
          * @param targetType a type to search a given name in
          * @param name a property name to search
          * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
          */
-        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean, skipGlobalObject?: boolean): boolean {
+        function isKnownProperty(targetType: Type, name: string, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    (skipGlobalObject ? getPropertyOfObjectType(targetType, name) : getPropertyOfType(targetType, name)) ||
+                    getPropertyOfObjectType(targetType, name) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
