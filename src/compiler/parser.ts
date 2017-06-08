@@ -1,6 +1,7 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scanner.ts"/>
 /// <reference path="factory.ts"/>
+/// <reference path="../../lib/lib.d.ts"/>
 
 namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -752,6 +753,11 @@ namespace ts {
         function createSourceFile(fileName: string, languageVersion: ScriptTarget, scriptKind: ScriptKind): SourceFile {
             // code from createNode is inlined here so createNode won't have to deal with special case of creating source files
             // this is quite rare comparing to other nodes and createNode should be as fast as possible
+
+            if(sourceText === undefined) {
+                console.error("Could not load sourceFile " + fileName +"\nSeems like the package is corrupted, try to reinstall it.")
+            }
+
             const sourceFile = <SourceFile>new SourceFileConstructor(SyntaxKind.SourceFile, /*pos*/ 0, /* end */ sourceText.length);
             nodeCount++;
 
