@@ -8530,6 +8530,7 @@ interface DOMException {
     readonly URL_MISMATCH_ERR: number;
     readonly VALIDATION_ERR: number;
     readonly WRONG_DOCUMENT_ERR: number;
+    new(message?: string, name?: string): DOMException;
 }
 
 declare var DOMException: {
@@ -21042,6 +21043,7 @@ type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
 type ConstrainDouble = number | ConstrainDoubleRange;
 type ConstrainLong = number | ConstrainLongRange;
 type CryptoOperationData = ArrayBufferView;
+type DOMExceptionType = "IndexSizeError" | "DOMStringSizeError" | "HierarchyRequestError" | "WrongDocumentError" | "InvalidCharacterError" | "NoDataAllowedError" | "NoModificationAllowedError" | "NotFoundError" | "NotSupportedError" | "InUseAttributeError" | "InvalidStateError" | "SyntaxError" | "InvalidModificationError" | "NamespaceError" | "InvalidAccessError" | "ValidationError" | "TypeMismatchError" | "SecurityError" | "NetworkError" | "AbortError" | "URLMismatchError" | "QuotaExceededError" | "TimeoutError" | "InvalidNodeTypeError" | "DataCloneError" | "EncodingError" | "NotReadableError" | "UnknownError" | "ConstraintError" | "DataError" | "TransactionInactiveError" | "ReadOnlyError" | "VersionError" | "OperationError" | "NotAllowedError";
 type GLbitfield = number;
 type GLboolean = boolean;
 type GLbyte = number;
