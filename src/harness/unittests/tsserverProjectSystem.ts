@@ -96,7 +96,7 @@ namespace ts.projectSystem {
         }
 
         enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
-            const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports, this.globalTypingsCacheLocation);
+            const request = server.createInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             this.install(request);
         }
 

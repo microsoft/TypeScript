@@ -950,6 +950,52 @@ namespace ts.projectSystem {
             const version2 = proj.getCachedUnresolvedImportsPerFile_TestOnly().getVersion();
             assert.equal(version1, version2, "set of unresolved imports should not change");
         });
+
+        it("typings cache is used only if versions match", () => {
+            const jquery = {
+                path: "/a/jquery.js",
+                content: ""
+            };
+            const jqueryDTS = {
+                path: "/cache/node_modules/@types/jquery/index.d.ts",
+                content: ""
+            };
+            const jqueryPackageJson = {
+                path: "/cache/node_modules/@types/jquery/package.json",
+                content: JSON.stringify({
+                    typeScriptVersion: "1.1",
+                    typings: "index.d.ts"
+                })
+            };
+            const packageJson = {
+                path: "/cache/package.json",
+                content: JSON.stringify({
+                    typeScriptVersion: ts.version,
+                    devDependencies: { "@types/jquery": "^2.0.46" }
+                })
+            };
+            const host = createServerHost([jquery, packageJson, jqueryDTS, jqueryPackageJson]);
+            const testTypingsInstaller = (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: "/cache", typesRegistry: createTypesRegistry("jquery") });
+                }
+            });
+            let installer = new testTypingsInstaller();
+            let projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(jquery.path);
+            installer.installAll(/*expectedCount*/ 0);
+
+            // Update the typescript version in the root package.json to something outdated,
+            // then test again with a new instance of the typings installer
+            const newPackageJson = <any>JSON.parse(host.readFile(packageJson.path));
+            newPackageJson.typeScriptVersion = "1.1";
+            host.writeFile(packageJson.path, JSON.stringify(newPackageJson));
+
+            installer = new testTypingsInstaller();
+            projectService = createProjectService(host, { useSingleInferredProject: true, typingsInstaller: installer });
+            projectService.openClientFile(jquery.path);
+            installer.installAll(/*expectedCount*/ 1);
+        });
     });
 
     describe("Validate package name:", () => {
