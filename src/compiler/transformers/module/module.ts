@@ -514,14 +514,14 @@ namespace ts {
 
         function visitImportCallExpression(node: ImportCall): Expression {
             switch (compilerOptions.module) {
-                case ModuleKind.CommonJS:
-                    return transformImportCallExpressionCommonJS(node);
                 case ModuleKind.AMD:
                     return transformImportCallExpressionAMD(node);
                 case ModuleKind.UMD:
                     return transformImportCallExpressionUMD(node);
+                case ModuleKind.CommonJS:
+                default:
+                    return transformImportCallExpressionCommonJS(node);
             }
-            Debug.fail("All supported module kind in this transformation step should have been handled");
         }
 
         function transformImportCallExpressionUMD(node: ImportCall): Expression {
