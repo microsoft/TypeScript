@@ -48,8 +48,7 @@ declare namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
-        GetRefactorCodeActions = "getRefactorCodeActions",
-        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
+        GetEditsForRefactor = "getEditsForRefactor",
     }
     /**
      * A TypeScript Server message
@@ -291,32 +290,84 @@ declare namespace ts.server.protocol {
         offset: number;
     }
     type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
+    /**
+     * Request refactorings at a given position or selection area.
+     */
     interface GetApplicableRefactorsRequest extends Request {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
     type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
-    interface ApplicableRefactorInfo {
-        name: string;
-        description: string;
-    }
+    /**
+     * Response is a list of available refactorings.
+     * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+     */
     interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
     }
-    interface GetRefactorCodeActionsRequest extends Request {
-        command: CommandTypes.GetRefactorCodeActions;
-        arguments: GetRefactorCodeActionsRequestArgs;
+    /**
+     * A set of one or more available refactoring actions, grouped under a parent refactoring.
+     */
+    interface ApplicableRefactorInfo {
+        /**
+         * The programmatic name of the refactoring
+         */
+        name: string;
+        /**
+         * A description of this refactoring category to show to the user.
+         * If the refactoring gets inlined (see below), this text will not be visible.
+         */
+        description: string;
+        /**
+         * Inlineable refactorings can have their actions hoisted out to the top level
+         * of a context menu. Non-inlineanable refactorings should always be shown inside
+         * their parent grouping.
+         *
+         * If not specified, this value is assumed to be 'true'
+         */
+        inlineable?: boolean;
+        actions: RefactorActionInfo[];
     }
-    type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
-        refactorName: string;
+    /**
+     * Represents a single refactoring action - for example, the "Extract Method..." refactor might
+     * offer several actions, each corresponding to a surround class or closure to extract into.
+     */
+    type RefactorActionInfo = {
+        /**
+         * The programmatic name of the refactoring action
+         */
+        name: string;
+        /**
+         * A description of this refactoring action to show to the user.
+         * If the parent refactoring is inlined away, this will be the only text shown,
+         * so this description should make sense by itself if the parent is inlineable=true
+         */
+        description: string;
     };
-    type RefactorCodeActions = {
-        actions: protocol.CodeAction[];
-        renameLocation?: number;
-    };
-    interface GetRefactorCodeActionsResponse extends Response {
-        body: RefactorCodeActions;
+    interface GetEditsForRefactorRequest extends Request {
+        command: CommandTypes.GetEditsForRefactor;
+        arguments: GetEditsForRefactorRequestArgs;
     }
+    /**
+     * Request the edits that a particular refactoring action produces.
+     * Callers must specify the name of the refactor and the name of the action.
+     */
+    type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+        refactor: string;
+        action: string;
+    };
+    interface GetEditsForRefactorResponse extends Response {
+        body?: RefactorEditInfo;
+    }
+    type RefactorEditInfo = {
+        edits: FileCodeEdits[];
+        /**
+         * An optional location where the editor should start a rename operation once
+         * the refactoring edits have been applied
+         */
+        renameLocation?: Location;
+        renameFilename?: string;
+    };
     /**
      * Request for the available codefixes at a specific position.
      */

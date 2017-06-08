@@ -341,21 +341,22 @@ declare namespace ts {
         JSDocComment = 283,
         JSDocTag = 284,
         JSDocAugmentsTag = 285,
-        JSDocParameterTag = 286,
-        JSDocReturnTag = 287,
-        JSDocTypeTag = 288,
-        JSDocTemplateTag = 289,
-        JSDocTypedefTag = 290,
-        JSDocPropertyTag = 291,
-        JSDocTypeLiteral = 292,
-        JSDocLiteralType = 293,
-        SyntaxList = 294,
-        NotEmittedStatement = 295,
-        PartiallyEmittedExpression = 296,
-        CommaListExpression = 297,
-        MergeDeclarationMarker = 298,
-        EndOfDeclarationMarker = 299,
-        Count = 300,
+        JSDocClassTag = 286,
+        JSDocParameterTag = 287,
+        JSDocReturnTag = 288,
+        JSDocTypeTag = 289,
+        JSDocTemplateTag = 290,
+        JSDocTypedefTag = 291,
+        JSDocPropertyTag = 292,
+        JSDocTypeLiteral = 293,
+        JSDocLiteralType = 294,
+        SyntaxList = 295,
+        NotEmittedStatement = 296,
+        PartiallyEmittedExpression = 297,
+        CommaListExpression = 298,
+        MergeDeclarationMarker = 299,
+        EndOfDeclarationMarker = 300,
+        Count = 301,
         FirstAssignment = 58,
         LastAssignment = 70,
         FirstCompoundAssignment = 59,
@@ -382,9 +383,9 @@ declare namespace ts {
         LastBinaryOperator = 70,
         FirstNode = 143,
         FirstJSDocNode = 267,
-        LastJSDocNode = 293,
-        FirstJSDocTagNode = 283,
-        LastJSDocTagNode = 293,
+        LastJSDocNode = 294,
+        FirstJSDocTagNode = 284,
+        LastJSDocTagNode = 294,
     }
     const enum NodeFlags {
         None = 0,
@@ -1440,6 +1441,9 @@ declare namespace ts {
         kind: SyntaxKind.JSDocAugmentsTag;
         typeExpression: JSDocTypeExpression;
     }
+    interface JSDocClassTag extends JSDocTag {
+        kind: SyntaxKind.JSDocClassTag;
+    }
     interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
         typeParameters: NodeArray<TypeParameterDeclaration>;
@@ -2230,6 +2234,14 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string;
     }
+    interface SourceMapRange extends TextRange {
+        source?: SourceMapSource;
+    }
+    interface SourceMapSource {
+        fileName: string;
+        text: string;
+        skipTrivia?: (pos: number) => number;
+    }
     const enum EmitFlags {
         SingleLine = 1,
         AdviseOnEmitNode = 2,
@@ -2412,7 +2424,7 @@ declare namespace ts {
     }
     function tokenToString(t: SyntaxKind): string | undefined;
     function getPositionOfLineAndCharacter(sourceFile: SourceFile, line: number, character: number): number;
-    function getLineAndCharacterOfPosition(sourceFile: SourceFile, position: number): LineAndCharacter;
+    function getLineAndCharacterOfPosition(sourceFile: SourceFileLike, position: number): LineAndCharacter;
     function isWhiteSpaceLike(ch: number): boolean;
     function isWhiteSpaceSingleLine(ch: number): boolean;
     function isLineBreak(ch: number): boolean;
@@ -2720,7 +2732,7 @@ declare namespace ts {
     function updateQualifiedName(node: QualifiedName, left: EntityName, right: Identifier): QualifiedName;
     function createComputedPropertyName(expression: Expression): ComputedPropertyName;
     function updateComputedPropertyName(node: ComputedPropertyName, expression: Expression): ComputedPropertyName;
-    function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
+    function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode): TypeParameterDeclaration;
     function updateTypeParameterDeclaration(node: TypeParameterDeclaration, name: Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined): TypeParameterDeclaration;
     function createParameter(decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken?: QuestionToken, type?: TypeNode, initializer?: Expression): ParameterDeclaration;
     function updateParameter(node: ParameterDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, dotDotDotToken: DotDotDotToken | undefined, name: string | BindingName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined): ParameterDeclaration;
@@ -2987,10 +2999,11 @@ declare namespace ts {
     function setTextRange<T extends TextRange>(range: T, location: TextRange | undefined): T;
     function getEmitFlags(node: Node): EmitFlags | undefined;
     function setEmitFlags<T extends Node>(node: T, emitFlags: EmitFlags): T;
-    function getSourceMapRange(node: Node): TextRange;
-    function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined): T;
-    function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined;
-    function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined): T;
+    function getSourceMapRange(node: Node): SourceMapRange;
+    function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined): T;
+    function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource;
+    function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined;
+    function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined): T;
     function getCommentRange(node: Node): TextRange;
     function setCommentRange<T extends Node>(node: T, range: TextRange): T;
     function getSyntheticLeadingComments(node: Node): SynthesizedComment[] | undefined;
@@ -3103,6 +3116,9 @@ declare namespace ts {
     interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
+    interface SourceMapSource {
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    }
     interface IScriptSnapshot {
         getText(start: number, end: number): string;
         getLength(): number;
@@ -3187,7 +3203,7 @@ declare namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
-        getRefactorCodeActions(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string): CodeAction[] | undefined;
+        getEditsForRefactor(fileName: string, formatOptions: FormatCodeSettings, positionOrRange: number | TextRange, refactorName: string, actionName: string): RefactorEditInfo | undefined;
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program;
         dispose(): void;
@@ -3241,7 +3257,18 @@ declare namespace ts {
     interface ApplicableRefactorInfo {
         name: string;
         description: string;
+        inlineable?: boolean;
+        actions: RefactorActionInfo[];
     }
+    type RefactorActionInfo = {
+        name: string;
+        description: string;
+    };
+    type RefactorEditInfo = {
+        edits: FileTextChanges[];
+        renameFilename?: string;
+        renameLocation?: number;
+    };
     interface TextInsertion {
         newText: string;
         caretOffset: number;
@@ -3878,8 +3905,7 @@ declare namespace ts.server.protocol {
         GetCodeFixes = "getCodeFixes",
         GetSupportedCodeFixes = "getSupportedCodeFixes",
         GetApplicableRefactors = "getApplicableRefactors",
-        GetRefactorCodeActions = "getRefactorCodeActions",
-        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
+        GetEditsForRefactor = "getEditsForRefactor",
     }
     interface Message {
         seq: number;
@@ -3980,27 +4006,35 @@ declare namespace ts.server.protocol {
         arguments: GetApplicableRefactorsRequestArgs;
     }
     type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
-    interface ApplicableRefactorInfo {
-        name: string;
-        description: string;
-    }
     interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
     }
-    interface GetRefactorCodeActionsRequest extends Request {
-        command: CommandTypes.GetRefactorCodeActions;
-        arguments: GetRefactorCodeActionsRequestArgs;
+    interface ApplicableRefactorInfo {
+        name: string;
+        description: string;
+        inlineable?: boolean;
+        actions: RefactorActionInfo[];
     }
-    type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
-        refactorName: string;
+    type RefactorActionInfo = {
+        name: string;
+        description: string;
     };
-    type RefactorCodeActions = {
-        actions: protocol.CodeAction[];
-        renameLocation?: number;
-    };
-    interface GetRefactorCodeActionsResponse extends Response {
-        body: RefactorCodeActions;
+    interface GetEditsForRefactorRequest extends Request {
+        command: CommandTypes.GetEditsForRefactor;
+        arguments: GetEditsForRefactorRequestArgs;
     }
+    type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+        refactor: string;
+        action: string;
+    };
+    interface GetEditsForRefactorResponse extends Response {
+        body?: RefactorEditInfo;
+    }
+    type RefactorEditInfo = {
+        edits: FileCodeEdits[];
+        renameLocation?: Location;
+        renameFilename?: string;
+    };
     interface CodeFixRequest extends Request {
         command: CommandTypes.GetCodeFixes;
         arguments: CodeFixRequestArgs;
@@ -4807,10 +4841,11 @@ declare namespace ts.server {
         private isLocation(locationOrSpan);
         private extractPositionAndRange(args, scriptInfo);
         private getApplicableRefactors(args);
-        private getRefactorCodeActions(args, simplifiedResult);
+        private getEditsForRefactor(args, simplifiedResult);
         private getCodeFixes(args, simplifiedResult);
         private getStartAndEndPosition(args, scriptInfo);
         private mapCodeAction(codeAction, scriptInfo);
+        private mapTextChangesToCodeEdits(project, textChanges);
         private convertTextChangeToCodeEdit(change, scriptInfo);
         private getBraceMatching(args, simplifiedResult);
         private getDiagnosticsForProject(next, delay, fileName);
