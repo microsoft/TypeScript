@@ -2620,18 +2620,17 @@ namespace ts {
         });
     }
 
-    /** Get the type annotation for the value parameter. */
-    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration, includeJSDocType?: boolean): TypeNode {
+    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
-            const parameter = accessor.parameters[hasThis ? 1 : 0];
-            if (parameter.type) {
-                return parameter.type;
-            }
-            if (includeJSDocType && parameter.flags & NodeFlags.JavaScriptFile) {
-                return getJSDocType(parameter);
-            }
+            return accessor.parameters[hasThis ? 1 : 0];
         }
+    }
+
+    /** Get the type annotation for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(accessor);
+        return parameter && parameter.type;
     }
 
     export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
@@ -2710,6 +2709,41 @@ namespace ts {
             getAccessor,
             setAccessor
         };
+    }
+
+    /**
+     * Gets the effective type annotation of a variable, parameter, or property. If the node was
+     * parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocType(node);
+        }
+    }
+
+    /**
+     * Gets the effective return type annotation of a signature. If the node was parsed in a
+     * JavaScript file, gets the return type annotation from JSDoc.
+     */
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocReturnType(node);
+        }
+    }
+
+    /**
+     * Gets the effective type annotation of the value parameter of a set accessor. If the node
+     * was parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(node);
+        return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
 
     export function emitNewLineBeforeLeadingComments(lineMap: number[], writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {

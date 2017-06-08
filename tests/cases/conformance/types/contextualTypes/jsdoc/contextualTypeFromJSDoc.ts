@@ -10,7 +10,7 @@ const arr = [
     ['b', { y: 2 }]
 ];
 
-/** @return {function(): Array<[string, {x?:number, y?:number}]>} */
+/** @return {Array<[string, {x?:number, y?:number}]>} */
 function f() {
     return [
         ['a', { x: 1 }],
@@ -19,9 +19,9 @@ function f() {
 }
 
 class C {
-    /** @param {function(): Array<[string, {x?:number, y?:number}]>} value */
+    /** @param {Array<[string, {x?:number, y?:number}]>} value */
     set x(value) { }
-    get () {
+    get x() {
         return [
             ['a', { x: 1 }],
             ['b', { y: 2 }]
