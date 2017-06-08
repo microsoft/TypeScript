@@ -1,16 +1,18 @@
 /* @internal */
 
 namespace ts.refactor {
+    const actionName = "convert";
+
     const convertFunctionToES6Class: Refactor = {
         name: "Convert to ES2015 class",
         description: Diagnostics.Convert_function_to_an_ES2015_class.message,
-        getCodeActions,
-        isApplicable
+        getEditsForAction,
+        getAvailableActions
     };
 
     registerRefactor(convertFunctionToES6Class);
 
-    function isApplicable(context: RefactorContext): boolean {
+    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] {
         const start = context.startPosition;
         const node = getTokenAtPosition(context.file, start, /*includeJsDocComment*/ false);
         const checker = context.program.getTypeChecker();
@@ -20,10 +22,28 @@ namespace ts.refactor {
             symbol = (symbol.valueDeclaration as VariableDeclaration).initializer.symbol;
         }
 
-        return symbol && symbol.flags & SymbolFlags.Function && symbol.members && symbol.members.size > 0;
+        if (symbol && (symbol.flags & SymbolFlags.Function) && symbol.members && (symbol.members.size > 0)) {
+            return [
+                {
+                    name: convertFunctionToES6Class.name,
+                    description: convertFunctionToES6Class.description,
+                    actions: [
+                        {
+                            description: convertFunctionToES6Class.description,
+                            name: actionName
+                        }
+                    ]
+                }
+            ];
+        }
     }
 
-    function getCodeActions(context: RefactorContext): CodeAction[] | undefined {
+    function getEditsForAction(context: RefactorContext, action: string): RefactorEditInfo | undefined {
+        // Somehow wrong action got invoked?
+        if (actionName !== action) {
+            return undefined;
+        }
+
         const start = context.startPosition;
         const sourceFile = context.file;
         const checker = context.program.getTypeChecker();
@@ -35,7 +55,7 @@ namespace ts.refactor {
         const deletes: (() => any)[] = [];
 
         if (!(ctorSymbol.flags & (SymbolFlags.Function | SymbolFlags.Variable))) {
-            return [];
+            return undefined;
         }
 
         const ctorDeclaration = ctorSymbol.valueDeclaration;
@@ -63,7 +83,7 @@ namespace ts.refactor {
         }
 
         if (!newClassDeclaration) {
-            return [];
+            return undefined;
         }
 
         // Because the preceding node could be touched, we need to insert nodes before delete nodes.
@@ -72,10 +92,9 @@ namespace ts.refactor {
             deleteCallback();
         }
 
-        return [{
-            description: formatStringFromArgs(Diagnostics.Convert_function_0_to_class.message, [ctorSymbol.name]),
-            changes: changeTracker.getChanges()
-        }];
+        return {
+            edits: changeTracker.getChanges()
+        };
 
         function deleteNode(node: Node, inList = false) {
             if (deletedNodes.some(n => isNodeDescendantOf(node, n))) {

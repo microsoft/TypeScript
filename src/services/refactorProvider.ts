@@ -8,10 +8,10 @@ namespace ts {
         description: string;
 
         /** Compute the associated code actions */
-        getCodeActions(context: RefactorContext): CodeAction[];
+        getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
-        /** A fast syntactic check to see if the refactor is applicable at given position. */
-        isApplicable(context: RefactorContext): boolean;
+        /** Compute (quickly) which actions are available here */
+        getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
     }
 
     export interface RefactorContext {
@@ -34,7 +34,6 @@ namespace ts {
         }
 
         export function getApplicableRefactors(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-
             let results: ApplicableRefactorInfo[];
             const refactorList: Refactor[] = [];
             refactors.forEach(refactor => {
@@ -44,16 +43,17 @@ namespace ts {
                 if (context.cancellationToken && context.cancellationToken.isCancellationRequested()) {
                     return results;
                 }
-                if (refactor.isApplicable(context)) {
-                    (results || (results = [])).push({ name: refactor.name, description: refactor.description });
+                const infos = refactor.getAvailableActions(context);
+                if (infos && infos.length) {
+                    (results || (results = [])).push(...infos);
                 }
             }
             return results;
         }
 
-        export function getRefactorCodeActions(context: RefactorContext, refactorName: string): CodeAction[] | undefined {
+        export function getEditsForRefactor(context: RefactorContext, refactorName: string, actionName: string): RefactorEditInfo | undefined {
             const refactor = refactors.get(refactorName);
-            return refactor && refactor.getCodeActions(context);
+            return refactor && refactor.getEditsForAction(context, actionName);
         }
     }
 }

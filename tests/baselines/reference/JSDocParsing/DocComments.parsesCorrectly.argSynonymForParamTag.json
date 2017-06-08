@@ -40,6 +40,7 @@
                 "end": 27,
                 "text": "name1"
             },
+            "isBracketed": false,
             "comment": "Description"
         },
         "length": 1,

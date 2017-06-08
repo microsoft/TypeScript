@@ -25,4 +25,4 @@ class foo {
 foo.prototype.instanceProp1 = "hello";
 foo.prototype.instanceProp2 = undefined;
 foo.staticProp = "world";
-`, 'Convert to ES2015 class');
+`, 'Convert to ES2015 class', 'convert');
