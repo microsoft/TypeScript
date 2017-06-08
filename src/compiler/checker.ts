@@ -4588,7 +4588,12 @@ namespace ts {
                         error(getter, Diagnostics._0_implicitly_has_return_type_any_because_it_does_not_have_a_return_type_annotation_and_is_referenced_directly_or_indirectly_in_one_of_its_return_expressions, symbolToString(symbol));
                     }
                 }
-                links.type = getter ? addOptionality(type, /*optional*/ !!getter.questionToken) : type;
+                if (getter) {
+                    links.type = addOptionality(type, /*optional*/ !!getter.questionToken);
+                }
+                else {
+                    links.type = type;
+                }
             }
             return links.type;
         }
