@@ -22,7 +22,7 @@ namespace ts {
          *
          * @param sourceFile The source file.
          */
-        setSourceFile(sourceFile: SourceFile): void;
+        setSourceFile(sourceFile: SourceMapSource): void;
 
         /**
          * Emits a mapping.
@@ -81,7 +81,7 @@ namespace ts {
     export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
         const compilerOptions = host.getCompilerOptions();
         const extendedDiagnostics = compilerOptions.extendedDiagnostics;
-        let currentSourceFile: SourceFile;
+        let currentSource: SourceMapSource;
         let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
 
@@ -110,6 +110,13 @@ namespace ts {
         };
 
         /**
+         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         */
+        function skipSourceTrivia(pos: number): number {
+            return currentSource.skipTrivia ? currentSource.skipTrivia(pos) : skipTrivia(currentSourceText, pos);
+        }
+
+        /**
          * Initialize the SourceMapWriter for a new output file.
          *
          * @param filePath The path to the generated output file.
@@ -125,7 +132,7 @@ namespace ts {
                 reset();
             }
 
-            currentSourceFile = undefined;
+            currentSource = undefined;
             currentSourceText = undefined;
 
             // Current source map file and its index in the sources list
@@ -192,7 +199,7 @@ namespace ts {
                 return;
             }
 
-            currentSourceFile = undefined;
+            currentSource = undefined;
             sourceMapDir = undefined;
             sourceMapSourceIndex = undefined;
             lastRecordedSourceMapSpan = undefined;
@@ -263,7 +270,7 @@ namespace ts {
                 performance.mark("beforeSourcemap");
             }
 
-            const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
+            const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
 
             // Convert the location to be one-based.
             sourceLinePos.line++;
@@ -320,13 +327,21 @@ namespace ts {
             if (node) {
                 const emitNode = node.emitNode;
                 const emitFlags = emitNode && emitNode.flags;
-                const { pos, end } = emitNode && emitNode.sourceMapRange || node;
+                const range = emitNode && emitNode.sourceMapRange;
+                const { pos, end } = range || node;
+                let source = range && range.source;
+                const oldSource = currentSource;
+                if (source === oldSource) source = undefined;
+
+                if (source) setSourceFile(source);
 
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
                     && pos >= 0) {
-                    emitPos(skipTrivia(currentSourceText, pos));
+                    emitPos(skipSourceTrivia(pos));
                 }
+
+                if (source) setSourceFile(oldSource);
 
                 if (emitFlags & EmitFlags.NoNestedSourceMaps) {
                     disabled = true;
@@ -337,11 +352,15 @@ namespace ts {
                     emitCallback(hint, node);
                 }
 
+                if (source) setSourceFile(source);
+
                 if (node.kind !== SyntaxKind.NotEmittedStatement
                     && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
                     && end >= 0) {
                     emitPos(end);
                 }
+
+                if (source) setSourceFile(oldSource);
             }
         }
 
@@ -362,7 +381,7 @@ namespace ts {
             const emitFlags = emitNode && emitNode.flags;
             const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
 
-            tokenPos = skipTrivia(currentSourceText, range ? range.pos : tokenPos);
+            tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
             if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
                 emitPos(tokenPos);
             }
@@ -382,13 +401,13 @@ namespace ts {
          *
          * @param sourceFile The source file.
          */
-        function setSourceFile(sourceFile: SourceFile) {
+        function setSourceFile(sourceFile: SourceMapSource) {
             if (disabled) {
                 return;
             }
 
-            currentSourceFile = sourceFile;
-            currentSourceText = currentSourceFile.text;
+            currentSource = sourceFile;
+            currentSourceText = currentSource.text;
 
             // Add the file to tsFilePaths
             // If sourceroot option: Use the relative path corresponding to the common directory path
@@ -396,7 +415,7 @@ namespace ts {
             const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
 
             const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                currentSourceFile.fileName,
+                currentSource.fileName,
                 host.getCurrentDirectory(),
                 host.getCanonicalFileName,
                 /*isAbsolutePathAnUrl*/ true);
@@ -407,10 +426,10 @@ namespace ts {
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(currentSourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(currentSource.fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(currentSourceFile.text);
+                    sourceMapData.sourceMapSourcesContent.push(currentSource.text);
                 }
             }
         }

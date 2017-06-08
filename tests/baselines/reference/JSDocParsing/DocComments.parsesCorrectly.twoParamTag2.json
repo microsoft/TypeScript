@@ -40,6 +40,7 @@
                 "end": 29,
                 "text": "name1"
             },
+            "isBracketed": false,
             "comment": ""
         },
         "1": {
@@ -79,6 +80,7 @@
                 "end": 55,
                 "text": "name2"
             },
+            "isBracketed": false,
             "comment": ""
         },
         "length": 2,

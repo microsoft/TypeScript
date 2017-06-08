@@ -526,7 +526,7 @@ namespace ts.server {
                     watchedFile.callback(watchedFile.fileName);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                    watchedFile.mtime = getModifiedTime(watchedFile.fileName);
+                    watchedFile.mtime = stats.mtime;
                     watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
                 }
             });

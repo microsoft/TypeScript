@@ -814,7 +814,7 @@ namespace ts {
          * False will mean that node is not classified and traverse routine should recurse into node contents.
          */
         function tryClassifyNode(node: Node): boolean {
-            if (isJSDocTag(node)) {
+            if (isJSDocNode(node)) {
                 return true;
             }
 

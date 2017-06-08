@@ -1425,29 +1425,40 @@ namespace ts.server {
             return project.getLanguageService().getApplicableRefactors(file, position || textRange);
         }
 
-        private getRefactorCodeActions(args: protocol.GetRefactorCodeActionsRequestArgs, simplifiedResult: boolean): protocol.RefactorCodeActions | protocol.RefactorCodeActionsFull {
+        private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): ts.RefactorEditInfo | protocol.RefactorEditInfo {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
 
-            const result: ts.CodeAction[] = project.getLanguageService().getRefactorCodeActions(
+            const result = project.getLanguageService().getEditsForRefactor(
                 file,
                 this.projectService.getFormatCodeOptions(),
                 position || textRange,
-                args.refactorName
+                args.refactor,
+                args.action
             );
 
-            if (simplifiedResult) {
-                // Not full
+            if (result === undefined) {
                 return {
-                    actions: result.map(action => this.mapCodeAction(action, scriptInfo))
+                    edits: []
+                };
+            }
+
+            if (simplifiedResult) {
+                const file = result.renameFilename;
+                let location: ILineInfo | undefined  = undefined;
+                if (file !== undefined && result.renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
+                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                }
+                return {
+                    renameLocation: location,
+                    renameFilename: file,
+                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
-                // Full
-                return {
-                    actions: result
-                };
+                return result;
             }
         }
 
@@ -1505,6 +1516,14 @@ namespace ts.server {
             };
         }
 
+        private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
+            const scriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(textChanges.fileName));
+            return {
+                fileName: textChanges.fileName,
+                textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+            };
+        }
+
         private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
@@ -1544,18 +1563,22 @@ namespace ts.server {
             const normalizedFileName = toNormalizedPath(fileName);
             const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*refreshInferredProjects*/ true);
             for (const fileNameInProject of fileNamesInProject) {
-                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName))
+                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName)) {
                     highPriorityFiles.push(fileNameInProject);
+                }
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
                     if (!info.isScriptOpen()) {
-                        if (fileNameInProject.indexOf(".d.ts") > 0)
+                        if (fileNameInProject.indexOf(".d.ts") > 0) {
                             veryLowPriorityFiles.push(fileNameInProject);
-                        else
+                        }
+                        else {
                             lowPriorityFiles.push(fileNameInProject);
+                        }
                     }
-                    else
+                    else {
                         mediumPriorityFiles.push(fileNameInProject);
+                    }
                 }
             }
 
@@ -1833,11 +1856,11 @@ namespace ts.server {
             [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
                 return this.requiredResponse(this.getApplicableRefactors(request.arguments));
             },
-            [CommandNames.GetRefactorCodeActions]: (request: protocol.GetRefactorCodeActionsRequest) => {
-                return this.requiredResponse(this.getRefactorCodeActions(request.arguments, /*simplifiedResult*/ true));
+            [CommandNames.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
+                return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetRefactorCodeActionsFull]: (request: protocol.GetRefactorCodeActionsRequest) => {
-                return this.requiredResponse(this.getRefactorCodeActions(request.arguments, /*simplifiedResult*/ false));
+            [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
+                return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
             }
         });
 

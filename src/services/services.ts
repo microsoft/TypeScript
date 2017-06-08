@@ -136,7 +136,7 @@ namespace ts {
         }
 
         private createChildren(sourceFile?: SourceFileLike) {
-            if (isJSDocTag(this)) {
+            if (this.kind === SyntaxKind.JSDocComment || isJSDocTag(this)) {
                 /** Don't add trivia for "tokens" since this is in a comment. */
                 const children: Node[] = [];
                 this.forEachChild(child => { children.push(child); });
@@ -146,9 +146,9 @@ namespace ts {
                 const children: Node[] = [];
                 scanner.setText((sourceFile || this.getSourceFile()).text);
                 let pos = this.pos;
-                const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
+                const useJSDocScanner = isJSDocNode(this);
                 const processNode = (node: Node) => {
-                    const isJSDocTagNode = isJSDocTag(node);
+                    const isJSDocTagNode = isJSDocNode(node);
                     if (!isJSDocTagNode && pos < node.pos) {
                         pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
                     }
@@ -684,8 +684,9 @@ namespace ts {
                             forEachChild(decl.name, visit);
                             break;
                         }
-                        if (decl.initializer)
+                        if (decl.initializer) {
                             visit(decl.initializer);
+                        }
                     }
                         // falls through
                     case SyntaxKind.EnumMember:
@@ -732,6 +733,15 @@ namespace ts {
         }
     }
 
+    class SourceMapSourceObject implements SourceMapSource {
+        lineMap: number[];
+        constructor (public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+
+        public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
+            return ts.getLineAndCharacterOfPosition(this, pos);
+        }
+    }
+
     function getServicesObjectAllocator(): ObjectAllocator {
         return {
             getNodeConstructor: () => NodeObject,
@@ -742,6 +752,7 @@ namespace ts {
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
+            getSourceMapSourceConstructor: () => SourceMapSourceObject,
         };
     }
 
@@ -1989,15 +2000,16 @@ namespace ts {
             return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
         }
 
-        function getRefactorCodeActions(
+        function getEditsForRefactor(
             fileName: string,
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorName: string): CodeAction[] | undefined {
+            refactorName: string,
+            actionName: string): RefactorEditInfo {
 
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getRefactorCodeActions(getRefactorContext(file, positionOrRange, formatOptions), refactorName);
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName);
         }
 
         return {
@@ -2005,8 +2017,6 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getApplicableRefactors,
-            getRefactorCodeActions,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
@@ -2044,7 +2054,9 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
-            getProgram
+            getProgram,
+            getApplicableRefactors,
+            getEditsForRefactor,
         };
     }
 
