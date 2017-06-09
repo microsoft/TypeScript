@@ -21785,7 +21785,13 @@ namespace ts {
                 }
 
                 // Don't allow to re-export something with no value side when `--isolatedModules` is set.
-                if (node.kind === SyntaxKind.ExportSpecifier && compilerOptions.isolatedModules && !(target.flags & SymbolFlags.Value)) {
+                if (compilerOptions.isolatedModules
+                    && node.kind === SyntaxKind.ExportSpecifier
+                    && !(target.flags & SymbolFlags.Value)
+                    // Module augmentation / ambient declaration not allowed under `--isolatedModules` anyway, so this should be at the top-level.
+                    && isSourceFile(node.parent.parent.parent)
+                    // OK to re-export a type in a declaration file.
+                    && !node.parent.parent.parent.isDeclarationFile) {
                     error(node, Diagnostics.Cannot_re_export_a_type_when_the_isolatedModules_flag_is_provided);
                 }
             }

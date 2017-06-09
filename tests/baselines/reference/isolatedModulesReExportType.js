@@ -10,6 +10,16 @@ export class C {}
 declare type T = number;
 export = T;
 
+//// [bar.d.ts]
+export type T = number;
+
+//// [index.d.ts]
+export { T } from "./bar"; // In a declaration file, so not an error.
+
+//// [index.d.ts]
+declare module "baz" {
+    export { T } from "foo"; // Also allowed.
+}
 
 //// [user.ts]
 // Error, can't re-export something that's only a type.
