@@ -9,6 +9,7 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             assert.equal(et.getEvents().length, 0);
         });
+
         it("only sends an event once", () => {
             const file = makeFile("/a.ts");
             const tsconfig = makeFile("/tsconfig.json", {});
@@ -46,12 +47,13 @@ namespace ts.projectSystem {
             const et = new EventTracker([file1]);
             const compilerOptions: ts.CompilerOptions = { strict: true };
 
-            const projectFileName = "foo.csproj";
+            const projectFileName = "/hunter2/foo.csproj";
 
             open();
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
+                projectId: Harness.LanguageService.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -195,6 +197,7 @@ namespace ts.projectSystem {
             const et = new EventTracker([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
+                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -214,6 +217,7 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent, /*mayBeMore*/ true);
             et.assertProjectInfoTelemetryEvent({
+                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -248,7 +252,26 @@ namespace ts.projectSystem {
         }
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
-            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), makePayload(partial));
+            assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
+                projectId: Harness.LanguageService.mockHash("/tsconfig.json"),
+                fileStats: fileStats({ ts: 1 }),
+                compilerOptions: {},
+                extends: false,
+                files: false,
+                include: false,
+                exclude: false,
+                compileOnSave: false,
+                typeAcquisition: {
+                    enable: false,
+                    exclude: false,
+                    include: false,
+                },
+                configFileName: "tsconfig.json",
+                projectType: "configured",
+                languageServiceEnabled: true,
+                version: ts.version,
+                ...partial,
+            });
         }
 
         getEvent<T extends server.ProjectServiceEvent>(eventName: T["eventName"], mayBeMore = false): T["data"] {
@@ -258,28 +281,6 @@ namespace ts.projectSystem {
             assert.equal(event.eventName, eventName);
             return event.data;
         }
-    }
-
-    function makePayload(partial: Partial<server.ProjectInfoTelemetryEventData>): server.ProjectInfoTelemetryEventData {
-        return {
-            fileStats: fileStats({ ts: 1 }),
-            compilerOptions: {},
-            extends: false,
-            files: false,
-            include: false,
-            exclude: false,
-            compileOnSave: false,
-            typeAcquisition: {
-                enable: false,
-                exclude: false,
-                include: false,
-            },
-            configFileName: "tsconfig.json",
-            projectType: "configured",
-            languageServiceEnabled: true,
-            version: ts.version,
-            ...partial
-        };
     }
 
     function makeFile(path: string, content: {} = ""): projectSystem.FileOrFolder {

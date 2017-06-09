@@ -724,8 +724,8 @@ namespace ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation);
-                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName);
+                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation); // "@"
+                    pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
 
@@ -814,7 +814,7 @@ namespace ts {
          * False will mean that node is not classified and traverse routine should recurse into node contents.
          */
         function tryClassifyNode(node: Node): boolean {
-            if (isJSDocNode(node)) {
+            if (isJSDoc(node)) {
                 return true;
             }
 

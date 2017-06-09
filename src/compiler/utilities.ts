@@ -1546,6 +1546,12 @@ namespace ts {
             p.name.kind === SyntaxKind.Identifier && p.name.text === name);
     }
 
+    export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
+        const name = node.name.text;
+        const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
+        return find(typeParameters, p => p.name.text === name);
+    }
+
     export function getJSDocType(node: Node): JSDocType {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
@@ -1568,6 +1574,11 @@ namespace ts {
 
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+    }
+
+    export function getJSDocReturnType(node: Node): JSDocType {
+        const returnTag = getJSDocReturnTag(node);
+        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
@@ -2615,12 +2626,17 @@ namespace ts {
         });
     }
 
-    /** Get the type annotaion for the value parameter. */
-    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
-            return accessor.parameters[hasThis ? 1 : 0].type;
+            return accessor.parameters[hasThis ? 1 : 0];
         }
+    }
+
+    /** Get the type annotation for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(accessor);
+        return parameter && parameter.type;
     }
 
     export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
@@ -2699,6 +2715,41 @@ namespace ts {
             getAccessor,
             setAccessor
         };
+    }
+
+    /**
+     * Gets the effective type annotation of a variable, parameter, or property. If the node was
+     * parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocType(node);
+        }
+    }
+
+    /**
+     * Gets the effective return type annotation of a signature. If the node was parsed in a
+     * JavaScript file, gets the return type annotation from JSDoc.
+     */
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocReturnType(node);
+        }
+    }
+
+    /**
+     * Gets the effective type annotation of the value parameter of a set accessor. If the node
+     * was parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(node);
+        return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
 
     export function emitNewLineBeforeLeadingComments(lineMap: number[], writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
@@ -4670,6 +4721,16 @@ namespace ts {
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
 namespace ts {
+    /* @internal */
+    export function isNode(node: Node) {
+        return isNodeKind(node.kind);
+    }
+
+    /* @internal */
+    export function isNodeKind(kind: SyntaxKind) {
+        return kind >= SyntaxKind.FirstNode;
+    }
+
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -5219,6 +5280,10 @@ namespace ts {
 
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
+        if (node.kind === SyntaxKind.TypeParameter) {
+            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJavaScriptFile(node);
+        }
+
         return isDeclarationKind(node.kind);
     }
 
@@ -5306,6 +5371,11 @@ namespace ts {
     /* @internal */
     export function isJSDocNode(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+
+    /** True if node is of a kind that may contain comment text. */
+    export function isJSDocCommentContainingNode(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
     }
 
     // TODO: determine what this does before making it public.

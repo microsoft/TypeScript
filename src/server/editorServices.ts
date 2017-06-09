@@ -37,6 +37,8 @@ namespace ts.server {
     }
 
     export interface ProjectInfoTelemetryEventData {
+        /** Cryptographically secure hash of project file location. */
+        readonly projectId: string;
         /** Count of file extensions seen in the project. */
         readonly fileStats: FileStats;
         /**
@@ -1049,6 +1051,7 @@ namespace ts.server {
             if (!this.eventHandler) return;
 
             const data: ProjectInfoTelemetryEventData = {
+                projectId: this.host.createHash(projectKey),
                 fileStats: countEachFileTypes(project.getScriptInfos()),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilerOptions()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
