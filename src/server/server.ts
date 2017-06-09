@@ -35,6 +35,7 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
+        const versionMajorMinor = ts.version.match(/\d+\.\d+/)[0];
         switch (process.platform) {
             case "win32": {
                 const basePath = process.env.LOCALAPPDATA ||
@@ -43,7 +44,7 @@ namespace ts.server {
                     process.env.USERPROFILE ||
                     (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }
             case "openbsd":
             case "freebsd":
@@ -51,7 +52,7 @@ namespace ts.server {
             case "linux":
             case "android": {
                 const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return combinePaths(cacheLocation, "typescript");
+                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
                 Debug.fail(`unsupported platform '${process.platform}'`);
