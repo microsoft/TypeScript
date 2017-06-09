@@ -5415,7 +5415,7 @@ namespace ts {
         }
 
         /**
-         * Tests whether a declaration name is definately late-bindable.
+         * Tests whether a declaration name is definitely late-bindable.
          */
         function isLateBoundName(node: DeclarationName): node is LateBoundName {
             return isComputedPropertyName(node)
