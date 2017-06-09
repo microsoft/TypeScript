@@ -34,22 +34,28 @@ else if (process.env.PATH !== undefined) {
     process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
-function filesFromConfig(configPath) {
-    var configText = fs.readFileSync(configPath).toString();
-    var config = ts.parseConfigFileTextToJson(configPath, configText, /*stripComments*/ true);
-    if (config.error) {
-        throw new Error(diagnosticsToString([config.error]));
+function readJson(jsonPath) {
+    var jsonText = fs.readFileSync(jsonPath).toString();
+    var result = ts.parseConfigFileTextToJson(jsonPath, jsonText, /*stripComments*/ true);
+    if (result.error) {
+        throw new Error(diagnosticsToString([result.error]));
     }
-    const configFileContent = ts.parseJsonConfigFileContent(config.config, ts.sys, path.dirname(configPath));
+
+    return result.config;
+
+    function diagnosticsToString(s) {
+        return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
+    }
+}
+
+function filesFromConfig(configPath) {
+    var config = readJson(configPath);
+    var configFileContent = ts.parseJsonConfigFileContent(config, ts.sys, path.dirname(configPath));
     if (configFileContent.errors && configFileContent.errors.length) {
         throw new Error(diagnosticsToString(configFileContent.errors));
     }
 
     return configFileContent.fileNames;
-
-    function diagnosticsToString(s) {
-        return s.map(function(e) { return ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine); }).join(ts.sys.newLine);
-    }
 }
 
 function toNs(diff) {
@@ -148,43 +154,7 @@ var harnessSources = harnessCoreSources.concat([
     return path.join(serverDirectory, f);
 }));
 
-var librarySourceMap = [
-    // Host libraries
-    "dom.generated=lib.dom.d.ts",
-    "dom.iterable",
-    "webworker.generated=lib.webworker.d.ts",
-    "webworker.importscripts",
-    "scripthost",
-
-    // Javascript libraries
-    "es5",
-    "es2015",
-    "es2015.core",
-    "es2015.collection",
-    "es2015.generator",
-    "es2015.iterable",
-    "es2015.promise",
-    "es2015.proxy",
-    "es2015.reflect",
-    "es2015.symbol",
-    "es2015.symbol.wellknown",
-    "es2016",
-    "es2016.array.include",
-    "es2017",
-    "es2017.object",
-    "es2017.sharedmemory",
-    "es2017.string",
-    "es2017.intl",
-    "esnext",
-    "esnext.asynciterable",
-
-    // Default libraries
-    "default.es5=lib.d.ts",
-    "default.es2015=lib.es6.d.ts",
-    "default.es2016=lib.es2016.full.d.ts",
-    "default.es2017=lib.es2017.full.d.ts",
-    "default.esnext=lib.esnext.full.d.ts",
-].map(function (lib) {
+var librarySourceMap = readJson(path.resolve("./src/lib/libs.json")).map(function (lib) {
     var parts = lib.split("=", 2);
     return {
         sources: ["header.d.ts", parts[0] + ".d.ts"],

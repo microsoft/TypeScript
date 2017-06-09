@@ -22,7 +22,7 @@ namespace ts {
         "dom.iterable": "lib.dom.iterable.d.ts",
         "webworker": "lib.webworker.d.ts",
         "scripthost": "lib.scripthost.d.ts",
-        // ES2015 Or ESNext By-feature options
+        // By-feature options
         "es2015.core": "lib.es2015.core.d.ts",
         "es2015.collection": "lib.es2015.collection.d.ts",
         "es2015.generator": "lib.es2015.generator.d.ts",
@@ -41,10 +41,10 @@ namespace ts {
     });
 
     /* @internal */
-    // We only support "webworker.importscripts" when used as part of a default lib. It's not available
-    // on the command line.
+    // Internally we add some additional lib references that we only support when used as part of a
+    // "lib" reference directive. They are not available on the command line or in tsconfig.json.
     export const libMap = cloneMap(commandLineLibMap)
-        .set("webworker.importscripts", "lib.webworker.importscripts.d.ts");
+       .set("webworker.importscripts", "lib.webworker.importscripts.d.ts");
 
     /* @internal */
     export const libs = arrayFrom(commandLineLibMap.keys());

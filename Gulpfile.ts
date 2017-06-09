@@ -31,6 +31,7 @@ import merge2 = require("merge2");
 import intoStream = require("into-stream");
 import * as os from "os";
 import fold = require("travis-fold");
+import ts = require("./lib/typescript");
 const gulp = helpMaker(originalGulp);
 const mochaParallel = require("./scripts/mocha-parallel.js");
 const {runTestsInParallel} = mochaParallel;
@@ -66,6 +67,21 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         workers: process.env.workerCount || os.cpus().length,
     }
 });
+
+function readJson(jsonPath: string): any {
+    const jsonText = fs.readFileSync(jsonPath).toString();
+    const result = ts.parseConfigFileTextToJson(jsonPath, jsonText, /*stripComments*/ true);
+    if (result.error) {
+        throw new Error(diagnosticsToString([result.error]));
+    }
+
+    return result.config;
+
+    function diagnosticsToString(s: ts.Diagnostic[]) {
+        return s.map(e => ts.flattenDiagnosticMessageText(e.messageText, ts.sys.newLine)).join(ts.sys.newLine);
+    }
+}
+
 
 function exec(cmd: string, args: string[], complete: () => void = (() => { }), error: (e: any, status: number) => void = (() => { })) {
     console.log(`${cmd} ${args.join(" ")}`);
@@ -105,43 +121,7 @@ const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
 const isWin = /^win/.test(process.platform);
 const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
 
-const librarySourceMap = [
-    // Host libraries
-    "dom.generated=lib.dom.d.ts",
-    "dom.iterable",
-    "webworker.generated=lib.webworker.d.ts",
-    "webworker.importscripts",
-    "scripthost",
-
-    // Javascript libraries
-    "es5",
-    "es2015",
-    "es2015.core",
-    "es2015.collection",
-    "es2015.generator",
-    "es2015.iterable",
-    "es2015.promise",
-    "es2015.proxy",
-    "es2015.reflect",
-    "es2015.symbol",
-    "es2015.symbol.wellknown",
-    "es2016",
-    "es2016.array.include",
-    "es2017",
-    "es2017.object",
-    "es2017.sharedmemory",
-    "es2017.string",
-    "es2017.intl",
-    "esnext",
-    "esnext.asynciterable",
-
-    // Default libraries
-    "default.es5=lib.d.ts",
-    "default.es2015=lib.es6.d.ts",
-    "default.es2016=lib.es2016.full.d.ts",
-    "default.es2017=lib.es2017.full.d.ts",
-    "default.esnext=lib.esnext.full.d.ts",
-].map(function (lib) {
+const librarySourceMap = (readJson(path.resolve("./src/lib/libs.json")) as string[]).map(function (lib) {
     const parts = lib.split("=", 2);
     return {
         sources: ["header.d.ts", parts[0] + ".d.ts"],
