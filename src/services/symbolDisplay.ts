@@ -4,8 +4,10 @@ namespace ts.SymbolDisplay {
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
         const { flags } = symbol;
 
-        if (flags & SymbolFlags.Class) return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
+        if (flags & SymbolFlags.Class) {
+            return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
             ScriptElementKind.localClassElement : ScriptElementKind.classElement;
+        }
         if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;

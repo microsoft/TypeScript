@@ -496,11 +496,10 @@ namespace ts.FindAllReferences.Core {
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
-            return { location, symbol, comingFrom, text, escapedText, parents, includes };
-
-            function includes(referenceSymbol: Symbol): boolean {
-                return allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol;
-            }
+            return {
+                location, symbol, comingFrom, text, escapedText, parents,
+                includes: referenceSymbol => allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol,
+            };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
@@ -785,8 +784,8 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        const fullStart = state.options.findInComments || container.jsDoc !== undefined || forEach(search.symbol.declarations, d => d.kind === ts.SyntaxKind.JSDocTypedefTag);
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, fullStart)) {
+        // Need to search in the full start of the node in case there is a reference inside JSDoc.
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, /*fullStart*/ true)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }

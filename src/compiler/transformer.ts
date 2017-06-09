@@ -239,7 +239,7 @@ namespace ts {
         function hoistVariableDeclaration(name: Identifier): void {
             Debug.assert(state > TransformationState.Uninitialized, "Cannot modify the lexical environment during initialization.");
             Debug.assert(state < TransformationState.Completed, "Cannot modify the lexical environment after transformation has completed.");
-            const decl = createVariableDeclaration(name);
+            const decl = setEmitFlags(createVariableDeclaration(name), EmitFlags.NoNestedSourceMaps);
             if (!lexicalEnvironmentVariableDeclarations) {
                 lexicalEnvironmentVariableDeclarations = [decl];
             }

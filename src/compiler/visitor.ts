@@ -1517,35 +1517,7 @@ namespace ts {
     }
 
     export namespace Debug {
-        if (isDebugging) {
-            // Add additional properties in debug mode to assist with debugging.
-            Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
-                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
-            });
-
-            Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
-                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
-                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
-                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
-            });
-
-            for (const ctor of [objectAllocator.getNodeConstructor(), objectAllocator.getIdentifierConstructor(), objectAllocator.getTokenConstructor(), objectAllocator.getSourceFileConstructor()]) {
-                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
-                    Object.defineProperties(ctor.prototype, {
-                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
-                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
-                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
-                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
-                        "__debugGetText": { value(this: Node, includeTrivia?: boolean) {
-                            if (nodeIsSynthesized(this)) return "";
-                            const parseNode = getParseTreeNode(this);
-                            const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                            return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                        } }
-                    });
-                }
-            }
-        }
+        let isDebugInfoEnabled = false;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string): void => fail(
@@ -1592,5 +1564,51 @@ namespace ts {
                 () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`,
                 assertMissingNode)
             : noop;
+
+        /**
+         * Injects debug information into frequently used types.
+         */
+        export function enableDebugInfo() {
+            if (isDebugInfoEnabled) return;
+
+            // Add additional properties in debug mode to assist with debugging.
+            Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
+                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+            });
+
+            Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
+                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
+                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
+            });
+
+            const nodeConstructors = [
+                objectAllocator.getNodeConstructor(),
+                objectAllocator.getIdentifierConstructor(),
+                objectAllocator.getTokenConstructor(),
+                objectAllocator.getSourceFileConstructor()
+            ];
+
+            for (const ctor of nodeConstructors) {
+                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                    Object.defineProperties(ctor.prototype, {
+                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
+                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
+                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                        "__debugGetText": {
+                            value(this: Node, includeTrivia?: boolean) {
+                                if (nodeIsSynthesized(this)) return "";
+                                const parseNode = getParseTreeNode(this);
+                                const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                            }
+                        }
+                    });
+                }
+            }
+
+            isDebugInfoEnabled = true;
+        }
     }
 }

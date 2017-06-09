@@ -1,9 +1,10 @@
 tests/cases/conformance/jsdoc/0.js(3,5): error TS2322: Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsdoc/0.js(6,5): error TS2322: Type '"hello"' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/0.js(10,4): error TS2345: Argument of type '"string"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/jsdoc/0.js(13,7): error TS2451: Cannot redeclare block-scoped variable 'x2'.
 tests/cases/conformance/jsdoc/0.js(17,1): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/0.js(20,7): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/conformance/jsdoc/0.js(20,21): error TS2339: Property 'concat' does not exist on type 'number'.
+tests/cases/conformance/jsdoc/0.js(24,7): error TS2322: Type '(a: number) => number' is not assignable to type '(arg0: number) => string'.
+  Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/jsdoc/0.js (6 errors) ====
@@ -26,8 +27,6 @@ tests/cases/conformance/jsdoc/0.js(20,7): error TS2451: Cannot redeclare block-s
     
     /** @type {function (number): number} */
     const x2 = (a) => a + 1;
-          ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
     
     /** @type {string} */
     var a;
@@ -36,7 +35,14 @@ tests/cases/conformance/jsdoc/0.js(20,7): error TS2451: Cannot redeclare block-s
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
     
     /** @type {function (number): number} */
-    const x2 = (a) => a.concat("hi");
+    const x3 = (a) => a.concat("hi");
+                        ~~~~~~
+!!! error TS2339: Property 'concat' does not exist on type 'number'.
+    x3(0);
+    
+    /** @type {function (number): string} */
+    const x4 = (a) => a + 1;
           ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
-    x2(0);
+!!! error TS2322: Type '(a: number) => number' is not assignable to type '(arg0: number) => string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    x4(0);

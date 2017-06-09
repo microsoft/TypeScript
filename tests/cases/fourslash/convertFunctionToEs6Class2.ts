@@ -24,4 +24,4 @@ verify.fileAfterApplyingRefactorAtMarker('4',
 foo.instanceProp1 = "hello";
 foo.instanceProp2 = undefined;
 foo.staticProp = "world";
-`, 'Convert to ES2015 class');
+`, 'Convert to ES2015 class', 'convert');
