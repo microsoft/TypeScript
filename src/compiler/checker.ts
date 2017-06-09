@@ -22551,8 +22551,14 @@ namespace ts {
             }
 
             if (entityName.parent!.kind === SyntaxKind.JSDocParameterTag) {
-                const parameter = ts.getParameterFromJSDoc(entityName.parent as JSDocParameterTag);
+                const parameter = getParameterFromJSDoc(entityName.parent as JSDocParameterTag);
                 return parameter && parameter.symbol;
+            }
+
+            if (entityName.parent!.kind === SyntaxKind.TypeParameter && entityName.parent!.parent!.kind === SyntaxKind.JSDocTemplateTag) {
+                Debug.assert(!isInJavaScriptFile(entityName)); // Otherwise `isDeclarationName` would have been true.
+                const typeParameter = getTypeParameterFromJsDoc(entityName.parent as TypeParameterDeclaration & { parent: JSDocTemplateTag });
+                return typeParameter && typeParameter.symbol;
             }
 
             if (isPartOfExpression(entityName)) {
@@ -24821,7 +24827,6 @@ namespace ts {
                 // falls through
             default:
                 return isDeclarationName(name);
-
         }
     }
 }
