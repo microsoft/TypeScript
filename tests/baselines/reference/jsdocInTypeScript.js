@@ -28,7 +28,16 @@ f(1); f(true).length;
 // @type has no effect either.
 /** @type {{ x?: number }} */
 const z = {};
-z.x = 1;
+z.x = 1; // Error
+
+// @template tag should not interfere with constraint or default.
+/** @template T */
+interface I<T extends number = 0> {}
+
+/** @template T */
+function tem<T extends number>(t: T): I<T> { return {}; }
+
+let i: I; // Should succeed thanks to type parameter default
 
 
 //// [jsdocInTypeScript.js]
@@ -50,4 +59,7 @@ f(true).length;
 // @type has no effect either.
 /** @type {{ x?: number }} */
 var z = {};
-z.x = 1;
+z.x = 1; // Error
+/** @template T */
+function tem(t) { return {}; }
+var i; // Should succeed thanks to type parameter default
