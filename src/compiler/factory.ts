@@ -3910,7 +3910,8 @@ namespace ts {
     export function getExternalModuleNameLiteral(importNode: ImportDeclaration | ExportDeclaration | ImportEqualsDeclaration, sourceFile: SourceFile, host: EmitHost, resolver: EmitResolver, compilerOptions: CompilerOptions) {
         const moduleName = getExternalModuleName(importNode);
         if (moduleName.kind === SyntaxKind.StringLiteral) {
-            return tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
+            // Can't get module name from declaration if importNode is synthesized.
+            return importNode.parent && tryGetModuleNameFromDeclaration(importNode, host, resolver, compilerOptions)
                 || tryRenameExternalModule(<StringLiteral>moduleName, sourceFile)
                 || getSynthesizedClone(<StringLiteral>moduleName);
         }
