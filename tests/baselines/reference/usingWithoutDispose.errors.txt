@@ -1,0 +1,16 @@
+tests/cases/compiler/usingWithoutDispose.ts(6,1): error TS96000: Class 'DisposableClass' must implement a dispose method when declared in a using statement.
+
+
+==== tests/cases/compiler/usingWithoutDispose.ts (1 errors) ====
+    export class DisposableClass {
+        public foo() {
+    
+        }
+    }
+    using(let disposedObj = new DisposableClass()) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        disposedObj.foo();
+    ~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS96000: Class 'DisposableClass' must implement a dispose method when declared in a using statement.

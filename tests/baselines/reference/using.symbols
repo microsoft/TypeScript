@@ -1,0 +1,22 @@
+=== tests/cases/compiler/using.ts ===
+export class DisposableClass {
+>DisposableClass : Symbol(DisposableClass, Decl(using.ts, 0, 0))
+
+    public foo() {
+>foo : Symbol(DisposableClass.foo, Decl(using.ts, 0, 30))
+
+    }
+
+    public dispose() {
+>dispose : Symbol(DisposableClass.dispose, Decl(using.ts, 3, 5))
+    }
+}
+using(let disposedObj = new DisposableClass()) {
+>disposedObj : Symbol(disposedObj, Decl(using.ts, 8, 9))
+>DisposableClass : Symbol(DisposableClass, Decl(using.ts, 0, 0))
+
+    disposedObj.foo();
+>disposedObj.foo : Symbol(DisposableClass.foo, Decl(using.ts, 0, 30))
+>disposedObj : Symbol(disposedObj, Decl(using.ts, 8, 9))
+>foo : Symbol(DisposableClass.foo, Decl(using.ts, 0, 30))
+}

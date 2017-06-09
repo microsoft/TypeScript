@@ -20297,7 +20297,7 @@ namespace ts {
                 }
             }
             if (!disposeFound) {
-                error(usingStatement, Diagnostics._0_expected, "dispose");
+                error(usingStatement, Diagnostics.Class_0_must_implement_a_dispose_method_when_declared_in_a_using_statement, getNameOfSymbol(varType.symbol));
             }
             checkBlock(usingStatement.block);
         }

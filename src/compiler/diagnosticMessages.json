@@ -3642,5 +3642,9 @@
     "Report errors in .js files.": {
         "category": "Message",
         "code": 8019
+    },
+    "Class '{0}' must implement a dispose method when declared in a using statement.": {
+        "category": "Error",
+        "code": 96000
     }
 }
