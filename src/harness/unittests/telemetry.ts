@@ -53,7 +53,7 @@ namespace ts.projectSystem {
 
             // TODO: Apparently compilerOptions is mutated, so have to repeat it here!
             et.assertProjectInfoTelemetryEvent({
-                id: Harness.LanguageService.mockHash("/hunter2/foo.csproj"),
+                projectId: Harness.LanguageService.mockHash("/hunter2/foo.csproj"),
                 compilerOptions: { strict: true },
                 compileOnSave: true,
                 // These properties can't be present for an external project, so they are undefined instead of false.
@@ -197,7 +197,7 @@ namespace ts.projectSystem {
             const et = new EventTracker([jsconfig, file]);
             et.service.openClientFile(file.path);
             et.assertProjectInfoTelemetryEvent({
-                id: Harness.LanguageService.mockHash("/jsconfig.json"),
+                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 typeAcquisition: {
@@ -217,7 +217,7 @@ namespace ts.projectSystem {
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent, /*mayBeMore*/ true);
             et.assertProjectInfoTelemetryEvent({
-                id: Harness.LanguageService.mockHash("/jsconfig.json"),
+                projectId: Harness.LanguageService.mockHash("/jsconfig.json"),
                 fileStats: fileStats({ js: 1 }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
@@ -253,7 +253,7 @@ namespace ts.projectSystem {
 
         assertProjectInfoTelemetryEvent(partial: Partial<server.ProjectInfoTelemetryEventData>): void {
             assert.deepEqual(this.getEvent<server.ProjectInfoTelemetryEvent>(ts.server.ProjectInfoTelemetryEvent), {
-                id: Harness.LanguageService.mockHash("/tsconfig.json"),
+                projectId: Harness.LanguageService.mockHash("/tsconfig.json"),
                 fileStats: fileStats({ ts: 1 }),
                 compilerOptions: {},
                 extends: false,
