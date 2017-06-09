@@ -2,9 +2,6 @@ maxDepthExceeded/root.ts(3,1): error TS2322: Type '"10"' is not assignable to ty
 maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a constant or a read-only property.
 
 
-==== relative.js (0 errors) ====
-    exports.relativeProp = true;
-    
 ==== index.js (0 errors) ====
     var m2 = require('m2');
     var rel = require('./relative');
@@ -40,4 +37,7 @@ maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it i
     	"b": "hello, world",
     	"person": m3.person
     };
+    
+==== relative.js (0 errors) ====
+    exports.relativeProp = true;
     
