@@ -3,9 +3,10 @@ tests/cases/compiler/jsdocInTypeScript.ts(23,33): error TS2362: The left-hand si
 tests/cases/compiler/jsdocInTypeScript.ts(25,3): error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
 tests/cases/compiler/jsdocInTypeScript.ts(25,15): error TS2339: Property 'length' does not exist on type 'number'.
 tests/cases/compiler/jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does not exist on type '{}'.
+tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find namespace 'N'.
 
 
-==== tests/cases/compiler/jsdocInTypeScript.ts (5 errors) ====
+==== tests/cases/compiler/jsdocInTypeScript.ts (6 errors) ====
     // JSDoc typedef tags are not bound TypeScript files.
     /** @typedef {function} T */
     declare const x: T;
@@ -55,4 +56,9 @@ tests/cases/compiler/jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does
     function tem<T extends number>(t: T): I<T> { return {}; }
     
     let i: I; // Should succeed thanks to type parameter default
+    
+    /** @typedef {string} N.Str */
+    import M = N; // Error: @typedef does not create namespaces in TypeScript code.
+               ~
+!!! error TS2503: Cannot find namespace 'N'.
     

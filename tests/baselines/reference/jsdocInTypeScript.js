@@ -39,6 +39,9 @@ function tem<T extends number>(t: T): I<T> { return {}; }
 
 let i: I; // Should succeed thanks to type parameter default
 
+/** @typedef {string} N.Str */
+import M = N; // Error: @typedef does not create namespaces in TypeScript code.
+
 
 //// [jsdocInTypeScript.js]
 var T = (function () {
@@ -63,3 +66,5 @@ z.x = 1; // Error
 /** @template T */
 function tem(t) { return {}; }
 var i; // Should succeed thanks to type parameter default
+/** @typedef {string} N.Str */
+var M = N; // Error: @typedef does not create namespaces in TypeScript code.
