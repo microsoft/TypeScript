@@ -340,6 +340,8 @@ namespace ts {
         const potentialNewTargetCollisions: Node[] = [];
         const awaitedTypeStack: number[] = [];
 
+        const fakeInferenceMapper = createFakeInferenceMapper();
+
         const diagnostics = createDiagnosticCollection();
 
         const enum TypeFacts {
@@ -8005,6 +8007,13 @@ namespace ts {
             return type;
         }
 
+        function createFakeInferenceMapper(): TypeMapper {
+            const fakeSignature = <Signature>{
+                 typeParameters: []
+            };
+            return createInferenceContext(fakeSignature, 0);
+        }
+
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
             const mapper: TypeMapper = t => instantiateType(mapper1(t), mapper2);
             mapper.mappedTypes = concatenate(mapper1.mappedTypes, mapper2.mappedTypes);
@@ -14977,12 +14986,34 @@ namespace ts {
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
         function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
-            const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes);
+            const context = createInferenceContext(signature, 0);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
             });
-            return getSignatureInstantiation(signature, getInferredTypes(context));
+            // If contextualMapper is fakeInferenceMapper we are being called by checkApplicableSignature.
+            if (contextualMapper === fakeInferenceMapper) {
+                let source, target;
+                if (contextualSignature.typePredicate && signature.typePredicate && contextualSignature.typePredicate.kind === signature.typePredicate.kind) {
+                    source = contextualSignature.typePredicate.type;
+                    target = signature.typePredicate.type;
+                }
+                else {
+                    source = getReturnTypeOfSignature(contextualSignature);
+                    target = getReturnTypeOfSignature(signature);
+                }
+                // source is already instantiated by the caller of checkApplicableSignature.
+                inferTypes(context.inferences, source, target);
+            }
+            const inferred = getInferredTypes(context);
+            for (let i = 0; i < inferred.length; ++i) {
+                // If inference has failed, use the first constituent type. During checking, the other
+                // constituents will fail to match, resulting in a nice error message pointing it out.
+                if (inferred[i] === unknownType) {
+                    inferred[i] = context.inferences[i].candidates[0] || inferred[i];
+                }
+            }
+            return getSignatureInstantiation(signature, inferred);
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
@@ -15180,7 +15211,7 @@ namespace ts {
                     // If the effective argument type is 'undefined', there is no synthetic type
                     // for the argument. In that case, we should check the argument.
                     if (argType === undefined) {
-                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                        argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : fakeInferenceMapper);
                     }
 
                     // Use argument expression as error location when reporting errors

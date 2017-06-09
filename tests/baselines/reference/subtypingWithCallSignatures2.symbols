@@ -216,14 +216,14 @@ declare function foo14(a: any): any;
 >foo14 : Symbol(foo14, Decl(subtypingWithCallSignatures2.ts, 44, 36), Decl(subtypingWithCallSignatures2.ts, 46, 77))
 >a : Symbol(a, Decl(subtypingWithCallSignatures2.ts, 47, 23))
 
-declare function foo15(a: { 
+declare function foo15(a: {
 >foo15 : Symbol(foo15, Decl(subtypingWithCallSignatures2.ts, 47, 36), Decl(subtypingWithCallSignatures2.ts, 52, 13))
 >a : Symbol(a, Decl(subtypingWithCallSignatures2.ts, 49, 23))
 
     (x: number): number[];
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 50, 5))
 
-    (x: string): string[]; 
+    (x: string): string[];
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 51, 5))
 
 }): typeof a;
@@ -319,7 +319,7 @@ var r1arg2 = (x: number) => [1];
 >r1arg2 : Symbol(r1arg2, Decl(subtypingWithCallSignatures2.ts, 80, 3))
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 80, 14))
 
-var r1 = foo1(r1arg1); // any, return types are not subtype of first overload
+var r1 = foo1(r1arg1);
 >r1 : Symbol(r1, Decl(subtypingWithCallSignatures2.ts, 81, 3))
 >foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures2.ts, 5, 49), Decl(subtypingWithCallSignatures2.ts, 7, 60))
 >r1arg1 : Symbol(r1arg1, Decl(subtypingWithCallSignatures2.ts, 79, 3))
@@ -344,7 +344,7 @@ var r2arg2 = (x: number) => [''];
 >r2arg2 : Symbol(r2arg2, Decl(subtypingWithCallSignatures2.ts, 86, 3))
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 86, 14))
 
-var r2 = foo2(r2arg1); 
+var r2 = foo2(r2arg1);
 >r2 : Symbol(r2, Decl(subtypingWithCallSignatures2.ts, 87, 3))
 >foo2 : Symbol(foo2, Decl(subtypingWithCallSignatures2.ts, 8, 35), Decl(subtypingWithCallSignatures2.ts, 10, 60))
 >r2arg1 : Symbol(r2arg1, Decl(subtypingWithCallSignatures2.ts, 85, 3))
@@ -370,7 +370,7 @@ var r3arg2 = (x: number) => { };
 >r3arg2 : Symbol(r3arg2, Decl(subtypingWithCallSignatures2.ts, 92, 3))
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 92, 14))
 
-var r3 = foo3(r3arg1); 
+var r3 = foo3(r3arg1);
 >r3 : Symbol(r3, Decl(subtypingWithCallSignatures2.ts, 93, 3))
 >foo3 : Symbol(foo3, Decl(subtypingWithCallSignatures2.ts, 11, 35), Decl(subtypingWithCallSignatures2.ts, 13, 56))
 >r3arg1 : Symbol(r3arg1, Decl(subtypingWithCallSignatures2.ts, 91, 3))
@@ -400,7 +400,7 @@ var r4arg2 = (x: string, y: number) => '';
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 98, 14))
 >y : Symbol(y, Decl(subtypingWithCallSignatures2.ts, 98, 24))
 
-var r4 = foo4(r4arg1); // any
+var r4 = foo4(r4arg1);
 >r4 : Symbol(r4, Decl(subtypingWithCallSignatures2.ts, 99, 3))
 >foo4 : Symbol(foo4, Decl(subtypingWithCallSignatures2.ts, 14, 35), Decl(subtypingWithCallSignatures2.ts, 16, 69))
 >r4arg1 : Symbol(r4arg1, Decl(subtypingWithCallSignatures2.ts, 97, 3))
@@ -430,7 +430,7 @@ var r5arg2 = (x: (arg: string) => number) => '';
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 104, 14))
 >arg : Symbol(arg, Decl(subtypingWithCallSignatures2.ts, 104, 18))
 
-var r5 = foo5(r5arg1); // any
+var r5 = foo5(r5arg1);
 >r5 : Symbol(r5, Decl(subtypingWithCallSignatures2.ts, 105, 3))
 >foo5 : Symbol(foo5, Decl(subtypingWithCallSignatures2.ts, 17, 35), Decl(subtypingWithCallSignatures2.ts, 19, 75))
 >r5arg1 : Symbol(r5arg1, Decl(subtypingWithCallSignatures2.ts, 103, 3))
@@ -465,7 +465,7 @@ var r6arg2 = (x: (arg: Base) => Derived) => <Base>null;
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 >Base : Symbol(Base, Decl(subtypingWithCallSignatures2.ts, 0, 0))
 
-var r6 = foo6(r6arg1); // any
+var r6 = foo6(r6arg1);
 >r6 : Symbol(r6, Decl(subtypingWithCallSignatures2.ts, 111, 3))
 >foo6 : Symbol(foo6, Decl(subtypingWithCallSignatures2.ts, 20, 35), Decl(subtypingWithCallSignatures2.ts, 22, 72))
 >r6arg1 : Symbol(r6arg1, Decl(subtypingWithCallSignatures2.ts, 109, 3))
@@ -504,7 +504,7 @@ var r7arg2 = (x: (arg: Base) => Derived) => (r: Base) => <Derived>null;
 >Base : Symbol(Base, Decl(subtypingWithCallSignatures2.ts, 0, 0))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r7 = foo7(r7arg1); // any
+var r7 = foo7(r7arg1);
 >r7 : Symbol(r7, Decl(subtypingWithCallSignatures2.ts, 117, 3))
 >foo7 : Symbol(foo7, Decl(subtypingWithCallSignatures2.ts, 23, 35), Decl(subtypingWithCallSignatures2.ts, 25, 88))
 >r7arg1 : Symbol(r7arg1, Decl(subtypingWithCallSignatures2.ts, 115, 3))
@@ -551,7 +551,7 @@ var r8arg2 = (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base
 >Base : Symbol(Base, Decl(subtypingWithCallSignatures2.ts, 0, 0))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r8 = foo8(r8arg1); // any
+var r8 = foo8(r8arg1);
 >r8 : Symbol(r8, Decl(subtypingWithCallSignatures2.ts, 123, 3))
 >foo8 : Symbol(foo8, Decl(subtypingWithCallSignatures2.ts, 26, 35), Decl(subtypingWithCallSignatures2.ts, 28, 116))
 >r8arg1 : Symbol(r8arg1, Decl(subtypingWithCallSignatures2.ts, 121, 3))
@@ -599,7 +599,7 @@ var r9arg2 = (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base
 >Base : Symbol(Base, Decl(subtypingWithCallSignatures2.ts, 0, 0))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r9 = foo9(r9arg1); // any
+var r9 = foo9(r9arg1);
 >r9 : Symbol(r9, Decl(subtypingWithCallSignatures2.ts, 129, 3))
 >foo9 : Symbol(foo9, Decl(subtypingWithCallSignatures2.ts, 29, 35), Decl(subtypingWithCallSignatures2.ts, 31, 116))
 >r9arg1 : Symbol(r9arg1, Decl(subtypingWithCallSignatures2.ts, 127, 3))
@@ -628,7 +628,7 @@ var r10arg2 = (...x: Derived[]) => <Derived>null;
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r10 = foo10(r10arg1); // any
+var r10 = foo10(r10arg1);
 >r10 : Symbol(r10, Decl(subtypingWithCallSignatures2.ts, 135, 3))
 >foo10 : Symbol(foo10, Decl(subtypingWithCallSignatures2.ts, 32, 35), Decl(subtypingWithCallSignatures2.ts, 34, 66))
 >r10arg1 : Symbol(r10arg1, Decl(subtypingWithCallSignatures2.ts, 133, 3))
@@ -662,7 +662,7 @@ var r11arg2 = (x: { foo: string }, y: { foo: string; bar: string }) => <Base>nul
 >bar : Symbol(bar, Decl(subtypingWithCallSignatures2.ts, 140, 52))
 >Base : Symbol(Base, Decl(subtypingWithCallSignatures2.ts, 0, 0))
 
-var r11 = foo11(r11arg1); // any
+var r11 = foo11(r11arg1);
 >r11 : Symbol(r11, Decl(subtypingWithCallSignatures2.ts, 141, 3))
 >foo11 : Symbol(foo11, Decl(subtypingWithCallSignatures2.ts, 35, 36), Decl(subtypingWithCallSignatures2.ts, 37, 99))
 >r11arg1 : Symbol(r11arg1, Decl(subtypingWithCallSignatures2.ts, 139, 3))
@@ -701,7 +701,7 @@ var r12arg2 = (x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null;
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r12 = foo12(r12arg1); // any
+var r12 = foo12(r12arg1);
 >r12 : Symbol(r12, Decl(subtypingWithCallSignatures2.ts, 147, 3))
 >foo12 : Symbol(foo12, Decl(subtypingWithCallSignatures2.ts, 38, 36), Decl(subtypingWithCallSignatures2.ts, 40, 92))
 >r12arg1 : Symbol(r12arg1, Decl(subtypingWithCallSignatures2.ts, 145, 3))
@@ -739,7 +739,7 @@ var r13arg2 = (x: Array<Base>, y: Array<Derived>) => <Array<Derived>>null;
 >Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(subtypingWithCallSignatures2.ts, 2, 27))
 
-var r13 = foo13(r13arg1); // any
+var r13 = foo13(r13arg1);
 >r13 : Symbol(r13, Decl(subtypingWithCallSignatures2.ts, 153, 3))
 >foo13 : Symbol(foo13, Decl(subtypingWithCallSignatures2.ts, 41, 36), Decl(subtypingWithCallSignatures2.ts, 43, 91))
 >r13arg1 : Symbol(r13arg1, Decl(subtypingWithCallSignatures2.ts, 151, 3))
@@ -807,7 +807,7 @@ var r16arg1 = <T extends Base>(x: T) => [1];
 >x : Symbol(x, Decl(subtypingWithCallSignatures2.ts, 165, 31))
 >T : Symbol(T, Decl(subtypingWithCallSignatures2.ts, 165, 15))
 
-var r16 = foo16(r16arg1); 
+var r16 = foo16(r16arg1);
 >r16 : Symbol(r16, Decl(subtypingWithCallSignatures2.ts, 166, 3))
 >foo16 : Symbol(foo16, Decl(subtypingWithCallSignatures2.ts, 53, 36), Decl(subtypingWithCallSignatures2.ts, 58, 13))
 >r16arg1 : Symbol(r16arg1, Decl(subtypingWithCallSignatures2.ts, 165, 3))
@@ -835,7 +835,7 @@ var r18arg1 = <T>(x: (a: T) => T) => <T[]>null;
 >T : Symbol(T, Decl(subtypingWithCallSignatures2.ts, 169, 15))
 >T : Symbol(T, Decl(subtypingWithCallSignatures2.ts, 169, 15))
 
-var r18 = foo18(r18arg1); 
+var r18 = foo18(r18arg1);
 >r18 : Symbol(r18, Decl(subtypingWithCallSignatures2.ts, 170, 3))
 >foo18 : Symbol(foo18, Decl(subtypingWithCallSignatures2.ts, 65, 36), Decl(subtypingWithCallSignatures2.ts, 76, 13))
 >r18arg1 : Symbol(r18arg1, Decl(subtypingWithCallSignatures2.ts, 169, 3))
