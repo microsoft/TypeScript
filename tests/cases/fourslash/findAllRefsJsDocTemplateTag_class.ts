@@ -3,4 +3,4 @@
 /////** @template [|T|] */
 ////class C<[|{| "isWriteAccess": true, "isDefinition": true |}T|]> {}
 
-verify.singleReferenceGroup("(type parameter) T in I<T>");
+verify.singleReferenceGroup("(type parameter) T in C<T>");
