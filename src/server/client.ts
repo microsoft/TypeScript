@@ -676,7 +676,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getisInMultiLineCommentAtPosition(_fileName: string, _position: number): boolean {
+        isInMultiLineCommentAtPosition(_fileName: string, _position: number): boolean {
             return notImplemented();
         }
 

@@ -44,8 +44,8 @@ namespace ts.formatting {
 
             const lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
 
-            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position);
-            if (indentationOfEnclosingMultiLineComment !== -1) {
+            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position, options);
+            if (indentationOfEnclosingMultiLineComment >= 0) {
                 return indentationOfEnclosingMultiLineComment;
             }
 
@@ -410,13 +410,13 @@ namespace ts.formatting {
             return findFirstNonWhitespaceColumn(lineStart, lineStart + lineAndCharacter.character, sourceFile, options);
         }
 
-        /*
-            Character is the actual index of the character since the beginning of the line.
-            Column - position of the character after expanding tabs to spaces
-            "0\t2$"
-            value of 'character' for '$' is 3
-            value of 'column' for '$' is 6 (assuming that tab size is 4)
-        */
+        /**
+         * Character is the actual index of the character since the beginning of the line.
+         * Column - position of the character after expanding tabs to spaces.
+         * "0\t2$"
+         * value of 'character' for '$' is 3
+         * value of 'column' for '$' is 6 (assuming that tab size is 4)
+         */
         export function findFirstNonWhitespaceCharacterAndColumn(startPos: number, endPos: number, sourceFile: SourceFileLike, options: EditorSettings) {
             let character = 0;
             let column = 0;

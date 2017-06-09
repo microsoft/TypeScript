@@ -1818,9 +1818,9 @@ namespace ts {
             return true;
         }
 
-        function getisInMultiLineCommentAtPosition(fileName: string, position: number): boolean {
+        function isInMultiLineCommentAtPosition(fileName: string, position: number): boolean {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
-            return ts.formatting.getIndentationOfEnclosingMultiLineComment(sourceFile, position) !== -1;
+            return !!ts.formatting.getRangeOfEnclosingComment(sourceFile, position, SyntaxKind.MultiLineCommentTrivia);
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2045,7 +2045,7 @@ namespace ts {
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
             isValidBraceCompletionAtPosition,
-            getisInMultiLineCommentAtPosition,
+            isInMultiLineCommentAtPosition,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,

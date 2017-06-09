@@ -1,36 +1,46 @@
 /// <reference path="fourslash.ts" />
 
 //// /* x */
-//// /** x */
+//// /**
+////   * @param this doesn't make sense here.
+////   */
 //// // x
-//// let x = 1;
+//// let x = 1; /*
+////             *
 
+const firstCommentStart = 0;
+const firstCommentEnd = 7;
+goTo.position(firstCommentStart);
+verify.not.isInMultiLineCommentAtPosition();
 
-for (let i = 1; i < 7; ++i) {
-    goTo.position(i);
-    verify.isInMultiLineCommentAtPosition();
-}
+goTo.position(firstCommentStart + 1);
+verify.isInMultiLineCommentAtPosition();
+goTo.position(firstCommentEnd - 1);
+verify.isInMultiLineCommentAtPosition();
 
-for (let i = 0; i < 2; ++i) {
-    goTo.position(i * 7);
-    verify.not.isInMultiLineCommentAtPosition();
-}
+goTo.position(firstCommentEnd);
+verify.not.isInMultiLineCommentAtPosition();
 
-const jsDocStart = 8;
+const multilineJsDocStart = firstCommentEnd + 1;
+const multilineJsDocEnd = multilineJsDocStart + 49;
 
-for (let i = 1; i < 8; ++i) {
-    goTo.position(jsDocStart + i);
-    verify.isInMultiLineCommentAtPosition();
-}
+goTo.position(multilineJsDocStart);
+verify.not.isInMultiLineCommentAtPosition();
+goTo.position(multilineJsDocStart + 1);
+verify.isInMultiLineCommentAtPosition();
+goTo.position(multilineJsDocEnd - 1);
+verify.isInMultiLineCommentAtPosition();
+goTo.position(multilineJsDocEnd);
+verify.not.isInMultiLineCommentAtPosition();
 
-for (let i = 0; i < 2; ++i) {
-    goTo.position(jsDocStart + i * 8);
-    verify.not.isInMultiLineCommentAtPosition();
-}
+const singleLineCommentStart = multilineJsDocEnd + 1;
 
-const singleLineCommentStart = 17;
+goTo.position(singleLineCommentStart + 1);
+verify.not.isInMultiLineCommentAtPosition();
 
-for (let i = 0; i < 5; ++i) {
-    goTo.position(singleLineCommentStart + i);
-    verify.not.isInMultiLineCommentAtPosition();
-}
+const postNodeCommentStart = singleLineCommentStart + 16;
+
+goTo.position(postNodeCommentStart);
+verify.not.isInMultiLineCommentAtPosition();
+goTo.position(postNodeCommentStart + 1);
+verify.isInMultiLineCommentAtPosition();

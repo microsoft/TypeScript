@@ -2500,13 +2500,13 @@ namespace FourSlash {
             }
         }
 
-        public verifyisInMultiLineCommentAtPosition(negative: boolean) {
+        public verifyIsInMultiLineCommentAtPosition(negative: boolean) {
             const expected = !negative;
             const position = this.currentCaretPosition;
             const fileName = this.activeFile.fileName;
-            const actual = this.languageService.getisInMultiLineCommentAtPosition(fileName, position);
+            const actual = this.languageService.isInMultiLineCommentAtPosition(fileName, position);
             if (expected !== actual) {
-                this.raiseError(`verifyIsInDocComment failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
+                this.raiseError(`verifyIsInMultiLineCommentAtPosition failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
             }
         }
 
@@ -3584,7 +3584,7 @@ namespace FourSlashInterface {
         }
 
         public isInMultiLineCommentAtPosition() {
-            this.state.verifyisInMultiLineCommentAtPosition(this.negative);
+            this.state.verifyIsInMultiLineCommentAtPosition(this.negative);
         }
 
         public codeFixAvailable() {

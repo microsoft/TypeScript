@@ -1118,23 +1118,36 @@ namespace ts.formatting {
     }
 
     /**
-     * @returns -1 iff the position is not in a multi-line comment.
+     * Gets the indentation level of the multi-line comment enclosing position,
+     * and a negative value if the position is not in a multi-line comment.
      */
-    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number): number {
-        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        const leadingCommentRanges = getLeadingCommentRangesOfNode(token, sourceFile);
-        if (leadingCommentRanges) {
-            loop: for (const range of leadingCommentRanges) {
+    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number, options: EditorSettings): number {
+        const range = getRangeOfEnclosingComment(sourceFile, position, SyntaxKind.MultiLineCommentTrivia);
+        if (range) {
+            const commentStart = range.pos;
+            const commentLineStart = getLineStartPositionForPosition(commentStart, sourceFile);
+            const { column, character } = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(commentLineStart, commentStart, sourceFile, options);
+            return range.pos - character + column;
+        }
+        return undefined;
+    }
+
+    export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, kind: CommentKind): CommentRange | undefined {
+        const precedingToken = findPrecedingToken(position, sourceFile);
+        const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
+        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false), sourceFile);
+        const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
+            trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
+            trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
+        if (commentRanges) {
+            for (const range of commentRanges) {
                 // We need to extend the range when in an unclosed multi-line comment.
                 if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
-                    if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
-                        return range.pos - getLineStartPositionForPosition(range.pos, sourceFile);
-                    }
-                    break loop;
+                    return range.kind === kind ? range : undefined;
                 }
             }
         }
-        return -1;
+        return undefined;
     }
 
 

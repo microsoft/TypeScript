@@ -486,7 +486,7 @@ namespace Harness.LanguageService {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             return unwrapJSONCallResult(this.shim.isValidBraceCompletionAtPosition(fileName, position, openingBrace));
         }
-        getisInMultiLineCommentAtPosition(fileName: string, position: number): boolean {
+        isInMultiLineCommentAtPosition(fileName: string, position: number): boolean {
             return unwrapJSONCallResult(this.shim.getisInMultiLineCommentAtPosition(fileName, position));
         }
         getCodeFixesAtPosition(): ts.CodeAction[] {

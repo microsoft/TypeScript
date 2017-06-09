@@ -965,7 +965,7 @@ namespace ts.server {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const position = this.getPosition(args, scriptInfo);
-            return project.getLanguageService(/*ensureSynchronized*/ false).getisInMultiLineCommentAtPosition(file, position);
+            return project.getLanguageService(/*ensureSynchronized*/ false).isInMultiLineCommentAtPosition(file, position);
         }
 
         private getIndentation(args: protocol.IndentationRequestArgs) {

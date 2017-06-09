@@ -844,7 +844,7 @@ namespace ts {
         public getisInMultiLineCommentAtPosition(fileName: string, position: number): string {
             return this.forwardJSONCall(
                 `getisInMultiLineCommentAtPosition('${fileName}', ${position})`,
-                () => this.languageService.getisInMultiLineCommentAtPosition(fileName, position)
+                () => this.languageService.isInMultiLineCommentAtPosition(fileName, position)
             );
         }
 
