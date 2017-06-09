@@ -646,9 +646,11 @@ namespace ts.FindAllReferences.Core {
         }
 
         // If the symbol has a parent, it's globally visible.
+        // (Private properties handled above.)
         // Unless that parent is an external module, then we should only search in the module (and recurse on the export later).
         // But if the parent is a module that has `export as namespace`, then the symbol *is* globally visible.
-        if (parent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
+        const exposedByParent = parent && !(symbol.flags & SymbolFlags.TypeParameter);
+        if (exposedByParent && !((parent.flags & SymbolFlags.Module) && isExternalModuleSymbol(parent) && !parent.globalExports)) {
             return undefined;
         }
 
@@ -675,7 +677,7 @@ namespace ts.FindAllReferences.Core {
         //     declare module "a" { export type T = number; }
         //     declare module "b" { import { T } from "a"; export const x: T; }
         // So we must search the whole source file. (Because we will mark the source file as seen, we we won't return to it when searching for imports.)
-        return parent ? scope.getSourceFile() : scope;
+        return exposedByParent ? scope.getSourceFile() : scope;
     }
 
     function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile, fullStart = false): number[] {
