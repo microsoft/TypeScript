@@ -710,7 +710,7 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
@@ -741,7 +741,7 @@ namespace ts {
                 // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
-                    const start = child.getStart(sourceFile);
+                    const start = (includeJsDoc && child.jsDoc ? child.jsDoc[0] : child).getStart(sourceFile);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
@@ -758,7 +758,7 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.

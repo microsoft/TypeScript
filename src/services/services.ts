@@ -37,7 +37,7 @@ namespace ts {
     let ruleProvider: formatting.RulesProvider;
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
-        const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
+        const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
@@ -103,10 +103,10 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number, useJSDocScanner?: boolean): number {
+        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
-                const token = useJSDocScanner ? scanner.scanJSDocToken() : scanner.scan();
+                const token = scanner.scan();
                 Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
@@ -136,54 +136,50 @@ namespace ts {
         }
 
         private createChildren(sourceFile?: SourceFileLike) {
-            if (this.kind === SyntaxKind.JSDocComment || isJSDocTag(this)) {
+            if (!isNodeKind(this.kind)) {
+                this._children = emptyArray;
+                return;
+            }
+
+            if (isJSDocCommentContainingNode(this)) {
                 /** Don't add trivia for "tokens" since this is in a comment. */
                 const children: Node[] = [];
                 this.forEachChild(child => { children.push(child); });
                 this._children = children;
+                return;
             }
-            else if (this.kind >= SyntaxKind.FirstNode) {
-                const children: Node[] = [];
-                scanner.setText((sourceFile || this.getSourceFile()).text);
-                let pos = this.pos;
-                const useJSDocScanner = isJSDocNode(this);
-                const processNode = (node: Node) => {
-                    const isJSDocTagNode = isJSDocNode(node);
-                    if (!isJSDocTagNode && pos < node.pos) {
-                        pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
-                    }
-                    children.push(node);
-                    if (!isJSDocTagNode) {
-                        pos = node.end;
-                    }
-                };
-                const processNodes = (nodes: NodeArray<Node>) => {
-                    if (pos < nodes.pos) {
-                        pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
-                    }
-                    children.push(this.createSyntaxList(nodes));
-                    pos = nodes.end;
-                };
-                // jsDocComments need to be the first children
-                if (this.jsDoc) {
-                    for (const jsDocComment of this.jsDoc) {
-                        processNode(jsDocComment);
-                    }
+
+            const children: Node[] = [];
+            scanner.setText((sourceFile || this.getSourceFile()).text);
+            let pos = this.pos;
+            const processNode = (node: Node) => {
+                pos = this.addSyntheticNodes(children, pos, node.pos);
+                children.push(node);
+                pos = node.end;
+            };
+            const processNodes = (nodes: NodeArray<Node>) => {
+                if (pos < nodes.pos) {
+                    pos = this.addSyntheticNodes(children, pos, nodes.pos);
                 }
-                // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-                // Restoring the scanner position ensures that.
-                pos = this.pos;
-                forEachChild(this, processNode, processNodes);
-                if (pos < this.end) {
-                    this.addSyntheticNodes(children, pos, this.end);
+                children.push(this.createSyntaxList(nodes));
+                pos = nodes.end;
+            };
+            // jsDocComments need to be the first children
+            if (this.jsDoc) {
+                for (const jsDocComment of this.jsDoc) {
+                    processNode(jsDocComment);
                 }
-                scanner.setText(undefined);
-                this._children = children;
             }
-            else {
-                this._children = emptyArray;
+            // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
+            // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+            // Restoring the scanner position ensures that.
+            pos = this.pos;
+            forEachChild(this, processNode, processNodes);
+            if (pos < this.end) {
+                this.addSyntheticNodes(children, pos, this.end);
             }
+            scanner.setText(undefined);
+            this._children = children;
         }
 
         public getChildCount(sourceFile?: SourceFile): number {

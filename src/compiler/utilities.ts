@@ -4670,6 +4670,16 @@ namespace ts {
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
 namespace ts {
+    /* @internal */
+    export function isNode(node: Node) {
+        return isNodeKind(node.kind);
+    }
+
+    /* @internal */
+    export function isNodeKind(kind: SyntaxKind) {
+        return kind >= SyntaxKind.FirstNode;
+    }
+
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -5306,6 +5316,11 @@ namespace ts {
     /* @internal */
     export function isJSDocNode(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+
+    /** True if node is of a kind that may contain comment text. */
+    export function isJSDocCommentContainingNode(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
     }
 
     // TODO: determine what this does before making it public.
