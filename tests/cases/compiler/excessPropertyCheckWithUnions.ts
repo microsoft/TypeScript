@@ -38,3 +38,13 @@ amb = { tag: "A", y: 12, extra: 12 }
 // the last constituent since assignability error reporting can't find a single best discriminant either.
 amb = { tag: "A" }
 amb = { tag: "A", z: true }
+
+type Overlapping =
+    | { a: 1, b: 1, first: string }
+    | { a: 2, second: string }
+    | { b: 3, third: string }
+let over: Overlapping
+
+// these two are not reported because there are two discriminant properties
+over = { a: 1, b: 1, first: "ok", second: "error" }
+over = { a: 1, b: 1, first: "ok", third: "error" }

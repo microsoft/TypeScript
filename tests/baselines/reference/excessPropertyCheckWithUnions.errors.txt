@@ -87,3 +87,13 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type 
 !!! error TS2322:     Types of property 'tag' are incompatible.
 !!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
     
+    type Overlapping =
+        | { a: 1, b: 1, first: string }
+        | { a: 2, second: string }
+        | { b: 3, third: string }
+    let over: Overlapping
+    
+    // these two are not reported because there are two discriminant properties
+    over = { a: 1, b: 1, first: "ok", second: "error" }
+    over = { a: 1, b: 1, first: "ok", third: "error" }
+    
