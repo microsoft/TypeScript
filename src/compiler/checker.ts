@@ -24818,13 +24818,9 @@ namespace ts {
         switch (name.parent.kind) {
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ExportSpecifier:
-                if ((name.parent as ImportOrExportSpecifier).propertyName) {
-                    return true;
-                }
-                // falls through
+                return true;
             default:
                 return isDeclarationName(name);
-
         }
     }
 }
