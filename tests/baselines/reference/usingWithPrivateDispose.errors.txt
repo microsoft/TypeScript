@@ -1,0 +1,19 @@
+tests/cases/compiler/usingWithPrivateDispose.ts(9,1): error TS2341: Property 'dispose' is private and only accessible within class 'DisposableClass'.
+
+
+==== tests/cases/compiler/usingWithPrivateDispose.ts (1 errors) ====
+    export class DisposableClass {
+        public foo() {
+    
+        }
+    
+        private dispose() {
+        }
+    }
+    using(let disposedObj = new DisposableClass()) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        disposedObj.foo();
+    ~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS2341: Property 'dispose' is private and only accessible within class 'DisposableClass'.
