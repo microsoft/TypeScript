@@ -2427,16 +2427,6 @@ namespace FourSlash {
             }
         }
 
-        public verifyIsInMultiLineComment(negative: boolean) {
-            const expected = !negative;
-            const position = this.currentCaretPosition;
-            const fileName = this.activeFile.fileName;
-            const actual = this.languageService.getIsInMultiLineComment(fileName, position);
-            if (expected !== actual) {
-                this.raiseError(`verifyIsInDocComment failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
-            }
-        }
-
         private clarifyNewlines(str: string) {
             return str.replace(/\r?\n/g, lineEnding => {
                 const representation = lineEnding === "\r\n" ? "CRLF" : "LF";
@@ -2507,6 +2497,16 @@ namespace FourSlash {
 
             if (actual.length !== 0) {
                 this.raiseError("verifyNoMatchingBracePosition failed - expected: 0 spans, actual: " + actual.length);
+            }
+        }
+
+        public verifyisInMultiLineCommentAtPosition(negative: boolean) {
+            const expected = !negative;
+            const position = this.currentCaretPosition;
+            const fileName = this.activeFile.fileName;
+            const actual = this.languageService.getisInMultiLineCommentAtPosition(fileName, position);
+            if (expected !== actual) {
+                this.raiseError(`verifyIsInDocComment failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
             }
         }
 
@@ -3583,12 +3583,12 @@ namespace FourSlashInterface {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
 
-        public codeFixAvailable() {
-            this.state.verifyCodeFixAvailable(this.negative);
+        public isInMultiLineCommentAtPosition() {
+            this.state.verifyisInMultiLineCommentAtPosition(this.negative);
         }
 
-        public isInMultiLineComment() {
-            this.state.verifyIsInMultiLineComment(this.negative);
+        public codeFixAvailable() {
+            this.state.verifyCodeFixAvailable(this.negative);
         }
 
         public applicableRefactorAvailableAtMarker(markerName: string) {

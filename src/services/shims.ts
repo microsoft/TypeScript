@@ -248,16 +248,16 @@ namespace ts {
         getDocCommentTemplateAtPosition(fileName: string, position: number): string;
 
         /**
-         * Returns JSON-encoded value of the type TextInsertion.
-         */
-        getIsInMultiLineComment(fileName: string, position: number): string;
-
-        /**
          * Returns JSON-encoded boolean to indicate whether we should support brace location
          * at the current position.
          * E.g. we don't want brace completion inside string-literals, comments, etc.
          */
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
+
+        /**
+         * Returns JSON-encoded boolean to indicate whether the caret at the current position is in a multi-line comment.
+         */
+        getisInMultiLineCommentAtPosition(fileName: string, position: number): string;
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
@@ -840,6 +840,14 @@ namespace ts {
             );
         }
 
+        /// GET IS IN MULTI-LINE COMMENT
+        public getisInMultiLineCommentAtPosition(fileName: string, position: number): string {
+            return this.forwardJSONCall(
+                `getisInMultiLineCommentAtPosition('${fileName}', ${position})`,
+                () => this.languageService.getisInMultiLineCommentAtPosition(fileName, position)
+            );
+        }
+
         /// GET SMART INDENT
         public getIndentationAtPosition(fileName: string, position: number, options: string /*Services.EditorOptions*/): string {
             return this.forwardJSONCall(
@@ -937,13 +945,6 @@ namespace ts {
             return this.forwardJSONCall(
                 `getDocCommentTemplateAtPosition('${fileName}', ${position})`,
                 () => this.languageService.getDocCommentTemplateAtPosition(fileName, position)
-            );
-        }
-
-        public getIsInMultiLineComment(fileName: string, position: number): string {
-            return this.forwardJSONCall(
-                `getIsInMultiLineComment('${fileName}', ${position})`,
-                () => this.languageService.getIsInMultiLineComment(fileName, position)
             );
         }
 

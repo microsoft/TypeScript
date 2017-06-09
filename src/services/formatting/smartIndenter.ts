@@ -38,11 +38,16 @@ namespace ts.formatting {
 
             // no indentation in string \regex\template literals
             const precedingTokenIsLiteral = isStringOrRegularExpressionOrTemplateLiteral(precedingToken.kind);
-            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && precedingToken.end > position) {
+            if (precedingTokenIsLiteral && precedingToken.getStart(sourceFile) <= position && position < precedingToken.end) {
                 return 0;
             }
 
             const lineAtPosition = sourceFile.getLineAndCharacterOfPosition(position).line;
+
+            const indentationOfEnclosingMultiLineComment = getIndentationOfEnclosingMultiLineComment(sourceFile, position);
+            if (indentationOfEnclosingMultiLineComment !== -1) {
+                return indentationOfEnclosingMultiLineComment;
+            }
 
             // indentation is first non-whitespace character in a previous line
             // for block indentation, we should look for a line which contains something that's not

@@ -8,5 +8,5 @@
 
 for (let i = 0; i < 4; ++i) {
     goTo.marker(`${i}`);
-    verify.isInMultiLineComment();
+    verify.isInMultiLineCommentAtPosition();
 }

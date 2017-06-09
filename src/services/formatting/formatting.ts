@@ -1117,6 +1117,27 @@ namespace ts.formatting {
         }
     }
 
+    /**
+     * @returns -1 iff the position is not in a multi-line comment.
+     */
+    export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number): number {
+        const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
+        const leadingCommentRanges = getLeadingCommentRangesOfNode(token, sourceFile);
+        if (leadingCommentRanges) {
+            loop: for (const range of leadingCommentRanges) {
+                // We need to extend the range when in an unclosed multi-line comment.
+                if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
+                    if (range.kind === SyntaxKind.MultiLineCommentTrivia) {
+                        return range.pos - getLineStartPositionForPosition(range.pos, sourceFile);
+                    }
+                    break loop;
+                }
+            }
+        }
+        return -1;
+    }
+
+
     function getOpenTokenForList(node: Node, list: Node[]) {
         switch (node.kind) {
             case SyntaxKind.Constructor:

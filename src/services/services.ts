@@ -1789,21 +1789,6 @@ namespace ts {
             return JsDoc.getDocCommentTemplateAtPosition(getNewLineOrDefaultFromHost(host), syntaxTreeCache.getCurrentSourceFile(fileName), position);
         }
 
-        function getIsInMultiLineComment(_fileName: string, position: number): boolean {
-            const sourceFile = syntaxTreeCache.getCurrentSourceFile(_fileName);
-            const token = getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-            const leadingCommentRanges = getLeadingCommentRangesOfNode(token, sourceFile);
-
-            for (const range of leadingCommentRanges) {
-                // We need to extend the range when in an unclosed multi-line comment.
-                if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
-                    return range.kind === SyntaxKind.MultiLineCommentTrivia;
-                }
-            }
-
-            return false;
-        }
-
         function isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean {
             // '<' is currently not supported, figuring out if we're in a Generic Type vs. a comparison is too
             // expensive to do during typing scenarios
@@ -1831,6 +1816,11 @@ namespace ts {
             }
 
             return true;
+        }
+
+        function getisInMultiLineCommentAtPosition(fileName: string, position: number): boolean {
+            const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
+            return ts.formatting.getIndentationOfEnclosingMultiLineComment(sourceFile, position) !== -1;
         }
 
         function getTodoComments(fileName: string, descriptors: TodoCommentDescriptor[]): TodoComment[] {
@@ -2054,8 +2044,8 @@ namespace ts {
             getFormattingEditsForDocument,
             getFormattingEditsAfterKeystroke,
             getDocCommentTemplateAtPosition,
-            getIsInMultiLineComment,
             isValidBraceCompletionAtPosition,
+            getisInMultiLineCommentAtPosition,
             getCodeFixesAtPosition,
             getEmitOutput,
             getNonBoundSourceFile,

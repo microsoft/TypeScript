@@ -257,9 +257,10 @@ namespace ts {
         getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[];
 
         getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion;
-        getIsInMultiLineComment(fileName: string, position: number): boolean;
 
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): boolean;
+
+        getisInMultiLineCommentAtPosition(fileName: string, position: number): boolean;
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: number[], formatOptions: FormatCodeSettings): CodeAction[];
         getApplicableRefactors(fileName: string, positionOrRaneg: number | TextRange): ApplicableRefactorInfo[];
