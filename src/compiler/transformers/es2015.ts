@@ -482,7 +482,6 @@ namespace ts {
 
                 case SyntaxKind.ForOfStatement:
                     return visitForOfStatement(<ForOfStatement>node, /*outermostLabeledStatement*/ undefined);
-
                 case SyntaxKind.ExpressionStatement:
                     return visitExpressionStatement(<ExpressionStatement>node);
 
@@ -558,7 +557,6 @@ namespace ts {
 
                 case SyntaxKind.ReturnStatement:
                     return visitReturnStatement(<ReturnStatement>node);
-
                 default:
                     return visitEachChild(node, visitor, context);
             }

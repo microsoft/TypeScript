@@ -20285,6 +20285,23 @@ namespace ts {
             }
         }
 
+        function checkUsingStatemment(usingStatement: UsingStatement): void {
+            checkGrammarVariableDeclaration(usingStatement.variableDeclaration);
+            const varType = getTypeOfNode(usingStatement.variableDeclaration);
+            const properties = getPropertiesOfType(varType);
+            let disposeFound = false;
+            for (const p of properties) {
+                if (((p.flags & SymbolFlags.Method) === SymbolFlags.Method) && p.name === "dispose") {
+                    disposeFound = true;
+                    break;
+                }
+            }
+            if (!disposeFound) {
+                error(usingStatement, Diagnostics._0_expected, "dispose");
+            }
+            checkBlock(usingStatement.block);
+        }
+
         function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
@@ -22103,6 +22120,8 @@ namespace ts {
                     return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForOfStatement:
                     return checkForOfStatement(<ForOfStatement>node);
+                case SyntaxKind.UsingStatement:
+                    return checkUsingStatemment(<UsingStatement>node);
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);
