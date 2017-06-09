@@ -5463,7 +5463,7 @@ namespace ts {
                 return `__@${type.symbol.name}@${getSymbolId(type.symbol)}`;
             }
             if (type.flags & TypeFlags.StringOrNumberLiteral) {
-                return escapeIdentifier("" + (<LiteralType>type).value);
+                return "" + (<LiteralType>type).value;
             }
         }
 
@@ -7686,8 +7686,8 @@ namespace ts {
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
-            const propName = indexType.flags & TypeFlags.StringOrNumberLiteral ?
-                "" + (<LiteralType>indexType).value :
+            const propName = indexType.flags & TypeFlags.StringOrNumberLiteralOrUnique ?
+                getLateBoundNameFromType(indexType) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text) :
                     undefined;

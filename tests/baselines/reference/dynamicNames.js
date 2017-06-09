@@ -123,6 +123,11 @@ export const o1 = {
     [s2]: true
 };
 
+// check element access types
+export const o1_c4 = o1[c4];
+export const o1_c5 = o1[c5];
+export const o1_s2 = o1[s2];
+
 export const o2: T0 = o1;
 
 //// [module.js]
@@ -174,6 +179,10 @@ exports.o1 = {
     [exports.c5]: "a",
     [exports.s2]: true
 };
+// check element access types
+exports.o1_c4 = exports.o1[exports.c4];
+exports.o1_c5 = exports.o1[exports.c5];
+exports.o1_s2 = exports.o1[exports.s2];
 exports.o2 = exports.o1;
 
 
@@ -208,4 +217,7 @@ export declare const o1: {
     [c5]: string;
     [s2]: boolean;
 };
+export declare const o1_c4: number;
+export declare const o1_c5: string;
+export declare const o1_s2: boolean;
 export declare const o2: T0;
