@@ -9029,6 +9029,7 @@ namespace ts {
 
             function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
                 const sourceProperties = getPropertiesOfObjectType(source);
+                let match: Type;
                 if (sourceProperties) {
                     for (const sourceProperty of sourceProperties) {
                         if (isDiscriminantProperty(target, sourceProperty.name)) {
@@ -9036,12 +9037,16 @@ namespace ts {
                             for (const type of target.types) {
                                 const targetType = getTypeOfPropertyOfType(type, sourceProperty.name);
                                 if (targetType && isRelatedTo(sourceType, targetType)) {
-                                    return type;
+                                    if (match) {
+                                        return undefined;
+                                    }
+                                    match = type;
                                 }
                             }
                         }
                     }
                 }
+                return match;
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
