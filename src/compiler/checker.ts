@@ -22645,14 +22645,16 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                    // External module name in an import declaration
-                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
-                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
-                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) &&
-                            (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
+                    // import x = require("./mo/*gotToDefinitionHere*/d")
+                    if (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
-                    if (isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+                    // External module name in an import declaration
+                    if ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) {
+                        return resolveExternalModuleName(node, <LiteralExpression>node);
+                    }
+                    if ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) ||
+                        isImportCall(node.parent)) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
