@@ -9504,7 +9504,7 @@ namespace ts {
                     }
                 }
                 else if (sourceSignatures.length === 1 && targetSignatures.length === 1) {
-                    // For pure functions (functions with a single signature) we only erase type parameters for
+                    // For simple functions (functions with a single signature) we only erase type parameters for
                     // the comparable relation. Otherwise, if the source signature is generic, we instantiate it
                     // in the context of the target signature before checking the relationship. Ideally we'd do
                     // this regardless of the number of signatures, but the potential costs are prohibitive due
@@ -15037,10 +15037,10 @@ namespace ts {
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
                     const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node)));
-                    // If the contextual type is a generic pure function type, we instantiate the type with
-                    // its own type parameters and type arguments. This ensures that the type parameters are
-                    // not erased to type any during type inference such that they can be inferred as actual
-                    // types from the contextual type. For example:
+                    // If the contextual type is a generic function type with a single call signature, we
+                    // instantiate the type with its own type parameters and type arguments. This ensures that
+                    // the type parameters are not erased to type any during type inference such that they can
+                    // be inferred as actual types from the contextual type. For example:
                     //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
                     //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
                     // Above, the type of the 'value' parameter is inferred to be 'A'.
