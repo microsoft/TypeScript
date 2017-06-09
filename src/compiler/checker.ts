@@ -10025,10 +10025,10 @@ namespace ts {
 
         function getNullableType(type: Type, flags: TypeFlags): Type {
             const missing = (flags & ~type.flags) & (TypeFlags.Undefined | TypeFlags.Null);
-             return missing === 0 ? type :
-                 missing === TypeFlags.Undefined ? getUnionType([type, undefinedType]) :
-                 missing === TypeFlags.Null ? getUnionType([type, nullType]) :
-                 getUnionType([type, undefinedType, nullType]);
+            return missing === 0 ? type :
+                missing === TypeFlags.Undefined ? getUnionType([type, undefinedType]) :
+                missing === TypeFlags.Null ? getUnionType([type, nullType]) :
+                getUnionType([type, undefinedType, nullType]);
         }
 
         function getNonNullableType(type: Type): Type {
