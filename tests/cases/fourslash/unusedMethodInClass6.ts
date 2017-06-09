@@ -5,4 +5,4 @@
 ////     private "string" (){} 
 //// }|]
 
-verify.rangeAfterCodeFix("class C { }", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("class C { }");

@@ -5,4 +5,4 @@
 ////     [|public f1<X, Y, Z>(a: X)|] { a; var b: Z; b }
 //// }
 
-verify.rangeAfterCodeFix("public f1<X, Z>(a: X)", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("public f1<X, Z>(a: X)");

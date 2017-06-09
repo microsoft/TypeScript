@@ -6,4 +6,4 @@
 ////    public b: Z;
 ////}
 
-verify.rangeAfterCodeFix("class greeter<X, Z>", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("class greeter<X, Z>");

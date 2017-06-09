@@ -9,5 +9,5 @@
 verify.rangeAfterCodeFix(`
 namespace A {
 }
-`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+`);
 

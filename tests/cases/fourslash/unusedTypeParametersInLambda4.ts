@@ -6,4 +6,4 @@
 //// }
 //// [|var y: new <T,U>(a:T)=>void;|]
 
-verify.rangeAfterCodeFix("var y: new <T>(a:T)=>void;", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("var y: new <T>(a:T)=>void;");

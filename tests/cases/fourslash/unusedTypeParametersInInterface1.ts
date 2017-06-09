@@ -4,4 +4,4 @@
 // @noUnusedParameters: true
 //// [|interface I<T> {}|]
 
-verify.rangeAfterCodeFix("interface I {}", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("interface I {}");

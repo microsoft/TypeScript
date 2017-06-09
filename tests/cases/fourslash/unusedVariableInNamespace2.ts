@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.rangeAfterCodeFix(`let a = "dummy entry", c = 0;`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix(`let a = "dummy entry", c = 0;`);

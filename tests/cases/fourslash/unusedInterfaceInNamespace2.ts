@@ -9,4 +9,4 @@
 ////}
 
 verify.rangeAfterCodeFix(`export interface interface2 {
-}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+}`);

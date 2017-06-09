@@ -21,4 +21,4 @@
 ////
 //// }
 
-verify.rangeAfterCodeFix(`import {Calculator as calc, test as t1} from "./file1"`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix(`import {Calculator as calc, test as t1} from "./file1"`);

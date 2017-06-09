@@ -7,4 +7,4 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix(`for (const _elem in ["a", "b", "c"])`, /*includeWhiteSpace*/ true, /*errorCode*/ 0, /*index*/ 0);
+verify.rangeAfterCodeFix(`for (const _elem in ["a", "b", "c"])`, /*includeWhiteSpace*/ true, /*errorCode*/ 0);

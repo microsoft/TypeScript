@@ -12,4 +12,4 @@ verify.rangeAfterCodeFix(`
 class greeter {
     public function2() {
     }
-}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+}`);

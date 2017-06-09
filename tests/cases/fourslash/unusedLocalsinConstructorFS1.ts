@@ -9,4 +9,4 @@
 ////}
 
 verify.rangeAfterCodeFix(`constructor() {
-}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+}`);

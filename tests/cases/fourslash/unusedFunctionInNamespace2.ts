@@ -11,4 +11,4 @@
 verify.rangeAfterCodeFix(`namespace greeter {
     export function function2() {
     }
-}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+}`);

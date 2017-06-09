@@ -12,4 +12,4 @@
 verify.rangeAfterCodeFix(`let x = 10;
    {
    }
-   x;`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+   x;`);

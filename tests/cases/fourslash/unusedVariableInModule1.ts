@@ -6,4 +6,4 @@
 //// [|var x: string;
 //// export var y: string;|]
 
-verify.rangeAfterCodeFix("export var y: string;", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("export var y: string;");

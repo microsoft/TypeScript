@@ -16,4 +16,4 @@
 ////
 //// }
 
-verify.rangeAfterCodeFix(`import {Calculator} from "./file1"`, /*includeWhiteSpace*/ true, /*errorCode*/ 0, /*index*/ 0);
+verify.rangeAfterCodeFix(`import {Calculator} from "./file1"`, /*includeWhiteSpace*/ true, /*errorCode*/ 0);

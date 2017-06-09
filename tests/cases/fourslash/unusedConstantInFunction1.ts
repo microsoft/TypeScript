@@ -6,5 +6,5 @@
 //// } |]
 
 verify.rangeAfterCodeFix(`function f1 () {
-}`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+}`);
 

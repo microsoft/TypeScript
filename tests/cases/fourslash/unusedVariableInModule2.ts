@@ -7,4 +7,4 @@
 //// z;
 //// export var y: string;
 
-verify.rangeAfterCodeFix("var z: number;", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+verify.rangeAfterCodeFix("var z: number;");
