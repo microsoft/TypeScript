@@ -4092,7 +4092,7 @@ namespace ts {
 
     // Signature elements
 
-    export function isTypeParameter(node: Node): node is TypeParameterDeclaration {
+    export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration {
         return node.kind === SyntaxKind.TypeParameter;
     }
 
