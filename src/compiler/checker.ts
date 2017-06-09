@@ -4537,6 +4537,10 @@ namespace ts {
                 }
 
                 // If the type is a fresh, unique symbol type and is not the type for this symbol, get its regular type
+                // For example:
+                //
+                //  const x = Symbol(); // fresh type, e.g. 'symbol()'
+                //  const y = x;        // regular type, e.g. 'typeof x'
                 if (type.flags & TypeFlags.Unique && type.flags & TypeFlags.Fresh && type.symbol !== symbol) {
                     type = (<UniqueType>type).regularType;
                 }
