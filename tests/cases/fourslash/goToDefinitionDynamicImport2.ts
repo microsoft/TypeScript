@@ -1,7 +1,7 @@
 ﻿/// <reference path='fourslash.ts' />
 
 // @Filename: foo.ts
-//// export function /*Desitnation*/bar() { return "bar"; }
+//// export function /*Destination*/bar() { return "bar"; }
 
 //// var x = import("./foo");
 //// x.then(foo => {
