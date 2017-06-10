@@ -11,36 +11,37 @@
 const firstCommentStart = 0;
 const firstCommentEnd = 7;
 goTo.position(firstCommentStart);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
 
 goTo.position(firstCommentStart + 1);
-verify.isInMultiLineCommentAtPosition();
+verify.isInCommentAtPosition(/*onlyMultiLine*/ true);
 goTo.position(firstCommentEnd - 1);
-verify.isInMultiLineCommentAtPosition();
+verify.isInCommentAtPosition(/*onlyMultiLine*/ true);
 
 goTo.position(firstCommentEnd);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
 
 const multilineJsDocStart = firstCommentEnd + 1;
 const multilineJsDocEnd = multilineJsDocStart + 49;
 
 goTo.position(multilineJsDocStart);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
 goTo.position(multilineJsDocStart + 1);
-verify.isInMultiLineCommentAtPosition();
+verify.isInCommentAtPosition(/*onlyMultiLine*/ true);
 goTo.position(multilineJsDocEnd - 1);
-verify.isInMultiLineCommentAtPosition();
+verify.isInCommentAtPosition(/*onlyMultiLine*/ true);
 goTo.position(multilineJsDocEnd);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
 
 const singleLineCommentStart = multilineJsDocEnd + 1;
 
 goTo.position(singleLineCommentStart + 1);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
+verify.isInCommentAtPosition(/*onlyMultiLine*/ false);
 
 const postNodeCommentStart = singleLineCommentStart + 16;
 
 goTo.position(postNodeCommentStart);
-verify.not.isInMultiLineCommentAtPosition();
+verify.not.isInCommentAtPosition(/*onlyMultiLine*/ true);
 goTo.position(postNodeCommentStart + 1);
-verify.isInMultiLineCommentAtPosition();
+verify.isInCommentAtPosition(/*onlyMultiLine*/ true);

@@ -1127,7 +1127,7 @@ namespace ts.formatting {
             const commentStart = range.pos;
             const commentLineStart = getLineStartPositionForPosition(commentStart, sourceFile);
             const { column, character } = SmartIndenter.findFirstNonWhitespaceCharacterAndColumn(commentLineStart, commentStart, sourceFile, options);
-            return range.pos - character + column;
+            return column + /*length after whitespace ends*/ range.pos - (commentLineStart + character);
         }
         return undefined;
     }
@@ -1142,7 +1142,8 @@ namespace ts.formatting {
         if (commentRanges) {
             for (const range of commentRanges) {
                 // We need to extend the range when in an unclosed multi-line comment.
-                if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
+                if (range.pos < position && position < range.end ||
+                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth())) {
                     return onlyMultiLine && range.kind !== SyntaxKind.MultiLineCommentTrivia ? undefined : range;
                 }
             }
