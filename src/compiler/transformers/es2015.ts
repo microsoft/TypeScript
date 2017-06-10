@@ -1578,6 +1578,7 @@ namespace ts {
          * @param node The ClassExpression or ClassDeclaration node.
          */
         function addClassMembers(statements: Statement[], node: ClassExpression | ClassDeclaration): void {
+            let prototypeName: Identifier;
             for (const member of node.members) {
                 switch (member.kind) {
                     case SyntaxKind.SemicolonClassElement:
@@ -1585,14 +1586,20 @@ namespace ts {
                         break;
 
                     case SyntaxKind.MethodDeclaration:
-                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member), <MethodDeclaration>member, node));
+                        if (!prototypeName && !hasModifier(member, ModifierFlags.Static)) {
+                            prototypeName = addPrototypeDeclaration(statements, node);
+                        }
+                        statements.push(transformClassMethodDeclarationToStatement(getClassMemberPrefix(node, member, prototypeName), <MethodDeclaration>member, node));
                         break;
 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
+                        if (!prototypeName && !hasModifier(member, ModifierFlags.Static)) {
+                            prototypeName = addPrototypeDeclaration(statements, node);
+                        }
                         const accessors = getAllAccessorDeclarations(node.members, <AccessorDeclaration>member);
                         if (member === accessors.firstAccessor) {
-                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member), accessors, node));
+                            statements.push(transformAccessorsToStatement(getClassMemberPrefix(node, member, prototypeName), accessors, node));
                         }
 
                         break;
@@ -1606,6 +1613,23 @@ namespace ts {
                         break;
                 }
             }
+        }
+
+        /**
+         * Adds a statement to the class body function declaring a local variable for the class prototype.
+         *
+         * @param statements The statements for the class body function.
+         * @param node The ClassExpression or ClassDeclaration node.
+         */
+        function addPrototypeDeclaration(statements: Statement[], node: ClassExpression | ClassDeclaration): Identifier {
+            const prototypeName: Identifier = createUniqueName("proto");
+            statements.push(createVariableStatement(/* modifiers */ undefined, [
+                createVariableDeclaration(
+                    prototypeName,
+                    /* type */ undefined,
+                    createPropertyAccess(getInternalName(node), "prototype"))
+            ]));
+            return prototypeName;
         }
 
         /**
@@ -4040,10 +4064,10 @@ namespace ts {
             return node;
         }
 
-        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement) {
+        function getClassMemberPrefix(node: ClassExpression | ClassDeclaration, member: ClassElement, prototypeAccessor: Identifier) {
             return hasModifier(member, ModifierFlags.Static)
                 ? getInternalName(node)
-                : createPropertyAccess(getInternalName(node), "prototype");
+                : prototypeAccessor;
         }
 
         function hasSynthesizedDefaultSuperCall(constructor: ConstructorDeclaration, hasExtendsClause: boolean) {
