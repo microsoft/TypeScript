@@ -1044,6 +1044,7 @@ interface ReadonlyArray<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => void | undefined | null | false | 0 | '' | S, thisArg?: any): S[];
     filter(callbackfn: (value: T, index: number, array: ReadonlyArray<T>) => any, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -1194,6 +1195,7 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: T[]) => void | undefined | null | false | 0 | '' | S, thisArg?: any): S[];
     filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[];
     /**
       * Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
