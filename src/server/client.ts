@@ -676,7 +676,7 @@ namespace ts.server {
             return notImplemented();
         }
 
-        isInMultiLineCommentAtPosition(_fileName: string, _position: number): boolean {
+        getSpanOfEnclosingComment(_fileName: string, _position: number, _onlyMultiLine: boolean): TextSpan {
             return notImplemented();
         }
 

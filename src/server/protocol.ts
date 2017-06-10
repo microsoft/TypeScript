@@ -8,7 +8,7 @@ namespace ts.server.protocol {
         /* @internal */
         BraceFull = "brace-full",
         BraceCompletion = "braceCompletion",
-        isInMultiLineComment = "isInMultiLineComment",
+        GetSpanOfEnclosingComment = "getSpanOfEnclosingComment",
         Change = "change",
         Close = "close",
         Completions = "completions",
@@ -240,10 +240,18 @@ namespace ts.server.protocol {
     }
 
     /**
-     * A request to determine if the caret is inside a multi-line comment.
+     * A request to determine if the caret is inside a comment.
      */
-    export interface IsInMultiLineCommentAtPositionRequest extends FileLocationRequest {
-        command: CommandTypes.isInMultiLineComment;
+    export interface SpanOfEnclosingCommentRequest extends FileLocationRequest {
+        command: CommandTypes.GetSpanOfEnclosingComment;
+        arguments: SpanOfEnclosingCommentRequestArgs;
+    }
+
+    export interface SpanOfEnclosingCommentRequestArgs extends FileLocationRequestArgs {
+        /**
+         * Requires that the enclosing span be a multi-line comment, or else the request returns undefined.
+         */
+        onlyMultiLine: boolean;
     }
 
     /**

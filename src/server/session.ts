@@ -961,11 +961,12 @@ namespace ts.server {
             return project.getLanguageService(/*ensureSynchronized*/ false).getDocCommentTemplateAtPosition(file, position);
         }
 
-        private getisInMultiLineCommentAtPosition(args: protocol.FileLocationRequestArgs) {
+        private getSpanOfEnclosingComment(args: protocol.SpanOfEnclosingCommentRequestArgs) {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+            const onlyMultiLine = args.onlyMultiLine;
             const position = this.getPosition(args, scriptInfo);
-            return project.getLanguageService(/*ensureSynchronized*/ false).isInMultiLineCommentAtPosition(file, position);
+            return project.getLanguageService(/*ensureSynchronized*/ false).getSpanOfEnclosingComment(file, position, onlyMultiLine);
         }
 
         private getIndentation(args: protocol.IndentationRequestArgs) {
@@ -1701,8 +1702,8 @@ namespace ts.server {
             [CommandNames.DocCommentTemplate]: (request: protocol.DocCommentTemplateRequest) => {
                 return this.requiredResponse(this.getDocCommentTemplate(request.arguments));
             },
-            [CommandNames.isInMultiLineComment]: (request: protocol.IsInMultiLineCommentAtPositionRequest) => {
-                return this.requiredResponse(this.getisInMultiLineCommentAtPosition(request.arguments));
+            [CommandNames.GetSpanOfEnclosingComment]: (request: protocol.SpanOfEnclosingCommentRequest) => {
+                return this.requiredResponse(this.getSpanOfEnclosingComment(request.arguments));
             },
             [CommandNames.Format]: (request: protocol.FormatRequest) => {
                 return this.requiredResponse(this.getFormattingEditsForRange(request.arguments));

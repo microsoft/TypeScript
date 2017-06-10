@@ -255,9 +255,9 @@ namespace ts {
         isValidBraceCompletionAtPosition(fileName: string, position: number, openingBrace: number): string;
 
         /**
-         * Returns JSON-encoded boolean to indicate whether the caret at the current position is in a multi-line comment.
+         * Returns a JSON-encoded TextSpan | undefined indicating the range of the enclosing comment, if it exists.
          */
-        getisInMultiLineCommentAtPosition(fileName: string, position: number): string;
+        getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string;
 
         getEmitOutput(fileName: string): string;
         getEmitOutputObject(fileName: string): EmitOutput;
@@ -840,11 +840,10 @@ namespace ts {
             );
         }
 
-        /// GET IS IN MULTI-LINE COMMENT
-        public getisInMultiLineCommentAtPosition(fileName: string, position: number): string {
+        public getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): string {
             return this.forwardJSONCall(
-                `getisInMultiLineCommentAtPosition('${fileName}', ${position})`,
-                () => this.languageService.isInMultiLineCommentAtPosition(fileName, position)
+                `getSpanOfEnclosingComment('${fileName}', ${position})`,
+                () => this.languageService.getSpanOfEnclosingComment(fileName, position, onlyMultiLine)
             );
         }
 

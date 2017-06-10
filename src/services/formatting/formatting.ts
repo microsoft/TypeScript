@@ -1122,7 +1122,7 @@ namespace ts.formatting {
      * and a negative value if the position is not in a multi-line comment.
      */
     export function getIndentationOfEnclosingMultiLineComment(sourceFile: SourceFile, position: number, options: EditorSettings): number {
-        const range = getRangeOfEnclosingComment(sourceFile, position, SyntaxKind.MultiLineCommentTrivia);
+        const range = getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ true);
         if (range) {
             const commentStart = range.pos;
             const commentLineStart = getLineStartPositionForPosition(commentStart, sourceFile);
@@ -1132,7 +1132,7 @@ namespace ts.formatting {
         return undefined;
     }
 
-    export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, kind: CommentKind): CommentRange | undefined {
+    export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean): CommentRange | undefined {
         const precedingToken = findPrecedingToken(position, sourceFile);
         const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
         const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false), sourceFile);
@@ -1143,7 +1143,7 @@ namespace ts.formatting {
             for (const range of commentRanges) {
                 // We need to extend the range when in an unclosed multi-line comment.
                 if (range.pos < position && (position < range.end || position === range.end && position === sourceFile.getFullWidth())) {
-                    return range.kind === kind ? range : undefined;
+                    return onlyMultiLine && range.kind !== SyntaxKind.MultiLineCommentTrivia ? undefined : range;
                 }
             }
         }

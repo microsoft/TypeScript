@@ -2500,13 +2500,17 @@ namespace FourSlash {
             }
         }
 
-        public verifyIsInMultiLineCommentAtPosition(negative: boolean) {
+        public verifySpanOfEnclosingComment(negative: boolean, onlyMultiLine: boolean) {
             const expected = !negative;
             const position = this.currentCaretPosition;
             const fileName = this.activeFile.fileName;
-            const actual = this.languageService.isInMultiLineCommentAtPosition(fileName, position);
+            const actual = !!this.languageService.getSpanOfEnclosingComment(fileName, position, /*onlyMultiLine*/ onlyMultiLine);
             if (expected !== actual) {
-                this.raiseError(`verifyIsInMultiLineCommentAtPosition failed: at position '${position}' in '${fileName}', expected '${expected}'.`);
+                this.raiseError(`verifySpanOfEnclosingComment failed:
+                position: '${position}'
+                fileName: '${fileName}'
+                onlyMultiLine: '${onlyMultiLine}'
+                expected: '${expected}'.`);
             }
         }
 
@@ -3583,8 +3587,8 @@ namespace FourSlashInterface {
             this.state.verifyBraceCompletionAtPosition(this.negative, openingBrace);
         }
 
-        public isInMultiLineCommentAtPosition() {
-            this.state.verifyIsInMultiLineCommentAtPosition(this.negative);
+        public isInCommentAtPosition(onlyMultiLine: boolean) {
+            this.state.verifySpanOfEnclosingComment(this.negative, onlyMultiLine);
         }
 
         public codeFixAvailable() {
