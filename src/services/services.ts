@@ -1822,6 +1822,13 @@ namespace ts {
                 return false;
             }
 
+            switch (openingBrace) {
+                case CharacterCodes.singleQuote:
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.backtick:
+                    return !ts.formatting.getRangeOfEnclosingComment(sourceFile, position, /*onlyMultiLine*/ false);
+            }
+
             return true;
         }
 

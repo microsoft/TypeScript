@@ -15,9 +15,14 @@
 
 goTo.marker('1');
 verify.isValidBraceCompletionAtPosition('(');
+verify.not.isValidBraceCompletionAtPosition('"');
+verify.not.isValidBraceCompletionAtPosition(`'`);
+verify.not.isValidBraceCompletionAtPosition('`');
 
 goTo.marker('2');
 verify.isValidBraceCompletionAtPosition('(');
+verify.not.isValidBraceCompletionAtPosition('"');
 
 goTo.marker('3');
 verify.isValidBraceCompletionAtPosition('(');
+verify.not.isValidBraceCompletionAtPosition('"');
