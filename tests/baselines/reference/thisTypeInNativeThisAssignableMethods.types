@@ -286,9 +286,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : string[]
->options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; <S extends string>(callbackfn: (value: string, index: number, array: string[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >options : string[]
->filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; <S extends string>(callbackfn: (value: string, index: number, array: string[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -511,9 +511,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : string[]
->options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>options.filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; <S extends string>(callbackfn: (value: string, index: number, array: string[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >options : string[]
->filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
+>filter : { <S extends string>(callbackfn: (value: string, index: number, array: string[]) => value is S, thisArg?: any): S[]; <S extends string>(callbackfn: (value: string, index: number, array: string[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: string, index: number, array: string[]) => any, thisArg?: any): string[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: string, index: number) => boolean
 >val : string
 >index : number
@@ -683,9 +683,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Int8Array[]
->options.filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
+>options.filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
 >options : Int8Array[]
->filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
+>filter : { <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => value is S, thisArg?: any): S[]; <S extends Int8Array>(callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Int8Array, index: number, array: Int8Array[]) => any, thisArg?: any): Int8Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Int8Array, index: number) => boolean
 >val : Int8Array
 >index : number
@@ -855,9 +855,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8Array[]
->options.filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
+>options.filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
 >options : Uint8Array[]
->filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
+>filter : { <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => value is S, thisArg?: any): S[]; <S extends Uint8Array>(callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint8Array, index: number, array: Uint8Array[]) => any, thisArg?: any): Uint8Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8Array, index: number) => boolean
 >val : Uint8Array
 >index : number
@@ -1027,9 +1027,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Float32Array[]
->options.filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
+>options.filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
 >options : Float32Array[]
->filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
+>filter : { <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => value is S, thisArg?: any): S[]; <S extends Float32Array>(callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Float32Array, index: number, array: Float32Array[]) => any, thisArg?: any): Float32Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Float32Array, index: number) => boolean
 >val : Float32Array
 >index : number
@@ -1199,9 +1199,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint8ClampedArray[]
->options.filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
+>options.filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
 >options : Uint8ClampedArray[]
->filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
+>filter : { <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => value is S, thisArg?: any): S[]; <S extends Uint8ClampedArray>(callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint8ClampedArray, index: number, array: Uint8ClampedArray[]) => any, thisArg?: any): Uint8ClampedArray[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint8ClampedArray, index: number) => boolean
 >val : Uint8ClampedArray
 >index : number
@@ -1371,9 +1371,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Int16Array[]
->options.filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
+>options.filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
 >options : Int16Array[]
->filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
+>filter : { <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => value is S, thisArg?: any): S[]; <S extends Int16Array>(callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Int16Array, index: number, array: Int16Array[]) => any, thisArg?: any): Int16Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Int16Array, index: number) => boolean
 >val : Int16Array
 >index : number
@@ -1543,9 +1543,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint16Array[]
->options.filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
+>options.filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
 >options : Uint16Array[]
->filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
+>filter : { <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => value is S, thisArg?: any): S[]; <S extends Uint16Array>(callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint16Array, index: number, array: Uint16Array[]) => any, thisArg?: any): Uint16Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint16Array, index: number) => boolean
 >val : Uint16Array
 >index : number
@@ -1715,9 +1715,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Uint32Array[]
->options.filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
+>options.filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
 >options : Uint32Array[]
->filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
+>filter : { <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => value is S, thisArg?: any): S[]; <S extends Uint32Array>(callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Uint32Array, index: number, array: Uint32Array[]) => any, thisArg?: any): Uint32Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Uint32Array, index: number) => boolean
 >val : Uint32Array
 >index : number
@@ -1887,9 +1887,9 @@ class A {
 
         options.filter(function (val, index) {
 >options.filter(function (val, index) {            return val === this.options[index];        }, thisObject) : Float64Array[]
->options.filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
+>options.filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
 >options : Float64Array[]
->filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
+>filter : { <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => value is S, thisArg?: any): S[]; <S extends Float64Array>(callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => false | void | "" | 0 | S, thisArg?: any): S[]; (callbackfn: (value: Float64Array, index: number, array: Float64Array[]) => any, thisArg?: any): Float64Array[]; }
 >function (val, index) {            return val === this.options[index];        } : (val: Float64Array, index: number) => boolean
 >val : Float64Array
 >index : number

@@ -5,7 +5,7 @@ export class bluebird<T> {
 
 export async function runSampleWorks<A, B, C, D, E>(
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
-    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => el));
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
         f.apply(this, result);
     let rfunc: typeof func & {} = func as any; // <- This is the only difference
@@ -14,7 +14,7 @@ export async function runSampleWorks<A, B, C, D, E>(
 
 export async function runSampleBreaks<A, B, C, D, E>(
     a: bluebird<A>, b?: bluebird<B>, c?: bluebird<C>, d?: bluebird<D>, e?: bluebird<E>) {
-    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => !!el));
+    let result = await (bluebird.all as any)([a, b, c, d, e].filter(el => el));
     let func = <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>
         f.apply(this, result);
     let rfunc: typeof func = func as any; // <- This is the only difference
@@ -37,7 +37,7 @@ class bluebird {
 exports.bluebird = bluebird;
 function runSampleWorks(a, b, c, d, e) {
     return __awaiter(this, void 0, void 0, function* () {
-        let result = yield bluebird.all([a, b, c, d, e].filter(el => !!el));
+        let result = yield bluebird.all([a, b, c, d, e].filter(el => el));
         let func = (f) => f.apply(this, result);
         let rfunc = func; // <- This is the only difference
         return rfunc;
@@ -46,7 +46,7 @@ function runSampleWorks(a, b, c, d, e) {
 exports.runSampleWorks = runSampleWorks;
 function runSampleBreaks(a, b, c, d, e) {
     return __awaiter(this, void 0, void 0, function* () {
-        let result = yield bluebird.all([a, b, c, d, e].filter(el => !!el));
+        let result = yield bluebird.all([a, b, c, d, e].filter(el => el));
         let func = (f) => f.apply(this, result);
         let rfunc = func; // <- This is the only difference
         return rfunc;
