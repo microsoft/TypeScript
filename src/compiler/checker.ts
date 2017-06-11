@@ -7168,6 +7168,7 @@ namespace ts {
             containsAny?: boolean;
             containsUndefined?: boolean;
             containsNull?: boolean;
+            containsNever?: boolean;
             containsNonWideningType?: boolean;
             containsString?: boolean;
             containsNumber?: boolean;
@@ -7369,10 +7370,13 @@ namespace ts {
             else if (type.flags & TypeFlags.Any) {
                 typeSet.containsAny = true;
             }
+            else if (type.flags & TypeFlags.Never) {
+                typeSet.containsNever = true;
+            }
             else if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
                 typeSet.containsEmptyObject = true;
             }
-            else if (!(type.flags & TypeFlags.Never) && (strictNullChecks || !(type.flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
+            else if ((strictNullChecks || !(type.flags & TypeFlags.Nullable)) && !contains(typeSet, type)) {
                 if (type.flags & TypeFlags.Object) {
                     typeSet.containsObjectType = true;
                 }
@@ -7410,6 +7414,9 @@ namespace ts {
             }
             const typeSet = [] as TypeSet;
             addTypesToIntersection(typeSet, types);
+            if (typeSet.containsNever) {
+                return neverType;
+            }
             if (typeSet.containsAny) {
                 return anyType;
             }
