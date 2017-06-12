@@ -116,7 +116,7 @@ namespace ts.server {
 
         public languageServiceEnabled = true;
 
-        protected readonly lsHost: LSHost;
+        protected lsHost: LSHost;
 
         builder: Builder;
         /**
@@ -297,9 +297,15 @@ namespace ts.server {
             this.rootFiles = undefined;
             this.rootFilesMap = undefined;
             this.program = undefined;
+            this.builder = undefined;
+            this.cachedUnresolvedImportsPerFile = undefined;
+            this.projectErrors = undefined;
+            this.lsHost.dispose();
+            this.lsHost = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
+            this.languageService = undefined;
         }
 
         getCompilerOptions() {
@@ -1043,6 +1049,7 @@ namespace ts.server {
 
             if (this.projectFileWatcher) {
                 this.projectFileWatcher.close();
+                this.projectFileWatcher = undefined;
             }
 
             if (this.typeRootsWatchers) {

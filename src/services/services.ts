@@ -1311,7 +1311,9 @@ namespace ts {
             if (program) {
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                program = undefined;
             }
+            host = undefined;
         }
 
         /// Diagnostics
