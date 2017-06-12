@@ -829,10 +829,20 @@ namespace ts.server {
                         this.assignScriptInfoToInferredProjectIfNecessary(f, /*addToListOfOpenFiles*/ false);
                     }
                 }
+
+                // Cleanup script infos that are not open and not part of any project
+                this.deleteOrphanScriptInfoNotInAnyProject();
             }
-            if (info.containingProjects.length === 0) {
-                // if there are not projects that include this script info - delete it
-                this.filenameToScriptInfo.remove(info.path);
+        }
+
+        private deleteOrphanScriptInfoNotInAnyProject() {
+            for (const path of this.filenameToScriptInfo.getKeys()) {
+                const info = this.filenameToScriptInfo.get(path);
+                if (!info.isScriptOpen() && info.containingProjects.length === 0) {
+                    // if there are not projects that include this script info - delete it
+                    info.stopWatcher();
+                    this.filenameToScriptInfo.remove(info.path);
+                }
             }
         }
 
@@ -1421,6 +1431,8 @@ namespace ts.server {
             for (const p of this.inferredProjects) {
                 p.updateGraph();
             }
+
+            this.deleteOrphanScriptInfoNotInAnyProject();
             this.printProjects();
         }
 

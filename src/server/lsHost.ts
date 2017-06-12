@@ -11,11 +11,11 @@ namespace ts.server {
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
 
-        private readonly resolveModuleName: typeof resolveModuleName;
+        private resolveModuleName: typeof resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
 
-        constructor(private readonly host: ServerHost, private readonly project: Project, private readonly cancellationToken: HostCancellationToken) {
+        constructor(private readonly host: ServerHost, private project: Project, private readonly cancellationToken: HostCancellationToken) {
             this.cancellationToken = new ThrottledCancellationToken(cancellationToken, project.projectService.throttleWaitMilliseconds);
             this.getCanonicalFileName = ts.createGetCanonicalFileName(this.host.useCaseSensitiveFileNames);
 
@@ -45,6 +45,11 @@ namespace ts.server {
             if (this.host.realpath) {
                 this.realpath = path => this.host.realpath(path);
             }
+        }
+
+        dispose() {
+            this.project = undefined;
+            this.resolveModuleName = undefined;
         }
 
         public startRecordingFilesWithChangedResolutions() {
