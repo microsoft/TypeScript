@@ -33,7 +33,8 @@ function makeP(Ctor) {
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_1.prototype.render = function () {
+        var proto_1 = class_1.prototype;
+        proto_1.render = function () {
             return (<Ctor {...this.props}/>);
         };
         return class_1;

@@ -73,7 +73,8 @@ var editor;
     var Bug = (function () {
         function Bug(p1, p2) {
         } // should be an error on p2 - it's not exported
-        Bug.prototype.foo = function (p1) {
+        var proto_1 = Bug.prototype;
+        proto_1.foo = function (p1) {
         };
         return Bug;
     }());

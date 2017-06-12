@@ -260,7 +260,8 @@ var m1;
             this.n3 = n3;
             this.n4 = n4;
         }
-        c1.prototype.d = function () {
+        var proto_1 = c1.prototype;
+        proto_1.d = function () {
             return "Hello";
         };
         return c1;
@@ -306,10 +307,11 @@ var exportTests;
     var C1_public = (function () {
         function C1_public() {
         }
-        C1_public.prototype.f2 = function () {
+        var proto_2 = C1_public.prototype;
+        proto_2.f2 = function () {
             return 30;
         };
-        C1_public.prototype.f3 = function () {
+        proto_2.f3 = function () {
             return "string";
         };
         return C1_public;
@@ -318,10 +320,11 @@ var exportTests;
     var C2_private = (function () {
         function C2_private() {
         }
-        C2_private.prototype.f2 = function () {
+        var proto_3 = C2_private.prototype;
+        proto_3.f2 = function () {
             return 30;
         };
-        C2_private.prototype.f3 = function () {
+        proto_3.f3 = function () {
             return "string";
         };
         return C2_private;
@@ -329,24 +332,25 @@ var exportTests;
     var C3_public = (function () {
         function C3_public() {
         }
-        C3_public.prototype.getC2_private = function () {
+        var proto_4 = C3_public.prototype;
+        proto_4.getC2_private = function () {
             return new C2_private();
         };
-        C3_public.prototype.setC2_private = function (arg) {
+        proto_4.setC2_private = function (arg) {
         };
-        Object.defineProperty(C3_public.prototype, "c2", {
+        Object.defineProperty(proto_4, "c2", {
             get: function () {
                 return new C2_private();
             },
             enumerable: true,
             configurable: true
         });
-        C3_public.prototype.getC1_public = function () {
+        proto_4.getC1_public = function () {
             return new C1_public();
         };
-        C3_public.prototype.setC1_public = function (arg) {
+        proto_4.setC1_public = function (arg) {
         };
-        Object.defineProperty(C3_public.prototype, "c1", {
+        Object.defineProperty(proto_4, "c1", {
             get: function () {
                 return new C1_public();
             },

@@ -24,7 +24,8 @@ Sammy.bar();
 var Sammy = (function () {
     function Sammy() {
     }
-    Sammy.prototype.foo = function () { return "hi"; };
+    var proto_1 = Sammy.prototype;
+    proto_1.foo = function () { return "hi"; };
     Sammy.bar = function () {
         return -1;
     };

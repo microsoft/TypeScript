@@ -20,7 +20,8 @@ function foo() {
     var X = (function () {
         function X() {
         }
-        X.prototype.m = function () {
+        var proto_1 = X.prototype;
+        proto_1.m = function () {
             return (function () {
                 var Y = (function () {
                     function Y() {

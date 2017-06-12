@@ -257,7 +257,8 @@ function foo2() {
 var A = (function () {
     function A() {
     }
-    A.prototype.m1 = function () {
+    var proto_1 = A.prototype;
+    proto_1.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];
@@ -265,7 +266,7 @@ var A = (function () {
         var z = { a: 1 }.a;
         use(z);
     };
-    A.prototype.m2 = function () {
+    proto_1.m2 = function () {
         {
             var x_2 = 1;
             use(x_2);
@@ -281,7 +282,8 @@ var A = (function () {
 var B = (function () {
     function B() {
     }
-    B.prototype.m1 = function () {
+    var proto_2 = B.prototype;
+    proto_2.m1 = function () {
         var x = 1;
         use(x);
         var y = [1][0];
@@ -289,7 +291,7 @@ var B = (function () {
         var z = { a: 1 }.a;
         use(z);
     };
-    B.prototype.m2 = function () {
+    proto_2.m2 = function () {
         {
             var x_3 = 1;
             use(x_3);

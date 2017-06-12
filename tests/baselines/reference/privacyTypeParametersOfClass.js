@@ -61,7 +61,8 @@ exports.publicClass = publicClass;
 var publicClassWithPrivateTypeParameters = (function () {
     function publicClassWithPrivateTypeParameters() {
     }
-    publicClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+    var proto_1 = publicClassWithPrivateTypeParameters.prototype;
+    proto_1.myMethod = function (val) {
         return val;
     };
     return publicClassWithPrivateTypeParameters;
@@ -70,7 +71,8 @@ exports.publicClassWithPrivateTypeParameters = publicClassWithPrivateTypeParamet
 var publicClassWithPublicTypeParameters = (function () {
     function publicClassWithPublicTypeParameters() {
     }
-    publicClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+    var proto_2 = publicClassWithPublicTypeParameters.prototype;
+    proto_2.myMethod = function (val) {
         return val;
     };
     return publicClassWithPublicTypeParameters;
@@ -79,7 +81,8 @@ exports.publicClassWithPublicTypeParameters = publicClassWithPublicTypeParameter
 var privateClassWithPrivateTypeParameters = (function () {
     function privateClassWithPrivateTypeParameters() {
     }
-    privateClassWithPrivateTypeParameters.prototype.myMethod = function (val) {
+    var proto_3 = privateClassWithPrivateTypeParameters.prototype;
+    proto_3.myMethod = function (val) {
         return val;
     };
     return privateClassWithPrivateTypeParameters;
@@ -87,7 +90,8 @@ var privateClassWithPrivateTypeParameters = (function () {
 var privateClassWithPublicTypeParameters = (function () {
     function privateClassWithPublicTypeParameters() {
     }
-    privateClassWithPublicTypeParameters.prototype.myMethod = function (val) {
+    var proto_4 = privateClassWithPublicTypeParameters.prototype;
+    proto_4.myMethod = function (val) {
         return val;
     };
     return privateClassWithPublicTypeParameters;
@@ -95,7 +99,8 @@ var privateClassWithPublicTypeParameters = (function () {
 var publicClassWithPublicTypeParametersWithoutExtends = (function () {
     function publicClassWithPublicTypeParametersWithoutExtends() {
     }
-    publicClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+    var proto_5 = publicClassWithPublicTypeParametersWithoutExtends.prototype;
+    proto_5.myMethod = function (val) {
         return val;
     };
     return publicClassWithPublicTypeParametersWithoutExtends;
@@ -104,7 +109,8 @@ exports.publicClassWithPublicTypeParametersWithoutExtends = publicClassWithPubli
 var privateClassWithPublicTypeParametersWithoutExtends = (function () {
     function privateClassWithPublicTypeParametersWithoutExtends() {
     }
-    privateClassWithPublicTypeParametersWithoutExtends.prototype.myMethod = function (val) {
+    var proto_6 = privateClassWithPublicTypeParametersWithoutExtends.prototype;
+    proto_6.myMethod = function (val) {
         return val;
     };
     return privateClassWithPublicTypeParametersWithoutExtends;

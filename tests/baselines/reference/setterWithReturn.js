@@ -14,7 +14,8 @@ class C234 {
 var C234 = (function () {
     function C234() {
     }
-    Object.defineProperty(C234.prototype, "p1", {
+    var proto_1 = C234.prototype;
+    Object.defineProperty(proto_1, "p1", {
         set: function (arg1) {
             if (true) {
                 return arg1;

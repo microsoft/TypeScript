@@ -22,11 +22,12 @@ class MyClass
 var MyClass = (function () {
     function MyClass() {
     }
+    var proto_1 = MyClass.prototype;
     // my function comments
-    MyClass.prototype.Count = function () {
+    proto_1.Count = function () {
         return 42;
     };
-    MyClass.prototype.SetCount = function (value) {
+    proto_1.SetCount = function (value) {
         //
     };
     return MyClass;

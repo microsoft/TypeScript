@@ -10,9 +10,10 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         return 0;
     };
-    C.prototype[this.bar()] = function () { };
+    proto_1[this.bar()] = function () { };
     return C;
 }());

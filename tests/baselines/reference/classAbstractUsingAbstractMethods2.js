@@ -62,7 +62,8 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.foo = function () { };
+    var proto_1 = D.prototype;
+    proto_1.foo = function () { };
     return D;
 }(A));
 var E = (function (_super) {
@@ -70,7 +71,8 @@ var E = (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    E.prototype.foo = function () { };
+    var proto_2 = E.prototype;
+    proto_2.foo = function () { };
     return E;
 }(A));
 var AA = (function () {
@@ -97,6 +99,7 @@ var DD = (function (_super) {
     function DD() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    DD.prototype.foo = function () { };
+    var proto_3 = DD.prototype;
+    proto_3.foo = function () { };
     return DD;
 }(AA));

@@ -9,12 +9,14 @@ class c3 { public bar() { } } // error
 var c3 = (function () {
     function c3() {
     }
-    c3.prototype.foo = function () { };
+    var proto_1 = c3.prototype;
+    proto_1.foo = function () { };
     return c3;
 }()); // error
 var c3 = (function () {
     function c3() {
     }
-    c3.prototype.bar = function () { };
+    var proto_2 = c3.prototype;
+    proto_2.bar = function () { };
     return c3;
 }()); // error

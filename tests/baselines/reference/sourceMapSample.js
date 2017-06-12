@@ -45,7 +45,8 @@ var Foo;
             function Greeter(greeting) {
                 this.greeting = greeting;
             }
-            Greeter.prototype.greet = function () {
+            var proto_1 = Greeter.prototype;
+            proto_1.greet = function () {
                 return "<h1>" + this.greeting + "</h1>";
             };
             return Greeter;

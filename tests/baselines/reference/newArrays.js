@@ -25,7 +25,8 @@ var M;
             this.x = 10;
             this.y = 10;
         }
-        Gar.prototype.m = function () {
+        var proto_1 = Gar.prototype;
+        proto_1.m = function () {
             this.fa = new Array(this.x * this.y);
         };
         return Gar;

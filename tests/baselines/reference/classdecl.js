@@ -107,8 +107,9 @@ var __extends = (this && this.__extends) || (function () {
 var a = (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () { };
-    Object.defineProperty(a.prototype, "d", {
+    var proto_1 = a.prototype;
+    proto_1.pgF = function () { };
+    Object.defineProperty(proto_1, "d", {
         get: function () {
             return 30;
         },
@@ -133,7 +134,7 @@ var a = (function () {
         enumerable: true,
         configurable: true
     });
-    a.prototype.foo = function (ns) {
+    proto_1.foo = function (ns) {
         return ns.toString();
     };
     return a;
@@ -194,7 +195,8 @@ var ib2 = (function () {
 var d = (function () {
     function d() {
     }
-    d.prototype.foo = function (ns) {
+    var proto_2 = d.prototype;
+    proto_2.foo = function (ns) {
         return ns.toString();
     };
     return d;
@@ -202,7 +204,8 @@ var d = (function () {
 var e = (function () {
     function e() {
     }
-    e.prototype.foo = function (ns) {
+    var proto_3 = e.prototype;
+    proto_3.foo = function (ns) {
         return ns.toString();
     };
     return e;

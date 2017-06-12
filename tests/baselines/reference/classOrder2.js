@@ -34,13 +34,15 @@ var A = (function (_super) {
     function A() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    A.prototype.foo = function () { this.bar(); };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { this.bar(); };
     return A;
 }(B));
 var B = (function () {
     function B() {
     }
-    B.prototype.bar = function () { };
+    var proto_2 = B.prototype;
+    proto_2.bar = function () { };
     return B;
 }());
 var a = new A();

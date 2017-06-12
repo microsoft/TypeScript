@@ -39,7 +39,8 @@ var Foo = (function (_super) {
         var _this = this;
         return _this;
     }
-    Foo.prototype.bar1 = function () { };
+    var proto_1 = Foo.prototype;
+    proto_1.bar1 = function () { };
     return Foo;
 }(FooBase));
 var f1 = new Foo("hey");

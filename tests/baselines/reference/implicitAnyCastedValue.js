@@ -90,17 +90,18 @@ var C = (function () {
         this.bar = null; // this should be an error
         this.foo = undefined; // this should be an error
     }
-    Object.defineProperty(C.prototype, "tempVar", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "tempVar", {
         get: function () {
             return 0; // this should not be an error
         },
         enumerable: true,
         configurable: true
     });
-    C.prototype.returnBarWithCase = function () {
+    proto_1.returnBarWithCase = function () {
         return this.bar;
     };
-    C.prototype.returnFooWithCase = function () {
+    proto_1.returnFooWithCase = function () {
         return this.foo; // this should not be an error
     };
     return C;
@@ -109,14 +110,15 @@ var C1 = (function () {
     function C1() {
         this.getValue = null; // this should be an error
     }
-    Object.defineProperty(C1.prototype, "castedGet", {
+    var proto_2 = C1.prototype;
+    Object.defineProperty(proto_2, "castedGet", {
         get: function () {
             return this.getValue; // this should not be an error
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C1.prototype, "notCastedGet", {
+    Object.defineProperty(proto_2, "notCastedGet", {
         get: function () {
             return this.getValue; // this should not be an error
         },

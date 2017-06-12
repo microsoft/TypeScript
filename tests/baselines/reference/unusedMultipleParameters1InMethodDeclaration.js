@@ -10,7 +10,8 @@ class Dummy {
 var Dummy = (function () {
     function Dummy() {
     }
-    Dummy.prototype.greeter = function (person, person2) {
+    var proto_1 = Dummy.prototype;
+    proto_1.greeter = function (person, person2) {
         var unused = 20;
         person2 = "dummy value";
     };

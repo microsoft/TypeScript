@@ -24,7 +24,8 @@ System.register([], function (exports_1, context_1) {
             A = (function () {
                 function A() {
                 }
-                A.prototype.B = function () {
+                var proto_1 = A.prototype;
+                proto_1.B = function () {
                     return 42;
                 };
                 return A;

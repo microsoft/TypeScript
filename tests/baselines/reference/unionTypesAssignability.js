@@ -95,7 +95,8 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.foo1 = function () { };
+    var proto_1 = D.prototype;
+    proto_1.foo1 = function () { };
     return D;
 }(C));
 var E = (function (_super) {
@@ -103,7 +104,8 @@ var E = (function (_super) {
     function E() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    E.prototype.foo2 = function () { };
+    var proto_2 = E.prototype;
+    proto_2.foo2 = function () { };
     return E;
 }(C));
 var unionDE;

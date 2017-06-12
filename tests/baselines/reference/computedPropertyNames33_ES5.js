@@ -14,7 +14,8 @@ function foo() { return ''; }
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         var obj = (_a = {},
             _a[foo()] = function () { },
             _a);

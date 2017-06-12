@@ -14,13 +14,15 @@ f(g < A, B > +(7));
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { };
     return A;
 }());
 var B = (function () {
     function B() {
     }
-    B.prototype.bar = function () { };
+    var proto_2 = B.prototype;
+    proto_2.bar = function () { };
     return B;
 }());
 function f(x) { return x; }

@@ -226,11 +226,12 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget1();
         ;
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
+    var proto_1 = publicClassWithWithPrivateParmeterTypes.prototype;
+    proto_1.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+    proto_1.myPrivateMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
@@ -241,11 +242,11 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget3();
         ;
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
+    proto_1.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
-    publicClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
+    proto_1.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
@@ -262,11 +263,12 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget1();
         ;
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod = function () {
+    var proto_2 = privateClassWithWithPrivateParmeterTypes.prototype;
+    proto_2.myPublicMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod = function () {
+    proto_2.myPrivateMethod = function () {
         return exporter.createExportedWidget1();
         ;
     };
@@ -277,11 +279,11 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
         return exporter.createExportedWidget3();
         ;
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPublicMethod1 = function () {
+    proto_2.myPublicMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
-    privateClassWithWithPrivateParmeterTypes.prototype.myPrivateMethod1 = function () {
+    proto_2.myPrivateMethod1 = function () {
         return exporter.createExportedWidget3();
         ;
     };
@@ -307,13 +309,14 @@ var publicClassWithPrivateModuleReturnTypes = (function () {
     publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
     };
-    publicClassWithPrivateModuleReturnTypes.prototype.myPublicMethod = function () {
+    var proto_3 = publicClassWithPrivateModuleReturnTypes.prototype;
+    proto_3.myPublicMethod = function () {
         return exporter.createExportedWidget2();
     };
     publicClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
     };
-    publicClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
+    proto_3.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
     return publicClassWithPrivateModuleReturnTypes;
@@ -333,13 +336,14 @@ var privateClassWithPrivateModuleReturnTypes = (function () {
     privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod = function () {
         return exporter.createExportedWidget2();
     };
-    privateClassWithPrivateModuleReturnTypes.prototype.myPublicMethod = function () {
+    var proto_4 = privateClassWithPrivateModuleReturnTypes.prototype;
+    proto_4.myPublicMethod = function () {
         return exporter.createExportedWidget2();
     };
     privateClassWithPrivateModuleReturnTypes.myPublicStaticMethod1 = function () {
         return exporter.createExportedWidget4();
     };
-    privateClassWithPrivateModuleReturnTypes.prototype.myPublicMethod1 = function () {
+    proto_4.myPublicMethod1 = function () {
         return exporter.createExportedWidget4();
     };
     return privateClassWithPrivateModuleReturnTypes;

@@ -9,7 +9,8 @@ get testProp() { return this.testProp; }
 var MyClass = (function () {
     function MyClass() {
     }
-    Object.defineProperty(MyClass.prototype, "testProp", {
+    var proto_1 = MyClass.prototype;
+    Object.defineProperty(proto_1, "testProp", {
         get: function () { return this.testProp; },
         enumerable: true,
         configurable: true

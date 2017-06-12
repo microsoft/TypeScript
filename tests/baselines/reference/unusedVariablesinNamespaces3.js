@@ -20,7 +20,8 @@ var Validation;
     var LettersOnlyValidator = (function () {
         function LettersOnlyValidator() {
         }
-        LettersOnlyValidator.prototype.isAcceptable = function (s2) {
+        var proto_1 = LettersOnlyValidator.prototype;
+        proto_1.isAcceptable = function (s2) {
             return lettersRegexp.test(s2);
         };
         return LettersOnlyValidator;

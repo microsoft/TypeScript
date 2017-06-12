@@ -128,11 +128,13 @@ var __extends = (this && this.__extends) || (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.method = function () {
+    var proto_1 = Base.prototype;
+    proto_1.method = function () {
         var A = (function () {
             function A() {
             }
-            A.prototype.methoda = function () {
+            var proto_2 = A.prototype;
+            proto_2.methoda = function () {
                 var b;
                 var d1;
                 var d2;
@@ -154,11 +156,13 @@ var Derived1 = (function (_super) {
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived1.prototype.method1 = function () {
+    var proto_3 = Derived1.prototype;
+    proto_3.method1 = function () {
         var B = (function () {
             function B() {
             }
-            B.prototype.method1b = function () {
+            var proto_4 = B.prototype;
+            proto_4.method1b = function () {
                 var b;
                 var d1;
                 var d2;
@@ -180,11 +184,13 @@ var Derived2 = (function (_super) {
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived2.prototype.method2 = function () {
+    var proto_5 = Derived2.prototype;
+    proto_5.method2 = function () {
         var C = (function () {
             function C() {
             }
-            C.prototype.method2c = function () {
+            var proto_6 = C.prototype;
+            proto_6.method2c = function () {
                 var b;
                 var d1;
                 var d2;
@@ -206,11 +212,13 @@ var Derived3 = (function (_super) {
     function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived3.prototype.method3 = function () {
+    var proto_7 = Derived3.prototype;
+    proto_7.method3 = function () {
         var D = (function () {
             function D() {
             }
-            D.prototype.method3d = function () {
+            var proto_8 = D.prototype;
+            proto_8.method3d = function () {
                 var b;
                 var d1;
                 var d2;
@@ -232,11 +240,13 @@ var Derived4 = (function (_super) {
     function Derived4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived4.prototype.method4 = function () {
+    var proto_9 = Derived4.prototype;
+    proto_9.method4 = function () {
         var E = (function () {
             function E() {
             }
-            E.prototype.method4e = function () {
+            var proto_10 = E.prototype;
+            proto_10.method4e = function () {
                 var b;
                 var d1;
                 var d2;

@@ -72,7 +72,8 @@ var ImmediatelyFix;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function (x) {
+        var proto_1 = C.prototype;
+        proto_1.foo = function (x) {
             return x(null);
         };
         return C;
@@ -84,7 +85,8 @@ var ImmediatelyFix;
     var C2 = (function () {
         function C2() {
         }
-        C2.prototype.foo = function (x) {
+        var proto_2 = C2.prototype;
+        proto_2.foo = function (x) {
             return x(null);
         };
         return C2;
@@ -98,7 +100,8 @@ var WithCandidates;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo2 = function (x, cb) {
+        var proto_3 = C.prototype;
+        proto_3.foo2 = function (x, cb) {
             return cb(x);
         };
         return C;
@@ -110,7 +113,8 @@ var WithCandidates;
     var C2 = (function () {
         function C2() {
         }
-        C2.prototype.foo3 = function (x, cb, y) {
+        var proto_4 = C2.prototype;
+        proto_4.foo3 = function (x, cb, y) {
             return cb(x);
         };
         return C2;
@@ -121,7 +125,8 @@ var WithCandidates;
     var C3 = (function () {
         function C3() {
         }
-        C3.prototype.foo3 = function (x, cb, y) {
+        var proto_5 = C3.prototype;
+        proto_5.foo3 = function (x, cb, y) {
             return cb(x);
         };
         return C3;

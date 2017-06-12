@@ -84,8 +84,9 @@ var C1 = (function () {
         // parameters in function declaration
         num = typeof param === "string" && param.length; // string
     }
+    var proto_1 = C1.prototype;
     // Inside function declaration
-    C1.prototype.p1 = function (param) {
+    proto_1.p1 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration
@@ -95,7 +96,7 @@ var C1 = (function () {
         num = typeof param === "string" && param.length; // string
     };
     // Inside function declaration
-    C1.prototype.p2 = function (param) {
+    proto_1.p2 = function (param) {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
         // variables in function declaration

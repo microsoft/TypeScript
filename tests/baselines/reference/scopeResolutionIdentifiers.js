@@ -61,7 +61,8 @@ var C = (function () {
     function C() {
         this.n = this.s;
     }
-    C.prototype.x = function () {
+    var proto_1 = C.prototype;
+    proto_1.x = function () {
         var p = this.n;
         var p;
     };

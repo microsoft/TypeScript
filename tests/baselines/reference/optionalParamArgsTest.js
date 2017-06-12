@@ -142,22 +142,23 @@ var C1 = (function () {
         if (p === void 0) { p = 0; }
         this.n = 0;
     }
-    C1.prototype.C1M1 = function () { return 0; }; // returning C1M1A1 will result in "Unresolved symbol C1M1A1"
-    C1.prototype.C1M2 = function (C1M2A1) { return C1M2A1; }; // will return C1M1A2 without complaint
+    var proto_1 = C1.prototype;
+    proto_1.C1M1 = function () { return 0; }; // returning C1M1A1 will result in "Unresolved symbol C1M1A1"
+    proto_1.C1M2 = function (C1M2A1) { return C1M2A1; }; // will return C1M1A2 without complaint
     // C1M3 contains all optional parameters
-    C1.prototype.C1M3 = function (C1M3A1, C1M3A2) {
+    proto_1.C1M3 = function (C1M3A1, C1M3A2) {
         if (C1M3A1 === void 0) { C1M3A1 = 0; }
         if (C1M3A2 === void 0) { C1M3A2 = C1M3A1; }
         return C1M3A1 + C1M3A2;
     };
     // C1M4 contains a mix of optional and non-optional parameters
-    C1.prototype.C1M4 = function (C1M4A1, C1M4A2) { return C1M4A1 + C1M4A2; };
-    C1.prototype.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
+    proto_1.C1M4 = function (C1M4A1, C1M4A2) { return C1M4A1 + C1M4A2; };
+    proto_1.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };
     // Uninitialized parameter makes the initialized one required
-    C1.prototype.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
+    proto_1.C1M5 = function (C1M5A1, C1M5A2, C1M5A3) {
         if (C1M5A2 === void 0) { C1M5A2 = 0; }
         return C1M5A1 + C1M5A2;
     };

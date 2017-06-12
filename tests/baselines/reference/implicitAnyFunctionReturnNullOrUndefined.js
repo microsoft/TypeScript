@@ -31,10 +31,11 @@ function undefinedWidenFunction() { return undefined; } // error at "undefinedWi
 var C = (function () {
     function C() {
     }
-    C.prototype.nullWidenFuncOfC = function () {
+    var proto_1 = C.prototype;
+    proto_1.nullWidenFuncOfC = function () {
         return null;
     };
-    C.prototype.underfinedWidenFuncOfC = function () {
+    proto_1.underfinedWidenFuncOfC = function () {
         return undefined;
     };
     return C;

@@ -13,7 +13,8 @@ function g() {
             function C() {
                 this.prop1 = 1;
             }
-            C.prototype.foo = function () { };
+            var proto_1 = C.prototype;
+            proto_1.foo = function () { };
             return C;
         }()),
         _a.prop2 = 43,

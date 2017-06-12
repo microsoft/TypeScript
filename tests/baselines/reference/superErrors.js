@@ -73,7 +73,8 @@ var User = (function () {
     function User() {
         this.name = "Bob";
     }
-    User.prototype.sayHello = function () {
+    var proto_1 = User.prototype;
+    proto_1.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
@@ -99,7 +100,8 @@ var RegisteredUser = (function (_super) {
         })();
         return _this;
     }
-    RegisteredUser.prototype.sayHello = function () {
+    var proto_2 = RegisteredUser.prototype;
+    proto_2.sayHello = function () {
         // super call in a method
         _super.prototype.sayHello.call(this);
         // super call in a lambda in an inner function in a method

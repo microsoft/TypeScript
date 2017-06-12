@@ -31,7 +31,8 @@ var bar = (function (_super) {
     function bar() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    bar.prototype.test = function () {
+    var proto_1 = bar.prototype;
+    proto_1.test = function () {
         this.
         ;
     };

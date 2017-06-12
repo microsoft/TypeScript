@@ -29,7 +29,8 @@ var Ship = (function () {
 var Board = (function () {
     function Board() {
     }
-    Board.prototype.allShipsSunk = function () {
+    var proto_1 = Board.prototype;
+    proto_1.allShipsSunk = function () {
         return this.ships.every(function (val) { return val.isSunk; });
     };
     return Board;

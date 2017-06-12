@@ -118,7 +118,8 @@ var m1;
         var C2 = (function () {
             function C2() {
             }
-            Object.defineProperty(C2.prototype, "p1", {
+            var proto_1 = C2.prototype;
+            Object.defineProperty(proto_1, "p1", {
                 get: function (arg) {
                     return new C1();
                 },
@@ -127,7 +128,7 @@ var m1;
                 enumerable: true,
                 configurable: true
             });
-            C2.prototype.f55 = function () {
+            proto_1.f55 = function () {
                 return "Hello world";
             };
             return C2;
@@ -176,7 +177,8 @@ var m2;
         var c_pr = (function () {
             function c_pr() {
             }
-            c_pr.prototype.f1 = function () {
+            var proto_2 = c_pr.prototype;
+            proto_2.f1 = function () {
                 return "Hello";
             };
             return c_pr;

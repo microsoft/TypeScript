@@ -29,7 +29,8 @@ var EventBase = (function () {
     function EventBase() {
         this._listeners = [];
     }
-    EventBase.prototype.add = function (listener) {
+    var proto_1 = EventBase.prototype;
+    proto_1.add = function (listener) {
         this._listeners.push(listener);
     };
     return EventBase;
@@ -39,7 +40,8 @@ var StringEvent = (function (_super) {
     function StringEvent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    StringEvent.prototype.add = function (listener) {
+    var proto_2 = StringEvent.prototype;
+    proto_2.add = function (listener) {
         _super.prototype.add.call(this, listener);
     };
     return StringEvent;

@@ -131,7 +131,8 @@ var C = (function () {
     function C() {
         this.p = 1;
     }
-    C.prototype.m = function () { };
+    var proto_1 = C.prototype;
+    proto_1.m = function () { };
     return C;
 }());
 var c = new C();

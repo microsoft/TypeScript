@@ -21,7 +21,8 @@ var r3 = r.a
 var C = (function () {
     function C() {
     }
-    C.prototype.fn = function () {
+    var proto_1 = C.prototype;
+    proto_1.fn = function () {
         return this;
     };
     return C;

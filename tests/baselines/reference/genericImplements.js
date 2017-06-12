@@ -37,20 +37,23 @@ var B = (function () {
 var X = (function () {
     function X() {
     }
-    X.prototype.f = function () { return undefined; };
+    var proto_1 = X.prototype;
+    proto_1.f = function () { return undefined; };
     return X;
 }()); // { f: () => { b; } }
 // OK
 var Y = (function () {
     function Y() {
     }
-    Y.prototype.f = function () { return undefined; };
+    var proto_2 = Y.prototype;
+    proto_2.f = function () { return undefined; };
     return Y;
 }()); // { f: () => { a; } }
 // OK
 var Z = (function () {
     function Z() {
     }
-    Z.prototype.f = function () { return undefined; };
+    var proto_3 = Z.prototype;
+    proto_3.f = function () { return undefined; };
     return Z;
 }()); // { f: <T>() => T } 

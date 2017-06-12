@@ -15,7 +15,8 @@ c.P(1,2,3);
 var C = (function () {
     function C() {
     }
-    C.prototype.P = function (ii, j, k) {
+    var proto_1 = C.prototype;
+    proto_1.P = function (ii, j, k) {
         for (var i = 0; i < arguments.length; i++) {
             // WScript.Echo("param: " + arguments[i]);
         }

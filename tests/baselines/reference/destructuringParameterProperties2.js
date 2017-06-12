@@ -38,13 +38,14 @@ var C1 = (function () {
             this.a = a || k;
         }
     }
-    C1.prototype.getA = function () {
+    var proto_1 = C1.prototype;
+    proto_1.getA = function () {
         return this.a;
     };
-    C1.prototype.getB = function () {
+    proto_1.getB = function () {
         return this.b;
     };
-    C1.prototype.getC = function () {
+    proto_1.getC = function () {
         return this.c;
     };
     return C1;

@@ -21,7 +21,8 @@ exports.__esModule = true;
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree
+    var proto_1 = baz.prototype;
+    proto_1.foo = function (bar) { }; // error - access modifiers do not agree
     return baz;
 }());
 function bar(s) { }

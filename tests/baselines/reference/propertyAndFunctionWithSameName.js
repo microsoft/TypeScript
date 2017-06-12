@@ -15,7 +15,8 @@ class D {
 var C = (function () {
     function C() {
     }
-    C.prototype.x = function () {
+    var proto_1 = C.prototype;
+    proto_1.x = function () {
         return 1;
     };
     return C;
@@ -23,6 +24,7 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.x = function (v) { }; // error
+    var proto_2 = D.prototype;
+    proto_2.x = function (v) { }; // error
     return D;
 }());

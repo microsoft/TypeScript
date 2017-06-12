@@ -10,7 +10,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var default_1 = (function () {
     function default_1() {
     }
-    default_1.prototype.method = function () { };
+    var proto_1 = default_1.prototype;
+    proto_1.method = function () { };
     return default_1;
 }());
 exports.default = default_1;

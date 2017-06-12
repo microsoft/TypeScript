@@ -16,7 +16,8 @@ exports.__esModule = true;
 var Greeter = (function () {
     function Greeter() {
     }
-    Greeter.prototype.greet = function () { return 'greet'; };
+    var proto_1 = Greeter.prototype;
+    proto_1.greet = function () { return 'greet'; };
     return Greeter;
 }());
 exports.Greeter = Greeter;

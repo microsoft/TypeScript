@@ -59,7 +59,8 @@ var f4 = <U extends T, T>(x: V, y: X) => { // error
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) {
         var r;
         return x;
     };

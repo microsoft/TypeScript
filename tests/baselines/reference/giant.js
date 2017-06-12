@@ -703,28 +703,29 @@ define(["require", "exports"], function (require, exports) {
     var C = (function () {
         function C() {
         }
-        C.prototype.pF = function () { };
-        C.prototype.rF = function () { };
-        C.prototype.pgF = function () { };
-        Object.defineProperty(C.prototype, "pgF", {
+        var proto_1 = C.prototype;
+        proto_1.pF = function () { };
+        proto_1.rF = function () { };
+        proto_1.pgF = function () { };
+        Object.defineProperty(proto_1, "pgF", {
             get: function () { },
             enumerable: true,
             configurable: true
         });
-        C.prototype.psF = function (param) { };
-        Object.defineProperty(C.prototype, "psF", {
+        proto_1.psF = function (param) { };
+        Object.defineProperty(proto_1, "psF", {
             set: function (param) { },
             enumerable: true,
             configurable: true
         });
-        C.prototype.rgF = function () { };
-        Object.defineProperty(C.prototype, "rgF", {
+        proto_1.rgF = function () { };
+        Object.defineProperty(proto_1, "rgF", {
             get: function () { },
             enumerable: true,
             configurable: true
         });
-        C.prototype.rsF = function (param) { };
-        Object.defineProperty(C.prototype, "rsF", {
+        proto_1.rsF = function (param) { };
+        Object.defineProperty(proto_1, "rsF", {
             set: function (param) { },
             enumerable: true,
             configurable: true
@@ -752,28 +753,29 @@ define(["require", "exports"], function (require, exports) {
         var C = (function () {
             function C() {
             }
-            C.prototype.pF = function () { };
-            C.prototype.rF = function () { };
-            C.prototype.pgF = function () { };
-            Object.defineProperty(C.prototype, "pgF", {
+            var proto_2 = C.prototype;
+            proto_2.pF = function () { };
+            proto_2.rF = function () { };
+            proto_2.pgF = function () { };
+            Object.defineProperty(proto_2, "pgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.psF = function (param) { };
-            Object.defineProperty(C.prototype, "psF", {
+            proto_2.psF = function (param) { };
+            Object.defineProperty(proto_2, "psF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.rgF = function () { };
-            Object.defineProperty(C.prototype, "rgF", {
+            proto_2.rgF = function () { };
+            Object.defineProperty(proto_2, "rgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.rsF = function (param) { };
-            Object.defineProperty(C.prototype, "rsF", {
+            proto_2.rsF = function (param) { };
+            Object.defineProperty(proto_2, "rsF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
@@ -828,28 +830,29 @@ define(["require", "exports"], function (require, exports) {
         var eC = (function () {
             function eC() {
             }
-            eC.prototype.pF = function () { };
-            eC.prototype.rF = function () { };
-            eC.prototype.pgF = function () { };
-            Object.defineProperty(eC.prototype, "pgF", {
+            var proto_3 = eC.prototype;
+            proto_3.pF = function () { };
+            proto_3.rF = function () { };
+            proto_3.pgF = function () { };
+            Object.defineProperty(proto_3, "pgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.psF = function (param) { };
-            Object.defineProperty(eC.prototype, "psF", {
+            proto_3.psF = function (param) { };
+            Object.defineProperty(proto_3, "psF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.rgF = function () { };
-            Object.defineProperty(eC.prototype, "rgF", {
+            proto_3.rgF = function () { };
+            Object.defineProperty(proto_3, "rgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.rsF = function (param) { };
-            Object.defineProperty(eC.prototype, "rsF", {
+            proto_3.rsF = function (param) { };
+            Object.defineProperty(proto_3, "rsF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
@@ -907,28 +910,29 @@ define(["require", "exports"], function (require, exports) {
     var eC = (function () {
         function eC() {
         }
-        eC.prototype.pF = function () { };
-        eC.prototype.rF = function () { };
-        eC.prototype.pgF = function () { };
-        Object.defineProperty(eC.prototype, "pgF", {
+        var proto_4 = eC.prototype;
+        proto_4.pF = function () { };
+        proto_4.rF = function () { };
+        proto_4.pgF = function () { };
+        Object.defineProperty(proto_4, "pgF", {
             get: function () { },
             enumerable: true,
             configurable: true
         });
-        eC.prototype.psF = function (param) { };
-        Object.defineProperty(eC.prototype, "psF", {
+        proto_4.psF = function (param) { };
+        Object.defineProperty(proto_4, "psF", {
             set: function (param) { },
             enumerable: true,
             configurable: true
         });
-        eC.prototype.rgF = function () { };
-        Object.defineProperty(eC.prototype, "rgF", {
+        proto_4.rgF = function () { };
+        Object.defineProperty(proto_4, "rgF", {
             get: function () { },
             enumerable: true,
             configurable: true
         });
-        eC.prototype.rsF = function (param) { };
-        Object.defineProperty(eC.prototype, "rsF", {
+        proto_4.rsF = function (param) { };
+        Object.defineProperty(proto_4, "rsF", {
             set: function (param) { },
             enumerable: true,
             configurable: true
@@ -957,28 +961,29 @@ define(["require", "exports"], function (require, exports) {
         var C = (function () {
             function C() {
             }
-            C.prototype.pF = function () { };
-            C.prototype.rF = function () { };
-            C.prototype.pgF = function () { };
-            Object.defineProperty(C.prototype, "pgF", {
+            var proto_5 = C.prototype;
+            proto_5.pF = function () { };
+            proto_5.rF = function () { };
+            proto_5.pgF = function () { };
+            Object.defineProperty(proto_5, "pgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.psF = function (param) { };
-            Object.defineProperty(C.prototype, "psF", {
+            proto_5.psF = function (param) { };
+            Object.defineProperty(proto_5, "psF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.rgF = function () { };
-            Object.defineProperty(C.prototype, "rgF", {
+            proto_5.rgF = function () { };
+            Object.defineProperty(proto_5, "rgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            C.prototype.rsF = function (param) { };
-            Object.defineProperty(C.prototype, "rsF", {
+            proto_5.rsF = function (param) { };
+            Object.defineProperty(proto_5, "rsF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
@@ -1033,28 +1038,29 @@ define(["require", "exports"], function (require, exports) {
         var eC = (function () {
             function eC() {
             }
-            eC.prototype.pF = function () { };
-            eC.prototype.rF = function () { };
-            eC.prototype.pgF = function () { };
-            Object.defineProperty(eC.prototype, "pgF", {
+            var proto_6 = eC.prototype;
+            proto_6.pF = function () { };
+            proto_6.rF = function () { };
+            proto_6.pgF = function () { };
+            Object.defineProperty(proto_6, "pgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.psF = function (param) { };
-            Object.defineProperty(eC.prototype, "psF", {
+            proto_6.psF = function (param) { };
+            Object.defineProperty(proto_6, "psF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.rgF = function () { };
-            Object.defineProperty(eC.prototype, "rgF", {
+            proto_6.rgF = function () { };
+            Object.defineProperty(proto_6, "rgF", {
                 get: function () { },
                 enumerable: true,
                 configurable: true
             });
-            eC.prototype.rsF = function (param) { };
-            Object.defineProperty(eC.prototype, "rsF", {
+            proto_6.rsF = function (param) { };
+            Object.defineProperty(proto_6, "rsF", {
                 set: function (param) { },
                 enumerable: true,
                 configurable: true

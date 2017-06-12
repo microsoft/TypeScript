@@ -30,7 +30,8 @@ var A;
     var B = (function () {
         function B() {
         }
-        B.prototype.Hello = function () {
+        var proto_1 = B.prototype;
+        proto_1.Hello = function () {
             return "from private B";
         };
         return B;
@@ -40,7 +41,8 @@ var A;
     var B = (function () {
         function B() {
         }
-        B.prototype.Hello = function () {
+        var proto_2 = B.prototype;
+        proto_2.Hello = function () {
             return "from export B";
         };
         return B;

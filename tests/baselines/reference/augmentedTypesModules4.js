@@ -49,7 +49,8 @@ var m4d;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_1 = C.prototype;
+        proto_1.foo = function () { };
         return C;
     }());
 })(m4d || (m4d = {}));

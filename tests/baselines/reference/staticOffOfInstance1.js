@@ -10,7 +10,8 @@ class List {
 var List = (function () {
     function List() {
     }
-    List.prototype.Blah = function () {
+    var proto_1 = List.prototype;
+    proto_1.Blah = function () {
         this.Foo();
     };
     List.Foo = function () { };

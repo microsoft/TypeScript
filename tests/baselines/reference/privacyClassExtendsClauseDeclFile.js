@@ -114,7 +114,8 @@ var publicModule;
     var publicClassInPublicModule = (function () {
         function publicClassInPublicModule() {
         }
-        publicClassInPublicModule.prototype.f1 = function () {
+        var proto_1 = publicClassInPublicModule.prototype;
+        proto_1.f1 = function () {
         };
         return publicClassInPublicModule;
     }());
@@ -175,7 +176,8 @@ var privateModule;
     var publicClassInPrivateModule = (function () {
         function publicClassInPrivateModule() {
         }
-        publicClassInPrivateModule.prototype.f1 = function () {
+        var proto_2 = publicClassInPrivateModule.prototype;
+        proto_2.f1 = function () {
         };
         return publicClassInPrivateModule;
     }());
@@ -234,7 +236,8 @@ var privateModule;
 var publicClass = (function () {
     function publicClass() {
     }
-    publicClass.prototype.f1 = function () {
+    var proto_3 = publicClass.prototype;
+    proto_3.f1 = function () {
     };
     return publicClass;
 }());
@@ -305,7 +308,8 @@ var publicModuleInGlobal;
     var publicClassInPublicModule = (function () {
         function publicClassInPublicModule() {
         }
-        publicClassInPublicModule.prototype.f1 = function () {
+        var proto_1 = publicClassInPublicModule.prototype;
+        proto_1.f1 = function () {
         };
         return publicClassInPublicModule;
     }());

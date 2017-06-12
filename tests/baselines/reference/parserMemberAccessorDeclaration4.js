@@ -7,7 +7,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "a", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "a", {
         set: function (i) { },
         enumerable: true,
         configurable: true

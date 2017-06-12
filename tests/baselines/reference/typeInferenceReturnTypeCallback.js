@@ -25,7 +25,8 @@ class Cons<T> implements IList<T>{
 var Nil = (function () {
     function Nil() {
     }
-    Nil.prototype.map = function (f) {
+    var proto_1 = Nil.prototype;
+    proto_1.map = function (f) {
         return null;
     };
     return Nil;
@@ -33,12 +34,13 @@ var Nil = (function () {
 var Cons = (function () {
     function Cons() {
     }
-    Cons.prototype.map = function (f) {
+    var proto_2 = Cons.prototype;
+    proto_2.map = function (f) {
         return this.foldRight(new Nil(), function (t, acc) {
             return new Cons();
         });
     };
-    Cons.prototype.foldRight = function (z, f) {
+    proto_2.foldRight = function (z, f) {
         return null;
     };
     return Cons;

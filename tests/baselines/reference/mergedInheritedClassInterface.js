@@ -60,7 +60,8 @@ var __extends = (this && this.__extends) || (function () {
 var BaseClass = (function () {
     function BaseClass() {
     }
-    BaseClass.prototype.baseMethod = function () { };
+    var proto_1 = BaseClass.prototype;
+    proto_1.baseMethod = function () { };
     return BaseClass;
 }());
 var Child = (function (_super) {
@@ -68,13 +69,15 @@ var Child = (function (_super) {
     function Child() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Child.prototype.method = function () { };
+    var proto_2 = Child.prototype;
+    proto_2.method = function () { };
     return Child;
 }(BaseClass));
 var ChildNoBaseClass = (function () {
     function ChildNoBaseClass() {
     }
-    ChildNoBaseClass.prototype.method2 = function () { };
+    var proto_3 = ChildNoBaseClass.prototype;
+    proto_3.method2 = function () { };
     return ChildNoBaseClass;
 }());
 var Grandchild = (function (_super) {

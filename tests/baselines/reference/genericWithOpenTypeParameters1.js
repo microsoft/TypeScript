@@ -15,7 +15,8 @@ var f4 = (x: B<number>) => { return x.foo(1); } // no error
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function (x) { return null; };
+    var proto_1 = B.prototype;
+    proto_1.foo = function (x) { return null; };
     return B;
 }());
 var x;

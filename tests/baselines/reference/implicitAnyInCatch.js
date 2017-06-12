@@ -24,7 +24,8 @@ for (var key in this) { }
 var C = (function () {
     function C() {
     }
-    C.prototype.temp = function () {
+    var proto_1 = C.prototype;
+    proto_1.temp = function () {
         for (var x in this) {
         }
     };

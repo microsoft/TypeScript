@@ -130,13 +130,14 @@ function d2(_a) {
 var C4 = (function () {
     function C4() {
     }
-    C4.prototype.d3 = function (_a) {
+    var proto_1 = C4.prototype;
+    proto_1.d3 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     }; // Error, binding pattern can't be optional in implementation signature
-    C4.prototype.d4 = function (_a) {
+    proto_1.d4 = function (_a) {
         var x = _a.x, y = _a.y, c = _a.c;
     };
-    C4.prototype.e0 = function (_a) {
+    proto_1.e0 = function (_a) {
         var a = _a[0], b = _a[1], q = _a[2];
     };
     return C4;

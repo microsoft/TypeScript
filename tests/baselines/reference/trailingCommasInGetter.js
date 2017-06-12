@@ -8,7 +8,8 @@ class X {
 var X = (function () {
     function X() {
     }
-    Object.defineProperty(X.prototype, "x", {
+    var proto_1 = X.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () { return 0; },
         enumerable: true,
         configurable: true

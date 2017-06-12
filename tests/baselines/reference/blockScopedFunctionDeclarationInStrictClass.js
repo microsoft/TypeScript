@@ -13,7 +13,8 @@ class c {
 var c = (function () {
     function c() {
     }
-    c.prototype.method = function () {
+    var proto_1 = c.prototype;
+    proto_1.method = function () {
         if (true) {
             function foo() { }
             foo(); // ok

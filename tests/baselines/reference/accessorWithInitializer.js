@@ -8,7 +8,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "X", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "X", {
         set: function (v) {
             if (v === void 0) { v = 0; }
         },

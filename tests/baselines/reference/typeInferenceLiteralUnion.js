@@ -44,7 +44,8 @@ var NumCoercible = (function () {
     function NumCoercible(a) {
         this.a = a;
     }
-    NumCoercible.prototype.valueOf = function () {
+    var proto_1 = NumCoercible.prototype;
+    proto_1.valueOf = function () {
         return this.a;
     };
     return NumCoercible;

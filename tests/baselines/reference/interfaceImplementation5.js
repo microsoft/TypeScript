@@ -35,7 +35,8 @@ class C6 implements I1 {
 var C1 = (function () {
     function C1() {
     }
-    Object.defineProperty(C1.prototype, "getset1", {
+    var proto_1 = C1.prototype;
+    Object.defineProperty(proto_1, "getset1", {
         get: function () { return 1; },
         enumerable: true,
         configurable: true
@@ -45,7 +46,8 @@ var C1 = (function () {
 var C2 = (function () {
     function C2() {
     }
-    Object.defineProperty(C2.prototype, "getset1", {
+    var proto_2 = C2.prototype;
+    Object.defineProperty(proto_2, "getset1", {
         set: function (baz) { },
         enumerable: true,
         configurable: true
@@ -55,7 +57,8 @@ var C2 = (function () {
 var C3 = (function () {
     function C3() {
     }
-    Object.defineProperty(C3.prototype, "getset1", {
+    var proto_3 = C3.prototype;
+    Object.defineProperty(proto_3, "getset1", {
         get: function () { return 1; },
         set: function (baz) { },
         enumerable: true,
@@ -66,7 +69,8 @@ var C3 = (function () {
 var C4 = (function () {
     function C4() {
     }
-    Object.defineProperty(C4.prototype, "getset1", {
+    var proto_4 = C4.prototype;
+    Object.defineProperty(proto_4, "getset1", {
         get: function () { var x; return x; },
         enumerable: true,
         configurable: true
@@ -76,7 +80,8 @@ var C4 = (function () {
 var C5 = (function () {
     function C5() {
     }
-    Object.defineProperty(C5.prototype, "getset1", {
+    var proto_5 = C5.prototype;
+    Object.defineProperty(proto_5, "getset1", {
         set: function (baz) { },
         enumerable: true,
         configurable: true
@@ -86,7 +91,8 @@ var C5 = (function () {
 var C6 = (function () {
     function C6() {
     }
-    Object.defineProperty(C6.prototype, "getset1", {
+    var proto_6 = C6.prototype;
+    Object.defineProperty(proto_6, "getset1", {
         get: function () { var x; return x; },
         set: function (baz) { },
         enumerable: true,

@@ -17,7 +17,8 @@ module M1.M2 {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         _super.prototype.foo.call(this);
     };
     return C;
@@ -29,7 +30,8 @@ var M1;
         var C = (function () {
             function C() {
             }
-            C.prototype.foo = function () {
+            var proto_2 = C.prototype;
+            proto_2.foo = function () {
                 _super.prototype.foo.call(this);
             };
             return C;

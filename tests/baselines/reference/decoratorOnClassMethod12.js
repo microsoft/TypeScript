@@ -31,7 +31,8 @@ var M;
     var S = (function () {
         function S() {
         }
-        S.prototype.decorator = function (target, key) { };
+        var proto_1 = S.prototype;
+        proto_1.decorator = function (target, key) { };
         return S;
     }());
     var C = (function (_super) {
@@ -39,7 +40,8 @@ var M;
         function C() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        C.prototype.method = function () { };
+        var proto_2 = C.prototype;
+        proto_2.method = function () { };
         __decorate([
             _super.decorator
         ], C.prototype, "method", null);

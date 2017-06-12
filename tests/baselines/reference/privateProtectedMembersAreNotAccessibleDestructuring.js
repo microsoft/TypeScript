@@ -35,8 +35,9 @@ var __extends = (this && this.__extends) || (function () {
 var K = (function () {
     function K() {
     }
-    K.prototype.privateMethod = function () { };
-    K.prototype.m = function () {
+    var proto_1 = K.prototype;
+    proto_1.privateMethod = function () { };
+    proto_1.m = function () {
         var _a = this, a = _a.priv, b = _a.prot; // ok
         var _b = new K(), priv = _b.priv, prot = _b.prot; // ok
     };
@@ -47,7 +48,8 @@ var C = (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype.m2 = function () {
+    var proto_2 = C.prototype;
+    proto_2.m2 = function () {
         var a = this.priv; // error
         var b = this.prot; // ok
     };

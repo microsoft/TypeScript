@@ -50,7 +50,8 @@ var C = (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype.foo = function () { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { };
     return C;
 }(A));
 function foo(name) {

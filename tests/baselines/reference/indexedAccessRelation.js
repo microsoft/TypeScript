@@ -36,7 +36,8 @@ exports.__esModule = true;
 var Component = (function () {
     function Component() {
     }
-    Component.prototype.setState = function (state) { };
+    var proto_1 = Component.prototype;
+    proto_1.setState = function (state) { };
     return Component;
 }());
 var Foo = (function () {
@@ -49,7 +50,8 @@ var Comp = (function (_super) {
     function Comp() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Comp.prototype.foo = function (a) {
+    var proto_2 = Comp.prototype;
+    proto_2.foo = function (a) {
         this.setState({ a: a });
     };
     return Comp;

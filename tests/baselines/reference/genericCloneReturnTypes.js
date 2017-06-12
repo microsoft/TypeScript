@@ -30,7 +30,8 @@ var Bar = (function () {
     function Bar(x) {
         this.size = x;
     }
-    Bar.prototype.clone = function () {
+    var proto_1 = Bar.prototype;
+    proto_1.clone = function () {
         return new Bar(this.size);
     };
     return Bar;

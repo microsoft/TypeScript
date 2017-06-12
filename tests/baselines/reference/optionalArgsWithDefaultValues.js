@@ -17,7 +17,8 @@ function foo(x, y, z) {
 var CCC = (function () {
     function CCC() {
     }
-    CCC.prototype.foo = function (x, y, z) {
+    var proto_1 = CCC.prototype;
+    proto_1.foo = function (x, y, z) {
         if (y === void 0) { y = false; }
         if (z === void 0) { z = 0; }
     };

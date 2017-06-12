@@ -39,9 +39,10 @@ class a {
 var a = (function () {
     function a(ns) {
     }
-    a.prototype.pgF = function () { };
+    var proto_1 = a.prototype;
+    proto_1.pgF = function () { };
     ;
-    Object.defineProperty(a.prototype, "d", {
+    Object.defineProperty(proto_1, "d", {
         get: function () {
             return 30;
         },
@@ -66,7 +67,7 @@ var a = (function () {
         enumerable: true,
         configurable: true
     });
-    a.prototype.foo = function (ns) {
+    proto_1.foo = function (ns) {
         return ns.toString();
     };
     return a;

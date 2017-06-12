@@ -64,10 +64,11 @@ var __extends = (this && this.__extends) || (function () {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.f = function () {
+    var proto_1 = C1.prototype;
+    proto_1.f = function () {
         return this.x;
     };
-    Object.defineProperty(C1.prototype, "accessor", {
+    Object.defineProperty(proto_1, "accessor", {
         get: function () { return 0; },
         set: function (a) { },
         enumerable: true,
@@ -94,7 +95,8 @@ var C2 = (function (_super) {
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C2.prototype.f = function () {
+    var proto_2 = C2.prototype;
+    proto_2.f = function () {
         return _super.prototype.f.call(this) + this.x;
     };
     C2.sf = function () {
@@ -108,7 +110,8 @@ var C3 = (function (_super) {
     function C3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C3.prototype.f = function () {
+    var proto_3 = C3.prototype;
+    proto_3.f = function () {
         return _super.prototype.f.call(this);
     };
     C3.sf = function () {

@@ -45,13 +45,14 @@ var IceCreamMonster = (function () {
         this.soundsWhenEating = soundsWhenEating;
         this.name = name;
     }
+    var proto_1 = IceCreamMonster.prototype;
     /**
 * Tells the IceCreamMonster to eat their ice cre    am!
 *
 * @param {number} amount The amount of ice cream to e    at.
 * @return {boolean} True if ice cream remains, false if there is no more ice cream le    ft.
 */
-    IceCreamMonster.prototype.eatIceCream = function (amount) {
+    proto_1.eatIceCream = function (amount) {
         this.iceCreamRemaining -= amount;
         if (this.iceCreamRemaining <= 0) {
             this.iceCreamRemaining = 0;

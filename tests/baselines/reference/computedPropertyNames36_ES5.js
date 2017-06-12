@@ -24,13 +24,14 @@ var Foo2 = (function () {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "get1", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "get1", {
         // Computed properties
         get: function () { return new Foo; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "set1", {
+    Object.defineProperty(proto_1, "set1", {
         set: function (p) { },
         enumerable: true,
         configurable: true

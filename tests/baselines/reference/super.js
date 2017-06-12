@@ -52,10 +52,11 @@ var Base = (function () {
     function Base() {
         var x;
     }
-    Base.prototype.foo = function () {
+    var proto_1 = Base.prototype;
+    proto_1.foo = function () {
         return "base";
     };
-    Base.prototype.bar = function () {
+    proto_1.bar = function () {
         return "basebar";
     };
     return Base;
@@ -65,7 +66,8 @@ var Sub1 = (function (_super) {
     function Sub1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Sub1.prototype.foo = function () {
+    var proto_2 = Sub1.prototype;
+    proto_2.foo = function () {
         return "sub1" + _super.prototype.foo.call(this) + _super.prototype.bar.call(this);
     };
     return Sub1;
@@ -75,7 +77,8 @@ var SubSub1 = (function (_super) {
     function SubSub1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    SubSub1.prototype.foo = function () {
+    var proto_3 = SubSub1.prototype;
+    proto_3.foo = function () {
         return "subsub1" + _super.prototype.foo.call(this);
     };
     return SubSub1;
@@ -83,7 +86,8 @@ var SubSub1 = (function (_super) {
 var Base2 = (function () {
     function Base2() {
     }
-    Base2.prototype.foo = function () {
+    var proto_4 = Base2.prototype;
+    proto_4.foo = function () {
         _super.prototype.foo.call(this);
     };
     return Base2;

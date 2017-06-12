@@ -29,7 +29,8 @@ c = a;
 var B = (function () {
     function B() {
     }
-    B.prototype.prop = function () { };
+    var proto_1 = B.prototype;
+    proto_1.prop = function () { };
     return B;
 }());
 var C = (function () {

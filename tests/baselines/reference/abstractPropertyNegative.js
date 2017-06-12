@@ -66,7 +66,8 @@ var C = (function (_super) {
         _this.ro = "readonly please";
         return _this;
     }
-    Object.defineProperty(C.prototype, "concreteWithNoBody", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "concreteWithNoBody", {
         get: function () { },
         enumerable: true,
         configurable: true
@@ -99,7 +100,8 @@ var WrongTypeAccessorImpl = (function (_super) {
     function WrongTypeAccessorImpl() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(WrongTypeAccessorImpl.prototype, "num", {
+    var proto_2 = WrongTypeAccessorImpl.prototype;
+    Object.defineProperty(proto_2, "num", {
         get: function () { return "nope, wrong"; },
         enumerable: true,
         configurable: true
@@ -118,13 +120,14 @@ var WrongTypeAccessorImpl2 = (function (_super) {
 var AbstractAccessorMismatch = (function () {
     function AbstractAccessorMismatch() {
     }
-    Object.defineProperty(AbstractAccessorMismatch.prototype, "p1", {
+    var proto_3 = AbstractAccessorMismatch.prototype;
+    Object.defineProperty(proto_3, "p1", {
         set: function (val) { },
         enumerable: true,
         configurable: true
     });
     ;
-    Object.defineProperty(AbstractAccessorMismatch.prototype, "p2", {
+    Object.defineProperty(proto_3, "p2", {
         get: function () { return "should work"; },
         enumerable: true,
         configurable: true

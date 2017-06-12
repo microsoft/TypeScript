@@ -22,6 +22,7 @@ var TestController = (function () {
             p2: function () { return function (vvvvvvvvv) { return _this; }; }
         });
     }
-    TestController.prototype.m = function (def) { };
+    var proto_1 = TestController.prototype;
+    proto_1.m = function (def) { };
     return TestController;
 }());

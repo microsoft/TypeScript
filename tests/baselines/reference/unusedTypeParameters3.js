@@ -11,7 +11,8 @@ class greeter<typeparameter1, typeparameter2, typeparameter3> {
 var greeter = (function () {
     function greeter() {
     }
-    greeter.prototype.function1 = function () {
+    var proto_1 = greeter.prototype;
+    proto_1.function1 = function () {
         this.x;
     };
     return greeter;

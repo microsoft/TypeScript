@@ -34,7 +34,8 @@ var A = (function () {
             args[_i] = arguments[_i];
         }
     }
-    A.prototype.method = function () {
+    var proto_1 = A.prototype;
+    proto_1.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
@@ -59,7 +60,8 @@ var B = (function () {
             args[_i] = arguments[_i];
         }
     }
-    B.prototype.method = function () {
+    var proto_2 = B.prototype;
+    proto_2.method = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];

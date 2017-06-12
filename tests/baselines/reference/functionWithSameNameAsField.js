@@ -12,7 +12,8 @@ class TestProgressBar {
 var TestProgressBar = (function () {
     function TestProgressBar() {
     }
-    TestProgressBar.prototype.total = function (total) {
+    var proto_1 = TestProgressBar.prototype;
+    proto_1.total = function (total) {
         this.total = total;
         return this;
     };

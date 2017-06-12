@@ -22,8 +22,9 @@ c.foo = C.foo;
 var C = (function () {
     function C(x) {
     }
-    C.prototype.foo = function () { };
-    C.prototype.bar = function () { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { };
+    proto_1.bar = function () { };
     C.boo = function () { };
     return C;
 }());

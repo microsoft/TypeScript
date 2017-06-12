@@ -54,7 +54,8 @@ define(["require", "exports"], function (require, exports) {
         TestRunner.arrayCompare = function (arg1, arg2) {
             return false;
         };
-        TestRunner.prototype.addTest = function (test) {
+        var proto_1 = TestRunner.prototype;
+        proto_1.addTest = function (test) {
         };
         return TestRunner;
     }());

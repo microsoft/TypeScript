@@ -33,7 +33,8 @@ var MyModule;
     var MyClass = (function () {
         function MyClass() {
         }
-        Object.defineProperty(MyClass.prototype, "myGetter", {
+        var proto_1 = MyClass.prototype;
+        Object.defineProperty(proto_1, "myGetter", {
             get: function () {
                 var obj = {};
                 return obj;

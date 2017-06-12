@@ -80,7 +80,8 @@ var f2 = function () {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];
@@ -130,7 +131,8 @@ var f4 = function () {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.foo = function () {
+    var proto_2 = C2.prototype;
+    proto_2.foo = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             x[_i] = arguments[_i];

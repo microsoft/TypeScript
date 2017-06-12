@@ -32,7 +32,8 @@ class parser {
 var parser = (function () {
     function parser() {
     }
-    parser.prototype.m = function () {
+    var proto_1 = parser.prototype;
+    proto_1.m = function () {
         this.options = this.options.sort(function (a, b) {
             var aName = a.name.toLowerCase();
             var bName = b.name.toLowerCase();

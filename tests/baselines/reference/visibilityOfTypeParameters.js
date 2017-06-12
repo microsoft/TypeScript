@@ -11,7 +11,8 @@ exports.__esModule = true;
 var MyClass = (function () {
     function MyClass() {
     }
-    MyClass.prototype.myMethod = function (val) {
+    var proto_1 = MyClass.prototype;
+    proto_1.myMethod = function (val) {
         return val;
     };
     return MyClass;

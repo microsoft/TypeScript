@@ -46,7 +46,8 @@ exports.B = B;
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.method = function (x) {
     };
     tslib_1.__decorate([
         tslib_1.__param(0, dec),
@@ -97,7 +98,8 @@ var B = (function (_super) {
 var C = (function () {
     function C() {
     }
-    C.prototype.method = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.method = function (x) {
     };
     __decorate([
         __param(0, dec),

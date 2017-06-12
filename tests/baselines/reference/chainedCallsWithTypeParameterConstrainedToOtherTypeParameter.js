@@ -34,7 +34,8 @@ var Chain = (function () {
     function Chain(value) {
         this.value = value;
     }
-    Chain.prototype.then = function (cb) {
+    var proto_1 = Chain.prototype;
+    proto_1.then = function (cb) {
         return null;
     };
     return Chain;

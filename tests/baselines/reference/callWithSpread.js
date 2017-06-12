@@ -107,7 +107,8 @@ var C = (function () {
         this.foo(x, y);
         this.foo.apply(this, [x, y].concat(z));
     }
-    C.prototype.foo = function (x, y) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x, y) {
         var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
             z[_i - 2] = arguments[_i];
@@ -122,7 +123,8 @@ var D = (function (_super) {
         _this = _super.apply(this, [1, 2].concat(a)) || this;
         return _this;
     }
-    D.prototype.foo = function () {
+    var proto_2 = D.prototype;
+    proto_2.foo = function () {
         _super.prototype.foo.call(this, 1, 2);
         _super.prototype.foo.apply(this, [1, 2].concat(a));
     };

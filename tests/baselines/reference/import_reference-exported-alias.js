@@ -31,7 +31,8 @@ define(["require", "exports"], function (require, exports) {
             var UserServices = (function () {
                 function UserServices() {
                 }
-                UserServices.prototype.getUserName = function () {
+                var proto_1 = UserServices.prototype;
+                proto_1.getUserName = function () {
                     return "Bill Gates";
                 };
                 return UserServices;

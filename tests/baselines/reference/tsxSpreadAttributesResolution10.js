@@ -42,7 +42,8 @@ var Opt = (function (_super) {
     function Opt() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Opt.prototype.render = function () {
+    var proto_1 = Opt.prototype;
+    proto_1.render = function () {
         return <div>Hello</div>;
     };
     return Opt;

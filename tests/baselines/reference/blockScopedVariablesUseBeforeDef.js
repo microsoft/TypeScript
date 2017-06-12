@@ -120,7 +120,8 @@ function foo3() {
     var X = (function () {
         function X() {
         }
-        X.prototype.m = function () { return x; };
+        var proto_1 = X.prototype;
+        proto_1.m = function () { return x; };
         return X;
     }());
     var x;
@@ -129,7 +130,8 @@ function foo4() {
     var y = (function () {
         function class_1() {
         }
-        class_1.prototype.m = function () { return x; };
+        var proto_2 = class_1.prototype;
+        proto_2.m = function () { return x; };
         return class_1;
     }());
     var x;

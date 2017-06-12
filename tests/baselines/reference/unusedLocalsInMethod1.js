@@ -9,7 +9,8 @@ class greeter {
 var greeter = (function () {
     function greeter() {
     }
-    greeter.prototype.function1 = function () {
+    var proto_1 = greeter.prototype;
+    proto_1.function1 = function () {
         var x = 10;
     };
     return greeter;

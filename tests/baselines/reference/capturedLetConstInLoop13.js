@@ -27,7 +27,8 @@ var Main = (function () {
     function Main() {
         this.register("a", "b", "c");
     }
-    Main.prototype.register = function () {
+    var proto_1 = Main.prototype;
+    proto_1.register = function () {
         var _this = this;
         var names = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -45,8 +46,8 @@ var Main = (function () {
             _loop_1(name);
         }
     };
-    Main.prototype.bar = function (a) { };
-    Main.prototype.foo = function (name) { };
+    proto_1.bar = function (a) { };
+    proto_1.foo = function (name) { };
     return Main;
 }());
 new Main();

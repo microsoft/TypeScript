@@ -82,7 +82,8 @@ var Button = (function (_super) {
     function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Button.prototype.select = function () { };
+    var proto_1 = Button.prototype;
+    proto_1.select = function () { };
     return Button;
 }(Control));
 var TextBox = (function (_super) {
@@ -90,7 +91,8 @@ var TextBox = (function (_super) {
     function TextBox() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    TextBox.prototype.select = function () { };
+    var proto_2 = TextBox.prototype;
+    proto_2.select = function () { };
     return TextBox;
 }(Control));
 var ImageBase = (function (_super) {
@@ -110,13 +112,15 @@ var Image1 = (function (_super) {
 var Locations = (function () {
     function Locations() {
     }
-    Locations.prototype.select = function () { };
+    var proto_3 = Locations.prototype;
+    proto_3.select = function () { };
     return Locations;
 }());
 var Locations1 = (function () {
     function Locations1() {
     }
-    Locations1.prototype.select = function () { };
+    var proto_4 = Locations1.prototype;
+    proto_4.select = function () { };
     return Locations1;
 }());
 var sc;

@@ -26,7 +26,8 @@ var __extends = (this && this.__extends) || (function () {
 var Animal = (function () {
     function Animal() {
     }
-    Animal.prototype.run = function () { };
+    var proto_1 = Animal.prototype;
+    proto_1.run = function () { };
     return Animal;
 }());
 var Cat = (function (_super) {

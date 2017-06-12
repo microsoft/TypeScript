@@ -43,18 +43,20 @@ var Foo = (function () {
     function Foo(private, public, static) {
         private = public = static;
     }
-    Foo.prototype.banana = function (x) { };
+    var proto_1 = Foo.prototype;
+    proto_1.banana = function (x) { };
     return Foo;
 }());
 var C = (function () {
     function C(public, let) {
         this.public = public;
     }
-    C.prototype.foo1 = function (private, static, public) {
+    var proto_2 = C.prototype;
+    proto_2.foo1 = function (private, static, public) {
         function let() { }
         var z = function let() { };
     };
-    C.prototype.pulbic = function () { }; // No Error;
+    proto_2.pulbic = function () { }; // No Error;
     return C;
 }());
 var D = (function () {

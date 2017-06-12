@@ -78,8 +78,9 @@ var y;
 var Base = (function () {
     function Base(a) {
     }
-    Base.prototype.b = function (a) { };
-    Object.defineProperty(Base.prototype, "c", {
+    var proto_1 = Base.prototype;
+    proto_1.b = function (a) { };
+    Object.defineProperty(proto_1, "c", {
         get: function () { return x; },
         set: function (v) { },
         enumerable: true,
@@ -99,8 +100,9 @@ var Derived = (function (_super) {
     function Derived(a) {
         return _super.call(this, x) || this;
     }
-    Derived.prototype.b = function (a) { };
-    Object.defineProperty(Derived.prototype, "c", {
+    var proto_2 = Derived.prototype;
+    proto_2.b = function (a) { };
+    Object.defineProperty(proto_2, "c", {
         get: function () { return y; },
         set: function (v) { },
         enumerable: true,

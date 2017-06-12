@@ -29,7 +29,8 @@ var __extends = (this && this.__extends) || (function () {
 var B = (function () {
     function B(x) {
     }
-    B.prototype.x = function () { return ""; };
+    var proto_1 = B.prototype;
+    proto_1.x = function () { return ""; };
     return B;
 }());
 var C1 = (function (_super) {

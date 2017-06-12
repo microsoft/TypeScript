@@ -16,7 +16,8 @@ class Foo {
 var C = (function () {
     function C() {
     }
-    C.prototype.a = function () {
+    var proto_1 = C.prototype;
+    proto_1.a = function () {
         s = 1;
     };
     return C;

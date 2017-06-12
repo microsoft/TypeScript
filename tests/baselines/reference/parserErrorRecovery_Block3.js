@@ -10,9 +10,10 @@ class C  {
 var C = (function () {
     function C() {
     }
-    C.prototype.a = function () {
+    var proto_1 = C.prototype;
+    proto_1.a = function () {
     };
-    C.prototype.b = function () {
+    proto_1.b = function () {
     };
     return C;
 }());

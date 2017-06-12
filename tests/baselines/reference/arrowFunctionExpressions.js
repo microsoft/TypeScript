@@ -150,7 +150,8 @@ var MyClass = (function () {
         this.m = function (n) { return n + 1; };
         this.p = function (n) { return n && _this; };
     }
-    MyClass.prototype.fn = function () {
+    var proto_1 = MyClass.prototype;
+    proto_1.fn = function () {
         var _this = this;
         var m = function (n) { return n + 1; };
         var p = function (n) { return n && _this; };

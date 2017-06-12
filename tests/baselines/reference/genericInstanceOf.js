@@ -17,7 +17,8 @@ var C = (function () {
         this.a = a;
         this.b = b;
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         if (this.a instanceof this.b) {
         }
     };

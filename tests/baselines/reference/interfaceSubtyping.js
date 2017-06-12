@@ -14,6 +14,7 @@ var Camera = (function () {
     function Camera(str) {
         this.str = str;
     }
-    Camera.prototype.foo = function () { return "s"; };
+    var proto_1 = Camera.prototype;
+    proto_1.foo = function () { return "s"; };
     return Camera;
 }());

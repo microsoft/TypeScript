@@ -92,11 +92,12 @@ var NoBase = (function () {
         //super call in class member initializer with no base type
         this.p = _this = _super.call(this) || this;
     }
+    var proto_1 = NoBase.prototype;
     //super call in class member function with no base type
-    NoBase.prototype.fn = function () {
+    proto_1.fn = function () {
         _this = _super.call(this) || this;
     };
-    Object.defineProperty(NoBase.prototype, "foo", {
+    Object.defineProperty(proto_1, "foo", {
         //super call in class accessor (get and set) with no base type
         get: function () {
             _this = _super.call(this) || this;
@@ -157,11 +158,12 @@ var OtherDerived = (function (_super) {
         _this.t = _this = _super.call(this) || this;
         return _this;
     }
-    OtherDerived.prototype.fn = function () {
+    var proto_2 = OtherDerived.prototype;
+    proto_2.fn = function () {
         //super call in class member function of derived type
         _this = _super.call(this) || this;
     };
-    Object.defineProperty(OtherDerived.prototype, "foo", {
+    Object.defineProperty(proto_2, "foo", {
         //super call in class accessor (get and set) of derived type
         get: function () {
             _this = _super.call(this) || this;

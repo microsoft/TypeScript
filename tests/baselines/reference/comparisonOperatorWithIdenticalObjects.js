@@ -208,7 +208,8 @@ var __extends = (this && this.__extends) || (function () {
 var A1 = (function () {
     function A1() {
     }
-    A1.prototype.fn = function (a) {
+    var proto_1 = A1.prototype;
+    proto_1.fn = function (a) {
         return null;
     };
     return A1;
@@ -216,7 +217,8 @@ var A1 = (function () {
 var B1 = (function () {
     function B1() {
     }
-    B1.prototype.fn = function (b) {
+    var proto_2 = B1.prototype;
+    proto_2.fn = function (b) {
         return null;
     };
     return B1;
@@ -224,7 +226,8 @@ var B1 = (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.fn = function (b) {
+    var proto_3 = Base.prototype;
+    proto_3.fn = function (b) {
         return null;
     };
     return Base;

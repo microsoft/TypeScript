@@ -100,10 +100,11 @@ var farrow = function (a) {
 var C = (function () {
     function C() {
     }
+    var proto_1 = C.prototype;
     // Method declaration paramter
-    C.prototype.method = function (a) {
+    proto_1.method = function (a) {
     };
-    Object.defineProperty(C.prototype, "x", {
+    Object.defineProperty(proto_1, "x", {
         // Accessor declaration paramter
         set: function (v) {
         },
@@ -115,10 +116,11 @@ var C = (function () {
 var E = (function () {
     function class_1() {
     }
+    var proto_2 = class_1.prototype;
     // Method declaration paramter
-    class_1.prototype.method = function (a) {
+    proto_2.method = function (a) {
     };
-    Object.defineProperty(class_1.prototype, "x", {
+    Object.defineProperty(proto_2, "x", {
         // Accessor declaration paramter
         set: function (v) {
         },

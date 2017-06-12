@@ -20,7 +20,8 @@ var Foo = (function () {
     function Foo(store) {
         this._store = store; // should be an error.
     }
-    Foo.prototype.foo = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.foo = function () {
         return this._store.length;
     };
     return Foo;

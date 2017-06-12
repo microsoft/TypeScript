@@ -59,7 +59,8 @@ var M;
     var D = (function () {
         function D() {
         }
-        D.prototype._subscribe = function (viewModel) {
+        var proto_1 = D.prototype;
+        proto_1._subscribe = function (viewModel) {
             var f = function (newValue) { };
             var v = viewModel.value;
             // both of these should work

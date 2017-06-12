@@ -27,7 +27,8 @@ function func(s) {
 var A = (function () {
     function A() {
     }
-    A.prototype.m = function () {
+    var proto_1 = A.prototype;
+    proto_1.m = function () {
     };
     __decorate([
         (function (x, p) {

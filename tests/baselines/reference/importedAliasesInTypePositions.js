@@ -33,7 +33,8 @@ define(["require", "exports"], function (require, exports) {
                     var ReferredTo = (function () {
                         function ReferredTo() {
                         }
-                        ReferredTo.prototype.doSomething = function () {
+                        var proto_1 = ReferredTo.prototype;
+                        proto_1.doSomething = function () {
                         };
                         return ReferredTo;
                     }());

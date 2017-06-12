@@ -15,10 +15,11 @@ define(["require", "exports"], function (require, exports) {
     var BuildWorkspaceService = (function () {
         function BuildWorkspaceService() {
         }
-        BuildWorkspaceService.prototype.injectRequestService = function (service) {
+        var proto_1 = BuildWorkspaceService.prototype;
+        proto_1.injectRequestService = function (service) {
             this.injectBuildService(new X(service));
         };
-        BuildWorkspaceService.prototype.injectBuildService = function (service) {
+        proto_1.injectBuildService = function (service) {
         };
         return BuildWorkspaceService;
     }());

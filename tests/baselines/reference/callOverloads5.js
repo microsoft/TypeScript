@@ -24,7 +24,8 @@ var Foo = (function () {
     function Foo(x) {
         // WScript.Echo("Constructor function has executed");
     }
-    Foo.prototype.bar1 = function (a) { };
+    var proto_1 = Foo.prototype;
+    proto_1.bar1 = function (a) { };
     return Foo;
 }());
 //class Foo(s: String);

@@ -17,6 +17,7 @@ class C5 implements I1 {
 var C5 = (function () {
     function C5() {
     }
-    C5.prototype.iFn = function () { };
+    var proto_1 = C5.prototype;
+    proto_1.iFn = function () { };
     return C5;
 }());

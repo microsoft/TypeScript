@@ -26,7 +26,8 @@ class B<T extends A> {
 var A = (function () {
     function A() {
     }
-    A.prototype.self = function () {
+    var proto_1 = A.prototype;
+    proto_1.self = function () {
         return this;
     };
     return A;
@@ -40,10 +41,11 @@ function f(x) {
 var B = (function () {
     function B() {
     }
-    B.prototype.foo = function (x) {
+    var proto_2 = B.prototype;
+    proto_2.foo = function (x) {
         x = x.self();
     };
-    B.prototype.bar = function (x) {
+    proto_2.bar = function (x) {
         x = x.self();
     };
     return B;

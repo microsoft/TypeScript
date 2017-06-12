@@ -24,7 +24,8 @@ var Result = (function () {
 var Test = (function () {
     function Test() {
     }
-    Object.defineProperty(Test.prototype, "Property", {
+    var proto_1 = Test.prototype;
+    Object.defineProperty(proto_1, "Property", {
         get: function () {
             var x = 1;
             return null;
@@ -37,7 +38,8 @@ var Test = (function () {
 var Test2 = (function () {
     function Test2() {
     }
-    Object.defineProperty(Test2.prototype, "Property", {
+    var proto_2 = Test2.prototype;
+    Object.defineProperty(proto_2, "Property", {
         get: function () {
             var x = 1;
             return null;

@@ -31,7 +31,8 @@ var Point = (function () {
         this.x = x;
         this.y = y;
     }
-    Point.prototype.toString = function () {
+    var proto_1 = Point.prototype;
+    proto_1.toString = function () {
         return "x=" + this.x + " y=" + this.y;
     };
     return Point;
@@ -43,7 +44,8 @@ var ColoredPoint = (function (_super) {
         _this.color = color;
         return _this;
     }
-    ColoredPoint.prototype.toString = function () {
+    var proto_2 = ColoredPoint.prototype;
+    proto_2.toString = function () {
         return _super.prototype.toString.call(this) + " color=" + this.color;
     };
     return ColoredPoint;

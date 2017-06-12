@@ -39,7 +39,8 @@ var A = (function () {
         this.bar;
         any;
     }
-    A.prototype.baz = function () {
+    var proto_1 = A.prototype;
+    proto_1.baz = function () {
         var _this = this;
         this.foo = "foo";
         this.bar = "bar";

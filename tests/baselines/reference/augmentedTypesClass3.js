@@ -18,13 +18,15 @@ class c5c { public foo() { } }
 var c5 = (function () {
     function c5() {
     }
-    c5.prototype.foo = function () { };
+    var proto_1 = c5.prototype;
+    proto_1.foo = function () { };
     return c5;
 }());
 var c5a = (function () {
     function c5a() {
     }
-    c5a.prototype.foo = function () { };
+    var proto_2 = c5a.prototype;
+    proto_2.foo = function () { };
     return c5a;
 }());
 (function (c5a) {
@@ -33,7 +35,8 @@ var c5a = (function () {
 var c5b = (function () {
     function c5b() {
     }
-    c5b.prototype.foo = function () { };
+    var proto_3 = c5b.prototype;
+    proto_3.foo = function () { };
     return c5b;
 }());
 (function (c5b) {
@@ -43,7 +46,8 @@ var c5b = (function () {
 var c5c = (function () {
     function c5c() {
     }
-    c5c.prototype.foo = function () { };
+    var proto_4 = c5c.prototype;
+    proto_4.foo = function () { };
     return c5c;
 }());
 //import c5c = require(''); 

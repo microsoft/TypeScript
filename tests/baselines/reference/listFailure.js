@@ -48,7 +48,8 @@ var Editor;
         function Buffer() {
             this.lines = ListMakeHead();
         }
-        Buffer.prototype.addLine = function (lineText) {
+        var proto_1 = Buffer.prototype;
+        proto_1.addLine = function (lineText) {
             var line = new Line();
             var lineEntry = this.lines.add(line);
             return lineEntry;
@@ -71,11 +72,12 @@ var Editor;
     var List = (function () {
         function List() {
         }
-        List.prototype.add = function (data) {
+        var proto_2 = List.prototype;
+        proto_2.add = function (data) {
             this.next = ListMakeEntry(data);
             return this.next;
         };
-        List.prototype.popEntry = function (head) {
+        proto_2.popEntry = function (head) {
             return (ListRemoveEntry(this.next));
         };
         return List;

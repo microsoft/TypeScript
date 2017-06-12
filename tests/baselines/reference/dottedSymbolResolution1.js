@@ -29,7 +29,8 @@ function _setBarAndText(): void {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.foo = function () { };
+    var proto_1 = Base.prototype;
+    proto_1.foo = function () { };
     return Base;
 }());
 function each(collection, callback) {

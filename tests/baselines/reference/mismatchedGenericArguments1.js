@@ -19,7 +19,8 @@ class C2<T> implements IFoo<T> {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x) {
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x) {
         return null;
     };
     return C;
@@ -27,7 +28,8 @@ var C = (function () {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.foo = function (x) {
+    var proto_2 = C2.prototype;
+    proto_2.foo = function (x) {
         return null;
     };
     return C2;

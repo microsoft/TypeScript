@@ -141,7 +141,8 @@ var Errors;
 var FileService = (function () {
     function FileService() {
     }
-    FileService.prototype.uploadData = function () {
+    var proto_1 = FileService.prototype;
+    proto_1.uploadData = function () {
         var _this = this;
         var path = "";
         return this.requestService.makeRequest({

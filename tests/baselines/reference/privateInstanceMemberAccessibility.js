@@ -37,7 +37,8 @@ var Derived = (function (_super) {
         _this.z = _super.prototype.foo; // error
         return _this;
     }
-    Derived.prototype.y = function () {
+    var proto_1 = Derived.prototype;
+    proto_1.y = function () {
         return _super.prototype.foo; // error
     };
     return Derived;

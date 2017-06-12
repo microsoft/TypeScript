@@ -36,7 +36,8 @@ class c44 {
 var c11 = (function () {
     function c11() {
     }
-    c11.prototype.foo = function () {
+    var proto_1 = c11.prototype;
+    proto_1.foo = function () {
         return 1;
     };
     return c11;
@@ -46,7 +47,8 @@ var c11 = (function () {
 var c33 = (function () {
     function c33() {
     }
-    c33.prototype.foo = function () {
+    var proto_2 = c33.prototype;
+    proto_2.foo = function () {
         return 1;
     };
     return c33;
@@ -59,7 +61,8 @@ var c33 = (function () {
 var c44 = (function () {
     function c44() {
     }
-    c44.prototype.foo = function () {
+    var proto_3 = c44.prototype;
+    proto_3.foo = function () {
         return 1;
     };
     return c44;

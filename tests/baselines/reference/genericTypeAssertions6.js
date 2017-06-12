@@ -40,7 +40,8 @@ var A = (function () {
         var y = x;
         var z = x;
     }
-    A.prototype.f = function (x, y) {
+    var proto_1 = A.prototype;
+    proto_1.f = function (x, y) {
         x = y;
         y = x;
     };
@@ -51,7 +52,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.g = function (x) {
+    var proto_2 = B.prototype;
+    proto_2.g = function (x) {
         var a = x;
         var b = x;
         var c = new Date();

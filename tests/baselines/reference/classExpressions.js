@@ -14,7 +14,8 @@ var x = (function () {
         this.func = function () {
         };
     }
-    B.prototype.onStart = function () {
+    var proto_1 = B.prototype;
+    proto_1.onStart = function () {
     };
     return B;
 }());

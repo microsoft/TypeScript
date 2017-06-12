@@ -33,7 +33,8 @@ var C1 = (function () {
     function C1() {
         this.p1 = 0;
     }
-    C1.prototype.p2 = function () { };
+    var proto_1 = C1.prototype;
+    proto_1.p2 = function () { };
     return C1;
 }());
 exports.C1 = C1;
@@ -41,7 +42,8 @@ var C2 = (function () {
     function C2() {
         this.p1 = 0;
     }
-    C2.prototype.p2 = function () { };
+    var proto_2 = C2.prototype;
+    proto_2.p2 = function () { };
     return C2;
 }());
 var E1;

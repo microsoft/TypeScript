@@ -8,7 +8,8 @@ var r2: A<number> = <A<A<number>>>foo; // error
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function (x) { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function (x) { };
     return A;
 }());
 var foo = new A();

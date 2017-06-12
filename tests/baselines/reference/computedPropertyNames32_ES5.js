@@ -12,9 +12,10 @@ function foo() { return ''; }
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         return 0;
     };
-    C.prototype[foo()] = function () { };
+    proto_1[foo()] = function () { };
     return C;
 }());

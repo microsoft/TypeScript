@@ -15,7 +15,8 @@ module C {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "x", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "x", {
         set: function (y) { },
         enumerable: true,
         configurable: true

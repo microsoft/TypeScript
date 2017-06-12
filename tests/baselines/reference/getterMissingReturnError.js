@@ -10,7 +10,8 @@ class test {
 var test = (function () {
     function test() {
     }
-    Object.defineProperty(test.prototype, "p2", {
+    var proto_1 = test.prototype;
+    Object.defineProperty(proto_1, "p2", {
         get: function () {
         },
         enumerable: true,

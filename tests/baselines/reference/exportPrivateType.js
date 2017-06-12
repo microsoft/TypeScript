@@ -41,7 +41,8 @@ var foo;
     var C2 = (function () {
         function C2() {
         }
-        C2.prototype.test = function () { return true; };
+        var proto_1 = C2.prototype;
+        proto_1.test = function () { return true; };
         return C2;
     }());
 })(foo || (foo = {}));

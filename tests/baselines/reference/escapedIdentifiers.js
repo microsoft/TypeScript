@@ -179,7 +179,8 @@ interfaceType2Object2.bar2 = 2;
 var testClass = (function () {
     function testClass() {
     }
-    testClass.prototype.func = function (arg1, arg\u0032, arg\u0033, arg4) {
+    var proto_1 = testClass.prototype;
+    proto_1.func = function (arg1, arg\u0032, arg\u0033, arg4) {
         arg\u0031 = 1;
         arg2 = 'string';
         arg\u0033 = true;

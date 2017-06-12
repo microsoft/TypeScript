@@ -15,7 +15,8 @@ class Bar implements Foo<Bar, string> {
 var Bar = (function () {
     function Bar() {
     }
-    Bar.prototype.foo = function (bar) {
+    var proto_1 = Bar.prototype;
+    proto_1.foo = function (bar) {
     };
     return Bar;
 }());

@@ -47,9 +47,10 @@ var X = (function () {
         this.m = this.m.bind(this);
         this.mistake = 'frankly, complete nonsense';
     }
-    X.prototype.m = function () {
+    var proto_1 = X.prototype;
+    proto_1.m = function () {
     };
-    X.prototype.mistake = function () {
+    proto_1.mistake = function () {
     };
     return X;
 }());
@@ -62,9 +63,10 @@ var Y = (function () {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';
     }
-    Y.prototype.mistake = function () {
+    var proto_2 = Y.prototype;
+    proto_2.mistake = function () {
     };
-    Y.prototype.m = function () {
+    proto_2.m = function () {
     };
     return Y;
 }());

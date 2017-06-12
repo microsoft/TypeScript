@@ -13,7 +13,8 @@ class C implements I {
 var C = (function () {
     function C() {
     }
-    C.prototype.x1 = function (a, callback) {
+    var proto_1 = C.prototype;
+    proto_1.x1 = function (a, callback) {
     };
     return C;
 }());

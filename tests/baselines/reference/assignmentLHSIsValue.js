@@ -88,7 +88,8 @@ var C = (function () {
     function C() {
         this = value;
     }
-    C.prototype.foo = function () { this = value; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { this = value; };
     C.sfoo = function () { this = value; };
     return C;
 }());
@@ -127,7 +128,8 @@ var Derived = (function (_super) {
         _super.prototype. = value;
         return _this;
     }
-    Derived.prototype.foo = function () { _super.prototype. = value; };
+    var proto_2 = Derived.prototype;
+    proto_2.foo = function () { _super.prototype. = value; };
     Derived.sfoo = function () { _super. = value; };
     return Derived;
 }(C));

@@ -13,7 +13,8 @@ class Foo<T> {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.fn = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.fn = function () {
         this.x = a;
     };
     return Foo;

@@ -36,7 +36,8 @@ var C2 = (function () {
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.set = function (x) {
+    var proto_1 = C3.prototype;
+    proto_1.set = function (x) {
         return x + 1;
     };
     return C3;
@@ -51,8 +52,9 @@ var C5 = (function () {
     function C5() {
         this.set = function () { return true; };
     }
-    C5.prototype.get = function () { return true; };
-    Object.defineProperty(C5.prototype, "t", {
+    var proto_2 = C5.prototype;
+    proto_2.get = function () { return true; };
+    Object.defineProperty(proto_2, "t", {
         set: function (x) { },
         enumerable: true,
         configurable: true

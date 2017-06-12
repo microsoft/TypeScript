@@ -33,7 +33,8 @@ var b = (function (_super) {
     function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(b.prototype, "x", {
+    var proto_1 = b.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () {
             return "20";
         },

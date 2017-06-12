@@ -44,7 +44,8 @@ var MyComponent = (function () {
     function MyComponent(Service) {
         this.Service = Service;
     }
-    MyComponent.prototype.method = function (x) {
+    var proto_1 = MyComponent.prototype;
+    proto_1.method = function (x) {
     };
     __decorate([
         decorator,

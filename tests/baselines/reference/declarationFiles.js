@@ -51,7 +51,8 @@ class C4 {
 var C1 = (function () {
     function C1(x) {
     }
-    C1.prototype.f = function (x) { return undefined; };
+    var proto_1 = C1.prototype;
+    proto_1.f = function (x) { return undefined; };
     return C1;
 }());
 var C2 = (function () {
@@ -72,16 +73,17 @@ var C4 = (function () {
         this.x3 = [{ a: this }];
         this.x4 = function () { return _this; };
     }
-    C4.prototype.f1 = function () {
+    var proto_2 = C4.prototype;
+    proto_2.f1 = function () {
         return { a: this };
     };
-    C4.prototype.f2 = function () {
+    proto_2.f2 = function () {
         return [this];
     };
-    C4.prototype.f3 = function () {
+    proto_2.f3 = function () {
         return [{ a: this }];
     };
-    C4.prototype.f4 = function () {
+    proto_2.f4 = function () {
         var _this = this;
         return function () { return _this; };
     };

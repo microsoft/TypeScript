@@ -42,7 +42,8 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
         var DB = (function () {
             function DB() {
             }
-            DB.prototype.findPerson = function (id) {
+            var proto_1 = DB.prototype;
+            proto_1.findPerson = function (id) {
                 return new P.Models.Person("Rock");
             };
             return DB;

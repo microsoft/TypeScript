@@ -15,7 +15,8 @@ var i2: I<C>; // should be an error
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { return null; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { return null; };
     return C;
 }());
 var c1; // error

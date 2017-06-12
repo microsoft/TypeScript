@@ -618,10 +618,11 @@ function f13(foo, bar) {
 var Component = (function () {
     function Component() {
     }
-    Component.prototype.getProperty = function (key) {
+    var proto_1 = Component.prototype;
+    proto_1.getProperty = function (key) {
         return this.props[key];
     };
-    Component.prototype.setProperty = function (key, value) {
+    proto_1.setProperty = function (key, value) {
         this.props[key] = value;
     };
     return Component;
@@ -754,13 +755,14 @@ function f84() {
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.get = function (key) {
+    var proto_2 = C1.prototype;
+    proto_2.get = function (key) {
         return this[key];
     };
-    C1.prototype.set = function (key, value) {
+    proto_2.set = function (key, value) {
         this[key] = value;
     };
-    C1.prototype.foo = function () {
+    proto_2.foo = function () {
         var x1 = this.x; // number
         var x2 = this["x"]; // number
         var x3 = this.get("x"); // this["x"]
@@ -794,10 +796,11 @@ function f90(x1, x2, x3, x4) {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.get = function (prop) {
+    var proto_3 = Base.prototype;
+    proto_3.get = function (prop) {
         return this[prop];
     };
-    Base.prototype.set = function (prop, value) {
+    proto_3.set = function (prop, value) {
         this[prop] = value;
     };
     return Base;
@@ -809,7 +812,8 @@ var Person = (function (_super) {
         _this.set("parts", parts);
         return _this;
     }
-    Person.prototype.getParts = function () {
+    var proto_4 = Person.prototype;
+    proto_4.getParts = function () {
         return this.get("parts");
     };
     return Person;
@@ -818,7 +822,8 @@ var OtherPerson = (function () {
     function OtherPerson(parts) {
         setProperty(this, "parts", parts);
     }
-    OtherPerson.prototype.getParts = function () {
+    var proto_5 = OtherPerson.prototype;
+    proto_5.getParts = function () {
         return getProperty(this, "parts");
     };
     return OtherPerson;
@@ -893,7 +898,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.f = function (p) {
+    var proto_6 = B.prototype;
+    proto_6.f = function (p) {
         p.x;
     };
     return B;
@@ -902,7 +908,8 @@ var B = (function (_super) {
 var Form = (function () {
     function Form() {
     }
-    Form.prototype.set = function (prop, value) {
+    var proto_7 = Form.prototype;
+    proto_7.set = function (prop, value) {
         this.childFormFactories[prop](value);
     };
     return Form;
@@ -922,7 +929,8 @@ var AnotherSampleClass = (function (_super) {
         _this = _super.call(this, merge(props, foo)) || this;
         return _this;
     }
-    AnotherSampleClass.prototype.brokenMethod = function () {
+    var proto_8 = AnotherSampleClass.prototype;
+    proto_8.brokenMethod = function () {
         this.props.foo.concat;
     };
     return AnotherSampleClass;

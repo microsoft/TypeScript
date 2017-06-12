@@ -12,7 +12,8 @@ var A;
     var Calculator = (function () {
         function Calculator() {
         }
-        Calculator.prototype.handelChar = function () {
+        var proto_1 = Calculator.prototype;
+        proto_1.handelChar = function () {
         };
         return Calculator;
     }());

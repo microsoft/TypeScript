@@ -17,7 +17,8 @@ var P = (function () {
         this.z = z;
         this.x = this;
     }
-    P.prototype.foo = function (zz) {
+    var proto_1 = P.prototype;
+    proto_1.foo = function (zz) {
         if (zz === void 0) { zz = this; }
         zz.x;
     };

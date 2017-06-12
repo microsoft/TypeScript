@@ -31,7 +31,8 @@ exports.__esModule = true;
 var B = (function () {
     function B() {
     }
-    B.prototype.print = function () { return "I am B"; };
+    var proto_1 = B.prototype;
+    proto_1.print = function () { return "I am B"; };
     return B;
 }());
 exports.B = B;
@@ -82,7 +83,8 @@ var C = (function () {
     function C() {
         this.myModule = Promise.resolve().then(function () { return require("./0"); });
     }
-    C.prototype.method = function () {
+    var proto_1 = C.prototype;
+    proto_1.method = function () {
         var _this = this;
         this.myModule.then(function (Zero) {
             console.log(Zero.foo());

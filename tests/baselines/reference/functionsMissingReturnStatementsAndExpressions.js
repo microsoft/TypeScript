@@ -212,14 +212,15 @@ function f21() {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "m1", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "m1", {
         get: function () {
             // Errors; get accessors must return a value.
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "m2", {
+    Object.defineProperty(proto_1, "m2", {
         get: function () {
             // Permissible; returns undefined.
             return;
@@ -227,14 +228,14 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "m3", {
+    Object.defineProperty(proto_1, "m3", {
         get: function () {
             return "Okay, because this is a return expression.";
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "m4", {
+    Object.defineProperty(proto_1, "m4", {
         get: function () {
             // Fine since this consists of a single throw statement.
             throw null;
@@ -242,7 +243,7 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(C.prototype, "m5", {
+    Object.defineProperty(proto_1, "m5", {
         get: function () {
             // Not fine, since we can *only* consist of a single throw statement
             // if no return statements are present but we are a get accessor.

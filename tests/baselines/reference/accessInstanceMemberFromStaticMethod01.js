@@ -11,7 +11,8 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         var k = foo;
     };
     return C;

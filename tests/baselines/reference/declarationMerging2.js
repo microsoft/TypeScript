@@ -21,7 +21,8 @@ define(["require", "exports"], function (require, exports) {
     var A = (function () {
         function A() {
         }
-        A.prototype.getF = function () { return this._f; };
+        var proto_1 = A.prototype;
+        proto_1.getF = function () { return this._f; };
         return A;
     }());
     exports.A = A;

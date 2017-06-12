@@ -27,7 +27,8 @@ var __extends = (this && this.__extends) || (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.method = function () {
+    var proto_1 = Base.prototype;
+    proto_1.method = function () {
         this.x; // OK, accessed within their declaring class
     };
     return Base;
@@ -37,7 +38,8 @@ var Derived = (function (_super) {
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.method1 = function () {
+    var proto_2 = Derived.prototype;
+    proto_2.method1 = function () {
         this.x; // OK, accessed within a subclass of the declaring class
         _super.prototype.x; // Error, x is not public
     };

@@ -44,7 +44,8 @@ var Test;
     var Example = (function () {
         function Example() {
         }
-        Example.prototype.doSomething = function () {
+        var proto_1 = Example.prototype;
+        proto_1.doSomething = function () {
             var that = this;
             function innerFunction() {
                 var num = that.someNumber;
@@ -57,8 +58,9 @@ var Test;
 var C = (function () {
     function C() {
     }
-    C.prototype.getX = function () { return this.x; };
-    C.prototype.clone = function (other) {
+    var proto_2 = C.prototype;
+    proto_2.getX = function () { return this.x; };
+    proto_2.clone = function (other) {
         this.x = other.x;
     };
     return C;

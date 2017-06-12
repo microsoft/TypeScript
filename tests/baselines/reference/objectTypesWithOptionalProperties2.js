@@ -32,13 +32,15 @@ var a;
 var C = (function () {
     function C() {
     }
-    C.prototype.x = function () { };
+    var proto_1 = C.prototype;
+    proto_1.x = function () { };
     return C;
 }());
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.x = function () { };
+    var proto_2 = C2.prototype;
+    proto_2.x = function () { };
     return C2;
 }());
 var b = {

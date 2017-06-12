@@ -34,7 +34,8 @@ var __extends = (this && this.__extends) || (function () {
 var Constraint = (function () {
     function Constraint() {
     }
-    Constraint.prototype.method = function () { };
+    var proto_1 = Constraint.prototype;
+    proto_1.method = function () { };
     return Constraint;
 }());
 var GenericBase = (function () {
@@ -52,7 +53,8 @@ var Derived = (function (_super) {
 var TypeArg = (function () {
     function TypeArg() {
     }
-    TypeArg.prototype.method = function () {
+    var proto_2 = TypeArg.prototype;
+    proto_2.method = function () {
         Container.People.items;
     };
     return TypeArg;

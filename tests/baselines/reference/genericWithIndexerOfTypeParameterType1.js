@@ -13,7 +13,8 @@ var LazyArray = (function () {
     function LazyArray() {
         this.objects = {};
     }
-    LazyArray.prototype.array = function () {
+    var proto_1 = LazyArray.prototype;
+    proto_1.array = function () {
         return this.objects;
     };
     return LazyArray;

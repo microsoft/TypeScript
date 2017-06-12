@@ -18,6 +18,7 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    D.prototype.f = function () { };
+    var proto_1 = D.prototype;
+    proto_1.f = function () { };
     return D;
 }());

@@ -59,7 +59,8 @@ var BigGreeter = (function (_super) {
     function BigGreeter() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    BigGreeter.prototype.render = function () {
+    var proto_1 = BigGreeter.prototype;
+    proto_1.render = function () {
         return <div></div>;
     };
     return BigGreeter;

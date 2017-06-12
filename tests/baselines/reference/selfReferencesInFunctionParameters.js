@@ -26,7 +26,8 @@ var C = (function () {
         if (x === void 0) { x = 1; }
         if (y === void 0) { y = y; }
     }
-    C.prototype.bar = function (a, b) {
+    var proto_1 = C.prototype;
+    proto_1.bar = function (a, b) {
         if (a === void 0) { a = ""; }
         if (b === void 0) { b = b.toString(); }
     };

@@ -12,10 +12,11 @@ class C {
 var C = (function () {
     function C() {
     }
-    C.prototype.bar = function () {
+    var proto_1 = C.prototype;
+    proto_1.bar = function () {
         return 0;
     };
-    C.prototype[(_a = {}, _a[this.bar()] = 1, _a)[0]] = function () { };
+    proto_1[(_a = {}, _a[this.bar()] = 1, _a)[0]] = function () { };
     return C;
     var _a;
 }());

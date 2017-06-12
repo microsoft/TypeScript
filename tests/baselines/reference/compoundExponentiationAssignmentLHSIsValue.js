@@ -103,7 +103,8 @@ var C = (function () {
     function C() {
         this = Math.pow(this, value);
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         this = Math.pow(this, value);
     };
     C.sfoo = function () {
@@ -149,7 +150,8 @@ var Derived = (function (_super) {
         var _a;
         return _this;
     }
-    Derived.prototype.foo = function () {
+    var proto_2 = Derived.prototype;
+    proto_2.foo = function () {
         (_a = _super.prototype). = Math.pow(_a., value);
         var _a;
     };

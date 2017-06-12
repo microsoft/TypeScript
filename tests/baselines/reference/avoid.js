@@ -30,7 +30,8 @@ w = f(); // error void fn
 var C = (function () {
     function C() {
     }
-    C.prototype.g = function () {
+    var proto_1 = C.prototype;
+    proto_1.g = function () {
     };
     return C;
 }());

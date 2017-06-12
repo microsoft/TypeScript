@@ -148,7 +148,8 @@ var InitClass = (function () {
     function InitClass() {
         this.x = this.x;
     }
-    InitClass.prototype.fn = function () {
+    var proto_1 = InitClass.prototype;
+    proto_1.fn = function () {
         var y = this.x;
         var y;
     };
@@ -216,13 +217,14 @@ var t = fnArg2(); // t: should be 'any', but is 'string'
 var C = (function () {
     function C() {
     }
-    C.prototype.fn1 = function () {
+    var proto_2 = C.prototype;
+    proto_2.fn1 = function () {
         return new (this.fn1())();
     };
-    C.prototype.fn2 = function () {
+    proto_2.fn2 = function () {
         return new (this.fn2());
     };
-    C.prototype.fn3 = function () {
+    proto_2.fn3 = function () {
         var a;
         return new a(this.fn3);
     };

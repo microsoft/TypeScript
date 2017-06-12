@@ -37,7 +37,8 @@ var ShortDetails = (function (_super) {
     function ShortDetails() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    ShortDetails.prototype.render = function () {
+    var proto_1 = ShortDetails.prototype;
+    proto_1.render = function () {
         if (this.props.id < 1) {
             return (React.createElement("div", null));
         }

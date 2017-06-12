@@ -12,6 +12,7 @@ declare var OData: any;
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function (x, y) { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function (x, y) { };
     return C;
 }());

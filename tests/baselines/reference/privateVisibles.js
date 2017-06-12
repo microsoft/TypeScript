@@ -15,6 +15,7 @@ var Foo = (function () {
         this.pvar = 0;
         var n = this.pvar;
     }
-    Foo.prototype.meth = function () { var q = this.pvar; };
+    var proto_1 = Foo.prototype;
+    proto_1.meth = function () { var q = this.pvar; };
     return Foo;
 }());

@@ -79,7 +79,8 @@ var fp1: () =>any = a => 0;
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.p1 = function () {
+    var proto_1 = C1.prototype;
+    proto_1.p1 = function () {
         return "s";
     };
     return C1;
@@ -87,7 +88,8 @@ var C1 = (function () {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.p1 = function (n) {
+    var proto_2 = C2.prototype;
+    proto_2.p1 = function (n) {
         return 0;
     };
     return C2;

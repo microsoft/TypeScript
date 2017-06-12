@@ -20,6 +20,7 @@ var Foo = (function () {
         };
         this.bar++;
     }
-    class_1.prototype.m = function () { return this.bar; };
+    var proto_1 = class_1.prototype;
+    proto_1.m = function () { return this.bar; };
     return class_1;
 }());

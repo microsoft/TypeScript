@@ -55,7 +55,8 @@ var RC1 = (function (_super) {
     function RC1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RC1.prototype.render = function () {
+    var proto_1 = RC1.prototype;
+    proto_1.render = function () {
         return null;
     };
     return RC1;
@@ -65,10 +66,11 @@ var RC2 = (function (_super) {
     function RC2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RC2.prototype.render = function () {
+    var proto_2 = RC2.prototype;
+    proto_2.render = function () {
         return null;
     };
-    RC2.prototype.method = function () { };
+    proto_2.method = function () { };
     return RC2;
 }(React.Component));
 var RC3 = (function (_super) {
@@ -76,7 +78,8 @@ var RC3 = (function (_super) {
     function RC3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RC3.prototype.render = function () {
+    var proto_3 = RC3.prototype;
+    proto_3.render = function () {
         return null;
     };
     return RC3;
@@ -86,7 +89,8 @@ var RC4 = (function (_super) {
     function RC4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    RC4.prototype.render = function () {
+    var proto_4 = RC4.prototype;
+    proto_4.render = function () {
         return null;
     };
     return RC4;

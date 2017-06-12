@@ -194,13 +194,14 @@ var C = (function () {
             prop1;
         });
     }
+    var proto_1 = C.prototype;
     // Method declaration paramter
-    C.prototype.method = function (a) {
+    proto_1.method = function (a) {
         defered(function () {
             a;
         });
     };
-    Object.defineProperty(C.prototype, "x", {
+    Object.defineProperty(proto_1, "x", {
         // Accessor declaration paramter
         set: function (v) {
             defered(function () {
@@ -221,13 +222,14 @@ var E = (function () {
             prop2;
         });
     }
+    var proto_2 = class_1.prototype;
     // Method declaration paramter
-    class_1.prototype.method = function (a) {
+    proto_2.method = function (a) {
         defered(function () {
             a;
         });
     };
-    Object.defineProperty(class_1.prototype, "x", {
+    Object.defineProperty(proto_2, "x", {
         // Accessor declaration paramter
         set: function (v) {
             defered(function () {

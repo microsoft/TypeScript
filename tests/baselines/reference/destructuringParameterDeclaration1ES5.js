@@ -181,9 +181,10 @@ function d0(x) {
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.d3 = function () { };
-    C2.prototype.d4 = function () { };
-    C2.prototype.e0 = function (_a) {
+    var proto_1 = C2.prototype;
+    proto_1.d3 = function () { };
+    proto_1.d4 = function () { };
+    proto_1.e0 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     };
     return C2;
@@ -191,13 +192,14 @@ var C2 = (function () {
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.d3 = function (_a) {
+    var proto_2 = C3.prototype;
+    proto_2.d3 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     };
-    C3.prototype.d4 = function (_a) {
+    proto_2.d4 = function (_a) {
         var x = _a.x, y = _a.y, z = _a.z;
     };
-    C3.prototype.e0 = function (_a) {
+    proto_2.e0 = function (_a) {
         var a = _a[0], b = _a[1], c = _a[2];
     };
     return C3;

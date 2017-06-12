@@ -25,7 +25,8 @@ var Foo = (function (_super) {
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Foo.prototype.m1 = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.m1 = function () {
         return _super.prototype.m1.call(this);
     };
     Foo.m2 = function () {

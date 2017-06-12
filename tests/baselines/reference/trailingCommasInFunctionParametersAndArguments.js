@@ -44,7 +44,8 @@ f3(1, 2);
 var X = (function () {
     function X(a) {
     }
-    Object.defineProperty(X.prototype, "x", {
+    var proto_1 = X.prototype;
+    Object.defineProperty(proto_1, "x", {
         // See trailingCommasInGetter.ts
         set: function (value) { },
         enumerable: true,

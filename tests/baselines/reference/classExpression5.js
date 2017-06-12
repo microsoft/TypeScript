@@ -9,7 +9,8 @@ new class {
 new (function () {
     function class_1() {
     }
-    class_1.prototype.hi = function () {
+    var proto_1 = class_1.prototype;
+    proto_1.hi = function () {
         return "Hi!";
     };
     return class_1;

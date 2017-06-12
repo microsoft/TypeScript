@@ -71,7 +71,8 @@ class B {
 var Bug = (function () {
     function Bug() {
     }
-    Bug.prototype.foo = function (name) {
+    var proto_1 = Bug.prototype;
+    proto_1.foo = function (name) {
         this.name = name;
     };
     Bug.func = [

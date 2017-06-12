@@ -35,7 +35,8 @@ function f2() {
         return (function () {
             function class_1() {
             }
-            class_1.prototype.bar = function () { return x.length; }; // ok
+            var proto_1 = class_1.prototype;
+            proto_1.bar = function () { return x.length; }; // ok
             return class_1;
         }());
     }

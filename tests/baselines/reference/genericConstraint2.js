@@ -33,7 +33,8 @@ var ComparableString = (function () {
     function ComparableString(currentValue) {
         this.currentValue = currentValue;
     }
-    ComparableString.prototype.localeCompare = function (other) {
+    var proto_1 = ComparableString.prototype;
+    proto_1.localeCompare = function (other) {
         return 0;
     };
     return ComparableString;

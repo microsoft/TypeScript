@@ -35,7 +35,8 @@ class F {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "x", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () {
             return 1;
         },
@@ -49,7 +50,8 @@ var C = (function () {
 var D = (function () {
     function D() {
     }
-    Object.defineProperty(D.prototype, "x", {
+    var proto_2 = D.prototype;
+    Object.defineProperty(proto_2, "x", {
         get: function () {
             return 1;
         },
@@ -63,7 +65,8 @@ var D = (function () {
 var E = (function () {
     function E() {
     }
-    Object.defineProperty(E.prototype, "x", {
+    var proto_3 = E.prototype;
+    Object.defineProperty(proto_3, "x", {
         get: function () {
             return 1;
         },

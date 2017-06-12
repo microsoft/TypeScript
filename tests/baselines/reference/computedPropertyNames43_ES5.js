@@ -43,13 +43,14 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(D.prototype, "get1", {
+    var proto_1 = D.prototype;
+    Object.defineProperty(proto_1, "get1", {
         // Computed properties
         get: function () { return new Foo; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(D.prototype, "set1", {
+    Object.defineProperty(proto_1, "set1", {
         set: function (p) { },
         enumerable: true,
         configurable: true

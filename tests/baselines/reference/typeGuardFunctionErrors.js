@@ -246,14 +246,15 @@ var D = (function () {
     function D(p1) {
         return true;
     }
-    Object.defineProperty(D.prototype, "m1", {
+    var proto_1 = D.prototype;
+    Object.defineProperty(proto_1, "m1", {
         get: function (p1) {
             return true;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(D.prototype, "m2", {
+    Object.defineProperty(proto_1, "m2", {
         set: function (p1) {
             return true;
         },

@@ -31,7 +31,8 @@ var B1 = (function (_super) {
     function B1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B1.prototype.render = function () {
+    var proto_1 = B1.prototype;
+    proto_1.render = function () {
         return <div>hi</div>;
     };
     return B1;
@@ -41,7 +42,8 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.render = function () {
+    var proto_2 = B.prototype;
+    proto_2.render = function () {
         return <B1 {...this.props} x="hi"/>;
     };
     return B;

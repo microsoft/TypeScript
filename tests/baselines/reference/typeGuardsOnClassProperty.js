@@ -36,11 +36,12 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 var D = (function () {
     function D() {
     }
-    D.prototype.getData = function () {
+    var proto_1 = D.prototype;
+    proto_1.getData = function () {
         var data = this.data;
         return typeof data === "string" ? data : data.join(" ");
     };
-    D.prototype.getData1 = function () {
+    proto_1.getData1 = function () {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
     };
     return D;

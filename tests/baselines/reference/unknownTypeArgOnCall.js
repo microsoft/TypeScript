@@ -12,7 +12,8 @@ var r = f.clone<Uhhhh>()
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.clone = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.clone = function () {
         return null;
     };
     return Foo;

@@ -40,7 +40,8 @@ var bar = (function () {
 var X = (function () {
     function X() {
     }
-    X.prototype.attr = function (first, second) {
+    var proto_1 = X.prototype;
+    proto_1.attr = function (first, second) {
     };
     return X;
 }());

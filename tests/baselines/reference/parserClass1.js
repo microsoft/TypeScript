@@ -15,12 +15,13 @@ exports.__esModule = true;
 var NullLogger = (function () {
     function NullLogger() {
     }
-    NullLogger.prototype.information = function () { return false; };
-    NullLogger.prototype.debug = function () { return false; };
-    NullLogger.prototype.warning = function () { return false; };
-    NullLogger.prototype.error = function () { return false; };
-    NullLogger.prototype.fatal = function () { return false; };
-    NullLogger.prototype.log = function (s) {
+    var proto_1 = NullLogger.prototype;
+    proto_1.information = function () { return false; };
+    proto_1.debug = function () { return false; };
+    proto_1.warning = function () { return false; };
+    proto_1.error = function () { return false; };
+    proto_1.fatal = function () { return false; };
+    proto_1.log = function (s) {
     };
     return NullLogger;
 }());

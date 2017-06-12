@@ -14,11 +14,12 @@ var b;
 var C = (function () {
     function C() {
     }
-    C.prototype[b] = function () { };
+    var proto_1 = C.prototype;
+    proto_1[b] = function () { };
     C[true] = function () { };
-    C.prototype[[]] = function () { };
+    proto_1[[]] = function () { };
     C[{}] = function () { };
-    C.prototype[undefined] = function () { };
+    proto_1[undefined] = function () { };
     C[null] = function () { };
     return C;
 }());

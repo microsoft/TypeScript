@@ -11,7 +11,8 @@ class f {
 var f = (function () {
     function f() {
     }
-    Object.defineProperty(f.prototype, "x", {
+    var proto_1 = f.prototype;
+    Object.defineProperty(proto_1, "x", {
         set: function (value) {
             return null; // Should be an error
         },

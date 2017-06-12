@@ -192,15 +192,16 @@ var MyTestClass = (function () {
         var p;
         this.canary = 3;
     }
+    var proto_1 = MyTestClass.prototype;
     //type of 'this' in member function param list is the class instance type
-    MyTestClass.prototype.memberFunc = function (t) {
+    proto_1.memberFunc = function (t) {
         if (t === void 0) { t = this; }
         var t;
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
     };
-    Object.defineProperty(MyTestClass.prototype, "prop", {
+    Object.defineProperty(proto_1, "prop", {
         //type of 'this' in member accessor(get and set) body is the class instance type
         get: function () {
             var p = this;
@@ -262,15 +263,16 @@ var MyGenericTestClass = (function () {
         var p;
         this.canary = 3;
     }
+    var proto_2 = MyGenericTestClass.prototype;
     //type of 'this' in member function param list is the class instance type
-    MyGenericTestClass.prototype.memberFunc = function (t) {
+    proto_2.memberFunc = function (t) {
         if (t === void 0) { t = this; }
         var t;
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
     };
-    Object.defineProperty(MyGenericTestClass.prototype, "prop", {
+    Object.defineProperty(proto_2, "prop", {
         //type of 'this' in member accessor(get and set) body is the class instance type
         get: function () {
             var p = this;

@@ -115,7 +115,8 @@ var m1d;
     var I = (function () {
         function I() {
         }
-        I.prototype.foo = function () { };
+        var proto_1 = I.prototype;
+        proto_1.foo = function () { };
         return I;
     }());
     m1d.I = I;
@@ -149,7 +150,8 @@ function m2g() { }
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_2 = C.prototype;
+        proto_2.foo = function () { };
         return C;
     }());
     m2g.C = C;
@@ -166,13 +168,15 @@ var m3a;
 var m3a = (function () {
     function m3a() {
     }
-    m3a.prototype.foo = function () { };
+    var proto_3 = m3a.prototype;
+    proto_3.foo = function () { };
     return m3a;
 }()); // error, class isn't ambient or declared before the module
 var m3b = (function () {
     function m3b() {
     }
-    m3b.prototype.foo = function () { };
+    var proto_4 = m3b.prototype;
+    proto_4.foo = function () { };
     return m3b;
 }());
 (function (m3b) {
@@ -181,7 +185,8 @@ var m3b = (function () {
 var m3c = (function () {
     function m3c() {
     }
-    m3c.prototype.foo = function () { };
+    var proto_5 = m3c.prototype;
+    proto_5.foo = function () { };
     return m3c;
 }());
 (function (m3c) {
@@ -200,7 +205,8 @@ var m3g;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_6 = C.prototype;
+        proto_6.foo = function () { };
         return C;
     }());
     m3g.C = C;
@@ -231,7 +237,8 @@ var m4d;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_7 = C.prototype;
+        proto_7.foo = function () { };
         return C;
     }());
 })(m4d || (m4d = {}));

@@ -28,7 +28,8 @@ arr_any = c3; // should be an error - is
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.CM3M1 = function () { return 3; };
+    var proto_1 = C3.prototype;
+    proto_1.CM3M1 = function () { return 3; };
     return C3;
 }());
 /*

@@ -73,7 +73,8 @@ var a0 = function (num, str) {
 var Class = (function () {
     function Class() {
     }
-    Class.prototype.foo = function () { };
+    var proto_1 = Class.prototype;
+    proto_1.foo = function () { };
     return Class;
 }());
 var a1 = function (a1) {

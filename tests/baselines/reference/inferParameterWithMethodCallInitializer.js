@@ -27,10 +27,11 @@ function getNumber() {
 var Example = (function () {
     function Example() {
     }
-    Example.prototype.getNumber = function () {
+    var proto_1 = Example.prototype;
+    proto_1.getNumber = function () {
         return 1;
     };
-    Example.prototype.doSomething = function (a) {
+    proto_1.doSomething = function (a) {
         if (a === void 0) { a = this.getNumber(); }
         return a;
     };
@@ -43,7 +44,8 @@ function weird(a) {
 var Weird = (function () {
     function Weird() {
     }
-    Weird.prototype.doSomething = function (a) {
+    var proto_2 = Weird.prototype;
+    proto_2.doSomething = function (a) {
         if (a === void 0) { a = this.getNumber(); }
         return a;
     };

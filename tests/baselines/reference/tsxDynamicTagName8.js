@@ -39,7 +39,8 @@ var Text = (function (_super) {
         _this._tagName = 'div';
         return _this;
     }
-    Text.prototype.render = function () {
+    var proto_1 = Text.prototype;
+    proto_1.render = function () {
         return (<this._tagName> Hello world </this._tagName>);
     };
     return Text;

@@ -14,7 +14,8 @@ var X = (function () {
     function X() {
         this.y = 0;
     }
-    X.prototype.getSettings = function (keys) {
+    var proto_1 = X.prototype;
+    proto_1.getSettings = function (keys) {
         var _this = this;
         var ret;
         return ret.always(function () {

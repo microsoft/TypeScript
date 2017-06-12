@@ -138,8 +138,9 @@ function fn12() { }
 var cls = (function () {
     function cls() {
     }
-    cls.prototype.f = function () { };
-    cls.prototype.g = function () { };
+    var proto_1 = cls.prototype;
+    proto_1.f = function () { };
+    proto_1.g = function () { };
     return cls;
 }());
 //Function overloads with differing export

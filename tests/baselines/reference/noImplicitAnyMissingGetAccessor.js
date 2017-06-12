@@ -32,7 +32,8 @@ var Child = (function (_super) {
     function Child() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(Child.prototype, "message", {
+    var proto_1 = Child.prototype;
+    Object.defineProperty(proto_1, "message", {
         set: function (str) {
             this._x = str;
         },

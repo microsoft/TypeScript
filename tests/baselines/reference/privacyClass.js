@@ -145,7 +145,8 @@ var m1;
     var m1_c_public = (function () {
         function m1_c_public() {
         }
-        m1_c_public.prototype.f1 = function () {
+        var proto_1 = m1_c_public.prototype;
+        proto_1.f1 = function () {
         };
         return m1_c_public;
     }());
@@ -243,7 +244,8 @@ var m2;
     var m2_c_public = (function () {
         function m2_c_public() {
         }
-        m2_c_public.prototype.f1 = function () {
+        var proto_2 = m2_c_public.prototype;
+        proto_2.f1 = function () {
         };
         return m2_c_public;
     }());
@@ -339,7 +341,8 @@ var m2;
 var glo_c_public = (function () {
     function glo_c_public() {
     }
-    glo_c_public.prototype.f1 = function () {
+    var proto_3 = glo_c_public.prototype;
+    proto_3.f1 = function () {
     };
     return glo_c_public;
 }());

@@ -51,7 +51,8 @@ var Button = (function (_super) {
     function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Button.prototype.render = function () {
+    var proto_1 = Button.prototype;
+    proto_1.render = function () {
         var condition;
         if (condition) {
             return <InnerButton {...this.props}/>;
@@ -69,7 +70,8 @@ var InnerButton = (function (_super) {
     function InnerButton() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    InnerButton.prototype.render = function () {
+    var proto_2 = InnerButton.prototype;
+    proto_2.render = function () {
         return (<button>Hello</button>);
     };
     return InnerButton;

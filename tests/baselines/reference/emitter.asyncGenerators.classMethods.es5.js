@@ -103,7 +103,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C1 = (function () {
     function C1() {
     }
-    C1.prototype.f = function () {
+    var proto_1 = C1.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 return [2 /*return*/];
@@ -155,7 +156,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C2 = (function () {
     function C2() {
     }
-    C2.prototype.f = function () {
+    var proto_1 = C2.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -213,7 +215,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C3 = (function () {
     function C3() {
     }
-    C3.prototype.f = function () {
+    var proto_1 = C3.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -291,7 +294,8 @@ var __values = (this && this.__values) || function (o) {
 var C4 = (function () {
     function C4() {
     }
-    C4.prototype.f = function () {
+    var proto_1 = C4.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -370,7 +374,8 @@ var __values = (this && this.__values) || function (o) {
 var C5 = (function () {
     function C5() {
     }
-    C5.prototype.f = function () {
+    var proto_1 = C5.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -436,7 +441,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C6 = (function () {
     function C6() {
     }
-    C6.prototype.f = function () {
+    var proto_1 = C6.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             var x;
             return __generator(this, function (_a) {
@@ -494,7 +500,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C7 = (function () {
     function C7() {
     }
-    C7.prototype.f = function () {
+    var proto_1 = C7.prototype;
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 return [2 /*return*/, 1];
@@ -546,9 +553,10 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var C8 = (function () {
     function C8() {
     }
-    C8.prototype.g = function () {
+    var proto_1 = C8.prototype;
+    proto_1.g = function () {
     };
-    C8.prototype.f = function () {
+    proto_1.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 this.g();
@@ -611,7 +619,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 var B9 = (function () {
     function B9() {
     }
-    B9.prototype.g = function () { };
+    var proto_1 = B9.prototype;
+    proto_1.g = function () { };
     return B9;
 }());
 var C9 = (function (_super) {
@@ -619,7 +628,8 @@ var C9 = (function (_super) {
     function C9() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C9.prototype.f = function () {
+    var proto_2 = C9.prototype;
+    proto_2.f = function () {
         return __asyncGenerator(this, arguments, function f_1() {
             return __generator(this, function (_a) {
                 _super.prototype.g.call(this);

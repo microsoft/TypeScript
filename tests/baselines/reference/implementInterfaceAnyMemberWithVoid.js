@@ -13,7 +13,8 @@ class Bug implements I {
 var Bug = (function () {
     function Bug() {
     }
-    Bug.prototype.foo = function (value) {
+    var proto_1 = Bug.prototype;
+    proto_1.foo = function (value) {
     };
     return Bug;
 }());

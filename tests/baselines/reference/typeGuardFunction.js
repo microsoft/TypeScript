@@ -134,7 +134,8 @@ var obj;
 var D = (function () {
     function D() {
     }
-    D.prototype.method1 = function (p1) {
+    var proto_1 = D.prototype;
+    proto_1.method1 = function (p1) {
         return true;
     };
     return D;

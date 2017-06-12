@@ -30,7 +30,8 @@ var Foo2 = (function (_super) {
     function Foo2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Foo2.prototype.x = function () {
+    var proto_1 = Foo2.prototype;
+    proto_1.x = function () {
         var lambda = function (_super) {
         };
     };

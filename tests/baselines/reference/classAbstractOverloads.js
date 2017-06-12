@@ -28,7 +28,8 @@ abstract class B {
 var A = (function () {
     function A() {
     }
-    A.prototype.baz = function () { };
+    var proto_1 = A.prototype;
+    proto_1.baz = function () { };
     return A;
 }());
 var B = (function () {

@@ -44,7 +44,8 @@ var M;
     var C = (function () {
         function C() {
         }
-        C.prototype.f = function (x) {
+        var proto_1 = C.prototype;
+        proto_1.f = function (x) {
             var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
@@ -56,13 +57,13 @@ var M;
             result += (x + ": " + sum);
             return result;
         };
-        C.prototype.fnope = function (x) {
+        proto_1.fnope = function (x) {
             var rest = [];
             for (var _i = 1; _i < arguments.length; _i++) {
                 rest[_i - 1] = arguments[_i];
             }
         };
-        C.prototype.fonly = function () {
+        proto_1.fonly = function () {
             var rest = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 rest[_i] = arguments[_i];

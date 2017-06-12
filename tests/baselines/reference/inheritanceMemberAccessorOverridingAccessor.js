@@ -31,7 +31,8 @@ var __extends = (this && this.__extends) || (function () {
 var a = (function () {
     function a() {
     }
-    Object.defineProperty(a.prototype, "x", {
+    var proto_1 = a.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () {
             return "20";
         },
@@ -47,7 +48,8 @@ var b = (function (_super) {
     function b() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(b.prototype, "x", {
+    var proto_2 = b.prototype;
+    Object.defineProperty(proto_2, "x", {
         get: function () {
             return "20";
         },

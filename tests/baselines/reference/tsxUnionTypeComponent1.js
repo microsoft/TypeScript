@@ -42,7 +42,8 @@ var MyComponent = (function (_super) {
     function MyComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    MyComponent.prototype.render = function () {
+    var proto_1 = MyComponent.prototype;
+    proto_1.render = function () {
         var AnyComponent = this.props.AnyComponent;
         return (React.createElement(AnyComponent, null));
     };

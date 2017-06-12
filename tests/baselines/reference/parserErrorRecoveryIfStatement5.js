@@ -13,7 +13,8 @@ class Foo {
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.f1 = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.f1 = function () {
         if (a.b) {
         }
         f2();

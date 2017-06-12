@@ -25,7 +25,8 @@ c.x1(1, (x: number) => { return 1; } );
 var C = (function () {
     function C() {
     }
-    C.prototype.x1 = function (a, callback) {
+    var proto_1 = C.prototype;
+    proto_1.x1 = function (a, callback) {
         callback('hi');
         callback('bye');
         var hm = "hm";

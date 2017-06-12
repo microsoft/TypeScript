@@ -61,7 +61,8 @@ var Explicit = (function () {
     function Explicit() {
         this.n = 17;
     }
-    Object.defineProperty(Explicit.prototype, "x", {
+    var proto_1 = Explicit.prototype;
+    Object.defineProperty(proto_1, "x", {
         get: function () { return this.n; },
         set: function (n) { this.n = n; },
         enumerable: true,
@@ -73,7 +74,8 @@ var Contextual = (function () {
     function Contextual() {
         this.n = 21;
     }
-    Object.defineProperty(Contextual.prototype, "x", {
+    var proto_2 = Contextual.prototype;
+    Object.defineProperty(proto_2, "x", {
         get: function () { return this.n; } // inside a class, so already correct
         ,
         enumerable: true,

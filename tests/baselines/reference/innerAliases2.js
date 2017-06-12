@@ -25,7 +25,8 @@ var _provider;
     var UsefulClass = (function () {
         function UsefulClass() {
         }
-        UsefulClass.prototype.foo = function () {
+        var proto_1 = UsefulClass.prototype;
+        proto_1.foo = function () {
         };
         return UsefulClass;
     }());

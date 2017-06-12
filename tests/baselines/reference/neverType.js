@@ -134,16 +134,17 @@ function check(x) {
 var C = (function () {
     function C() {
     }
-    C.prototype.void1 = function () {
+    var proto_1 = C.prototype;
+    proto_1.void1 = function () {
         throw new Error();
     };
-    C.prototype.void2 = function () {
+    proto_1.void2 = function () {
         while (true) { }
     };
-    C.prototype.never1 = function () {
+    proto_1.never1 = function () {
         throw new Error();
     };
-    C.prototype.never2 = function () {
+    proto_1.never2 = function () {
         while (true) { }
     };
     return C;

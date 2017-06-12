@@ -15,7 +15,8 @@ class A {
 var A = (function () {
     function A() {
     }
-    A.prototype.doIt = function (x) {
+    var proto_1 = A.prototype;
+    proto_1.doIt = function (x) {
         var _this = this;
         x.forEach(function (v) {
             switch (v) {

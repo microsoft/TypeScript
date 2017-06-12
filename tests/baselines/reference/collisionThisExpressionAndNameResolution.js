@@ -17,7 +17,8 @@ var console;
 var Foo = (function () {
     function Foo() {
     }
-    Foo.prototype.x = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.x = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner() {
             var _this = this;

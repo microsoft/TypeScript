@@ -27,11 +27,12 @@ exports.__esModule = true;
 var Bug = (function () {
     function Bug() {
     }
-    Bug.prototype.ok = function () {
+    var proto_1 = Bug.prototype;
+    proto_1.ok = function () {
         this.values = {};
         this.values['comments'] = { italic: true };
     };
-    Bug.prototype.shouldBeOK = function () {
+    proto_1.shouldBeOK = function () {
         this.values = {
             comments: { italic: true }
         };

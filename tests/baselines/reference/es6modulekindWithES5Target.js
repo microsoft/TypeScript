@@ -30,7 +30,8 @@ var C = (function () {
     function C() {
         this.p = 1;
     }
-    C.prototype.method = function () { };
+    var proto_1 = C.prototype;
+    proto_1.method = function () { };
     C.s = 0;
     return C;
 }());
@@ -40,7 +41,8 @@ var D = (function () {
     function D() {
         this.p = 1;
     }
-    D.prototype.method = function () { };
+    var proto_2 = D.prototype;
+    proto_2.method = function () { };
     D.s = 0;
     D = __decorate([
         foo

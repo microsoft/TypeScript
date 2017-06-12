@@ -53,7 +53,8 @@ var CBase = (function (_super) {
 var Parameter = (function () {
     function Parameter() {
     }
-    Parameter.prototype.method = function (t) { };
+    var proto_1 = Parameter.prototype;
+    proto_1.method = function (t) { };
     return Parameter;
 }());
 var Wrapper = (function () {
@@ -66,12 +67,13 @@ var C = (function (_super) {
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C.prototype.works = function () {
+    var proto_2 = C.prototype;
+    proto_2.works = function () {
         new CBaseBase(this);
     };
-    C.prototype.alsoWorks = function () {
+    proto_2.alsoWorks = function () {
         new CBase(this); // Should not error, parameter is of type Parameter<Wrapper<T1>>
     };
-    C.prototype.method = function (t) { };
+    proto_2.method = function (t) { };
     return C;
 }(CBase));

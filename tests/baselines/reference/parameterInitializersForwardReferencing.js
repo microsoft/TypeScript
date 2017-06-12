@@ -86,7 +86,8 @@ var C = (function () {
         if (a === void 0) { a = b; }
         if (b === void 0) { b = 1; }
     }
-    C.prototype.method = function (a, b) {
+    var proto_1 = C.prototype;
+    proto_1.method = function (a, b) {
         if (a === void 0) { a = b; }
         if (b === void 0) { b = 1; }
     };

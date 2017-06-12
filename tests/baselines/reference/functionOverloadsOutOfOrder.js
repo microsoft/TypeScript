@@ -19,7 +19,8 @@ class e {
 var d = (function () {
     function d() {
     }
-    d.prototype.foo = function (ns) {
+    var proto_1 = d.prototype;
+    proto_1.foo = function (ns) {
         return ns.toString();
     };
     return d;
@@ -27,7 +28,8 @@ var d = (function () {
 var e = (function () {
     function e() {
     }
-    e.prototype.foo = function (ns) {
+    var proto_2 = e.prototype;
+    proto_2.foo = function (ns) {
         return ns.toString();
     };
     return e;

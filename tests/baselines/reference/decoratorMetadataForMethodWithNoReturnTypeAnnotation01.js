@@ -17,7 +17,8 @@ class MyClass {
 var MyClass = (function () {
     function MyClass(test, test2) {
     }
-    MyClass.prototype.doSomething = function () {
+    var proto_1 = MyClass.prototype;
+    proto_1.doSomething = function () {
     };
     __decorate([
         decorator,

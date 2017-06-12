@@ -41,7 +41,8 @@ var SubText = (function (_super) {
 var TextBase = (function () {
     function TextBase() {
     }
-    TextBase.prototype.subText = function (span) {
+    var proto_1 = TextBase.prototype;
+    proto_1.subText = function (span) {
         return new SubText(this, span);
     };
     return TextBase;

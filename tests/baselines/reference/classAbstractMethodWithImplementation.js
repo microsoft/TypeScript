@@ -7,6 +7,7 @@ abstract class A {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { };
     return A;
 }());

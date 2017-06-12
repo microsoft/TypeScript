@@ -22,7 +22,8 @@ var Foo = (function () {
     function Foo() {
         this.x = "hello";
     }
-    Foo.prototype.bar = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.bar = function () {
         function inner() {
             var _this = this;
             this.y = "hi"; // 'this' should be not type to 'Foo' either

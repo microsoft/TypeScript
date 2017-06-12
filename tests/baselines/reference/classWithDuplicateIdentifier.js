@@ -17,13 +17,15 @@ class D {
 var C = (function () {
     function C() {
     }
-    C.prototype.a = function () { return 0; }; // error: duplicate identifier
+    var proto_1 = C.prototype;
+    proto_1.a = function () { return 0; }; // error: duplicate identifier
     return C;
 }());
 var K = (function () {
     function K() {
     }
-    K.prototype.b = function () { return 0; };
+    var proto_2 = K.prototype;
+    proto_2.b = function () { return 0; };
     return K;
 }());
 var D = (function () {

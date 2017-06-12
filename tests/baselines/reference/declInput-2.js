@@ -38,12 +38,13 @@ var M;
     var D = (function () {
         function D() {
         }
-        D.prototype.m232 = function () { return null; };
-        D.prototype.m242 = function () { return null; };
-        D.prototype.m252 = function () { return null; }; // don't generate
-        D.prototype.m26 = function (i) { };
-        D.prototype.m262 = function (i) { };
-        D.prototype.m3 = function () { return new C(); };
+        var proto_1 = D.prototype;
+        proto_1.m232 = function () { return null; };
+        proto_1.m242 = function () { return null; };
+        proto_1.m252 = function () { return null; }; // don't generate
+        proto_1.m26 = function (i) { };
+        proto_1.m262 = function (i) { };
+        proto_1.m3 = function () { return new C(); };
         return D;
     }());
     M.D = D;

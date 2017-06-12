@@ -26,7 +26,8 @@ while (0) {
     var A = (function () {
         function A() {
         }
-        A.prototype.methodA = function () {
+        var proto_1 = A.prototype;
+        proto_1.methodA = function () {
             this; //note: a this reference of some kind is required to trigger the bug
         };
         return A;
@@ -34,7 +35,8 @@ while (0) {
     var B = (function () {
         function B() {
         }
-        B.prototype.methodB = function () {
+        var proto_2 = B.prototype;
+        proto_2.methodB = function () {
             this.methodA; // error
             this.methodB; // ok
         };

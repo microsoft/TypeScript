@@ -23,7 +23,8 @@ var a4: I<string> = <K<number>>z;
 var A = (function () {
     function A() {
     }
-    A.prototype.compareTo = function (other) { return 1; };
+    var proto_1 = A.prototype;
+    proto_1.compareTo = function (other) { return 1; };
     return A;
 }());
 var z = { x: new A() };

@@ -9,6 +9,7 @@ class baz {
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.foo = function (bar) { };
+    var proto_1 = baz.prototype;
+    proto_1.foo = function (bar) { };
     return baz;
 }());

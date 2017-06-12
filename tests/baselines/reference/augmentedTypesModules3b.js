@@ -22,7 +22,8 @@ module m3g { export class C { foo() { } } }
 var m3b = (function () {
     function m3b() {
     }
-    m3b.prototype.foo = function () { };
+    var proto_1 = m3b.prototype;
+    proto_1.foo = function () { };
     return m3b;
 }());
 (function (m3b) {
@@ -31,7 +32,8 @@ var m3b = (function () {
 var m3c = (function () {
     function m3c() {
     }
-    m3c.prototype.foo = function () { };
+    var proto_2 = m3c.prototype;
+    proto_2.foo = function () { };
     return m3c;
 }());
 (function (m3c) {
@@ -50,7 +52,8 @@ var m3g;
     var C = (function () {
         function C() {
         }
-        C.prototype.foo = function () { };
+        var proto_3 = C.prototype;
+        proto_3.foo = function () { };
         return C;
     }());
     m3g.C = C;

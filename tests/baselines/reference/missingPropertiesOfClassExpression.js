@@ -26,6 +26,7 @@ var George = (function (_super) {
 }((function () {
     function class_1() {
     }
-    class_1.prototype.reset = function () { return this.y; };
+    var proto_1 = class_1.prototype;
+    proto_1.reset = function () { return this.y; };
     return class_1;
 }())));

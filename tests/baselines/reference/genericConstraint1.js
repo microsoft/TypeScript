@@ -12,7 +12,8 @@ x.bar2<string>(2, "");
 var C = (function () {
     function C() {
     }
-    C.prototype.bar2 = function (x, y) {
+    var proto_1 = C.prototype;
+    proto_1.bar2 = function (x, y) {
         return null;
     };
     return C;

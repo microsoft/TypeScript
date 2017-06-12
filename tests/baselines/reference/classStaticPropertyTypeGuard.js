@@ -17,7 +17,8 @@ class A {
 var A = (function () {
     function A() {
     }
-    Object.defineProperty(A.prototype, "a", {
+    var proto_1 = A.prototype;
+    Object.defineProperty(proto_1, "a", {
         get: function () {
             if (A._a) {
                 return A._a; // is possibly null or undefined.

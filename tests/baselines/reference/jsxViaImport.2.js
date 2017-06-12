@@ -42,7 +42,8 @@ var TestComponent = (function (_super) {
     function TestComponent() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    TestComponent.prototype.render = function () {
+    var proto_1 = TestComponent.prototype;
+    proto_1.render = function () {
         return <BaseComponent_1.default />;
     };
     return TestComponent;

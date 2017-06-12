@@ -217,7 +217,8 @@ var C4 = (function (_super) {
     function C4() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C4.prototype.f = function (c4, c5, c6) {
+    var proto_1 = C4.prototype;
+    proto_1.f = function (c4, c5, c6) {
         c4.p;
         c5.p;
         c6.p;
@@ -234,7 +235,8 @@ var C5 = (function (_super) {
     function C5() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C5.prototype.f = function (c4, c5, c6) {
+    var proto_2 = C5.prototype;
+    proto_2.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;
@@ -251,7 +253,8 @@ var C6 = (function (_super) {
     function C6() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    C6.prototype.f = function (c4, c5, c6) {
+    var proto_3 = C6.prototype;
+    proto_3.f = function (c4, c5, c6) {
         c4.p; // Error, not in class deriving from Protected2
         c5.p;
         c6.p;

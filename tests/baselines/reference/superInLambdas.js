@@ -82,7 +82,8 @@ var User = (function () {
     function User() {
         this.name = "Bob";
     }
-    User.prototype.sayHello = function () {
+    var proto_1 = User.prototype;
+    proto_1.sayHello = function () {
         //console.log("Hello, " + this.name);
     };
     return User;
@@ -98,7 +99,8 @@ var RegisteredUser = (function (_super) {
         var x = function () { return _super.prototype.sayHello.call(_this); };
         return _this;
     }
-    RegisteredUser.prototype.sayHello = function () {
+    var proto_2 = RegisteredUser.prototype;
+    proto_2.sayHello = function () {
         var _this = this;
         // super call in a method
         _super.prototype.sayHello.call(this);
@@ -116,7 +118,8 @@ var RegisteredUser2 = (function (_super) {
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
         return _this;
     }
-    RegisteredUser2.prototype.sayHello = function () {
+    var proto_3 = RegisteredUser2.prototype;
+    proto_3.sayHello = function () {
         var _this = this;
         // super call in a nested lambda in a method
         var x = function () { return function () { return function () { return _super.prototype.sayHello.call(_this); }; }; };
@@ -132,7 +135,8 @@ var RegisteredUser3 = (function (_super) {
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
         return _this;
     }
-    RegisteredUser3.prototype.sayHello = function () {
+    var proto_4 = RegisteredUser3.prototype;
+    proto_4.sayHello = function () {
         var _this = this;
         // super property in a nested lambda in a method
         var superName = function () { return function () { return function () { return _super.prototype.name; }; }; };
@@ -148,7 +152,8 @@ var RegisteredUser4 = (function (_super) {
         var x = function () { return function () { return _super.prototype.; }; };
         return _this;
     }
-    RegisteredUser4.prototype.sayHello = function () {
+    var proto_5 = RegisteredUser4.prototype;
+    proto_5.sayHello = function () {
         var _this = this;
         // super in a nested lambda in a method
         var x = function () { return function () { return _super.prototype.; }; };

@@ -14,7 +14,8 @@ var X = (function () {
     function X() {
         return 1;
     }
-    X.prototype.foo = function () { };
+    var proto_1 = X.prototype;
+    proto_1.foo = function () { };
     return X;
 }());
 var x = new X();

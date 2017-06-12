@@ -37,7 +37,8 @@ var K = (function () {
     function K() {
         this.p = 12;
     }
-    K.prototype.m = function () { };
+    var proto_1 = K.prototype;
+    proto_1.m = function () { };
     return K;
 }());
 var k = new K();

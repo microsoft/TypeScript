@@ -18,7 +18,8 @@ var C = (function () {
         this.data = data;
         this.data2 = data2;
     }
-    C.prototype.create = function () {
+    var proto_1 = C.prototype;
+    proto_1.create = function () {
         var x = new this.data(); // no error
         var x2 = new this.data2(); // was error, shouldn't be
     };

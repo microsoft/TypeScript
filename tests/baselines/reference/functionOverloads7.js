@@ -14,8 +14,9 @@ class foo {
 var foo = (function () {
     function foo() {
     }
-    foo.prototype.bar = function (foo) { return "foo"; };
-    foo.prototype.n = function () {
+    var proto_1 = foo.prototype;
+    proto_1.bar = function (foo) { return "foo"; };
+    proto_1.n = function () {
         var foo = this.bar();
         foo = this.bar("test");
     };

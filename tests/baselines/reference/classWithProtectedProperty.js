@@ -45,7 +45,8 @@ var C = (function () {
         this.b = '';
         this.d = function () { return ''; };
     }
-    C.prototype.c = function () { return ''; };
+    var proto_1 = C.prototype;
+    proto_1.c = function () { return ''; };
     C.f = function () { return ''; };
     C.g = function () { return ''; };
     return C;
@@ -55,7 +56,8 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    D.prototype.method = function () {
+    var proto_2 = D.prototype;
+    proto_2.method = function () {
         // No errors
         var d = new D();
         var r1 = d.x;

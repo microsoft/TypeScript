@@ -32,7 +32,8 @@ var A = (function () {
     A.bar = function () {
         return "";
     };
-    A.prototype.foo = function () { return 1; };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { return 1; };
     return A;
 }());
 var C2 = (function (_super) {

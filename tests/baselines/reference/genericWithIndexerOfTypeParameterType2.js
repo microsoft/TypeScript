@@ -39,7 +39,8 @@ define(["require", "exports"], function (require, exports) {
         function List() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        List.prototype.Bar = function () { };
+        var proto_1 = List.prototype;
+        proto_1.Bar = function () { };
         return List;
     }(Collection));
     exports.List = List;

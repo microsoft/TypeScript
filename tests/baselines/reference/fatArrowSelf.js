@@ -30,7 +30,8 @@ var Events;
     var EventEmitter = (function () {
         function EventEmitter() {
         }
-        EventEmitter.prototype.addListener = function (type, listener) {
+        var proto_1 = EventEmitter.prototype;
+        proto_1.addListener = function (type, listener) {
         };
         return EventEmitter;
     }());
@@ -42,13 +43,14 @@ var Consumer;
         function EventEmitterConsummer(emitter) {
             this.emitter = emitter;
         }
-        EventEmitterConsummer.prototype.register = function () {
+        var proto_2 = EventEmitterConsummer.prototype;
+        proto_2.register = function () {
             var _this = this;
             this.emitter.addListener('change', function (e) {
                 _this.changed();
             });
         };
-        EventEmitterConsummer.prototype.changed = function () {
+        proto_2.changed = function () {
         };
         return EventEmitterConsummer;
     }());

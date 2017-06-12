@@ -47,7 +47,8 @@ exports.noPrivates = (_a = (function () {
             this.p = 12;
         }
         class_1.getTags = function () { };
-        class_1.prototype.tags = function () { };
+        var proto_1 = class_1.prototype;
+        proto_1.tags = function () { };
         return class_1;
     }()),
     _a.ps = -1,
@@ -57,7 +58,8 @@ var FooItem = (function () {
     function FooItem() {
         this.property = "capitalism";
     }
-    FooItem.prototype.foo = function () { };
+    var proto_2 = FooItem.prototype;
+    proto_2.foo = function () { };
     return FooItem;
 }());
 exports.FooItem = FooItem;
@@ -68,7 +70,8 @@ function WithTags(Base) {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         class_2.getTags = function () { };
-        class_2.prototype.tags = function () { };
+        var proto_3 = class_2.prototype;
+        proto_3.tags = function () { };
         return class_2;
     }(Base));
 }

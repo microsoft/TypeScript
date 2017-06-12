@@ -42,7 +42,8 @@ var DataView2 = (function (_super) {
     function DataView2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    DataView2.prototype.fillItems = function (item) {
+    var proto_1 = DataView2.prototype;
+    proto_1.fillItems = function (item) {
         this._itemsByKey['dummy'] = item;
     };
     return DataView2;

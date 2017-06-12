@@ -94,7 +94,8 @@ var ClassA = (function () {
         }
         this.array = init;
     }
-    ClassA.prototype.foo = function () {
+    var proto_1 = ClassA.prototype;
+    proto_1.foo = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];

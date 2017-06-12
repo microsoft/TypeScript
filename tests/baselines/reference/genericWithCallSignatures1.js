@@ -24,7 +24,8 @@ class MyClass {
 var MyClass = (function () {
     function MyClass() {
     }
-    MyClass.prototype.myMethod = function () {
+    var proto_1 = MyClass.prototype;
+    proto_1.myMethod = function () {
         var x = this.callableThing();
     };
     return MyClass;

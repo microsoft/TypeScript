@@ -150,17 +150,18 @@ var o = {
 var C = (function () {
     function C() {
     }
-    C.prototype.m1 = function () {
+    var proto_1 = C.prototype;
+    proto_1.m1 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     };
-    C.prototype.m2 = function () {
+    proto_1.m2 = function () {
         return __awaiter(this, void 0, void 0, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });
     };
-    C.prototype.m3 = function () {
+    proto_1.m3 = function () {
         return __awaiter(this, void 0, missing_1.MyPromise, function () { return __generator(this, function (_a) {
             return [2 /*return*/];
         }); });

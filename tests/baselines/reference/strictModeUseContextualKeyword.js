@@ -20,7 +20,8 @@ function foo(as) { }
 var C = (function () {
     function C() {
     }
-    C.prototype.as = function () { };
+    var proto_1 = C.prototype;
+    proto_1.as = function () { };
     return C;
 }());
 function F() {

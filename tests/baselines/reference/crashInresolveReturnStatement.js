@@ -22,7 +22,8 @@ class WITDialogs {
 var WorkItemToolbar = (function () {
     function WorkItemToolbar() {
     }
-    WorkItemToolbar.prototype.onToolbarItemClick = function () {
+    var proto_1 = WorkItemToolbar.prototype;
+    proto_1.onToolbarItemClick = function () {
         WITDialogs.createCopyOfWorkItem();
     };
     return WorkItemToolbar;
@@ -30,7 +31,8 @@ var WorkItemToolbar = (function () {
 var CreateCopyOfWorkItemDialog = (function () {
     function CreateCopyOfWorkItemDialog() {
     }
-    CreateCopyOfWorkItemDialog.prototype.getDialogResult = function () {
+    var proto_2 = CreateCopyOfWorkItemDialog.prototype;
+    proto_2.getDialogResult = function () {
         return null;
     };
     return CreateCopyOfWorkItemDialog;

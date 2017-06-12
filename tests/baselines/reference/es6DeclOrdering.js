@@ -21,8 +21,9 @@ var Bar = (function () {
     function Bar(store) {
         this._store = store; // this is an error for some reason? Unresolved symbol store
     }
+    var proto_1 = Bar.prototype;
     //public bar() { }
-    Bar.prototype.foo = function () {
+    proto_1.foo = function () {
         return this._store.length;
     };
     return Bar;

@@ -29,7 +29,8 @@ var C = (function () {
             return y;
         };
     }
-    C.prototype.foo = function () {
+    var proto_1 = C.prototype;
+    proto_1.foo = function () {
         function temp(a) {
             var y;
             return y;

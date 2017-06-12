@@ -36,7 +36,8 @@ var Foo2 = (function () {
 var C = (function () {
     function C() {
     }
-    Object.defineProperty(C.prototype, "get1", {
+    var proto_1 = C.prototype;
+    Object.defineProperty(proto_1, "get1", {
         get: function () { return new Foo; },
         enumerable: true,
         configurable: true
@@ -48,7 +49,8 @@ var D = (function (_super) {
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Object.defineProperty(D.prototype, "set1", {
+    var proto_2 = D.prototype;
+    Object.defineProperty(proto_2, "set1", {
         set: function (p) { },
         enumerable: true,
         configurable: true

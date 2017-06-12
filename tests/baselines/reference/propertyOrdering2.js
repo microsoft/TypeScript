@@ -13,7 +13,8 @@ var Foo = (function () {
     function Foo(x, y) {
         this.x = x;
     }
-    Foo.prototype.foo = function () {
+    var proto_1 = Foo.prototype;
+    proto_1.foo = function () {
         var a = this.x;
         return this.y;
     };

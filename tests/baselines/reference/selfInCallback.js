@@ -12,8 +12,9 @@ var C = (function () {
     function C() {
         this.p1 = 0;
     }
-    C.prototype.callback = function (cb) { cb(); };
-    C.prototype.doit = function () {
+    var proto_1 = C.prototype;
+    proto_1.callback = function (cb) { cb(); };
+    proto_1.doit = function () {
         var _this = this;
         this.callback(function () { _this.p1 + 1; });
     };

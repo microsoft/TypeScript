@@ -98,7 +98,8 @@ var Printable = function (superClass) { return _a = (function (_super) {
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
-        class_1.prototype.print = function () {
+        var proto_1 = class_1.prototype;
+        proto_1.print = function () {
             var output = this.x + "," + this.y;
         };
         return class_1;
@@ -142,7 +143,8 @@ var Thing3 = (function (_super) {
         _this._tag = tag;
         return _this;
     }
-    Thing3.prototype.test = function () {
+    var proto_2 = Thing3.prototype;
+    proto_2.test = function () {
         this.print();
     };
     return Thing3;

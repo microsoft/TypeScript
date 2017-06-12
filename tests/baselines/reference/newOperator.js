@@ -81,7 +81,8 @@ var M;
 var S = (function () {
     function S() {
     }
-    Object.defineProperty(S.prototype, "xs", {
+    var proto_1 = S.prototype;
+    Object.defineProperty(proto_1, "xs", {
         get: function () {
             return new M.T[];
         },

@@ -38,7 +38,8 @@ interface i4 {
 var i2 = (function () {
     function i2() {
     }
-    i2.prototype.bar = function () {
+    var proto_1 = i2.prototype;
+    proto_1.bar = function () {
         return 1;
     };
     return i2;

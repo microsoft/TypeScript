@@ -28,7 +28,8 @@ var __extends = (this && this.__extends) || (function () {
 var Base = (function () {
     function Base() {
     }
-    Base.prototype.foo = function () { };
+    var proto_1 = Base.prototype;
+    proto_1.foo = function () { };
     return Base;
 }());
 var Derived1 = (function (_super) {
@@ -36,7 +37,8 @@ var Derived1 = (function (_super) {
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived1.prototype.bar = function () { };
+    var proto_2 = Derived1.prototype;
+    proto_2.bar = function () { };
     return Derived1;
 }(Base));
 var Derived2 = (function (_super) {
@@ -44,7 +46,8 @@ var Derived2 = (function (_super) {
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived2.prototype.baz = function () { };
+    var proto_3 = Derived2.prototype;
+    proto_3.baz = function () { };
     return Derived2;
 }(Base));
 var Derived3 = (function (_super) {
@@ -52,7 +55,8 @@ var Derived3 = (function (_super) {
     function Derived3() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived3.prototype.biz = function () { };
+    var proto_4 = Derived3.prototype;
+    proto_4.biz = function () { };
     return Derived3;
 }(Base));
 function foo(tagName) {

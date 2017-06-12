@@ -61,7 +61,8 @@ var n3 = 5 || {};
 var baz = (function () {
     function baz() {
     }
-    baz.prototype.bar = function () { };
+    var proto_1 = baz.prototype;
+    proto_1.bar = function () { };
     ;
     return baz;
 }());
@@ -70,7 +71,8 @@ var foo = (function (_super) {
     function foo() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    foo.prototype.bar = function () { return undefined; };
+    var proto_2 = foo.prototype;
+    proto_2.bar = function () { return undefined; };
     ;
     return foo;
 }(baz));

@@ -37,7 +37,8 @@ function f<T>(x: T): A {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { return null; };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { return null; };
     return C;
 }());
 var c1;

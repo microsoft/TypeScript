@@ -164,16 +164,17 @@ var __extends = (this && this.__extends) || (function () {
 var c1 = (function () {
     function c1() {
     }
+    var proto_1 = c1.prototype;
     // i1_f1
-    c1.prototype.i1_f1 = function () {
+    proto_1.i1_f1 = function () {
     };
-    c1.prototype.i1_nc_f1 = function () {
+    proto_1.i1_nc_f1 = function () {
     };
     /** c1_f1*/
-    c1.prototype.f1 = function () {
+    proto_1.f1 = function () {
     };
     /** c1_nc_f1*/
-    c1.prototype.nc_f1 = function () {
+    proto_1.nc_f1 = function () {
     };
     return c1;
 }());
@@ -186,10 +187,11 @@ var c2 = (function () {
     function c2(a) {
         this.c2_p1 = a;
     }
+    var proto_2 = c2.prototype;
     /** c2 c2_f1*/
-    c2.prototype.c2_f1 = function () {
+    proto_2.c2_f1 = function () {
     };
-    Object.defineProperty(c2.prototype, "c2_prop", {
+    Object.defineProperty(proto_2, "c2_prop", {
         /** c2 c2_prop*/
         get: function () {
             return 10;
@@ -197,9 +199,9 @@ var c2 = (function () {
         enumerable: true,
         configurable: true
     });
-    c2.prototype.c2_nc_f1 = function () {
+    proto_2.c2_nc_f1 = function () {
     };
-    Object.defineProperty(c2.prototype, "c2_nc_prop", {
+    Object.defineProperty(proto_2, "c2_nc_prop", {
         get: function () {
             return 10;
         },
@@ -207,9 +209,9 @@ var c2 = (function () {
         configurable: true
     });
     /** c2 f1*/
-    c2.prototype.f1 = function () {
+    proto_2.f1 = function () {
     };
-    Object.defineProperty(c2.prototype, "prop", {
+    Object.defineProperty(proto_2, "prop", {
         /** c2 prop*/
         get: function () {
             return 10;
@@ -217,9 +219,9 @@ var c2 = (function () {
         enumerable: true,
         configurable: true
     });
-    c2.prototype.nc_f1 = function () {
+    proto_2.nc_f1 = function () {
     };
-    Object.defineProperty(c2.prototype, "nc_prop", {
+    Object.defineProperty(proto_2, "nc_prop", {
         get: function () {
             return 10;
         },
@@ -233,10 +235,11 @@ var c3 = (function (_super) {
     function c3() {
         return _super.call(this, 10) || this;
     }
+    var proto_3 = c3.prototype;
     /** c3 f1*/
-    c3.prototype.f1 = function () {
+    proto_3.f1 = function () {
     };
-    Object.defineProperty(c3.prototype, "prop", {
+    Object.defineProperty(proto_3, "prop", {
         /** c3 prop*/
         get: function () {
             return 10;
@@ -244,9 +247,9 @@ var c3 = (function (_super) {
         enumerable: true,
         configurable: true
     });
-    c3.prototype.nc_f1 = function () {
+    proto_3.nc_f1 = function () {
     };
-    Object.defineProperty(c3.prototype, "nc_prop", {
+    Object.defineProperty(proto_3, "nc_prop", {
         get: function () {
             return 10;
         },

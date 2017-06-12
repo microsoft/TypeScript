@@ -47,7 +47,8 @@ var NonGeneric;
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
+        var proto_1 = C.prototype;
+        proto_1.fn = function () { return this; };
         Object.defineProperty(C, "x", {
             get: function () { return 1; },
             set: function (v) { },
@@ -72,7 +73,8 @@ var Generic;
             this.a = a;
             this.b = b;
         }
-        C.prototype.fn = function () { return this; };
+        var proto_2 = C.prototype;
+        proto_2.fn = function () { return this; };
         Object.defineProperty(C, "x", {
             get: function () { return 1; },
             set: function (v) { },

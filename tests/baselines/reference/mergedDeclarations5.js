@@ -15,7 +15,8 @@ class B extends A {
 var A = (function () {
     function A() {
     }
-    A.prototype.foo = function () { };
+    var proto_1 = A.prototype;
+    proto_1.foo = function () { };
     return A;
 }());
 //// [b.js]
@@ -34,6 +35,7 @@ var B = (function (_super) {
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    B.prototype.foo = function () { };
+    var proto_1 = B.prototype;
+    proto_1.foo = function () { };
     return B;
 }(A));

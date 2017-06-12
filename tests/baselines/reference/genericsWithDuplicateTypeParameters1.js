@@ -22,8 +22,9 @@ function f2(a, b) { return null; }
 var C = (function () {
     function C() {
     }
-    C.prototype.f = function () { };
-    C.prototype.f2 = function (a, b) { return null; };
+    var proto_1 = C.prototype;
+    proto_1.f = function () { };
+    proto_1.f2 = function (a, b) { return null; };
     return C;
 }());
 var m = {

@@ -34,8 +34,9 @@ var __extends = (this && this.__extends) || (function () {
 var C = (function () {
     function C() {
     }
-    C.prototype.foo = function () { };
-    C.prototype.bar = function () { };
+    var proto_1 = C.prototype;
+    proto_1.foo = function () { };
+    proto_1.bar = function () { };
     return C;
 }());
 var Base = (function () {

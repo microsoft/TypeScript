@@ -10,8 +10,9 @@ class C65 {
 var C65 = (function () {
     function C65() {
     }
-    C65.prototype.aaaaa = function () { };
-    Object.defineProperty(C65.prototype, "aaaaa", {
+    var proto_1 = C65.prototype;
+    proto_1.aaaaa = function () { };
+    Object.defineProperty(proto_1, "aaaaa", {
         get: function () {
             return 1;
         },
