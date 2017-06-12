@@ -2744,8 +2744,8 @@ namespace ts {
     }
 
     /**
-     * Gets the effective return type annotation of a signature. If the node was parsed in a
-     * JavaScript file, gets the return type annotation from JSDoc.
+     * Gets the effective type parameters. If the node was parsed in a
+     * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
      */
     export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
         if (node.typeParameters) {
