@@ -6178,7 +6178,7 @@ namespace ts {
             return undefined;
         }
 
-        function getTypeParametersFromJSDocTemplate(declaration: SignatureDeclaration): TypeParameterDeclaration[] {
+        function getTypeParametersFromJSDocTemplate(declaration: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
             if (declaration.flags & NodeFlags.JavaScriptFile) {
                 const templateTag = getJSDocTemplateTag(declaration);
                 return templateTag && templateTag.typeParameters;
@@ -6188,9 +6188,9 @@ namespace ts {
 
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
-        function getTypeParametersFromDeclaration(typeParameterDeclarations: TypeParameterDeclaration[]): TypeParameter[] {
+        function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] {
             let result: TypeParameter[];
-            forEach(typeParameterDeclarations, node => {
+            forEach(declaration.typeParameters || getTypeParametersFromJSDocTemplate(declaration), node => {
                 const tp = getDeclaredTypeOfTypeParameter(node.symbol);
                 if (!contains(result, tp)) {
                     if (!result) {
@@ -6391,8 +6391,7 @@ namespace ts {
                 const classType = declaration.kind === SyntaxKind.Constructor ?
                     getDeclaredTypeOfClassOrInterface(getMergedSymbol((<ClassDeclaration>declaration.parent).symbol))
                     : undefined;
-                const typeParameters = classType ? classType.localTypeParameters :
-                    getTypeParametersFromDeclaration(declaration.typeParameters || getTypeParametersFromJSDocTemplate(declaration));
+                const typeParameters = classType ? classType.localTypeParameters : getTypeParametersFromDeclaration(declaration);
                 const returnType = getSignatureReturnTypeFromDeclaration(declaration, isJSConstructSignature, classType);
                 const typePredicate = declaration.type && declaration.type.kind === SyntaxKind.TypePredicate ?
                     createTypePredicateFromTypePredicateNode(declaration.type as TypePredicateNode) :
@@ -8166,8 +8165,8 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                    const typeParameters = (node as DeclarationWithTypeParameters).typeParameters ||
-                        getTypeParametersFromJSDocTemplate(node as SignatureDeclaration);
+                        const declaration = node as DeclarationWithTypeParameters;
+                        const typeParameters = declaration.typeParameters || getTypeParametersFromJSDocTemplate(declaration);
                         if (typeParameters) {
                             for (const d of typeParameters) {
                                 if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode(d)))) {
