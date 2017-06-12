@@ -844,7 +844,7 @@ namespace ts.Completions {
          *
          * @returns true if 'symbols' was successfully populated; false otherwise.
          */
-        function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | BindingPattern): boolean {
+        function tryGetObjectLikeCompletionSymbols(objectLikeContainer: ObjectLiteralExpression | ObjectBindingPattern): boolean {
             // We're looking up possible property names from contextual/inferred/declared type.
             isMemberCompletion = true;
 
@@ -860,40 +860,35 @@ namespace ts.Completions {
                 typeMembers = typeChecker.getAllPossiblePropertiesOfType(typeForObject);
                 existingMembers = (<ObjectLiteralExpression>objectLikeContainer).properties;
             }
-            else if (objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern) {
+            else {
+                Debug.assert(objectLikeContainer.kind === SyntaxKind.ObjectBindingPattern);
                 // We are *only* completing on properties from the type being destructured.
                 isNewIdentifierLocation = false;
 
                 const rootDeclaration = getRootDeclaration(objectLikeContainer.parent);
-                if (isVariableLike(rootDeclaration)) {
-                    // We don't want to complete using the type acquired by the shape
-                    // of the binding pattern; we are only interested in types acquired
-                    // through type declaration or inference.
-                    // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
-                    // type of parameter will flow in from the contextual type of the function
-                    let canGetType = !!(rootDeclaration.initializer || rootDeclaration.type);
-                    if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
-                        if (isExpression(rootDeclaration.parent)) {
-                            canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
-                        }
-                        else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
-                            canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
-                        }
+                if (!isVariableLike(rootDeclaration)) throw Debug.fail("Root declaration is not variable-like.");
+
+                // We don't want to complete using the type acquired by the shape
+                // of the binding pattern; we are only interested in types acquired
+                // through type declaration or inference.
+                // Also proceed if rootDeclaration is a parameter and if its containing function expression/arrow function is contextually typed -
+                // type of parameter will flow in from the contextual type of the function
+                let canGetType = rootDeclaration.initializer || rootDeclaration.type || rootDeclaration.parent.parent.kind === SyntaxKind.ForOfStatement;
+                if (!canGetType && rootDeclaration.kind === SyntaxKind.Parameter) {
+                    if (isExpression(rootDeclaration.parent)) {
+                        canGetType = !!typeChecker.getContextualType(<Expression>rootDeclaration.parent);
                     }
-                    if (canGetType) {
-                        const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
-                        if (!typeForObject) return false;
-                        // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
-                        typeMembers = typeChecker.getPropertiesOfType(typeForObject);
-                        existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
+                    else if (rootDeclaration.parent.kind === SyntaxKind.MethodDeclaration || rootDeclaration.parent.kind === SyntaxKind.SetAccessor) {
+                        canGetType = isExpression(rootDeclaration.parent.parent) && !!typeChecker.getContextualType(<Expression>rootDeclaration.parent.parent);
                     }
                 }
-                else {
-                    Debug.fail("Root declaration is not variable-like.");
+                if (canGetType) {
+                    const typeForObject = typeChecker.getTypeAtLocation(objectLikeContainer);
+                    if (!typeForObject) return false;
+                    // In a binding pattern, get only known properties. Everywhere else we will get all possible properties.
+                    typeMembers = typeChecker.getPropertiesOfType(typeForObject);
+                    existingMembers = (<ObjectBindingPattern>objectLikeContainer).elements;
                 }
-            }
-            else {
-                Debug.fail("Expected object literal or binding pattern, got " + objectLikeContainer.kind);
             }
 
             if (typeMembers && typeMembers.length > 0) {
@@ -1003,14 +998,14 @@ namespace ts.Completions {
          * Returns the immediate owning object literal or binding pattern of a context token,
          * on the condition that one exists and that the context implies completion should be given.
          */
-        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | BindingPattern {
+        function tryGetObjectLikeCompletionContainer(contextToken: Node): ObjectLiteralExpression | ObjectBindingPattern {
             if (contextToken) {
                 switch (contextToken.kind) {
                     case SyntaxKind.OpenBraceToken:  // const x = { |
                     case SyntaxKind.CommaToken:      // const x = { a: 0, |
                         const parent = contextToken.parent;
-                        if (parent && (parent.kind === SyntaxKind.ObjectLiteralExpression || parent.kind === SyntaxKind.ObjectBindingPattern)) {
-                            return <ObjectLiteralExpression | BindingPattern>parent;
+                        if (isObjectLiteralExpression(parent) || isObjectBindingPattern(parent)) {
+                            return parent;
                         }
                         break;
                 }
