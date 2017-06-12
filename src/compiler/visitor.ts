@@ -1198,9 +1198,9 @@ namespace ts {
 
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                result = reduceNode((<ForInStatement | ForOfStatement>node).initializer, cbNode, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).expression, cbNode, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).statement, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).initializer, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).expression, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.ReturnStatement:

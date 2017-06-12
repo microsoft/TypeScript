@@ -1053,7 +1053,7 @@ namespace Harness {
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
-        function getCommandLineOption(name: string): ts.CommandLineOption {
+        function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
