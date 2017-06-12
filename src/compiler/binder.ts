@@ -2138,8 +2138,10 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
-                    return bindModuleDeclaration(<ModuleDeclaration>node);
-
+                    if (node.parent.kind !== ts.SyntaxKind.JSDocTypedefTag || isInJavaScriptFile(node)) {
+                        return bindModuleDeclaration(<ModuleDeclaration>node);
+                    }
+                    return undefined;
                 // Jsx-attributes
                 case SyntaxKind.JsxAttributes:
                     return bindJsxAttributes(<JsxAttributes>node);

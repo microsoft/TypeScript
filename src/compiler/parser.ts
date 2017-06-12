@@ -6851,7 +6851,7 @@ namespace ts {
                             jsDocNamespaceNode.flags |= flags;
                             jsDocNamespaceNode.name = typeNameOrNamespaceName;
                             jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace);
-                            return jsDocNamespaceNode;
+                            return finishNode(jsDocNamespaceNode);
                         }
 
                         if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
