@@ -20312,7 +20312,8 @@ namespace ts {
                         Diagnostics.dispose_method_signature_shouldn_t_contain_any_method_arguments
                     );
                 }
-            } else {
+            }
+            else {
                 error(
                     usingStatement,
                     Diagnostics.Class_0_must_implement_a_dispose_method_when_declared_in_a_using_statement,

@@ -24,8 +24,9 @@ var DisposableClass = (function () {
     return DisposableClass;
 }());
 exports.DisposableClass = DisposableClass;
-var disposedObj = new DisposableClass();
+var disposedObj;
 try {
+    disposedObj = new DisposableClass();
     disposedObj.foo();
 }
 finally {
