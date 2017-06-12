@@ -16880,7 +16880,7 @@ namespace ts {
 
         function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage): boolean {
             // References are combinations of identifiers, parentheses, and property accesses.
-            const node = skipParentheses(expr);
+            const node = skipOuterExpressions(expr, OuterExpressionKinds.Assertions | OuterExpressionKinds.Parentheses);
             if (node.kind !== SyntaxKind.Identifier && node.kind !== SyntaxKind.PropertyAccessExpression && node.kind !== SyntaxKind.ElementAccessExpression) {
                 error(expr, invalidReferenceMessage);
                 return false;
