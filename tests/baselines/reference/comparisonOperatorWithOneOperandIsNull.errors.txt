@@ -7,64 +7,80 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(34,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS2365: Operator '<' cannot be applied to types 'any' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(39,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(40,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(42,12): error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(42,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(43,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(44,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(45,12): error TS2365: Operator '<' cannot be applied to types 'void' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(45,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(46,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(47,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(48,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(49,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(53,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS2365: Operator '>' cannot be applied to types 'any' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(56,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(57,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(58,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(59,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(61,12): error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(61,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(62,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(63,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(64,12): error TS2365: Operator '>' cannot be applied to types 'void' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(64,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(65,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(66,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(67,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(68,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(73,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(74,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(74,12): error TS2365: Operator '<=' cannot be applied to types 'any' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(75,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(76,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(77,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(78,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(80,12): error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(80,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(81,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(82,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS2365: Operator '<=' cannot be applied to types 'void' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(83,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(84,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(85,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(86,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(87,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(90,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(90,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'boolean'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(91,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(92,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(93,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(93,12): error TS2365: Operator '>=' cannot be applied to types 'any' and 'void'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(94,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(95,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(96,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(97,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(99,12): error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(99,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(100,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(101,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(102,12): error TS2365: Operator '>=' cannot be applied to types 'void' and 'any'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(102,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(103,17): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(104,17): error TS2531: Object is possibly 'null'.
@@ -72,7 +88,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(106,17): error TS2531: Object is possibly 'null'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts (72 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts (88 errors) ====
     enum E { a, b, c }
     
     function foo<T>(t: T) {
@@ -124,6 +140,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r1a1 = null < a;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'boolean'.
     var r1a2 = null < b;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -133,6 +151,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r1a4 = null < d;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'any' and 'void'.
     var r1a5 = null < e;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -147,6 +167,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2531: Object is possibly 'null'.
     
     var r1b1 = a < null;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'boolean' and 'any'.
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r1b2 = b < null;
@@ -156,6 +178,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r1b4 = d < null;
+               ~~~~~~~~
+!!! error TS2365: Operator '<' cannot be applied to types 'void' and 'any'.
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r1b5 = e < null;
@@ -175,6 +199,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r2a1 = null > a;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'boolean'.
     var r2a2 = null > b;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -184,6 +210,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r2a4 = null > d;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'any' and 'void'.
     var r2a5 = null > e;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -198,6 +226,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2531: Object is possibly 'null'.
     
     var r2b1 = a > null;
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'boolean' and 'any'.
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r2b2 = b > null;
@@ -207,6 +237,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r2b4 = d > null;
+               ~~~~~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'void' and 'any'.
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r2b5 = e > null;
@@ -226,6 +258,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r3a1 = null <= a;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'boolean'.
     var r3a2 = null <= b;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -235,6 +269,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r3a4 = null <= d;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'any' and 'void'.
     var r3a5 = null <= e;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -249,6 +285,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2531: Object is possibly 'null'.
     
     var r3b1 = a <= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'boolean' and 'any'.
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r3b2 = b <= null;
@@ -258,6 +296,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r3b4 = d <= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '<=' cannot be applied to types 'void' and 'any'.
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r3b5 = e <= null;
@@ -277,6 +317,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r4a1 = null >= a;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'boolean'.
     var r4a2 = null >= b;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -286,6 +328,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r4a4 = null >= d;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'any' and 'void'.
     var r4a5 = null >= e;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
@@ -300,6 +344,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 !!! error TS2531: Object is possibly 'null'.
     
     var r4b1 = a >= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'boolean' and 'any'.
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r4b2 = b >= null;
@@ -309,6 +355,8 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r4b4 = d >= null;
+               ~~~~~~~~~
+!!! error TS2365: Operator '>=' cannot be applied to types 'void' and 'any'.
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r4b5 = e >= null;
