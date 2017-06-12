@@ -3524,6 +3524,7 @@ namespace ts {
         noImplicitAny?: boolean;  // Always combine with strict property
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;  // Always combine with strict property
+        noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;

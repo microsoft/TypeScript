@@ -8450,10 +8450,9 @@ namespace ts {
                 return Ternary.False;
             }
 
-            // Spec 1.0 Section 3.8.3 & 3.8.4:
-            // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
-            source = getErasedSignature(source);
-            target = getErasedSignature(target);
+            if (source.typeParameters) {
+                source = instantiateSignatureInContextOf(source, target);
+            }
 
             let result = Ternary.True;
 
@@ -9491,23 +9490,33 @@ namespace ts {
                 const saveErrorInfo = errorInfo;
 
                 if (getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol) {
-                    // We instantiations of the same anonymous type (which typically will be the type of a method).
-                    // Simply do a pairwise comparison of the signatures in the two signature lists instead of the
-                    // much more expensive N * M comparison matrix we explore below.
+                    // We have instantiations of the same anonymous type (which typically will be the type of a
+                    // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
+                    // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
+                    // as they are known to always be the same.
                     for (let i = 0; i < targetSignatures.length; i++) {
-                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], reportErrors);
+                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors);
                         if (!related) {
                             return Ternary.False;
                         }
                         result &= related;
                     }
                 }
+                else if (sourceSignatures.length === 1 && targetSignatures.length === 1) {
+                    // For simple functions (functions with a single signature) we only erase type parameters for
+                    // the comparable relation. Otherwise, if the source signature is generic, we instantiate it
+                    // in the context of the target signature before checking the relationship. Ideally we'd do
+                    // this regardless of the number of signatures, but the potential costs are prohibitive due
+                    // to the quadratic nature of the logic below.
+                    const eraseGenerics = relation === comparableRelation || compilerOptions.noStrictGenericChecks;
+                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
+                }
                 else {
                     outer: for (const t of targetSignatures) {
                         // Only elaborate errors from the first failure
                         let shouldElaborateErrors = reportErrors;
                         for (const s of sourceSignatures) {
-                            const related = signatureRelatedTo(s, t, shouldElaborateErrors);
+                            const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors);
                             if (related) {
                                 result &= related;
                                 errorInfo = saveErrorInfo;
@@ -9530,8 +9539,9 @@ namespace ts {
             /**
              * See signatureAssignableTo, compareSignaturesIdentical
              */
-            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
-                return compareSignaturesRelated(source, target, /*checkAsCallback*/ false, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
+            function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean): Ternary {
+                return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
+                    /*checkAsCallback*/ false, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
@@ -14979,12 +14989,15 @@ namespace ts {
         }
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
-        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper: TypeMapper): Signature {
+        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper): Signature {
             const context = createInferenceContext(signature, InferenceFlags.InferUnionTypes);
             forEachMatchingParameterType(contextualSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-                inferTypes(context.inferences, instantiateType(source, contextualMapper), target);
+                inferTypes(context.inferences, instantiateType(source, contextualMapper || identityMapper), target);
             });
+            if (!contextualMapper) {
+                inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
+            }
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
@@ -15024,10 +15037,10 @@ namespace ts {
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
                     const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node)));
-                    // If the contextual type is a generic pure function type, we instantiate the type with
-                    // its own type parameters and type arguments. This ensures that the type parameters are
-                    // not erased to type any during type inference such that they can be inferred as actual
-                    // types from the contextual type. For example:
+                    // If the contextual type is a generic function type with a single call signature, we
+                    // instantiate the type with its own type parameters and type arguments. This ensures that
+                    // the type parameters are not erased to type any during type inference such that they can
+                    // be inferred as actual types from the contextual type. For example:
                     //   declare function arrayMap<T, U>(f: (x: T) => U): (a: T[]) => U[];
                     //   const boxElements: <A>(a: A[]) => { value: A }[] = arrayMap(value => ({ value }));
                     // Above, the type of the 'value' parameter is inferred to be 'A'.
@@ -16361,38 +16374,43 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : neverType;
         }
 
-        function assignContextualParameterTypes(signature: Signature, context: Signature, mapper: TypeMapper, checkMode: CheckMode) {
+        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
-            if (checkMode === CheckMode.Inferential) {
-                for (let i = 0; i < len; i++) {
-                    const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
+            for (let i = 0; i < len; i++) {
+                const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
+                if (declaration.type) {
                     const typeNode = getEffectiveTypeAnnotationNode(declaration);
                     if (typeNode) {
                         inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
             }
+        }
+
+        function assignContextualParameterTypes(signature: Signature, context: Signature) {
+            signature.typeParameters = context.typeParameters;
             if (context.thisParameter) {
                 const parameter = signature.thisParameter;
                 if (!parameter || parameter.valueDeclaration && !(<ParameterDeclaration>parameter.valueDeclaration).type) {
                     if (!parameter) {
                         signature.thisParameter = createSymbolWithType(context.thisParameter, /*type*/ undefined);
                     }
-                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter), mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(signature.thisParameter, getTypeOfSymbol(context.thisParameter));
                 }
             }
+            const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const parameter = signature.parameters[i];
                 if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeAtPosition(context, i);
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
             if (signature.hasRestParameter && isRestParameterIndex(context, signature.parameters.length - 1)) {
                 const parameter = lastOrUndefined(signature.parameters);
                 if (!getEffectiveTypeAnnotationNode(<ParameterDeclaration>parameter.valueDeclaration)) {
                     const contextualParameterType = getTypeOfSymbol(lastOrUndefined(context.parameters));
-                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType, mapper, checkMode);
+                    assignTypeToParameterAndFixTypeParameters(parameter, contextualParameterType);
                 }
             }
         }
@@ -16412,10 +16430,10 @@ namespace ts {
             }
         }
 
-        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type, mapper: TypeMapper, checkMode: CheckMode) {
+        function assignTypeToParameterAndFixTypeParameters(parameter: Symbol, contextualType: Type) {
             const links = getSymbolLinks(parameter);
             if (!links.type) {
-                links.type = instantiateType(contextualType, mapper);
+                links.type = contextualType;
                 const name = getNameOfDeclaration(parameter.valueDeclaration);
                 // if inference didn't come up with anything but {}, fall back to the binding pattern if present.
                 if (links.type === emptyObjectType &&
@@ -16423,38 +16441,6 @@ namespace ts {
                     links.type = getTypeFromBindingPattern(<BindingPattern>name);
                 }
                 assignBindingElementTypes(<ParameterDeclaration>parameter.valueDeclaration);
-            }
-            else if (checkMode === CheckMode.Inferential) {
-                // Even if the parameter already has a type, it might be because it was given a type while
-                // processing the function as an argument to a prior signature during overload resolution.
-                // If this was the case, it may have caused some type parameters to be fixed. So here,
-                // we need to ensure that type parameters at the same positions get fixed again. This is
-                // done by calling instantiateType to attach the mapper to the contextualType, and then
-                // calling inferTypes to force a walk of contextualType so that all the correct fixing
-                // happens. The choice to pass in links.type may seem kind of arbitrary, but it serves
-                // to make sure that all the correct positions in contextualType are reached by the walk.
-                // Here is an example:
-                //
-                //      interface Base {
-                //          baseProp;
-                //      }
-                //      interface Derived extends Base {
-                //          toBase(): Base;
-                //      }
-                //
-                //      var derived: Derived;
-                //
-                //      declare function foo<T>(x: T, func: (p: T) => T): T;
-                //      declare function foo<T>(x: T, func: (p: T) => T): T;
-                //
-                //      var result = foo(derived, d => d.toBase());
-                //
-                // We are typing d while checking the second overload. But we've already given d
-                // a type (Derived) from the first overload. However, we still want to fix the
-                // T in the second overload so that we do not infer Base as a candidate for T
-                // (inferring Base would make type argument inference inconsistent between the two
-                // overloads).
-                inferTypes((<InferenceContext>mapper).inferences, links.type, instantiateType(contextualType, mapper));
             }
         }
 
@@ -16728,37 +16714,35 @@ namespace ts {
 
             const links = getNodeLinks(node);
             const type = getTypeOfSymbol(node.symbol);
-            const contextSensitive = isContextSensitive(node);
-            const mightFixTypeParameters = contextSensitive && checkMode === CheckMode.Inferential;
 
             // Check if function expression is contextually typed and assign parameter types if so.
-            // See the comment in assignTypeToParameterAndFixTypeParameters to understand why we need to
-            // check mightFixTypeParameters.
-            if (mightFixTypeParameters || !(links.flags & NodeCheckFlags.ContextChecked)) {
+            if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                 const contextualSignature = getContextualSignature(node);
                 // If a type check is started at a function expression that is an argument of a function call, obtaining the
                 // contextual type may recursively get back to here during overload resolution of the call. If so, we will have
                 // already assigned contextual types.
-                const contextChecked = !!(links.flags & NodeCheckFlags.ContextChecked);
-                if (mightFixTypeParameters || !contextChecked) {
+                if (!(links.flags & NodeCheckFlags.ContextChecked)) {
                     links.flags |= NodeCheckFlags.ContextChecked;
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
-                        if (contextSensitive) {
-                            assignContextualParameterTypes(signature, contextualSignature, getContextualMapper(node), checkMode);
+                        if (isContextSensitive(node)) {
+                            const contextualMapper = getContextualMapper(node);
+                            if (checkMode === CheckMode.Inferential) {
+                                inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
+                            }
+                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
+                                contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
+                            assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
-                        if (mightFixTypeParameters || !getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
+                        if (!getEffectiveReturnTypeNode(node) && !signature.resolvedReturnType) {
                             const returnType = getReturnTypeFromBody(node, checkMode);
                             if (!signature.resolvedReturnType) {
                                 signature.resolvedReturnType = returnType;
                             }
                         }
                     }
-
-                    if (!contextChecked) {
-                        checkSignatureDeclaration(node);
-                        checkNodeDeferred(node);
-                    }
+                    checkSignatureDeclaration(node);
+                    checkNodeDeferred(node);
                 }
             }
 
@@ -17731,7 +17715,7 @@ namespace ts {
                 if (signature && signature.typeParameters) {
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
-                        const contextualSignature = getSingleCallSignature(contextualType);
+                        const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
                             return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, getContextualMapper(node)));
                         }
