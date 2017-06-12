@@ -1,17 +1,23 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
-        return node && (getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile));
+        if (!node) return undefined;
+
+        if (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent)) {
+            // For a JSX element, just highlight the matching tag, not all references.
+            const { openingElement, closingElement } = node.parent.parent;
+            const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
+            return [{ fileName: sourceFile.fileName, highlightSpans }];
+        }
+
+        return getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
-        const start = node.getStart(sourceFile);
-        const end = node.getEnd();
-
         return {
             fileName: sourceFile.fileName,
-            textSpan: createTextSpanFromBounds(start, end),
+            textSpan: createTextSpanFromNode(node, sourceFile),
             kind: HighlightSpanKind.none
         };
     }

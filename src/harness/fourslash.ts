@@ -536,10 +536,15 @@ namespace FourSlash {
                 Harness.IO.log("Unexpected error(s) found.  Error list is:");
             }
 
-            for (const { start, length, messageText } of errors) {
-                Harness.IO.log("  minChar: " + start +
-                    ", limChar: " + (start + length) +
+            for (const { start, length, messageText, file } of errors) {
+                Harness.IO.log("  from: " + showPosition(file, start) +
+                    ", to: " + showPosition(file, start + length) +
                     ", message: " + ts.flattenDiagnosticMessageText(messageText, Harness.IO.newLine()) + "\n");
+            }
+
+            function showPosition(file: ts.SourceFile, pos: number) {
+                const { line, character } = ts.getLineAndCharacterOfPosition(file, pos);
+                return `${line}:${character}`;
             }
         }
 
@@ -2671,6 +2676,13 @@ namespace FourSlash {
             this.rangesByText().forEach(ranges => this.verifyRangesAreDocumentHighlights(ranges));
         }
 
+        public verifyDocumentHighlightsOf(startRange: Range, ranges: Range[]) {
+            ts.Debug.assert(ts.contains(ranges, startRange));
+            const fileNames = unique(ranges, range => range.fileName);
+            this.goToRangeStart(startRange);
+            this.verifyDocumentHighlights(ranges, fileNames);
+        }
+
         public verifyRangesAreDocumentHighlights(ranges?: Range[]) {
             ranges = ranges || this.getRanges();
             const fileNames = unique(ranges, range => range.fileName);
@@ -3883,6 +3895,10 @@ namespace FourSlashInterface {
 
         public rangesWithSameTextAreDocumentHighlights() {
             this.state.verifyRangesWithSameTextAreDocumentHighlights();
+        }
+
+        public documentHighlightsOf(startRange: FourSlash.Range, ranges: FourSlash.Range[]) {
+            this.state.verifyDocumentHighlightsOf(startRange, ranges);
         }
 
         public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
