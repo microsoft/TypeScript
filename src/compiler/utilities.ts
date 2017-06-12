@@ -1448,7 +1448,7 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         if (isJSDocTypedefTag(node)) {
             return [node.parent];
         }
