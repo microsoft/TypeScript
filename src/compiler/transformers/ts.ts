@@ -485,6 +485,9 @@ namespace ts {
                     // TypeScript namespace or external module import.
                     return visitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
 
+                case SyntaxKind.UsingStatement:
+                    return visitUsingStatement(<UsingStatement>node);
+
                 default:
                     Debug.failBadSyntaxKind(node);
                     return visitEachChild(node, visitor, context);
@@ -3106,6 +3109,57 @@ namespace ts {
                     node
                 );
             }
+        }
+
+        function visitUsingStatement(node: UsingStatement) {
+            const statements: Statement[] = [];
+            statements.push(
+                createVariableStatement(
+                    /* modifiers */ undefined,
+                    [
+                        createVariableDeclaration(<Identifier>node.variableDeclaration.name, node.variableDeclaration.type)
+                    ]
+                )
+            );
+            statements.push(
+                createTry(
+                    createBlock(
+                        [
+                            createStatement(
+                                createAssignment(
+                                    getDeclarationName(node.variableDeclaration),
+                                    node.variableDeclaration.initializer
+                                )
+                            ),
+                            ...node.block.statements
+                        ], /* multiline */ true),
+                    /* catchClause */ undefined,
+                    createBlock(
+                        [
+                            setEmitFlags(
+                                createIf(
+                                    createStrictInequality(createTypeOf(<Identifier>node.variableDeclaration.name), createLiteral("undefined")),
+                                    createStatement(
+                                        createCall(
+                                            createPropertyAccess(
+                                                getDeclarationName(node.variableDeclaration),
+                                                "dispose"
+                                            ),
+                                            /* typeArguments */ undefined,
+                                            /* argumentsArray */ undefined
+                                        )
+                                    )
+                                ),
+                                EmitFlags.SingleLine
+                            )
+                        ]
+                    )
+                )
+            );
+            return setTextRange(
+                createNodeArray(statements),
+                node
+            );
         }
 
         /**

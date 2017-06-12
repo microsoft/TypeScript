@@ -667,6 +667,9 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                     bindJSDocTypedefTag(<JSDocTypedefTag>node);
                     break;
+                case SyntaxKind.UsingStatement:
+                    bindUsingStatement(<UsingStatement>node);
+                    break;
                 default:
                     bindEachChild(node);
                     break;
@@ -981,6 +984,11 @@ namespace ts {
             bind(node.elseStatement);
             addAntecedent(postIfLabel, currentFlow);
             currentFlow = finishFlowLabel(postIfLabel);
+        }
+
+        function bindUsingStatement(node: UsingStatement): void {
+            bind(node.variableDeclaration);
+            bind(node.block);
         }
 
         function bindReturnOrThrow(node: ReturnStatement | ThrowStatement): void {
@@ -2722,7 +2730,8 @@ namespace ts {
 
             case SyntaxKind.PropertyAccessExpression:
                 return computePropertyAccess(<PropertyAccessExpression>node, subtreeFlags);
-
+            case SyntaxKind.UsingStatement:
+                return computeUsingStatement(<UsingStatement>node, subtreeFlags);
             default:
                 return computeOther(node, kind, subtreeFlags);
         }
@@ -3294,6 +3303,12 @@ namespace ts {
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.VariableDeclarationListExcludes;
+    }
+
+    function computeUsingStatement(node: UsingStatement, subtreeFlags: TransformFlags) {
+        const transformFlags = subtreeFlags | TransformFlags.AssertTypeScript;
+        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        return transformFlags & ~TransformFlags.NodeExcludes;
     }
 
     function computeOther(node: Node, kind: SyntaxKind, subtreeFlags: TransformFlags) {

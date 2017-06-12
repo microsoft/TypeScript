@@ -1,0 +1,24 @@
+=== tests/cases/compiler/using.ts ===
+export class DisposableClass {
+>DisposableClass : DisposableClass
+
+    public foo() {
+>foo : () => void
+
+    }
+
+    public dispose() {
+>dispose : () => void
+    }
+}
+using(let disposedObj = new DisposableClass()) {
+>disposedObj : DisposableClass
+>new DisposableClass() : DisposableClass
+>DisposableClass : typeof DisposableClass
+
+    disposedObj.foo();
+>disposedObj.foo() : void
+>disposedObj.foo : () => void
+>disposedObj : DisposableClass
+>foo : () => void
+}

@@ -20266,6 +20266,43 @@ namespace ts {
             }
         }
 
+        function checkUsingStatemment(usingStatement: UsingStatement): void {
+            const disposeMethodName = "dispose";
+            checkGrammarVariableDeclaration(usingStatement.variableDeclaration);
+            const varType = getTypeOfNode(usingStatement.variableDeclaration);
+            const properties = getPropertiesOfType(varType);
+            let disposeMethod: Symbol = undefined;
+            for (const prop of properties) {
+                if (isMethodLike(prop) && prop.name === disposeMethodName) {
+                    disposeMethod = prop;
+                    break;
+                }
+            }
+            if (typeof disposeMethod !== "undefined") {
+                const isPrivate = getDeclarationModifierFlagsFromSymbol(disposeMethod) & (ModifierFlags.Private | ModifierFlags.Protected);
+                if (isPrivate) {
+                    error(
+                        usingStatement,
+                        Diagnostics.Property_0_is_private_and_only_accessible_within_class_1,
+                        disposeMethodName,
+                        getNameOfSymbol(varType.symbol)
+                    );
+                } if ((<FunctionLikeDeclaration>disposeMethod.valueDeclaration).parameters.length > 0) {
+                    error(
+                        usingStatement,
+                        Diagnostics.dispose_method_signature_shouldn_t_contain_any_method_arguments
+                    );
+                }
+            }
+            else {
+                error(
+                    usingStatement,
+                    Diagnostics.Class_0_must_implement_a_dispose_method_when_declared_in_a_using_statement,
+                    getNameOfSymbol(varType.symbol));
+            }
+            checkBlock(usingStatement.block);
+        }
+
         function checkRightHandSideOfForOf(rhsExpression: Expression, awaitModifier: AwaitKeywordToken | undefined): Type {
             const expressionType = checkNonNullExpression(rhsExpression);
             return checkIteratedTypeOrElementType(expressionType, rhsExpression, /*allowStringInput*/ true, awaitModifier !== undefined);
@@ -22084,6 +22121,8 @@ namespace ts {
                     return checkForInStatement(<ForInStatement>node);
                 case SyntaxKind.ForOfStatement:
                     return checkForOfStatement(<ForOfStatement>node);
+                case SyntaxKind.UsingStatement:
+                    return checkUsingStatemment(<UsingStatement>node);
                 case SyntaxKind.ContinueStatement:
                 case SyntaxKind.BreakStatement:
                     return checkBreakOrContinueStatement(<BreakOrContinueStatement>node);

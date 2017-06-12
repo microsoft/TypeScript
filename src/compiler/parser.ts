@@ -253,6 +253,9 @@ namespace ts {
                     visitNode(cbNode, (<ForOfStatement>node).initializer) ||
                     visitNode(cbNode, (<ForOfStatement>node).expression) ||
                     visitNode(cbNode, (<ForOfStatement>node).statement);
+            case SyntaxKind.UsingStatement:
+                return visitNode(cbNode, (<UsingStatement>node).variableDeclaration) ||
+                    visitNode(cbNode, (<UsingStatement>node).block);
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 return visitNode(cbNode, (<BreakOrContinueStatement>node).label);
@@ -4541,6 +4544,19 @@ namespace ts {
             return finishNode(forOrForInOrForOfStatement);
         }
 
+        function parseUsingStatement(): UsingStatement {
+            const node = <UsingStatement>createNode(SyntaxKind.UsingStatement);
+            parseExpected(SyntaxKind.UsingKeyword);
+            parseExpected(SyntaxKind.OpenParenToken);
+            if (token() === SyntaxKind.VarKeyword || token() === SyntaxKind.LetKeyword || token() === SyntaxKind.ConstKeyword) {
+                nextToken();
+                node.variableDeclaration = parseVariableDeclaration();
+            }
+            parseExpected(SyntaxKind.CloseParenToken);
+            node.block = parseBlock(/* ignoreMissingOpenBrace */ true);
+            return finishNode(node);
+        }
+
         function parseBreakOrContinueStatement(kind: SyntaxKind): BreakOrContinueStatement {
             const node = <BreakOrContinueStatement>createNode(kind);
 
@@ -4812,6 +4828,7 @@ namespace ts {
                 // however, we say they are here so that we may gracefully parse them and error later.
                 case SyntaxKind.CatchKeyword:
                 case SyntaxKind.FinallyKeyword:
+                case SyntaxKind.UsingKeyword:
                     return true;
 
                 case SyntaxKind.ImportKeyword:
@@ -4881,6 +4898,8 @@ namespace ts {
                     return parseWhileStatement();
                 case SyntaxKind.ForKeyword:
                     return parseForOrForInOrForOfStatement();
+                case SyntaxKind.UsingKeyword:
+                    return parseUsingStatement();
                 case SyntaxKind.ContinueKeyword:
                     return parseBreakOrContinueStatement(SyntaxKind.ContinueStatement);
                 case SyntaxKind.BreakKeyword:

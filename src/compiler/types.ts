@@ -163,6 +163,7 @@ namespace ts {
         TrueKeyword,
         TryKeyword,
         TypeOfKeyword,
+        UsingKeyword,
         VarKeyword,
         VoidKeyword,
         WhileKeyword,
@@ -321,7 +322,7 @@ namespace ts {
         NamedExports,
         ExportSpecifier,
         MissingDeclaration,
-
+        UsingStatement,
         // Module references
         ExternalModuleReference,
 
@@ -682,7 +683,7 @@ namespace ts {
 
     export interface VariableDeclarationList extends Node {
         kind: SyntaxKind.VariableDeclarationList;
-        parent?: VariableStatement | ForStatement | ForOfStatement | ForInStatement;
+        parent?: VariableStatement | ForStatement | ForOfStatement | ForInStatement | UsingStatement;
         declarations: NodeArray<VariableDeclaration>;
     }
 
@@ -1721,6 +1722,12 @@ namespace ts {
         awaitModifier?: AwaitKeywordToken;
         initializer: ForInitializer;
         expression: Expression;
+    }
+
+    export interface UsingStatement extends Statement {
+        kind: SyntaxKind.UsingStatement;
+        variableDeclaration: VariableDeclaration;
+        block: Block;
     }
 
     export interface BreakStatement extends Statement {

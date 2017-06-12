@@ -1,0 +1,19 @@
+tests/cases/compiler/usingDisposeWithArgs.ts(9,1): error TS96001: dispose method signature shouldn't contain any method arguments
+
+
+==== tests/cases/compiler/usingDisposeWithArgs.ts (1 errors) ====
+    export class DisposableClass {
+        public foo() {
+    
+        }
+    
+        public dispose(x: number) {
+        }
+    }
+    using(let disposedObj = new DisposableClass()) {
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        disposedObj.foo();
+    ~~~~~~~~~~~~~~~~~~~~~~
+    }
+    ~
+!!! error TS96001: dispose method signature shouldn't contain any method arguments
