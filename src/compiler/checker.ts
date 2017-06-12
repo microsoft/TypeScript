@@ -6178,19 +6178,11 @@ namespace ts {
             return undefined;
         }
 
-        function getTypeParametersFromJSDocTemplate(declaration: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
-            if (declaration.flags & NodeFlags.JavaScriptFile) {
-                const templateTag = getJSDocTemplateTag(declaration);
-                return templateTag && templateTag.typeParameters;
-            }
-            return undefined;
-        }
-
         // Return list of type parameters with duplicates removed (duplicate identifier errors are generated in the actual
         // type checking functions).
         function getTypeParametersFromDeclaration(declaration: DeclarationWithTypeParameters): TypeParameter[] {
             let result: TypeParameter[];
-            forEach(declaration.typeParameters || getTypeParametersFromJSDocTemplate(declaration), node => {
+            forEach(getEffectiveTypeParameterDeclarations(declaration), node => {
                 const tp = getDeclaredTypeOfTypeParameter(node.symbol);
                 if (!contains(result, tp)) {
                     if (!result) {
@@ -8165,8 +8157,7 @@ namespace ts {
                     case SyntaxKind.ClassExpression:
                     case SyntaxKind.InterfaceDeclaration:
                     case SyntaxKind.TypeAliasDeclaration:
-                        const declaration = node as DeclarationWithTypeParameters;
-                        const typeParameters = declaration.typeParameters || getTypeParametersFromJSDocTemplate(declaration);
+                        const typeParameters = getEffectiveTypeParameterDeclarations(node as DeclarationWithTypeParameters);
                         if (typeParameters) {
                             for (const d of typeParameters) {
                                 if (contains(mappedTypes, getDeclaredTypeOfTypeParameter(getSymbolOfNode(d)))) {
