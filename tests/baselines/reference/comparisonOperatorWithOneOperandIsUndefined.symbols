@@ -118,571 +118,655 @@ var f: {};
 var g: string[];
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var h: Date;
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+>Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
 // operator <
 var r1a1 = x < a;
->r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 33, 3))
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 34, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r1a2 = x < b;
->r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 34, 3))
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 35, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r1a3 = x < c;
->r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 35, 3))
+>r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 36, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r1a4 = x < d;
->r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 36, 3))
+>r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 37, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r1a5 = x < e;
->r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 37, 3))
+>r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 38, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r1a6 = x < f;
->r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 38, 3))
+>r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 39, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r1a7 = x < g;
->r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 39, 3))
+>r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 40, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 41, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r1a7 = x < h;
+>r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 40, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 41, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r1b1 = a < x;
->r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 41, 3))
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 43, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b2 = b < x;
->r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 42, 3))
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 44, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b3 = c < x;
->r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 43, 3))
+>r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 45, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b4 = d < x;
->r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 44, 3))
+>r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 46, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b5 = e < x;
->r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 45, 3))
+>r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 47, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b6 = f < x;
->r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 46, 3))
+>r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 48, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r1b7 = g < x;
->r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 47, 3))
+>r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 49, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 50, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r1b7 = h < x;
+>r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 49, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 50, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator >
 var r2a1 = x > a;
->r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 50, 3))
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 53, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r2a2 = x > b;
->r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 51, 3))
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 54, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r2a3 = x > c;
->r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 52, 3))
+>r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 55, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r2a4 = x > d;
->r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 53, 3))
+>r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 56, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r2a5 = x > e;
->r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 54, 3))
+>r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 57, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r2a6 = x > f;
->r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 55, 3))
+>r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 58, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r2a7 = x > g;
->r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 56, 3))
+>r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 59, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 60, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r2a7 = x > h;
+>r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 59, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 60, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r2b1 = a > x;
->r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 58, 3))
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 62, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b2 = b > x;
->r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 59, 3))
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 63, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b3 = c > x;
->r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 60, 3))
+>r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 64, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b4 = d > x;
->r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 61, 3))
+>r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 65, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b5 = e > x;
->r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 62, 3))
+>r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 66, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b6 = f > x;
->r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 63, 3))
+>r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 67, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r2b7 = g > x;
->r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 64, 3))
+>r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 68, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 69, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r2b7 = h > x;
+>r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 68, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 69, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator <=
 var r3a1 = x <= a;
->r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 67, 3))
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 72, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r3a2 = x <= b;
->r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 68, 3))
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 73, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r3a3 = x <= c;
->r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 69, 3))
+>r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 74, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r3a4 = x <= d;
->r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 70, 3))
+>r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 75, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r3a5 = x <= e;
->r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 71, 3))
+>r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 76, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r3a6 = x <= f;
->r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 72, 3))
+>r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 77, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r3a7 = x <= g;
->r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 73, 3))
+>r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 78, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 79, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r3a7 = x <= h;
+>r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 78, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 79, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r3b1 = a <= x;
->r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 75, 3))
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 81, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b2 = b <= x;
->r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 76, 3))
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 82, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b3 = c <= x;
->r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 77, 3))
+>r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 83, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b4 = d <= x;
->r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 78, 3))
+>r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 84, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b5 = e <= x;
->r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 79, 3))
+>r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 85, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b6 = f <= x;
->r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 80, 3))
+>r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 86, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r3b7 = g <= x;
->r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 81, 3))
+>r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 87, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 88, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r3b7 = h <= x;
+>r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 87, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 88, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator >=
 var r4a1 = x >= a;
->r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 84, 3))
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 91, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r4a2 = x >= b;
->r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 85, 3))
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 92, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r4a3 = x >= c;
->r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 86, 3))
+>r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 93, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r4a4 = x >= d;
->r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 87, 3))
+>r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 94, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r4a5 = x >= e;
->r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 88, 3))
+>r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 95, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r4a6 = x >= f;
->r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 89, 3))
+>r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 96, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r4a7 = x >= g;
->r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 90, 3))
+>r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 97, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 98, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r4a7 = x >= h;
+>r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 97, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 98, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r4b1 = a >= x;
->r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 92, 3))
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 100, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b2 = b >= x;
->r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 93, 3))
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 101, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b3 = c >= x;
->r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 94, 3))
+>r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 102, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b4 = d >= x;
->r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 95, 3))
+>r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 103, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b5 = e >= x;
->r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 96, 3))
+>r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 104, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b6 = f >= x;
->r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 97, 3))
+>r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 105, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r4b7 = g >= x;
->r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 98, 3))
+>r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 106, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 107, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r4b7 = h >= x;
+>r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 106, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 107, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator ==
 var r5a1 = x == a;
->r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 101, 3))
+>r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 110, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r5a2 = x == b;
->r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 102, 3))
+>r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 111, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r5a3 = x == c;
->r5a3 : Symbol(r5a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 103, 3))
+>r5a3 : Symbol(r5a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 112, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r5a4 = x == d;
->r5a4 : Symbol(r5a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 104, 3))
+>r5a4 : Symbol(r5a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 113, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r5a5 = x == e;
->r5a5 : Symbol(r5a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 105, 3))
+>r5a5 : Symbol(r5a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 114, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r5a6 = x == f;
->r5a6 : Symbol(r5a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 106, 3))
+>r5a6 : Symbol(r5a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 115, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r5a7 = x == g;
->r5a7 : Symbol(r5a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 107, 3))
+>r5a7 : Symbol(r5a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 116, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 117, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r5a7 = x == h;
+>r5a7 : Symbol(r5a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 116, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 117, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r5b1 = a == x;
->r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 109, 3))
+>r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 119, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b2 = b == x;
->r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 110, 3))
+>r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 120, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b3 = c == x;
->r5b3 : Symbol(r5b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 111, 3))
+>r5b3 : Symbol(r5b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 121, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b4 = d == x;
->r5b4 : Symbol(r5b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 112, 3))
+>r5b4 : Symbol(r5b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 122, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b5 = e == x;
->r5b5 : Symbol(r5b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 113, 3))
+>r5b5 : Symbol(r5b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 123, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b6 = f == x;
->r5b6 : Symbol(r5b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 114, 3))
+>r5b6 : Symbol(r5b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 124, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r5b7 = g == x;
->r5b7 : Symbol(r5b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 115, 3))
+>r5b7 : Symbol(r5b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 125, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 126, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r5b7 = h == x;
+>r5b7 : Symbol(r5b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 125, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 126, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator !=
 var r6a1 = x != a;
->r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 118, 3))
+>r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 129, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r6a2 = x != b;
->r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 119, 3))
+>r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 130, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r6a3 = x != c;
->r6a3 : Symbol(r6a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 120, 3))
+>r6a3 : Symbol(r6a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 131, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r6a4 = x != d;
->r6a4 : Symbol(r6a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 121, 3))
+>r6a4 : Symbol(r6a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 132, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r6a5 = x != e;
->r6a5 : Symbol(r6a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 122, 3))
+>r6a5 : Symbol(r6a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 133, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r6a6 = x != f;
->r6a6 : Symbol(r6a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 123, 3))
+>r6a6 : Symbol(r6a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 134, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r6a7 = x != g;
->r6a7 : Symbol(r6a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 124, 3))
+>r6a7 : Symbol(r6a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 135, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 136, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r6a7 = x != h;
+>r6a7 : Symbol(r6a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 135, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 136, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r6b1 = a != x;
->r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 126, 3))
+>r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 138, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b2 = b != x;
->r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 127, 3))
+>r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 139, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b3 = c != x;
->r6b3 : Symbol(r6b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 128, 3))
+>r6b3 : Symbol(r6b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 140, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b4 = d != x;
->r6b4 : Symbol(r6b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 129, 3))
+>r6b4 : Symbol(r6b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 141, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b5 = e != x;
->r6b5 : Symbol(r6b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 130, 3))
+>r6b5 : Symbol(r6b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 142, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b6 = f != x;
->r6b6 : Symbol(r6b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 131, 3))
+>r6b6 : Symbol(r6b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 143, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r6b7 = g != x;
->r6b7 : Symbol(r6b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 132, 3))
+>r6b7 : Symbol(r6b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 144, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 145, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r6b7 = h != x;
+>r6b7 : Symbol(r6b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 144, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 145, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator ===
 var r7a1 = x === a;
->r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 135, 3))
+>r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 148, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r7a2 = x === b;
->r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 136, 3))
+>r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 149, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r7a3 = x === c;
->r7a3 : Symbol(r7a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 137, 3))
+>r7a3 : Symbol(r7a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 150, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r7a4 = x === d;
->r7a4 : Symbol(r7a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 138, 3))
+>r7a4 : Symbol(r7a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 151, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r7a5 = x === e;
->r7a5 : Symbol(r7a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 139, 3))
+>r7a5 : Symbol(r7a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 152, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r7a6 = x === f;
->r7a6 : Symbol(r7a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 140, 3))
+>r7a6 : Symbol(r7a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 153, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r7a7 = x === g;
->r7a7 : Symbol(r7a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 141, 3))
+>r7a7 : Symbol(r7a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 154, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 155, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r7a7 = x === h;
+>r7a7 : Symbol(r7a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 154, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 155, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r7b1 = a === x;
->r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 143, 3))
+>r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 157, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b2 = b === x;
->r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 144, 3))
+>r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 158, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b3 = c === x;
->r7b3 : Symbol(r7b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 145, 3))
+>r7b3 : Symbol(r7b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 159, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b4 = d === x;
->r7b4 : Symbol(r7b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 146, 3))
+>r7b4 : Symbol(r7b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 160, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b5 = e === x;
->r7b5 : Symbol(r7b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 147, 3))
+>r7b5 : Symbol(r7b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 161, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b6 = f === x;
->r7b6 : Symbol(r7b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 148, 3))
+>r7b6 : Symbol(r7b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 162, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r7b7 = g === x;
->r7b7 : Symbol(r7b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 149, 3))
+>r7b7 : Symbol(r7b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 163, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 164, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r7b7 = h === x;
+>r7b7 : Symbol(r7b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 163, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 164, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 // operator !==
 var r8a1 = x !== a;
->r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 152, 3))
+>r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 167, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 
 var r8a2 = x !== b;
->r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 153, 3))
+>r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 168, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 
 var r8a3 = x !== c;
->r8a3 : Symbol(r8a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 154, 3))
+>r8a3 : Symbol(r8a3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 169, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 
 var r8a4 = x !== d;
->r8a4 : Symbol(r8a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 155, 3))
+>r8a4 : Symbol(r8a4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 170, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 
 var r8a5 = x !== e;
->r8a5 : Symbol(r8a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 156, 3))
+>r8a5 : Symbol(r8a5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 171, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 
 var r8a6 = x !== f;
->r8a6 : Symbol(r8a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 157, 3))
+>r8a6 : Symbol(r8a6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 172, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 
 var r8a7 = x !== g;
->r8a7 : Symbol(r8a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 158, 3))
+>r8a7 : Symbol(r8a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 173, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 174, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
 
+var r8a7 = x !== h;
+>r8a7 : Symbol(r8a7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 173, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 174, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
+
 var r8b1 = a !== x;
->r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 160, 3))
+>r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 176, 3))
 >a : Symbol(a, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 24, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b2 = b !== x;
->r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 161, 3))
+>r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 177, 3))
 >b : Symbol(b, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 25, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b3 = c !== x;
->r8b3 : Symbol(r8b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 162, 3))
+>r8b3 : Symbol(r8b3, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 178, 3))
 >c : Symbol(c, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 26, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b4 = d !== x;
->r8b4 : Symbol(r8b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 163, 3))
+>r8b4 : Symbol(r8b4, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 179, 3))
 >d : Symbol(d, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 27, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b5 = e !== x;
->r8b5 : Symbol(r8b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 164, 3))
+>r8b5 : Symbol(r8b5, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 180, 3))
 >e : Symbol(e, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 28, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b6 = f !== x;
->r8b6 : Symbol(r8b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 165, 3))
+>r8b6 : Symbol(r8b6, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 181, 3))
 >f : Symbol(f, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 29, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 
 var r8b7 = g !== x;
->r8b7 : Symbol(r8b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 166, 3))
+>r8b7 : Symbol(r8b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 182, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 183, 3))
 >g : Symbol(g, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 30, 3))
+>x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
+
+var r8b7 = h !== x;
+>r8b7 : Symbol(r8b7, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 182, 3), Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 183, 3))
+>h : Symbol(h, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 31, 3))
 >x : Symbol(x, Decl(comparisonOperatorWithOneOperandIsUndefined.ts, 0, 3))
 

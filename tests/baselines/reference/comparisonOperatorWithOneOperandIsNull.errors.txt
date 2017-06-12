@@ -6,65 +6,73 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(14,18): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(15,18): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(16,18): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(32,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(33,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(34,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(35,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(36,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(37,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(38,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(40,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(41,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(39,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(40,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(42,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(43,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(44,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(45,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(46,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(49,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(50,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(51,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(47,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(48,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(49,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(52,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(53,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(54,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(55,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(57,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(58,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(59,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(60,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(56,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(57,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(58,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(59,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(61,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(62,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(63,16): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(66,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(67,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(68,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(69,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(70,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(64,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(65,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(66,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(67,16): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(68,16): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(71,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(72,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(74,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(75,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(76,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(77,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(78,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(79,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(73,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(74,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(75,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(76,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(77,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(78,12): error TS2531: Object is possibly 'null'.
 tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(80,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(83,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(84,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(85,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(86,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(87,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(88,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(89,12): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(91,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(92,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(93,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(94,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(95,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(96,17): error TS2531: Object is possibly 'null'.
-tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(97,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(81,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(82,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(83,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(84,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(85,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(86,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(87,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(90,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(91,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(92,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(93,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(94,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(95,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(96,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(97,12): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(99,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(100,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(101,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(102,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(103,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(104,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(105,17): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts(106,17): error TS2531: Object is possibly 'null'.
 
 
-==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts (64 errors) ====
+==== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithOneOperandIsNull.ts (72 errors) ====
     enum E { a, b, c }
     
     function foo<T>(t: T) {
@@ -110,6 +118,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var e: E;
     var f: {};
     var g: string[];
+    var h: Date;
     
     // operator <
     var r1a1 = null < a;
@@ -133,6 +142,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r1a7 = null < g;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+    var r1a7 = null < h;
+               ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     var r1b1 = a < null;
                    ~~~~
@@ -153,6 +165,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r1b7 = g < null;
+                   ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r1b7 = h < null;
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     
@@ -178,6 +193,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r2a7 = null > g;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+    var r2a7 = null > h;
+               ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     var r2b1 = a > null;
                    ~~~~
@@ -198,6 +216,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r2b7 = g > null;
+                   ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r2b7 = h > null;
                    ~~~~
 !!! error TS2531: Object is possibly 'null'.
     
@@ -223,6 +244,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r3a7 = null <= g;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+    var r3a7 = null <= h;
+               ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     var r3b1 = a <= null;
                     ~~~~
@@ -243,6 +267,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     var r3b7 = g <= null;
+                    ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    var r3b7 = h <= null;
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
     
@@ -268,6 +295,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r4a7 = null >= g;
                ~~~~
 !!! error TS2531: Object is possibly 'null'.
+    var r4a7 = null >= h;
+               ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     var r4b1 = a >= null;
                     ~~~~
@@ -290,6 +320,9 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r4b7 = g >= null;
                     ~~~~
 !!! error TS2531: Object is possibly 'null'.
+    var r4b7 = h >= null;
+                    ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     // operator ==
     var r5a1 = null == a;
@@ -299,6 +332,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r5a5 = null == e;
     var r5a6 = null == f;
     var r5a7 = null == g;
+    var r5a7 = null == h;
     
     var r5b1 = a == null;
     var r5b2 = b == null;
@@ -307,6 +341,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r5b5 = e == null;
     var r5b6 = f == null;
     var r5b7 = g == null;
+    var r5b7 = h == null;
     
     // operator !=
     var r6a1 = null != a;
@@ -316,6 +351,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r6a5 = null != e;
     var r6a6 = null != f;
     var r6a7 = null != g;
+    var r6a7 = null != h;
     
     var r6b1 = a != null;
     var r6b2 = b != null;
@@ -324,6 +360,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r6b5 = e != null;
     var r6b6 = f != null;
     var r6b7 = g != null;
+    var r6b7 = h != null;
     
     // operator ===
     var r7a1 = null === a;
@@ -333,6 +370,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r7a5 = null === e;
     var r7a6 = null === f;
     var r7a7 = null === g;
+    var r7a7 = null === h;
     
     var r7b1 = a === null;
     var r7b2 = b === null;
@@ -341,6 +379,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r7b5 = e === null;
     var r7b6 = f === null;
     var r7b7 = g === null;
+    var r7b7 = h === null;
     
     // operator !==
     var r8a1 = null !== a;
@@ -350,6 +389,7 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r8a5 = null !== e;
     var r8a6 = null !== f;
     var r8a7 = null !== g;
+    var r8a7 = null !== h;
     
     var r8b1 = a !== null;
     var r8b2 = b !== null;
@@ -358,3 +398,4 @@ tests/cases/conformance/expressions/binaryOperators/comparisonOperator/compariso
     var r8b5 = e !== null;
     var r8b6 = f !== null;
     var r8b7 = g !== null;
+    var r8b7 = h !== null;

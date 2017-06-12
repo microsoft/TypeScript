@@ -134,6 +134,10 @@ var f: {};
 var g: string[];
 >g : string[]
 
+var h: Date;
+>h : Date
+>Date : Date
+
 // operator <
 var r1a1 = x < a;
 >r1a1 : boolean
@@ -177,6 +181,12 @@ var r1a7 = x < g;
 >x : any
 >g : string[]
 
+var r1a7 = x < h;
+>r1a7 : boolean
+>x < h : boolean
+>x : any
+>h : Date
+
 var r1b1 = a < x;
 >r1b1 : boolean
 >a < x : boolean
@@ -217,6 +227,12 @@ var r1b7 = g < x;
 >r1b7 : boolean
 >g < x : boolean
 >g : string[]
+>x : any
+
+var r1b7 = h < x;
+>r1b7 : boolean
+>h < x : boolean
+>h : Date
 >x : any
 
 // operator >
@@ -262,6 +278,12 @@ var r2a7 = x > g;
 >x : any
 >g : string[]
 
+var r2a7 = x > h;
+>r2a7 : boolean
+>x > h : boolean
+>x : any
+>h : Date
+
 var r2b1 = a > x;
 >r2b1 : boolean
 >a > x : boolean
@@ -302,6 +324,12 @@ var r2b7 = g > x;
 >r2b7 : boolean
 >g > x : boolean
 >g : string[]
+>x : any
+
+var r2b7 = h > x;
+>r2b7 : boolean
+>h > x : boolean
+>h : Date
 >x : any
 
 // operator <=
@@ -347,6 +375,12 @@ var r3a7 = x <= g;
 >x : any
 >g : string[]
 
+var r3a7 = x <= h;
+>r3a7 : boolean
+>x <= h : boolean
+>x : any
+>h : Date
+
 var r3b1 = a <= x;
 >r3b1 : boolean
 >a <= x : boolean
@@ -387,6 +421,12 @@ var r3b7 = g <= x;
 >r3b7 : boolean
 >g <= x : boolean
 >g : string[]
+>x : any
+
+var r3b7 = h <= x;
+>r3b7 : boolean
+>h <= x : boolean
+>h : Date
 >x : any
 
 // operator >=
@@ -432,6 +472,12 @@ var r4a7 = x >= g;
 >x : any
 >g : string[]
 
+var r4a7 = x >= h;
+>r4a7 : boolean
+>x >= h : boolean
+>x : any
+>h : Date
+
 var r4b1 = a >= x;
 >r4b1 : boolean
 >a >= x : boolean
@@ -472,6 +518,12 @@ var r4b7 = g >= x;
 >r4b7 : boolean
 >g >= x : boolean
 >g : string[]
+>x : any
+
+var r4b7 = h >= x;
+>r4b7 : boolean
+>h >= x : boolean
+>h : Date
 >x : any
 
 // operator ==
@@ -517,6 +569,12 @@ var r5a7 = x == g;
 >x : any
 >g : string[]
 
+var r5a7 = x == h;
+>r5a7 : boolean
+>x == h : boolean
+>x : any
+>h : Date
+
 var r5b1 = a == x;
 >r5b1 : boolean
 >a == x : boolean
@@ -557,6 +615,12 @@ var r5b7 = g == x;
 >r5b7 : boolean
 >g == x : boolean
 >g : string[]
+>x : any
+
+var r5b7 = h == x;
+>r5b7 : boolean
+>h == x : boolean
+>h : Date
 >x : any
 
 // operator !=
@@ -602,6 +666,12 @@ var r6a7 = x != g;
 >x : any
 >g : string[]
 
+var r6a7 = x != h;
+>r6a7 : boolean
+>x != h : boolean
+>x : any
+>h : Date
+
 var r6b1 = a != x;
 >r6b1 : boolean
 >a != x : boolean
@@ -642,6 +712,12 @@ var r6b7 = g != x;
 >r6b7 : boolean
 >g != x : boolean
 >g : string[]
+>x : any
+
+var r6b7 = h != x;
+>r6b7 : boolean
+>h != x : boolean
+>h : Date
 >x : any
 
 // operator ===
@@ -687,6 +763,12 @@ var r7a7 = x === g;
 >x : any
 >g : string[]
 
+var r7a7 = x === h;
+>r7a7 : boolean
+>x === h : boolean
+>x : any
+>h : Date
+
 var r7b1 = a === x;
 >r7b1 : boolean
 >a === x : boolean
@@ -727,6 +809,12 @@ var r7b7 = g === x;
 >r7b7 : boolean
 >g === x : boolean
 >g : string[]
+>x : any
+
+var r7b7 = h === x;
+>r7b7 : boolean
+>h === x : boolean
+>h : Date
 >x : any
 
 // operator !==
@@ -772,6 +860,12 @@ var r8a7 = x !== g;
 >x : any
 >g : string[]
 
+var r8a7 = x !== h;
+>r8a7 : boolean
+>x !== h : boolean
+>x : any
+>h : Date
+
 var r8b1 = a !== x;
 >r8b1 : boolean
 >a !== x : boolean
@@ -812,5 +906,11 @@ var r8b7 = g !== x;
 >r8b7 : boolean
 >g !== x : boolean
 >g : string[]
+>x : any
+
+var r8b7 = h !== x;
+>r8b7 : boolean
+>h !== x : boolean
+>h : Date
 >x : any
 
