@@ -1117,25 +1117,6 @@ namespace ts.formatting {
         }
     }
 
-    export function getRangeOfEnclosingComment(sourceFile: SourceFile, position: number, onlyMultiLine: boolean): CommentRange | undefined {
-        const precedingToken = findPrecedingToken(position, sourceFile);
-        const trailingRangesOfPreviousToken = precedingToken && getTrailingCommentRanges(sourceFile.text, precedingToken.end);
-        const leadingCommentRangesOfNextToken = getLeadingCommentRangesOfNode(getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false), sourceFile);
-        const commentRanges = trailingRangesOfPreviousToken && leadingCommentRangesOfNextToken ?
-            trailingRangesOfPreviousToken.concat(leadingCommentRangesOfNextToken) :
-            trailingRangesOfPreviousToken || leadingCommentRangesOfNextToken;
-        if (commentRanges) {
-            for (const range of commentRanges) {
-                // We need to extend the range when in an unclosed multi-line comment.
-                if (range.pos < position && position < range.end ||
-                    position === range.end && (range.kind === SyntaxKind.SingleLineCommentTrivia || position === sourceFile.getFullWidth())) {
-                    return onlyMultiLine && range.kind !== SyntaxKind.MultiLineCommentTrivia ? undefined : range;
-                }
-            }
-        }
-        return undefined;
-    }
-
     function getOpenTokenForList(node: Node, list: Node[]) {
         switch (node.kind) {
             case SyntaxKind.Constructor:
