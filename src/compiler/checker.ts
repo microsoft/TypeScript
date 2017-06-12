@@ -9509,7 +9509,8 @@ namespace ts {
                     // in the context of the target signature before checking the relationship. Ideally we'd do
                     // this regardless of the number of signatures, but the potential costs are prohibitive due
                     // to the quadratic nature of the logic below.
-                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], /*erase*/ relation === comparableRelation, reportErrors);
+                    const eraseGenerics = relation === comparableRelation || compilerOptions.noStrictGenericChecks;
+                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
                 }
                 else {
                     outer: for (const t of targetSignatures) {
