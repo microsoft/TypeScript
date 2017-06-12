@@ -1448,7 +1448,7 @@ namespace ts {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         if (isJSDocTypedefTag(node)) {
             return [node.parent];
         }
@@ -2740,6 +2740,20 @@ namespace ts {
         }
         if (node.flags & NodeFlags.JavaScriptFile) {
             return getJSDocReturnType(node);
+        }
+    }
+
+    /**
+     * Gets the effective type parameters. If the node was parsed in a
+     * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     */
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
+        if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            const templateTag = getJSDocTemplateTag(node);
+            return templateTag && templateTag.typeParameters;
         }
     }
 
