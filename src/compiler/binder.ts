@@ -612,7 +612,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    bindForInOrForOfStatement(<ForInOrOfStatement>node);
                     break;
                 case SyntaxKind.IfStatement:
                     bindIfStatement(<IfStatement>node);
@@ -950,7 +950,7 @@ namespace ts {
             currentFlow = finishFlowLabel(postLoopLabel);
         }
 
-        function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
+        function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
@@ -1328,7 +1328,7 @@ namespace ts {
 
         function bindVariableDeclarationFlow(node: VariableDeclaration) {
             bindEachChild(node);
-            if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+            if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
             }
         }
