@@ -5973,7 +5973,7 @@ namespace ts {
                     typeParameter.default = targetDefault ? instantiateType(targetDefault, typeParameter.mapper) : noConstraintType;
                 }
                 else {
-                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameter(decl) && decl.default);
+                    const defaultDeclaration = typeParameter.symbol && forEach(typeParameter.symbol.declarations, decl => isTypeParameterDeclaration(decl) && decl.default);
                     typeParameter.default = defaultDeclaration ? getTypeFromTypeNode(defaultDeclaration) : noConstraintType;
                 }
             }
