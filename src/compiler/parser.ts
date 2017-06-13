@@ -6698,9 +6698,6 @@ namespace ts {
                     }
                     else {
                         preName = name;
-                    }
-
-                    if (!typeExpression) {
                         typeExpression = tryParseTypeExpression();
                     }
 
