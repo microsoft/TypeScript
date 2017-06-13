@@ -3233,9 +3233,15 @@ namespace ts {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
                     else if (type.flags & TypeFlags.Index) {
+                        if (flags & TypeFormatFlags.InElementType) {
+                            writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        }
                         writer.writeKeyword("keyof");
                         writeSpace(writer);
                         writeType((<IndexType>type).type, TypeFormatFlags.InElementType);
+                        if (flags & TypeFormatFlags.InElementType) {
+                            writePunctuation(writer, SyntaxKind.CloseParenToken);
+                        }
                     }
                     else if (type.flags & TypeFlags.IndexedAccess) {
                         writeType((<IndexedAccessType>type).objectType, TypeFormatFlags.InElementType);
