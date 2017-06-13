@@ -16,9 +16,7 @@ matrix:
 branches:
   only:
   - master
-  - release-2.1
-  - release-2.2
-  - release-2.3
+  - release-2.4
 
 install:
   - npm uninstall typescript --no-save
