@@ -685,7 +685,7 @@ namespace ts {
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
+            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode() as EndOfFileToken);
 
             setExternalModuleIndicator(sourceFile);
 
