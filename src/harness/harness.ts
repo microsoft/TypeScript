@@ -1832,7 +1832,7 @@ namespace Harness {
             let tsConfig: ts.ParsedCommandLine;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
-                if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
+                if (getConfigNameFromFileName(data.name)) {
                     const configJson = ts.parseConfigFileTextToJson(data.name, data.content);
                     assert.isTrue(configJson.config !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
@@ -1983,6 +1983,11 @@ namespace Harness {
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
+    export function getConfigNameFromFileName(filename: string): "tsconfig.json" | "jsconfig.json" | undefined {
+        const flc = ts.getBaseFileName(filename).toLowerCase();
+        return ts.find(["tsconfig.json" as "tsconfig.json", "jsconfig.json" as "jsconfig.json"], x => x === flc);
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;
