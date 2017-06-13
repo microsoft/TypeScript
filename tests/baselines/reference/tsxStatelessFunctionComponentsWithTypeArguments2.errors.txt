@@ -8,13 +8,15 @@ tests/cases/conformance/jsx/file.tsx(20,19): error TS2322: Type '{ func: (a: num
   Type '{ func: (a: number, b: string) => void; }' is not assignable to type '{ func: (arg: number) => void; }'.
     Types of property 'func' are incompatible.
       Type '(a: number, b: string) => void' is not assignable to type '(arg: number) => void'.
-tests/cases/conformance/jsx/file.tsx(31,9): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-  Property 'render' is missing in type 'Element'.
-tests/cases/conformance/jsx/file.tsx(31,10): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+tests/cases/conformance/jsx/file.tsx(31,30): error TS2322: Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
+  Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
+    Types of property 'selectHandler' are incompatible.
+      Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
+        Types of parameters 'val' and 'selectedVal' are incompatible.
+          Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
     import React = require('react')
     
     declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
@@ -59,10 +61,11 @@ tests/cases/conformance/jsx/file.tsx(31,10): error TS2453: The type argument for
     
     // Error
     let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-!!! error TS2605:   Property 'render' is missing in type 'Element'.
-             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'IntrinsicAttributes & InferParamProp<number>'.
+!!! error TS2322:   Type '{ values: number[]; selectHandler: (val: string) => void; }' is not assignable to type 'InferParamProp<number>'.
+!!! error TS2322:     Types of property 'selectHandler' are incompatible.
+!!! error TS2322:       Type '(val: string) => void' is not assignable to type '(selectedVal: number) => void'.
+!!! error TS2322:         Types of parameters 'val' and 'selectedVal' are incompatible.
+!!! error TS2322:           Type 'number' is not assignable to type 'string'.
     
