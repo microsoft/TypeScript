@@ -90,7 +90,7 @@ class CompilerBaselineRunner extends RunnerBase {
                 }
 
                 lastUnit = units[units.length - 1];
-                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ".d.ts"));
+                hasNonDtsFiles = ts.forEach(units, unit => !ts.fileExtensionIs(unit.name, ts.Extension.Dts));
                 // We need to assemble the list of input files for the compiler and other related files on the 'filesystem' (ie in a multi-file test)
                 // If the last file in a test uses require or a triple slash reference we'll assume all other files will be brought in via references,
                 // otherwise, assume all files are just meant to be in the same compilation session without explicit references to one another.

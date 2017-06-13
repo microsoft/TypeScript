@@ -453,9 +453,9 @@ function pluck<T, K extends keyof T>(array: T[], key: K) {
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 131, 17))
 
     return array.map(x => x[key]);
->array.map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>array.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >array : Symbol(array, Decl(keyofAndIndexedAccess.ts, 131, 37))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.d.ts, --, --))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
 >x : Symbol(x, Decl(keyofAndIndexedAccess.ts, 132, 21))
 >key : Symbol(key, Decl(keyofAndIndexedAccess.ts, 131, 48))

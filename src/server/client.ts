@@ -719,20 +719,49 @@ namespace ts.server {
             return response.body;
         }
 
-        getRefactorCodeActions(
+        getEditsForRefactor(
             fileName: string,
             _formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorName: string) {
+            refactorName: string,
+            actionName: string): RefactorEditInfo {
 
-            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetRefactorCodeActionsRequestArgs;
-            args.refactorName = refactorName;
+            const args = this.createFileLocationOrRangeRequestArgs(positionOrRange, fileName) as protocol.GetEditsForRefactorRequestArgs;
+            args.refactor = refactorName;
+            args.action = actionName;
 
-            const request = this.processRequest<protocol.GetRefactorCodeActionsRequest>(CommandNames.GetRefactorCodeActions, args);
-            const response = this.processResponse<protocol.GetRefactorCodeActionsResponse>(request);
-            const codeActions = response.body.actions;
+            const request = this.processRequest<protocol.GetEditsForRefactorRequest>(CommandNames.GetEditsForRefactor, args);
+            const response = this.processResponse<protocol.GetEditsForRefactorResponse>(request);
 
-            return map(codeActions, codeAction => this.convertCodeActions(codeAction, fileName));
+            if (!response.body) {
+                return {
+                    edits: []
+                };
+            }
+
+            const edits: FileTextChanges[] = this.convertCodeEditsToTextChanges(response.body.edits);
+
+            const renameFilename: string | undefined = response.body.renameFilename;
+            let renameLocation: number | undefined = undefined;
+            if (renameFilename !== undefined) {
+                renameLocation = this.lineOffsetToPosition(renameFilename, response.body.renameLocation);
+            }
+
+            return {
+                edits,
+                renameFilename,
+                renameLocation
+            };
+        }
+
+        private convertCodeEditsToTextChanges(edits: ts.server.protocol.FileCodeEdits[]): FileTextChanges[] {
+            return edits.map(edit => {
+                const fileName = edit.fileName;
+                return {
+                    fileName,
+                    textChanges: edit.textChanges.map(t => this.convertTextChangeToCodeEdit(t, fileName))
+                };
+            });
         }
 
         convertCodeActions(entry: protocol.CodeAction, fileName: string): CodeAction {

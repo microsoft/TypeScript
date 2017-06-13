@@ -374,6 +374,7 @@ namespace ts {
         JSDocComment,
         JSDocTag,
         JSDocAugmentsTag,
+        JSDocClassTag,
         JSDocParameterTag,
         JSDocReturnTag,
         JSDocTypeTag,
@@ -395,6 +396,7 @@ namespace ts {
 
         // Enum value count
         Count,
+
         // Markers
         FirstAssignment = EqualsToken,
         LastAssignment = CaretEqualsToken,
@@ -423,7 +425,7 @@ namespace ts {
         FirstNode = QualifiedName,
         FirstJSDocNode = JSDocTypeExpression,
         LastJSDocNode = JSDocLiteralType,
-        FirstJSDocTagNode = JSDocComment,
+        FirstJSDocTagNode = JSDocTag,
         LastJSDocTagNode = JSDocLiteralType
     }
 
@@ -448,6 +450,17 @@ namespace ts {
         JavaScriptFile =     1 << 16, // If node was parsed in a JavaScript
         ThisNodeOrAnySubNodesHasError = 1 << 17, // If this node or any of its children had an error
         HasAggregatedChildData = 1 << 18, // If we've computed data from children and cached it in this node
+
+        // This flag will be set when the parser encounters a dynamic import expression so that module resolution
+        // will not have to walk the tree if the flag is not set. However, this flag is just a approximation because
+        // once it is set, the flag never gets cleared (hence why it's named "PossiblyContainsDynamicImport").
+        // During editing, if dynamic import is removed, incremental parsing will *NOT* update this flag. This means that the tree will always be traversed
+        // during module resolution. However, the removal operation should not occur often and in the case of the
+        // removal, it is likely that users will add the import anyway.
+        // The advantage of this approach is its simplicity. For the case of batch compilation,
+        // we guarantee that users won't have to pay the price of walking the tree if a dynamic import isn't used.
+        /* @internal */
+        PossiblyContainsDynamicImport = 1 << 19,
 
         BlockScoped = Let | Const,
 
@@ -1001,8 +1014,10 @@ namespace ts {
         _unaryExpressionBrand: any;
     }
 
-    export interface IncrementExpression extends UnaryExpression {
-        _incrementExpressionBrand: any;
+    /** Deprecated, please use UpdateExpression */
+    export type IncrementExpression = UpdateExpression;
+    export interface UpdateExpression extends UnaryExpression {
+        _updateExpressionBrand: any;
     }
 
     // see: https://tc39.github.io/ecma262/#prod-UpdateExpression
@@ -1013,10 +1028,9 @@ namespace ts {
         | SyntaxKind.PlusToken
         | SyntaxKind.MinusToken
         | SyntaxKind.TildeToken
-        | SyntaxKind.ExclamationToken
-        ;
+        | SyntaxKind.ExclamationToken;
 
-    export interface PrefixUnaryExpression extends IncrementExpression {
+    export interface PrefixUnaryExpression extends UpdateExpression {
         kind: SyntaxKind.PrefixUnaryExpression;
         operator: PrefixUnaryOperator;
         operand: UnaryExpression;
@@ -1028,13 +1042,13 @@ namespace ts {
         | SyntaxKind.MinusMinusToken
         ;
 
-    export interface PostfixUnaryExpression extends IncrementExpression {
+    export interface PostfixUnaryExpression extends UpdateExpression {
         kind: SyntaxKind.PostfixUnaryExpression;
         operand: LeftHandSideExpression;
         operator: PostfixUnaryOperator;
     }
 
-    export interface LeftHandSideExpression extends IncrementExpression {
+    export interface LeftHandSideExpression extends UpdateExpression {
         _leftHandSideExpressionBrand: any;
     }
 
@@ -1060,6 +1074,10 @@ namespace ts {
 
     export interface SuperExpression extends PrimaryExpression {
         kind: SyntaxKind.SuperKeyword;
+    }
+
+    export interface ImportExpression extends PrimaryExpression {
+        kind: SyntaxKind.ImportKeyword;
     }
 
     export interface DeleteExpression extends UnaryExpression {
@@ -1454,10 +1472,7 @@ namespace ts {
     }
 
     // see: https://tc39.github.io/ecma262/#prod-SuperProperty
-    export type SuperProperty
-        = SuperPropertyAccessExpression
-        | SuperElementAccessExpression
-        ;
+    export type SuperProperty = SuperPropertyAccessExpression | SuperElementAccessExpression;
 
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
@@ -1469,6 +1484,10 @@ namespace ts {
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
+    }
+
+    export interface ImportCall extends CallExpression {
+        expression: ImportExpression;
     }
 
     export interface ExpressionWithTypeArguments extends TypeNode {
@@ -1689,6 +1708,8 @@ namespace ts {
         incrementor?: Expression;
     }
 
+    export type ForInOrOfStatement = ForInStatement | ForOfStatement;
+
     export interface ForInStatement extends IterationStatement {
         kind: SyntaxKind.ForInStatement;
         initializer: ForInitializer;
@@ -1778,7 +1799,7 @@ namespace ts {
         block: Block;
     }
 
-    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
+    export type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
 
     export interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
@@ -2115,6 +2136,10 @@ namespace ts {
     export interface JSDocAugmentsTag extends JSDocTag {
         kind: SyntaxKind.JSDocAugmentsTag;
         typeExpression: JSDocTypeExpression;
+    }
+
+    export interface JSDocClassTag extends JSDocTag {
+        kind: SyntaxKind.JSDocClassTag;
     }
 
     export interface JSDocTemplateTag extends JSDocTag {
@@ -2535,7 +2560,6 @@ namespace ts {
         getNonNullableType(type: Type): Type;
 
         /** Note that the resulting nodes cannot be checked. */
-
         typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): TypeNode;
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration;
@@ -2605,6 +2629,9 @@ namespace ts {
          * Does not include properties of primitive types.
          */
         /* @internal */ getAllPossiblePropertiesOfType(type: Type): Symbol[];
+
+        /* @internal */ getJsxNamespace(): string;
+        /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
     }
 
     export enum NodeBuilderFlags {
@@ -3497,6 +3524,7 @@ namespace ts {
         noImplicitAny?: boolean;  // Always combine with strict property
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;  // Always combine with strict property
+        noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
@@ -3564,6 +3592,7 @@ namespace ts {
         UMD = 3,
         System = 4,
         ES2015 = 5,
+        ESNext = 6
     }
 
     export const enum JsxEmit {
@@ -3855,13 +3884,12 @@ namespace ts {
         extension: Extension;
     }
 
-    export enum Extension {
-        Ts,
-        Tsx,
-        Dts,
-        Js,
-        Jsx,
-        LastTypeScriptExtension = Dts
+    export const enum Extension {
+        Ts = ".ts",
+        Tsx = ".tsx",
+        Dts = ".d.ts",
+        Js = ".js",
+        Jsx = ".jsx"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -3948,6 +3976,11 @@ namespace ts {
         ContainsYield = 1 << 24,
         ContainsHoistedDeclarationOrCompletion = 1 << 25,
 
+        ContainsDynamicImport = 1 << 26,
+
+        // Please leave this as 1 << 29.
+        // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
+        // It is a good reminder of how much room we have left
         HasComputedFlags = 1 << 29, // Transform flags have been computed.
 
         // Assertions
@@ -3985,18 +4018,29 @@ namespace ts {
         ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
+    export interface SourceMapRange extends TextRange {
+        source?: SourceMapSource;
+    }
+
+    export interface SourceMapSource {
+        fileName: string;
+        text: string;
+        /* @internal */ lineMap: number[];
+        skipTrivia?: (pos: number) => number;
+    }
+
     /* @internal */
     export interface EmitNode {
-        annotatedNodes?: Node[];                // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags?: EmitFlags;                      // Flags that customize emit
-        leadingComments?: SynthesizedComment[]; // Synthesized leading comments
+        annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
+        flags?: EmitFlags;                       // Flags that customize emit
+        leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
-        commentRange?: TextRange;               // The text range to use when emitting leading or trailing comments
-        sourceMapRange?: TextRange;             // The text range to use when emitting leading or trailing source mappings
-        tokenSourceMapRanges?: TextRange[];     // The text range to use when emitting source mappings for tokens
-        constantValue?: string | number;        // The constant value of an expression
-        externalHelpersModuleName?: Identifier; // The local name for an imported helpers module
-        helpers?: EmitHelper[];                 // Emit helpers for the node
+        commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
+        sourceMapRange?: SourceMapRange;         // The text range to use when emitting leading or trailing source mappings
+        tokenSourceMapRanges?: SourceMapRange[]; // The text range to use when emitting source mappings for tokens
+        constantValue?: string | number;         // The constant value of an expression
+        externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
+        helpers?: EmitHelper[];                  // Emit helpers for the node
     }
 
     export const enum EmitFlags {
@@ -4058,6 +4102,7 @@ namespace ts {
         AsyncGenerator = 1 << 12,   // __asyncGenerator (used by ES2017 async generator transformation)
         AsyncDelegator = 1 << 13,   // __asyncDelegator (used by ES2017 async generator yield* transformation)
         AsyncValues = 1 << 14,      // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 15,       // __exportStar (used by CommonJS/AMD/UMD module transformation)
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,
@@ -4075,7 +4120,7 @@ namespace ts {
         SpreadIncludes = Read | Spread,
 
         FirstEmitHelper = Extends,
-        LastEmitHelper = AsyncValues
+        LastEmitHelper = ExportStar
     }
 
     export const enum EmitHint {

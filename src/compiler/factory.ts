@@ -228,7 +228,7 @@ namespace ts {
 
     // Signature elements
 
-    export function createTypeParameterDeclaration(name: string | Identifier, constraint: TypeNode | undefined, defaultType: TypeNode | undefined) {
+    export function createTypeParameterDeclaration(name: string | Identifier, constraint?: TypeNode, defaultType?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeParameter) as TypeParameterDeclaration;
         node.name = asName(name);
         node.constraint = constraint;
@@ -2314,15 +2314,24 @@ namespace ts {
     /**
      * Sets a custom text range to use when emitting source maps.
      */
-    export function setSourceMapRange<T extends Node>(node: T, range: TextRange | undefined) {
+    export function setSourceMapRange<T extends Node>(node: T, range: SourceMapRange | undefined) {
         getOrCreateEmitNode(node).sourceMapRange = range;
         return node;
+    }
+
+    let SourceMapSource: new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
+
+    /**
+     * Create an external source map source file reference
+     */
+    export function createSourceMapSource(fileName: string, text: string, skipTrivia?: (pos: number) => number): SourceMapSource {
+        return new (SourceMapSource || (SourceMapSource = objectAllocator.getSourceMapSourceConstructor()))(fileName, text, skipTrivia);
     }
 
     /**
      * Gets the TextRange to use for source maps for a token of a node.
      */
-    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): TextRange | undefined {
+    export function getTokenSourceMapRange(node: Node, token: SyntaxKind): SourceMapRange | undefined {
         const emitNode = node.emitNode;
         const tokenSourceMapRanges = emitNode && emitNode.tokenSourceMapRanges;
         return tokenSourceMapRanges && tokenSourceMapRanges[token];
@@ -2331,7 +2340,7 @@ namespace ts {
     /**
      * Sets the TextRange to use for source maps for a token of a node.
      */
-    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: TextRange | undefined) {
+    export function setTokenSourceMapRange<T extends Node>(node: T, token: SyntaxKind, range: SourceMapRange | undefined) {
         const emitNode = getOrCreateEmitNode(node);
         const tokenSourceMapRanges = emitNode.tokenSourceMapRanges || (emitNode.tokenSourceMapRanges = []);
         tokenSourceMapRanges[token] = range;
@@ -2503,6 +2512,7 @@ namespace ts {
             helpers
         } = sourceEmitNode;
         if (!destEmitNode) destEmitNode = {};
+        // We are using `.slice()` here in case `destEmitNode.leadingComments` is pushed to later.
         if (leadingComments) destEmitNode.leadingComments = addRange(leadingComments.slice(), destEmitNode.leadingComments);
         if (trailingComments) destEmitNode.trailingComments = addRange(trailingComments.slice(), destEmitNode.trailingComments);
         if (flags) destEmitNode.flags = flags;
@@ -3840,22 +3850,33 @@ namespace ts {
         return emitNode && emitNode.externalHelpersModuleName;
     }
 
-    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions) {
-        if (compilerOptions.importHelpers && (isExternalModule(node) || compilerOptions.isolatedModules)) {
+    export function getOrCreateExternalHelpersModuleNameIfNeeded(node: SourceFile, compilerOptions: CompilerOptions, hasExportStarsToExportValues?: boolean) {
+        if (compilerOptions.importHelpers && isEffectiveExternalModule(node, compilerOptions)) {
             const externalHelpersModuleName = getExternalHelpersModuleName(node);
             if (externalHelpersModuleName) {
                 return externalHelpersModuleName;
             }
 
-            const helpers = getEmitHelpers(node);
-            if (helpers) {
-                for (const helper of helpers) {
-                    if (!helper.scoped) {
-                        const parseNode = getOriginalNode(node, isSourceFile);
-                        const emitNode = getOrCreateEmitNode(parseNode);
-                        return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
+            const moduleKind = getEmitModuleKind(compilerOptions);
+            let create = hasExportStarsToExportValues
+                && moduleKind !== ModuleKind.System
+                && moduleKind !== ModuleKind.ES2015;
+            if (!create) {
+                const helpers = getEmitHelpers(node);
+                if (helpers) {
+                    for (const helper of helpers) {
+                        if (!helper.scoped) {
+                            create = true;
+                            break;
+                        }
                     }
                 }
+            }
+
+            if (create) {
+                const parseNode = getOriginalNode(node, isSourceFile);
+                const emitNode = getOrCreateEmitNode(parseNode);
+                return emitNode.externalHelpersModuleName || (emitNode.externalHelpersModuleName = createUniqueName(externalHelpersModuleNameText));
             }
         }
     }
@@ -4239,17 +4260,6 @@ namespace ts {
         let exportEquals: ExportAssignment = undefined;
         let hasExportStarsToExportValues = false;
 
-        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions);
-        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
-            /*decorators*/ undefined,
-            /*modifiers*/ undefined,
-            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
-            createLiteral(externalHelpersModuleNameText));
-
-        if (externalHelpersImportDeclaration) {
-            externalImports.push(externalHelpersImportDeclaration);
-        }
-
         for (const node of sourceFile.statements) {
             switch (node.kind) {
                 case SyntaxKind.ImportDeclaration:
@@ -4358,6 +4368,17 @@ namespace ts {
                     }
                     break;
             }
+        }
+
+        const externalHelpersModuleName = getOrCreateExternalHelpersModuleNameIfNeeded(sourceFile, compilerOptions, hasExportStarsToExportValues);
+        const externalHelpersImportDeclaration = externalHelpersModuleName && createImportDeclaration(
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            createImportClause(/*name*/ undefined, createNamespaceImport(externalHelpersModuleName)),
+            createLiteral(externalHelpersModuleNameText));
+
+        if (externalHelpersImportDeclaration) {
+            externalImports.unshift(externalHelpersImportDeclaration);
         }
 
         return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };

@@ -351,8 +351,10 @@ namespace ts {
             );
         }
 
-        function awaitAsYield(expression: Expression) {
-            return createYield(/*asteriskToken*/ undefined, enclosingFunctionFlags & FunctionFlags.Generator ? createAwaitHelper(context, expression) : expression);
+        function createDownlevelAwait(expression: Expression) {
+            return enclosingFunctionFlags & FunctionFlags.Generator
+                ? createYield(/*asteriskToken*/ undefined, createAwaitHelper(context, expression))
+                : createAwait(expression);
         }
 
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
@@ -385,11 +387,11 @@ namespace ts {
                             EmitFlags.NoHoisting
                         ),
                         /*condition*/ createComma(
-                            createAssignment(result, awaitAsYield(callNext)),
+                            createAssignment(result, createDownlevelAwait(callNext)),
                             createLogicalNot(getDone)
                         ),
                         /*incrementor*/ undefined,
-                        /*statement*/ convertForOfStatementHead(node, awaitAsYield(getValue))
+                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
                     ),
                     /*location*/ node
                 ),
@@ -434,7 +436,7 @@ namespace ts {
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(awaitAsYield(callReturn))
+                                    createStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )

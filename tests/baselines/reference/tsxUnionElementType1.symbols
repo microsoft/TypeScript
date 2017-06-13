@@ -8,8 +8,8 @@ function SFC1(prop: { x: number }) {
 >x : Symbol(x, Decl(file.tsx, 2, 21))
 
     return <div>hello</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2399, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 };
 
@@ -19,8 +19,8 @@ function SFC2(prop: { x: boolean }) {
 >x : Symbol(x, Decl(file.tsx, 6, 21))
 
     return <h1>World </h1>;
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2409, 47))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2409, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
 }
 
 var SFCComp = SFC1 || SFC2;

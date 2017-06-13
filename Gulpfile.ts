@@ -39,25 +39,25 @@ Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
     boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
-    string: ["browser", "tests", "host", "reporter", "stackTraceLimit"],
+    string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         b: "browser",
-        d: "debug",
-        t: "tests",
-        test: "tests",
+        d: "debug", "debug-brk": "debug",
+        i: "inspect", "inspect-brk": "inspect",
+        t: "tests", test: "tests",
         r: "reporter",
-        color: "colors",
-        f: "files",
-        file: "files",
+        c: "colors", color: "colors",
+        f: "files", file: "files",
         w: "workers",
     },
     default: {
         soft: false,
         colors: process.env.colors || process.env.color || true,
-        debug: process.env.debug || process.env.d,
-        inspect: process.env.inspect,
+        debug: process.env.debug || process.env["debug-brk"] || process.env.d,
+        inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
+        timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
         reporter: process.env.reporter || process.env.r,
@@ -594,11 +594,11 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-let testTimeout = 40000;
 function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
     const lintFlag = cmdLineOptions["lint"];
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
+        let testTimeout = cmdLineOptions["timeout"];
         const debug = cmdLineOptions["debug"];
         const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
@@ -637,12 +637,6 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            if (inspect) {
-                args.push("--inspect");
-            }
-            if (inspect || debug) {
-                args.push("--debug-brk");
-            }
             args.push("-R", reporter);
             if (tests) {
                 args.push("-g", `"${tests}"`);
@@ -653,7 +647,15 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             else {
                 args.push("--no-colors");
             }
-            args.push("-t", testTimeout);
+            if (inspect) {
+                args.unshift("--inspect-brk");
+            }
+            else if (debug) {
+                args.unshift("--debug-brk");
+            }
+            else {
+                args.push("-t", testTimeout);
+            }
             args.push(run);
             setNodeEnvToDevelopment();
             exec(mocha, args, lintThenFinish, function(e, status) {
@@ -838,6 +840,7 @@ gulp.task("runtests-browser", "Runs the tests using the built run.js file like '
 });
 
 gulp.task("generate-code-coverage", "Generates code coverage data via istanbul", ["tests"], (done) => {
+    const testTimeout = cmdLineOptions["timeout"];
     exec("istanbul", ["cover", "node_modules/mocha/bin/_mocha", "--", "-R", "min", "-t", testTimeout.toString(), run], done, done);
 });
 

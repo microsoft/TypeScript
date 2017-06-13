@@ -185,7 +185,8 @@ namespace ts.FindAllReferences {
         if (entry.type === "node") {
             const { node } = entry;
             return { textSpan: getTextSpan(node), fileName: node.getSourceFile().fileName, ...implementationKindDisplayParts(node, checker) };
-        } else {
+        }
+        else {
             const { textSpan, fileName } = entry;
             return { textSpan, fileName, kind: ScriptElementKind.unknown, displayParts: [] };
         }
@@ -495,11 +496,10 @@ namespace ts.FindAllReferences.Core {
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
             const escapedText = escapeIdentifier(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
-            return { location, symbol, comingFrom, text, escapedText, parents, includes };
-
-            function includes(referenceSymbol: Symbol): boolean {
-                return allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol;
-            }
+            return {
+                location, symbol, comingFrom, text, escapedText, parents,
+                includes: referenceSymbol => allSearchSymbols ? contains(allSearchSymbols, referenceSymbol) : referenceSymbol === symbol,
+            };
         }
 
         private readonly symbolIdToReferences: Entry[][] = [];
@@ -678,9 +678,7 @@ namespace ts.FindAllReferences.Core {
         return parent ? scope.getSourceFile() : scope;
     }
 
-    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile, fullStart = false): number[] {
-        const start = fullStart ? container.getFullStart() : container.getStart(sourceFile);
-        const end = container.getEnd();
+    function getPossibleSymbolReferencePositions(sourceFile: SourceFile, symbolName: string, container: Node = sourceFile): number[] {
         const positions: number[] = [];
 
         /// TODO: Cache symbol existence for files to save text search
@@ -695,10 +693,10 @@ namespace ts.FindAllReferences.Core {
         const sourceLength = text.length;
         const symbolNameLength = symbolName.length;
 
-        let position = text.indexOf(symbolName, start);
+        let position = text.indexOf(symbolName, container.pos);
         while (position >= 0) {
             // If we are past the end, stop looking
-            if (position > end) break;
+            if (position > container.end) break;
 
             // We found a match.  Make sure it's not part of a larger word (i.e. the char
             // before and after it have to be a non-identifier char).
@@ -759,8 +757,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function addReferencesForKeywordInFile(sourceFile: SourceFile, kind: SyntaxKind, searchText: string, references: Push<NodeEntry>): void {
-        // Want fullStart so we can find the symbol in JSDoc comments
-        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile, /*fullStart*/ true);
+        const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, searchText, sourceFile);
         for (const position of possiblePositions) {
             const referenceLocation = getTouchingPropertyName(sourceFile, position, /*includeJsDocComment*/ true);
             if (referenceLocation.kind === kind) {
@@ -784,8 +781,7 @@ namespace ts.FindAllReferences.Core {
             return;
         }
 
-        const fullStart = state.options.findInComments || container.jsDoc !== undefined || forEach(search.symbol.declarations, d => d.kind === ts.SyntaxKind.JSDocTypedefTag);
-        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container, fullStart)) {
+        for (const position of getPossibleSymbolReferencePositions(sourceFile, search.text, container)) {
             getReferencesAtLocation(sourceFile, position, search, state);
         }
     }

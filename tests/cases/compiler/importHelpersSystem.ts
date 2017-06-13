@@ -6,6 +6,7 @@ export class A { }
 
 // @filename: b.ts
 import { A } from "./a";
+export * from "./a";
 export class B extends A { }
 
 // @filename: tslib.d.ts

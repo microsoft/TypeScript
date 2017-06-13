@@ -317,14 +317,14 @@ var r3 = foo3(r3arg);
 >r3arg : <T>(x: T) => T
 
 var r3a = [r3arg, r3arg2];
->r3a : (<T>(x: T) => T)[]
->[r3arg, r3arg2] : (<T>(x: T) => T)[]
+>r3a : (<T>(x: T) => void)[]
+>[r3arg, r3arg2] : (<T>(x: T) => void)[]
 >r3arg : <T>(x: T) => T
 >r3arg2 : <T>(x: T) => void
 
 var r3b = [r3arg2, r3arg];
->r3b : (<T>(x: T) => T)[]
->[r3arg2, r3arg] : (<T>(x: T) => T)[]
+>r3b : (<T>(x: T) => void)[]
+>[r3arg2, r3arg] : (<T>(x: T) => void)[]
 >r3arg2 : <T>(x: T) => void
 >r3arg : <T>(x: T) => T
 
@@ -543,14 +543,14 @@ var r15 = foo15(r15arg);
 >r15arg : <U, V>(x: { a: U; b: V; }) => U[]
 
 var r15a = [r15arg, r15arg2];
->r15a : (<U, V>(x: { a: U; b: V; }) => U[])[]
->[r15arg, r15arg2] : (<U, V>(x: { a: U; b: V; }) => U[])[]
+>r15a : (<T>(x: { a: T; b: T; }) => T[])[]
+>[r15arg, r15arg2] : (<T>(x: { a: T; b: T; }) => T[])[]
 >r15arg : <U, V>(x: { a: U; b: V; }) => U[]
 >r15arg2 : <T>(x: { a: T; b: T; }) => T[]
 
 var r15b = [r15arg2, r15arg];
->r15b : (<U, V>(x: { a: U; b: V; }) => U[])[]
->[r15arg2, r15arg] : (<U, V>(x: { a: U; b: V; }) => U[])[]
+>r15b : (<T>(x: { a: T; b: T; }) => T[])[]
+>[r15arg2, r15arg] : (<T>(x: { a: T; b: T; }) => T[])[]
 >r15arg2 : <T>(x: { a: T; b: T; }) => T[]
 >r15arg : <U, V>(x: { a: U; b: V; }) => U[]
 

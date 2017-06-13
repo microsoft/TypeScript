@@ -5,7 +5,7 @@ namespace ts {
         if (!expected === !actual) {
             if (expected) {
                 assert.isTrue(expected.resolvedFileName === actual.resolvedFileName, `'resolvedFileName': expected '${expected.resolvedFileName}' to be equal to '${actual.resolvedFileName}'`);
-                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${Extension[expected.extension]}' to be equal to '${Extension[actual.extension]}'`);
+                assert.isTrue(expected.extension === actual.extension, `'ext': expected '${expected.extension}' to be equal to '${actual.extension}'`);
                 assert.isTrue(expected.isExternalLibraryImport === actual.isExternalLibraryImport, `'isExternalLibraryImport': expected '${expected.isExternalLibraryImport}' to be equal to '${actual.isExternalLibraryImport}'`);
             }
             return true;
