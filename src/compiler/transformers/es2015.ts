@@ -3401,28 +3401,19 @@ namespace ts {
                     classBodyStart++;
                 }
 
-                // We reuse the comment and source-map positions from the original variable statement
-                // and class alias, while converting the function declaration for the class constructor
-                // into an expression.
+                // The next statement is the function declaration.
+                statements.push(funcStatements[classBodyStart]);
+                classBodyStart++;
+
+                // Add the class alias following the declaration.
                 statements.push(
-                    updateVariableStatement(
-                        varStatement,
-                        /*modifiers*/ undefined,
-                        updateVariableDeclarationList(varStatement.declarationList, [
-                            updateVariableDeclaration(variable,
-                                variable.name,
-                                /*type*/ undefined,
-                                updateBinary(aliasAssignment,
-                                    aliasAssignment.left,
-                                    convertFunctionDeclarationToExpression(
-                                        cast(funcStatements[classBodyStart], isFunctionDeclaration)
-                                    )
-                                )
-                            )
-                        ])
+                    createStatement(
+                        createAssignment(
+                            aliasAssignment.left,
+                            cast(variable.name, isIdentifier)
+                        )
                     )
                 );
-                classBodyStart++;
             }
 
             // Find the trailing 'return' statement (4)
