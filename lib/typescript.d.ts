@@ -1147,6 +1147,7 @@ declare namespace ts {
         condition?: Expression;
         incrementor?: Expression;
     }
+    type ForInOrOfStatement = ForInStatement | ForOfStatement;
     interface ForInStatement extends IterationStatement {
         kind: SyntaxKind.ForInStatement;
         initializer: ForInitializer;
@@ -1220,7 +1221,7 @@ declare namespace ts {
         variableDeclaration: VariableDeclaration;
         block: Block;
     }
-    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration;
+    type DeclarationWithTypeParameters = SignatureDeclaration | ClassLikeDeclaration | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag;
     interface ClassLikeDeclaration extends NamedDeclaration {
         name?: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
@@ -2183,6 +2184,7 @@ declare namespace ts {
         noImplicitAny?: boolean;
         noImplicitReturns?: boolean;
         noImplicitThis?: boolean;
+        noStrictGenericChecks?: boolean;
         noUnusedLocals?: boolean;
         noUnusedParameters?: boolean;
         noImplicitUseStrict?: boolean;
@@ -2331,12 +2333,11 @@ declare namespace ts {
         extension: Extension;
     }
     enum Extension {
-        Ts = 0,
-        Tsx = 1,
-        Dts = 2,
-        Js = 3,
-        Jsx = 4,
-        LastTypeScriptExtension = 2,
+        Ts = ".ts",
+        Tsx = ".tsx",
+        Dts = ".d.ts",
+        Js = ".js",
+        Jsx = ".jsx",
     }
     interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
@@ -2592,7 +2593,7 @@ declare namespace ts {
 }
 declare namespace ts {
     /** The version of the TypeScript compiler release */
-    const version = "2.4.0";
+    const version = "2.4.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -2627,6 +2628,10 @@ declare namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         getModifiedTime?(path: string): Date;
+        /**
+         * This should be cryptographically secure.
+         * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
+         */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
@@ -2785,7 +2790,7 @@ declare namespace ts {
     function isIdentifier(node: Node): node is Identifier;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
-    function isTypeParameter(node: Node): node is TypeParameterDeclaration;
+    function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
     function isParameter(node: Node): node is ParameterDeclaration;
     function isDecorator(node: Node): node is Decorator;
     function isPropertySignature(node: Node): node is PropertySignature;
@@ -2967,6 +2972,8 @@ declare namespace ts {
     function isIterationStatement(node: Node, lookInLabeledStatements: boolean): node is IterationStatement;
     function isJsxOpeningLikeElement(node: Node): node is JsxOpeningLikeElement;
     function isCaseOrDefaultClause(node: Node): node is CaseOrDefaultClause;
+    /** True if node is of a kind that may contain comment text. */
+    function isJSDocCommentContainingNode(node: Node): boolean;
 }
 declare namespace ts {
     /**
