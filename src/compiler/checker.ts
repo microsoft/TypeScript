@@ -22665,16 +22665,12 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                    // import x = require("./mo/*gotToDefinitionHere*/d")
-                    if (isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) {
-                        return resolveExternalModuleName(node, <LiteralExpression>node);
-                    }
-                    // External module name in an import declaration
-                    if ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) {
-                        return resolveExternalModuleName(node, <LiteralExpression>node);
-                    }
-                    if ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) ||
-                        isImportCall(node.parent)) {
+                    // 1). import x = require("./mo/*gotToDefinitionHere*/d")
+                    // 2). External module name in an import declaration
+                    // 3). Dynamic import call or require in javascript
+                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
+                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) || isImportCall(node.parent))) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
