@@ -1,0 +1,18 @@
+=== tests/cases/conformance/classes/classDeclarations/prototypeVariableVisiblity1.ts ===
+const proto_1 = 1;
+>proto_1 : Symbol(proto_1, Decl(prototypeVariableVisiblity1.ts, 0, 5))
+
+const proto_2 = 2;
+>proto_2 : Symbol(proto_2, Decl(prototypeVariableVisiblity1.ts, 1, 5))
+
+class A {
+>A : Symbol(A, Decl(prototypeVariableVisiblity1.ts, 1, 18))
+
+    a(): number {
+>a : Symbol(A.a, Decl(prototypeVariableVisiblity1.ts, 3, 9))
+
+        return proto_1 + proto_2;
+>proto_1 : Symbol(proto_1, Decl(prototypeVariableVisiblity1.ts, 0, 5))
+>proto_2 : Symbol(proto_2, Decl(prototypeVariableVisiblity1.ts, 1, 5))
+    }
+}

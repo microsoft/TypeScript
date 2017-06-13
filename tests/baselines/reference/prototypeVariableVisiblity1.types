@@ -1,0 +1,21 @@
+=== tests/cases/conformance/classes/classDeclarations/prototypeVariableVisiblity1.ts ===
+const proto_1 = 1;
+>proto_1 : 1
+>1 : 1
+
+const proto_2 = 2;
+>proto_2 : 2
+>2 : 2
+
+class A {
+>A : A
+
+    a(): number {
+>a : () => number
+
+        return proto_1 + proto_2;
+>proto_1 + proto_2 : number
+>proto_1 : 1
+>proto_2 : 2
+    }
+}

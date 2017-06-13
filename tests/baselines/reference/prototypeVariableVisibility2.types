@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/classDeclarations/prototypeVariableVisibility2.ts ===
+class A {
+>A : A
+
+    a() {
+>a : () => any
+
+        return proto_1;
+>proto_1 : any
+    }
+}
+
+var proto_1;
+>proto_1 : any
+

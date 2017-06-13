@@ -1,0 +1,15 @@
+=== tests/cases/conformance/classes/classDeclarations/prototypeVariableVisibility2.ts ===
+class A {
+>A : Symbol(A, Decl(prototypeVariableVisibility2.ts, 0, 0))
+
+    a() {
+>a : Symbol(A.a, Decl(prototypeVariableVisibility2.ts, 0, 9))
+
+        return proto_1;
+>proto_1 : Symbol(proto_1, Decl(prototypeVariableVisibility2.ts, 6, 3))
+    }
+}
+
+var proto_1;
+>proto_1 : Symbol(proto_1, Decl(prototypeVariableVisibility2.ts, 6, 3))
+
