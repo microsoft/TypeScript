@@ -4821,7 +4821,7 @@ namespace ts {
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[], location: Node): Signature[] {
             let signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
-            if (typeArgumentNodes) {
+            if (some(typeArgumentNodes)) {
                 const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
                 signatures = map(signatures, sig => getSignatureInstantiation(sig, typeArguments));
             }
@@ -20921,7 +20921,7 @@ namespace ts {
                     const staticBaseType = getApparentType(baseConstructorType);
                     checkBaseTypeAccessibility(staticBaseType, baseTypeNode);
                     checkSourceElement(baseTypeNode.expression);
-                    if (baseTypeNode.typeArguments) {
+                    if (some(baseTypeNode.typeArguments)) {
                         forEach(baseTypeNode.typeArguments, checkSourceElement);
                         for (const constructor of getConstructorsForTypeArguments(staticBaseType, baseTypeNode.typeArguments, baseTypeNode)) {
                             if (!checkTypeArgumentConstraints(constructor.typeParameters, baseTypeNode.typeArguments)) {
@@ -23896,6 +23896,11 @@ namespace ts {
                 const sourceFile = getSourceFileOfNode(node);
                 return grammarErrorAtPos(sourceFile, types.pos, 0, Diagnostics._0_list_cannot_be_empty, listType);
             }
+            return forEach(types, checkGrammarExpressionWithTypeArguments);
+        }
+
+        function checkGrammarExpressionWithTypeArguments(node: ExpressionWithTypeArguments) {
+            return checkGrammarTypeArguments(node, node.typeArguments);
         }
 
         function checkGrammarClassDeclarationHeritageClauses(node: ClassLikeDeclaration) {
