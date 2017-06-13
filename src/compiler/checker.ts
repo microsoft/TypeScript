@@ -9912,7 +9912,7 @@ namespace ts {
                     bestSupertypeScore = score;
                 }
 
-                // types.length - 1 is the maximum score, given that getCommonSupertype returned false
+                Debug.assert(bestSupertypeScore < types.length, "types.length - 1 is the maximum score, given that getCommonSuperType returned false");
                 if (bestSupertypeScore === types.length - 1) {
                     break;
                 }
@@ -10623,6 +10623,19 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getUnionType(reducedTypes) : getIntersectionType(reducedTypes);
         }
 
+        /**
+         * We widen inferred literal types if
+         * all inferences were made to top-level ocurrences of the type parameter, and
+         * the type parameter has no constraint or its constraint includes no primitive or literal types, and
+         * the type parameter was fixed during inference or does not occur at top-level in the return type.
+         */
+        function widenInferenceCandidates(inference: InferenceInfo, signature: Signature) {
+            const widenLiteralTypes = inference.topLevel &&
+                !hasPrimitiveConstraint(inference.typeParameter) &&
+                (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
+            return widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
+        }
+
         function hasPrimitiveConstraint(type: TypeParameter): boolean {
             const constraint = getConstraintOfTypeParameter(type);
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
@@ -10634,15 +10647,7 @@ namespace ts {
             let inferenceSucceeded: boolean;
             if (!inferredType) {
                 if (inference.candidates) {
-                    // We widen inferred literal types if
-                    // all inferences were made to top-level ocurrences of the type parameter, and
-                    // the type parameter has no constraint or its constraint includes no primitive or literal types, and
-                    // the type parameter was fixed during inference or does not occur at top-level in the return type.
-                    const signature = context.signature;
-                    const widenLiteralTypes = inference.topLevel &&
-                        !hasPrimitiveConstraint(inference.typeParameter) &&
-                        (inference.isFixed || !isTypeParameterAtTopLevel(getReturnTypeOfSignature(signature), inference.typeParameter));
-                    const baseCandidates = widenLiteralTypes ? sameMap(inference.candidates, getWidenedLiteralType) : inference.candidates;
+                    const baseCandidates = widenInferenceCandidates(inference, context.signature);
                     // Infer widened union or supertype, or the unknown type for no common supertype. We infer union types
                     // for inferences coming from return types in order to avoid common supertype failures.
                     const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
@@ -15656,7 +15661,7 @@ namespace ts {
                 else {
                     Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
                     const failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
-                    const inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex].candidates;
+                    const inferenceCandidates = widenInferenceCandidates(resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex], resultOfFailedInference.signature);
 
                     let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
                         Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
