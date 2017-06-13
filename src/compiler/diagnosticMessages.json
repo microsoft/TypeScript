@@ -3625,6 +3625,10 @@
         "category": "Message",
         "code": 90024
     },
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
     
     "Convert function to an ES2015 class": {
         "category": "Message",

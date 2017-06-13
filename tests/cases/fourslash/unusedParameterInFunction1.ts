@@ -4,4 +4,4 @@
 ////function [|greeter( x)|] {
 ////}
 
-verify.rangeAfterCodeFix("greeter()");
+verify.rangeAfterCodeFix("greeter()", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
