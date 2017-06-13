@@ -75,9 +75,9 @@ var C2 = (function () {
     C2.foo = function (x) {
         return undefined;
     };
+    C2.y = undefined;
     return C2;
 }());
-C2.y = undefined;
 var N1;
 (function (N1) {
     N1.y = this;

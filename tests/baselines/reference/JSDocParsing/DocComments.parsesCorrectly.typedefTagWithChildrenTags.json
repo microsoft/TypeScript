@@ -103,7 +103,8 @@
                             "pos": 66,
                             "end": 69,
                             "text": "age"
-                        }
+                        },
+                        "isBracketed": false
                     },
                     {
                         "kind": "JSDocPropertyTag",
@@ -141,7 +142,8 @@
                             "pos": 93,
                             "end": 97,
                             "text": "name"
-                        }
+                        },
+                        "isBracketed": false
                     }
                 ]
             },

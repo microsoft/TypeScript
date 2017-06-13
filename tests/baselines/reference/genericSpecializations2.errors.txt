@@ -1,8 +1,18 @@
+tests/cases/compiler/genericSpecializations2.ts(7,7): error TS2420: Class 'IntFooBad' incorrectly implements interface 'IFoo<number>'.
+  Types of property 'foo' are incompatible.
+    Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/genericSpecializations2.ts(8,9): error TS2368: Type parameter name cannot be 'string'.
+tests/cases/compiler/genericSpecializations2.ts(11,7): error TS2420: Class 'StringFoo2' incorrectly implements interface 'IFoo<string>'.
+  Types of property 'foo' are incompatible.
+    Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+      Types of parameters 'x' and 'x' are incompatible.
+        Type 'T' is not assignable to type 'string'.
 tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parameter name cannot be 'string'.
 
 
-==== tests/cases/compiler/genericSpecializations2.ts (2 errors) ====
+==== tests/cases/compiler/genericSpecializations2.ts (4 errors) ====
     class IFoo<T> {
         foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
             return null;
@@ -10,12 +20,24 @@ tests/cases/compiler/genericSpecializations2.ts(12,9): error TS2368: Type parame
     }
     
     class IntFooBad implements IFoo<number> {
+          ~~~~~~~~~
+!!! error TS2420: Class 'IntFooBad' incorrectly implements interface 'IFoo<number>'.
+!!! error TS2420:   Types of property 'foo' are incompatible.
+!!! error TS2420:     Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo<string>(x: string): string { return null; }
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.
     }
     
     class StringFoo2 implements IFoo<string> {
+          ~~~~~~~~~~
+!!! error TS2420: Class 'StringFoo2' incorrectly implements interface 'IFoo<string>'.
+!!! error TS2420:   Types of property 'foo' are incompatible.
+!!! error TS2420:     Type '<string>(x: string) => string' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo<string>(x: string): string { return null; }
             ~~~~~~
 !!! error TS2368: Type parameter name cannot be 'string'.

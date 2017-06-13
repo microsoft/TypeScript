@@ -35,12 +35,17 @@ namespace ts {
         getDirectories(path: string): string[];
         readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
         getModifiedTime?(path: string): Date;
+        /**
+         * This should be cryptographically secure.
+         * A good implementation is node.js' `crypto.createHash`. (https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm)
+         */
         createHash?(data: string): string;
         getMemoryUsage?(): number;
         exit(exitCode?: number): void;
         realpath?(path: string): string;
         /*@internal*/ getEnvironmentVariable(name: string): string;
         /*@internal*/ tryEnableSourceMapsForHost?(): void;
+        /*@internal*/ debugMode?: boolean;
         setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
         clearTimeout?(timeoutId: any): void;
     }
@@ -428,6 +433,7 @@ namespace ts {
                 realpath(path: string): string {
                     return _fs.realpathSync(path);
                 },
+                debugMode: some(<string[]>process.execArgv, arg => /^--(inspect|debug)(-brk)?(=\d+)?$/i.test(arg)),
                 tryEnableSourceMapsForHost() {
                     try {
                         require("source-map-support").install();
@@ -516,5 +522,8 @@ namespace ts {
         Debug.currentAssertionLevel = /^development$/i.test(sys.getEnvironmentVariable("NODE_ENV"))
             ? AssertionLevel.Normal
             : AssertionLevel.None;
+    }
+    if (sys && sys.debugMode) {
+        Debug.isDebugging = true;
     }
 }

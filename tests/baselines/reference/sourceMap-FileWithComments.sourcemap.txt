@@ -264,89 +264,90 @@ sourceFile:sourceMap-FileWithComments.ts
 28>Emitted(12, 102) Source(15, 74) + SourceIndex(0)
 29>Emitted(12, 103) Source(15, 75) + SourceIndex(0)
 ---
+>>>        // Static member
+1 >^^^^^^^^
+2 >        ^^^^^^^^^^^^^^^^
+3 >                        ^^^^^^^^^^^^^^^^->
+1 >
+  >
+  >        
+2 >        // Static member
+1 >Emitted(13, 9) Source(17, 9) + SourceIndex(0)
+2 >Emitted(13, 25) Source(17, 25) + SourceIndex(0)
+---
+>>>        Point.origin = new Point(0, 0);
+1->^^^^^^^^
+2 >        ^^^^^^^^^^^^
+3 >                    ^^^
+4 >                       ^^^^
+5 >                           ^^^^^
+6 >                                ^
+7 >                                 ^
+8 >                                  ^^
+9 >                                    ^
+10>                                     ^
+11>                                      ^
+1->
+  >        static 
+2 >        origin
+3 >                     = 
+4 >                       new 
+5 >                           Point
+6 >                                (
+7 >                                 0
+8 >                                  , 
+9 >                                    0
+10>                                     )
+11>                                      ;
+1->Emitted(14, 9) Source(18, 16) + SourceIndex(0)
+2 >Emitted(14, 21) Source(18, 22) + SourceIndex(0)
+3 >Emitted(14, 24) Source(18, 25) + SourceIndex(0)
+4 >Emitted(14, 28) Source(18, 29) + SourceIndex(0)
+5 >Emitted(14, 33) Source(18, 34) + SourceIndex(0)
+6 >Emitted(14, 34) Source(18, 35) + SourceIndex(0)
+7 >Emitted(14, 35) Source(18, 36) + SourceIndex(0)
+8 >Emitted(14, 37) Source(18, 38) + SourceIndex(0)
+9 >Emitted(14, 38) Source(18, 39) + SourceIndex(0)
+10>Emitted(14, 39) Source(18, 40) + SourceIndex(0)
+11>Emitted(14, 40) Source(18, 41) + SourceIndex(0)
+---
 >>>        return Point;
 1 >^^^^^^^^
 2 >        ^^^^^^^^^^^^
 1 >
-  >
-  >        // Static member
-  >        static origin = new Point(0, 0);
   >    
 2 >        }
-1 >Emitted(13, 9) Source(19, 5) + SourceIndex(0)
-2 >Emitted(13, 21) Source(19, 6) + SourceIndex(0)
+1 >Emitted(15, 9) Source(19, 5) + SourceIndex(0)
+2 >Emitted(15, 21) Source(19, 6) + SourceIndex(0)
 ---
 >>>    }());
-1 >^^^^
-2 >    ^
-3 >     
-4 >     ^^^^^^^^^^^^^^^^->
+1 >^^^^^
+2 >     
+3 >     ^^^^
+4 >         ^^^^^^^^^^^^^^^^^->
 1 >
-2 >    }
-3 >     
-1 >Emitted(14, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(14, 6) Source(19, 6) + SourceIndex(0)
-3 >Emitted(14, 6) Source(10, 5) + SourceIndex(0)
----
->>>    // Static member
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^
-3 >                    ^^^^^^^^^^^^^^^^->
-1->export class Point implements IPoint {
-  >        // Constructor
-  >        constructor(public x: number, public y: number) { }
-  >
-  >        // Instance member
-  >        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
-  >
-  >        
-2 >    // Static member
-1->Emitted(15, 5) Source(17, 9) + SourceIndex(0)
-2 >Emitted(15, 21) Source(17, 25) + SourceIndex(0)
----
->>>    Point.origin = new Point(0, 0);
-1->^^^^
-2 >    ^^^^^^^^^^^^
-3 >                ^^^
-4 >                   ^^^^
-5 >                       ^^^^^
-6 >                            ^
-7 >                             ^
-8 >                              ^^
-9 >                                ^
-10>                                 ^
-11>                                  ^
-1->
-  >        static 
-2 >    origin
-3 >                 = 
-4 >                   new 
-5 >                       Point
-6 >                            (
-7 >                             0
-8 >                              , 
-9 >                                0
-10>                                 )
-11>                                  ;
-1->Emitted(16, 5) Source(18, 16) + SourceIndex(0)
-2 >Emitted(16, 17) Source(18, 22) + SourceIndex(0)
-3 >Emitted(16, 20) Source(18, 25) + SourceIndex(0)
-4 >Emitted(16, 24) Source(18, 29) + SourceIndex(0)
-5 >Emitted(16, 29) Source(18, 34) + SourceIndex(0)
-6 >Emitted(16, 30) Source(18, 35) + SourceIndex(0)
-7 >Emitted(16, 31) Source(18, 36) + SourceIndex(0)
-8 >Emitted(16, 33) Source(18, 38) + SourceIndex(0)
-9 >Emitted(16, 34) Source(18, 39) + SourceIndex(0)
-10>Emitted(16, 35) Source(18, 40) + SourceIndex(0)
-11>Emitted(16, 36) Source(18, 41) + SourceIndex(0)
+2 >     
+3 >     export class Point implements IPoint {
+  >             // Constructor
+  >             constructor(public x: number, public y: number) { }
+  >     
+  >             // Instance member
+  >             getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+  >     
+  >             // Static member
+  >             static origin = new Point(0, 0);
+  >         }
+1 >Emitted(16, 6) Source(19, 6) + SourceIndex(0)
+2 >Emitted(16, 6) Source(10, 5) + SourceIndex(0)
+3 >Emitted(16, 10) Source(19, 6) + SourceIndex(0)
 ---
 >>>    Shapes.Point = Point;
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^^^^^
 3 >                ^^^^^^^^
 4 >                        ^
 5 >                         ^^^^^^^^^^^->
-1 >
+1->
 2 >    Point
 3 >                 implements IPoint {
   >                        // Constructor
@@ -359,7 +360,7 @@ sourceFile:sourceMap-FileWithComments.ts
   >                        static origin = new Point(0, 0);
   >                    }
 4 >                        
-1 >Emitted(17, 5) Source(10, 18) + SourceIndex(0)
+1->Emitted(17, 5) Source(10, 18) + SourceIndex(0)
 2 >Emitted(17, 17) Source(10, 23) + SourceIndex(0)
 3 >Emitted(17, 25) Source(19, 6) + SourceIndex(0)
 4 >Emitted(17, 26) Source(19, 6) + SourceIndex(0)

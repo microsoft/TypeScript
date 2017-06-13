@@ -7,5 +7,5 @@
 ////     }
 //// }
 
-verify.rangeAfterCodeFix("const {} of ");
+verify.rangeAfterCodeFix("const {} of ", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

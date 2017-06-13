@@ -662,6 +662,10 @@ namespace ts {
     }
 }
 
+if (ts.Debug.isDebugging) {
+    ts.Debug.enableDebugInfo();
+}
+
 if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
     ts.sys.tryEnableSourceMapsForHost();
 }

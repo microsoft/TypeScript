@@ -13,7 +13,8 @@ namespace ts.projectSystem {
             express: "express",
             jquery: "jquery",
             lodash: "lodash",
-            moment: "moment"
+            moment: "moment",
+            chroma: "chroma-js"
         })
     };
 
@@ -61,7 +62,6 @@ namespace ts.projectSystem {
             super(installTypingHost, globalTypingsCacheLocation, safeList.path, throttleLimit, log);
         }
 
-        safeFileList = safeList.path;
         protected postExecActions: PostExecAction[] = [];
 
         executePendingCommands() {
@@ -472,7 +472,7 @@ namespace ts.projectSystem {
         }
 
         createHash(s: string): string {
-            return s;
+            return Harness.LanguageService.mockHash(s);
         }
 
         triggerDirectoryWatcherCallback(directoryName: string, fileName: string): void {

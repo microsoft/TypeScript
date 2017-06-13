@@ -63,9 +63,9 @@ var __extends = (this && this.__extends) || (function () {
 var ErrClass1 = (function () {
     function ErrClass1() {
     }
+    ErrClass1.t = this; // Error
     return ErrClass1;
 }());
-ErrClass1.t = this; // Error
 var BaseErrClass = (function () {
     function BaseErrClass(t) {
     }

@@ -25,6 +25,6 @@ var P = (function () {
         if (zz === void 0) { zz = this; }
         zz.y;
     };
+    P.y = this;
     return P;
 }());
-P.y = this;

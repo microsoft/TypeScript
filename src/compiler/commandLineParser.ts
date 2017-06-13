@@ -100,11 +100,12 @@ namespace ts {
                 "umd": ModuleKind.UMD,
                 "es6": ModuleKind.ES2015,
                 "es2015": ModuleKind.ES2015,
+                "esnext": ModuleKind.ESNext
             }),
             paramType: Diagnostics.KIND,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_or_es2015,
+            description: Diagnostics.Specify_module_code_generation_Colon_commonjs_amd_system_umd_es2015_or_ESNext,
         },
         {
             name: "lib",
@@ -620,6 +621,12 @@ namespace ts {
             description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
         {
+            name: "noStrictGenericChecks",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
+        },
+        {
             // A list of plugins to load in the language service
             name: "plugins",
             type: "list",
@@ -1042,7 +1049,7 @@ namespace ts {
             for (let i = 0; i < nameColumn.length; i++) {
                 const optionName = nameColumn[i];
                 const description = descriptionColumn[i];
-                result.push(tab + tab + optionName + makePadding(marginLength - optionName.length + 2) + description);
+                result.push(optionName && `${tab}${tab}${optionName}${ description && (makePadding(marginLength - optionName.length + 2) + description)}`);
             }
             if (configurations.files && configurations.files.length) {
                 result.push(`${tab}},`);
@@ -1625,10 +1632,12 @@ namespace ts {
             }
 
             // Remove any subpaths under an existing recursively watched directory.
-            for (const key in wildcardDirectories) if (hasProperty(wildcardDirectories, key)) {
-                for (const recursiveKey of recursiveKeys) {
-                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+            for (const key in wildcardDirectories) {
+                if (hasProperty(wildcardDirectories, key)) {
+                    for (const recursiveKey of recursiveKeys) {
+                        if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
+                            delete wildcardDirectories[key];
+                        }
                     }
                 }
             }
@@ -1716,10 +1725,12 @@ namespace ts {
     /* @internal */
     export function convertCompilerOptionsForTelemetry(opts: ts.CompilerOptions): ts.CompilerOptions {
         const out: ts.CompilerOptions = {};
-        for (const key in opts) if (opts.hasOwnProperty(key)) {
-            const type = getOptionFromName(key);
-            if (type !== undefined) { // Ignore unknown options
-                out[key] = getOptionValueWithEmptyStrings(opts[key], type);
+        for (const key in opts) {
+            if (opts.hasOwnProperty(key)) {
+                const type = getOptionFromName(key);
+                if (type !== undefined) { // Ignore unknown options
+                    out[key] = getOptionValueWithEmptyStrings(opts[key], type);
+                }
             }
         }
         return out;

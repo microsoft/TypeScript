@@ -15,8 +15,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var C = (function () {
     function C() {
     }
+    __decorate([
+        dec()
+    ], C.prototype, "prop", void 0);
     return C;
 }());
-__decorate([
-    dec()
-], C.prototype, "prop", void 0);

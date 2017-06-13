@@ -100,16 +100,16 @@ var ClassA = (function () {
             args[_i] = arguments[_i];
         }
     };
+    __decorate([
+        annotation1(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [aux1_1.SomeClass1]),
+        __metadata("design:returntype", void 0)
+    ], ClassA.prototype, "foo", null);
+    ClassA = __decorate([
+        annotation(),
+        __metadata("design:paramtypes", [aux_1.SomeClass])
+    ], ClassA);
     return ClassA;
 }());
-__decorate([
-    annotation1(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [aux1_1.SomeClass1]),
-    __metadata("design:returntype", void 0)
-], ClassA.prototype, "foo", null);
-ClassA = __decorate([
-    annotation(),
-    __metadata("design:paramtypes", [aux_1.SomeClass])
-], ClassA);
 exports.ClassA = ClassA;

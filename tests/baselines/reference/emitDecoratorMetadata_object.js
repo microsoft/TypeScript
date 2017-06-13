@@ -24,15 +24,15 @@ var A = (function () {
     function A(hi) {
     }
     A.prototype.method = function (there) { };
+    __decorate([
+        MyMethodDecorator,
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], A.prototype, "method", null);
+    A = __decorate([
+        MyClassDecorator,
+        __metadata("design:paramtypes", [Object])
+    ], A);
     return A;
 }());
-__decorate([
-    MyMethodDecorator,
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], A.prototype, "method", null);
-A = __decorate([
-    MyClassDecorator,
-    __metadata("design:paramtypes", [Object])
-], A);

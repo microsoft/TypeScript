@@ -8,107 +8,161 @@ namespace ts.codefix {
 
     function getActionsForAddMissingMember(context: CodeFixContext): CodeAction[] | undefined {
 
-        const sourceFile = context.sourceFile;
+        const tokenSourceFile = context.sourceFile;
         const start = context.span.start;
-        // This is the identifier of the missing property. eg:
+        // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
-        const token = getTokenAtPosition(sourceFile, start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(tokenSourceFile, start, /*includeJsDocComment*/ false);
 
         if (token.kind !== SyntaxKind.Identifier) {
             return undefined;
         }
 
-        if (!isPropertyAccessExpression(token.parent) || token.parent.expression.kind !== SyntaxKind.ThisKeyword) {
+        if (!isPropertyAccessExpression(token.parent)) {
             return undefined;
         }
 
-        const classMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false);
-        if (!isClassElement(classMemberDeclaration)) {
-            return undefined;
+        const tokenName = token.getText(tokenSourceFile);
+
+        let makeStatic = false;
+        let classDeclaration: ClassLikeDeclaration;
+
+        if (token.parent.expression.kind === SyntaxKind.ThisKeyword) {
+            const containingClassMemberDeclaration = getThisContainer(token, /*includeArrowFunctions*/ false);
+            if (!isClassElement(containingClassMemberDeclaration)) {
+                return undefined;
+            }
+
+            classDeclaration = <ClassLikeDeclaration>containingClassMemberDeclaration.parent;
+
+            // Property accesses on `this` in a static method are accesses of a static member.
+            makeStatic = classDeclaration && hasModifier(containingClassMemberDeclaration, ModifierFlags.Static);
+        }
+        else {
+
+            const checker = context.program.getTypeChecker();
+            const leftExpression = token.parent.expression;
+            const leftExpressionType = checker.getTypeAtLocation(leftExpression);
+
+            if (leftExpressionType.flags & TypeFlags.Object) {
+                const symbol = leftExpressionType.symbol;
+                if (symbol.flags & SymbolFlags.Class) {
+                    classDeclaration = symbol.declarations && <ClassLikeDeclaration>symbol.declarations[0];
+                    if (leftExpressionType !== checker.getDeclaredTypeOfSymbol(symbol)) {
+                        // The expression is a class symbol but the type is not the instance-side.
+                        makeStatic = true;
+                    }
+                }
+            }
         }
 
-        const classDeclaration = <ClassLikeDeclaration>classMemberDeclaration.parent;
         if (!classDeclaration || !isClassLike(classDeclaration)) {
             return undefined;
         }
 
-        const isStatic = hasModifier(classMemberDeclaration, ModifierFlags.Static);
+        const classDeclarationSourceFile = getSourceFileOfNode(classDeclaration);
+        const classOpenBrace = getOpenBraceOfClassLike(classDeclaration, classDeclarationSourceFile);
 
-        return isInJavaScriptFile(sourceFile) ? getActionsForAddMissingMemberInJavaScriptFile() : getActionsForAddMissingMemberInTypeScriptFile();
+        return isInJavaScriptFile(classDeclarationSourceFile) ?
+            getActionsForAddMissingMemberInJavaScriptFile(classDeclaration, makeStatic) :
+            getActionsForAddMissingMemberInTypeScriptFile(classDeclaration, makeStatic);
 
-        function getActionsForAddMissingMemberInJavaScriptFile(): CodeAction[] | undefined {
-            const memberName = token.getText();
+        function getActionsForAddMissingMemberInJavaScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
+            let actions: CodeAction[];
 
-            if (isStatic) {
+            const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ false);
+            if (methodCodeAction) {
+                actions = [methodCodeAction];
+            }
+
+            if (makeStatic) {
                 if (classDeclaration.kind === SyntaxKind.ClassExpression) {
-                    return undefined;
+                    return actions;
                 }
 
                 const className = classDeclaration.name.getText();
 
-                return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [memberName]),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: [{
-                            span: { start: classDeclaration.getEnd(), length: 0 },
-                            newText: `${context.newLineCharacter}${className}.${memberName} = undefined;${context.newLineCharacter}`
-                        }]
-                    }]
-                }];
+                const staticInitialization = createStatement(createAssignment(
+                    createPropertyAccess(createIdentifier(className), tokenName),
+                    createIdentifier("undefined")));
 
+                const staticInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                staticInitializationChangeTracker.insertNodeAfter(
+                    classDeclarationSourceFile,
+                    classDeclaration,
+                    staticInitialization,
+                    { suffix: context.newLineCharacter });
+                const initializeStaticAction = {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_static_property_0), [tokenName]),
+                    changes: staticInitializationChangeTracker.getChanges()
+                };
+
+                (actions || (actions = [])).push(initializeStaticAction);
+                return actions;
             }
             else {
                 const classConstructor = getFirstConstructorWithBody(classDeclaration);
                 if (!classConstructor) {
-                    return undefined;
+                    return actions;
                 }
 
-                return [{
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [memberName]),
-                    changes: [{
-                        fileName: sourceFile.fileName,
-                        textChanges: [{
-                            span: { start: classConstructor.body.getEnd() - 1, length: 0 },
-                            newText: `this.${memberName} = undefined;${context.newLineCharacter}`
-                        }]
-                    }]
-                }];
+                const propertyInitialization = createStatement(createAssignment(
+                    createPropertyAccess(createThis(), tokenName),
+                    createIdentifier("undefined")));
+
+                const propertyInitializationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                propertyInitializationChangeTracker.insertNodeAt(
+                    classDeclarationSourceFile,
+                    classConstructor.body.getEnd() - 1,
+                    propertyInitialization,
+                    { prefix: context.newLineCharacter, suffix: context.newLineCharacter });
+
+                const initializeAction = {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Initialize_property_0_in_the_constructor), [tokenName]),
+                    changes: propertyInitializationChangeTracker.getChanges()
+                };
+
+                (actions || (actions = [])).push(initializeAction);
+                return actions;
             }
         }
 
-        function getActionsForAddMissingMemberInTypeScriptFile(): CodeAction[] | undefined {
-            let typeNode: TypeNode;
+        function getActionsForAddMissingMemberInTypeScriptFile(classDeclaration: ClassLikeDeclaration, makeStatic: boolean): CodeAction[] | undefined {
+            let actions: CodeAction[];
 
-            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
-                const binaryExpression = token.parent.parent as BinaryExpression;
-
-                const checker = context.program.getTypeChecker();
-                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(binaryExpression.right)));
-                typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+            const methodCodeAction = getActionForMethodDeclaration(/*includeTypeScriptSyntax*/ true);
+            if (methodCodeAction) {
+                actions = [methodCodeAction];
             }
 
+            let typeNode: TypeNode;
+            if (token.parent.parent.kind === SyntaxKind.BinaryExpression) {
+                const binaryExpression = token.parent.parent as BinaryExpression;
+                const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
+                const checker = context.program.getTypeChecker();
+                const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
+                typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+            }
             typeNode = typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
-
-            const openBrace = getOpenBraceOfClassLike(classDeclaration, sourceFile);
 
             const property = createProperty(
                 /*decorators*/undefined,
-                /*modifiers*/ isStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
-                token.getText(sourceFile),
+                /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+                tokenName,
                 /*questionToken*/ undefined,
                 typeNode,
                 /*initializer*/ undefined);
             const propertyChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-            propertyChangeTracker.insertNodeAfter(sourceFile, openBrace, property, { suffix: context.newLineCharacter });
+            propertyChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, property, { suffix: context.newLineCharacter });
 
-            const actions = [{
-                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_declaration_for_missing_property_0), [token.getText()]),
+            (actions || (actions = [])).push({
+                description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Declare_property_0), [tokenName]),
                 changes: propertyChangeTracker.getChanges()
-            }];
+            });
 
-            if (!isStatic) {
+            if (!makeStatic) {
+                // Index signatures cannot have the static modifier.
                 const stringTypeNode = createKeywordTypeNode(SyntaxKind.StringKeyword);
                 const indexingParameter = createParameter(
                     /*decorators*/ undefined,
@@ -125,15 +179,32 @@ namespace ts.codefix {
                     typeNode);
 
                 const indexSignatureChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
-                indexSignatureChangeTracker.insertNodeAfter(sourceFile, openBrace, indexSignature, { suffix: context.newLineCharacter });
+                indexSignatureChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, indexSignature, { suffix: context.newLineCharacter });
 
                 actions.push({
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_missing_property_0), [token.getText()]),
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Add_index_signature_for_property_0), [tokenName]),
                     changes: indexSignatureChangeTracker.getChanges()
                 });
             }
 
             return actions;
+        }
+
+        function getActionForMethodDeclaration(includeTypeScriptSyntax: boolean): CodeAction | undefined {
+            if (token.parent.parent.kind === SyntaxKind.CallExpression) {
+                const callExpression = <CallExpression>token.parent.parent;
+                const methodDeclaration = createMethodFromCallExpression(callExpression, tokenName, includeTypeScriptSyntax, makeStatic);
+
+                const methodDeclarationChangeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+                methodDeclarationChangeTracker.insertNodeAfter(classDeclarationSourceFile, classOpenBrace, methodDeclaration, { suffix: context.newLineCharacter });
+                return {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(makeStatic ?
+                        Diagnostics.Declare_method_0 :
+                        Diagnostics.Declare_static_method_0),
+                        [tokenName]),
+                    changes: methodDeclarationChangeTracker.getChanges()
+                };
+            }
         }
     }
 }

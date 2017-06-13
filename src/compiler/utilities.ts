@@ -596,6 +596,10 @@ namespace ts {
         return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.SuperKeyword;
     }
 
+    export function isImportCall(n: Node): n is ImportCall {
+        return n.kind === SyntaxKind.CallExpression && (<CallExpression>n).expression.kind === SyntaxKind.ImportKeyword;
+    }
+
     export function isPrologueDirective(node: Node): node is PrologueDirective {
         return node.kind === SyntaxKind.ExpressionStatement
             && (<ExpressionStatement>node).expression.kind === SyntaxKind.StringLiteral;
@@ -1434,31 +1438,17 @@ namespace ts {
     }
 
     function getJSDocTags(node: Node, kind: SyntaxKind): JSDocTag[] {
-        const docs = getJSDocs(node);
-        if (docs) {
-            const result: JSDocTag[] = [];
-            for (const doc of docs) {
-                if (doc.kind === SyntaxKind.JSDocParameterTag) {
-                    if (doc.kind === kind) {
-                        result.push(doc as JSDocTag);
-                    }
-                }
-                else {
-                    const tags = (doc as JSDoc).tags;
-                    if (tags) {
-                        result.push(...filter(tags, tag => tag.kind === kind));
-                    }
-                }
-            }
-            return result;
-        }
+        return flatMap(getJSDocs(node), doc =>
+            doc.kind === SyntaxKind.JSDocComment
+                ? filter((doc as JSDoc).tags, tag => tag.kind === kind)
+                : doc.kind === kind && doc);
     }
 
     function getFirstJSDocTag(node: Node, kind: SyntaxKind): JSDocTag {
         return node && firstOrUndefined(getJSDocTags(node, kind));
     }
 
-   export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
+    export function getJSDocs(node: Node): (JSDoc | JSDocTag)[] {
         if (isJSDocTypedefTag(node)) {
             return [node.parent];
         }
@@ -1556,6 +1546,12 @@ namespace ts {
             p.name.kind === SyntaxKind.Identifier && p.name.text === name);
     }
 
+    export function getTypeParameterFromJsDoc(node: TypeParameterDeclaration & { parent: JSDocTemplateTag }): TypeParameterDeclaration | undefined {
+        const name = node.name.text;
+        const { typeParameters } = (node.parent.parent.parent as ts.SignatureDeclaration | ts.InterfaceDeclaration | ts.ClassDeclaration);
+        return find(typeParameters, p => p.name.text === name);
+    }
+
     export function getJSDocType(node: Node): JSDocType {
         let tag: JSDocTypeTag | JSDocParameterTag = getFirstJSDocTag(node, SyntaxKind.JSDocTypeTag) as JSDocTypeTag;
         if (!tag && node.kind === SyntaxKind.Parameter) {
@@ -1572,8 +1568,17 @@ namespace ts {
         return getFirstJSDocTag(node, SyntaxKind.JSDocAugmentsTag) as JSDocAugmentsTag;
     }
 
+    export function getJSDocClassTag(node: Node): JSDocClassTag {
+        return getFirstJSDocTag(node, SyntaxKind.JSDocClassTag) as JSDocClassTag;
+    }
+
     export function getJSDocReturnTag(node: Node): JSDocReturnTag {
         return getFirstJSDocTag(node, SyntaxKind.JSDocReturnTag) as JSDocReturnTag;
+    }
+
+    export function getJSDocReturnType(node: Node): JSDocType {
+        const returnTag = getJSDocReturnTag(node);
+        return returnTag && returnTag.typeExpression && returnTag.typeExpression.type;
     }
 
     export function getJSDocTemplateTag(node: Node): JSDocTemplateTag {
@@ -1622,7 +1627,7 @@ namespace ts {
                     return unaryOperator === SyntaxKind.PlusPlusToken || unaryOperator === SyntaxKind.MinusMinusToken ? AssignmentKind.Compound : AssignmentKind.None;
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    return (<ForInStatement | ForOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
+                    return (<ForInOrOfStatement>parent).initializer === node ? AssignmentKind.Definite : AssignmentKind.None;
                 case SyntaxKind.ParenthesizedExpression:
                 case SyntaxKind.ArrayLiteralExpression:
                 case SyntaxKind.SpreadElement:
@@ -2496,7 +2501,7 @@ namespace ts {
         const path = outputDir
             ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
             : sourceFile.fileName;
-        return removeFileExtension(path) + ".d.ts";
+        return removeFileExtension(path) + Extension.Dts;
     }
 
     export interface EmitFileNames {
@@ -2555,7 +2560,7 @@ namespace ts {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : "";
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
                 action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
@@ -2576,19 +2581,19 @@ namespace ts {
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
     // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
-    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): string {
+    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
         if (options.jsx === JsxEmit.Preserve) {
             if (isSourceFileJavaScript(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
-                    return ".jsx";
+                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
+                    return Extension.Jsx;
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
                 // TypeScript source file preserving JSX syntax
-                return ".jsx";
+                return Extension.Jsx;
             }
         }
-        return ".js";
+        return Extension.Js;
     }
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
@@ -2621,12 +2626,17 @@ namespace ts {
         });
     }
 
-    /** Get the type annotaion for the value parameter. */
-    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+    function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
         if (accessor && accessor.parameters.length > 0) {
             const hasThis = accessor.parameters.length === 2 && parameterIsThisKeyword(accessor.parameters[0]);
-            return accessor.parameters[hasThis ? 1 : 0].type;
+            return accessor.parameters[hasThis ? 1 : 0];
         }
+    }
+
+    /** Get the type annotation for the value parameter. */
+    export function getSetAccessorTypeAnnotationNode(accessor: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(accessor);
+        return parameter && parameter.type;
     }
 
     export function getThisParameter(signature: SignatureDeclaration): ParameterDeclaration | undefined {
@@ -2705,6 +2715,55 @@ namespace ts {
             getAccessor,
             setAccessor
         };
+    }
+
+    /**
+     * Gets the effective type annotation of a variable, parameter, or property. If the node was
+     * parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocType(node);
+        }
+    }
+
+    /**
+     * Gets the effective return type annotation of a signature. If the node was parsed in a
+     * JavaScript file, gets the return type annotation from JSDoc.
+     */
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode {
+        if (node.type) {
+            return node.type;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            return getJSDocReturnType(node);
+        }
+    }
+
+    /**
+     * Gets the effective type parameters. If the node was parsed in a
+     * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
+     */
+    export function getEffectiveTypeParameterDeclarations(node: DeclarationWithTypeParameters): TypeParameterDeclaration[] {
+        if (node.typeParameters) {
+            return node.typeParameters;
+        }
+        if (node.flags & NodeFlags.JavaScriptFile) {
+            const templateTag = getJSDocTemplateTag(node);
+            return templateTag && templateTag.typeParameters;
+        }
+    }
+
+    /**
+     * Gets the effective type annotation of the value parameter of a set accessor. If the node
+     * was parsed in a JavaScript file, gets the type annotation from JSDoc.
+     */
+    export function getEffectiveSetAccessorTypeAnnotationNode(node: SetAccessorDeclaration): TypeNode {
+        const parameter = getSetAccessorValueParameter(node);
+        return parameter && getEffectiveTypeAnnotationNode(parameter);
     }
 
     export function emitNewLineBeforeLeadingComments(lineMap: number[], writer: EmitTextWriter, node: TextRange, leadingComments: CommentRange[]) {
@@ -2935,6 +2994,14 @@ namespace ts {
             return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
 
+        const flags = getModifierFlagsNoCache(node);
+        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
+        return flags;
+    }
+
+    /* @internal */
+    export function getModifierFlagsNoCache(node: Node): ModifierFlags {
+
         let flags = ModifierFlags.None;
         if (node.modifiers) {
             for (const modifier of node.modifiers) {
@@ -2946,7 +3013,6 @@ namespace ts {
             flags |= ModifierFlags.Export;
         }
 
-        node.modifierFlagsCache = flags | ModifierFlags.HasComputedFlags;
         return flags;
     }
 
@@ -3235,27 +3301,76 @@ namespace ts {
         return false;
     }
 
-    const syntaxKindCache: string[] = [];
-
-    export function formatSyntaxKind(kind: SyntaxKind): string {
-        const syntaxKindEnum = (<any>ts).SyntaxKind;
-        if (syntaxKindEnum) {
-            const cached = syntaxKindCache[kind];
-            if (cached !== undefined) {
-                return cached;
-            }
-
-            for (const name in syntaxKindEnum) {
-                if (syntaxKindEnum[name] === kind) {
-                    const result = `${kind} (${name})`;
-                    syntaxKindCache[kind] = result;
-                    return result;
+    /**
+     * Formats an enum value as a string for debugging and debug assertions.
+     */
+    function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
+        const members = getEnumMembers(enumObject);
+        if (value === 0) {
+            return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
+        }
+        if (isFlags) {
+            let result = "";
+            let remainingFlags = value;
+            for (let i = members.length - 1; i >= 0 && remainingFlags !== 0; i--) {
+                const [enumValue, enumName] = members[i];
+                if (enumValue !== 0 && (remainingFlags & enumValue) === enumValue) {
+                    remainingFlags &= ~enumValue;
+                    result = `${enumName}${result ? ", " : ""}${result}`;
                 }
+            }
+            if (remainingFlags === 0) {
+                return result;
             }
         }
         else {
-            return kind.toString();
+            for (const [enumValue, enumName] of members) {
+                if (enumValue === value) {
+                    return enumName;
+                }
+            }
         }
+        return value.toString();
+    }
+
+    function getEnumMembers(enumObject: any) {
+        const result: [number, string][] = [];
+        for (const name in enumObject) {
+            const value = enumObject[name];
+            if (typeof value === "number") {
+                result.push([value, name]);
+            }
+        }
+
+        return stableSort(result, (x, y) => compareValues(x[0], y[0]));
+    }
+
+    export function formatSyntaxKind(kind: SyntaxKind): string {
+        return formatEnum(kind, (<any>ts).SyntaxKind, /*isFlags*/ false);
+    }
+
+    export function formatModifierFlags(flags: ModifierFlags): string {
+        return formatEnum(flags, (<any>ts).ModifierFlags, /*isFlags*/ true);
+    }
+
+    export function formatTransformFlags(flags: TransformFlags): string {
+        return formatEnum(flags, (<any>ts).TransformFlags, /*isFlags*/ true);
+    }
+
+    export function formatEmitFlags(flags: EmitFlags): string {
+        return formatEnum(flags, (<any>ts).EmitFlags, /*isFlags*/ true);
+    }
+
+    export function formatSymbolFlags(flags: SymbolFlags): string {
+        return formatEnum(flags, (<any>ts).SymbolFlags, /*isFlags*/ true);
+    }
+
+    export function formatTypeFlags(flags: TypeFlags): string {
+        return formatEnum(flags, (<any>ts).TypeFlags, /*isFlags*/ true);
+    }
+
+    export function formatObjectFlags(flags: ObjectFlags): string {
+        return formatEnum(flags, (<any>ts).ObjectFlags, /*isFlags*/ true);
     }
 
     export function getRangePos(range: TextRange | undefined) {
@@ -3997,7 +4112,7 @@ namespace ts {
 
     // Signature elements
 
-    export function isTypeParameter(node: Node): node is TypeParameterDeclaration {
+    export function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration {
         return node.kind === SyntaxKind.TypeParameter;
     }
 
@@ -4620,6 +4735,16 @@ namespace ts {
 // All node tests in the following list should *not* reference parent pointers so that
 // they may be used with transformations.
 namespace ts {
+    /* @internal */
+    export function isNode(node: Node) {
+        return isNodeKind(node.kind);
+    }
+
+    /* @internal */
+    export function isNodeKind(kind: SyntaxKind) {
+        return kind >= SyntaxKind.FirstNode;
+    }
+
     /**
      * True if node is of some token syntax kind.
      * For example, this is true for an IfKeyword but not for an IfStatement.
@@ -5041,6 +5166,11 @@ namespace ts {
         return false;
     }
 
+    /* @internal */
+    export function isForInOrOfStatement(node: Node): node is ForInOrOfStatement {
+        return node.kind === SyntaxKind.ForInStatement || node.kind === SyntaxKind.ForOfStatement;
+    }
+
     // Element
 
     /* @internal */
@@ -5169,6 +5299,10 @@ namespace ts {
 
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
+        if (node.kind === SyntaxKind.TypeParameter) {
+            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJavaScriptFile(node);
+        }
+
         return isDeclarationKind(node.kind);
     }
 
@@ -5256,6 +5390,11 @@ namespace ts {
     /* @internal */
     export function isJSDocNode(node: Node): boolean {
         return node.kind >= SyntaxKind.FirstJSDocNode && node.kind <= SyntaxKind.LastJSDocNode;
+    }
+
+    /** True if node is of a kind that may contain comment text. */
+    export function isJSDocCommentContainingNode(node: Node): boolean {
+        return node.kind === SyntaxKind.JSDocComment || isJSDocTag(node);
     }
 
     // TODO: determine what this does before making it public.
