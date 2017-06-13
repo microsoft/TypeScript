@@ -6,8 +6,8 @@ var r = < <T>(x: T) => T > ((x) => { return null; }); // bug was 'could not find
 >x : T
 >T : T
 >T : T
->((x) => { return null; }) : (x: T) => any
->(x) => { return null; } : (x: T) => any
+>((x) => { return null; }) : <T>(x: T) => any
+>(x) => { return null; } : <T>(x: T) => any
 >x : T
 >null : null
 

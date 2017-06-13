@@ -125,7 +125,7 @@ const f01: <A>(x: A) => A[] = x => [x];
 >x : A
 >A : A
 >A : A
->x => [x] : (x: A) => A[]
+>x => [x] : <A>(x: A) => A[]
 >x : A
 >[x] : A[]
 >x : A
@@ -356,7 +356,7 @@ type fn = <A>(a: A) => A;
 const fn: fn = a => a;
 >fn : fn
 >fn : fn
->a => a : (a: A) => A
+>a => a : <A>(a: A) => A
 >a : A
 >a : A
 

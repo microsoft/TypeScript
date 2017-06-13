@@ -1,0 +1,41 @@
+=== tests/cases/conformance/types/never/neverUnionIntersection.ts ===
+type T01 = string | never;
+>T01 : string
+
+type T02 = string & never;
+>T02 : never
+
+type T03 = string | number | never;
+>T03 : T03
+
+type T04 = string & number & never;
+>T04 : never
+
+type T05 = any | never;
+>T05 : any
+
+type T06 = any & never;
+>T06 : never
+
+type T07 = undefined | never;
+>T07 : undefined
+
+type T08 = undefined & never;
+>T08 : never
+
+type T09 = null | never;
+>T09 : null
+>null : null
+
+type T10 = null & never;
+>T10 : never
+>null : null
+
+type T11 = { a: string } | never;
+>T11 : { a: string; }
+>a : string
+
+type T12 = { a: string } & never;
+>T12 : never
+>a : string
+

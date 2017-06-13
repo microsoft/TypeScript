@@ -3278,6 +3278,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005

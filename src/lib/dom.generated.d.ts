@@ -3483,7 +3483,7 @@ interface DragEvent extends MouseEvent {
 
 declare var DragEvent: {
     prototype: DragEvent;
-    new(): DragEvent;
+    new(type: "drag" | "dragend" | "dragenter" | "dragexit" | "dragleave" | "dragover" | "dragstart" | "drop", dragEventInit?: { dataTransfer?: DataTransfer }): DragEvent;
 };
 
 interface DynamicsCompressorNode extends AudioNode {
@@ -8224,6 +8224,7 @@ interface Navigator extends Object, NavigatorID, NavigatorOnLine, NavigatorConte
     readonly serviceWorker: ServiceWorkerContainer;
     readonly webdriver: boolean;
     readonly hardwareConcurrency: number;
+    readonly languages: string[];
     getGamepads(): Gamepad[];
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
