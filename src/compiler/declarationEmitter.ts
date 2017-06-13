@@ -340,7 +340,7 @@ namespace ts {
             // these types may need to add `undefined`.
             const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
                 (resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration) ||
-                 (getModifierFlags(declaration) & ModifierFlags.ParameterPropertyModifier && resolver.isOptionalParameter(declaration as ParameterDeclaration)));
+                 resolver.isOptionalUninitializedParameterProperty(declaration as ParameterDeclaration));
             if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);
