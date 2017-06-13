@@ -14,12 +14,15 @@ const obj = {
   lol,
   /** @type {number} */
   ['b' + 'ar1']: 42,
+  /** @type {function(number): number} */
+  arrowFunc: (num) => num + 42
 }
 obj.foo = 'string'
 obj.lol
 obj.bar = undefined;
 var k = obj.method1(0);
 obj.bar1 = "42";
+obj.arrowFunc(0);
 
 //// [0.js]
 // @ts-check
@@ -38,10 +41,13 @@ var obj = (_a = {
     },
     /** @type {number} */
     _a['b' + 'ar1'] = 42,
+    /** @type {function(number): number} */
+    _a.arrowFunc = function (num) { return num + 42; },
     _a);
 obj.foo = 'string';
 obj.lol;
 obj.bar = undefined;
 var k = obj.method1(0);
 obj.bar1 = "42";
+obj.arrowFunc(0);
 var _a;

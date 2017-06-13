@@ -30,6 +30,11 @@ const obj = {
 
   /** @type {number} */
   ['b' + 'ar1']: 42,
+  /** @type {function(number): number} */
+  arrowFunc: (num) => num + 42
+>arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
+>num : Symbol(num, Decl(0.js, 16, 14))
+>num : Symbol(num, Decl(0.js, 16, 14))
 }
 obj.foo = 'string'
 >obj.foo : Symbol(foo, Decl(0.js, 2, 13))
@@ -48,11 +53,16 @@ obj.bar = undefined;
 >undefined : Symbol(undefined)
 
 var k = obj.method1(0);
->k : Symbol(k, Decl(0.js, 19, 3))
+>k : Symbol(k, Decl(0.js, 21, 3))
 >obj.method1 : Symbol(method1, Decl(0.js, 6, 12))
 >obj : Symbol(obj, Decl(0.js, 2, 5))
 >method1 : Symbol(method1, Decl(0.js, 6, 12))
 
 obj.bar1 = "42";
 >obj : Symbol(obj, Decl(0.js, 2, 5))
+
+obj.arrowFunc(0);
+>obj.arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
+>obj : Symbol(obj, Decl(0.js, 2, 5))
+>arrowFunc : Symbol(arrowFunc, Decl(0.js, 14, 20))
 

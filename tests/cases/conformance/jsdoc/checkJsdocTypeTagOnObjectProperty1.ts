@@ -18,9 +18,12 @@ const obj = {
   lol,
   /** @type {number} */
   ['b' + 'ar1']: 42,
+  /** @type {function(number): number} */
+  arrowFunc: (num) => num + 42
 }
 obj.foo = 'string'
 obj.lol
 obj.bar = undefined;
 var k = obj.method1(0);
 obj.bar1 = "42";
+obj.arrowFunc(0);
