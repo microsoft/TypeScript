@@ -30,4 +30,5 @@ function foo(x: Promise<any>) {
 
 foo(import("./0"));
 >foo : Symbol(foo, Decl(2.ts, 0, 0))
+>"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
 
