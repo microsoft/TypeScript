@@ -879,6 +879,10 @@ namespace ts {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
             }
 
+            for (const p of oldProgram.getMissingFilePaths()) {
+                filesByName.set(p, undefined);
+            }
+
             files = newSourceFiles;
             fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
 
