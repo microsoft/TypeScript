@@ -8955,7 +8955,8 @@ namespace ts {
                                     reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
                                 }
                                 else {
-                                    if (prop.valueDeclaration) {
+                                    const objectLiteralDeclaration = source.symbol && source.symbol.valueDeclaration;
+                                    if (prop.valueDeclaration && findAncestor(prop.valueDeclaration, d => d === objectLiteralDeclaration)) {
                                         errorNode = prop.valueDeclaration;
                                     }
                                     reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
