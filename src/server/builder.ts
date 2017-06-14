@@ -93,6 +93,10 @@ namespace ts.server {
             return this.fileInfos_doNotAccessDirectly || (this.fileInfos_doNotAccessDirectly = createFileMap<T>());
         }
 
+        protected hasFileInfos() {
+            return !!this.fileInfos_doNotAccessDirectly;
+        }
+
         public clear() {
             // drop the existing list - it will be re-created as necessary
             this.fileInfos_doNotAccessDirectly = undefined;
@@ -130,11 +134,13 @@ namespace ts.server {
 
         abstract getFilesAffectedBy(scriptInfo: ScriptInfo): string[];
         abstract onProjectUpdateGraph(): void;
+        protected abstract ensureFileInfoIfInProject(scriptInfo: ScriptInfo): void;
 
         /**
          * @returns {boolean} whether the emit was conducted or not
          */
         emitFile(scriptInfo: ScriptInfo, writeFile: (path: string, data: string, writeByteOrderMark?: boolean) => void): boolean {
+            this.ensureFileInfoIfInProject(scriptInfo);
             const fileInfo = this.getFileInfo(scriptInfo.path);
             if (!fileInfo) {
                 return false;
@@ -158,7 +164,21 @@ namespace ts.server {
             super(project, BuilderFileInfo);
         }
 
+        protected ensureFileInfoIfInProject(scriptInfo: ScriptInfo) {
+            if (this.project.containsScriptInfo(scriptInfo)) {
+                this.getOrCreateFileInfo(scriptInfo.path);
+            }
+        }
+
         onProjectUpdateGraph() {
+            if (this.hasFileInfos()) {
+                this.forEachFileInfo(fileInfo => {
+                    if (!this.project.containsScriptInfo(fileInfo.scriptInfo)) {
+                        // This file was deleted from this project
+                        this.removeFileInfo(fileInfo.scriptInfo.path);
+                    }
+                });
+            }
         }
 
         /**
@@ -262,8 +282,15 @@ namespace ts.server {
             return [];
         }
 
-        onProjectUpdateGraph() {
+        protected ensureFileInfoIfInProject(_scriptInfo: ScriptInfo) {
             this.ensureProjectDependencyGraphUpToDate();
+        }
+
+        onProjectUpdateGraph() {
+            // Update the graph only if we have computed graph earlier
+            if (this.hasFileInfos()) {
+                this.ensureProjectDependencyGraphUpToDate();
+            }
         }
 
         private ensureProjectDependencyGraphUpToDate() {
