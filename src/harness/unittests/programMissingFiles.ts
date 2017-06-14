@@ -54,7 +54,7 @@ namespace ts {
 
         it("Missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", "./nonexistent1.ts"], options, testCompilerHost);
-            const missing = program.getMissingFilePaths();
+            const missing = program.getMissingFilePaths().sort();
             assert.equal(missing.length, 2);
             assert.equal(missing[0].toString(), "d:/pretend/nonexistent0.ts");
             assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
@@ -62,19 +62,10 @@ namespace ts {
 
         it("Some missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"], options, testCompilerHost);
-            const missing = program.getMissingFilePaths();
+            const missing = program.getMissingFilePaths().sort();
             assert.equal(missing.length, 2);
             assert.equal(missing[0].toString(), "d:/pretend/nonexistent0.ts");
             assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
-        });
-
-        it("Result order", () => {
-            const program0 = createProgram(["./nonexistent0.ts", "./nonexistent1.ts"], options, testCompilerHost);
-            const missing0 = program0.getMissingFilePaths();
-            const program1 = createProgram(["./nonexistent1.ts", "./nonexistent0.ts"], options, testCompilerHost);
-            const missing1 = program1.getMissingFilePaths();
-            assert.equal(missing0.length, 2);
-            assert.deepEqual(missing0, missing1);
         });
 
         it("Repeated root file", () => {
@@ -96,7 +87,7 @@ namespace ts {
 
         it("Missing triple slash references", () => {
             const program = createProgram([referenceFileRelativePath], options, testCompilerHost);
-            const missing = program.getMissingFilePaths();
+            const missing = program.getMissingFilePaths().sort();
             assert.isDefined(missing);
             assert.equal(missing.length, 6);
 

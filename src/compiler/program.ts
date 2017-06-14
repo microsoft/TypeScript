@@ -523,7 +523,7 @@ namespace ts {
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
-            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)).sort(), // TODO (acasey): don't sort
+            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)),
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
