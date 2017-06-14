@@ -37,14 +37,14 @@ namespace ts {
             /*libFiles*/ undefined
         );
 
-        it("No missing root files", () => {
+        it("handles no missing root files", () => {
             const program = createProgram([emptyFileRelativePath], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
             assert.equal(missing.length, 0);
         });
 
-        it("Missing root file", () => {
+        it("handles missing root file", () => {
             const program = createProgram(["./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
@@ -52,7 +52,7 @@ namespace ts {
             assert.equal(missing[0].toString(), "d:/pretend/nonexistent.ts"); // Absolute path
         });
 
-        it("Missing root files", () => {
+        it("handles multiple missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", "./nonexistent1.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
             assert.equal(missing.length, 2);
@@ -60,7 +60,7 @@ namespace ts {
             assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
         });
 
-        it("Some missing root files", () => {
+        it("handles a mix of present and missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
             assert.equal(missing.length, 2);
@@ -68,7 +68,7 @@ namespace ts {
             assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
         });
 
-        it("Repeated root file", () => {
+        it("handles repeatedly specified root files", () => {
             const program = createProgram(["./nonexistent.ts", "./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
@@ -76,7 +76,7 @@ namespace ts {
             assert.equal(missing[0].toString(), "d:/pretend/nonexistent.ts");
         });
 
-        it("Normalize case", () => {
+        it("normalizes file paths", () => {
             const program0 = createProgram(["./nonexistent.ts", "./NONEXISTENT.ts"], options, testCompilerHost);
             const program1 = createProgram(["./NONEXISTENT.ts", "./nonexistent.ts"], options, testCompilerHost);
             const missing0 = program0.getMissingFilePaths();
@@ -85,7 +85,7 @@ namespace ts {
             assert.deepEqual(missing0, missing1);
         });
 
-        it("Missing triple slash references", () => {
+        it("handles missing triple slash references", () => {
             const program = createProgram([referenceFileRelativePath], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
             assert.isDefined(missing);
