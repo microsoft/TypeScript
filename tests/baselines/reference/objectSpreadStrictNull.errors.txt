@@ -1,11 +1,3 @@
-tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(9,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-  Types of property 'sn' are incompatible.
-    Type 'string | number | undefined' is not assignable to type 'string | number'.
-      Type 'undefined' is not assignable to type 'string | number'.
-tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(10,9): error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-  Types of property 'sn' are incompatible.
-    Type 'string | number | undefined' is not assignable to type 'string | number'.
-      Type 'undefined' is not assignable to type 'string | number'.
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(14,9): error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
   Types of property 'sn' are incompatible.
     Type 'number | undefined' is not assignable to type 'string | number'.
@@ -21,9 +13,13 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(18,9): error TS23
 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,7): error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
   Types of property 'title' are incompatible.
     Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS2322: Type '{ foo: number | undefined; bar: string | undefined; }' is not assignable to type 'Fields'.
+  Types of property 'foo' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts (6 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadStrictNull.ts (5 errors) ====
     function f(
         definiteBoolean: { sn: boolean },
         definiteString: { sn: string },
@@ -33,17 +29,7 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,7): error TS23
         undefinedNumber: { sn: number | undefined }) {
         // optional
         let optionalUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalNumber };
-            ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-!!! error TS2322:   Types of property 'sn' are incompatible.
-!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
         let optionalUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...optionalString, ...optionalNumber };
-            ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number; }'.
-!!! error TS2322:   Types of property 'sn' are incompatible.
-!!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
         let allOptional: { sn?: string | number } = { ...optionalString, ...optionalNumber };
     
         // undefined
@@ -81,4 +67,24 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(28,7): error TS23
 !!! error TS2322: Type '{ title: undefined; yearReleased: number; }' is not assignable to type 'Movie'.
 !!! error TS2322:   Types of property 'title' are incompatible.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+    
+    interface Fields {
+        foo: number;
+        bar: string;
+    }
+    interface NearlyPartialFields {
+        foo: number | undefined;
+        bar: string | undefined;
+    }
+    function g(fields: Fields, partialFields: Partial<Fields>, nearlyPartialFields: NearlyPartialFields) {
+        // ok, undefined is stripped from optional properties when spread
+        fields = { ...fields, ...partialFields };
+        // error: not optional, undefined remains
+        fields = { ...fields, ...nearlyPartialFields };
+        ~~~~~~
+!!! error TS2322: Type '{ foo: number | undefined; bar: string | undefined; }' is not assignable to type 'Fields'.
+!!! error TS2322:   Types of property 'foo' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+    }
     
