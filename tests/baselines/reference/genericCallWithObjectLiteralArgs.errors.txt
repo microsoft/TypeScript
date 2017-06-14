@@ -1,5 +1,6 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts(5,9): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts(5,13): error TS2345: Argument of type '{ bar: number; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
+  Types of property 'baz' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts (1 errors) ====
@@ -8,9 +9,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     }
     
     var r = foo({ bar: 1, baz: '' }); // error
-            ~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+                ~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '{ bar: number; baz: string; }' is not assignable to parameter of type '{ bar: number; baz: number; }'.
+!!! error TS2345:   Types of property 'baz' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
     var r2 = foo({ bar: 1, baz: 1 }); // T = number
     var r3 = foo({ bar: foo, baz: foo }); // T = typeof foo
     var r4 = foo<Object>({ bar: 1, baz: '' }); // T = Object

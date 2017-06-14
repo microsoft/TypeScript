@@ -335,9 +335,12 @@ namespace ts {
             write(": ");
 
             // use the checker's type, not the declared type,
-            // for non-optional initialized parameters that aren't a parameter property
+            // for optional parameter properties
+            // and also for non-optional initialized parameters that aren't a parameter property
+            // these types may need to add `undefined`.
             const shouldUseResolverType = declaration.kind === SyntaxKind.Parameter &&
-                resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration);
+                (resolver.isRequiredInitializedParameter(declaration as ParameterDeclaration) ||
+                 resolver.isOptionalUninitializedParameterProperty(declaration as ParameterDeclaration));
             if (type && !shouldUseResolverType) {
                 // Write the type
                 emitType(type);

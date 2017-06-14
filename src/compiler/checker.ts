@@ -3233,9 +3233,15 @@ namespace ts {
                         writer.writeStringLiteral(literalTypeToString(<LiteralType>type));
                     }
                     else if (type.flags & TypeFlags.Index) {
+                        if (flags & TypeFormatFlags.InElementType) {
+                            writePunctuation(writer, SyntaxKind.OpenParenToken);
+                        }
                         writer.writeKeyword("keyof");
                         writeSpace(writer);
                         writeType((<IndexType>type).type, TypeFormatFlags.InElementType);
+                        if (flags & TypeFormatFlags.InElementType) {
+                            writePunctuation(writer, SyntaxKind.CloseParenToken);
+                        }
                     }
                     else if (type.flags & TypeFlags.IndexedAccess) {
                         writeType((<IndexedAccessType>type).objectType, TypeFormatFlags.InElementType);
@@ -8397,10 +8403,6 @@ namespace ts {
             return isTypeComparableTo(type1, type2) || isTypeComparableTo(type2, type1);
         }
 
-        function checkTypeSubtypeOf(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
-            return checkTypeRelatedTo(source, target, subtypeRelation, errorNode, headMessage, containingMessageChain);
-        }
-
         function checkTypeAssignableTo(source: Type, target: Type, errorNode: Node, headMessage?: DiagnosticMessage, containingMessageChain?: DiagnosticMessageChain): boolean {
             return checkTypeRelatedTo(source, target, assignableRelation, errorNode, headMessage, containingMessageChain);
         }
@@ -9844,13 +9846,6 @@ namespace ts {
             return signature.hasRestParameter && parameterIndex >= signature.parameters.length - 1;
         }
 
-        function isSupertypeOfEach(candidate: Type, types: Type[]): boolean {
-            for (const t of types) {
-                if (candidate !== t && !isTypeSubtypeOf(t, candidate)) return false;
-            }
-            return true;
-        }
-
         function literalTypesWithSameBaseType(types: Type[]): boolean {
             let commonBaseType: Type;
             for (const t of types) {
@@ -9865,11 +9860,13 @@ namespace ts {
             return true;
         }
 
-        // When the candidate types are all literal types with the same base type, the common
-        // supertype is a union of those literal types. Otherwise, the common supertype is the
-        // first type that is a supertype of each of the other types.
+        // When the candidate types are all literal types with the same base type, return a union
+        // of those literal types. Otherwise, return the leftmost type for which no type to the
+        // right is a supertype.
         function getSupertypeOrUnion(types: Type[]): Type {
-            return literalTypesWithSameBaseType(types) ? getUnionType(types) : forEach(types, t => isSupertypeOfEach(t, types) ? t : undefined);
+            return literalTypesWithSameBaseType(types) ?
+                getUnionType(types) :
+                reduceLeft(types, (s, t) => isTypeSubtypeOf(s, t) ? t : s);
         }
 
         function getCommonSupertype(types: Type[]): Type {
@@ -9877,52 +9874,9 @@ namespace ts {
                 return getSupertypeOrUnion(types);
             }
             const primaryTypes = filter(types, t => !(t.flags & TypeFlags.Nullable));
-            if (!primaryTypes.length) {
-                return getUnionType(types, /*subtypeReduction*/ true);
-            }
-            const supertype = getSupertypeOrUnion(primaryTypes);
-            return supertype && getNullableType(supertype, getFalsyFlagsOfTypes(types) & TypeFlags.Nullable);
-        }
-
-        function reportNoCommonSupertypeError(types: Type[], errorLocation: Node, errorMessageChainHead: DiagnosticMessageChain): void {
-            // The downfallType/bestSupertypeDownfallType is the first type that caused a particular candidate
-            // to not be the common supertype. So if it weren't for this one downfallType (and possibly others),
-            // the type in question could have been the common supertype.
-            let bestSupertype: Type;
-            let bestSupertypeDownfallType: Type;
-            let bestSupertypeScore = 0;
-
-            for (let i = 0; i < types.length; i++) {
-                let score = 0;
-                let downfallType: Type = undefined;
-                for (let j = 0; j < types.length; j++) {
-                    if (isTypeSubtypeOf(types[j], types[i])) {
-                        score++;
-                    }
-                    else if (!downfallType) {
-                        downfallType = types[j];
-                    }
-                }
-
-                Debug.assert(!!downfallType, "If there is no common supertype, each type should have a downfallType");
-
-                if (score > bestSupertypeScore) {
-                    bestSupertype = types[i];
-                    bestSupertypeDownfallType = downfallType;
-                    bestSupertypeScore = score;
-                }
-
-                // types.length - 1 is the maximum score, given that getCommonSupertype returned false
-                if (bestSupertypeScore === types.length - 1) {
-                    break;
-                }
-            }
-
-            // In the following errors, the {1} slot is before the {0} slot because checkTypeSubtypeOf supplies the
-            // subtype as the first argument to the error
-            checkTypeSubtypeOf(bestSupertypeDownfallType, bestSupertype, errorLocation,
-                Diagnostics.Type_argument_candidate_1_is_not_a_valid_type_argument_because_it_is_not_a_supertype_of_candidate_0,
-                errorMessageChainHead);
+            return primaryTypes.length ?
+                getNullableType(getSupertypeOrUnion(primaryTypes), getFalsyFlagsOfTypes(types) & TypeFlags.Nullable) :
+                getUnionType(types, /*subtypeReduction*/ true);
         }
 
         function isArrayType(type: Type): boolean {
@@ -10631,7 +10585,6 @@ namespace ts {
         function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
-            let inferenceSucceeded: boolean;
             if (!inferredType) {
                 if (inference.candidates) {
                     // We widen inferred literal types if
@@ -10647,52 +10600,39 @@ namespace ts {
                     // for inferences coming from return types in order to avoid common supertype failures.
                     const unionOrSuperType = context.flags & InferenceFlags.InferUnionTypes || inference.priority & InferencePriority.ReturnType ?
                         getUnionType(baseCandidates, /*subtypeReduction*/ true) : getCommonSupertype(baseCandidates);
-                    inferredType = unionOrSuperType ? getWidenedType(unionOrSuperType) : unknownType;
-                    inferenceSucceeded = !!unionOrSuperType;
+                    inferredType = getWidenedType(unionOrSuperType);
+                }
+                else if (context.flags & InferenceFlags.NoDefault) {
+                    // We use silentNeverType as the wildcard that signals no inferences.
+                    inferredType = silentNeverType;
                 }
                 else {
-                    if (context.flags & InferenceFlags.NoDefault) {
-                        // We use silentNeverType as the wildcard that signals no inferences.
-                        inferredType = silentNeverType;
+                    // Infer either the default or the empty object type when no inferences were
+                    // made. It is important to remember that in this case, inference still
+                    // succeeds, meaning there is no error for not having inference candidates. An
+                    // inference error only occurs when there are *conflicting* candidates, i.e.
+                    // candidates with no common supertype.
+                    const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
+                    if (defaultType) {
+                        // Instantiate the default type. Any forward reference to a type
+                        // parameter should be instantiated to the empty object type.
+                        inferredType = instantiateType(defaultType,
+                            combineTypeMappers(
+                                createBackreferenceMapper(context.signature.typeParameters, index),
+                                context));
                     }
                     else {
-                        // Infer either the default or the empty object type when no inferences were
-                        // made. It is important to remember that in this case, inference still
-                        // succeeds, meaning there is no error for not having inference candidates. An
-                        // inference error only occurs when there are *conflicting* candidates, i.e.
-                        // candidates with no common supertype.
-                        const defaultType = getDefaultFromTypeParameter(inference.typeParameter);
-                        if (defaultType) {
-                            // Instantiate the default type. Any forward reference to a type
-                            // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType,
-                                combineTypeMappers(
-                                    createBackreferenceMapper(context.signature.typeParameters, index),
-                                    context));
-                        }
-                        else {
-                            inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
-                        }
+                        inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
                     }
-                    inferenceSucceeded = true;
                 }
                 inference.inferredType = inferredType;
 
-                // Only do the constraint check if inference succeeded (to prevent cascading errors)
-                if (inferenceSucceeded) {
-                    const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
-                    if (constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, context);
-                        if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                            inference.inferredType = inferredType = instantiatedConstraint;
-                        }
+                const constraint = getConstraintOfTypeParameter(context.signature.typeParameters[index]);
+                if (constraint) {
+                    const instantiatedConstraint = instantiateType(constraint, context);
+                    if (!isTypeAssignableTo(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                        inference.inferredType = inferredType = instantiatedConstraint;
                     }
-                }
-                else if (context.failedTypeParameterIndex === undefined || context.failedTypeParameterIndex > index) {
-                    // If inference failed, it is necessary to record the index of the failed type parameter (the one we are on).
-                    // It might be that inference has already failed on a later type parameter on a previous call to inferTypeArguments.
-                    // So if this failure is on preceding type parameter, this type parameter is the new failure index.
-                    context.failedTypeParameterIndex = index;
                 }
             }
             return inferredType;
@@ -15024,17 +14964,6 @@ namespace ts {
                 }
             }
 
-            // On this call to inferTypeArguments, we may get more inferences for certain type parameters that were not
-            // fixed last time. This means that a type parameter that failed inference last time may succeed this time,
-            // or vice versa. Therefore, the failedTypeParameterIndex is useless if it points to an unfixed type parameter,
-            // because it may change. So here we reset it. However, getInferredType will not revisit any type parameters
-            // that were previously fixed. So if a fixed type parameter failed previously, it will fail again because
-            // it will contain the exact same set of inferences. So if we reset the index from a fixed type parameter,
-            // we will lose information that we won't recover this time around.
-            if (context.failedTypeParameterIndex !== undefined && !context.inferences[context.failedTypeParameterIndex].isFixed) {
-                context.failedTypeParameterIndex = undefined;
-            }
-
             // If a contextual type is available, infer from that type to the return type of the call expression. For
             // example, given a 'function wrap<T, U>(cb: (x: T) => U): (x: T) => U' and a call expression
             // 'let f: (x: string) => number = wrap(s => s.length)', we infer from the declared type of 'f' to the
@@ -15603,9 +15532,9 @@ namespace ts {
             // was fine. So if there is any overload that is only incorrect because of an
             // argument, we will report an error on that one.
             //
-            //     function foo(s: string) {}
-            //     function foo(n: number) {} // Report argument error on this overload
-            //     function foo() {}
+            //     function foo(s: string): void;
+            //     function foo(n: number): void; // Report argument error on this overload
+            //     function foo(): void;
             //     foo(true);
             //
             // If none of the overloads even made it that far, there are two possibilities.
@@ -15613,13 +15542,12 @@ namespace ts {
             // report an error on that. Or none of the overloads even had correct arity,
             // in which case give an arity error.
             //
-            //     function foo<T>(x: T, y: T) {} // Report type argument inference error
-            //     function foo() {}
-            //     foo(0, true);
+            //     function foo<T extends string>(x: T): void; // Report type argument error
+            //     function foo(): void;
+            //     foo<number>(0);
             //
             let candidateForArgumentError: Signature;
             let candidateForTypeArgumentError: Signature;
-            let resultOfFailedInference: InferenceContext;
             let result: Signature;
 
             // If we are in signature help, a trailing comma indicates that we intend to provide another argument,
@@ -15641,10 +15569,6 @@ namespace ts {
                 result = chooseOverload(candidates, subtypeRelation, signatureHelpTrailingComma);
             }
             if (!result) {
-                // Reinitialize these pointers for round two
-                candidateForArgumentError = undefined;
-                candidateForTypeArgumentError = undefined;
-                resultOfFailedInference = undefined;
                 result = chooseOverload(candidates, assignableRelation, signatureHelpTrailingComma);
             }
             if (result) {
@@ -15668,25 +15592,8 @@ namespace ts {
                 checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
             }
             else if (candidateForTypeArgumentError) {
-                if (!isTaggedTemplate && !isDecorator && typeArguments) {
-                    const typeArguments = (<CallExpression>node).typeArguments;
-                    checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
-                }
-                else {
-                    Debug.assert(resultOfFailedInference.failedTypeParameterIndex >= 0);
-                    const failedTypeParameter = candidateForTypeArgumentError.typeParameters[resultOfFailedInference.failedTypeParameterIndex];
-                    const inferenceCandidates = resultOfFailedInference.inferences[resultOfFailedInference.failedTypeParameterIndex].candidates;
-
-                    let diagnosticChainHead = chainDiagnosticMessages(/*details*/ undefined, // details will be provided by call to reportNoCommonSupertypeError
-                        Diagnostics.The_type_argument_for_type_parameter_0_cannot_be_inferred_from_the_usage_Consider_specifying_the_type_arguments_explicitly,
-                        typeToString(failedTypeParameter));
-
-                    if (fallbackError) {
-                        diagnosticChainHead = chainDiagnosticMessages(diagnosticChainHead, fallbackError);
-                    }
-
-                    reportNoCommonSupertypeError(inferenceCandidates, (<JsxOpeningLikeElement>node).tagName || (<CallExpression>node).expression || (<TaggedTemplateExpression>node).tag, diagnosticChainHead);
-                }
+                const typeArguments = (<CallExpression>node).typeArguments;
+                checkTypeArguments(candidateForTypeArgumentError, typeArguments, map(typeArguments, getTypeFromTypeNode), /*reportErrors*/ true, fallbackError);
             }
             else if (typeArguments && every(signatures, sig => length(sig.typeParameters) !== typeArguments.length)) {
                 let min = Number.POSITIVE_INFINITY;
@@ -15740,35 +15647,36 @@ namespace ts {
             return resolveErrorCall(node);
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
+                candidateForArgumentError = undefined;
+                candidateForTypeArgumentError = undefined;
                 for (const originalCandidate of candidates) {
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
 
                     let candidate: Signature;
-                    let typeArgumentsAreValid: boolean;
-                    const inferenceContext = originalCandidate.typeParameters
-                        ? createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0)
-                        : undefined;
+                    const inferenceContext = originalCandidate.typeParameters ?
+                        createInferenceContext(originalCandidate, /*flags*/ isInJavaScriptFile(node) ? InferenceFlags.AnyDefault : 0) :
+                        undefined;
 
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            let typeArgumentTypes: Type[] | undefined;
+                            let typeArgumentTypes: Type[];
                             if (typeArguments) {
                                 typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
-                                typeArgumentsAreValid = checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false);
+                                if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                                    candidateForTypeArgumentError = originalCandidate;
+                                    break;
+                                }
                             }
                             else {
                                 typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                                typeArgumentsAreValid = inferenceContext.failedTypeParameterIndex === undefined;
-                            }
-                            if (!typeArgumentsAreValid) {
-                                break;
                             }
                             candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                            candidateForArgumentError = candidate;
                             break;
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, /*value*/ true) : -1;
@@ -15776,28 +15684,6 @@ namespace ts {
                             return candidate;
                         }
                         excludeArgument[index] = false;
-                    }
-
-                    // A post-mortem of this iteration of the loop. The signature was not applicable,
-                    // so we want to track it as a candidate for reporting an error. If the candidate
-                    // had no type parameters, or had no issues related to type arguments, we can
-                    // report an error based on the arguments. If there was an issue with type
-                    // arguments, then we can only report an error based on the type arguments.
-                    if (originalCandidate.typeParameters) {
-                        const instantiatedCandidate = candidate;
-                        if (typeArgumentsAreValid) {
-                            candidateForArgumentError = instantiatedCandidate;
-                        }
-                        else {
-                            candidateForTypeArgumentError = originalCandidate;
-                            if (!typeArguments) {
-                                resultOfFailedInference = inferenceContext;
-                            }
-                        }
-                    }
-                    else {
-                        Debug.assert(originalCandidate === candidate);
-                        candidateForArgumentError = originalCandidate;
                     }
                 }
 
@@ -22664,14 +22550,12 @@ namespace ts {
                     return undefined;
 
                 case SyntaxKind.StringLiteral:
-                    // External module name in an import declaration
-                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) &&
-                        getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
-                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) &&
-                            (<ImportDeclaration>node.parent).moduleSpecifier === node)) {
-                        return resolveExternalModuleName(node, <LiteralExpression>node);
-                    }
-                    if (isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) {
+                    // 1). import x = require("./mo/*gotToDefinitionHere*/d")
+                    // 2). External module name in an import declaration
+                    // 3). Dynamic import call or require in javascript
+                    if ((isExternalModuleImportEqualsDeclaration(node.parent.parent) && getExternalModuleImportEqualsDeclarationExpression(node.parent.parent) === node) ||
+                        ((node.parent.kind === SyntaxKind.ImportDeclaration || node.parent.kind === SyntaxKind.ExportDeclaration) && (<ImportDeclaration>node.parent).moduleSpecifier === node) ||
+                        ((isInJavaScriptFile(node) && isRequireCall(node.parent, /*checkArgumentIsStringLiteral*/ false)) || isImportCall(node.parent))) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
                     // falls through
@@ -23149,6 +23033,13 @@ namespace ts {
                 !(getModifierFlags(parameter) & ModifierFlags.ParameterPropertyModifier);
         }
 
+        function isOptionalUninitializedParameterProperty(parameter: ParameterDeclaration) {
+            return strictNullChecks &&
+                isOptionalParameter(parameter) &&
+                !parameter.initializer &&
+                !!(getModifierFlags(parameter) & ModifierFlags.ParameterPropertyModifier);
+        }
+
         function getNodeCheckFlags(node: Node): NodeCheckFlags {
             return getNodeLinks(node).flags;
         }
@@ -23358,6 +23249,7 @@ namespace ts {
                 isDeclarationVisible,
                 isImplementationOfOverload,
                 isRequiredInitializedParameter,
+                isOptionalUninitializedParameterProperty,
                 writeTypeOfDeclaration,
                 writeReturnTypeOfSignatureDeclaration,
                 writeTypeOfExpression,
