@@ -297,6 +297,7 @@ namespace ts {
                 const missingPaths = compileResult.program.getMissingFilePaths() || [];
                 missingPaths.forEach((path: Path): void => {
                     const fileWatcher = sys.watchFile(path, (_fileName: string, removed?: boolean) => {
+                        // removed = deleted ? true : (added ? false : undefined)
                         if (removed === false) {
                             fileWatcher.close();
                             startTimerForRecompilation();

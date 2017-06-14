@@ -522,6 +522,9 @@ namespace ts.server {
                 return;
             }
 
+            // removed = deleted ? true : (added ? false : undefined)
+            // This value is consistent with sys.watchFile()
+            // and depended upon by the file watchers created in performCompilation() in tsc's executeCommandLine().
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
                     watchedFile.callback(watchedFile.fileName);

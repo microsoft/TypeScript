@@ -582,6 +582,7 @@ namespace ts.server {
                 missingFilePaths.forEach(p => {
                     if (!this.missingFilesMap.contains(p)) {
                         const fileWatcher = ts.sys.watchFile(p, (_filename: string, removed?: boolean) => {
+                            // removed = deleted ? true : (added ? false : undefined)
                             if (removed === false && this.missingFilesMap.contains(p)) {
                                 fileWatcher.close();
                                 this.missingFilesMap.remove(p);
