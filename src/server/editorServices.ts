@@ -1484,6 +1484,10 @@ namespace ts.server {
             // at this point if file is the part of some configured/external project then this project should be created
             const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ true);
+            // Delete the orphan files here because there might be orphan script infos (which are not part of project)
+            // when some file/s were closed which resulted in project removal.
+            // It was then postponed to cleanup these script infos so that they can be reused if
+            // the file from that old project is reopened because of opening file from here.
             this.deleteOrphanScriptInfoNotInAnyProject();
             this.printProjects();
             return { configFileName, configFileErrors };
