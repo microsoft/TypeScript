@@ -18,14 +18,14 @@ namespace ts.codefix {
 
             switch (token.kind) {
                 case ts.SyntaxKind.Identifier:
-                    return deleteIdentifier();
+                    return deleteIdentifierOrPrefixWithUnderscore(<Identifier>token);
 
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.NamespaceImport:
-                    return deleteNode(token.parent);
+                    return [deleteNode(token.parent)];
 
                 default:
-                    return deleteDefault();
+                    return [deleteDefault()];
             }
 
             function deleteDefault() {
@@ -40,61 +40,69 @@ namespace ts.codefix {
                 }
             }
 
-            function deleteIdentifier(): CodeAction[] | undefined {
-                switch (token.parent.kind) {
+            function prefixIdentifierWithUnderscore(identifier: Identifier): CodeAction {
+                const startPosition = identifier.getStart(sourceFile, /*includeJsDocComment*/ false);
+                return {
+                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Prefix_0_with_an_underscore), { 0: token.getText() }),
+                    changes: [{
+                        fileName: sourceFile.path,
+                        textChanges: [{
+                            span: { start: startPosition, length: 0 },
+                            newText: "_"
+                        }]
+                    }]
+                };
+            }
+
+            function deleteIdentifierOrPrefixWithUnderscore(identifier: Identifier): CodeAction[] | undefined {
+                const parent = identifier.parent;
+                switch (parent.kind) {
                     case ts.SyntaxKind.VariableDeclaration:
-                        return deleteVariableDeclaration(<ts.VariableDeclaration>token.parent);
+                        return deleteVariableDeclarationOrPrefixWithUnderscore(identifier, <ts.VariableDeclaration>parent);
 
                     case SyntaxKind.TypeParameter:
-                        const typeParameters = (<DeclarationWithTypeParameters>token.parent.parent).typeParameters;
+                        const typeParameters = (<DeclarationWithTypeParameters>parent.parent).typeParameters;
                         if (typeParameters.length === 1) {
                             const previousToken = getTokenAtPosition(sourceFile, typeParameters.pos - 1, /*includeJsDocComment*/ false);
-                            if (!previousToken || previousToken.kind !== SyntaxKind.LessThanToken) {
-                                return deleteRange(typeParameters);
-                            }
                             const nextToken = getTokenAtPosition(sourceFile, typeParameters.end, /*includeJsDocComment*/ false);
-                            if (!nextToken || nextToken.kind !== SyntaxKind.GreaterThanToken) {
-                                return deleteRange(typeParameters);
-                            }
-                            return deleteNodeRange(previousToken, nextToken);
+                            Debug.assert(previousToken.kind === SyntaxKind.LessThanToken);
+                            Debug.assert(nextToken.kind === SyntaxKind.GreaterThanToken);
+
+                            return [deleteNodeRange(previousToken, nextToken)];
                         }
                         else {
-                            return deleteNodeInList(token.parent);
+                            return [deleteNodeInList(parent)];
                         }
 
                     case ts.SyntaxKind.Parameter:
-                        const functionDeclaration = <FunctionDeclaration>token.parent.parent;
-                        if (functionDeclaration.parameters.length === 1) {
-                            return deleteNode(token.parent);
-                        }
-                        else {
-                            return deleteNodeInList(token.parent);
-                        }
+                        const functionDeclaration = <FunctionDeclaration>parent.parent;
+                        return [functionDeclaration.parameters.length === 1 ? deleteNode(parent) : deleteNodeInList(parent),
+                            prefixIdentifierWithUnderscore(identifier)];
 
                     // handle case where 'import a = A;'
                     case SyntaxKind.ImportEqualsDeclaration:
-                        const importEquals = getAncestor(token, SyntaxKind.ImportEqualsDeclaration);
-                        return deleteNode(importEquals);
+                        const importEquals = getAncestor(identifier, SyntaxKind.ImportEqualsDeclaration);
+                        return [deleteNode(importEquals)];
 
                     case SyntaxKind.ImportSpecifier:
-                        const namedImports = <NamedImports>token.parent.parent;
+                        const namedImports = <NamedImports>parent.parent;
                         if (namedImports.elements.length === 1) {
                             // Only 1 import and it is unused. So the entire declaration should be removed.
-                            const importSpec = getAncestor(token, SyntaxKind.ImportDeclaration);
-                            return deleteNode(importSpec);
+                            const importSpec = getAncestor(identifier, SyntaxKind.ImportDeclaration);
+                            return [deleteNode(importSpec)];
                         }
                         else {
                             // delete import specifier
-                            return deleteNodeInList(token.parent);
+                            return [deleteNodeInList(parent)];
                         }
 
                     // handle case where "import d, * as ns from './file'"
                     // or "'import {a, b as ns} from './file'"
                     case SyntaxKind.ImportClause: // this covers both 'import |d|' and 'import |d,| *'
-                        const importClause = <ImportClause>token.parent;
+                        const importClause = <ImportClause>parent;
                         if (!importClause.namedBindings) { // |import d from './file'| or |import * as ns from './file'|
                             const importDecl = getAncestor(importClause, SyntaxKind.ImportDeclaration);
-                            return deleteNode(importDecl);
+                            return [deleteNode(importDecl)];
                         }
                         else {
                             // import |d,| * as ns from './file'
@@ -102,64 +110,62 @@ namespace ts.codefix {
                             const nextToken = getTokenAtPosition(sourceFile, importClause.name.end, /*includeJsDocComment*/ false);
                             if (nextToken && nextToken.kind === SyntaxKind.CommaToken) {
                                 // shift first non-whitespace position after comma to the start position of the node
-                                return deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) });
+                                return [deleteRange({ pos: start, end: skipTrivia(sourceFile.text, nextToken.end, /*stopAfterLineBreaks*/ false, /*stopAtComments*/ true) })];
                             }
                             else {
-                                return deleteNode(importClause.name);
+                                return [deleteNode(importClause.name)];
                             }
                         }
 
                     case SyntaxKind.NamespaceImport:
-                        const namespaceImport = <NamespaceImport>token.parent;
-                        if (namespaceImport.name === token && !(<ImportClause>namespaceImport.parent).name) {
+                        const namespaceImport = <NamespaceImport>parent;
+                        if (namespaceImport.name === identifier && !(<ImportClause>namespaceImport.parent).name) {
                             const importDecl = getAncestor(namespaceImport, SyntaxKind.ImportDeclaration);
-                            return deleteNode(importDecl);
+                            return [deleteNode(importDecl)];
                         }
                         else {
                             const previousToken = getTokenAtPosition(sourceFile, namespaceImport.pos - 1, /*includeJsDocComment*/ false);
                             if (previousToken && previousToken.kind === SyntaxKind.CommaToken) {
                                 const startPosition = textChanges.getAdjustedStartPosition(sourceFile, previousToken, {}, textChanges.Position.FullStart);
-                                return deleteRange({ pos: startPosition, end: namespaceImport.end });
+                                return [deleteRange({ pos: startPosition, end: namespaceImport.end })];
                             }
-                            return deleteRange(namespaceImport);
+                            return [deleteRange(namespaceImport)];
                         }
 
                     default:
-                        return deleteDefault();
+                        return [deleteDefault()];
                 }
             }
 
             // token.parent is a variableDeclaration
-            function deleteVariableDeclaration(varDecl: ts.VariableDeclaration): CodeAction[] | undefined {
+            function deleteVariableDeclarationOrPrefixWithUnderscore(identifier: Identifier, varDecl: ts.VariableDeclaration): CodeAction[] | undefined {
                 switch (varDecl.parent.parent.kind) {
                     case SyntaxKind.ForStatement:
                         const forStatement = <ForStatement>varDecl.parent.parent;
                         const forInitializer = <VariableDeclarationList>forStatement.initializer;
-                        if (forInitializer.declarations.length === 1) {
-                            return deleteNode(forInitializer);
-                        }
-                        else {
-                            return deleteNodeInList(varDecl);
-                        }
+                        return [forInitializer.declarations.length === 1 ? deleteNode(forInitializer) : deleteNodeInList(varDecl)];
 
                     case SyntaxKind.ForOfStatement:
                         const forOfStatement = <ForOfStatement>varDecl.parent.parent;
                         Debug.assert(forOfStatement.initializer.kind === SyntaxKind.VariableDeclarationList);
                         const forOfInitializer = <VariableDeclarationList>forOfStatement.initializer;
-                        return replaceNode(forOfInitializer.declarations[0], createObjectLiteral());
+                        return [
+                            replaceNode(forOfInitializer.declarations[0], createObjectLiteral()),
+                            prefixIdentifierWithUnderscore(identifier)
+                        ];
 
                     case SyntaxKind.ForInStatement:
                         // There is no valid fix in the case of:
                         //  for .. in
-                        return undefined;
+                        return [prefixIdentifierWithUnderscore(identifier)];
 
                     default:
                         const variableStatement = <VariableStatement>varDecl.parent.parent;
                         if (variableStatement.declarationList.declarations.length === 1) {
-                            return deleteNode(variableStatement);
+                            return [deleteNode(variableStatement)];
                         }
                         else {
-                            return deleteNodeInList(varDecl);
+                            return [deleteNodeInList(varDecl)];
                         }
                 }
             }
@@ -184,11 +190,11 @@ namespace ts.codefix {
                 return makeChange(textChanges.ChangeTracker.fromCodeFixContext(context).replaceNode(sourceFile, n, newNode));
             }
 
-            function makeChange(changeTracker: textChanges.ChangeTracker) {
-                return [{
+            function makeChange(changeTracker: textChanges.ChangeTracker): CodeAction {
+                return {
                     description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Remove_declaration_for_Colon_0), { 0: token.getText() }),
                     changes: changeTracker.getChanges()
-                }];
+                };
             }
         }
     });
