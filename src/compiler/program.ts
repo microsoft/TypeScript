@@ -512,6 +512,8 @@ namespace ts {
             }
         }
 
+        const missingFilePaths = filesByName.getKeys().filter(p => !filesByName.get(p));
+
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
 
@@ -523,7 +525,7 @@ namespace ts {
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
-            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)),
+            getMissingFilePaths: () => missingFilePaths,
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
