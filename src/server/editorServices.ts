@@ -565,10 +565,17 @@ namespace ts.server {
             }
             else {
                 if (info && (!info.isScriptOpen())) {
-                    // file has been changed which might affect the set of referenced files in projects that include
-                    // this file and set of inferred projects
-                    info.reloadFromFile();
-                    this.updateProjectGraphs(info.containingProjects);
+                    if (info.containingProjects.length === 0) {
+                        // Orphan script info, remove it as we can always reload it on next open
+                        info.stopWatcher();
+                        this.filenameToScriptInfo.remove(info.path);
+                    }
+                    else {
+                        // file has been changed which might affect the set of referenced files in projects that include
+                        // this file and set of inferred projects
+                        info.reloadFromFile();
+                        this.updateProjectGraphs(info.containingProjects);
+                    }
                 }
             }
         }
@@ -829,10 +836,29 @@ namespace ts.server {
                         this.assignScriptInfoToInferredProjectIfNecessary(f, /*addToListOfOpenFiles*/ false);
                     }
                 }
+
+                // Cleanup script infos that arent part of any project is postponed to
+                // next file open so that if file from same project is opened we wont end up creating same script infos
             }
-            if (info.containingProjects.length === 0) {
-                // if there are not projects that include this script info - delete it
-                this.filenameToScriptInfo.remove(info.path);
+
+            // If the current info is being just closed - add the watcher file to track changes
+            // But if file was deleted, handle that part
+            if (this.host.fileExists(info.fileName)) {
+                this.watchClosedScriptInfo(info);
+            }
+            else {
+                this.handleDeletedFile(info);
+            }
+        }
+
+        private deleteOrphanScriptInfoNotInAnyProject() {
+            for (const path of this.filenameToScriptInfo.getKeys()) {
+                const info = this.filenameToScriptInfo.get(path);
+                if (!info.isScriptOpen() && info.containingProjects.length === 0) {
+                    // if there are not projects that include this script info - delete it
+                    info.stopWatcher();
+                    this.filenameToScriptInfo.remove(info.path);
+                }
             }
         }
 
@@ -1303,6 +1329,14 @@ namespace ts.server {
             return this.getScriptInfoForNormalizedPath(toNormalizedPath(uncheckedFileName));
         }
 
+        watchClosedScriptInfo(info: ScriptInfo) {
+            // do not watch files with mixed content - server doesn't know how to interpret it
+            if (!info.hasMixedContent) {
+                const { fileName } = info;
+                info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+            }
+        }
+
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean) {
             let info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
@@ -1318,15 +1352,13 @@ namespace ts.server {
                         }
                     }
                     else {
-                        // do not watch files with mixed content - server doesn't know how to interpret it
-                        if (!hasMixedContent) {
-                            info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
-                        }
+                        this.watchClosedScriptInfo(info);
                     }
                 }
             }
             if (info) {
                 if (openedByClient && !info.isScriptOpen()) {
+                    info.stopWatcher();
                     info.open(fileContent);
                     if (hasMixedContent) {
                         info.registerFileUpdate();
@@ -1421,6 +1453,7 @@ namespace ts.server {
             for (const p of this.inferredProjects) {
                 p.updateGraph();
             }
+
             this.printProjects();
         }
 
@@ -1454,6 +1487,11 @@ namespace ts.server {
             // at this point if file is the part of some configured/external project then this project should be created
             const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ true, fileContent, scriptKind, hasMixedContent);
             this.assignScriptInfoToInferredProjectIfNecessary(info, /*addToListOfOpenFiles*/ true);
+            // Delete the orphan files here because there might be orphan script infos (which are not part of project)
+            // when some file/s were closed which resulted in project removal.
+            // It was then postponed to cleanup these script infos so that they can be reused if
+            // the file from that old project is reopened because of opening file from here.
+            this.deleteOrphanScriptInfoNotInAnyProject();
             this.printProjects();
             return { configFileName, configFileErrors };
         }

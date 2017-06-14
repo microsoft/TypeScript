@@ -2204,7 +2204,8 @@ namespace ts.projectSystem {
             projectService.closeClientFile(f1.path);
             projectService.checkNumberOfProjects({});
 
-            for (const f of [f2, f3]) {
+            for (const f of [f1, f2, f3]) {
+                // There shouldnt be any script info as we closed the file that resulted in creation of it
                 const scriptInfo = projectService.getScriptInfoForNormalizedPath(server.toNormalizedPath(f.path));
                 assert.equal(scriptInfo.containingProjects.length, 0, `expect 0 containing projects for '${f.path}'`);
             }
