@@ -3930,11 +3930,6 @@ namespace ts {
         getNewLine(): string;
 
         /*
-         * Return a list of files that have been detected since they were reported missing.
-         */
-        getDiscoveredMissingFiles?(): Path[];
-
-        /*
          * CompilerHost must either implement resolveModuleNames (in case if it wants to be completely in charge of
          * module name resolution) or provide implementation for methods from ModuleResolutionHost (in this case compiler
          * will apply built-in module resolution logic and use members of ModuleResolutionHost to ask host specific questions).

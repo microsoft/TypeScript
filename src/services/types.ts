@@ -271,7 +271,7 @@ namespace ts {
 
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
 
-        getProgram(discoveredMissingFiles?: Path[]): Program;
+        getProgram(): Program;
 
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 

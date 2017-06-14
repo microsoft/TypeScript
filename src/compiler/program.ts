@@ -523,7 +523,7 @@ namespace ts {
             getSourceFile,
             getSourceFileByPath,
             getSourceFiles: () => files,
-            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)).sort(),
+            getMissingFilePaths: () => filesByName.getKeys().filter(p => !filesByName.get(p)).sort(), // TODO (acasey): don't sort
             getCompilerOptions: () => options,
             getSyntacticDiagnostics,
             getOptionsDiagnostics,
@@ -858,12 +858,20 @@ namespace ts {
                 return oldProgram.structureIsReused;
             }
 
-            // Strictly speaking, we could probably retain more structure based
-            // on our knowledge of the particular files that were discovered.
-            if (host.getDiscoveredMissingFiles) {
-                const discovered = host.getDiscoveredMissingFiles() || emptyArray;
-                if (discovered.length > 0) {
-                    return oldProgram.structureIsReused = StructureIsReused.SafeModules;
+            // If a file has ceased to be missing, then we need to discard some of the old
+            // structure in order to pick it up.
+            // Caution: if the file has created and then deleted between since it was discovered to
+            // be missing, then the corresponding file watcher will have been closed and no new one
+            // will be created until we encounter a change that prevents complete structure reuse.
+            // During this interval, creation of the file will go unnoticed.  We expect this to be
+            // both rare and low-impact.
+            if (oldProgram.getMissingFilePaths) {
+                const missingFilePaths: Path[] = oldProgram.getMissingFilePaths() || emptyArray;
+                for (const missingFilePath of missingFilePaths) {
+                    // TODO (acasey): use caching to avoid hitting the disk
+                    if (host.fileExists(missingFilePath)) {
+                        return oldProgram.structureIsReused = StructureIsReused.SafeModules;
+                    }
                 }
             }
 

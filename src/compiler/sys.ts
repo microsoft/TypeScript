@@ -339,6 +339,7 @@ namespace ts {
                         };
                     }
 
+                    // TODO (acasey): document
                     function fileChanged(curr: any, prev: any) {
                         const isCurrZero = +curr.mtime === 0;
                         const isPrevZero = +prev.mtime === 0;

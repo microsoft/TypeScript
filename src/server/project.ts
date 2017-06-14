@@ -483,10 +483,10 @@ namespace ts.server {
          * Updates set of files that contribute to this project
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
-        updateGraph(discoveredMissingFiles?: Path[]): boolean {
+        updateGraph(): boolean {
             this.lsHost.startRecordingFilesWithChangedResolutions();
 
-            let hasChanges = this.updateGraphWorker(discoveredMissingFiles);
+            let hasChanges = this.updateGraphWorker();
 
             const changedFiles: ReadonlyArray<Path> = this.lsHost.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
@@ -540,9 +540,9 @@ namespace ts.server {
             return true;
         }
 
-        private updateGraphWorker(discoveredMissingFiles?: Path[]) {
+        private updateGraphWorker() {
             const oldProgram = this.program;
-            this.program = this.languageService.getProgram(discoveredMissingFiles);
+            this.program = this.languageService.getProgram();
 
             let hasChanges = false;
             // bump up the version if
@@ -587,10 +587,8 @@ namespace ts.server {
                                 this.missingFilesMap.remove(p);
 
                                 // When a missing file is created, we should update the graph.
-                                // CONSIDER: We could likely improve performance by aggregating some or all of
-                                // the files discovered for a given project into a single updateGraph call.
                                 this.markAsDirty();
-                                this.updateGraph(/*discoveredMissingFiles*/ [p]);
+                                this.updateGraph();
                             }
                         });
                         this.missingFilesMap.set(p, fileWatcher);
