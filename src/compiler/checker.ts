@@ -22820,22 +22820,12 @@ namespace ts {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
             }
-
-            if (isDeclarationNameOrImportPropertyName(node)) {
-                // This is a declaration, call getSymbolOfNode
-                return getSymbolOfNode(node.parent);
-            }
-            else if (isLiteralComputedPropertyDeclarationName(node)) {
-                return getSymbolOfNode(node.parent.parent);
-            }
-
+            
             if (node.kind === SyntaxKind.Identifier) {
                 if (isInRightSideOfImportOrExportAssignment(<Identifier>node)) {
                     return getSymbolOfEntityNameOrPropertyAccessExpression(<Identifier>node);
                 }
-                else if (node.parent.kind === SyntaxKind.BindingElement &&
-                    node.parent.parent.kind === SyntaxKind.ObjectBindingPattern &&
-                    node === (<BindingElement>node.parent).propertyName) {
+                else if (node.parent.kind === SyntaxKind.BindingElement && node.parent.parent.kind === SyntaxKind.ObjectBindingPattern) {
                     const typeOfPattern = getTypeOfNode(node.parent.parent);
                     const propertyDeclaration = typeOfPattern && getPropertyOfType(typeOfPattern, (<Identifier>node).escapedText);
 
@@ -22843,6 +22833,14 @@ namespace ts {
                         return propertyDeclaration;
                     }
                 }
+            }
+
+            if (isDeclarationNameOrImportPropertyName(node)) {
+                // This is a declaration, call getSymbolOfNode
+                return getSymbolOfNode(node.parent);
+            }
+            else if (isLiteralComputedPropertyDeclarationName(node)) {
+                return getSymbolOfNode(node.parent.parent);
             }
 
             switch (node.kind) {

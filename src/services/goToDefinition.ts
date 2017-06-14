@@ -38,6 +38,16 @@ namespace ts.GoToDefinition {
             return [createDefinitionFromSignatureDeclaration(typeChecker, calledDeclaration)];
         }
 
+        // If the node is an identifier in bindingelement of ObjectBindingPattern (Note: ArrayBindingPattern can only declaration)
+        // instead of just return the declaration symbol which is itself. We should try to get to the original type of the ObjectBindingPattern and return the property declaration.
+        // For example:
+        //      import('./foo').then(({ b/*goto*/ar }) => undefined); => should get use to the declaration in file "./foo"
+        //
+        //      function bar<T>(onfulfilled: (value: T) => void) { //....}
+        //      interface Test {
+        //          pr/*destination*/op1: number
+        //      }
+        //      bar<Test>(({pr/*goto*/op1})=>{});
         let symbol = typeChecker.getSymbolAtLocation(node);
 
         // Could not find a symbol e.g. node is string or number keyword,
