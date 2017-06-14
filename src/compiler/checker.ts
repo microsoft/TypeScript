@@ -4827,20 +4827,8 @@ namespace ts {
 
         function getInstantiatedConstructorsForTypeArguments(type: Type, typeArgumentNodes: TypeNode[], location: Node): Signature[] {
             const signatures = getConstructorsForTypeArguments(type, typeArgumentNodes, location);
-            if (some(signatures)) {
-                const result: Signature[] = [];
-                const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
-                for (const sig of signatures) {
-                    if (some(sig.typeParameters)) {
-                        result.push(getSignatureInstantiation(sig, typeArguments));
-                    }
-                    else {
-                        result.push(sig);
-                    }
-                }
-                return result;
-            }
-            return emptyArray;
+            const typeArguments = map(typeArgumentNodes, getTypeFromTypeNode);
+            return sameMap(signatures, sig => some(sig.typeParameters) ? getSignatureInstantiation(sig, typeArguments) : sig);
         }
 
         /**
