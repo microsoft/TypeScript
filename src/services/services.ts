@@ -822,7 +822,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createFileMap<HostFileInformation>();
@@ -857,22 +857,17 @@ namespace ts {
             return entry;
         }
 
-        private getEntry(path: Path): HostFileInformation {
+        public getEntryByPath(path: Path): HostFileInformation {
             return this.fileNameToEntry.get(path);
         }
 
-        private contains(path: Path): boolean {
+        public containsEntryByPath(path: Path): boolean {
             return this.fileNameToEntry.contains(path);
         }
 
-        public getOrCreateEntry(fileName: string): HostFileInformation {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-            return this.getOrCreateEntryByPath(fileName, path);
-        }
-
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.contains(path)
-                ? this.getEntry(path)
+            return this.containsEntryByPath(path)
+                ? this.getEntryByPath(path)
                 : this.createEntry(fileName, path);
         }
 
@@ -889,12 +884,12 @@ namespace ts {
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1159,12 +1154,19 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
-                    return hostCache.getOrCreateEntry(fileName) !== undefined;
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    return hostCache.containsEntryByPath(path) ?
+                        !!hostCache.getEntryByPath(path) :
+                        (host.fileExists && host.fileExists(fileName));
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
-                    const entry = hostCache.getOrCreateEntry(fileName);
-                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    if (hostCache.containsEntryByPath(path)) {
+                        const entry = hostCache.getEntryByPath(path);
+                        return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    }
+                    return host.readFile && host.readFile(fileName);
                 },
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
@@ -1316,7 +1318,9 @@ namespace ts {
             if (program) {
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                program = undefined;
             }
+            host = undefined;
         }
 
         /// Diagnostics
