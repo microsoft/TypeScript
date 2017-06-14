@@ -56,8 +56,8 @@ goTo.marker('9');
 verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
-verify.completionListContains("connectModule");
-verify.completionListContains("connectExport");
+verify.not.completionListContains("connectModule");
+verify.not.completionListContains("connectExport");
 
 goTo.marker('10');
 verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");

@@ -82,7 +82,7 @@ namespace ts {
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.All;
         }
-        else if (isInRightSideOfImport(node)) {
+        else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
         }
         else if (isDeclarationName(node)) {
@@ -118,7 +118,7 @@ namespace ts {
         return SemanticMeaning.Namespace;
     }
 
-    function isInRightSideOfImport(node: Node) {
+    export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
@@ -745,7 +745,7 @@ namespace ts {
                 // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
-                    const start = (includeJsDoc && child.jsDoc ? child.jsDoc[0] : child).getStart(sourceFile);
+                    const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
