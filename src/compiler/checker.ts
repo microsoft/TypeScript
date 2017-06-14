@@ -151,12 +151,16 @@ namespace ts {
             getRootSymbols,
             getContextualType: node => {
                 node = getParseTreeNode(node, isExpression);
-                return node ? getContextualType(node) : undefined;
+                return node ? getContextualType(node, /*bestGuessForSignature*/ true) : undefined;
             },
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray?) => {
                 node = getParseTreeNode(node, isCallLikeExpression);
                 return node ? getResolvedSignature(node, candidatesOutArray) : undefined;
+            },
+            getBestGuessSignature: (node, apparentArgumentCount) => {
+                node = getParseTreeNode(node, isCallLikeExpression);
+                return node ? getBestGuessSignature(node, apparentArgumentCount) : undefined;
             },
             getConstantValue: node => {
                 node = getParseTreeNode(node, canHaveConstantValue);
@@ -6284,6 +6288,10 @@ namespace ts {
             return minTypeArgumentCount;
         }
 
+        function fillAndGetMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node): Type[] {
+            return fillMissingTypeArguments(typeArguments, typeParameters, minTypeArgumentCount, location).typeArguments;
+        }
+
         /**
          * Fill in default types for unsupplied type arguments. If `typeArguments` is undefined
          * when a default type is supplied, a new array will be created and returned.
@@ -6292,8 +6300,9 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node) {
+        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: TypeParameter[] | undefined, minTypeArgumentCount: number, location?: Node): TypeArgumentsInference {
             const numTypeParameters = length(typeParameters);
+            let inferredAnyDefault = false;
             if (numTypeParameters) {
                 const numTypeArguments = length(typeArguments);
                 const isJavaScript = isInJavaScriptFile(location);
@@ -6302,20 +6311,24 @@ namespace ts {
                         typeArguments = [];
                     }
 
-                    // Map an unsatisfied type parameter with a default type.
-                    // If a type parameter does not have a default type, or if the default type
-                    // is a forward reference, the empty object type is used.
-                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = isJavaScript ? anyType : emptyObjectType;
-                    }
-                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        const mapper = createTypeMapper(typeParameters, typeArguments);
-                        const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : isJavaScript ? anyType : emptyObjectType;
+                    if (numTypeArguments < numTypeParameters) {
+                        inferredAnyDefault = true;
+
+                        // Map an unsatisfied type parameter with a default type.
+                        // If a type parameter does not have a default type, or if the default type
+                        // is a forward reference, the empty object type is used.
+                        for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                            typeArguments[i] = getDefaultTypeArgumentType(isJavaScript);
+                        }
+                        for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                            const mapper = createTypeMapper(typeParameters, typeArguments);
+                            const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
+                            typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScript);
+                        }
                     }
                 }
             }
-            return typeArguments;
+            return { typeArguments, inferredAnyDefault };
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature {
@@ -6550,25 +6563,30 @@ namespace ts {
             return anyType;
         }
 
-        function getSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            typeArguments = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+        function getSignatureInstantiation(signature: Signature, args: TypeArgumentsInference | Type[]): Signature {
+            let { typeArguments, inferredAnyDefault } = isArray(args) || args === undefined ? { typeArguments: args as Type[], inferredAnyDefault: false } : args;
+
+            const { typeArguments: filledTypeArguments, inferredAnyDefault: inferredMissingTypeArgument } = fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters));
+            typeArguments = filledTypeArguments;
+            inferredAnyDefault = inferredAnyDefault || inferredMissingTypeArgument;
+
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
             let instantiation = instantiations.get(id);
             if (!instantiation) {
-                instantiations.set(id, instantiation = createSignatureInstantiation(signature, typeArguments));
+                instantiations.set(id, instantiation = createSignatureInstantiation(signature, { typeArguments, inferredAnyDefault }));
             }
             return instantiation;
         }
 
-        function createSignatureInstantiation(signature: Signature, typeArguments: Type[]): Signature {
-            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true);
+        function createSignatureInstantiation(signature: Signature, { typeArguments, inferredAnyDefault }: TypeArgumentsInference): Signature {
+            return instantiateSignature(signature, createTypeMapper(signature.typeParameters, typeArguments), /*eraseTypeParameters*/ true, inferredAnyDefault);
         }
 
         function getErasedSignature(signature: Signature): Signature {
             if (!signature.typeParameters) return signature;
             if (!signature.erasedSignatureCache) {
-                signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true);
+                signature.erasedSignatureCache = instantiateSignature(signature, createTypeEraser(signature.typeParameters), /*eraseTypeParameters*/ true, /*inferredAnyDefault*/ true);
             }
             return signature.erasedSignatureCache;
         }
@@ -6734,7 +6752,7 @@ namespace ts {
                 // In a type reference, the outer type parameters of the referenced class or interface are automatically
                 // supplied as type arguments and the type reference only specifies arguments for the local type parameters
                 // of the class or interface.
-                const typeArguments = concatenate(type.outerTypeParameters, fillMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
+                const typeArguments = concatenate(type.outerTypeParameters, fillAndGetMissingTypeArguments(typeArgs, typeParameters, minTypeArgumentCount, node));
                 return createTypeReference(<GenericType>type, typeArguments);
             }
             if (node.typeArguments) {
@@ -6751,7 +6769,7 @@ namespace ts {
             const id = getTypeListId(typeArguments);
             let instantiation = links.instantiations.get(id);
             if (!instantiation) {
-                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
+                links.instantiations.set(id, instantiation = instantiateTypeNoAlias(type, createTypeMapper(typeParameters, fillAndGetMissingTypeArguments(typeArguments, typeParameters, getMinTypeArgumentCount(typeParameters)))));
             }
             return instantiation;
         }
@@ -8033,7 +8051,7 @@ namespace ts {
             }
         }
 
-        function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean): Signature {
+        function instantiateSignature(signature: Signature, mapper: TypeMapper, eraseTypeParameters?: boolean, inferredAnyDefault?: boolean): Signature {
             let freshTypeParameters: TypeParameter[];
             let freshTypePredicate: TypePredicate;
             if (signature.typeParameters && !eraseTypeParameters) {
@@ -8055,6 +8073,7 @@ namespace ts {
                 /*resolvedReturnType*/ undefined,
                 freshTypePredicate,
                 signature.minArgumentCount, signature.hasRestParameter, signature.hasLiteralTypes);
+            result.inferredAnyDefaultTypeArgument = !!inferredAnyDefault;
             result.target = signature;
             result.mapper = mapper;
             return result;
@@ -10199,7 +10218,7 @@ namespace ts {
                 for (let i = 0; i < inferences.length; i++) {
                     if (t === inferences[i].typeParameter) {
                         inferences[i].isFixed = true;
-                        return getInferredType(context, i);
+                        return getInferredType(context, i).inferredType;
                     }
                 }
                 return t;
@@ -10579,9 +10598,10 @@ namespace ts {
             return constraint && maybeTypeOfKind(constraint, TypeFlags.Primitive | TypeFlags.Index);
         }
 
-        function getInferredType(context: InferenceContext, index: number): Type {
+        function getInferredType(context: InferenceContext, index: number): { inferredType: Type, inferredDefault: boolean } {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
+            let inferredDefault = false;
             if (!inferredType) {
                 if (inference.candidates) {
                     // We widen inferred literal types if
@@ -10604,6 +10624,7 @@ namespace ts {
                     inferredType = silentNeverType;
                 }
                 else {
+                    inferredDefault = true;
                     // Infer either the default or the empty object type when no inferences were
                     // made. It is important to remember that in this case, inference still
                     // succeeds, meaning there is no error for not having inference candidates. An
@@ -10619,7 +10640,7 @@ namespace ts {
                                 context));
                     }
                     else {
-                        inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
+                        inferredType = getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
                     }
                 }
                 inference.inferredType = inferredType;
@@ -10632,15 +10653,22 @@ namespace ts {
                     }
                 }
             }
-            return inferredType;
+            return { inferredType, inferredDefault };
         }
 
-        function getInferredTypes(context: InferenceContext): Type[] {
-            const result: Type[] = [];
+        function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
+            return isInJavaScriptFile ? anyType : emptyObjectType;
+        }
+
+        function getInferredTypes(context: InferenceContext): TypeArgumentsInference {
+            const typeArguments: Type[] = [];
+            let inferredAnyDefault = false;
             for (let i = 0; i < context.inferences.length; i++) {
-                result.push(getInferredType(context, i));
+                const { inferredType, inferredDefault} = getInferredType(context, i);
+                inferredAnyDefault = inferredAnyDefault || inferredDefault;
+                typeArguments.push(inferredType);
             }
-            return result;
+            return { typeArguments, inferredAnyDefault };
         }
 
         // EXPRESSION TYPE CHECKING
@@ -12780,11 +12808,17 @@ namespace ts {
         }
 
         // In a typed function call, an argument or substitution expression is contextually typed by the type of the corresponding parameter.
-        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression): Type {
+        function getContextualTypeForArgument(callTarget: CallLikeExpression, arg: Expression, bestGuessForSignature?: boolean): Type {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = indexOf(args, arg);
             if (argIndex >= 0) {
-                const signature = getResolvedOrAnySignature(callTarget);
+                // If we're already in the process of resolving the given signature, don't resolve again as
+                // that could cause infinite recursion. Instead, return anySignature.
+                const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature
+                    ? resolvingSignature
+                    : bestGuessForSignature
+                        ? getBestGuessSignature(callTarget, args.length).best
+                        : getResolvedSignature(callTarget);
                 return getTypeAtPosition(signature, argIndex);
             }
             return undefined;
@@ -12974,7 +13008,7 @@ namespace ts {
          * @param node the expression whose contextual type will be returned.
          * @returns the contextual type of an expression.
          */
-        function getContextualType(node: Expression): Type | undefined {
+        function getContextualType(node: Expression, bestGuessForSignature?: boolean): Type | undefined {
             if (isInsideWithStatementBody(node)) {
                 // We cannot answer semantic questions within a with block, do not proceed any further
                 return undefined;
@@ -12997,7 +13031,7 @@ namespace ts {
                     return getContextualTypeForYieldOperand(<YieldExpression>parent);
                 case SyntaxKind.CallExpression:
                 case SyntaxKind.NewExpression:
-                    return getContextualTypeForArgument(<CallExpression>parent, node);
+                    return getContextualTypeForArgument(<CallExpression>parent, node, bestGuessForSignature);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
                     return getTypeFromTypeNode((<AssertionExpression>parent).type);
@@ -13714,8 +13748,7 @@ namespace ts {
             const instantiatedSignatures = [];
             for (const signature of signatures) {
                 if (signature.typeParameters) {
-                    const typeArguments = fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0);
-                    instantiatedSignatures.push(getSignatureInstantiation(signature, typeArguments));
+                    instantiatedSignatures.push(getSignatureInstantiation(signature, fillMissingTypeArguments(/*typeArguments*/ undefined, signature.typeParameters, /*minTypeArgumentCount*/ 0)));
                 }
                 else {
                     instantiatedSignatures.push(signature);
@@ -14947,17 +14980,17 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context));
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
-            const inferences = context.inferences;
+        interface TypeArgumentsInference { typeArguments: Type[]; inferredAnyDefault: boolean; }
 
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): TypeArgumentsInference {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
-            for (let i = 0; i < inferences.length; i++) {
+            for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
                 // for type parameters that have already been fixed on the previous call to inferTypeArguments.
                 // It would be just as correct to reset all of them. But then we'd be repeating the same work
                 // for the type parameters that were fixed, namely the work done by getInferredType.
-                if (!inferences[i].isFixed) {
-                    inferences[i].inferredType = undefined;
+                if (!inference.isFixed) {
+                    inference.inferredType = undefined;
                 }
             }
 
@@ -15659,18 +15692,18 @@ namespace ts {
                     while (true) {
                         candidate = originalCandidate;
                         if (candidate.typeParameters) {
-                            let typeArgumentTypes: Type[];
+                            let inferred: TypeArgumentsInference;
                             if (typeArguments) {
-                                typeArgumentTypes = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
-                                if (!checkTypeArguments(candidate, typeArguments, typeArgumentTypes, /*reportErrors*/ false)) {
+                                inferred = fillMissingTypeArguments(map(typeArguments, getTypeFromTypeNode), candidate.typeParameters, getMinTypeArgumentCount(candidate.typeParameters));
+                                if (!checkTypeArguments(candidate, typeArguments, inferred.typeArguments, /*reportErrors*/ false)) {
                                     candidateForTypeArgumentError = originalCandidate;
                                     break;
                                 }
                             }
                             else {
-                                typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
+                                inferred = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                             }
-                            candidate = getSignatureInstantiation(candidate, typeArgumentTypes);
+                            candidate = getSignatureInstantiation(candidate, inferred);
                         }
                         if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
                             candidateForArgumentError = candidate;
@@ -16055,10 +16088,58 @@ namespace ts {
             return result;
         }
 
-        function getResolvedOrAnySignature(node: CallLikeExpression) {
-            // If we're already in the process of resolving the given signature, don't resolve again as
-            // that could cause infinite recursion. Instead, return anySignature.
-            return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
+        function getBestGuessSignature(node: CallLikeExpression, argumentCount: number): { best: Signature, candidates: Signature[], bestIndex: number } {
+            const candidates: Signature[] = [];
+            let best = getResolvedSignature(node, candidates);
+            if (candidates.length === 0) {
+                return { best: unknownSignature, candidates, bestIndex: -1 };
+            }
+
+            let bestIndex = candidates.indexOf(best);
+
+            // If best is not in candidates, resolution either failed or produced an instantiated signature.
+            if (bestIndex === -1) {
+                bestIndex = selectBestInvalidOverloadIndex(candidates, argumentCount);
+                // If resolution failed or the instatiated signature just filled in defaults for type arguments, don't use the result of `getResolvedSignature`.
+                if (best === unknownSignature || best.inferredAnyDefaultTypeArgument) {
+                    best = candidates[bestIndex];
+                }
+            }
+
+            // If we got a non-instantiated generic signature, see if we can still instantiate it if explicit type arguments were provided.
+            if (best.typeParameters && isCallOrNewExpression(node) && node.typeArguments) {
+                const typeArguments = node.typeArguments.map(getTypeOfNode);
+                best = createSignatureInstantiation(best, { typeArguments, inferredAnyDefault: false });
+            }
+
+            return { best, candidates, bestIndex };
+        }
+
+        /**
+         * The selectedItemIndex could be negative for several reasons.
+         *     1. There are too many arguments for all of the overloads
+         *     2. None of the overloads were type compatible
+         * The solution here is to try to pick the best overload by picking
+         * either the first one that has an appropriate number of parameters,
+         * or the one with the most parameters.
+         */
+        function selectBestInvalidOverloadIndex(candidates: Signature[], argumentCount: number): number {
+            let maxParamsSignatureIndex = -1;
+            let maxParams = -1;
+            for (let i = 0; i < candidates.length; i++) {
+                const candidate = candidates[i];
+
+                if (candidate.hasRestParameter || candidate.parameters.length >= argumentCount) {
+                    return i;
+                }
+
+                if (candidate.parameters.length > maxParams) {
+                    maxParams = candidate.parameters.length;
+                    maxParamsSignatureIndex = i;
+                }
+            }
+
+            return maxParamsSignatureIndex;
         }
 
         /**
@@ -18394,7 +18475,7 @@ namespace ts {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
                     if (!typeArguments) {
-                        typeArguments = fillMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
+                        typeArguments = fillAndGetMissingTypeArguments(map(typeArgumentNodes, getTypeFromTypeNode), typeParameters, minTypeArgumentCount);
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     const typeArgument = typeArguments[i];

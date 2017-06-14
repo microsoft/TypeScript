@@ -2582,7 +2582,16 @@ namespace ts {
         getAugmentedPropertiesOfType(type: Type): Symbol[];
         getRootSymbols(symbol: Symbol): Symbol[];
         getContextualType(node: Expression): Type | undefined;
+        /** returns unknownSignature in the case of an error. Don't know when it returns undefined. */
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[]): Signature | undefined;
+        /**
+         * Like `getResolvedSignature` but designed for the case call may be only partially-completed.
+         * `best` may be an instantiated signature where candidates[bestIndex] is the corresponding generic signature.
+         * So long as some candidates are available, will return something.
+         * If no candidates are available, returns `unknownSignature` with `bestIndex` of -1.
+         */
+        /* @internal */
+        getBestGuessSignature(node: CallLikeExpression, apprentArgumentCount: number): { best: Signature | undefined, candidates: Signature[], bestIndex: number };
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: FunctionLikeDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -3361,6 +3370,9 @@ namespace ts {
         typePredicate?: TypePredicate;
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        /** True if this is an instantiated signature, and the default for a type parameter (either an explicit type, or `{}`) was inferred. */
+        inferredAnyDefaultTypeArgument?: boolean;
     }
 
     export const enum IndexKind {
