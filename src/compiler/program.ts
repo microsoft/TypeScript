@@ -868,7 +868,6 @@ namespace ts {
             if (oldProgram.getMissingFilePaths) {
                 const missingFilePaths: Path[] = oldProgram.getMissingFilePaths() || emptyArray;
                 for (const missingFilePath of missingFilePaths) {
-                    // TODO (acasey): use caching to avoid hitting the disk
                     if (host.fileExists(missingFilePath)) {
                         return oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }

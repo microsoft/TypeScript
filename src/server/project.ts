@@ -616,6 +616,10 @@ namespace ts.server {
             return hasChanges;
         }
 
+        isWatchedMissingFile(path: Path) {
+            return this.missingFilesMap.contains(path);
+        }
+
         getScriptInfoLSHost(fileName: string) {
             const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
             if (scriptInfo) {
