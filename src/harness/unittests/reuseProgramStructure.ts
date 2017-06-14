@@ -316,6 +316,15 @@ namespace ts {
             assert.isTrue(program_1.structureIsReused === StructureIsReused.Not);
         });
 
+        it("succeeds if missing files remain missing", () => {
+            const options: CompilerOptions = { target };
+            const program_1 = newProgram(files, ["a.ts"], options);
+            assert.notEqual(0, program_1.getMissingFilePaths().length);
+            const program_2 = updateProgram(program_1, ["a.ts"], options, noop);
+            assert.deepEqual(program_1.getMissingFilePaths(), program_2.getMissingFilePaths());
+            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+        });
+
         it("resolution cache follows imports", () => {
             (<any>Error).stackTraceLimit = Infinity;
 
