@@ -213,7 +213,7 @@ namespace ts.server {
 
         export const GetEditsForRefactor: protocol.CommandTypes.GetEditsForRefactor = "getEditsForRefactor";
         /* @internal */
-        export const GetEditsForRefactorFull: protocol.CommandTypes.GetEditsForRefactorFull = "getEditsForRefactor-full"
+        export const GetEditsForRefactorFull: protocol.CommandTypes.GetEditsForRefactorFull = "getEditsForRefactor-full";
     }
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
