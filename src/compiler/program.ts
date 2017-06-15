@@ -1495,7 +1495,7 @@ namespace ts {
                 }
 
                 const sourceFileWithAddedExtension = forEach(supportedExtensions, extension => getSourceFile(fileName + extension));
-                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + Extension.Ts);
+                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + ".ts");
                 return sourceFileWithAddedExtension;
             }
         }

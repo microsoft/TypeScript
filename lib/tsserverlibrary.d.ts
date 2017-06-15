@@ -2201,11 +2201,12 @@ declare namespace ts {
         extension: Extension;
     }
     enum Extension {
-        Ts = ".ts",
-        Tsx = ".tsx",
-        Dts = ".d.ts",
-        Js = ".js",
-        Jsx = ".jsx",
+        Ts = 0,
+        Tsx = 1,
+        Dts = 2,
+        Js = 3,
+        Jsx = 4,
+        LastTypeScriptExtension = 2,
     }
     interface ResolvedModuleWithFailedLookupLocations {
         resolvedModule: ResolvedModuleFull | undefined;
@@ -3215,11 +3216,11 @@ declare namespace ts {
     }
     interface ClassifiedSpan {
         textSpan: TextSpan;
-        classificationType: ClassificationTypeNames;
+        classificationType: string;
     }
     interface NavigationBarItem {
         text: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         spans: TextSpan[];
         childItems: NavigationBarItem[];
@@ -3229,7 +3230,7 @@ declare namespace ts {
     }
     interface NavigationTree {
         text: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
@@ -3286,35 +3287,35 @@ declare namespace ts {
         isInString?: true;
     }
     interface ImplementationLocation extends DocumentSpan {
-        kind: ScriptElementKind;
+        kind: string;
         displayParts: SymbolDisplayPart[];
     }
     interface DocumentHighlights {
         fileName: string;
         highlightSpans: HighlightSpan[];
     }
-    enum HighlightSpanKind {
-        none = "none",
-        definition = "definition",
-        reference = "reference",
-        writtenReference = "writtenReference",
+    namespace HighlightSpanKind {
+        const none = "none";
+        const definition = "definition";
+        const reference = "reference";
+        const writtenReference = "writtenReference";
     }
     interface HighlightSpan {
         fileName?: string;
         isInString?: true;
         textSpan: TextSpan;
-        kind: HighlightSpanKind;
+        kind: string;
     }
     interface NavigateToItem {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         matchKind: string;
         isCaseSensitive: boolean;
         fileName: string;
         textSpan: TextSpan;
         containerName: string;
-        containerKind: ScriptElementKind;
+        containerKind: string;
     }
     enum IndentStyle {
         None = 0,
@@ -3374,9 +3375,9 @@ declare namespace ts {
     interface DefinitionInfo {
         fileName: string;
         textSpan: TextSpan;
-        kind: ScriptElementKind;
+        kind: string;
         name: string;
-        containerKind: ScriptElementKind;
+        containerKind: string;
         containerName: string;
     }
     interface ReferencedSymbolDefinitionInfo extends DefinitionInfo {
@@ -3419,7 +3420,7 @@ declare namespace ts {
         text?: string;
     }
     interface QuickInfo {
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts: SymbolDisplayPart[];
@@ -3431,7 +3432,7 @@ declare namespace ts {
         localizedErrorMessage: string;
         displayName: string;
         fullDisplayName: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         triggerSpan: TextSpan;
     }
@@ -3465,14 +3466,14 @@ declare namespace ts {
     }
     interface CompletionEntry {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         sortText: string;
         replacementSpan?: TextSpan;
     }
     interface CompletionEntryDetails {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
@@ -3530,75 +3531,75 @@ declare namespace ts {
         getClassificationsForLine(text: string, lexState: EndOfLineState, syntacticClassifierAbsent: boolean): ClassificationResult;
         getEncodedLexicalClassifications(text: string, endOfLineState: EndOfLineState, syntacticClassifierAbsent: boolean): Classifications;
     }
-    enum ScriptElementKind {
-        unknown = "",
-        warning = "warning",
-        keyword = "keyword",
-        scriptElement = "script",
-        moduleElement = "module",
-        classElement = "class",
-        localClassElement = "local class",
-        interfaceElement = "interface",
-        typeElement = "type",
-        enumElement = "enum",
-        enumMemberElement = "enum member",
-        variableElement = "var",
-        localVariableElement = "local var",
-        functionElement = "function",
-        localFunctionElement = "local function",
-        memberFunctionElement = "method",
-        memberGetAccessorElement = "getter",
-        memberSetAccessorElement = "setter",
-        memberVariableElement = "property",
-        constructorImplementationElement = "constructor",
-        callSignatureElement = "call",
-        indexSignatureElement = "index",
-        constructSignatureElement = "construct",
-        parameterElement = "parameter",
-        typeParameterElement = "type parameter",
-        primitiveType = "primitive type",
-        label = "label",
-        alias = "alias",
-        constElement = "const",
-        letElement = "let",
-        directory = "directory",
-        externalModuleName = "external module name",
-        jsxAttribute = "JSX attribute",
+    namespace ScriptElementKind {
+        const unknown = "";
+        const warning = "warning";
+        const keyword = "keyword";
+        const scriptElement = "script";
+        const moduleElement = "module";
+        const classElement = "class";
+        const localClassElement = "local class";
+        const interfaceElement = "interface";
+        const typeElement = "type";
+        const enumElement = "enum";
+        const enumMemberElement = "enum member";
+        const variableElement = "var";
+        const localVariableElement = "local var";
+        const functionElement = "function";
+        const localFunctionElement = "local function";
+        const memberFunctionElement = "method";
+        const memberGetAccessorElement = "getter";
+        const memberSetAccessorElement = "setter";
+        const memberVariableElement = "property";
+        const constructorImplementationElement = "constructor";
+        const callSignatureElement = "call";
+        const indexSignatureElement = "index";
+        const constructSignatureElement = "construct";
+        const parameterElement = "parameter";
+        const typeParameterElement = "type parameter";
+        const primitiveType = "primitive type";
+        const label = "label";
+        const alias = "alias";
+        const constElement = "const";
+        const letElement = "let";
+        const directory = "directory";
+        const externalModuleName = "external module name";
+        const jsxAttribute = "JSX attribute";
     }
-    enum ScriptElementKindModifier {
-        none = "",
-        publicMemberModifier = "public",
-        privateMemberModifier = "private",
-        protectedMemberModifier = "protected",
-        exportedModifier = "export",
-        ambientModifier = "declare",
-        staticModifier = "static",
-        abstractModifier = "abstract",
+    namespace ScriptElementKindModifier {
+        const none = "";
+        const publicMemberModifier = "public";
+        const privateMemberModifier = "private";
+        const protectedMemberModifier = "protected";
+        const exportedModifier = "export";
+        const ambientModifier = "declare";
+        const staticModifier = "static";
+        const abstractModifier = "abstract";
     }
-    enum ClassificationTypeNames {
-        comment = "comment",
-        identifier = "identifier",
-        keyword = "keyword",
-        numericLiteral = "number",
-        operator = "operator",
-        stringLiteral = "string",
-        whiteSpace = "whitespace",
-        text = "text",
-        punctuation = "punctuation",
-        className = "class name",
-        enumName = "enum name",
-        interfaceName = "interface name",
-        moduleName = "module name",
-        typeParameterName = "type parameter name",
-        typeAliasName = "type alias name",
-        parameterName = "parameter name",
-        docCommentTagName = "doc comment tag name",
-        jsxOpenTagName = "jsx open tag name",
-        jsxCloseTagName = "jsx close tag name",
-        jsxSelfClosingTagName = "jsx self closing tag name",
-        jsxAttribute = "jsx attribute",
-        jsxText = "jsx text",
-        jsxAttributeStringLiteralValue = "jsx attribute string literal value",
+    class ClassificationTypeNames {
+        static comment: string;
+        static identifier: string;
+        static keyword: string;
+        static numericLiteral: string;
+        static operator: string;
+        static stringLiteral: string;
+        static whiteSpace: string;
+        static text: string;
+        static punctuation: string;
+        static className: string;
+        static enumName: string;
+        static interfaceName: string;
+        static moduleName: string;
+        static typeParameterName: string;
+        static typeAliasName: string;
+        static parameterName: string;
+        static docCommentTagName: string;
+        static jsxOpenTagName: string;
+        static jsxCloseTagName: string;
+        static jsxSelfClosingTagName: string;
+        static jsxAttribute: string;
+        static jsxText: string;
+        static jsxAttributeStringLiteralValue: string;
     }
     enum ClassificationType {
         comment = 1,
@@ -3860,53 +3861,54 @@ declare namespace ts.server {
     }
 }
 declare namespace ts.server.protocol {
-    enum CommandTypes {
-        Brace = "brace",
-        BraceCompletion = "braceCompletion",
-        Change = "change",
-        Close = "close",
-        Completions = "completions",
-        CompletionDetails = "completionEntryDetails",
-        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
-        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
-        Configure = "configure",
-        Definition = "definition",
-        Implementation = "implementation",
-        Exit = "exit",
-        Format = "format",
-        Formatonkey = "formatonkey",
-        Geterr = "geterr",
-        GeterrForProject = "geterrForProject",
-        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
-        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-        NavBar = "navbar",
-        Navto = "navto",
-        NavTree = "navtree",
-        NavTreeFull = "navtree-full",
-        Occurrences = "occurrences",
-        DocumentHighlights = "documentHighlights",
-        Open = "open",
-        Quickinfo = "quickinfo",
-        References = "references",
-        Reload = "reload",
-        Rename = "rename",
-        Saveto = "saveto",
-        SignatureHelp = "signatureHelp",
-        TypeDefinition = "typeDefinition",
-        ProjectInfo = "projectInfo",
-        ReloadProjects = "reloadProjects",
-        Unknown = "unknown",
-        OpenExternalProject = "openExternalProject",
-        OpenExternalProjects = "openExternalProjects",
-        CloseExternalProject = "closeExternalProject",
-        TodoComments = "todoComments",
-        Indentation = "indentation",
-        DocCommentTemplate = "docCommentTemplate",
-        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
-        GetCodeFixes = "getCodeFixes",
-        GetSupportedCodeFixes = "getSupportedCodeFixes",
-        GetApplicableRefactors = "getApplicableRefactors",
-        GetEditsForRefactor = "getEditsForRefactor",
+    namespace CommandTypes {
+        type Brace = "brace";
+        type BraceCompletion = "braceCompletion";
+        type Change = "change";
+        type Close = "close";
+        type Completions = "completions";
+        type CompletionDetails = "completionEntryDetails";
+        type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        type Configure = "configure";
+        type Definition = "definition";
+        type Implementation = "implementation";
+        type Exit = "exit";
+        type Format = "format";
+        type Formatonkey = "formatonkey";
+        type Geterr = "geterr";
+        type GeterrForProject = "geterrForProject";
+        type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        type NavBar = "navbar";
+        type Navto = "navto";
+        type NavTree = "navtree";
+        type NavTreeFull = "navtree-full";
+        type Occurrences = "occurrences";
+        type DocumentHighlights = "documentHighlights";
+        type Open = "open";
+        type Quickinfo = "quickinfo";
+        type References = "references";
+        type Reload = "reload";
+        type Rename = "rename";
+        type Saveto = "saveto";
+        type SignatureHelp = "signatureHelp";
+        type TypeDefinition = "typeDefinition";
+        type ProjectInfo = "projectInfo";
+        type ReloadProjects = "reloadProjects";
+        type Unknown = "unknown";
+        type OpenExternalProject = "openExternalProject";
+        type OpenExternalProjects = "openExternalProjects";
+        type CloseExternalProject = "closeExternalProject";
+        type TodoComments = "todoComments";
+        type Indentation = "indentation";
+        type DocCommentTemplate = "docCommentTemplate";
+        type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        type GetCodeFixes = "getCodeFixes";
+        type GetSupportedCodeFixes = "getSupportedCodeFixes";
+        type GetApplicableRefactors = "getApplicableRefactors";
+        type GetRefactorCodeActions = "getRefactorCodeActions";
+        type GetEditsForRefactor = "getEditsForRefactor";
     }
     interface Message {
         seq: number;
@@ -4119,7 +4121,7 @@ declare namespace ts.server.protocol {
         arguments: DocumentHighlightsRequestArgs;
     }
     interface HighlightSpan extends TextSpan {
-        kind: HighlightSpanKind;
+        kind: string;
     }
     interface DocumentHighlightsItem {
         file: string;
@@ -4158,7 +4160,7 @@ declare namespace ts.server.protocol {
         localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
     }
     interface SpanGroup {
@@ -4278,7 +4280,7 @@ declare namespace ts.server.protocol {
         command: CommandTypes.Quickinfo;
     }
     interface QuickInfoResponseBody {
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         start: Location;
         end: Location;
@@ -4345,14 +4347,14 @@ declare namespace ts.server.protocol {
     }
     interface CompletionEntry {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         sortText: string;
         replacementSpan?: TextSpan;
     }
     interface CompletionEntryDetails {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
@@ -4500,7 +4502,7 @@ declare namespace ts.server.protocol {
     }
     interface NavtoItem {
         name: string;
-        kind: ScriptElementKind;
+        kind: string;
         matchKind?: string;
         isCaseSensitive?: boolean;
         kindModifiers?: string;
@@ -4508,7 +4510,7 @@ declare namespace ts.server.protocol {
         start: Location;
         end: Location;
         containerName?: string;
-        containerKind?: ScriptElementKind;
+        containerKind?: string;
     }
     interface NavtoResponse extends Response {
         body?: NavtoItem[];
@@ -4534,7 +4536,7 @@ declare namespace ts.server.protocol {
     }
     interface NavigationBarItem {
         text: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers?: string;
         spans: TextSpan[];
         childItems?: NavigationBarItem[];
@@ -4542,7 +4544,7 @@ declare namespace ts.server.protocol {
     }
     interface NavigationTree {
         text: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
@@ -4599,11 +4601,12 @@ declare namespace ts.server.protocol {
     interface NavTreeResponse extends Response {
         body?: NavigationTree;
     }
-    enum IndentStyle {
-        None = "None",
-        Block = "Block",
-        Smart = "Smart",
+    namespace IndentStyle {
+        type None = "None";
+        type Block = "Block";
+        type Smart = "Smart";
     }
+    type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
     interface EditorSettings {
         baseIndentSize?: number;
         indentSize?: number;
@@ -4696,35 +4699,40 @@ declare namespace ts.server.protocol {
         typeRoots?: string[];
         [option: string]: CompilerOptionsValue | undefined;
     }
-    enum JsxEmit {
-        None = "None",
-        Preserve = "Preserve",
-        ReactNative = "ReactNative",
-        React = "React",
+    namespace JsxEmit {
+        type None = "None";
+        type Preserve = "Preserve";
+        type ReactNative = "ReactNative";
+        type React = "React";
     }
-    enum ModuleKind {
-        None = "None",
-        CommonJS = "CommonJS",
-        AMD = "AMD",
-        UMD = "UMD",
-        System = "System",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
+    namespace ModuleKind {
+        type None = "None";
+        type CommonJS = "CommonJS";
+        type AMD = "AMD";
+        type UMD = "UMD";
+        type System = "System";
+        type ES6 = "ES6";
+        type ES2015 = "ES2015";
     }
-    enum ModuleResolutionKind {
-        Classic = "Classic",
-        Node = "Node",
+    type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
+    namespace ModuleResolutionKind {
+        type Classic = "Classic";
+        type Node = "Node";
     }
-    enum NewLineKind {
-        Crlf = "Crlf",
-        Lf = "Lf",
+    type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
+    namespace NewLineKind {
+        type Crlf = "Crlf";
+        type Lf = "Lf";
     }
-    enum ScriptTarget {
-        ES3 = "ES3",
-        ES5 = "ES5",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
+    namespace ScriptTarget {
+        type ES3 = "ES3";
+        type ES5 = "ES5";
+        type ES6 = "ES6";
+        type ES2015 = "ES2015";
     }
+    type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
 declare namespace ts.server {
     interface ServerCancellationToken extends HostCancellationToken {
@@ -4739,8 +4747,55 @@ declare namespace ts.server {
     interface EventSender {
         event<T>(payload: T, eventName: string): void;
     }
-    type CommandNames = protocol.CommandTypes;
-    const CommandNames: any;
+    namespace CommandNames {
+        const Brace: protocol.CommandTypes.Brace;
+        const BraceCompletion: protocol.CommandTypes.BraceCompletion;
+        const Change: protocol.CommandTypes.Change;
+        const Close: protocol.CommandTypes.Close;
+        const Completions: protocol.CommandTypes.Completions;
+        const CompletionDetails: protocol.CommandTypes.CompletionDetails;
+        const CompileOnSaveAffectedFileList: protocol.CommandTypes.CompileOnSaveAffectedFileList;
+        const CompileOnSaveEmitFile: protocol.CommandTypes.CompileOnSaveEmitFile;
+        const Configure: protocol.CommandTypes.Configure;
+        const Definition: protocol.CommandTypes.Definition;
+        const Exit: protocol.CommandTypes.Exit;
+        const Format: protocol.CommandTypes.Format;
+        const Formatonkey: protocol.CommandTypes.Formatonkey;
+        const Geterr: protocol.CommandTypes.Geterr;
+        const GeterrForProject: protocol.CommandTypes.GeterrForProject;
+        const Implementation: protocol.CommandTypes.Implementation;
+        const SemanticDiagnosticsSync: protocol.CommandTypes.SemanticDiagnosticsSync;
+        const SyntacticDiagnosticsSync: protocol.CommandTypes.SyntacticDiagnosticsSync;
+        const NavBar: protocol.CommandTypes.NavBar;
+        const NavTree: protocol.CommandTypes.NavTree;
+        const NavTreeFull: protocol.CommandTypes.NavTreeFull;
+        const Navto: protocol.CommandTypes.Navto;
+        const Occurrences: protocol.CommandTypes.Occurrences;
+        const DocumentHighlights: protocol.CommandTypes.DocumentHighlights;
+        const Open: protocol.CommandTypes.Open;
+        const Quickinfo: protocol.CommandTypes.Quickinfo;
+        const References: protocol.CommandTypes.References;
+        const Reload: protocol.CommandTypes.Reload;
+        const Rename: protocol.CommandTypes.Rename;
+        const Saveto: protocol.CommandTypes.Saveto;
+        const SignatureHelp: protocol.CommandTypes.SignatureHelp;
+        const TypeDefinition: protocol.CommandTypes.TypeDefinition;
+        const ProjectInfo: protocol.CommandTypes.ProjectInfo;
+        const ReloadProjects: protocol.CommandTypes.ReloadProjects;
+        const Unknown: protocol.CommandTypes.Unknown;
+        const OpenExternalProject: protocol.CommandTypes.OpenExternalProject;
+        const OpenExternalProjects: protocol.CommandTypes.OpenExternalProjects;
+        const CloseExternalProject: protocol.CommandTypes.CloseExternalProject;
+        const TodoComments: protocol.CommandTypes.TodoComments;
+        const Indentation: protocol.CommandTypes.Indentation;
+        const DocCommentTemplate: protocol.CommandTypes.DocCommentTemplate;
+        const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects;
+        const GetCodeFixes: protocol.CommandTypes.GetCodeFixes;
+        const GetSupportedCodeFixes: protocol.CommandTypes.GetSupportedCodeFixes;
+        const GetApplicableRefactors: protocol.CommandTypes.GetApplicableRefactors;
+        const GetRefactorCodeActions: protocol.CommandTypes.GetRefactorCodeActions;
+        const GetEditsForRefactor: protocol.CommandTypes.GetEditsForRefactor;
+    }
     function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string;
     interface SessionOptions {
         host: ServerHost;

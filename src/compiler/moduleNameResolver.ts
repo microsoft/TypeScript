@@ -815,15 +815,15 @@ namespace ts {
 
         switch (extensions) {
             case Extensions.DtsOnly:
-                return tryExtension(Extension.Dts);
+                return tryExtension(".d.ts", Extension.Dts);
             case Extensions.TypeScript:
-                return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
+                return tryExtension(".ts", Extension.Ts) || tryExtension(".tsx", Extension.Tsx) || tryExtension(".d.ts", Extension.Dts);
             case Extensions.JavaScript:
-                return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+                return tryExtension(".js", Extension.Js) || tryExtension(".jsx", Extension.Jsx);
         }
 
-        function tryExtension(extension: Extension): Resolved | undefined {
-            const path = tryFile(candidate + extension, failedLookupLocations, onlyRecordFailures, state);
+        function tryExtension(ext: string, extension: Extension): Resolved | undefined {
+            const path = tryFile(candidate + ext, failedLookupLocations, onlyRecordFailures, state);
             return path && { path, extension };
         }
     }

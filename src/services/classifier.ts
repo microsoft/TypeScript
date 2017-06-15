@@ -573,7 +573,7 @@ namespace ts {
         }
     }
 
-    function getClassificationTypeName(type: ClassificationType): ClassificationTypeNames {
+    function getClassificationTypeName(type: ClassificationType) {
         switch (type) {
             case ClassificationType.comment: return ClassificationTypeNames.comment;
             case ClassificationType.identifier: return ClassificationTypeNames.identifier;

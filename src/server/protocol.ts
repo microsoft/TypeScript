@@ -2,107 +2,110 @@
  * Declaration module describing the TypeScript Server protocol
  */
 namespace ts.server.protocol {
-    // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
-    export const enum CommandTypes {
-        Brace = "brace",
-        /* @internal */
-        BraceFull = "brace-full",
-        BraceCompletion = "braceCompletion",
-        Change = "change",
-        Close = "close",
-        Completions = "completions",
-        /* @internal */
-        CompletionsFull = "completions-full",
-        CompletionDetails = "completionEntryDetails",
-        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
-        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
-        Configure = "configure",
-        Definition = "definition",
-        /* @internal */
-        DefinitionFull = "definition-full",
-        Implementation = "implementation",
-        /* @internal */
-        ImplementationFull = "implementation-full",
-        Exit = "exit",
-        Format = "format",
-        Formatonkey = "formatonkey",
-        /* @internal */
-        FormatFull = "format-full",
-        /* @internal */
-        FormatonkeyFull = "formatonkey-full",
-        /* @internal */
-        FormatRangeFull = "formatRange-full",
-        Geterr = "geterr",
-        GeterrForProject = "geterrForProject",
-        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
-        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-        NavBar = "navbar",
-        /* @internal */
-        NavBarFull = "navbar-full",
-        Navto = "navto",
-        /* @internal */
-        NavtoFull = "navto-full",
-        NavTree = "navtree",
-        NavTreeFull = "navtree-full",
-        Occurrences = "occurrences",
-        DocumentHighlights = "documentHighlights",
-        /* @internal */
-        DocumentHighlightsFull = "documentHighlights-full",
-        Open = "open",
-        Quickinfo = "quickinfo",
-        /* @internal */
-        QuickinfoFull = "quickinfo-full",
-        References = "references",
-        /* @internal */
-        ReferencesFull = "references-full",
-        Reload = "reload",
-        Rename = "rename",
-        /* @internal */
-        RenameInfoFull = "rename-full",
-        /* @internal */
-        RenameLocationsFull = "renameLocations-full",
-        Saveto = "saveto",
-        SignatureHelp = "signatureHelp",
-        /* @internal */
-        SignatureHelpFull = "signatureHelp-full",
-        TypeDefinition = "typeDefinition",
-        ProjectInfo = "projectInfo",
-        ReloadProjects = "reloadProjects",
-        Unknown = "unknown",
-        OpenExternalProject = "openExternalProject",
-        OpenExternalProjects = "openExternalProjects",
-        CloseExternalProject = "closeExternalProject",
-        /* @internal */
-        SynchronizeProjectList = "synchronizeProjectList",
-        /* @internal */
-        ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
-        /* @internal */
-        EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
-        /* @internal */
-        Cleanup = "cleanup",
-        /* @internal */
-        OutliningSpans = "outliningSpans",
-        TodoComments = "todoComments",
-        Indentation = "indentation",
-        DocCommentTemplate = "docCommentTemplate",
-        /* @internal */
-        CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
-        /* @internal */
-        NameOrDottedNameSpan = "nameOrDottedNameSpan",
-        /* @internal */
-        BreakpointStatement = "breakpointStatement",
-        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
-        GetCodeFixes = "getCodeFixes",
-        /* @internal */
-        GetCodeFixesFull = "getCodeFixes-full",
-        GetSupportedCodeFixes = "getSupportedCodeFixes",
 
-        GetApplicableRefactors = "getApplicableRefactors",
-        GetEditsForRefactor = "getEditsForRefactor",
+    export namespace CommandTypes {
+        export type Brace = "brace";
         /* @internal */
-        GetEditsForRefactorFull = "getEditsForRefactor-full",
+        export type BraceFull = "brace-full";
+        export type BraceCompletion = "braceCompletion";
+        export type Change = "change";
+        export type Close = "close";
+        export type Completions = "completions";
+        /* @internal */
+        export type CompletionsFull = "completions-full";
+        export type CompletionDetails = "completionEntryDetails";
+        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export type Configure = "configure";
+        export type Definition = "definition";
+        /* @internal */
+        export type DefinitionFull = "definition-full";
+        export type Implementation = "implementation";
+        /* @internal */
+        export type ImplementationFull = "implementation-full";
+        export type Exit = "exit";
+        export type Format = "format";
+        export type Formatonkey = "formatonkey";
+        /* @internal */
+        export type FormatFull = "format-full";
+        /* @internal */
+        export type FormatonkeyFull = "formatonkey-full";
+        /* @internal */
+        export type FormatRangeFull = "formatRange-full";
+        export type Geterr = "geterr";
+        export type GeterrForProject = "geterrForProject";
+        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export type NavBar = "navbar";
+        /* @internal */
+        export type NavBarFull = "navbar-full";
+        export type Navto = "navto";
+        /* @internal */
+        export type NavtoFull = "navto-full";
+        export type NavTree = "navtree";
+        export type NavTreeFull = "navtree-full";
+        export type Occurrences = "occurrences";
+        export type DocumentHighlights = "documentHighlights";
+        /* @internal */
+        export type DocumentHighlightsFull = "documentHighlights-full";
+        export type Open = "open";
+        export type Quickinfo = "quickinfo";
+        /* @internal */
+        export type QuickinfoFull = "quickinfo-full";
+        export type References = "references";
+        /* @internal */
+        export type ReferencesFull = "references-full";
+        export type Reload = "reload";
+        export type Rename = "rename";
+        /* @internal */
+        export type RenameInfoFull = "rename-full";
+        /* @internal */
+        export type RenameLocationsFull = "renameLocations-full";
+        export type Saveto = "saveto";
+        export type SignatureHelp = "signatureHelp";
+        /* @internal */
+        export type SignatureHelpFull = "signatureHelp-full";
+        export type TypeDefinition = "typeDefinition";
+        export type ProjectInfo = "projectInfo";
+        export type ReloadProjects = "reloadProjects";
+        export type Unknown = "unknown";
+        export type OpenExternalProject = "openExternalProject";
+        export type OpenExternalProjects = "openExternalProjects";
+        export type CloseExternalProject = "closeExternalProject";
+        /* @internal */
+        export type SynchronizeProjectList = "synchronizeProjectList";
+        /* @internal */
+        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        /* @internal */
+        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        /* @internal */
+        export type Cleanup = "cleanup";
+        /* @internal */
+        export type OutliningSpans = "outliningSpans";
+        export type TodoComments = "todoComments";
+        export type Indentation = "indentation";
+        export type DocCommentTemplate = "docCommentTemplate";
+        /* @internal */
+        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
+        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
+        export type BreakpointStatement = "breakpointStatement";
+        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type GetCodeFixes = "getCodeFixes";
+        /* @internal */
+        export type GetCodeFixesFull = "getCodeFixes-full";
+        export type GetSupportedCodeFixes = "getSupportedCodeFixes";
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
+        export type GetApplicableRefactors = "getApplicableRefactors";
+        export type GetRefactorCodeActions = "getRefactorCodeActions";
+        /* @internal */
+        export type GetRefactorCodeActionsFull = "getRefactorCodeActions-full";
+
+        export type GetEditsForRefactor = "getEditsForRefactor";
+        /* @internal */
+        export type GetEditsForRefactorFull = "getEditsForRefactor-full";
     }
 
     /**
@@ -748,9 +751,10 @@ namespace ts.server.protocol {
 
     /**
      * Span augmented with extra information that denotes the kind of the highlighting to be used for span.
+     * Kind is taken from HighlightSpanKind type.
      */
     export interface HighlightSpan extends TextSpan {
-        kind: HighlightSpanKind;
+        kind: string;
     }
 
     /**
@@ -887,7 +891,7 @@ namespace ts.server.protocol {
         /**
          * The items's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: ScriptElementKind;
+        kind: string;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1401,7 +1405,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName' or plain 'text').
          */
-        kind: ScriptElementKind;
+        kind: string;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -1620,7 +1624,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: ScriptElementKind;
+        kind: string;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -1648,7 +1652,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: ScriptElementKind;
+        kind: string;
         /**
          * Optional modifiers for the kind (such as 'public').
          */
@@ -2107,7 +2111,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: ScriptElementKind;
+        kind: string;
 
         /**
          * exact, substring, or prefix.
@@ -2148,7 +2152,7 @@ namespace ts.server.protocol {
         /**
          * Kind of symbol's container symbol (if any).
          */
-        containerKind?: ScriptElementKind;
+        containerKind?: string;
     }
 
     /**
@@ -2221,7 +2225,7 @@ namespace ts.server.protocol {
         /**
          * The symbol's kind (such as 'className' or 'parameterName').
          */
-        kind: ScriptElementKind;
+        kind: string;
 
         /**
          * Optional modifiers for the kind (such as 'public').
@@ -2247,7 +2251,7 @@ namespace ts.server.protocol {
     /** protocol.NavigationTree is identical to ts.NavigationTree, except using protocol.TextSpan instead of ts.TextSpan */
     export interface NavigationTree {
         text: string;
-        kind: ScriptElementKind;
+        kind: string;
         kindModifiers: string;
         spans: TextSpan[];
         childItems?: NavigationTree[];
@@ -2341,11 +2345,13 @@ namespace ts.server.protocol {
         body?: NavigationTree;
     }
 
-    export const enum IndentStyle {
-        None = "None",
-        Block = "Block",
-        Smart = "Smart",
+    export namespace IndentStyle {
+        export type None = "None";
+        export type Block = "Block";
+        export type Smart = "Smart";
     }
+
+    export type IndentStyle = IndentStyle.None | IndentStyle.Block | IndentStyle.Smart;
 
     export interface EditorSettings {
         baseIndentSize?: number;
@@ -2443,37 +2449,47 @@ namespace ts.server.protocol {
         [option: string]: CompilerOptionsValue | undefined;
     }
 
-    export const enum JsxEmit {
-        None = "None",
-        Preserve = "Preserve",
-        ReactNative = "ReactNative",
-        React = "React",
+    export namespace JsxEmit {
+        export type None = "None";
+        export type Preserve = "Preserve";
+        export type ReactNative = "ReactNative";
+        export type React = "React";
     }
 
-    export const enum ModuleKind {
-        None = "None",
-        CommonJS = "CommonJS",
-        AMD = "AMD",
-        UMD = "UMD",
-        System = "System",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    export type JsxEmit = JsxEmit.None | JsxEmit.Preserve | JsxEmit.React | JsxEmit.ReactNative;
+
+    export namespace ModuleKind {
+        export type None = "None";
+        export type CommonJS = "CommonJS";
+        export type AMD = "AMD";
+        export type UMD = "UMD";
+        export type System = "System";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
     }
 
-    export const enum ModuleResolutionKind {
-        Classic = "Classic",
-        Node = "Node",
+    export type ModuleKind = ModuleKind.None | ModuleKind.CommonJS | ModuleKind.AMD | ModuleKind.UMD | ModuleKind.System | ModuleKind.ES6 | ModuleKind.ES2015;
+
+    export namespace ModuleResolutionKind {
+        export type Classic = "Classic";
+        export type Node = "Node";
     }
 
-    export const enum NewLineKind {
-        Crlf = "Crlf",
-        Lf = "Lf",
+    export type ModuleResolutionKind = ModuleResolutionKind.Classic | ModuleResolutionKind.Node;
+
+    export namespace NewLineKind {
+        export type Crlf = "Crlf";
+        export type Lf = "Lf";
     }
 
-    export const enum ScriptTarget {
-        ES3 = "ES3",
-        ES5 = "ES5",
-        ES6 = "ES6",
-        ES2015 = "ES2015",
+    export type NewLineKind = NewLineKind.Crlf | NewLineKind.Lf;
+
+    export namespace ScriptTarget {
+        export type ES3 = "ES3";
+        export type ES5 = "ES5";
+        export type ES6 = "ES6";
+        export type ES2015 = "ES2015";
     }
+
+    export type ScriptTarget = ScriptTarget.ES3 | ScriptTarget.ES5 | ScriptTarget.ES6 | ScriptTarget.ES2015;
 }
