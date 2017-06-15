@@ -2501,7 +2501,7 @@ namespace ts {
         const path = outputDir
             ? getSourceFilePathInNewDir(sourceFile, host, outputDir)
             : sourceFile.fileName;
-        return removeFileExtension(path) + Extension.Dts;
+        return removeFileExtension(path) + ".d.ts";
     }
 
     export interface EmitFileNames {
@@ -2560,7 +2560,7 @@ namespace ts {
             if (sourceFiles.length) {
                 const jsFilePath = options.outFile || options.out;
                 const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + ".d.ts" : "";
                 action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
             }
         }
@@ -2581,19 +2581,19 @@ namespace ts {
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
     // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
     // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
-    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
+    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): string {
         if (options.jsx === JsxEmit.Preserve) {
             if (isSourceFileJavaScript(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
-                    return Extension.Jsx;
+                if (fileExtensionIs(sourceFile.fileName, ".jsx")) {
+                    return ".jsx";
                 }
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
                 // TypeScript source file preserving JSX syntax
-                return Extension.Jsx;
+                return ".jsx";
             }
         }
-        return Extension.Js;
+        return ".js";
     }
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {

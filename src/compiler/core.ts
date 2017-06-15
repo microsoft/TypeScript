@@ -2131,13 +2131,13 @@ namespace ts {
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
-            case Extension.Js:
+            case ".js":
                 return ScriptKind.JS;
-            case Extension.Jsx:
+            case ".jsx":
                 return ScriptKind.JSX;
-            case Extension.Ts:
+            case ".ts":
                 return ScriptKind.TS;
-            case Extension.Tsx:
+            case ".tsx":
                 return ScriptKind.TSX;
             default:
                 return ScriptKind.Unknown;
@@ -2147,10 +2147,10 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension = [Extension.Dts, Extension.Ts, Extension.Tsx];
-    export const supportedJavascriptExtensions = [Extension.Js, Extension.Jsx];
+    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
+    export const supportedJavascriptExtensions = [".js", ".jsx"];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
@@ -2158,7 +2158,7 @@ namespace ts {
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions: string[] = allSupportedExtensions.slice(0);
+        const extensions = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
             if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
@@ -2237,7 +2237,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
+    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -2491,7 +2491,7 @@ namespace ts {
 
     /** True if an extension is one of the supported TypeScript extensions. */
     export function extensionIsTypeScript(ext: Extension): boolean {
-        return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
+        return ext <= Extension.LastTypeScriptExtension;
     }
 
     /**
@@ -2506,7 +2506,21 @@ namespace ts {
         Debug.fail(`File ${path} has unknown extension.`);
     }
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        return find(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
+        if (fileExtensionIs(path, ".d.ts")) {
+            return Extension.Dts;
+        }
+        if (fileExtensionIs(path, ".ts")) {
+            return Extension.Ts;
+        }
+        if (fileExtensionIs(path, ".tsx")) {
+            return Extension.Tsx;
+        }
+        if (fileExtensionIs(path, ".js")) {
+            return Extension.Js;
+        }
+        if (fileExtensionIs(path, ".jsx")) {
+            return Extension.Jsx;
+        }
     }
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
