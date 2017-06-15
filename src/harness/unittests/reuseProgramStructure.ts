@@ -317,12 +317,28 @@ namespace ts {
         });
 
         it("succeeds if missing files remain missing", () => {
-            const options: CompilerOptions = { target };
+            const options: CompilerOptions = { target, noLib: true };
+
             const program_1 = newProgram(files, ["a.ts"], options);
-            assert.notEqual(0, program_1.getMissingFilePaths().length);
+            assert.notDeepEqual(emptyArray, program_1.getMissingFilePaths());
+
             const program_2 = updateProgram(program_1, ["a.ts"], options, noop);
             assert.deepEqual(program_1.getMissingFilePaths(), program_2.getMissingFilePaths());
-            assert.isTrue(program_1.structureIsReused === StructureIsReused.Completely);
+
+            assert.equal(StructureIsReused.Completely, program_1.structureIsReused);
+        });
+
+        it("fails if missing file is created", () => {
+            const options: CompilerOptions = { target, noLib: true };
+
+            const program_1 = newProgram(files, ["a.ts"], options);
+            assert.notDeepEqual(emptyArray, program_1.getMissingFilePaths());
+
+            const newTexts: NamedSourceText[] = files.concat([{ name: "non-existing-file.ts", text: SourceText.New("", "", `var x = 1`) }]);
+            const program_2 = updateProgram(program_1, ["a.ts"], options, noop, newTexts);
+            assert.deepEqual(emptyArray, program_2.getMissingFilePaths());
+
+            assert.equal(StructureIsReused.SafeModules, program_1.structureIsReused);
         });
 
         it("resolution cache follows imports", () => {
