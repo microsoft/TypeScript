@@ -84,8 +84,8 @@ namespace ts {
         let addedGlobalFileReference = false;
         let allSourcesModuleElementDeclarationEmitInfo: ModuleElementDeclarationEmitInfo[] = [];
         forEach(sourceFiles, sourceFile => {
-            // Dont emit for javascript file
-            if (isSourceFileJavaScript(sourceFile)) {
+            // Dont emit for javascript file (unless allowJs is passed)
+            if (isSourceFileJavaScript(sourceFile) && !compilerOptions.allowJs) {
                 return;
             }
 

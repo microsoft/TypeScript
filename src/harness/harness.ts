@@ -1201,8 +1201,14 @@ namespace Harness {
             options: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string) {
-            if (options.declaration && result.errors.length === 0 && result.declFilesCode.length !== result.files.length) {
-                throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+            if (options.declaration && result.errors.length === 0) {
+                // declaration:true will only emit declaration files only when noEmitJs:true
+                if (options.noEmitJs && (result.files.length > 0 || result.declFilesCode.length == 0)) {
+                    throw new Error("Only declaration files should be generated when noEmit:true and declarations:true");
+                }
+                if (!options.noEmitJs && result.declFilesCode.length !== result.files.length) {
+                    throw new Error("There were no errors and declFiles generated did not match number of js files generated");
+                }
             }
 
             const declInputFiles: TestFile[] = [];
@@ -1958,7 +1964,9 @@ namespace Harness {
                 else {
                     IO.writeFile(actualFileName, actual);
                 }
-                throw new Error(`The baseline file ${relativeFileName} has changed.`);
+
+                const diff = getDiff(expected, encoded_actual, referencePath(relativeFileName), actualFileName);
+                throw new Error(`The baseline file ${relativeFileName} has changed.\n\n${diff}`);
             }
         }
 
@@ -1983,6 +1991,70 @@ namespace Harness {
     export function getDefaultLibraryFile(io: Harness.IO): Harness.Compiler.TestFile {
         const libFile = Harness.userSpecifiedRoot + Harness.libFolder + Harness.Compiler.defaultLibFileName;
         return { unitName: libFile, content: io.readFile(libFile) };
+    }
+
+    /**
+     * Prints a nice diff that is useful for debugging baseline failures
+     * It uses least common subsequence algorithm for a diff
+     * It also emits a `cp tests/baselines/local/<file> tests/baselines/reference/<file>`
+     * Which makes experience of updating basefiles case by case a lot nicer
+     */
+    export function getDiff(expectedText: string, actualText: string, expectedFileName: string, actualFileName: string): string {
+        const removedMarker = ` <-|`;
+        const addedMarker = ` ->|`;
+        const sameMarker = `   |`;
+        const expectedLines = expectedText.split(/\r?\n/g);
+        const actualLines = actualText.split(/\r?\n/g);
+        const numExpectedLines = expectedLines.length;
+        const numActualLines = actualLines.length;
+        const diffLines = [];
+        // Create a matrix of m*n of -1s
+        const lcsLenMatrix: number[][] = Array.apply(null, Array(numExpectedLines + 1))
+                                        .map((_: any) => Array.apply(null, Array(numActualLines + 1)).map((_: any) => -1));
+        let iE = 0, iA = 0;
+
+        // Use recursion rather than iteration because best case is O(n) rather than always being O(m*n)
+        (function lcsLen(iE: number, iA:number) {
+            if (iE >= numExpectedLines || iA >= numActualLines) return 0;
+
+            if (lcsLenMatrix[iE][iA] < 0) {
+                lcsLenMatrix[iE][iA] = (expectedLines[iE] == actualLines[iA]) ?
+                    lcsLen(iE + 1, iA + 1) + 1 : Math.max(lcsLen(iE + 1, iA), lcsLen(iE, iA + 1));
+            }
+
+            return lcsLenMatrix[iE][iA];
+        })(0, 0);
+
+        // Print files names and diff
+        diffLines.push(`\ncp ${actualFileName} ${expectedFileName}`);
+        diffLines.push(`${sameMarker} ${new Array(actualFileName.length).join('=')}`);
+
+        while (iE < numExpectedLines && iA < numActualLines) {
+            if (expectedLines[iE] == actualLines[iA]) {
+                diffLines.push(`${sameMarker} ${expectedLines[iE]}`);
+                iE++; iA++;
+            }
+            else if (lcsLenMatrix[iE + 1][iA] >= lcsLenMatrix[iE][iA + 1]) {
+                diffLines.push(`${removedMarker} ${expectedLines[iE]}`);
+                iE++;
+            }
+            else {
+                diffLines.push(`${addedMarker} ${actualLines[iA]}`);
+                iA++;
+            }
+        }
+
+        // Print removed lines
+        for (; iE < numExpectedLines; iE++) {
+            diffLines.push(`${removedMarker} ${expectedLines[iE]}`);
+        }
+
+        // print added lines
+        for (; iA < numActualLines; iA++) {
+            diffLines.push(`${addedMarker} ${actualLines[iA]}`);
+        }
+
+        return diffLines.join("\n");
     }
 
     if (Error) (<any>Error).stackTraceLimit = 100;

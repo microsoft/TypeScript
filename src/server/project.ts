@@ -212,7 +212,7 @@ namespace ts.server {
 
         private setInternalCompilerOptionsForEmittingJsFiles() {
             if (this.projectKind === ProjectKind.Inferred || this.projectKind === ProjectKind.External) {
-                this.compilerOptions.noEmitForJsFiles = true;
+                this.compilerOptions.noEmitJs = true;
             }
         }
 

@@ -2646,6 +2646,10 @@
         "category": "Message",
         "code": 6012
     },
+    "Do not emit js outputs.": {
+        "category": "Message",
+        "code": 6013
+    },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015

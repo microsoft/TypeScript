@@ -1,4 +1,5 @@
 // @allowJs: true
+// @checkJs: true
 // @out: out.js
 // @declaration: true
 // @filename: b.js
