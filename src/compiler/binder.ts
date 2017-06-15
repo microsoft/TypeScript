@@ -595,7 +595,19 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            forEach(node.jsDoc, bind);
+            if (node.jsDoc) {
+                if (isInJavaScriptFile(node)) {
+                    for (const j of node.jsDoc) {
+                        bind(j);
+                    }
+                }
+                else {
+                    for (const j of node.jsDoc) {
+                        setParentPointers(node, j);
+                    }
+                }
+            }
+
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -1903,7 +1915,7 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1991,7 +2003,7 @@ namespace ts {
                     // for typedef type names with namespaces, bind the new jsdoc type symbol here
                     // because it requires all containing namespaces to be in effect, namely the
                     // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                    if (isInJavaScriptFile(node) && (<Identifier>node).isInJSDocNamespace) {
+                    if ((<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
                         while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
                             parentNode = parentNode.parent;
@@ -2053,10 +2065,7 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                     return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
-                    if (node.parent.kind !== ts.SyntaxKind.JSDocTemplateTag || isInJavaScriptFile(node)) {
-                        return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
-                    }
-                    return;
+                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -2138,10 +2147,7 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
-                    if (node.parent.kind !== ts.SyntaxKind.JSDocTypedefTag || isInJavaScriptFile(node)) {
-                        return bindModuleDeclaration(<ModuleDeclaration>node);
-                    }
-                    return undefined;
+                    return bindModuleDeclaration(<ModuleDeclaration>node);
                 // Jsx-attributes
                 case SyntaxKind.JsxAttributes:
                     return bindJsxAttributes(<JsxAttributes>node);
@@ -2173,13 +2179,6 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
-                default:
-                    if (isInJavaScriptFile(node)) return bindJSDocWorker(node);
-            }
-        }
-
-        function bindJSDocWorker(node: Node) {
-            switch (node.kind) {
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
@@ -3604,5 +3603,14 @@ namespace ts {
             default:
                 return TransformFlags.NodeExcludes;
         }
+    }
+
+    /**
+     * "Binds" JSDoc nodes in TypeScript code.
+     * Since we will never create symbols for JSDoc, we just set parent pointers instead.
+     */
+    function setParentPointers(parent: Node, child: Node): void {
+        child.parent = parent;
+        forEachChild(child, (childsChild) => setParentPointers(child, childsChild));
     }
 }
