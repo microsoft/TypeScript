@@ -568,7 +568,7 @@ namespace ts.codefix {
 
                 function getRelativePath(path: string, directoryPath: string) {
                     const relativePath = getRelativePathToDirectoryOrUrl(directoryPath, path, directoryPath, getCanonicalFileName, /*isAbsolutePathAnUrl*/ false);
-                    return moduleHasNonRelativeName(relativePath) ? "./" + relativePath : relativePath;
+                    return !pathIsRelative(relativePath) ? "./" + relativePath : relativePath;
                 }
             }
 
