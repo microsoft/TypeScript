@@ -201,6 +201,7 @@ namespace ts.server {
         /* @internal */
         export const BreakpointStatement: protocol.CommandTypes.BreakpointStatement = "breakpointStatement";
         export const CompilerOptionsForInferredProjects: protocol.CommandTypes.CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export const TypeAcquisitionForInferredProjects: protocol.CommandTypes.TypeAcquisitionForInferredProjects = "typeAcquisitionForInferredProjects";
         export const GetCodeFixes: protocol.CommandTypes.GetCodeFixes = "getCodeFixes";
         /* @internal */
         export const GetCodeFixesFull: protocol.CommandTypes.GetCodeFixesFull = "getCodeFixes-full";
