@@ -9,6 +9,70 @@ namespace ts {
     const brackets = createBracketsMap();
 
     /*@internal*/
+    /**
+     * Iterates over the source files that are expected to have an emit output.
+     *
+     * @param host An EmitHost.
+     * @param action The action to execute.
+     * @param sourceFilesOrTargetSourceFile
+     *   If an array, the full list of source files to emit.
+     *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
+     */
+    export function forEachEmittedFile(
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
+        sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
+        emitOnlyDtsFiles?: boolean) {
+
+        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
+        const options = host.getCompilerOptions();
+        if (options.outFile || options.out) {
+            if (sourceFiles.length) {
+                const jsFilePath = options.outFile || options.out;
+                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
+            }
+        }
+        else {
+            for (const sourceFile of sourceFiles) {
+                const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
+                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
+                const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
+                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
+            }
+        }
+    }
+
+    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+        return options.sourceMap ? jsFilePath + ".map" : undefined;
+    }
+
+    // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
+    // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
+    // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
+    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
+        if (options.jsx === JsxEmit.Preserve) {
+            if (isSourceFileJavaScript(sourceFile)) {
+                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
+                    return Extension.Jsx;
+                }
+            }
+            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                // TypeScript source file preserving JSX syntax
+                return Extension.Jsx;
+            }
+        }
+        return Extension.Js;
+    }
+
+    function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
+        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
+            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
+        }
+        return getOriginalSourceFile(sourceFileOrBundle);
+    }
+
+    /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();

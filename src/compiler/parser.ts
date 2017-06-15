@@ -1,6 +1,5 @@
 /// <reference path="utilities.ts"/>
 /// <reference path="scanner.ts"/>
-/// <reference path="factory.ts"/>
 
 namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
@@ -466,6 +465,15 @@ namespace ts {
         return Parser.parseIsolatedEntityName(text, languageVersion);
     }
 
+    /**
+     * Parse json text into SyntaxTree and return node and parse errors if any
+     * @param fileName
+     * @param sourceText
+     */
+    export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
+        return Parser.parseJsonText(fileName, sourceText);
+    }
+
     // See also `isExternalOrCommonJsModule` in utilities.ts
     export function isExternalModule(file: SourceFile): boolean {
         return file.externalModuleIndicator !== undefined;
@@ -632,9 +640,34 @@ namespace ts {
             return isInvalid ? entityName : undefined;
         }
 
+        export function parseJsonText(fileName: string, sourceText: string): JsonSourceFile {
+            initializeState(sourceText, ScriptTarget.ES2015, /*syntaxCursor*/ undefined, ScriptKind.JSON);
+            // Set source file so that errors will be reported with this file name
+            sourceFile = createSourceFile(fileName, ScriptTarget.ES2015, ScriptKind.JSON);
+            const result = <JsonSourceFile>sourceFile;
+
+            // Prime the scanner.
+            nextToken();
+            if (token() === SyntaxKind.EndOfFileToken) {
+                sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
+            }
+            else if (token() === SyntaxKind.OpenBraceToken ||
+                lookAhead(() => token() === SyntaxKind.StringLiteral)) {
+                result.jsonObject = parseObjectLiteralExpression();
+                sourceFile.endOfFileToken = parseExpectedToken(SyntaxKind.EndOfFileToken, /*reportAtCurrentPosition*/ false, Diagnostics.Unexpected_token);
+            }
+            else {
+                parseExpected(SyntaxKind.OpenBraceToken);
+            }
+
+            sourceFile.parseDiagnostics = parseDiagnostics;
+            clearState();
+            return result;
+        }
+
         function getLanguageVariant(scriptKind: ScriptKind) {
             // .tsx and .jsx files are treated as jsx language variant.
-            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS ? LanguageVariant.JSX : LanguageVariant.Standard;
+            return scriptKind === ScriptKind.TSX || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JS  || scriptKind === ScriptKind.JSON ? LanguageVariant.JSX : LanguageVariant.Standard;
         }
 
         function initializeState(_sourceText: string, languageVersion: ScriptTarget, _syntaxCursor: IncrementalParser.SyntaxCursor, scriptKind: ScriptKind) {
@@ -652,7 +685,7 @@ namespace ts {
             identifierCount = 0;
             nodeCount = 0;
 
-            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX ? NodeFlags.JavaScriptFile : NodeFlags.None;
+            contextFlags = scriptKind === ScriptKind.JS || scriptKind === ScriptKind.JSX || scriptKind === ScriptKind.JSON ? NodeFlags.JavaScriptFile : NodeFlags.None;
             parseErrorBeforeNextFinishedNode = false;
 
             // Initialize and prime the scanner before parsing the source elements.

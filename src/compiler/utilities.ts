@@ -309,6 +309,14 @@ namespace ts {
         return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node, includeTrivia);
     }
 
+    /**
+     * Gets flags that control emit behavior of a node.
+     */
+    export function getEmitFlags(node: Node): EmitFlags | undefined {
+        const emitNode = node.emitNode;
+        return emitNode && emitNode.flags;
+    }
+
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
@@ -882,6 +890,15 @@ namespace ts {
         return predicate && predicate.kind === TypePredicateKind.This;
     }
 
+    export function getPropertyAssignment(objectLiteral: ObjectLiteralExpression, key: string, key2?: string) {
+        return <PropertyAssignment[]>filter(objectLiteral.properties, property => {
+            if (property.kind === SyntaxKind.PropertyAssignment) {
+                const propName = getTextOfPropertyName(property.name);
+                return key === propName || (key2 && key2 === propName);
+            }
+        });
+    }
+
     export function getContainingFunction(node: Node): FunctionLikeDeclaration {
         while (true) {
             node = node.parent;
@@ -1240,12 +1257,6 @@ namespace ts {
                 }
         }
         return false;
-    }
-
-    export function isInstantiatedModule(node: ModuleDeclaration, preserveConstEnums: boolean) {
-        const moduleState = getModuleInstanceState(node);
-        return moduleState === ModuleInstanceState.Instantiated ||
-            (preserveConstEnums && moduleState === ModuleInstanceState.ConstEnumOnly);
     }
 
     export function isExternalModuleImportEqualsDeclaration(node: Node) {
@@ -2013,24 +2024,12 @@ namespace ts {
             || positionIsSynthesized(node.end);
     }
 
-    export function getOriginalSourceFileOrBundle(sourceFileOrBundle: SourceFile | Bundle) {
-        if (sourceFileOrBundle.kind === SyntaxKind.Bundle) {
-            return updateBundle(sourceFileOrBundle, sameMap(sourceFileOrBundle.sourceFiles, getOriginalSourceFile));
-        }
-        return getOriginalSourceFile(sourceFileOrBundle);
-    }
-
-    function getOriginalSourceFile(sourceFile: SourceFile) {
+    export function getOriginalSourceFile(sourceFile: SourceFile) {
         return getParseTreeNode(sourceFile, isSourceFile) || sourceFile;
     }
 
     export function getOriginalSourceFiles(sourceFiles: SourceFile[]) {
         return sameMap(sourceFiles, getOriginalSourceFile);
-    }
-
-    export function getOriginalNodeId(node: Node) {
-        node = getOriginalNode(node);
-        return node ? getNodeId(node) : 0;
     }
 
     export const enum Associativity {
@@ -2538,62 +2537,6 @@ namespace ts {
     /** Don't call this for `--outFile`, just for `--outDir` or plain emit. `--outFile` needs additional checks. */
     export function sourceFileMayBeEmitted(sourceFile: SourceFile, options: CompilerOptions, isSourceFileFromExternalLibrary: (file: SourceFile) => boolean) {
         return !(options.noEmitForJsFiles && isSourceFileJavaScript(sourceFile)) && !sourceFile.isDeclarationFile && !isSourceFileFromExternalLibrary(sourceFile);
-    }
-
-    /**
-     * Iterates over the source files that are expected to have an emit output.
-     *
-     * @param host An EmitHost.
-     * @param action The action to execute.
-     * @param sourceFilesOrTargetSourceFile
-     *   If an array, the full list of source files to emit.
-     *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
-     */
-    export function forEachEmittedFile(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle, emitOnlyDtsFiles: boolean) => void,
-        sourceFilesOrTargetSourceFile?: SourceFile[] | SourceFile,
-        emitOnlyDtsFiles?: boolean) {
-
-        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
-        const options = host.getCompilerOptions();
-        if (options.outFile || options.out) {
-            if (sourceFiles.length) {
-                const jsFilePath = options.outFile || options.out;
-                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = options.declaration ? removeFileExtension(jsFilePath) + Extension.Dts : "";
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, createBundle(sourceFiles), emitOnlyDtsFiles);
-            }
-        }
-        else {
-            for (const sourceFile of sourceFiles) {
-                const jsFilePath = getOwnEmitOutputFilePath(sourceFile, host, getOutputExtension(sourceFile, options));
-                const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-                const declarationFilePath = !isSourceFileJavaScript(sourceFile) && (emitOnlyDtsFiles || options.declaration) ? getDeclarationEmitOutputFilePath(sourceFile, host) : undefined;
-                action({ jsFilePath, sourceMapFilePath, declarationFilePath }, sourceFile, emitOnlyDtsFiles);
-            }
-        }
-    }
-
-    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
-        return options.sourceMap ? jsFilePath + ".map" : undefined;
-    }
-
-    // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
-    // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
-    // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
-    function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
-        if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJavaScript(sourceFile)) {
-                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
-                    return Extension.Jsx;
-                }
-            }
-            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
-                // TypeScript source file preserving JSX syntax
-                return Extension.Jsx;
-            }
-        }
-        return Extension.Js;
     }
 
     export function getSourceFilePathInNewDir(sourceFile: SourceFile, host: EmitHost, newDirPath: string) {
@@ -4282,6 +4225,16 @@ namespace ts {
 
     export function isParenthesizedExpression(node: Node): node is ParenthesizedExpression {
         return node.kind === SyntaxKind.ParenthesizedExpression;
+    }
+
+    export function skipPartiallyEmittedExpressions(node: Expression): Expression;
+    export function skipPartiallyEmittedExpressions(node: Node): Node;
+    export function skipPartiallyEmittedExpressions(node: Node) {
+        while (node.kind === SyntaxKind.PartiallyEmittedExpression) {
+            node = (<PartiallyEmittedExpression>node).expression;
+        }
+
+        return node;
     }
 
     export function isFunctionExpression(node: Node): node is FunctionExpression {

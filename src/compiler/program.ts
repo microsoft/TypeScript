@@ -442,6 +442,7 @@ namespace ts {
 
         // Map storing if there is emit blocking diagnostics for given input
         const hasEmitBlockingDiagnostics = createFileMap<boolean>(getCanonicalFileName);
+        let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression;
 
         let moduleResolutionCache: ModuleResolutionCache;
         let resolveModuleNamesWorker: (moduleNames: string[], containingFile: string) => ResolvedModuleFull[];
@@ -1328,7 +1329,11 @@ namespace ts {
         function getOptionsDiagnostics(): Diagnostic[] {
             return sortAndDeduplicateDiagnostics(concatenate(
                 fileProcessingDiagnostics.getGlobalDiagnostics(),
-                programDiagnostics.getGlobalDiagnostics()));
+                concatenate(
+                    programDiagnostics.getGlobalDiagnostics(),
+                    options.configFile ? programDiagnostics.getDiagnostics(options.configFile.fileName) : []
+                )
+            ));
         }
 
         function getGlobalDiagnostics(): Diagnostic[] {
@@ -1773,33 +1778,33 @@ namespace ts {
         function verifyCompilerOptions() {
             if (options.isolatedModules) {
                 if (options.declaration) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declaration", "isolatedModules");
                 }
 
                 if (options.noEmitOnError) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmitOnError", "isolatedModules"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noEmitOnError", "isolatedModules");
                 }
 
                 if (options.out) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "isolatedModules");
                 }
 
                 if (options.outFile) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedModules");
                 }
             }
 
             if (options.inlineSourceMap) {
                 if (options.sourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap");
                 }
                 if (options.mapRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "mapRoot", "inlineSourceMap");
                 }
             }
 
             if (options.paths && options.baseUrl === undefined) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option));
+                createDiagnosticForOptionName(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option, "paths");
             }
 
             if (options.paths) {
@@ -1808,63 +1813,65 @@ namespace ts {
                         continue;
                     }
                     if (!hasZeroOrOneAsteriskCharacter(key)) {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key));
+                        createDiagnosticForOptionPaths(/*onKey*/ true, key, Diagnostics.Pattern_0_can_have_at_most_one_Asterisk_character, key);
                     }
                     if (isArray(options.paths[key])) {
-                        if (options.paths[key].length === 0) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_shouldn_t_be_an_empty_array, key));
+                        const len = options.paths[key].length;
+                        if (len === 0) {
+                            createDiagnosticForOptionPaths(/*onKey*/ false, key, Diagnostics.Substitutions_for_pattern_0_shouldn_t_be_an_empty_array, key);
                         }
-                        for (const subst of options.paths[key]) {
+                        for (let i = 0; i < len; i++) {
+                            const subst = options.paths[key][i];
                             const typeOfSubst = typeof subst;
                             if (typeOfSubst === "string") {
                                 if (!hasZeroOrOneAsteriskCharacter(subst)) {
-                                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_in_pattern_1_in_can_have_at_most_one_Asterisk_character, subst, key));
+                                    createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Substitution_0_in_pattern_1_in_can_have_at_most_one_Asterisk_character, subst, key);
                                 }
                             }
                             else {
-                                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitution_0_for_pattern_1_has_incorrect_type_expected_string_got_2, subst, key, typeOfSubst));
+                                createDiagnosticForOptionPathKeyValue(key, i, Diagnostics.Substitution_0_for_pattern_1_has_incorrect_type_expected_string_got_2, subst, key, typeOfSubst);
                             }
                         }
                     }
                     else {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key));
+                        createDiagnosticForOptionPaths(/*onKey*/ false, key, Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key);
                     }
                 }
             }
 
             if (!options.sourceMap && !options.inlineSourceMap) {
                 if (options.inlineSources) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "inlineSources"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "inlineSources");
                 }
                 if (options.sourceRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "sourceRoot"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "sourceRoot");
                 }
             }
 
             if (options.out && options.outFile) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile");
             }
 
             if (options.mapRoot && !options.sourceMap) {
                 // Error to specify --mapRoot without --sourcemap
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap");
             }
 
             if (options.declarationDir) {
                 if (!options.declaration) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "declarationDir", "declaration");
                 }
                 if (options.out || options.outFile) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "declarationDir", options.out ? "out" : "outFile");
                 }
             }
 
             if (options.lib && options.noLib) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "lib", "noLib");
             }
 
             if (options.noImplicitUseStrict && (options.alwaysStrict === undefined ? options.strict : options.alwaysStrict)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noImplicitUseStrict", "alwaysStrict");
             }
 
             const languageVersion = options.target || ScriptTarget.ES3;
@@ -1873,7 +1880,7 @@ namespace ts {
             const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher));
+                    createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
                 const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
@@ -1891,7 +1898,7 @@ namespace ts {
             // Cannot specify module gen that isn't amd or system with --out
             if (outFile) {
                 if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+                    createDiagnosticForOptionName(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile", "module");
                 }
                 else if (options.module === undefined && firstNonAmbientExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonAmbientExternalModuleSourceFile, firstNonAmbientExternalModuleSourceFile.externalModuleIndicator);
@@ -1910,12 +1917,12 @@ namespace ts {
 
                 // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
                 if (options.outDir && dir === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files));
+                    createDiagnosticForOptionName(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files, "outDir");
                 }
             }
 
             if (!options.noEmit && options.allowJs && options.declaration) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "declaration");
             }
 
             if (options.checkJs && !options.allowJs) {
@@ -1924,19 +1931,19 @@ namespace ts {
 
             if (options.emitDecoratorMetadata &&
                 !options.experimentalDecorators) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators"));
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators");
             }
 
             if (options.jsxFactory) {
                 if (options.reactNamespace) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory"));
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
                 }
                 if (!parseIsolatedEntityName(options.jsxFactory, languageVersion)) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory));
+                    createOptionValueDiagnostic("jsxFactory", Diagnostics.Invalid_value_for_jsxFactory_0_is_not_a_valid_identifier_or_qualified_name, options.jsxFactory);
                 }
             }
             else if (options.reactNamespace && !isIdentifierText(options.reactNamespace, languageVersion)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace));
+                createOptionValueDiagnostic("reactNamespace", Diagnostics.Invalid_value_for_reactNamespace_0_is_not_a_valid_identifier, options.reactNamespace);
             }
 
             // If the emit is enabled make sure that every output file is unique and not overwriting any of the input files
@@ -1974,6 +1981,91 @@ namespace ts {
                     }
                 }
             }
+        }
+
+        function createDiagnosticForOptionPathKeyValue(key: string, valueIndex: number, message: DiagnosticMessage, arg0: string | number, arg1: string | number, arg2?: string | number) {
+            let needCompilerDiagnostic = true;
+            const pathsSyntax = getOptionPathsSyntax();
+            for (const pathProp of pathsSyntax) {
+                if (isObjectLiteralExpression(pathProp.initializer)) {
+                    for (const keyProps of getPropertyAssignment(pathProp.initializer, key)) {
+                        if (isArrayLiteralExpression(keyProps.initializer) &&
+                            keyProps.initializer.elements.length > valueIndex) {
+                            programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, keyProps.initializer.elements[valueIndex], message, arg0, arg1, arg2));
+                            needCompilerDiagnostic = false;
+                        }
+                    }
+                }
+            }
+
+            if (needCompilerDiagnostic) {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1, arg2));
+            }
+        }
+
+        function createDiagnosticForOptionPaths(onKey: boolean, key: string, message: DiagnosticMessage, arg0: string | number) {
+            let needCompilerDiagnostic = true;
+            const pathsSyntax = getOptionPathsSyntax();
+            for (const pathProp of pathsSyntax) {
+                if (isObjectLiteralExpression(pathProp.initializer) &&
+                    createOptionDiagnosticInObjectLiteralSyntax(
+                        pathProp.initializer, onKey, key, /*key2*/ undefined,
+                        message, arg0)) {
+                    needCompilerDiagnostic = false;
+                }
+            }
+            if (needCompilerDiagnostic) {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0));
+            }
+        }
+
+        function getOptionPathsSyntax() {
+            const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
+            if (compilerOptionsObjectLiteralSyntax) {
+                return getPropertyAssignment(compilerOptionsObjectLiteralSyntax, "paths");
+            }
+            return emptyArray;
+        }
+
+        function createDiagnosticForOptionName(message: DiagnosticMessage, option1: string, option2?: string) {
+            createDiagnosticForOption(/*onKey*/ true, option1, option2, message, option1, option2);
+        }
+
+        function createOptionValueDiagnostic(option1: string, message: DiagnosticMessage, arg0: string) {
+            createDiagnosticForOption(/*onKey*/ false, option1, /*option2*/ undefined, message, arg0);
+        }
+
+        function createDiagnosticForOption(onKey: boolean, option1: string, option2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number) {
+            const compilerOptionsObjectLiteralSyntax = getCompilerOptionsObjectLiteralSyntax();
+            const needCompilerDiagnostic = !compilerOptionsObjectLiteralSyntax ||
+                !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, arg0, arg1);
+
+            if (needCompilerDiagnostic) {
+                programDiagnostics.add(createCompilerDiagnostic(message, arg0, arg1));
+            }
+        }
+
+        function getCompilerOptionsObjectLiteralSyntax() {
+            if (_compilerOptionsObjectLiteralSyntax === undefined) {
+                _compilerOptionsObjectLiteralSyntax = null; // tslint:disable-line:no-null-keyword
+                if (options.configFile && options.configFile.jsonObject) {
+                    for (const prop of getPropertyAssignment(options.configFile.jsonObject, "compilerOptions")) {
+                        if (isObjectLiteralExpression(prop.initializer)) {
+                            _compilerOptionsObjectLiteralSyntax = prop.initializer;
+                            break;
+                        }
+                    }
+                }
+            }
+            return _compilerOptionsObjectLiteralSyntax;
+        }
+
+        function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string, message: DiagnosticMessage, arg0: string | number, arg1?: string | number): boolean {
+            const props = getPropertyAssignment(objectLiteral, key1, key2);
+            for (const prop of props) {
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile, onKey ? prop.name : prop.initializer, message, arg0, arg1));
+            }
+            return !!props.length;
         }
 
         function blockEmittingOfFile(emitFileName: string, diag: Diagnostic) {

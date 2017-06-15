@@ -17,6 +17,7 @@
         "checker.ts",
         "factory.ts",
         "visitor.ts",
+        "transformers/utilities.ts",
         "transformers/ts.ts",
         "transformers/jsx.ts",
         "transformers/esnext.ts",

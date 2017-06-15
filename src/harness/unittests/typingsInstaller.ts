@@ -80,7 +80,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path]);
+            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path, config.path]);
             installer.installAll(0);
         });
     });
@@ -133,12 +133,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [file1.path]);
+            checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, jquery.path]);
+            checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
         });
 
         it("inferred project (typings installed)", () => {
@@ -684,12 +684,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower_components", () => {
@@ -730,13 +730,13 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
             checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower.json", () => {
@@ -777,12 +777,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("Malformed package.json should be watched", () => {

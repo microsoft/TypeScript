@@ -1109,27 +1109,16 @@ namespace ts {
                 () => {
                     const text = sourceTextSnapshot.getText(0, sourceTextSnapshot.getLength());
 
-                    const result = parseConfigFileTextToJson(fileName, text);
-
-                    if (result.error) {
-                        return {
-                            options: {},
-                            typeAcquisition: {},
-                            files: [],
-                            raw: {},
-                            errors: [realizeDiagnostic(result.error, "\r\n")]
-                        };
-                    }
-
+                    const result = parseJsonText(fileName, text);
                     const normalizedFileName = normalizeSlashes(fileName);
-                    const configFile = parseJsonConfigFileContent(result.config, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
+                    const configFile = parseJsonSourceFileConfigFileContent(result, this.host, getDirectoryPath(normalizedFileName), /*existingOptions*/ {}, normalizedFileName);
 
                     return {
                         options: configFile.options,
                         typeAcquisition: configFile.typeAcquisition,
                         files: configFile.fileNames,
                         raw: configFile.raw,
-                        errors: realizeDiagnostics(configFile.errors, "\r\n")
+                        errors: realizeDiagnostics(result.parseDiagnostics.concat(configFile.errors), "\r\n")
                     };
                 });
         }

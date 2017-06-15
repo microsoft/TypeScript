@@ -130,7 +130,7 @@ namespace ts {
         commandLineOptionsStringToEnum = commandLineOptionsStringToEnum || <CommandLineOptionOfCustomType[]>filter(optionDeclarations, o =>
             typeof o.type === "object" && !forEachEntry(o.type, v => typeof v !== "number"));
 
-        options = clone(options);
+        options = cloneCompilerOptions(options);
 
         for (const opt of commandLineOptionsStringToEnum) {
             if (!hasProperty(options, opt.name)) {

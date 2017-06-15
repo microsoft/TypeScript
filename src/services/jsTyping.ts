@@ -76,7 +76,7 @@ namespace ts.JsTyping {
 
         if (!safeList) {
             const result = readConfigFile(safeListPath, (path: string) => host.readFile(path));
-            safeList = result.config ? createMapFromTemplate<string>(result.config) : EmptySafeList;
+            safeList = createMapFromTemplate<string>(result.config);
         }
 
         const filesToWatch: string[] = [];
@@ -163,20 +163,18 @@ namespace ts.JsTyping {
                 filesToWatch.push(jsonPath);
             }
             const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
-            if (result.config) {
-                const jsonConfig: PackageJson = result.config;
-                if (jsonConfig.dependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.dependencies));
-                }
-                if (jsonConfig.devDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.devDependencies));
-                }
-                if (jsonConfig.optionalDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
-                }
-                if (jsonConfig.peerDependencies) {
-                    mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
-                }
+            const jsonConfig: PackageJson = result.config;
+            if (jsonConfig.dependencies) {
+                mergeTypings(getOwnKeys(jsonConfig.dependencies));
+            }
+            if (jsonConfig.devDependencies) {
+                mergeTypings(getOwnKeys(jsonConfig.devDependencies));
+            }
+            if (jsonConfig.optionalDependencies) {
+                mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
+            }
+            if (jsonConfig.peerDependencies) {
+                mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
             }
         }
 
@@ -222,9 +220,6 @@ namespace ts.JsTyping {
                     continue;
                 }
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
-                if (!result.config) {
-                    continue;
-                }
                 const packageJson: PackageJson = result.config;
 
                 // npm 3's package.json contains a "_requiredBy" field

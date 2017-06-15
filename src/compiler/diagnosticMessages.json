@@ -1,4 +1,4 @@
-﻿{
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -898,6 +898,14 @@
     "Dynamic import cannot have type arguments": {
         "category": "Error",
         "code": 1326
+    },
+    "String literal with double quotes expected.": {
+        "category": "Error",
+        "code": 1327
+    },
+    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+        "category": "Error",
+        "code": 1328
     },
 
     "Duplicate identifier '{0}'.": {

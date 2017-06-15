@@ -1,4 +1,5 @@
 /// <reference path="visitor.ts" />
+/// <reference path="transformers/utilities.ts" />
 /// <reference path="transformers/ts.ts" />
 /// <reference path="transformers/jsx.ts" />
 /// <reference path="transformers/esnext.ts" />

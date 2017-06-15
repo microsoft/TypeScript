@@ -982,6 +982,12 @@ namespace ts {
         return false;
     }
 
+    export function cloneCompilerOptions(options: CompilerOptions): CompilerOptions {
+        const result = clone(options);
+        setConfigFileInOptions(result, options && options.configFile);
+        return result;
+    }
+
     export function compareDataObjects(dst: any, src: any): boolean {
         if (!dst || !src || Object.keys(dst).length !== Object.keys(src).length) {
             return false;
@@ -1304,30 +1310,6 @@ namespace ts {
             scriptKind = getScriptKindFromFileName(fileName);
         }
         return ensureScriptKind(fileName, scriptKind);
-    }
-
-    export function sanitizeConfigFile(configFileName: string, content: string) {
-        const options: TranspileOptions = {
-            fileName: "config.js",
-            compilerOptions: {
-                target: ScriptTarget.ES2015,
-                removeComments: true
-            },
-            reportDiagnostics: true
-        };
-        const { outputText, diagnostics } = ts.transpileModule("(" + content + ")", options);
-        // Becasue the content was wrapped in "()", the start position of diagnostics needs to be subtract by 1
-        // also, the emitted result will have "(" in the beginning and ");" in the end. We need to strip these
-        // as well
-        const trimmedOutput = outputText.trim();
-        for (const diagnostic of diagnostics) {
-            diagnostic.start = diagnostic.start - 1;
-        }
-        const {config, error} = parseConfigFileTextToJson(configFileName, trimmedOutput.substring(1, trimmedOutput.length - 2), /*stripComments*/ false);
-        return {
-            configJsonObject: config || {},
-            diagnostics: error ? concatenate(diagnostics, [error]) : diagnostics
-        };
     }
 
     export function getFirstNonSpaceCharacterPosition(text: string, position: number) {

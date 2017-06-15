@@ -1943,6 +1943,13 @@ namespace ts.server.protocol {
         source?: string;
     }
 
+    export interface DiagnosticWithFileName extends Diagnostic {
+        /**
+         * Name of the file the diagnostic is in
+         */
+        fileName: string;
+    }
+
     export interface DiagnosticEventBody {
         /**
          * The file for which diagnostic information is reported.
@@ -1977,7 +1984,7 @@ namespace ts.server.protocol {
         /**
          * An arry of diagnostic information items for the found config file.
          */
-        diagnostics: Diagnostic[];
+        diagnostics: DiagnosticWithFileName[];
     }
 
     /**

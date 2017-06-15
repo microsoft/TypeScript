@@ -2375,6 +2375,11 @@ namespace ts {
         sourceFiles: SourceFile[];
     }
 
+    export interface JsonSourceFile extends SourceFile {
+        jsonObject?: ObjectLiteralExpression;
+        extendedSourceFiles?: string[];
+    }
+
     export interface ScriptReferenceHost {
         getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile;
@@ -3488,6 +3493,7 @@ namespace ts {
         charset?: string;
         checkJs?: boolean;
         /* @internal */ configFilePath?: string;
+        /* @internal */ readonly configFile?: JsonSourceFile;
         declaration?: boolean;
         declarationDir?: string;
         /* @internal */ diagnostics?: boolean;
@@ -3560,7 +3566,7 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
 
-        [option: string]: CompilerOptionsValue | undefined;
+        [option: string]: CompilerOptionsValue | JsonSourceFile | undefined;
     }
 
     export interface TypeAcquisition {
@@ -3620,7 +3626,8 @@ namespace ts {
         JSX = 2,
         TS = 3,
         TSX = 4,
-        External = 5
+        External = 5,
+        JSON = 6
     }
 
     export const enum ScriptTarget {
@@ -3692,6 +3699,8 @@ namespace ts {
     /* @internal */
     export interface TsConfigOnlyOption extends CommandLineOptionBase {
         type: "object";
+        elementOptions?: Map<CommandLineOption>;
+        extraKeyDiagnosticMessage?: DiagnosticMessage;
     }
 
     /* @internal */

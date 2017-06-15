@@ -1299,8 +1299,20 @@ namespace ts {
                     }
                 }
 
+                const currentOptions = program.getCompilerOptions();
+                const newOptions = hostCache.compilationSettings();
                 // If the compilation settings do no match, then the program is not up-to-date
-                return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+                if (!compareDataObjects(currentOptions, newOptions)) {
+                    return false;
+                }
+
+                // If everything matches but the text of config file is changed,
+                // error locations can change for program options, so update the program
+                if (currentOptions.configFile && newOptions.configFile) {
+                    return currentOptions.configFile.text === newOptions.configFile.text;
+                }
+
+                return true;
             }
         }
 

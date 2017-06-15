@@ -45,7 +45,7 @@ namespace ts.projectSystem {
         it("works with external project", () => {
             const file1 = makeFile("/a.ts");
             const et = new EventTracker([file1]);
-            const compilerOptions: ts.CompilerOptions = { strict: true };
+            const compilerOptions: ts.server.protocol.CompilerOptions = { strict: true };
 
             const projectFileName = "/hunter2/foo.csproj";
 
@@ -138,8 +138,6 @@ namespace ts.projectSystem {
                 declaration: true,
 
                 lib: ["es6", "dom"],
-
-                checkJs: "" as any as boolean,
             };
             (compilerOptions as any).unknownCompilerOption = "hunter2"; // These are always ignored.
             const tsconfig = makeFile("/tsconfig.json", { compilerOptions, files: ["/a.ts"] });

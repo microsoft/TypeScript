@@ -17,6 +17,7 @@
         "../compiler/checker.ts",
         "../compiler/factory.ts",
         "../compiler/visitor.ts",
+        "../compiler/transformers/utilities.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
         "../compiler/transformers/esnext.ts",

@@ -2,6 +2,17 @@ maxDepthExceeded/root.ts(3,1): error TS2322: Type '"10"' is not assignable to ty
 maxDepthExceeded/root.ts(4,4): error TS2540: Cannot assign to 'rel' because it is a constant or a read-only property.
 
 
+==== maxDepthExceeded/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { 
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 1, // Note: Module m1 is already included as a root file
+        "outDir": "built"
+      },
+      "include": ["**/*"],
+      "exclude": ["node_modules/m2/**/*"]
+    }
+    
 ==== relative.js (0 errors) ====
     exports.relativeProp = true;
     

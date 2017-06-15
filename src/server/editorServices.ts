@@ -976,20 +976,14 @@ namespace ts.server {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
-            let errors: Diagnostic[];
 
-            const result = parseConfigFileTextToJson(configFilename, configFileContent);
-            let config = result.config;
-
-            if (result.error) {
-                // try to reparse config file
-                const { configJsonObject: sanitizedConfig, diagnostics } = sanitizeConfigFile(configFilename, configFileContent);
-                config = sanitizedConfig;
-                errors = diagnostics.length ? diagnostics : [result.error];
+            const result = parseJsonText(configFilename, configFileContent);
+            if (!result.endOfFileToken) {
+                result.endOfFileToken = <EndOfFileToken>{ kind: SyntaxKind.EndOfFileToken };
             }
-
-            const parsedCommandLine = parseJsonConfigFileContent(
-                config,
+            const errors = result.parseDiagnostics;
+            const parsedCommandLine = parseJsonSourceFileConfigFileContent(
+                result,
                 this.host,
                 getDirectoryPath(configFilename),
                 /*existingOptions*/ {},
@@ -998,23 +992,23 @@ namespace ts.server {
                 this.hostConfiguration.extraFileExtensions);
 
             if (parsedCommandLine.errors.length) {
-                errors = concatenate(errors, parsedCommandLine.errors);
+                errors.push(...parsedCommandLine.errors);
             }
 
             Debug.assert(!!parsedCommandLine.fileNames);
 
             if (parsedCommandLine.fileNames.length === 0) {
-                (errors || (errors = [])).push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
+                errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
                 return { success: false, configFileErrors: errors };
             }
 
             const projectOptions: ProjectOptions = {
                 files: parsedCommandLine.fileNames,
                 compilerOptions: parsedCommandLine.options,
-                configHasExtendsProperty: config.extends !== undefined,
-                configHasFilesProperty: config.files !== undefined,
-                configHasIncludeProperty: config.include !== undefined,
-                configHasExcludeProperty: config.exclude !== undefined,
+                configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
+                configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
+                configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
+                configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
                 wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
                 typeAcquisition: parsedCommandLine.typeAcquisition,
                 compileOnSave: parsedCommandLine.compileOnSave
@@ -1183,7 +1177,7 @@ namespace ts.server {
             return {
                 success: conversionResult.success,
                 project,
-                errors: project.getProjectErrors()
+                errors: project.getGlobalProjectErrors()
             };
         }
 
