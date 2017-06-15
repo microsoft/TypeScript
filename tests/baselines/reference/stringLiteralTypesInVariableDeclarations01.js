@@ -1,5 +1,4 @@
 //// [stringLiteralTypesInVariableDeclarations01.ts]
-
 let a: "";
 var b: "foo";
 let c: "bar";

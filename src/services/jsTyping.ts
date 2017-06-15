@@ -13,7 +13,7 @@ namespace ts.JsTyping {
         fileExists: (fileName: string) => boolean;
         readFile: (path: string, encoding?: string) => string;
         readDirectory: (rootDir: string, extensions: string[], excludes: string[], includes: string[], depth?: number) => string[];
-    };
+    }
 
     interface PackageJson {
         _requiredBy?: string[];
@@ -23,7 +23,7 @@ namespace ts.JsTyping {
         optionalDependencies?: MapLike<string>;
         peerDependencies?: MapLike<string>;
         typings?: string;
-    };
+    }
 
     // A map of loose file names to library names
     // that we are confident require typings
@@ -113,8 +113,11 @@ namespace ts.JsTyping {
                 getTypingNamesFromJson(packageJsonPath, filesToWatch);
             }
 
+            const bowerComponentsPath = combinePaths(searchDir, "bower_components");
+            getTypingNamesFromPackagesFolder(bowerComponentsPath);
+
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromNodeModuleFolder(nodeModulesPath);
+            getTypingNamesFromPackagesFolder(nodeModulesPath);
         });
 
         getTypingNamesFromSourceFileNames(fileNames);
@@ -170,7 +173,7 @@ namespace ts.JsTyping {
         /**
          * Merge a given list of typingNames to the inferredTypings map
          */
-        function mergeTypings(typingNames: string[]) {
+        function mergeTypings(typingNames: ReadonlyArray<string>) {
             if (!typingNames) {
                 return;
             }
@@ -219,7 +222,7 @@ namespace ts.JsTyping {
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
             if (safeList !== EmptySafeList) {
-                mergeTypings(filter(cleanedTypingNames, f => safeList.has(f)));
+                mergeTypings(ts.mapDefined(cleanedTypingNames, f => safeList.get(f)));
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
@@ -229,20 +232,23 @@ namespace ts.JsTyping {
         }
 
         /**
-         * Infer typing names from node_module folder
-         * @param nodeModulesPath is the path to the "node_modules" folder
+         * Infer typing names from packages folder (ex: node_module, bower_components)
+         * @param packagesFolderPath is the path to the packages folder
          */
-        function getTypingNamesFromNodeModuleFolder(nodeModulesPath: string) {
+        function getTypingNamesFromPackagesFolder(packagesFolderPath: string) {
+            filesToWatch.push(packagesFolderPath);
+
             // Todo: add support for ModuleResolutionHost too
-            if (!host.directoryExists(nodeModulesPath)) {
+            if (!host.directoryExists(packagesFolderPath)) {
                 return;
             }
 
             const typingNames: string[] = [];
-            const fileNames = host.readDirectory(nodeModulesPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
-                if (getBaseFileName(normalizedFileName) !== "package.json") {
+                const baseFileName = getBaseFileName(normalizedFileName);
+                if (baseFileName !== "package.json" && baseFileName !== "bower.json") {
                     continue;
                 }
                 const result = readConfigFile(normalizedFileName, (path: string) => host.readFile(path));
@@ -254,7 +260,7 @@ namespace ts.JsTyping {
                 // npm 3's package.json contains a "_requiredBy" field
                 // we should include all the top level module names for npm 2, and only module names whose
                 // "_requiredBy" field starts with "#" or equals "/" for npm 3.
-                if (packageJson._requiredBy &&
+                if (baseFileName === "package.json" && packageJson._requiredBy &&
                     filter(packageJson._requiredBy, (r: string) => r[0] === "#" || r === "/").length === 0) {
                     continue;
                 }

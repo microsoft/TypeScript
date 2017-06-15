@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportEqualsInterop.ts] ////
 
 //// [modules.d.ts]
-
 declare module "interface" {
     interface Foo {
         x: number;
@@ -208,8 +207,8 @@ export * from "class-module";
 
 
 //// [main.js]
-/// <reference path="modules.d.ts"/>
 "use strict";
+/// <reference path="modules.d.ts"/>
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
@@ -233,8 +232,6 @@ z7.a;
 z8.a;
 z9.a;
 z0.a;
-// namespace import
-var y1 = require("interface");
 var y2 = require("variable");
 var y3 = require("interface-variable");
 var y4 = require("module");

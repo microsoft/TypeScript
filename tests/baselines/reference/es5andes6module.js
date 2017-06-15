@@ -1,5 +1,4 @@
 //// [es5andes6module.ts]
-
 export default class A
 {
     constructor ()

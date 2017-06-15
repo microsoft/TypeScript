@@ -172,7 +172,7 @@ namespace Utils {
                     assert.isFalse(child.pos < currentPos, "child.pos < currentPos");
                     currentPos = child.end;
                 },
-                (array: ts.NodeArray<ts.Node>) => {
+                array => {
                     assert.isFalse(array.pos < node.pos, "array.pos < node.pos");
                     assert.isFalse(array.end > node.end, "array.end > node.end");
                     assert.isFalse(array.pos < currentPos, "array.pos < currentPos");
@@ -191,7 +191,7 @@ namespace Utils {
             for (const childName in node) {
                 if (childName === "parent" || childName === "nextContainer" || childName === "modifiers" || childName === "externalModuleIndicator" ||
                     // for now ignore jsdoc comments
-                    childName === "jsDocComment") {
+                    childName === "jsDocComment" || childName === "checkJsDirective") {
                     continue;
                 }
                 const child = (<any>node)[childName];
@@ -259,8 +259,9 @@ namespace Utils {
                         return true;
                     }
                     else if ((f & v) > 0) {
-                        if (result.length)
+                        if (result.length) {
                             result += " | ";
+                        }
                         result += flags[v];
                         return false;
                     }
@@ -383,7 +384,7 @@ namespace Utils {
 
                 assertStructuralEquals(child1, child2);
             },
-            (array1: ts.NodeArray<ts.Node>) => {
+            array1 => {
                 const childName = findChildName(node1, array1);
                 const array2: ts.NodeArray<ts.Node> = (<any>node2)[childName];
 
@@ -857,6 +858,7 @@ namespace Harness {
 
         export function getDefaultLibFileName(options: ts.CompilerOptions): string {
             switch (options.target) {
+                case ts.ScriptTarget.ESNext:
                 case ts.ScriptTarget.ES2017:
                     return "lib.es2017.d.ts";
                 case ts.ScriptTarget.ES2016:
@@ -1051,7 +1053,7 @@ namespace Harness {
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
-        function getCommandLineOption(name: string): ts.CommandLineOption {
+        function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
@@ -1247,7 +1249,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
 
                 return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
             }
@@ -1463,7 +1465,7 @@ namespace Harness {
                 // When calling this function from rwc-runner, the baselinePath will have no extension.
                 // As rwc test- file is stored in json which ".json" will get stripped off.
                 // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
-                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
                     baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
                 Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
@@ -1561,7 +1563,7 @@ namespace Harness {
             }
 
             // check js output
-            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js"), () => {
+            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
                 let tsCode = "";
                 const tsSources = otherFiles.concat(toBeCompiled);
                 if (tsSources.length > 1) {
@@ -1649,22 +1651,22 @@ namespace Harness {
         }
 
         export function isTS(fileName: string) {
-            return ts.endsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ts.Extension.Ts);
         }
 
         export function isTSX(fileName: string) {
-            return ts.endsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ts.Extension.Tsx);
         }
 
         export function isDTS(fileName: string) {
-            return ts.endsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ts.Extension.Dts);
         }
 
         export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ".js");
+            return ts.endsWith(fileName, ts.Extension.Js);
         }
         export function isJSX(fileName: string) {
-            return ts.endsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ts.Extension.Jsx);
         }
 
         export function isJSMap(fileName: string) {
@@ -1797,7 +1799,7 @@ namespace Harness {
                     if (currentFileContent === undefined) {
                         currentFileContent = "";
                     }
-                    else {
+                    else if (currentFileContent !== "") {
                         // End-of-line
                         currentFileContent = currentFileContent + "\n";
                     }
@@ -1933,7 +1935,7 @@ namespace Harness {
                 }
 
                 const parentDirectory = IO.directoryName(dirName);
-                if (parentDirectory != "") {
+                if (parentDirectory !== "") {
                     createDirectoryStructure(parentDirectory);
                 }
                 IO.createDirectory(dirName);
@@ -1971,7 +1973,7 @@ namespace Harness {
     export function isDefaultLibraryFile(filePath: string): boolean {
         // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
         const fileName = ts.getBaseFileName(ts.normalizeSlashes(filePath));
-        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ts.Extension.Dts);
     }
 
     export function isBuiltFile(filePath: string): boolean {
@@ -1983,5 +1985,5 @@ namespace Harness {
         return { unitName: libFile, content: io.readFile(libFile) };
     }
 
-    if (Error) (<any>Error).stackTraceLimit = 1;
+    if (Error) (<any>Error).stackTraceLimit = 100;
 }

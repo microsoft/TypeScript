@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/nodeResolution7.ts] ////
 
 //// [index.d.ts]
-
 declare module "a" {
     var x: number;
 }

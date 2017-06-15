@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithOutDir.ts] ////
 
 //// [a.ts]
-
 class c {
 }
 

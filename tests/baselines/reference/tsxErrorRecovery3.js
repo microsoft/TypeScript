@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxErrorRecovery3.tsx] ////
 
 //// [file1.tsx]
-
 declare namespace JSX { interface Element { } }
 
 <div></div>

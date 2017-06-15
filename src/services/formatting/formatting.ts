@@ -34,31 +34,31 @@ namespace ts.formatting {
         getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind, container: Node): number;
         getIndentationForComment(owningToken: SyntaxKind, tokenIndentation: number, container: Node): number;
         /**
-          * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
-          * ... {
-          * .........<child>
-          * ....}
-          *  ____ - indentation
-          *      ____ - delta
-          **/
+         * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
+         * ... {
+         * .........<child>
+         * ....}
+         *  ____ - indentation
+         *      ____ - delta
+         */
         getIndentation(): number;
         /**
-          * Prefered relative indentation for child nodes.
-          * Delta is used to carry the indentation info
-          * foo(bar({
-          *     $
-          * }))
-          * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8.
-          * foo: { indentation: 0, delta: 4 }
-          * bar: { indentation: foo.indentation + foo.delta = 4, delta: 4} however 'foo' and 'bar' are on the same line
-          * so bar inherits indentation from foo and bar.delta will be 4
-          *
-          */
+         * Prefered relative indentation for child nodes.
+         * Delta is used to carry the indentation info
+         * foo(bar({
+         *     $
+         * }))
+         * Both 'foo', 'bar' introduce new indentation with delta = 4, but total indentation in $ is not 8.
+         * foo: { indentation: 0, delta: 4 }
+         * bar: { indentation: foo.indentation + foo.delta = 4, delta: 4} however 'foo' and 'bar' are on the same line
+         * so bar inherits indentation from foo and bar.delta will be 4
+         *
+         */
         getDelta(child: TextRangeWithKind): number;
         /**
-          * Formatter calls this function when rule adds or deletes new lines from the text
-          * so indentation scope can adjust values of indentation and delta.
-          */
+         * Formatter calls this function when rule adds or deletes new lines from the text
+         * so indentation scope can adjust values of indentation and delta.
+         */
         recomputeIndentation(lineAddedByFormatting: boolean): void;
     }
 
@@ -205,9 +205,9 @@ namespace ts.formatting {
     }
 
     /** formatting is not applied to ranges that contain parse errors.
-      * This function will return a predicate that for a given text range will tell
-      * if there are any parse errors that overlap with the range.
-      */
+     * This function will return a predicate that for a given text range will tell
+     * if there are any parse errors that overlap with the range.
+     */
     function prepareRangeContainsErrorFunction(errors: Diagnostic[], originalRange: TextRange): (r: TextRange) => boolean {
         if (!errors.length) {
             return rangeHasNoErrors;
@@ -254,10 +254,10 @@ namespace ts.formatting {
     }
 
     /**
-      * Start of the original range might fall inside the comment - scanner will not yield appropriate results
-      * This function will look for token that is located before the start of target range
-      * and return its end as start position for the scanner.
-      */
+     * Start of the original range might fall inside the comment - scanner will not yield appropriate results
+     * This function will look for token that is located before the start of target range
+     * and return its end as start position for the scanner.
+     */
     function getScanStartPosition(enclosingNode: Node, originalRange: TextRange, sourceFile: SourceFile): number {
         const start = enclosingNode.getStart(sourceFile);
         if (start === originalRange.pos && enclosingNode.end === originalRange.end) {
@@ -362,7 +362,7 @@ namespace ts.formatting {
         sourceFile: SourceFileLike): TextChange[] {
 
         // formatting context is used by rules provider
-        const formattingContext = new FormattingContext(sourceFile, requestKind);
+        const formattingContext = new FormattingContext(sourceFile, requestKind, options);
         let previousRangeHasError: boolean;
         let previousRange: TextRangeWithKind;
         let previousParent: Node;
@@ -388,7 +388,7 @@ namespace ts.formatting {
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                processTrivia(leadingTrivia, enclosingNode, enclosingNode, undefined);
+                processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined);
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
@@ -400,12 +400,12 @@ namespace ts.formatting {
         // local functions
 
         /** Tries to compute the indentation for a list element.
-          * If list element is not in range then
-          * function will pick its actual indentation
-          * so it can be pushed downstream as inherited indentation.
-          * If list element is in the range - its indentation will be equal
-          * to inherited indentation from its predecessors.
-          */
+         * If list element is not in range then
+         * function will pick its actual indentation
+         * so it can be pushed downstream as inherited indentation.
+         * If list element is in the range - its indentation will be equal
+         * to inherited indentation from its predecessors.
+         */
         function tryComputeIndentationForListItem(startPos: number,
             endPos: number,
             parentStartLine: number,
@@ -483,12 +483,11 @@ namespace ts.formatting {
                 case SyntaxKind.MethodDeclaration:
                     if ((<MethodDeclaration>node).asteriskToken) {
                         return SyntaxKind.AsteriskToken;
-                    }/*
-                    fall-through
-                    */
+                    }
+                    // falls through
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.Parameter:
-                    return (<Declaration>node).name.kind;
+                    return getNameOfDeclaration(<Declaration>node).kind;
             }
         }
 
@@ -568,7 +567,7 @@ namespace ts.formatting {
 
             function getEffectiveDelta(delta: number, child: TextRangeWithKind) {
                 // Delta value should be zero when the node explicitly prevents indentation of the child node
-                return SmartIndenter.nodeWillIndentChild(node, child, true) ? delta : 0;
+                return SmartIndenter.nodeWillIndentChild(node, child, /*indentByDefault*/ true) ? delta : 0;
             }
         }
 
@@ -600,7 +599,7 @@ namespace ts.formatting {
                 child => {
                     processChildNode(child, /*inheritedIndentation*/ Constants.Unknown, node, nodeDynamicIndentation, nodeStartLine, undecoratedNodeStartLine, /*isListItem*/ false);
                 },
-                (nodes: NodeArray<Node>) => {
+                nodes => {
                     processChildNodes(nodes, node, nodeStartLine, nodeDynamicIndentation);
                 });
 

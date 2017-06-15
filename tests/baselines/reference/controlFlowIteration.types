@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/controlFlowIteration.ts ===
-
 let cond: boolean;
 >cond : boolean
 

@@ -175,7 +175,7 @@
         "category": "Error",
         "code": 1057
     },
-    "Type used as operand to 'await' or the return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
+    "The return type of an async function must either be a valid promise or must not contain a callable 'then' member.": {
         "category": "Error",
         "code": 1058
     },
@@ -635,6 +635,10 @@
         "category": "Error",
         "code": 1203
     },
+    "Cannot re-export a type when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 1205
+    },
     "Decorators are not valid here.": {
         "category": "Error",
         "code": 1206
@@ -867,6 +871,35 @@
         "category": "Error",
         "code": 1319
     },
+    "Type of 'await' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1320
+    },
+    "Type of 'yield' operand in an async generator must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1321
+    },
+    "Type of iterated elements of a 'yield*' operand must either be a valid promise or must not contain a callable 'then' member.": {
+        "category": "Error",
+        "code": 1322
+    },
+    "Dynamic import cannot be used when targeting ECMAScript 2015 modules.": {
+        "category": "Error",
+        "code": 1323
+    },
+    "Dynamic import must have one specifier as an argument.": {
+        "category": "Error",
+        "code": 1324
+    },
+    "Specifier of dynamic import cannot be spread element.": {
+        "category": "Error",
+        "code": 1325
+    },
+    "Dynamic import cannot have type arguments": {
+        "category": "Error",
+        "code": 1326
+    },
+
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -1051,7 +1084,7 @@
         "category": "Error",
         "code": 2345
     },
-    "Supplied parameters do not match any signature of call target.": {
+    "Call target does not contain any signatures.": {
         "category": "Error",
         "code": 2346
     },
@@ -1827,6 +1860,46 @@
         "category": "Error",
         "code": 2549
     },
+    "Generic type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2550
+    },
+    "Property '{0}' does not exist on type '{1}'. Did you mean '{2}'?": {
+        "category": "Error",
+        "code": 2551
+    },
+    "Cannot find name '{0}'. Did you mean '{1}'?": {
+        "category": "Error",
+        "code": 2552
+    },
+    "Computed values are not permitted in an enum with string valued members.": {
+        "category": "Error",
+        "code": 2553
+    },
+    "Expected {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2554
+    },
+    "Expected at least {0} arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2555
+    },
+    "Expected {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2556
+    },
+    "Expected at least {0} arguments, but got a minimum of {1}.": {
+        "category": "Error",
+        "code": 2557
+    },
+    "Expected {0} type arguments, but got {1}.": {
+        "category": "Error",
+        "code": 2558
+    },
+    "Type '{0}' has no properties in common with type '{1}'.": {
+        "category": "Error",
+        "code": 2559
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -1870,10 +1943,6 @@
     "Cannot augment module '{0}' with value exports because it resolves to a non-module entity.": {
         "category": "Error",
         "code": 2649
-    },
-    "Cannot emit namespaced JSX elements in React.": {
-        "category": "Error",
-        "code": 2650
     },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
@@ -2094,6 +2163,26 @@
     "Generic type '{0}' requires between {1} and {2} type arguments.": {
         "category": "Error",
         "code": 2707
+    },
+    "Cannot use namespace '{0}' as a value.": {
+        "category": "Error",
+        "code": 2708
+    },
+    "Cannot use namespace '{0}' as a type.": {
+        "category": "Error",
+        "code": 2709
+    },
+    "'{0}' are specified twice. The attribute named '{0}' will be overwritten.": {
+        "category": "Error",
+        "code": 2710
+    },
+    "A dynamic import call returns a 'Promise'. Make sure you have a declaration for 'Promise' or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2711
+    },
+    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.": {
+        "category": "Error",
+        "code": 2712
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2392,9 +2481,9 @@
         "category": "Error",
         "code": 4092
     },
-    "'extends' clause of exported class '{0}' refers to a type whose name cannot be referenced.": {
+    "Property '{0}' of exported class expression may not be private or protected.": {
         "category": "Error",
-        "code": 4093
+        "code": 4094
     },
 
     "The current host does not support the '{0}' option.": {
@@ -2561,7 +2650,7 @@
         "category": "Message",
         "code": 6015
     },
-    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd' or 'es2015'.": {
+    "Specify module code generation: 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'.": {
         "category": "Message",
         "code": 6016
     },
@@ -2997,6 +3086,10 @@
         "category": "Message",
         "code": 6136
     },
+    "Cannot import type declaration files. Consider importing '{0}' instead of '{1}'.": {
+        "category": "Error",
+        "code": 6137
+    },
     "Property '{0}' is declared but never used.": {
         "category": "Error",
         "code": 6138
@@ -3173,7 +3266,22 @@
         "category": "Message",
         "code": 6181
     },
-
+    "Scoped package detected, looking in '{0}'": {
+        "category": "Message",
+        "code": 6182
+    },
+    "Reusing resolution of module '{0}' to file '{1}' from old program.": {
+        "category": "Message",
+        "code": 6183
+    },
+    "Reusing module resolutions originating in '{0}' since resolutions are unchanged from old program.": {
+        "category": "Message",
+        "code": 6184
+    },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3278,6 +3386,15 @@
         "category": "Error",
         "code": 7034
     },
+    "Try `npm install @types/{0}` if it exists or add a new declaration (.d.ts) file containing `declare module '{0}';`": {
+        "category": "Error",
+        "code": 7035
+    },
+    "Dynamic import's specifier must be of type 'string', but here has type '{0}'.": {
+        "category": "Error",
+        "code": 7036
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -3472,14 +3589,56 @@
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'.": {
+    "Declare property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'.": {
+    "Add index signature for property '{0}'.": {
         "category": "Message",
         "code": 90017
     },
+    "Disable checking for this file.": {
+        "category": "Message",
+        "code": 90018
+    },
+    "Ignore this error message.": {
+        "category": "Message",
+        "code": 90019
+    },
+    "Initialize property '{0}' in the constructor.": {
+        "category": "Message",
+        "code": 90020
+    },
+    "Initialize static property '{0}'.": {
+        "category": "Message",
+        "code": 90021
+    },
+    "Change spelling to '{0}'.": {
+        "category": "Message",
+        "code": 90022
+    },
+    "Declare method '{0}'.": {
+        "category": "Message",
+        "code": 90023
+    },
+    "Declare static method '{0}'.": {
+        "category": "Message",
+        "code": 90024
+    },
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
+    
+    "Convert function to an ES2015 class": {
+        "category": "Message",
+        "code": 95001
+    },
+    "Convert function '{0}' to class": {
+        "category": "Message",
+        "code": 95002
+    },
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
@@ -3487,5 +3646,9 @@
     "Octal literals are not allowed in enums members initializer. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8018
+    },
+    "Report errors in .js files.": {
+        "category": "Message",
+        "code": 8019
     }
 }

@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react')
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;

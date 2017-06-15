@@ -1,10 +1,9 @@
-tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(3,8): error TS1123: Variable declaration list cannot be empty.
-tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(4,5): error TS2304: Cannot find name 'let'.
-tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(5,10): error TS1123: Variable declaration list cannot be empty.
+tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(2,8): error TS1123: Variable declaration list cannot be empty.
+tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(3,5): error TS2304: Cannot find name 'let'.
+tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaration list cannot be empty.
 
 
 ==== tests/cases/conformance/internalModules/exportDeclarations/NonInitializedExportInInternalModule.ts (3 errors) ====
-    
     module Inner {
         var;
            

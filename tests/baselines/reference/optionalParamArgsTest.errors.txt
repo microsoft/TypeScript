@@ -1,25 +1,25 @@
 tests/cases/compiler/optionalParamArgsTest.ts(31,12): error TS2393: Duplicate function implementation.
 tests/cases/compiler/optionalParamArgsTest.ts(34,12): error TS2393: Duplicate function implementation.
-tests/cases/compiler/optionalParamArgsTest.ts(98,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(99,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(100,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(101,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(102,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(103,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(104,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(105,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(106,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(107,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(108,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(109,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/optionalParamArgsTest.ts(98,1): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/optionalParamArgsTest.ts(99,1): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/optionalParamArgsTest.ts(100,1): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/optionalParamArgsTest.ts(101,1): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/optionalParamArgsTest.ts(102,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(103,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(104,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(105,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(106,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/optionalParamArgsTest.ts(107,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/optionalParamArgsTest.ts(108,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/optionalParamArgsTest.ts(109,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/optionalParamArgsTest.ts(110,1): error TS2554: Expected 0-2 arguments, but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(111,1): error TS2554: Expected 0-2 arguments, but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(112,1): error TS2554: Expected 0-2 arguments, but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(113,1): error TS2554: Expected 0-2 arguments, but got 3.
+tests/cases/compiler/optionalParamArgsTest.ts(114,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(115,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(116,1): error TS2554: Expected 1-2 arguments, but got 0.
+tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2554: Expected 1-2 arguments, but got 0.
 
 
 ==== tests/cases/compiler/optionalParamArgsTest.ts (22 errors) ====
@@ -126,64 +126,64 @@ tests/cases/compiler/optionalParamArgsTest.ts(117,1): error TS2346: Supplied par
     // Negative tests - we expect these cases to fail
     c1o1.C1M1(1);
     ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.
     i1o1.C1M1(1);
     ~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.
     F1(1);
     ~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.
     L1(1);
     ~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0 arguments, but got 1.
     c1o1.C1M2();
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     i1o1.C1M2();
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     F2();
     ~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     L2();
     ~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 0.
     c1o1.C1M2(1,2);
     ~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     i1o1.C1M2(1,2);
     ~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     F2(1,2);
     ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     L2(1,2);
     ~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     c1o1.C1M3(1,2,3);
     ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-2 arguments, but got 3.
     i1o1.C1M3(1,2,3);
     ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-2 arguments, but got 3.
     F3(1,2,3);
     ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-2 arguments, but got 3.
     L3(1,2,3);
     ~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-2 arguments, but got 3.
     c1o1.C1M4();
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     i1o1.C1M4();
     ~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     F4();
     ~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     L4();
     ~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1-2 arguments, but got 0.
     
     function fnOpt1(id: number, children: number[] = [], expectedPath: number[] = [], isRoot?: boolean): void {}
     function fnOpt2(id: number, children?: number[], expectedPath?: number[], isRoot?: boolean): void {}

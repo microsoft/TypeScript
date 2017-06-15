@@ -120,3 +120,8 @@ function f6() {
     x = <string | null>"";
     x!.slice();
 }
+
+function f7() {
+    let x: string;
+    x!.slice();
+}

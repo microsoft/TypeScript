@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitTypeAliasWithTypeParameters1.ts ===
-
 export type Bar<X, Y> = () => [X, Y];
 >Bar : Bar<X, Y>
 >X : X

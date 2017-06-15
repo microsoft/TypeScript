@@ -1,5 +1,4 @@
 === tests/cases/compiler/promiseTest.ts ===
-
 interface Promise<T> {
 >Promise : Promise<T>
 >T : T

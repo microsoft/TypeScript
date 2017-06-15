@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportEqualsDefaultProperty.ts] ////
 
 //// [exp.ts]
-
 var x = {
     "greeting": "hello, world",
     "default": 42

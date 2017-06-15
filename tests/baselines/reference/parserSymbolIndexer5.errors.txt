@@ -1,6 +1,6 @@
 tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,6): error TS2304: Cannot find name 's'.
 tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,7): error TS1005: ']' expected.
-tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,9): error TS2304: Cannot find name 'symbol'.
+tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,9): error TS2552: Cannot find name 'symbol'. Did you mean 'Symbol'?
 tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,15): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(2,16): error TS1136: Property assignment expected.
 tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(3,1): error TS1005: ':' expected.
@@ -14,7 +14,7 @@ tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(3,1):
           ~
 !!! error TS1005: ']' expected.
             ~~~~~~
-!!! error TS2304: Cannot find name 'symbol'.
+!!! error TS2552: Cannot find name 'symbol'. Did you mean 'Symbol'?
                   ~
 !!! error TS1005: ',' expected.
                    ~

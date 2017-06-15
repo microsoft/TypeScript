@@ -1,5 +1,4 @@
 //// [es5-umd3.ts]
-
 export default class A
 {
     constructor ()

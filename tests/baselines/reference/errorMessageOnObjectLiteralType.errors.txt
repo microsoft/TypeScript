@@ -1,5 +1,5 @@
 tests/cases/compiler/errorMessageOnObjectLiteralType.ts(5,3): error TS2339: Property 'getOwnPropertyNamess' does not exist on type '{ a: string; b: number; }'.
-tests/cases/compiler/errorMessageOnObjectLiteralType.ts(6,8): error TS2339: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'.
+tests/cases/compiler/errorMessageOnObjectLiteralType.ts(6,8): error TS2551: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
 
 
 ==== tests/cases/compiler/errorMessageOnObjectLiteralType.ts (2 errors) ====
@@ -12,4 +12,4 @@ tests/cases/compiler/errorMessageOnObjectLiteralType.ts(6,8): error TS2339: Prop
 !!! error TS2339: Property 'getOwnPropertyNamess' does not exist on type '{ a: string; b: number; }'.
     Object.getOwnPropertyNamess(null);
            ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'.
+!!! error TS2551: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?

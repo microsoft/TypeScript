@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/keyof/keyofAndIndexedAccess.ts ===
-
 class Shape {
 >Shape : Shape
 
@@ -523,10 +522,10 @@ function pluck<T, K extends keyof T>(array: T[], key: K) {
 
     return array.map(x => x[key]);
 >array.map(x => x[key]) : T[K][]
->array.map : { <U>(this: [T, T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U, U, U]; <U>(this: [T, T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U]; <U>(this: [T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U]; <U>(this: [T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U]; <U>(this: [T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): U[]; <U>(callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[]; }
+>array.map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
 >array : T[]
->map : { <U>(this: [T, T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U, U, U]; <U>(this: [T, T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U, U]; <Z, U>(this: [T, T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U, U]; <U>(this: [T, T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U, U]; <Z, U>(this: [T, T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U, U]; <U>(this: [T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U, U]; <U>(this: [T, T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U, U]; <Z, U>(this: [T, T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U, U]; <U>(this: [T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): [U, U]; <U>(this: [T, T], callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): [U, U]; <Z, U>(this: [T, T], callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): [U, U]; <U>(callbackfn: (this: undefined, value: T, index: number, array: T[]) => U): U[]; <U>(callbackfn: (this: undefined, value: T, index: number, array: T[]) => U, thisArg: undefined): U[]; <Z, U>(callbackfn: (this: Z, value: T, index: number, array: T[]) => U, thisArg: Z): U[]; }
->x => x[key] : (this: undefined, x: T) => T[K]
+>map : <U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any) => U[]
+>x => x[key] : (x: T) => T[K]
 >x : T
 >x[key] : T[K]
 >x : T
@@ -1867,9 +1866,9 @@ let c1 = new Component1({
 
 c1.get("hello");
 >c1.get("hello") : string
->c1.get : <K extends "hello">(key: K) => ({ hello: string; } & {})[K]
+>c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
 >c1 : Component1<{ hello: string; }, {}>
->get : <K extends "hello">(key: K) => ({ hello: string; } & {})[K]
+>get : <K extends "hello">(key: K) => { hello: string; }[K]
 >"hello" : "hello"
 
 // Repro from #12625

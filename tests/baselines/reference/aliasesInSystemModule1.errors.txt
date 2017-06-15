@@ -1,8 +1,7 @@
-tests/cases/compiler/aliasesInSystemModule1.ts(2,24): error TS2307: Cannot find module 'foo'.
+tests/cases/compiler/aliasesInSystemModule1.ts(1,24): error TS2307: Cannot find module 'foo'.
 
 
 ==== tests/cases/compiler/aliasesInSystemModule1.ts (1 errors) ====
-    
     import alias = require('foo');
                            ~~~~~
 !!! error TS2307: Cannot find module 'foo'.

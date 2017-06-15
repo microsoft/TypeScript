@@ -58,8 +58,10 @@ namespace ts {
                     }
 
                     const isEmittedNode = node.kind !== SyntaxKind.NotEmittedStatement;
-                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0;
-                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0;
+                    // We have to explicitly check that the node is JsxText because if the compilerOptions.jsx is "preserve" we will not do any transformation.
+                    // It is expensive to walk entire tree just to set one kind of node to have no comments.
+                    const skipLeadingComments = pos < 0 || (emitFlags & EmitFlags.NoLeadingComments) !== 0 || node.kind === SyntaxKind.JsxText;
+                    const skipTrailingComments = end < 0 || (emitFlags & EmitFlags.NoTrailingComments) !== 0 || node.kind === SyntaxKind.JsxText;
 
                     // Emit leading comments if the position is not synthesized and the node
                     // has not opted out from emitting leading comments.
@@ -411,7 +413,7 @@ namespace ts {
          * Determine if the given comment is a triple-slash
          *
          * @return true if the comment is a triple-slash comment else false
-         **/
+         */
         function isTripleSlashComment(commentPos: number, commentEnd: number) {
             // Verify this is /// comment, but do the regexp match only when we first can find /// in the comment text
             // so that we don't end up computing comment string and doing match for all // comments

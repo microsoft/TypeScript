@@ -87,8 +87,8 @@ interface PropertyDescriptor {
     enumerable?: boolean;
     value?: any;
     writable?: boolean;
-    get? (): any;
-    set? (v: any): void;
+    get?(): any;
+    set?(v: any): void;
 }
 
 interface PropertyDescriptorMap {
@@ -128,7 +128,7 @@ interface Object {
 }
 
 interface ObjectConstructor {
-    new (value?: any): Object;
+    new(value?: any): Object;
     (): any;
     (value: any): any;
 
@@ -160,14 +160,14 @@ interface ObjectConstructor {
       * Creates an object that has the specified prototype or that has null prototype.
       * @param o Object to use as a prototype. May be null.
       */
-    create<T extends object>(o: T | null): T | object;
+    create(o: object | null): any;
 
     /**
       * Creates an object that has the specified prototype, and that optionally contains specified properties.
       * @param o Object to use as a prototype. May be null
       * @param properties JavaScript object that contains one or more property descriptors.
       */
-    create(o: object | null, properties: PropertyDescriptorMap): any;
+    create(o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Adds a property to an object, or modifies attributes of an existing property.
@@ -175,14 +175,14 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor): any;
+    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
       * @param o Object on which to add or modify the properties. This can be a native JavaScript object or a DOM object.
       * @param properties JavaScript object that contains one or more descriptor objects. Each descriptor object describes a data property or an accessor property.
       */
-    defineProperties(o: any, properties: PropertyDescriptorMap): any;
+    defineProperties(o: any, properties: PropertyDescriptorMap & ThisType<any>): any;
 
     /**
       * Prevents the modification of attributes of existing properties, and prevents the addition of new properties.
@@ -286,7 +286,7 @@ interface FunctionConstructor {
       * Creates a new function.
       * @param args A list of arguments the function accepts.
       */
-    new (...args: string[]): Function;
+    new(...args: string[]): Function;
     (...args: string[]): Function;
     readonly prototype: Function;
 }
@@ -345,53 +345,27 @@ interface String {
       * Matches a string with a regular expression, and returns an array containing the results of that search.
       * @param regexp A variable name or string literal containing the regular expression pattern and flags.
       */
-    match(regexp: string): RegExpMatchArray | null;
-
-    /**
-      * Matches a string with a regular expression, and returns an array containing the results of that search.
-      * @param regexp A regular expression object that contains the regular expression pattern and applicable flags.
-      */
-    match(regexp: RegExp): RegExpMatchArray | null;
+    match(regexp: string | RegExp): RegExpMatchArray | null;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string to search for.
       * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
       */
-    replace(searchValue: string, replaceValue: string): string;
+    replace(searchValue: string | RegExp, replaceValue: string): string;
 
     /**
       * Replaces text in a string, using a regular expression or search string.
       * @param searchValue A string to search for.
       * @param replacer A function that returns the replacement text.
       */
-    replace(searchValue: string, replacer: (substring: string, ...args: any[]) => string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags.
-      * @param replaceValue A string containing the text to replace for every successful match of searchValue in this string.
-      */
-    replace(searchValue: RegExp, replaceValue: string): string;
-
-    /**
-      * Replaces text in a string, using a regular expression or search string.
-      * @param searchValue A Regular Expression object containing the regular expression pattern and applicable flags
-      * @param replacer A function that returns the replacement text.
-      */
-    replace(searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string;
+    replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string;
 
     /**
       * Finds the first substring match in a regular expression search.
       * @param regexp The regular expression pattern and applicable flags.
       */
-    search(regexp: string): number;
-
-    /**
-      * Finds the first substring match in a regular expression search.
-      * @param regexp The regular expression pattern and applicable flags.
-      */
-    search(regexp: RegExp): number;
+    search(regexp: string | RegExp): number;
 
     /**
       * Returns a section of a string.
@@ -406,14 +380,7 @@ interface String {
       * @param separator A string that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
       * @param limit A value used to limit the number of elements returned in the array.
       */
-    split(separator: string, limit?: number): string[];
-
-    /**
-      * Split a string into substrings using the specified separator and return them as an array.
-      * @param separator A Regular Express that identifies character or characters to use in separating the string. If omitted, a single-element array containing the entire string is returned.
-      * @param limit A value used to limit the number of elements returned in the array.
-      */
-    split(separator: RegExp, limit?: number): string[];
+    split(separator: string | RegExp, limit?: number): string[];
 
     /**
       * Returns the substring at the specified location within a String object.
@@ -456,7 +423,7 @@ interface String {
 }
 
 interface StringConstructor {
-    new (value?: any): String;
+    new(value?: any): String;
     (value?: any): string;
     readonly prototype: String;
     fromCharCode(...codes: number[]): string;
@@ -473,7 +440,7 @@ interface Boolean {
 }
 
 interface BooleanConstructor {
-    new (value?: any): Boolean;
+    new(value?: any): Boolean;
     (value?: any): boolean;
     readonly prototype: Boolean;
 }
@@ -510,7 +477,7 @@ interface Number {
 }
 
 interface NumberConstructor {
-    new (value?: any): Number;
+    new(value?: any): Number;
     (value?: any): number;
     readonly prototype: Number;
 
@@ -543,7 +510,7 @@ interface NumberConstructor {
 declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
-    readonly raw: ReadonlyArray<string>
+    readonly raw: ReadonlyArray<string>;
 }
 
 interface Math {
@@ -812,10 +779,10 @@ interface Date {
 }
 
 interface DateConstructor {
-    new (): Date;
-    new (value: number): Date;
-    new (value: string): Date;
-    new (year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
+    new(): Date;
+    new(value: number): Date;
+    new(value: string): Date;
+    new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
     /**
@@ -881,9 +848,9 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp): RegExp;
-    new (pattern: string, flags?: string): RegExp;
-    (pattern: RegExp): RegExp;
+    new(pattern: RegExp | string): RegExp;
+    new(pattern: string, flags?: string): RegExp;
+    (pattern: RegExp | string): RegExp;
     (pattern: string, flags?: string): RegExp;
     readonly prototype: RegExp;
 
@@ -909,7 +876,7 @@ interface Error {
 }
 
 interface ErrorConstructor {
-    new (message?: string): Error;
+    new(message?: string): Error;
     (message?: string): Error;
     readonly prototype: Error;
 }
@@ -920,7 +887,7 @@ interface EvalError extends Error {
 }
 
 interface EvalErrorConstructor {
-    new (message?: string): EvalError;
+    new(message?: string): EvalError;
     (message?: string): EvalError;
     readonly prototype: EvalError;
 }
@@ -931,7 +898,7 @@ interface RangeError extends Error {
 }
 
 interface RangeErrorConstructor {
-    new (message?: string): RangeError;
+    new(message?: string): RangeError;
     (message?: string): RangeError;
     readonly prototype: RangeError;
 }
@@ -942,7 +909,7 @@ interface ReferenceError extends Error {
 }
 
 interface ReferenceErrorConstructor {
-    new (message?: string): ReferenceError;
+    new(message?: string): ReferenceError;
     (message?: string): ReferenceError;
     readonly prototype: ReferenceError;
 }
@@ -953,7 +920,7 @@ interface SyntaxError extends Error {
 }
 
 interface SyntaxErrorConstructor {
-    new (message?: string): SyntaxError;
+    new(message?: string): SyntaxError;
     (message?: string): SyntaxError;
     readonly prototype: SyntaxError;
 }
@@ -964,7 +931,7 @@ interface TypeError extends Error {
 }
 
 interface TypeErrorConstructor {
-    new (message?: string): TypeError;
+    new(message?: string): TypeError;
     (message?: string): TypeError;
     readonly prototype: TypeError;
 }
@@ -975,7 +942,7 @@ interface URIError extends Error {
 }
 
 interface URIErrorConstructor {
-    new (message?: string): URIError;
+    new(message?: string): URIError;
     (message?: string): URIError;
     readonly prototype: URIError;
 }
@@ -1025,12 +992,10 @@ interface ReadonlyArray<T> {
       * Returns a string representation of an array.
       */
     toString(): string;
-    toLocaleString(): string;
     /**
-      * Combines two or more arrays.
-      * @param items Additional items to add to the end of array1.
+      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
       */
-    concat<U extends ReadonlyArray<T>>(...items: U[]): T[];
+    toLocaleString(): string;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1058,7 +1023,6 @@ interface ReadonlyArray<T> {
       * @param fromIndex The array index at which to begin the search. If fromIndex is omitted, the search starts at index 0.
       */
     indexOf(searchElement: T, fromIndex?: number): number;
-
     /**
       * Returns the index of the last occurrence of a specified value in an array.
       * @param searchElement The value to locate in the array.
@@ -1138,6 +1102,9 @@ interface Array<T> {
       * Returns a string representation of an array.
       */
     toString(): string;
+    /**
+      * Returns a string representation of an array. The elements are converted to string using thier toLocalString methods.
+      */
     toLocaleString(): string;
     /**
       * Appends new elements to an array, and returns the new length of the array.
@@ -1235,31 +1202,13 @@ interface Array<T> {
       * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
       * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
       */
-    map<U>(this: [T, T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U, U];
-    /**
-      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
-      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
-      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-      */
-    map<U>(this: [T, T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U, U];
-    /**
-      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
-      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
-      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-      */
-    map<U>(this: [T, T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U, U];
-    /**
-      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
-      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
-      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-      */
-    map<U>(this: [T, T], callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): [U, U];
-    /**
-      * Calls a defined callback function on each element of an array, and returns an array that contains the results.
-      * @param callbackfn A function that accepts up to three arguments. The map method calls the callbackfn function one time for each element in the array.
-      * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
-      */
     map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[];
+    /**
+     * Returns the elements of an array that meet the condition specified in a callback function.
+     * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
+     * @param thisArg An object to which the this keyword can refer in the callbackfn function. If thisArg is omitted, undefined is used as the this value.
+     */
+    filter<S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
     /**
       * Returns the elements of an array that meet the condition specified in a callback function.
       * @param callbackfn A function that accepts up to three arguments. The filter method calls the callbackfn function one time for each element in the array.
@@ -1295,7 +1244,7 @@ interface Array<T> {
 }
 
 interface ArrayConstructor {
-    new (arrayLength?: number): any[];
+    new(arrayLength?: number): any[];
     new <T>(arrayLength: number): T[];
     new <T>(...items: T[]): T[];
     (arrayLength?: number): any[];
@@ -1377,14 +1326,19 @@ type Readonly<T> = {
  */
 type Pick<T, K extends keyof T> = {
     [P in K]: T[P];
-}
+};
 
 /**
  * Construct a type with a set of properties K of type T
  */
 type Record<K extends string, T> = {
     [P in K]: T;
-}
+};
+
+/**
+ * Marker for contextual 'this' type
+ */
+interface ThisType<T> { }
 
 /**
   * Represents a raw buffer of binary data, which is used to store data for the
@@ -1401,12 +1355,20 @@ interface ArrayBuffer {
     /**
       * Returns a section of an ArrayBuffer.
       */
-    slice(begin:number, end?:number): ArrayBuffer;
+    slice(begin: number, end?: number): ArrayBuffer;
 }
+
+/**
+ * Allowed ArrayBuffer types for the buffer of an ArrayBufferView and related Typed Arrays.
+ */
+interface ArrayBufferTypes {
+    ArrayBuffer: ArrayBuffer;
+}
+type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
 interface ArrayBufferConstructor {
     readonly prototype: ArrayBuffer;
-    new (byteLength: number): ArrayBuffer;
+    new(byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
 declare const ArrayBuffer: ArrayBufferConstructor;
@@ -1415,7 +1377,7 @@ interface ArrayBufferView {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    buffer: ArrayBuffer;
+    buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1557,7 +1519,7 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    new (buffer: ArrayBuffer, byteOffset?: number, byteLength?: number): DataView;
+    new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
 declare const DataView: DataViewConstructor;
 
@@ -1574,7 +1536,7 @@ interface Int8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1693,7 +1655,7 @@ interface Int8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int8Array) => number, thisArg?: any): Int8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -1750,13 +1712,6 @@ interface Int8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -1808,9 +1763,9 @@ interface Int8Array {
 }
 interface Int8ArrayConstructor {
     readonly prototype: Int8Array;
-    new (length: number): Int8Array;
-    new (array: ArrayLike<number>): Int8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int8Array;
+    new(length: number): Int8Array;
+    new(array: ArrayLike<number>): Int8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -1831,6 +1786,7 @@ interface Int8ArrayConstructor {
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array;
 
+
 }
 declare const Int8Array: Int8ArrayConstructor;
 
@@ -1847,7 +1803,7 @@ interface Uint8Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -1966,7 +1922,7 @@ interface Uint8Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8Array) => number, thisArg?: any): Uint8Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2023,13 +1979,6 @@ interface Uint8Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2082,9 +2031,9 @@ interface Uint8Array {
 
 interface Uint8ArrayConstructor {
     readonly prototype: Uint8Array;
-    new (length: number): Uint8Array;
-    new (array: ArrayLike<number>): Uint8Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8Array;
+    new(length: number): Uint8Array;
+    new(array: ArrayLike<number>): Uint8Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2121,7 +2070,7 @@ interface Uint8ClampedArray {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2240,7 +2189,7 @@ interface Uint8ClampedArray {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint8ClampedArray) => number, thisArg?: any): Uint8ClampedArray;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2297,17 +2246,10 @@ interface Uint8ClampedArray {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
-    set(array: Uint8ClampedArray, offset?: number): void;
+    set(array: ArrayLike<number>, offset?: number): void;
 
     /**
       * Returns a section of an array.
@@ -2356,9 +2298,9 @@ interface Uint8ClampedArray {
 
 interface Uint8ClampedArrayConstructor {
     readonly prototype: Uint8ClampedArray;
-    new (length: number): Uint8ClampedArray;
-    new (array: ArrayLike<number>): Uint8ClampedArray;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint8ClampedArray;
+    new(length: number): Uint8ClampedArray;
+    new(array: ArrayLike<number>): Uint8ClampedArray;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
 
     /**
       * The size in bytes of each element in the array.
@@ -2394,7 +2336,7 @@ interface Int16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2444,7 +2386,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    filter(callbackfn: (value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
+    filter(callbackfn: (this: void, value: number, index: number, array: Int16Array) => any, thisArg?: any): Int16Array;
 
     /**
       * Returns the value of the first element in the array where predicate is true, and undefined
@@ -2476,7 +2418,6 @@ interface Int16Array {
       * If thisArg is omitted, undefined is used as the this value.
       */
     forEach(callbackfn: (value: number, index: number, array: Int16Array) => void, thisArg?: any): void;
-
     /**
       * Returns the index of the first occurrence of a value in an array.
       * @param searchElement The value to locate in the array.
@@ -2513,7 +2454,7 @@ interface Int16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Int16Array) => number, thisArg?: any): Int16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2570,13 +2511,6 @@ interface Int16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2629,9 +2563,9 @@ interface Int16Array {
 
 interface Int16ArrayConstructor {
     readonly prototype: Int16Array;
-    new (length: number): Int16Array;
-    new (array: ArrayLike<number>): Int16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int16Array;
+    new(length: number): Int16Array;
+    new(array: ArrayLike<number>): Int16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2652,6 +2586,7 @@ interface Int16ArrayConstructor {
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array;
 
+
 }
 declare const Int16Array: Int16ArrayConstructor;
 
@@ -2668,7 +2603,7 @@ interface Uint16Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -2787,7 +2722,7 @@ interface Uint16Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint16Array) => number, thisArg?: any): Uint16Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -2844,13 +2779,6 @@ interface Uint16Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -2903,9 +2831,9 @@ interface Uint16Array {
 
 interface Uint16ArrayConstructor {
     readonly prototype: Uint16Array;
-    new (length: number): Uint16Array;
-    new (array: ArrayLike<number>): Uint16Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint16Array;
+    new(length: number): Uint16Array;
+    new(array: ArrayLike<number>): Uint16Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -2926,6 +2854,7 @@ interface Uint16ArrayConstructor {
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array;
 
+
 }
 declare const Uint16Array: Uint16ArrayConstructor;
 /**
@@ -2941,7 +2870,7 @@ interface Int32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3117,13 +3046,6 @@ interface Int32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3176,9 +3098,9 @@ interface Int32Array {
 
 interface Int32ArrayConstructor {
     readonly prototype: Int32Array;
-    new (length: number): Int32Array;
-    new (array: ArrayLike<number>): Int32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Int32Array;
+    new(length: number): Int32Array;
+    new(array: ArrayLike<number>): Int32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3198,6 +3120,7 @@ interface Int32ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array;
+
 }
 declare const Int32Array: Int32ArrayConstructor;
 
@@ -3214,7 +3137,7 @@ interface Uint32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3296,7 +3219,6 @@ interface Uint32Array {
       * If thisArg is omitted, undefined is used as the this value.
       */
     forEach(callbackfn: (value: number, index: number, array: Uint32Array) => void, thisArg?: any): void;
-
     /**
       * Returns the index of the first occurrence of a value in an array.
       * @param searchElement The value to locate in the array.
@@ -3333,7 +3255,7 @@ interface Uint32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Uint32Array) => number, thisArg?: any): Uint32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3390,13 +3312,6 @@ interface Uint32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3449,9 +3364,9 @@ interface Uint32Array {
 
 interface Uint32ArrayConstructor {
     readonly prototype: Uint32Array;
-    new (length: number): Uint32Array;
-    new (array: ArrayLike<number>): Uint32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Uint32Array;
+    new(length: number): Uint32Array;
+    new(array: ArrayLike<number>): Uint32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3471,6 +3386,7 @@ interface Uint32ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array;
+
 }
 declare const Uint32Array: Uint32ArrayConstructor;
 
@@ -3487,7 +3403,7 @@ interface Float32Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3606,7 +3522,7 @@ interface Float32Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float32Array) => number, thisArg?: any): Float32Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3663,13 +3579,6 @@ interface Float32Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3722,9 +3631,9 @@ interface Float32Array {
 
 interface Float32ArrayConstructor {
     readonly prototype: Float32Array;
-    new (length: number): Float32Array;
-    new (array: ArrayLike<number>): Float32Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float32Array;
+    new(length: number): Float32Array;
+    new(array: ArrayLike<number>): Float32Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -3745,6 +3654,7 @@ interface Float32ArrayConstructor {
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array;
 
+
 }
 declare const Float32Array: Float32ArrayConstructor;
 
@@ -3761,7 +3671,7 @@ interface Float64Array {
     /**
       * The ArrayBuffer instance referenced by the array.
       */
-    readonly buffer: ArrayBuffer;
+    readonly buffer: ArrayBufferLike;
 
     /**
       * The length in bytes of the array.
@@ -3880,7 +3790,7 @@ interface Float64Array {
       * @param thisArg An object to which the this keyword can refer in the callbackfn function.
       * If thisArg is omitted, undefined is used as the this value.
       */
-    map(callbackfn: (value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
+    map(callbackfn: (this: void, value: number, index: number, array: Float64Array) => number, thisArg?: any): Float64Array;
 
     /**
       * Calls the specified callback function for all the elements in an array. The return value of
@@ -3937,13 +3847,6 @@ interface Float64Array {
 
     /**
       * Sets a value or an array of values.
-      * @param index The index of the location to set.
-      * @param value The value to set.
-      */
-    set(index: number, value: number): void;
-
-    /**
-      * Sets a value or an array of values.
       * @param array A typed or untyped array of values to set.
       * @param offset The index in the current array at which the values are to be written.
       */
@@ -3996,9 +3899,9 @@ interface Float64Array {
 
 interface Float64ArrayConstructor {
     readonly prototype: Float64Array;
-    new (length: number): Float64Array;
-    new (array: ArrayLike<number>): Float64Array;
-    new (buffer: ArrayBuffer, byteOffset?: number, length?: number): Float64Array;
+    new(length: number): Float64Array;
+    new(array: ArrayLike<number>): Float64Array;
+    new(buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
 
     /**
       * The size in bytes of each element in the array.
@@ -4018,6 +3921,7 @@ interface Float64ArrayConstructor {
       * @param thisArg Value of 'this' used to invoke the mapfn.
       */
     from(arrayLike: ArrayLike<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array;
+
 }
 declare const Float64Array: Float64ArrayConstructor;
 
@@ -4025,7 +3929,7 @@ declare const Float64Array: Float64ArrayConstructor;
 /// ECMAScript Internationalization API
 /////////////////////////////
 
-declare module Intl {
+declare namespace Intl {
     interface CollatorOptions {
         usage?: string;
         localeMatcher?: string;
@@ -4050,10 +3954,10 @@ declare module Intl {
         resolvedOptions(): ResolvedCollatorOptions;
     }
     var Collator: {
-        new (locales?: string | string[], options?: CollatorOptions): Collator;
+        new(locales?: string | string[], options?: CollatorOptions): Collator;
         (locales?: string | string[], options?: CollatorOptions): Collator;
         supportedLocalesOf(locales: string | string[], options?: CollatorOptions): string[];
-    }
+    };
 
     interface NumberFormatOptions {
         localeMatcher?: string;
@@ -4087,10 +3991,10 @@ declare module Intl {
         resolvedOptions(): ResolvedNumberFormatOptions;
     }
     var NumberFormat: {
-        new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
+        new(locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
-    }
+    };
 
     interface DateTimeFormatOptions {
         localeMatcher?: string;
@@ -4130,10 +4034,10 @@ declare module Intl {
         resolvedOptions(): ResolvedDateTimeFormatOptions;
     }
     var DateTimeFormat: {
-        new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
+        new(locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
-    }
+    };
 }
 
 interface String {

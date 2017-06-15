@@ -2,7 +2,6 @@ tests/cases/compiler/file2.ts(1,8): error TS6133: 'd' is declared but never used
 
 
 ==== tests/cases/compiler/file1.ts (0 errors) ====
-    
     export class Calculator {
         handleChar() {}
     }

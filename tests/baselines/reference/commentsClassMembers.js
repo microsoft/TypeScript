@@ -1,5 +1,4 @@
 //// [commentsClassMembers.ts]
-
 /** This is comment for c1*/
 class c1 {
     /** p1 is property of c1*/

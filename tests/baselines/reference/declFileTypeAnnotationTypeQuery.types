@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileTypeAnnotationTypeQuery.ts ===
-
 class c {
 >c : c
 }

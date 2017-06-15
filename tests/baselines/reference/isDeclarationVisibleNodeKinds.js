@@ -1,5 +1,4 @@
 //// [isDeclarationVisibleNodeKinds.ts]
-
 // Function types
 module schema {
     export function createValidator1(schema: any): <T>(data: T) => T {

@@ -1,5 +1,4 @@
 //// [es6ModuleInternalNamedImports.ts]
-
 export module M {
     // variable
     export var M_V = 0;
@@ -42,7 +41,7 @@ export var M;
     }
     M.M_C = M_C;
     // instantiated module
-    var M_M;
+    let M_M;
     (function (M_M) {
         var x;
     })(M_M = M.M_M || (M.M_M = {}));
@@ -50,7 +49,7 @@ export var M;
     function M_F() { }
     M.M_F = M_F;
     // enum
-    var M_E;
+    let M_E;
     (function (M_E) {
     })(M_E = M.M_E || (M.M_E = {}));
     // alias

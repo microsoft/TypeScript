@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,1): error TS2304: Cannot find name 'foo'.
+tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,1): error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,6): error TS1005: ';' expected.
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,8): error TS2304: Cannot find name 'Bar'.
 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts(1,12): error TS1005: ';' expected.
@@ -11,7 +11,7 @@ tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.t
 ==== tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts (8 errors) ====
     foo(): Bar { }
     ~~~
-!!! error TS2304: Cannot find name 'foo'.
+!!! error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
          ~
 !!! error TS1005: ';' expected.
            ~~~

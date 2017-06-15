@@ -1,10 +1,24 @@
 /// <reference types="node" />
 /// <reference path="shared.ts" />
 /// <reference path="session.ts" />
-// used in fs.writeSync
-/* tslint:disable:no-null-keyword */
 
 namespace ts.server {
+    interface IOSessionOptions {
+        host: ServerHost;
+        cancellationToken: ServerCancellationToken;
+        canUseEvents: boolean;
+        installerEventPort: number;
+        useSingleInferredProject: boolean;
+        disableAutomaticTypingAcquisition: boolean;
+        globalTypingsCacheLocation: string;
+        logger: Logger;
+        typingSafeListLocation: string;
+        npmLocation: string | undefined;
+        telemetryEnabled: boolean;
+        globalPlugins: string[];
+        pluginProbeLocations: string[];
+        allowLocalPluginLoads: boolean;
+    }
 
     const net: {
         connect(options: { port: number }, onConnect?: () => void): NodeSocket
@@ -21,6 +35,7 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
+        const versionMajorMinor = ts.version.match(/\d+\.\d+/)[0];
         switch (process.platform) {
             case "win32": {
                 const basePath = process.env.LOCALAPPDATA ||
@@ -29,13 +44,15 @@ namespace ts.server {
                     process.env.USERPROFILE ||
                     (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript");
+                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
             }
+            case "openbsd":
+            case "freebsd":
             case "darwin":
             case "linux":
             case "android": {
                 const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return combinePaths(cacheLocation, "typescript");
+                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
             }
             default:
                 Debug.fail(`unsupported platform '${process.platform}'`);
@@ -196,7 +213,8 @@ namespace ts.server {
                 }
                 if (this.fd >= 0) {
                     const buf = new Buffer(s);
-                    fs.writeSync(this.fd, buf, 0, buf.length, null);
+                    // tslint:disable-next-line no-null-keyword
+                    fs.writeSync(this.fd, buf, 0, buf.length, /*position*/ null);
                 }
                 if (this.traceToConsole) {
                     console.warn(s);
@@ -219,6 +237,8 @@ namespace ts.server {
             host: ServerHost,
             eventPort: number,
             readonly globalTypingsCacheLocation: string,
+            readonly typingSafeListLocation: string,
+            private readonly npmLocation: string | undefined,
             private newLine: string) {
             this.throttledOperations = new ThrottledOperations(host);
             if (eventPort) {
@@ -260,19 +280,24 @@ namespace ts.server {
             if (this.logger.loggingEnabled() && this.logger.getLogFileName()) {
                 args.push(Arguments.LogFile, combinePaths(getDirectoryPath(normalizeSlashes(this.logger.getLogFileName())), `ti-${process.pid}.log`));
             }
+            if (this.typingSafeListLocation) {
+                args.push(Arguments.TypingSafeListLocation, this.typingSafeListLocation);
+            }
+            if (this.npmLocation) {
+                args.push(Arguments.NpmLocation, this.npmLocation);
+            }
+
             const execArgv: string[] = [];
-            {
-                for (const arg of process.execArgv) {
-                    const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
-                    if (match) {
-                        // if port is specified - use port + 1
-                        // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
-                        const currentPort = match[3] !== undefined
-                            ? +match[3]
-                            : match[1] === "debug" ? 5858 : 9229;
-                        execArgv.push(`--${match[1]}=${currentPort + 1}`);
-                        break;
-                    }
+            for (const arg of process.execArgv) {
+                const match = /^--(debug|inspect)(=(\d+))?$/.exec(arg);
+                if (match) {
+                    // if port is specified - use port + 1
+                    // otherwise pick a default port depending on if 'debug' or 'inspect' and use its value + 1
+                    const currentPort = match[3] !== undefined
+                        ? +match[3]
+                        : match[1] === "debug" ? 5858 : 9229;
+                    execArgv.push(`--${match[1]}=${currentPort + 1}`);
+                    break;
                 }
             }
 
@@ -363,40 +388,35 @@ namespace ts.server {
             }
 
             this.projectService.updateTypingsForProject(response);
-            if (response.kind == ActionSet && this.socket) {
+            if (response.kind === ActionSet && this.socket) {
                 this.sendEvent(0, "setTypings", response);
             }
         }
     }
 
     class IOSession extends Session {
-        constructor(
-            host: ServerHost,
-            cancellationToken: ServerCancellationToken,
-            installerEventPort: number,
-            canUseEvents: boolean,
-            useSingleInferredProject: boolean,
-            disableAutomaticTypingAcquisition: boolean,
-            globalTypingsCacheLocation: string,
-            telemetryEnabled: boolean,
-            logger: server.Logger) {
-                const typingsInstaller = disableAutomaticTypingAcquisition
-                    ? undefined
-                    : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, host.newLine);
+        constructor(options: IOSessionOptions) {
+            const { host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, canUseEvents } = options;
+            const typingsInstaller = disableAutomaticTypingAcquisition
+                ? undefined
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, installerEventPort, globalTypingsCacheLocation, typingSafeListLocation, npmLocation, host.newLine);
 
-                super(
-                    host,
-                    cancellationToken,
-                    useSingleInferredProject,
-                    typingsInstaller || nullTypingsInstaller,
-                    Buffer.byteLength,
-                    process.hrtime,
-                    logger,
-                    canUseEvents);
+            super({
+                host,
+                cancellationToken,
+                useSingleInferredProject,
+                typingsInstaller: typingsInstaller || nullTypingsInstaller,
+                byteLength: Buffer.byteLength,
+                hrtime: process.hrtime,
+                logger,
+                canUseEvents,
+                globalPlugins: options.globalPlugins,
+                pluginProbeLocations: options.pluginProbeLocations,
+                allowLocalPluginLoads: options.allowLocalPluginLoads });
 
-                if (telemetryEnabled && typingsInstaller) {
-                    typingsInstaller.setTelemetrySender(this);
-                }
+            if (telemetryEnabled && typingsInstaller) {
+                typingsInstaller.setTelemetrySender(this);
+            }
         }
 
         exit() {
@@ -507,7 +527,7 @@ namespace ts.server {
                     watchedFile.callback(watchedFile.fileName);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
-                    watchedFile.mtime = getModifiedTime(watchedFile.fileName);
+                    watchedFile.mtime = stats.mtime;
                     watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
                 }
             });
@@ -697,12 +717,11 @@ namespace ts.server {
     }
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
-        const result = nodeModuleNameResolverWorker(moduleName, initialDir + "/program.ts", { moduleResolution: ts.ModuleResolutionKind.NodeJs, allowJs: true }, sys, undefined, /*jsOnly*/ true);
         try {
-            return { module: require(result.resolvedModule.resolvedFileName), error: undefined };
+            return { module: require(resolveJavaScriptModule(moduleName, initialDir, sys)), error: undefined };
         }
-        catch (e) {
-            return { module: undefined, error: e };
+        catch (error) {
+            return { module: undefined, error };
         }
     };
 
@@ -713,7 +732,7 @@ namespace ts.server {
     }
     catch (e) {
         cancellationToken = nullCancellationToken;
-    };
+    }
 
     let eventPort: number;
     {
@@ -729,20 +748,35 @@ namespace ts.server {
         validateLocaleAndSetLanguage(localeStr, sys);
     }
 
+    const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation);
+    const npmLocation = findArgument(Arguments.NpmLocation);
+
+    const globalPlugins = (findArgument("--globalPlugins") || "").split(",");
+    const pluginProbeLocations = (findArgument("--pluginProbeLocations") || "").split(",");
+    const allowLocalPluginLoads = hasArgument("--allowLocalPluginLoads");
+
     const useSingleInferredProject = hasArgument("--useSingleInferredProject");
     const disableAutomaticTypingAcquisition = hasArgument("--disableAutomaticTypingAcquisition");
     const telemetryEnabled = hasArgument(Arguments.EnableTelemetry);
 
-    const ioSession = new IOSession(
-        sys,
+    const options: IOSessionOptions = {
+        host: sys,
         cancellationToken,
-        eventPort,
-        /*canUseEvents*/ eventPort === undefined,
+        installerEventPort: eventPort,
+        canUseEvents: eventPort === undefined,
         useSingleInferredProject,
         disableAutomaticTypingAcquisition,
-        getGlobalTypingsCacheLocation(),
+        globalTypingsCacheLocation: getGlobalTypingsCacheLocation(),
+        typingSafeListLocation,
+        npmLocation,
         telemetryEnabled,
-        logger);
+        logger,
+        globalPlugins,
+        pluginProbeLocations,
+        allowLocalPluginLoads
+    };
+
+    const ioSession = new IOSession(options);
     process.on("uncaughtException", function (err: Error) {
         ioSession.logError(err, "unknown");
     });

@@ -1,5 +1,4 @@
 //// [es5ExportEqualsDts.ts]
-
 class A {
     foo() {
         var aVal: A.B;

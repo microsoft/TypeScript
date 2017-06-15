@@ -1,5 +1,4 @@
 //// [decoratorWithUnderscoreMethod.ts]
-
 declare var console : { log(arg: string): void };
 function dec(): Function {
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {
@@ -30,8 +29,8 @@ var A = (function () {
     A.prototype.__foo = function (bar) {
         // do something with bar
     };
+    __decorate([
+        dec()
+    ], A.prototype, "__foo");
     return A;
 }());
-__decorate([
-    dec()
-], A.prototype, "__foo");

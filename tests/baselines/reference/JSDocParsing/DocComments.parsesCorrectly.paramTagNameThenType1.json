@@ -34,12 +34,13 @@
                     "end": 28
                 }
             },
-            "parameterName": {
+            "name": {
                 "kind": "Identifier",
                 "pos": 15,
                 "end": 20,
                 "text": "name1"
             },
+            "isBracketed": false,
             "comment": ""
         },
         "length": 1,

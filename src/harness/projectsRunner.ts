@@ -111,8 +111,7 @@ class ProjectRunner extends RunnerBase {
                 else if (url.indexOf(diskProjectPath) === 0) {
                     // Replace the disk specific path into the project root path
                     url = url.substr(diskProjectPath.length);
-                    // TODO: should be '!=='?
-                    if (url.charCodeAt(0) != ts.CharacterCodes.slash) {
+                    if (url.charCodeAt(0) !== ts.CharacterCodes.slash) {
                         url = "/" + url;
                     }
                 }
@@ -326,8 +325,8 @@ class ProjectRunner extends RunnerBase {
                     // we need to instead create files that can live in the project reference folder
                     // but make sure extension of these files matches with the fileName the compiler asked to write
                     diskRelativeName = "diskFile" + nonSubfolderDiskFiles +
-                    (Harness.Compiler.isDTS(fileName) ? ".d.ts" :
-                    Harness.Compiler.isJS(fileName) ? ".js" : ".js.map");
+                    (Harness.Compiler.isDTS(fileName) ? ts.Extension.Dts :
+                    Harness.Compiler.isJS(fileName) ? ts.Extension.Js : ".js.map");
                     nonSubfolderDiskFiles++;
                 }
 
@@ -373,7 +372,7 @@ class ProjectRunner extends RunnerBase {
             const compilerOptions = compilerResult.program.getCompilerOptions();
 
             ts.forEach(compilerResult.program.getSourceFiles(), sourceFile => {
-                if (ts.isDeclarationFile(sourceFile)) {
+                if (sourceFile.isDeclarationFile) {
                     allInputFiles.unshift({ emittedFileName: sourceFile.fileName, code: sourceFile.text });
                 }
                 else if (!(compilerOptions.outFile || compilerOptions.out)) {
@@ -387,14 +386,14 @@ class ProjectRunner extends RunnerBase {
                         emitOutputFilePathWithoutExtension = ts.removeFileExtension(sourceFile.fileName);
                     }
 
-                    const outputDtsFileName = emitOutputFilePathWithoutExtension + ".d.ts";
+                    const outputDtsFileName = emitOutputFilePathWithoutExtension + ts.Extension.Dts;
                     const file = findOutputDtsFile(outputDtsFileName);
                     if (file) {
                         allInputFiles.unshift(file);
                     }
                 }
                 else {
-                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ".d.ts";
+                    const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out) + ts.Extension.Dts;
                     const outputDtsFile = findOutputDtsFile(outputDtsFileName);
                     if (!ts.contains(allInputFiles, outputDtsFile)) {
                         allInputFiles.unshift(outputDtsFile);

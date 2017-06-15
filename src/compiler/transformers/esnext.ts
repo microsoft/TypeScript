@@ -33,7 +33,7 @@ namespace ts {
         return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -106,15 +106,11 @@ namespace ts {
             }
         }
 
-        function visitAwaitExpression(node: AwaitExpression) {
+        function visitAwaitExpression(node: AwaitExpression): Expression {
             if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
-                const expression = visitNode(node.expression, visitor, isExpression);
                 return setOriginalNode(
                     setTextRange(
-                        createYield(
-                            /*asteriskToken*/ undefined,
-                            createArrayLiteral([createLiteral("await"), expression])
-                        ),
+                        createYield(createAwaitHelper(context, visitNode(node.expression, visitor, isExpression))),
                         /*location*/ node
                     ),
                     node
@@ -124,18 +120,26 @@ namespace ts {
         }
 
         function visitYieldExpression(node: YieldExpression) {
-            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator) {
+            if (enclosingFunctionFlags & FunctionFlags.Async && enclosingFunctionFlags & FunctionFlags.Generator && node.asteriskToken) {
                 const expression = visitNode(node.expression, visitor, isExpression);
-                return updateYield(
-                    node,
-                    node.asteriskToken,
-                    node.asteriskToken
-                        ? createAsyncDelegatorHelper(context, expression, expression)
-                        : createArrayLiteral(
-                            expression
-                            ? [createLiteral("yield"), expression]
-                            : [createLiteral("yield")]
-                        )
+                return setOriginalNode(
+                    setTextRange(
+                        createYield(
+                            createAwaitHelper(context,
+                                updateYield(
+                                    node,
+                                    node.asteriskToken,
+                                    createAsyncDelegatorHelper(
+                                        context,
+                                        createAsyncValuesHelper(context, expression, expression),
+                                        expression
+                                    )
+                                )
+                            )
+                        ),
+                        node
+                    ),
+                    node
                 );
             }
             return visitEachChild(node, visitor, context);
@@ -347,6 +351,12 @@ namespace ts {
             );
         }
 
+        function createDownlevelAwait(expression: Expression) {
+            return enclosingFunctionFlags & FunctionFlags.Generator
+                ? createYield(/*asteriskToken*/ undefined, createAwaitHelper(context, expression))
+                : createAwait(expression);
+        }
+
         function transformForAwaitOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement) {
             const expression = visitNode(node.expression, visitor, isExpression);
             const iterator = isIdentifier(expression) ? getGeneratedNameForNode(expression) : createTempVariable(/*recordTempVariable*/ undefined);
@@ -354,16 +364,11 @@ namespace ts {
             const errorRecord = createUniqueName("e");
             const catchVariable = getGeneratedNameForNode(errorRecord);
             const returnMethod = createTempVariable(/*recordTempVariable*/ undefined);
-            const values = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
-            const next = createYield(
-                /*asteriskToken*/ undefined,
-                enclosingFunctionFlags & FunctionFlags.Generator
-                    ? createArrayLiteral([
-                        createLiteral("await"),
-                        createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
-                    ])
-                    : createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, [])
-            );
+            const callValues = createAsyncValuesHelper(context, expression, /*location*/ node.expression);
+            const callNext = createCall(createPropertyAccess(iterator, "next" ), /*typeArguments*/ undefined, []);
+            const getDone = createPropertyAccess(result, "done");
+            const getValue = createPropertyAccess(result, "value");
+            const callReturn = createFunctionCall(returnMethod, iterator, []);
 
             hoistVariableDeclaration(errorRecord);
             hoistVariableDeclaration(returnMethod);
@@ -374,16 +379,19 @@ namespace ts {
                         /*initializer*/ setEmitFlags(
                             setTextRange(
                                 createVariableDeclarationList([
-                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, values), node.expression),
-                                    createVariableDeclaration(result, /*type*/ undefined, next)
+                                    setTextRange(createVariableDeclaration(iterator, /*type*/ undefined, callValues), node.expression),
+                                    createVariableDeclaration(result)
                                 ]),
                                 node.expression
                             ),
                             EmitFlags.NoHoisting
                         ),
-                        /*condition*/ createLogicalNot(createPropertyAccess(result, "done")),
-                        /*incrementor*/ createAssignment(result, next),
-                        /*statement*/ convertForOfStatementHead(node, createPropertyAccess(result, "value"))
+                        /*condition*/ createComma(
+                            createAssignment(result, createDownlevelAwait(callNext)),
+                            createLogicalNot(getDone)
+                        ),
+                        /*incrementor*/ undefined,
+                        /*statement*/ convertForOfStatementHead(node, createDownlevelAwait(getValue))
                     ),
                     /*location*/ node
                 ),
@@ -421,26 +429,14 @@ namespace ts {
                                     createLogicalAnd(
                                         createLogicalAnd(
                                             result,
-                                            createLogicalNot(
-                                                createPropertyAccess(result, "done")
-                                            )
+                                            createLogicalNot(getDone)
                                         ),
                                         createAssignment(
                                             returnMethod,
                                             createPropertyAccess(iterator, "return")
                                         )
                                     ),
-                                    createStatement(
-                                        createYield(
-                                            /*asteriskToken*/ undefined,
-                                            enclosingFunctionFlags & FunctionFlags.Generator
-                                                ? createArrayLiteral([
-                                                    createLiteral("await"),
-                                                    createFunctionCall(returnMethod, iterator, [])
-                                                ])
-                                                : createFunctionCall(returnMethod, iterator, [])
-                                        )
-                                    )
+                                    createStatement(createDownlevelAwait(callReturn))
                                 ),
                                 EmitFlags.SingleLine
                             )
@@ -475,6 +471,7 @@ namespace ts {
                     /*modifiers*/ undefined,
                     node.dotDotDotToken,
                     getGeneratedNameForNode(node),
+                    /*questionToken*/ undefined,
                     /*type*/ undefined,
                     visitNode(node.initializer, visitor, isExpression)
                 );
@@ -540,6 +537,7 @@ namespace ts {
                     ? undefined
                     : node.asteriskToken,
                 visitNode(node.name, visitor, isPropertyName),
+                visitNode(/*questionToken*/ undefined, visitor, isToken),
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -616,7 +614,7 @@ namespace ts {
         function transformAsyncGeneratorFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody {
             resumeLexicalEnvironment();
             const statements: Statement[] = [];
-            const statementOffset = addPrologueDirectives(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
+            const statementOffset = addPrologue(statements, node.body.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
             statements.push(
@@ -661,12 +659,19 @@ namespace ts {
         function transformFunctionBody(node: ArrowFunction): ConciseBody;
         function transformFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
             resumeLexicalEnvironment();
-            const leadingStatements = appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node);
+            let statementOffset = 0;
+            const statements: Statement[] = [];
             const body = visitNode(node.body, visitor, isConciseBody);
+            if (isBlock(body)) {
+                statementOffset = addPrologue(statements, body.statements, /*ensureUseStrict*/ false, visitor);
+            }
+            addRange(statements, appendObjectRestAssignmentsIfNeeded(/*statements*/ undefined, node));
             const trailingStatements = endLexicalEnvironment();
-            if (some(leadingStatements) || some(trailingStatements)) {
+            if (statementOffset > 0 || some(statements) || some(trailingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                return updateBlock(block, setTextRange(createNodeArray(concatenate(concatenate(leadingStatements, block.statements), trailingStatements)), block.statements));
+                addRange(statements, block.statements.slice(statementOffset));
+                addRange(statements, trailingStatements);
+                return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }
             return body;
         }
@@ -871,27 +876,39 @@ namespace ts {
         );
     }
 
+    const awaitHelper: EmitHelper = {
+        name: "typescript:await",
+        scoped: false,
+        text: `
+            var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+        `
+    };
+
+    function createAwaitHelper(context: TransformationContext, expression: Expression) {
+        context.requestEmitHelper(awaitHelper);
+        return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
+    }
+
     const asyncGeneratorHelper: EmitHelper = {
         name: "typescript:asyncGenerator",
         scoped: false,
         text: `
             var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
                 if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-                var g = generator.apply(thisArg, _arguments || []), q = [], c, i;
-                return i = { next: verb("next"), "throw": verb("throw"), "return": verb("return") }, i[Symbol.asyncIterator] = function () { return this; }, i;
-                function verb(n) { return function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]), next(); }); }; }
-                function next() { if (!c && q.length) resume((c = q.shift())[0], c[1]); }
-                function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(c[3], e); } }
-                function step(r) { r.done ? settle(c[2], r) : r.value[0] === "yield" ? settle(c[2], { value: r.value[1], done: false }) : Promise.resolve(r.value[1]).then(r.value[0] === "delegate" ? delegate : fulfill, reject); }
-                function delegate(r) { step(r.done ? r : { value: ["yield", r.value], done: false }); }
+                var g = generator.apply(thisArg, _arguments || []), i, q = [];
+                return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+                function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+                function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+                function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);  }
                 function fulfill(value) { resume("next", value); }
                 function reject(value) { resume("throw", value); }
-                function settle(f, v) { c = void 0, f(v), next(); }
+                function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
             };
         `
     };
 
     function createAsyncGeneratorHelper(context: TransformationContext, generatorFunc: FunctionExpression) {
+        context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncGeneratorHelper);
 
         // Mark this node as originally an async function
@@ -913,14 +930,15 @@ namespace ts {
         scoped: false,
         text: `
             var __asyncDelegator = (this && this.__asyncDelegator) || function (o) {
-                var i = { next: verb("next"), "throw": verb("throw", function (e) { throw e; }), "return": verb("return", function (v) { return { value: v, done: true }; }) };
-                return o = __asyncValues(o), i[Symbol.iterator] = function () { return this; }, i;
-                function verb(n, f) { return function (v) { return { value: ["delegate", (o[n] || f).call(o, v)], done: false }; }; }
+                var i, p;
+                return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+                function verb(n, f) { if (o[n]) i[n] = function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; }; }
             };
         `
     };
 
     function createAsyncDelegatorHelper(context: TransformationContext, expression: Expression, location?: TextRange) {
+        context.requestEmitHelper(awaitHelper);
         context.requestEmitHelper(asyncDelegator);
         return setTextRange(
             createCall(

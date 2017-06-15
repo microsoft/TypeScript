@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commentsOnRequireStatement.ts] ////
 
 //// [0.ts]
-
 export var subject = 10;
 
 //// [1.ts]

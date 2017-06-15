@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor2.ts] ////
 
 //// [0.ts]
-
 export class base { }
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 
@@ -54,9 +53,9 @@ var C = (function (_super) {
     function C(prop) {
         return _super.call(this) || this;
     }
+    C = __decorate([
+        __param(0, _0_ts_2.foo)
+    ], C);
     return C;
 }(_0_ts_1.base));
-C = __decorate([
-    __param(0, _0_ts_2.foo)
-], C);
 exports.C = C;

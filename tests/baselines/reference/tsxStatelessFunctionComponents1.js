@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 function EmptyPropSFC() {
     return <div> Default Greeting </div>;
 }
@@ -43,7 +42,7 @@ let o = {
     prop1: true;
 }
 
-// Error
+// OK as access properties are allow when spread
 let i2 = <EmptyPropSFC {...o} />
 
 let o1: any;
@@ -94,7 +93,7 @@ var i1 = <EmptyPropSFC ref={function (x) { return x.greeting.substr(10); }}/>;
 var o = {
     prop1: true
 };
-// Error
+// OK as access properties are allow when spread
 var i2 = <EmptyPropSFC {...o}/>;
 var o1;
 // OK

@@ -1,5 +1,4 @@
 //// [typeGuardOfFormIsType.ts]
-
 class C1 {
     p1: string;
 }

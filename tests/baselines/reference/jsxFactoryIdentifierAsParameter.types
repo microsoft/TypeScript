@@ -1,5 +1,4 @@
 === tests/cases/compiler/test.tsx ===
-
 declare module JSX {
 >JSX : any
 

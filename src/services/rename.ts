@@ -31,25 +31,29 @@ namespace ts.Rename {
                     return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
                 }
 
+                // Cannot rename `default` as in `import { default as foo } from "./someModule";
+                if (node.kind === SyntaxKind.Identifier &&
+                        (node as Identifier).originalKeywordKind === SyntaxKind.DefaultKeyword &&
+                        symbol.parent.flags & ts.SymbolFlags.Module) {
+                    return undefined;
+                }
+
                 const displayName = stripQuotes(getDeclaredName(typeChecker, symbol, node));
                 const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
                 return kind ? getRenameInfoSuccess(displayName, typeChecker.getFullyQualifiedName(symbol), kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile) : undefined;
             }
         }
         else if (node.kind === SyntaxKind.StringLiteral) {
-            const type = getStringLiteralTypeForNode(<StringLiteral>node, typeChecker);
-            if (type) {
-                if (isDefinedInLibraryFile(node)) {
-                    return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
-                }
-
-                const displayName = stripQuotes(type.text);
-                return getRenameInfoSuccess(displayName, displayName, ScriptElementKind.variableElement, ScriptElementKindModifier.none, node, sourceFile);
+            if (isDefinedInLibraryFile(node)) {
+                return getRenameInfoError(Diagnostics.You_cannot_rename_elements_that_are_defined_in_the_standard_TypeScript_library);
             }
+
+            const displayName = stripQuotes((node as StringLiteral).text);
+            return getRenameInfoSuccess(displayName, displayName, ScriptElementKind.variableElement, ScriptElementKindModifier.none, node, sourceFile);
         }
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
         return {
             canRename: true,
             kind,
@@ -84,8 +88,9 @@ namespace ts.Rename {
         return createTextSpan(start, width);
     }
 
-    function nodeIsEligibleForRename(node: Node) {
-        return node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.StringLiteral ||
+    function nodeIsEligibleForRename(node: Node): boolean {
+        return node.kind === ts.SyntaxKind.Identifier ||
+            node.kind === SyntaxKind.StringLiteral ||
             isLiteralNameOfPropertyDeclarationOrIndexAccess(node) ||
             isThis(node);
     }

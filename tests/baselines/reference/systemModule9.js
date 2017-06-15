@@ -1,5 +1,4 @@
 //// [systemModule9.ts]
-
 import * as ns from 'file1';
 import {a, b as c} from 'file2';
 import d from 'file3'

@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 class Poisoned extends React.Component<{}, {}> {
@@ -8,11 +7,12 @@ class Poisoned extends React.Component<{}, {}> {
     }
 }
 
-const obj: Object = {};
+const obj = {};
 
 // OK
 let p = <Poisoned {...obj} />;
 let y = <Poisoned />;
+
 
 //// [file.jsx]
 "use strict";

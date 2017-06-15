@@ -1,47 +1,88 @@
 /* @internal */
 namespace ts.codefix {
 
+    export function newNodesToChanges(newNodes: Node[], insertAfter: Node, context: CodeFixContext) {
+        const sourceFile = context.sourceFile;
+
+        const changeTracker = textChanges.ChangeTracker.fromCodeFixContext(context);
+
+        for (const newNode of newNodes) {
+            changeTracker.insertNodeAfter(sourceFile, insertAfter, newNode, { suffix: context.newLineCharacter });
+        }
+
+        const changes = changeTracker.getChanges();
+        if (!some(changes)) {
+            return changes;
+        }
+
+        Debug.assert(changes.length === 1);
+        const consolidatedChanges: FileTextChanges[] = [{
+            fileName: changes[0].fileName,
+            textChanges: [{
+                span: changes[0].textChanges[0].span,
+                newText: changes[0].textChanges.reduce((prev, cur) => prev + cur.newText, "")
+            }]
+
+        }];
+        return consolidatedChanges;
+    }
+
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function getMissingMembersInsertion(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker, newlineChar: string): string {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
         const classMembers = classDeclaration.symbol.members;
         const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.getName()));
 
-        let insertion = "";
-
+        let newNodes: Node[] = [];
         for (const symbol of missingMembers) {
-            insertion = insertion.concat(getInsertionForMemberSymbol(symbol, classDeclaration, checker, newlineChar));
+            const newNode = createNewNodeForMemberSymbol(symbol, classDeclaration, checker);
+            if (newNode) {
+                if (Array.isArray(newNode)) {
+                    newNodes = newNodes.concat(newNode);
+                }
+                else {
+                    newNodes.push(newNode);
+                }
+            }
         }
-        return insertion;
+        return newNodes;
     }
 
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function getInsertionForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, newlineChar: string): string {
+    function createNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Node[] | Node | undefined {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
-            return "";
+            return undefined;
         }
 
         const declaration = declarations[0] as Declaration;
-        const name = declaration.name ? declaration.name.getText() : undefined;
-        const visibility = getVisibilityPrefixWithSpace(getModifierFlags(declaration));
-
-        const type = checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration);
+        // Clone name to remove leading trivia.
+        const name = getSynthesizedClone(getNameOfDeclaration(declaration)) as PropertyName;
+        const visibilityModifier = createVisibilityModifier(getModifierFlags(declaration));
+        const modifiers = visibilityModifier ? createNodeArray([visibilityModifier]) : undefined;
+        const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, enclosingDeclaration));
+        const optional = !!(symbol.flags & SymbolFlags.Optional);
 
         switch (declaration.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeString = checker.typeToString(type, enclosingDeclaration, TypeFormatFlags.None);
-                return `${visibility}${name}: ${typeString};${newlineChar}`;
-
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration);
+                const property = createProperty(
+                    /*decorators*/undefined,
+                    modifiers,
+                    name,
+                    optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+                    typeNode,
+                    /*initializer*/ undefined);
+                return property;
             case SyntaxKind.MethodSignature:
             case SyntaxKind.MethodDeclaration:
                 // The signature for the implementation appears as an entry in `signatures` iff
@@ -52,109 +93,174 @@ namespace ts.codefix {
                 // (eg: an abstract method or interface declaration), there is a 1-1
                 // correspondence of declarations and signatures.
                 const signatures = checker.getSignaturesOfType(type, SignatureKind.Call);
-                if (!(signatures && signatures.length > 0)) {
-                    return "";
+                if (!some(signatures)) {
+                    return undefined;
                 }
+
                 if (declarations.length === 1) {
                     Debug.assert(signatures.length === 1);
-                    const sigString = checker.signatureToString(signatures[0], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    return getStubbedMethod(visibility, name, sigString, newlineChar);
+                    const signature = signatures[0];
+                    return signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
                 }
 
-                let result = "";
+                const signatureDeclarations: MethodDeclaration[] = [];
                 for (let i = 0; i < signatures.length; i++) {
-                    const sigString = checker.signatureToString(signatures[i], enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                    result += `${visibility}${name}${sigString};${newlineChar}`;
+                    const signature = signatures[i];
+                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration);
+                    if (methodDeclaration) {
+                        signatureDeclarations.push(methodDeclaration);
+                    }
                 }
 
-                // If there is a declaration with a body, it is the last declaration,
-                // and it isn't caught by `getSignaturesOfType`.
-                let bodySig: Signature | undefined = undefined;
                 if (declarations.length > signatures.length) {
-                    bodySig = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const signature = checker.getSignatureFromDeclaration(declarations[declarations.length - 1] as SignatureDeclaration);
+                    const methodDeclaration = signatureToMethodDeclaration(signature, enclosingDeclaration, createStubbedMethodBody());
+                    if (methodDeclaration) {
+                        signatureDeclarations.push(methodDeclaration);
+                    }
                 }
                 else {
                     Debug.assert(declarations.length === signatures.length);
-                    bodySig = createBodySignatureWithAnyTypes(signatures, enclosingDeclaration, checker);
+                    const methodImplementingSignatures = createMethodImplementingSignatures(signatures, name, optional, modifiers);
+                    signatureDeclarations.push(methodImplementingSignatures);
                 }
-                const sigString = checker.signatureToString(bodySig, enclosingDeclaration, TypeFormatFlags.SuppressAnyReturnType, SignatureKind.Call);
-                result += getStubbedMethod(visibility, name, sigString, newlineChar);
-
-                return result;
+                return signatureDeclarations;
             default:
-                return "";
+                return undefined;
+        }
+
+        function signatureToMethodDeclaration(signature: Signature, enclosingDeclaration: Node, body?: Block) {
+            const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.SuppressAnyReturnType);
+            if (signatureDeclaration) {
+                signatureDeclaration.decorators = undefined;
+                signatureDeclaration.modifiers = modifiers;
+                signatureDeclaration.name = name;
+                signatureDeclaration.questionToken = optional ? createToken(SyntaxKind.QuestionToken) : undefined;
+                signatureDeclaration.body = body;
+            }
+            return signatureDeclaration;
         }
     }
 
-    function createBodySignatureWithAnyTypes(signatures: Signature[], enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker): Signature {
-        const newSignatureDeclaration = createNode(SyntaxKind.CallSignature) as SignatureDeclaration;
-        newSignatureDeclaration.parent = enclosingDeclaration;
-        newSignatureDeclaration.name = signatures[0].getDeclaration().name;
+    export function createMethodFromCallExpression(callExpression: CallExpression, methodName: string, includeTypeScriptSyntax: boolean, makeStatic: boolean): MethodDeclaration {
+        const parameters = createDummyParameters(callExpression.arguments.length, /*names*/ undefined, /*minArgumentCount*/ undefined, includeTypeScriptSyntax);
 
-        let maxNonRestArgs = -1;
-        let maxArgsIndex = 0;
+        let typeParameters: TypeParameterDeclaration[];
+        if (includeTypeScriptSyntax) {
+            const typeArgCount = length(callExpression.typeArguments);
+            for (let i = 0; i < typeArgCount; i++) {
+                const name = typeArgCount < 8 ? String.fromCharCode(CharacterCodes.T + i) : `T${i}`;
+                const typeParameter = createTypeParameterDeclaration(name, /*constraint*/ undefined, /*defaultType*/ undefined);
+                (typeParameters ? typeParameters : typeParameters = []).push(typeParameter);
+            }
+        }
+
+        const newMethod = createMethod(
+            /*decorators*/ undefined,
+            /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
+            /*asteriskToken*/ undefined,
+            methodName,
+            /*questionToken*/ undefined,
+            typeParameters,
+            parameters,
+            /*type*/ includeTypeScriptSyntax ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
+            createStubbedMethodBody()
+        );
+        return newMethod;
+    }
+
+    function createDummyParameters(argCount: number,  names: string[] | undefined, minArgumentCount: number | undefined, addAnyType: boolean) {
+        const parameters: ParameterDeclaration[] = [];
+        for (let i = 0; i < argCount; i++) {
+            const newParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                /*name*/ names && names[i] || `arg${i}`,
+                /*questionToken*/ minArgumentCount !== undefined && i >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                /*type*/ addAnyType ? createKeywordTypeNode(SyntaxKind.AnyKeyword) : undefined,
+                /*initializer*/ undefined);
+            parameters.push(newParameter);
+        }
+
+        return parameters;
+    }
+
+    function createMethodImplementingSignatures(signatures: Signature[], name: PropertyName, optional: boolean, modifiers: Modifier[] | undefined): MethodDeclaration {
+        /** This is *a* signature with the maximal number of arguments,
+         * such that if there is a "maximal" signature without rest arguments,
+         * this is one of them.
+         */
+        let maxArgsSignature = signatures[0];
         let minArgumentCount = signatures[0].minArgumentCount;
-        let hasRestParameter = false;
+        let someSigHasRestParameter = false;
         for (let i = 0; i < signatures.length; i++) {
             const sig = signatures[i];
             minArgumentCount = Math.min(sig.minArgumentCount, minArgumentCount);
-            hasRestParameter = hasRestParameter || sig.hasRestParameter;
-            const nonRestLength = sig.parameters.length - (sig.hasRestParameter ? 1 : 0);
-            if (nonRestLength > maxNonRestArgs) {
-                maxNonRestArgs = nonRestLength;
-                maxArgsIndex = i;
+            if (sig.hasRestParameter) {
+                someSigHasRestParameter = true;
+            }
+            if (sig.parameters.length >= maxArgsSignature.parameters.length && (!sig.hasRestParameter || maxArgsSignature.hasRestParameter)) {
+                maxArgsSignature = sig;
             }
         }
-        const maxArgsParameterSymbolNames = signatures[maxArgsIndex].getParameters().map(symbol => symbol.getName());
+        const maxNonRestArgs = maxArgsSignature.parameters.length - (maxArgsSignature.hasRestParameter ? 1 : 0);
+        const maxArgsParameterSymbolNames = maxArgsSignature.parameters.map(symbol => symbol.getName());
 
-        const optionalToken = createToken(SyntaxKind.QuestionToken);
+        const parameters = createDummyParameters(maxNonRestArgs, maxArgsParameterSymbolNames, minArgumentCount, /*addAnyType*/ true);
 
-        newSignatureDeclaration.parameters = createNodeArray<ParameterDeclaration>();
-        for (let i = 0; i < maxNonRestArgs; i++) {
-            const newParameter = createParameterDeclarationWithoutType(i, minArgumentCount, newSignatureDeclaration);
-            newSignatureDeclaration.parameters.push(newParameter);
+        if (someSigHasRestParameter) {
+            const anyArrayType = createArrayTypeNode(createKeywordTypeNode(SyntaxKind.AnyKeyword));
+            const restParameter = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                createToken(SyntaxKind.DotDotDotToken),
+                maxArgsParameterSymbolNames[maxNonRestArgs] || "rest",
+                /*questionToken*/ maxNonRestArgs >= minArgumentCount ? createToken(SyntaxKind.QuestionToken) : undefined,
+                anyArrayType,
+                /*initializer*/ undefined);
+            parameters.push(restParameter);
         }
 
-        if (hasRestParameter) {
-            const restParameter = createParameterDeclarationWithoutType(maxNonRestArgs, minArgumentCount, newSignatureDeclaration);
-            restParameter.dotDotDotToken = createToken(SyntaxKind.DotDotDotToken);
-            newSignatureDeclaration.parameters.push(restParameter);
-        }
-
-        return checker.getSignatureFromDeclaration(newSignatureDeclaration);
-
-        function createParameterDeclarationWithoutType(index: number, minArgCount: number, enclosingSignatureDeclaration: SignatureDeclaration): ParameterDeclaration {
-            const newParameter = createNode(SyntaxKind.Parameter) as ParameterDeclaration;
-
-            newParameter.symbol = new SymbolConstructor(SymbolFlags.FunctionScopedVariable, maxArgsParameterSymbolNames[index] || "rest");
-            newParameter.symbol.valueDeclaration = newParameter;
-            newParameter.symbol.declarations = [newParameter];
-            newParameter.parent = enclosingSignatureDeclaration;
-            if (index >= minArgCount) {
-                newParameter.questionToken = optionalToken;
-            }
-
-            return newParameter;
-        }
+        return createStubbedMethod(
+            modifiers,
+            name,
+            optional,
+            /*typeParameters*/ undefined,
+            parameters,
+            /*returnType*/ undefined);
     }
 
-    export function getStubbedMethod(visibility: string, name: string, sigString = "()", newlineChar: string): string {
-        return `${visibility}${name}${sigString}${getMethodBodyStub(newlineChar)}`;
+    export function createStubbedMethod(modifiers: Modifier[], name: PropertyName, optional: boolean, typeParameters: TypeParameterDeclaration[] | undefined, parameters: ParameterDeclaration[], returnType: TypeNode | undefined) {
+        return createMethod(
+            /*decorators*/ undefined,
+            modifiers,
+            /*asteriskToken*/ undefined,
+            name,
+            optional ? createToken(SyntaxKind.QuestionToken) : undefined,
+            typeParameters,
+            parameters,
+            returnType,
+            createStubbedMethodBody());
     }
 
-    function getMethodBodyStub(newlineChar: string) {
-        return ` {${newlineChar}throw new Error('Method not implemented.');${newlineChar}}${newlineChar}`;
+    function createStubbedMethodBody() {
+        return createBlock(
+            [createThrow(
+                createNew(
+                    createIdentifier("Error"),
+                    /*typeArguments*/ undefined,
+                    [createLiteral("Method not implemented.")]))],
+            /*multiline*/ true);
     }
 
-    function getVisibilityPrefixWithSpace(flags: ModifierFlags): string {
+    function createVisibilityModifier(flags: ModifierFlags) {
         if (flags & ModifierFlags.Public) {
-            return "public ";
+            return createToken(SyntaxKind.PublicKeyword);
         }
         else if (flags & ModifierFlags.Protected) {
-            return "protected ";
+            return createToken(SyntaxKind.ProtectedKeyword);
         }
-        return "";
+        return undefined;
     }
-
-    const SymbolConstructor = objectAllocator.getSymbolConstructor();
 }

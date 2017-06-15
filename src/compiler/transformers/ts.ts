@@ -18,6 +18,23 @@ namespace ts {
         NonQualifiedEnumMembers = 1 << 3
     }
 
+    const enum ClassFacts {
+        None = 0,
+        HasStaticInitializedProperties = 1 << 0,
+        HasConstructorDecorators = 1 << 1,
+        HasMemberDecorators = 1 << 2,
+        IsExportOfNamespace = 1 << 3,
+        IsNamedExternalExport = 1 << 4,
+        IsDefaultExternalExport = 1 << 5,
+        HasExtendsClause = 1 << 6,
+        UseImmediatelyInvokedFunctionExpression = 1 << 7,
+
+        HasAnyDecorators = HasConstructorDecorators | HasMemberDecorators,
+        NeedsName = HasStaticInitializedProperties | HasMemberDecorators,
+        MayNeedImmediatelyInvokedFunctionExpression = HasAnyDecorators | HasStaticInitializedProperties,
+        IsExported = IsExportOfNamespace | IsDefaultExternalExport | IsNamedExternalExport,
+    }
+
     export function transformTypeScript(context: TransformationContext) {
         const {
             startLexicalEnvironment,
@@ -76,7 +93,7 @@ namespace ts {
          * @param node A SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (isDeclarationFile(node)) {
+            if (node.isDeclarationFile) {
                 return node;
             }
 
@@ -345,6 +362,9 @@ namespace ts {
 
                 case SyntaxKind.PropertyDeclaration:
                     // TypeScript property declarations are elided.
+
+                case SyntaxKind.NamespaceExportDeclaration:
+                    // TypeScript namespace export declarations are elided.
                     return undefined;
 
                 case SyntaxKind.Constructor:
@@ -502,6 +522,19 @@ namespace ts {
             return parameter.decorators !== undefined && parameter.decorators.length > 0;
         }
 
+        function getClassFacts(node: ClassDeclaration, staticProperties: PropertyDeclaration[]) {
+            let facts = ClassFacts.None;
+            if (some(staticProperties)) facts |= ClassFacts.HasStaticInitializedProperties;
+            if (getClassExtendsHeritageClauseElement(node)) facts |= ClassFacts.HasExtendsClause;
+            if (shouldEmitDecorateCallForClass(node)) facts |= ClassFacts.HasConstructorDecorators;
+            if (childIsDecorated(node)) facts |= ClassFacts.HasMemberDecorators;
+            if (isExportOfNamespace(node)) facts |= ClassFacts.IsExportOfNamespace;
+            else if (isDefaultExternalModuleExport(node)) facts |= ClassFacts.IsDefaultExternalExport;
+            else if (isNamedExternalModuleExport(node)) facts |= ClassFacts.IsNamedExternalExport;
+            if (languageVersion <= ScriptTarget.ES5 && (facts & ClassFacts.MayNeedImmediatelyInvokedFunctionExpression)) facts |= ClassFacts.UseImmediatelyInvokedFunctionExpression;
+            return facts;
+        }
+
         /**
          * Transforms a class declaration with TypeScript syntax into compatible ES6.
          *
@@ -515,31 +548,26 @@ namespace ts {
          */
         function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement> {
             const staticProperties = getInitializedProperties(node, /*isStatic*/ true);
-            const hasExtendsClause = getClassExtendsHeritageClauseElement(node) !== undefined;
-            const isDecoratedClass = shouldEmitDecorateCallForClass(node);
+            const facts = getClassFacts(node, staticProperties);
 
-            // emit name if
-            // - node has a name
-            // - node has static initializers
-            //
-            let name = node.name;
-            if (!name && staticProperties.length > 0) {
-                name = getGeneratedNameForNode(node);
+            if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+                context.startLexicalEnvironment();
             }
 
-            const classStatement = isDecoratedClass
-                ? createClassDeclarationHeadWithDecorators(node, name, hasExtendsClause)
-                : createClassDeclarationHeadWithoutDecorators(node, name, hasExtendsClause, staticProperties.length > 0);
+            const name = node.name || (facts & ClassFacts.NeedsName ? getGeneratedNameForNode(node) : undefined);
+            const classStatement = facts & ClassFacts.HasConstructorDecorators
+                ? createClassDeclarationHeadWithDecorators(node, name, facts)
+                : createClassDeclarationHeadWithoutDecorators(node, name, facts);
 
-            const statements: Statement[] = [classStatement];
+            let statements: Statement[] = [classStatement];
 
             // Emit static property assignment. Because classDeclaration is lexically evaluated,
             // it is safe to emit static property assignment after classDeclaration
             // From ES6 specification:
             //      HasLexicalDeclaration (N) : Determines if the argument identifier has a binding in this environment record that was created using
             //                                  a lexical declaration such as a LexicalDeclaration or a ClassDeclaration.
-            if (staticProperties.length) {
-                addInitializedPropertyStatements(statements, staticProperties, getLocalName(node));
+            if (facts & ClassFacts.HasStaticInitializedProperties) {
+                addInitializedPropertyStatements(statements, staticProperties, facts & ClassFacts.UseImmediatelyInvokedFunctionExpression ? getInternalName(node) : getLocalName(node));
             }
 
             // Write any decorators of the node.
@@ -547,17 +575,63 @@ namespace ts {
             addClassElementDecorationStatements(statements, node, /*isStatic*/ true);
             addConstructorDecorationStatement(statements, node);
 
+            if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression) {
+                // When we emit a TypeScript class down to ES5, we must wrap it in an IIFE so that the
+                // 'es2015' transformer can properly nest static initializers and decorators. The result
+                // looks something like:
+                //
+                //  var C = function () {
+                //      class C {
+                //      }
+                //      C.static_prop = 1;
+                //      return C;
+                //  }();
+                //
+                const closingBraceLocation = createTokenRange(skipTrivia(currentSourceFile.text, node.members.end), SyntaxKind.CloseBraceToken);
+                const localName = getInternalName(node);
+
+                // The following partially-emitted expression exists purely to align our sourcemap
+                // emit with the original emitter.
+                const outer = createPartiallyEmittedExpression(localName);
+                outer.end = closingBraceLocation.end;
+                setEmitFlags(outer, EmitFlags.NoComments);
+
+                const statement = createReturn(outer);
+                statement.pos = closingBraceLocation.pos;
+                setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
+                statements.push(statement);
+
+                addRange(statements, context.endLexicalEnvironment());
+
+                const varStatement = createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ false),
+                            /*type*/ undefined,
+                            createImmediatelyInvokedFunctionExpression(statements)
+                        )
+                    ])
+                );
+
+                setOriginalNode(varStatement, node);
+                setCommentRange(varStatement, node);
+                setSourceMapRange(varStatement, moveRangePastDecorators(node));
+                startOnNewLine(varStatement);
+                statements = [varStatement];
+            }
+
             // If the class is exported as part of a TypeScript namespace, emit the namespace export.
             // Otherwise, if the class was exported at the top level and was decorated, emit an export
             // declaration or export default for the class.
-            if (isNamespaceExport(node)) {
+            if (facts & ClassFacts.IsExportOfNamespace) {
                 addExportMemberAssignment(statements, node);
             }
-            else if (isDecoratedClass) {
-                if (isDefaultExternalModuleExport(node)) {
+            else if (facts & ClassFacts.UseImmediatelyInvokedFunctionExpression || facts & ClassFacts.HasConstructorDecorators) {
+                if (facts & ClassFacts.IsDefaultExternalExport) {
                     statements.push(createExportDefault(getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
                 }
-                else if (isNamedExternalModuleExport(node)) {
+                else if (facts & ClassFacts.IsNamedExternalExport) {
                     statements.push(createExternalModuleExport(getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)));
                 }
             }
@@ -576,26 +650,31 @@ namespace ts {
          *
          * @param node A ClassDeclaration node.
          * @param name The name of the class.
-         * @param hasExtendsClause A value indicating whether the class has an extends clause.
-         * @param hasStaticProperties A value indicating whether the class has static properties.
+         * @param facts Precomputed facts about the class.
          */
-        function createClassDeclarationHeadWithoutDecorators(node: ClassDeclaration, name: Identifier, hasExtendsClause: boolean, hasStaticProperties: boolean) {
+        function createClassDeclarationHeadWithoutDecorators(node: ClassDeclaration, name: Identifier, facts: ClassFacts) {
             //  ${modifiers} class ${name} ${heritageClauses} {
             //      ${members}
             //  }
+
+            // we do not emit modifiers on the declaration if we are emitting an IIFE
+            const modifiers = !(facts & ClassFacts.UseImmediatelyInvokedFunctionExpression)
+                ? visitNodes(node.modifiers, modifierVisitor, isModifier)
+                : undefined;
+
             const classDeclaration = createClassDeclaration(
                 /*decorators*/ undefined,
-                visitNodes(node.modifiers, modifierVisitor, isModifier),
+                modifiers,
                 name,
                 /*typeParameters*/ undefined,
                 visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                transformClassMembers(node, hasExtendsClause)
+                transformClassMembers(node, (facts & ClassFacts.HasExtendsClause) !== 0)
             );
 
             // To better align with the old emitter, we should not emit a trailing source map
             // entry if the class has static properties.
             let emitFlags = getEmitFlags(node);
-            if (hasStaticProperties) {
+            if (facts & ClassFacts.HasStaticInitializedProperties) {
                 emitFlags |= EmitFlags.NoTrailingSourceMap;
             }
 
@@ -608,13 +687,8 @@ namespace ts {
         /**
          * Transforms a decorated class declaration and appends the resulting statements. If
          * the class requires an alias to avoid issues with double-binding, the alias is returned.
-         *
-         * @param statements A statement list to which to add the declaration.
-         * @param node A ClassDeclaration node.
-         * @param name The name of the class.
-         * @param hasExtendsClause A value indicating whether the class has an extends clause.
          */
-        function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier, hasExtendsClause: boolean) {
+        function createClassDeclarationHeadWithDecorators(node: ClassDeclaration, name: Identifier, facts: ClassFacts) {
             // When we emit an ES6 class that has a class decorator, we must tailor the
             // emit to certain specific cases.
             //
@@ -709,7 +783,7 @@ namespace ts {
             //      ${members}
             //  }
             const heritageClauses = visitNodes(node.heritageClauses, visitor, isHeritageClause);
-            const members = transformClassMembers(node, hasExtendsClause);
+            const members = transformClassMembers(node, (facts & ClassFacts.HasExtendsClause) !== 0);
             const classExpression = createClassExpression(/*modifiers*/ undefined, name, /*typeParameters*/ undefined, heritageClauses, members);
             setOriginalNode(classExpression, node);
             setTextRange(classExpression, location);
@@ -954,7 +1028,7 @@ namespace ts {
             if (ctor.body) {
                 const statements = ctor.body.statements;
                 // add prologue directives to the list (if any)
-                const index = addPrologueDirectives(result, statements, /*ensureUseStrict*/ false, visitor);
+                const index = addPrologue(result, statements, /*ensureUseStrict*/ false, visitor);
                 if (index === statements.length) {
                     // list contains nothing but prologue directives (or empty) - exit
                     return index;
@@ -1707,6 +1781,9 @@ namespace ts {
                 case SyntaxKind.StringKeyword:
                     return createIdentifier("String");
 
+                case SyntaxKind.ObjectKeyword:
+                    return createIdentifier("Object");
+
                 case SyntaxKind.LiteralType:
                     switch ((<LiteralTypeNode>node).literal.kind) {
                         case SyntaxKind.StringLiteral:
@@ -1758,23 +1835,19 @@ namespace ts {
         }
 
         function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
+            // Note when updating logic here also update getEntityNameForDecoratorMetadata
+            // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode;
             for (const typeNode of node.types) {
                 const serializedIndividual = serializeTypeNode(typeNode);
 
-                if (isVoidExpression(serializedIndividual)) {
-                    // If we dont have any other type already set, set the initial type
-                    if (!serializedUnion) {
-                        serializedUnion = serializedIndividual;
-                    }
-                }
-                else if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
+                if (isIdentifier(serializedIndividual) && serializedIndividual.text === "Object") {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
                 // If there exists union that is not void 0 expression, check if the the common type is identifier.
                 // anything more complex and we will just default to Object
-                else if (serializedUnion && !isVoidExpression(serializedUnion)) {
+                else if (serializedUnion) {
                     // Different types
                     if (!isIdentifier(serializedUnion) ||
                         !isIdentifier(serializedIndividual) ||
@@ -2049,6 +2122,7 @@ namespace ts {
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
                 node.asteriskToken,
                 visitPropertyNameOfClassElement(node),
+                /*questionToken*/ undefined,
                 /*typeParameters*/ undefined,
                 visitParameterList(node.parameters, visitor, context),
                 /*type*/ undefined,
@@ -2159,7 +2233,7 @@ namespace ts {
                 /*type*/ undefined,
                 visitFunctionBody(node.body, visitor, context) || createBlock([])
             );
-            if (isNamespaceExport(node)) {
+            if (isExportOfNamespace(node)) {
                 const statements: Statement[] = [updated];
                 addExportMemberAssignment(statements, node);
                 return statements;
@@ -2252,7 +2326,7 @@ namespace ts {
          * - The node is exported from a TypeScript namespace.
          */
         function visitVariableStatement(node: VariableStatement): Statement {
-            if (isNamespaceExport(node)) {
+            if (isExportOfNamespace(node)) {
                 const variables = getInitializedVariables(node.declarationList);
                 if (variables.length === 0) {
                     // elide statement if there are no initialized variables.
@@ -2323,13 +2397,13 @@ namespace ts {
                 // code if the casted expression has a lower precedence than the rest of the
                 // expression.
                 //
+                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
+                // preserve the position information of the original expression.
+                //
                 // Due to the auto-parenthesization rules used by the visitor and factory functions
                 // we can safely elide the parentheses here, as a new synthetic
                 // ParenthesizedExpression will be inserted if we remove parentheses too
                 // aggressively.
-                //
-                // To preserve comments, we return a "PartiallyEmittedExpression" here which will
-                // preserve the position information of the original expression.
                 return createPartiallyEmittedExpression(expression, node);
             }
 
@@ -2493,22 +2567,27 @@ namespace ts {
             // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
             // old emitter always generate 'expression' part of the name as-is.
             const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
+            const valueExpression = transformEnumMemberDeclarationValue(member);
+            const innerAssignment = createAssignment(
+                createElementAccess(
+                    currentNamespaceContainerName,
+                    name
+                ),
+                valueExpression
+            );
+            const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+                innerAssignment :
+                createAssignment(
+                    createElementAccess(
+                        currentNamespaceContainerName,
+                        innerAssignment
+                    ),
+                    name
+                );
             return setTextRange(
                 createStatement(
                     setTextRange(
-                        createAssignment(
-                            createElementAccess(
-                                currentNamespaceContainerName,
-                                createAssignment(
-                                    createElementAccess(
-                                        currentNamespaceContainerName,
-                                        name
-                                    ),
-                                    transformEnumMemberDeclarationValue(member)
-                                )
-                            ),
-                            name
-                        ),
+                        outerAssignment,
                         member
                     )
                 ),
@@ -2551,7 +2630,7 @@ namespace ts {
          * or `exports.x`).
          */
         function hasNamespaceQualifiedExportName(node: Node) {
-            return isNamespaceExport(node)
+            return isExportOfNamespace(node)
                 || (isExternalModuleExport(node)
                     && moduleKind !== ModuleKind.ES2015
                     && moduleKind !== ModuleKind.System);
@@ -2596,14 +2675,16 @@ namespace ts {
          * Adds a leading VariableStatement for a enum or module declaration.
          */
         function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
-            // Emit a variable statement for the module.
+            // Emit a variable statement for the module. We emit top-level enums as a `var`
+            // declaration to avoid static errors in global scripts scripts due to redeclaration.
+            // enums in any other scope are emitted as a `let` declaration.
             const statement = createVariableStatement(
                 visitNodes(node.modifiers, modifierVisitor, isModifier),
-                [
+                createVariableDeclarationList([
                     createVariableDeclaration(
                         getLocalName(node, /*allowComments*/ false, /*allowSourceMaps*/ true)
                     )
-                ]
+                ], currentScope.kind === SyntaxKind.SourceFile ? NodeFlags.None : NodeFlags.Let)
             );
 
             setOriginalNode(statement, node);
@@ -2915,7 +2996,7 @@ namespace ts {
         function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement> {
             if (!node.exportClause) {
                 // Elide a star export if the module it references does not export a value.
-                return resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
+                return compilerOptions.isolatedModules || resolver.moduleExportsSomeValue(node.moduleSpecifier) ? node : undefined;
             }
 
             if (!resolver.isValueAliasDeclaration(node)) {
@@ -2991,7 +3072,7 @@ namespace ts {
             const moduleReference = createExpressionFromEntityName(<EntityName>node.moduleReference);
             setEmitFlags(moduleReference, EmitFlags.NoComments | EmitFlags.NoNestedComments);
 
-            if (isNamedExternalModuleExport(node) || !isNamespaceExport(node)) {
+            if (isNamedExternalModuleExport(node) || !isExportOfNamespace(node)) {
                 //  export var ${name} = ${moduleReference};
                 //  var ${name} = ${moduleReference};
                 return setOriginalNode(
@@ -3032,7 +3113,7 @@ namespace ts {
          *
          * @param node The node to test.
          */
-        function isNamespaceExport(node: Node) {
+        function isExportOfNamespace(node: Node) {
             return currentNamespace !== undefined && hasModifier(node, ModifierFlags.Export);
         }
 
@@ -3346,7 +3427,7 @@ namespace ts {
             return node;
         }
 
-        function tryGetConstEnumValue(node: Node): number {
+        function tryGetConstEnumValue(node: Node): string | number {
             if (compilerOptions.isolatedModules) {
                 return undefined;
             }

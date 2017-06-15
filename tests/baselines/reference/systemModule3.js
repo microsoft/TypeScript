@@ -1,20 +1,15 @@
 //// [tests/cases/compiler/systemModule3.ts] ////
 
 //// [file1.ts]
-
-
 export default function() {}
 
 //// [file2.ts]
-
 export default function f() {}
 
 //// [file3.ts]
-
 export default class C {}
 
 //// [file4.ts]
-
 export default class {}
 
 //// [file1.js]

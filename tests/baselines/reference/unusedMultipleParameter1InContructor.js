@@ -1,5 +1,4 @@
 //// [unusedMultipleParameter1InContructor.ts]
-
 class Dummy {
     constructor(person: string, person2: string) {
         var unused = 20;

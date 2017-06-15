@@ -1,5 +1,4 @@
 //// [decoratorMetadataOnInferredType.ts]
-
 declare var console: {
     log(msg: string): void;
 };
@@ -32,10 +31,10 @@ var B = (function () {
     function B() {
         this.x = new A();
     }
+    __decorate([
+        decorator,
+        __metadata("design:type", Object)
+    ], B.prototype, "x", void 0);
     return B;
 }());
-__decorate([
-    decorator,
-    __metadata("design:type", Object)
-], B.prototype, "x", void 0);
 exports.B = B;

@@ -1,5 +1,4 @@
 === tests/cases/conformance/async/es6/await_unaryExpression_es6.ts ===
-
 async function bar() {
 >bar : () => Promise<void>
 

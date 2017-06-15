@@ -1,5 +1,4 @@
 //// [index.tsx]
-
 import "./jsx";
 
 var skate: any;

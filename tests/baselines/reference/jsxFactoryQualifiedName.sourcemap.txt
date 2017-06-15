@@ -16,8 +16,7 @@ sourceFile:Element.ts
 3 >    ^^^^^^^
 4 >           ^
 5 >            ^^^^^^^^^^->
-1 >
-  >declare namespace JSX {
+1 >declare namespace JSX {
   >    interface Element {
   >        name: string;
   >        isIntrinsic: boolean;
@@ -43,10 +42,10 @@ sourceFile:Element.ts
   >                   }
   >               }
   >           }
-1 >Emitted(3, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(14, 18) + SourceIndex(0)
-3 >Emitted(3, 12) Source(14, 25) + SourceIndex(0)
-4 >Emitted(3, 13) Source(24, 2) + SourceIndex(0)
+1 >Emitted(3, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(13, 18) + SourceIndex(0)
+3 >Emitted(3, 12) Source(13, 25) + SourceIndex(0)
+4 >Emitted(3, 13) Source(23, 2) + SourceIndex(0)
 ---
 >>>(function (Element) {
 1->
@@ -56,9 +55,9 @@ sourceFile:Element.ts
 1->
 2 >export namespace 
 3 >           Element
-1->Emitted(4, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(4, 12) Source(14, 18) + SourceIndex(0)
-3 >Emitted(4, 19) Source(14, 25) + SourceIndex(0)
+1->Emitted(4, 1) Source(13, 1) + SourceIndex(0)
+2 >Emitted(4, 12) Source(13, 18) + SourceIndex(0)
+3 >Emitted(4, 19) Source(13, 25) + SourceIndex(0)
 ---
 >>>    function isElement(el) {
 1->^^^^
@@ -69,9 +68,9 @@ sourceFile:Element.ts
   >    
 2 >    export function isElement(
 3 >                       el: any
-1->Emitted(5, 5) Source(15, 5) + SourceIndex(0)
-2 >Emitted(5, 24) Source(15, 31) + SourceIndex(0)
-3 >Emitted(5, 26) Source(15, 38) + SourceIndex(0)
+1->Emitted(5, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(5, 24) Source(14, 31) + SourceIndex(0)
+3 >Emitted(5, 26) Source(14, 38) + SourceIndex(0)
 ---
 >>>        return el.markAsChildOfRootElement !== undefined;
 1->^^^^^^^^
@@ -93,15 +92,15 @@ sourceFile:Element.ts
 7 >                                           !== 
 8 >                                               undefined
 9 >                                                        ;
-1->Emitted(6, 9) Source(16, 9) + SourceIndex(0)
-2 >Emitted(6, 15) Source(16, 15) + SourceIndex(0)
-3 >Emitted(6, 16) Source(16, 16) + SourceIndex(0)
-4 >Emitted(6, 18) Source(16, 18) + SourceIndex(0)
-5 >Emitted(6, 19) Source(16, 19) + SourceIndex(0)
-6 >Emitted(6, 43) Source(16, 43) + SourceIndex(0)
-7 >Emitted(6, 48) Source(16, 48) + SourceIndex(0)
-8 >Emitted(6, 57) Source(16, 57) + SourceIndex(0)
-9 >Emitted(6, 58) Source(16, 58) + SourceIndex(0)
+1->Emitted(6, 9) Source(15, 9) + SourceIndex(0)
+2 >Emitted(6, 15) Source(15, 15) + SourceIndex(0)
+3 >Emitted(6, 16) Source(15, 16) + SourceIndex(0)
+4 >Emitted(6, 18) Source(15, 18) + SourceIndex(0)
+5 >Emitted(6, 19) Source(15, 19) + SourceIndex(0)
+6 >Emitted(6, 43) Source(15, 43) + SourceIndex(0)
+7 >Emitted(6, 48) Source(15, 48) + SourceIndex(0)
+8 >Emitted(6, 57) Source(15, 57) + SourceIndex(0)
+9 >Emitted(6, 58) Source(15, 58) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -110,8 +109,8 @@ sourceFile:Element.ts
 1 >
   >    
 2 >    }
-1 >Emitted(7, 5) Source(17, 5) + SourceIndex(0)
-2 >Emitted(7, 6) Source(17, 6) + SourceIndex(0)
+1 >Emitted(7, 5) Source(16, 5) + SourceIndex(0)
+2 >Emitted(7, 6) Source(16, 6) + SourceIndex(0)
 ---
 >>>    Element.isElement = isElement;
 1->^^^^
@@ -125,10 +124,10 @@ sourceFile:Element.ts
   >                             return el.markAsChildOfRootElement !== undefined;
   >                         }
 4 >                                 
-1->Emitted(8, 5) Source(15, 21) + SourceIndex(0)
-2 >Emitted(8, 22) Source(15, 30) + SourceIndex(0)
-3 >Emitted(8, 34) Source(17, 6) + SourceIndex(0)
-4 >Emitted(8, 35) Source(17, 6) + SourceIndex(0)
+1->Emitted(8, 5) Source(14, 21) + SourceIndex(0)
+2 >Emitted(8, 22) Source(14, 30) + SourceIndex(0)
+3 >Emitted(8, 34) Source(16, 6) + SourceIndex(0)
+4 >Emitted(8, 35) Source(16, 6) + SourceIndex(0)
 ---
 >>>    function createElement(args) {
 1->^^^^
@@ -139,9 +138,9 @@ sourceFile:Element.ts
   >    
 2 >    export function createElement(
 3 >                           args: any[]
-1->Emitted(9, 5) Source(19, 5) + SourceIndex(0)
-2 >Emitted(9, 28) Source(19, 35) + SourceIndex(0)
-3 >Emitted(9, 32) Source(19, 46) + SourceIndex(0)
+1->Emitted(9, 5) Source(18, 5) + SourceIndex(0)
+2 >Emitted(9, 28) Source(18, 35) + SourceIndex(0)
+3 >Emitted(9, 32) Source(18, 46) + SourceIndex(0)
 ---
 >>>        return {};
 1 >^^^^^^^^
@@ -157,11 +156,11 @@ sourceFile:Element.ts
 4 >               {
   >                       }
 5 >                 
-1 >Emitted(10, 9) Source(21, 9) + SourceIndex(0)
-2 >Emitted(10, 15) Source(21, 15) + SourceIndex(0)
-3 >Emitted(10, 16) Source(21, 16) + SourceIndex(0)
-4 >Emitted(10, 18) Source(22, 10) + SourceIndex(0)
-5 >Emitted(10, 19) Source(22, 10) + SourceIndex(0)
+1 >Emitted(10, 9) Source(20, 9) + SourceIndex(0)
+2 >Emitted(10, 15) Source(20, 15) + SourceIndex(0)
+3 >Emitted(10, 16) Source(20, 16) + SourceIndex(0)
+4 >Emitted(10, 18) Source(21, 10) + SourceIndex(0)
+5 >Emitted(10, 19) Source(21, 10) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -170,8 +169,8 @@ sourceFile:Element.ts
 1 >
   >    
 2 >    }
-1 >Emitted(11, 5) Source(23, 5) + SourceIndex(0)
-2 >Emitted(11, 6) Source(23, 6) + SourceIndex(0)
+1 >Emitted(11, 5) Source(22, 5) + SourceIndex(0)
+2 >Emitted(11, 6) Source(22, 6) + SourceIndex(0)
 ---
 >>>    Element.createElement = createElement;
 1->^^^^
@@ -187,10 +186,10 @@ sourceFile:Element.ts
   >                                 }
   >                             }
 4 >                                         
-1->Emitted(12, 5) Source(19, 21) + SourceIndex(0)
-2 >Emitted(12, 26) Source(19, 34) + SourceIndex(0)
-3 >Emitted(12, 42) Source(23, 6) + SourceIndex(0)
-4 >Emitted(12, 43) Source(23, 6) + SourceIndex(0)
+1->Emitted(12, 5) Source(18, 21) + SourceIndex(0)
+2 >Emitted(12, 26) Source(18, 34) + SourceIndex(0)
+3 >Emitted(12, 42) Source(22, 6) + SourceIndex(0)
+4 >Emitted(12, 43) Source(22, 6) + SourceIndex(0)
 ---
 >>>})(Element = exports.Element || (exports.Element = {}));
 1->
@@ -222,15 +221,15 @@ sourceFile:Element.ts
   >                                                        }
   >                                                    }
   >                                                }
-1->Emitted(13, 1) Source(24, 1) + SourceIndex(0)
-2 >Emitted(13, 2) Source(24, 2) + SourceIndex(0)
-3 >Emitted(13, 4) Source(14, 18) + SourceIndex(0)
-4 >Emitted(13, 11) Source(14, 25) + SourceIndex(0)
-5 >Emitted(13, 14) Source(14, 18) + SourceIndex(0)
-6 >Emitted(13, 29) Source(14, 25) + SourceIndex(0)
-7 >Emitted(13, 34) Source(14, 18) + SourceIndex(0)
-8 >Emitted(13, 49) Source(14, 25) + SourceIndex(0)
-9 >Emitted(13, 57) Source(24, 2) + SourceIndex(0)
+1->Emitted(13, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(13, 2) Source(23, 2) + SourceIndex(0)
+3 >Emitted(13, 4) Source(13, 18) + SourceIndex(0)
+4 >Emitted(13, 11) Source(13, 25) + SourceIndex(0)
+5 >Emitted(13, 14) Source(13, 18) + SourceIndex(0)
+6 >Emitted(13, 29) Source(13, 25) + SourceIndex(0)
+7 >Emitted(13, 34) Source(13, 18) + SourceIndex(0)
+8 >Emitted(13, 49) Source(13, 25) + SourceIndex(0)
+9 >Emitted(13, 57) Source(23, 2) + SourceIndex(0)
 ---
 >>>exports.createElement = Element.createElement;
 1 >
@@ -251,14 +250,14 @@ sourceFile:Element.ts
 6 >                               .
 7 >                                createElement
 8 >                                             ;
-1 >Emitted(14, 1) Source(26, 12) + SourceIndex(0)
-2 >Emitted(14, 9) Source(26, 12) + SourceIndex(0)
-3 >Emitted(14, 22) Source(26, 25) + SourceIndex(0)
-4 >Emitted(14, 25) Source(26, 28) + SourceIndex(0)
-5 >Emitted(14, 32) Source(26, 35) + SourceIndex(0)
-6 >Emitted(14, 33) Source(26, 36) + SourceIndex(0)
-7 >Emitted(14, 46) Source(26, 49) + SourceIndex(0)
-8 >Emitted(14, 47) Source(26, 50) + SourceIndex(0)
+1 >Emitted(14, 1) Source(25, 12) + SourceIndex(0)
+2 >Emitted(14, 9) Source(25, 12) + SourceIndex(0)
+3 >Emitted(14, 22) Source(25, 25) + SourceIndex(0)
+4 >Emitted(14, 25) Source(25, 28) + SourceIndex(0)
+5 >Emitted(14, 32) Source(25, 35) + SourceIndex(0)
+6 >Emitted(14, 33) Source(25, 36) + SourceIndex(0)
+7 >Emitted(14, 46) Source(25, 49) + SourceIndex(0)
+8 >Emitted(14, 47) Source(25, 50) + SourceIndex(0)
 ---
 >>>function toCamelCase(text) {
 1 >
@@ -270,9 +269,9 @@ sourceFile:Element.ts
   >
 2 >function toCamelCase(
 3 >                     text: string
-1 >Emitted(15, 1) Source(28, 1) + SourceIndex(0)
-2 >Emitted(15, 22) Source(28, 22) + SourceIndex(0)
-3 >Emitted(15, 26) Source(28, 34) + SourceIndex(0)
+1 >Emitted(15, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(15, 22) Source(27, 22) + SourceIndex(0)
+3 >Emitted(15, 26) Source(27, 34) + SourceIndex(0)
 ---
 >>>    return text[0].toLowerCase() + text.substring(1);
 1->^^^^
@@ -312,24 +311,24 @@ sourceFile:Element.ts
 16>                                                  1
 17>                                                   )
 18>                                                    ;
-1->Emitted(16, 5) Source(29, 5) + SourceIndex(0)
-2 >Emitted(16, 11) Source(29, 11) + SourceIndex(0)
-3 >Emitted(16, 12) Source(29, 12) + SourceIndex(0)
-4 >Emitted(16, 16) Source(29, 16) + SourceIndex(0)
-5 >Emitted(16, 17) Source(29, 17) + SourceIndex(0)
-6 >Emitted(16, 18) Source(29, 18) + SourceIndex(0)
-7 >Emitted(16, 19) Source(29, 19) + SourceIndex(0)
-8 >Emitted(16, 20) Source(29, 20) + SourceIndex(0)
-9 >Emitted(16, 31) Source(29, 31) + SourceIndex(0)
-10>Emitted(16, 33) Source(29, 33) + SourceIndex(0)
-11>Emitted(16, 36) Source(29, 36) + SourceIndex(0)
-12>Emitted(16, 40) Source(29, 40) + SourceIndex(0)
-13>Emitted(16, 41) Source(29, 41) + SourceIndex(0)
-14>Emitted(16, 50) Source(29, 50) + SourceIndex(0)
-15>Emitted(16, 51) Source(29, 51) + SourceIndex(0)
-16>Emitted(16, 52) Source(29, 52) + SourceIndex(0)
-17>Emitted(16, 53) Source(29, 53) + SourceIndex(0)
-18>Emitted(16, 54) Source(29, 54) + SourceIndex(0)
+1->Emitted(16, 5) Source(28, 5) + SourceIndex(0)
+2 >Emitted(16, 11) Source(28, 11) + SourceIndex(0)
+3 >Emitted(16, 12) Source(28, 12) + SourceIndex(0)
+4 >Emitted(16, 16) Source(28, 16) + SourceIndex(0)
+5 >Emitted(16, 17) Source(28, 17) + SourceIndex(0)
+6 >Emitted(16, 18) Source(28, 18) + SourceIndex(0)
+7 >Emitted(16, 19) Source(28, 19) + SourceIndex(0)
+8 >Emitted(16, 20) Source(28, 20) + SourceIndex(0)
+9 >Emitted(16, 31) Source(28, 31) + SourceIndex(0)
+10>Emitted(16, 33) Source(28, 33) + SourceIndex(0)
+11>Emitted(16, 36) Source(28, 36) + SourceIndex(0)
+12>Emitted(16, 40) Source(28, 40) + SourceIndex(0)
+13>Emitted(16, 41) Source(28, 41) + SourceIndex(0)
+14>Emitted(16, 50) Source(28, 50) + SourceIndex(0)
+15>Emitted(16, 51) Source(28, 51) + SourceIndex(0)
+16>Emitted(16, 52) Source(28, 52) + SourceIndex(0)
+17>Emitted(16, 53) Source(28, 53) + SourceIndex(0)
+18>Emitted(16, 54) Source(28, 54) + SourceIndex(0)
 ---
 >>>}
 1 >
@@ -338,8 +337,8 @@ sourceFile:Element.ts
 1 >
   >
 2 >}
-1 >Emitted(17, 1) Source(30, 1) + SourceIndex(0)
-2 >Emitted(17, 2) Source(30, 2) + SourceIndex(0)
+1 >Emitted(17, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(17, 2) Source(29, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=Element.js.map===================================================================
 JsFile: test.js

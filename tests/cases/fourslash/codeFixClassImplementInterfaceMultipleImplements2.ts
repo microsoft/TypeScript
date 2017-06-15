@@ -4,16 +4,15 @@
 ////     x: number;
 //// }
 //// interface I2 {
-////     y: number;
+////     y: "𣋝ઢȴ¬⏊";
 //// }
 ////
 //// class C implements I1,I2 {[|
-////     x: number;
-//// |]}
+////     |]x: number;
+//// }
 
 verify.rangeAfterCodeFix(`
-y: number;
-x: number;
+y: "𣋝ઢȴ¬⏊";
 `);
 
 verify.not.codeFixAvailable();

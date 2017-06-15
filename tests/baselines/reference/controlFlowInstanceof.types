@@ -1,5 +1,4 @@
 === tests/cases/compiler/controlFlowInstanceof.ts ===
-
 // Repros from #10167
 
 function f1(s: Set<string> | Set<number>) {
@@ -248,7 +247,7 @@ function goo(x: X) {
 
         x.y;
 >x.y : string
->x : Y
+>x : X & Y
 >y : string
     }
     x;

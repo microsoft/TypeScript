@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationsImports3.ts] ////
 
 //// [a.ts]
-
 export class A {}
 
 //// [b.ts]

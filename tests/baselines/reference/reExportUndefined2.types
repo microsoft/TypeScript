@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.ts ===
-
 var undefined;
 >undefined : any
 

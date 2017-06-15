@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/commaOperator/commaOperatorWithSecondOperandBooleanType.ts ===
-
 var ANY: any;
 >ANY : any
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportMergeErrors.ts] ////
 
 //// [es6ImportNamedImportMergeErrors_0.ts]
-
 export var a = 10;
 export var x = a;
 export var z = a;

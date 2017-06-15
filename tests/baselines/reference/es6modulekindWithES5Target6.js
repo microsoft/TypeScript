@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target6.ts]
-
 export function f1(d = 0) {
 }
 

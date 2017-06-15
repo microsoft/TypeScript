@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportDefaultBindingFollowedWithNamedImport1InEs5.ts] ////
 
 //// [es6ImportDefaultBindingFollowedWithNamedImport1InEs5_0.ts]
-
 var a = 10;
 export default a;
 

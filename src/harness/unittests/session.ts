@@ -25,7 +25,7 @@ namespace ts.server {
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: s => s
+        createHash: Harness.LanguageService.mockHash,
     };
 
     const mockLogger: Logger = {
@@ -50,8 +50,22 @@ namespace ts.server {
         let session: TestSession;
         let lastSent: protocol.Message;
 
+        function createSession(): TestSession {
+            const opts: server.SessionOptions = {
+                host: mockHost,
+                cancellationToken: nullCancellationToken,
+                useSingleInferredProject: false,
+                typingsInstaller: undefined,
+                byteLength: Utils.byteLength,
+                hrtime: process.hrtime,
+                logger: mockLogger,
+                canUseEvents: true
+            };
+            return new TestSession(opts);
+        }
+
         beforeEach(() => {
-            session = new TestSession(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+            session = createSession();
             session.send = (msg: protocol.Message) => {
                 lastSent = msg;
             };
@@ -120,7 +134,7 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         formatOptions: {
-                            indentStyle: "Block"
+                            indentStyle: protocol.IndentStyle.Block,
                         }
                     }
                 };
@@ -135,11 +149,11 @@ namespace ts.server {
                     type: "request",
                     arguments: {
                         options: {
-                            module: "System",
-                            target: "ES5",
-                            jsx: "React",
-                            newLine: "Lf",
-                            moduleResolution: "Node"
+                            module: protocol.ModuleKind.System,
+                            target: protocol.ScriptTarget.ES5,
+                            jsx: protocol.JsxEmit.React,
+                            newLine: protocol.NewLineKind.Lf,
+                            moduleResolution: protocol.ModuleResolutionKind.Node,
                         }
                     }
                 };
@@ -158,12 +172,81 @@ namespace ts.server {
         });
 
         describe("onMessage", () => {
+            const allCommandNames: CommandNames[] = [
+                CommandNames.Brace,
+                CommandNames.BraceFull,
+                CommandNames.BraceCompletion,
+                CommandNames.Change,
+                CommandNames.Close,
+                CommandNames.Completions,
+                CommandNames.CompletionsFull,
+                CommandNames.CompletionDetails,
+                CommandNames.CompileOnSaveAffectedFileList,
+                CommandNames.Configure,
+                CommandNames.Definition,
+                CommandNames.DefinitionFull,
+                CommandNames.Implementation,
+                CommandNames.ImplementationFull,
+                CommandNames.Exit,
+                CommandNames.Format,
+                CommandNames.Formatonkey,
+                CommandNames.FormatFull,
+                CommandNames.FormatonkeyFull,
+                CommandNames.FormatRangeFull,
+                CommandNames.Geterr,
+                CommandNames.GeterrForProject,
+                CommandNames.SemanticDiagnosticsSync,
+                CommandNames.SyntacticDiagnosticsSync,
+                CommandNames.NavBar,
+                CommandNames.NavBarFull,
+                CommandNames.Navto,
+                CommandNames.NavtoFull,
+                CommandNames.NavTree,
+                CommandNames.NavTreeFull,
+                CommandNames.Occurrences,
+                CommandNames.DocumentHighlights,
+                CommandNames.DocumentHighlightsFull,
+                CommandNames.Open,
+                CommandNames.Quickinfo,
+                CommandNames.QuickinfoFull,
+                CommandNames.References,
+                CommandNames.ReferencesFull,
+                CommandNames.Reload,
+                CommandNames.Rename,
+                CommandNames.RenameInfoFull,
+                CommandNames.RenameLocationsFull,
+                CommandNames.Saveto,
+                CommandNames.SignatureHelp,
+                CommandNames.SignatureHelpFull,
+                CommandNames.TypeDefinition,
+                CommandNames.ProjectInfo,
+                CommandNames.ReloadProjects,
+                CommandNames.Unknown,
+                CommandNames.OpenExternalProject,
+                CommandNames.CloseExternalProject,
+                CommandNames.SynchronizeProjectList,
+                CommandNames.ApplyChangedToOpenFiles,
+                CommandNames.EncodedSemanticClassificationsFull,
+                CommandNames.Cleanup,
+                CommandNames.OutliningSpans,
+                CommandNames.TodoComments,
+                CommandNames.Indentation,
+                CommandNames.DocCommentTemplate,
+                CommandNames.CompilerOptionsDiagnosticsFull,
+                CommandNames.NameOrDottedNameSpan,
+                CommandNames.BreakpointStatement,
+                CommandNames.CompilerOptionsForInferredProjects,
+                CommandNames.GetCodeFixes,
+                CommandNames.GetCodeFixesFull,
+                CommandNames.GetSupportedCodeFixes,
+                CommandNames.GetApplicableRefactors,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
+            ];
+
             it("should not throw when commands are executed with invalid arguments", () => {
                 let i = 0;
-                for (const name in CommandNames) {
-                    if (!Object.prototype.hasOwnProperty.call(CommandNames, name)) {
-                        continue;
-                    }
+                for (const name of allCommandNames) {
                     const req: protocol.Request = {
                         command: name,
                         seq: i,
@@ -318,7 +401,16 @@ namespace ts.server {
             lastSent: protocol.Message;
             customHandler = "testhandler";
             constructor() {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: mockLogger,
+                    canUseEvents: true
+                });
                 this.addProtocolHandler(this.customHandler, () => {
                     return { response: undefined, responseRequired: true };
                 });
@@ -326,7 +418,7 @@ namespace ts.server {
             send(msg: protocol.Message) {
                 this.lastSent = msg;
             }
-        };
+        }
 
         it("can override methods such as send", () => {
             const session = new TestSession();
@@ -367,7 +459,7 @@ namespace ts.server {
                     assert(this.projectService);
                     expect(this.projectService).to.be.instanceOf(ProjectService);
                 }
-            };
+            }
             new ServiceSession();
         });
     });
@@ -376,7 +468,16 @@ namespace ts.server {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
-                super(mockHost, nullCancellationToken, /*useOneInferredProject*/ false, /*typingsInstaller*/ undefined, Utils.byteLength, process.hrtime, mockLogger, /*canUseEvents*/ true);
+                super({
+                    host: mockHost,
+                    cancellationToken: nullCancellationToken,
+                    useSingleInferredProject: false,
+                    typingsInstaller: undefined,
+                    byteLength: Utils.byteLength,
+                    hrtime: process.hrtime,
+                    logger: mockLogger,
+                    canUseEvents: true
+                });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({
                     response: req.arguments,
                     responseRequired: true
@@ -462,7 +563,7 @@ namespace ts.server {
                 });
                 this.callbacks[this.seq] = callback;
             }
-        };
+        }
 
         it("can be constructed and respond to commands", (done) => {
             const cli = new InProcClient();

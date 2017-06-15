@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals2.ts] ////
 
 //// [file1.ts]
-
 function foo() {}
 export = foo;
 

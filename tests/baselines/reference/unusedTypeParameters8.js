@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedTypeParameters8.ts] ////
 
 //// [a.ts]
-
 class C<T> { }
 
 //// [b.ts]

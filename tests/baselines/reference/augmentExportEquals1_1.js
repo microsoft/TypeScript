@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals1_1.ts] ////
 
 //// [file1.d.ts]
-
 declare module "file1" {
     var x: number;
     export = x;

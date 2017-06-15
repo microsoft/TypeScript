@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/typeGuardsNestedAssignments.ts ===
-
 class Foo {
 >Foo : Foo
 

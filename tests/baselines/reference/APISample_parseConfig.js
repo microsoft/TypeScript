@@ -1,5 +1,4 @@
 //// [APISample_parseConfig.ts]
-
 /*
  * Note: This test is a public API sample. The sample sources can be found 
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
@@ -37,12 +36,12 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
 }
 
 //// [APISample_parseConfig.js]
+"use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
          at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-minimal-compiler
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
-"use strict";
 exports.__esModule = true;
 var ts = require("typescript");
 function printError(error) {

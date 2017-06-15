@@ -1,5 +1,4 @@
 //// [ES5For-ofTypeCheck10.ts]
-
 // In ES3/5, you cannot for...of over an arbitrary iterable.
 class StringIterator {
     next() {

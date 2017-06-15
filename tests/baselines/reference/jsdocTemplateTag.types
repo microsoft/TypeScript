@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/jsdocTemplateTag.ts ===
+/**
+ * @param {T} a
+ * @template T
+ */
+function f<T>(a: T) {
+>f : <T>(a: T) => () => T
+>T : T
+>a : T
+>T : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let n = f(1)()
+>n : number
+>f(1)() : number
+>f(1) : () => number
+>f : <T>(a: T) => () => T
+>1 : 1
+
+/**
+ * @param {T} a
+ * @template T
+ * @returns {function(): T}
+ */
+function g<T>(a: T) {
+>g : <T>(a: T) => () => T
+>T : T
+>a : T
+>T : T
+
+    return () => a
+>() => a : () => T
+>a : T
+}
+let s = g('hi')()
+>s : string
+>g('hi')() : string
+>g('hi') : () => string
+>g : <T>(a: T) => () => T
+>'hi' : "hi"
+

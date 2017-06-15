@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declarationFileOverwriteError.ts] ////
 
 //// [a.d.ts]
-
 declare class c {
 }
 

@@ -1,4 +1,4 @@
-{
+﻿{
     "extends": "../tsconfig-base",
     "compilerOptions": {
         "removeComments": false,
@@ -80,7 +80,8 @@
         "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
-        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/fixUnusedIdentifier.ts",
+        "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",
         "sourceMapRecorder.ts",
@@ -95,7 +96,7 @@
         "rwcRunner.ts",
         "test262Runner.ts",
         "runner.ts",
-        "../server/protocol.d.ts",
+        "../server/protocol.ts",
         "../server/session.ts",
         "../server/client.ts",
         "../server/editorServices.ts",
@@ -126,6 +127,7 @@
         "./unittests/printer.ts",
         "./unittests/transform.ts",
         "./unittests/customTransforms.ts",
-        "./unittests/textChanges.ts"
+        "./unittests/textChanges.ts",
+        "./unittests/telemetry.ts"
     ]
 }

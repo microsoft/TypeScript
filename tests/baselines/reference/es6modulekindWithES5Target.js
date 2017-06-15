@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target.ts]
-
 export class C {
     static s = 0;
     p = 1;
@@ -32,22 +31,22 @@ var C = (function () {
         this.p = 1;
     }
     C.prototype.method = function () { };
+    C.s = 0;
     return C;
 }());
 export { C };
-C.s = 0;
 export { C as C2 };
 var D = (function () {
     function D() {
         this.p = 1;
     }
     D.prototype.method = function () { };
+    D.s = 0;
+    D = __decorate([
+        foo
+    ], D);
     return D;
 }());
-D.s = 0;
-D = __decorate([
-    foo
-], D);
 export { D };
 export { D as D2 };
 var E = (function () {
