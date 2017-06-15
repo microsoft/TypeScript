@@ -174,10 +174,8 @@ function runTests(taskConfigsFolder, run, options, cb) {
             var isPartitionFail = partition.failed || code !== 0;
             var summaryColor = isPartitionFail ? "fail" : "green";
             var summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
-            if (partition.passed === 54107) {
-                console.log(partition);
-            }
-            var summaryTests = (isPartitionFail ? partition.passed + "/" + partition.tests : partition.passed) + " passssssing";
+
+            var summaryTests = (isPartitionFail ? partition.passed + "/" + partition.tests : partition.passed) + " passing";
             var summaryDuration = "(" + ms(partition.duration) + ")";
             var savedUseColors = Base.useColors;
             Base.useColors = !options.noColors;
