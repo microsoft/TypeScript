@@ -44,6 +44,6 @@ export let b: number;
 // @filename: c:/root/src/file3/index.d.ts
 export let x: number;
 
-// @filename: c:/node_modules/module3.d.ts
+// @filename: c:/node_modules/module3/index.d.ts
 export let y: number;
 

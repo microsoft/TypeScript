@@ -967,7 +967,7 @@ namespace ts.projectSystem {
                 content: `import { T } from "module1";`
             };
             const nodeModuleFile: FileOrFolder = {
-                path: "/a/b/node_modules/module1.ts",
+                path: "/a/b/node_modules/module1/index.ts",
                 content: `export interface T {}`
             };
             const classicModuleFile: FileOrFolder = {
@@ -2414,8 +2414,6 @@ namespace ts.projectSystem {
                 "Directory '/node_modules' does not exist, skipping all lookups in it.",
                 "======== Module name 'lib' was not resolved. ========",
                 `Auto discovery for typings is enabled in project '${proj.getProjectName()}'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.`,
-                "File '/a/cache/node_modules/lib.d.ts' does not exist.",
-                "File '/a/cache/node_modules/@types/lib.d.ts' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/package.json' does not exist.",
                 "File '/a/cache/node_modules/@types/lib/index.d.ts' exist - use it as a name resolution result.",
             ]);

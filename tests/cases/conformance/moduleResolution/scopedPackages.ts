@@ -8,7 +8,7 @@ export const x: number;
 // @filename: /node_modules/@types/be__bop/index.d.ts
 export const y: number;
 
-// @filename: /node_modules/@types/be__bop/e/z.d.ts
+// @filename: /node_modules/@types/be__bop/e/z/index.d.ts
 export const z: number;
 
 // @filename: /a.ts

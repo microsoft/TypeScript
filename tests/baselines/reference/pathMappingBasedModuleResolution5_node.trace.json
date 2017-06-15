@@ -54,7 +54,9 @@
     "Loading module 'file4' from 'node_modules' folder, target file type 'TypeScript'.",
     "Directory 'c:/root/folder1/node_modules' does not exist, skipping all lookups in it.",
     "Directory 'c:/root/node_modules' does not exist, skipping all lookups in it.",
-    "File 'c:/node_modules/file4.ts' exist - use it as a name resolution result.",
-    "Resolving real path for 'c:/node_modules/file4.ts', result 'c:/node_modules/file4.ts'.",
-    "======== Module name 'file4' was successfully resolved to 'c:/node_modules/file4.ts'. ========"
+    "File 'c:/node_modules/file4/package.json' does not exist.",
+    "File 'c:/node_modules/file4/index.d.ts' does not exist.",
+    "File 'c:/node_modules/file4/index.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/node_modules/file4/index.ts', result 'c:/node_modules/file4/index.ts'.",
+    "======== Module name 'file4' was successfully resolved to 'c:/node_modules/file4/index.ts'. ========"
 ]

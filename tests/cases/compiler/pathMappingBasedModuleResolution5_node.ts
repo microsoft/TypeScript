@@ -39,5 +39,5 @@ export var y = 1;
 // @filename: c:/root/shared/components/file3/index.d.ts
 export var z: number;
 
-// @filename: c:/node_modules/file4.ts
+// @filename: c:/node_modules/file4/index.ts
 export var z1 = 1;

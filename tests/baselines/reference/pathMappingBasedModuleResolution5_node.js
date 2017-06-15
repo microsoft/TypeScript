@@ -22,7 +22,7 @@ export var y = 1;
 //// [index.d.ts]
 export var z: number;
 
-//// [file4.ts]
+//// [index.ts]
 export var z1 = 1;
 
 //// [file1.js]
@@ -33,7 +33,7 @@ exports.x = 1;
 "use strict";
 exports.__esModule = true;
 exports.y = 1;
-//// [file4.js]
+//// [index.js]
 "use strict";
 exports.__esModule = true;
 exports.z1 = 1;

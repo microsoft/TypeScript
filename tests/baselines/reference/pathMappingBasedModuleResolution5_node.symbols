@@ -51,7 +51,7 @@ export var y = 1;
 export var z: number;
 >z : Symbol(z, Decl(index.d.ts, 0, 10))
 
-=== c:/node_modules/file4.ts ===
+=== c:/node_modules/file4/index.ts ===
 export var z1 = 1;
->z1 : Symbol(z1, Decl(file4.ts, 0, 10))
+>z1 : Symbol(z1, Decl(index.ts, 0, 10))
 

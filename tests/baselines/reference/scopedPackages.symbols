@@ -16,7 +16,7 @@ export const x: number;
 export const y: number;
 >y : Symbol(y, Decl(index.d.ts, 0, 12))
 
-=== /node_modules/@types/be__bop/e/z.d.ts ===
+=== /node_modules/@types/be__bop/e/z/index.d.ts ===
 export const z: number;
->z : Symbol(z, Decl(z.d.ts, 0, 12))
+>z : Symbol(z, Decl(index.d.ts, 0, 12))
 

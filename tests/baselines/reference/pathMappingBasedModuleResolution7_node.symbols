@@ -50,8 +50,8 @@ export let b: number;
 export let x: number;
 >x : Symbol(x, Decl(index.d.ts, 0, 10))
 
-=== c:/node_modules/module3.d.ts ===
+=== c:/node_modules/module3/index.d.ts ===
 export let y: number;
->y : Symbol(y, Decl(module3.d.ts, 0, 10))
+>y : Symbol(y, Decl(index.d.ts, 0, 10))
 
 

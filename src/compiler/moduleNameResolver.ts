@@ -32,10 +32,27 @@ namespace ts {
      * Kinds of file that we are currently looking for.
      * Typically there is one pass with Extensions.TypeScript, then a second pass with Extensions.JavaScript.
      */
-    enum Extensions {
-        TypeScript, /** '.ts', '.tsx', or '.d.ts' */
-        JavaScript, /** '.js' or '.jsx' */
-        DtsOnly /** Only '.d.ts' */
+    const enum Extensions {
+        /**
+         * '.ts', '.tsx', or '.d.ts'
+         * This is for regular imports of TypeScript code.
+         */
+        TypeScript = "TypeScript",
+        /**
+         * Same as TypeScript, but look for a '.d.ts' file first.
+         * This is used inside node_modules (in the first phase, before we look for '.js')
+         */
+        TypeScriptDtsFirst = "TypeScript ('.d.ts' preferred)",
+        /**
+         * '.js' or '.jsx'
+         * This is done only after either TypeScript or TypeScriptDtsFirst has been tried.
+         */
+        JavaScript = "JavaScript",
+        /**
+         * Only '.d.ts'
+         * This is used for lookups in '@types'
+         */
+        DtsOnly = "'.d.ts' only"
     }
 
     /** Used with `Extensions.DtsOnly` to extract the path from TypeScript results. */
@@ -717,7 +734,7 @@ namespace ts {
 
             if (moduleHasNonRelativeName(moduleName)) {
                 if (traceEnabled) {
-                    trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
+                    trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, extensions);
                 }
                 const resolved = loadModuleFromNodeModules(extensions, moduleName, containingDirectory, failedLookupLocations, state, cache);
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
@@ -745,7 +762,7 @@ namespace ts {
 
     function nodeLoadModuleByRelativeName(extensions: Extensions, candidate: string, failedLookupLocations: Push<string>, onlyRecordFailures: boolean, state: ModuleResolutionState, considerPackageJson: boolean): Resolved | undefined {
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_type_1, candidate, Extensions[extensions]);
+            trace(state.host, Diagnostics.Loading_module_as_file_Slash_folder_candidate_module_location_0_target_file_type_1, candidate, extensions);
         }
         if (!pathEndsWithDirectorySeparator(candidate)) {
             if (!onlyRecordFailures) {
@@ -818,6 +835,8 @@ namespace ts {
                 return tryExtension(Extension.Dts);
             case Extensions.TypeScript:
                 return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
+            case Extensions.TypeScriptDtsFirst:
+                return tryExtension(Extension.Dts) || tryExtension(Extension.Ts) || tryExtension(Extension.Tsx);
             case Extensions.JavaScript:
                 return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
         }
@@ -920,22 +939,26 @@ namespace ts {
         return combinePaths(directory, "package.json");
     }
 
-    function loadModuleFromNodeModulesFolder(extensions: Extensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
-        const candidate = normalizePath(combinePaths(nodeModulesFolder, moduleName));
+    // Inside of node_modules we should be looking for '.d.ts' files before '.ts' files.
+    type NodeModulesExtensions = Extensions.TypeScriptDtsFirst | Extensions.JavaScript | Extensions.DtsOnly;
 
-        return loadModuleFromFile(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state) ||
-            loadNodeModuleFromDirectory(extensions, candidate, failedLookupLocations, !nodeModulesFolderExists, state);
+    function loadModuleFromNodeModulesFolder(extensions: NodeModulesExtensions, moduleName: string, nodeModulesFolder: string, nodeModulesFolderExists: boolean, failedLookupLocations: Push<string>, state: ModuleResolutionState): Resolved | undefined {
+        const packageDir = normalizePath(combinePaths(nodeModulesFolder, moduleName));
+        return loadNodeModuleFromDirectory(extensions, packageDir, failedLookupLocations, !nodeModulesFolderExists, state);
     }
 
     function loadModuleFromNodeModules(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
-        return loadModuleFromNodeModulesWorker(extensions, moduleName, directory, failedLookupLocations, state, /*typesOnly*/ false, cache);
+        // In node_modules, we will look for a '.d.ts' file first.
+        const ext = extensions === Extensions.TypeScript ? Extensions.TypeScriptDtsFirst : extensions;
+        return loadModuleFromNodeModulesWorker(ext, moduleName, directory, failedLookupLocations, state, /*typesOnly*/ false, cache);
     }
+
     function loadModuleFromNodeModulesAtTypes(moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState): SearchResult<Resolved> {
         // Extensions parameter here doesn't actually matter, because typesOnly ensures we're just doing @types lookup, which is always DtsOnly.
         return loadModuleFromNodeModulesWorker(Extensions.DtsOnly, moduleName, directory, failedLookupLocations, state, /*typesOnly*/ true, /*cache*/ undefined);
     }
 
-    function loadModuleFromNodeModulesWorker(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, typesOnly: boolean, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
+    function loadModuleFromNodeModulesWorker(extensions: NodeModulesExtensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, typesOnly: boolean, cache: NonRelativeModuleNameResolutionCache): SearchResult<Resolved> {
         const perModuleNameCache = cache && cache.getOrCreateCacheForModuleName(moduleName);
         return forEachAncestorDirectory(normalizeSlashes(directory), ancestorDirectory => {
             if (getBaseFileName(ancestorDirectory) !== "node_modules") {
@@ -949,7 +972,7 @@ namespace ts {
     }
 
     /** Load a module from a single node_modules directory, but not from any ancestors' node_modules directories. */
-    function loadModuleFromNodeModulesOneLevel(extensions: Extensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, typesOnly = false): Resolved | undefined {
+    function loadModuleFromNodeModulesOneLevel(extensions: NodeModulesExtensions, moduleName: string, directory: string, failedLookupLocations: Push<string>, state: ModuleResolutionState, typesOnly = false): Resolved | undefined {
         const nodeModulesFolder = combinePaths(directory, "node_modules");
         const nodeModulesFolderExists = directoryProbablyExists(nodeModulesFolder, state.host);
         if (!nodeModulesFolderExists && state.traceEnabled) {

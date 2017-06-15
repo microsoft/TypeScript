@@ -23,7 +23,7 @@ export let b: number;
 //// [index.d.ts]
 export let x: number;
 
-//// [module3.d.ts]
+//// [index.d.ts]
 export let y: number;
 
 
