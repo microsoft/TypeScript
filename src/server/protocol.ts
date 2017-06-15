@@ -98,8 +98,11 @@ namespace ts.server.protocol {
         GetSupportedCodeFixes = "getSupportedCodeFixes",
 
         GetApplicableRefactors = "getApplicableRefactors",
-        GetRefactorCodeActions = "getRefactorCodeActions",
-        GetRefactorCodeActionsFull = "getRefactorCodeActions-full",
+        GetEditsForRefactor = "getEditsForRefactor",
+        /* @internal */
+        GetEditsForRefactorFull = "getEditsForRefactor-full",
+
+        // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
 
     /**
@@ -401,51 +404,97 @@ namespace ts.server.protocol {
 
     export type FileLocationOrRangeRequestArgs = FileLocationRequestArgs | FileRangeRequestArgs;
 
+    /**
+     * Request refactorings at a given position or selection area.
+     */
     export interface GetApplicableRefactorsRequest extends Request {
         command: CommandTypes.GetApplicableRefactors;
         arguments: GetApplicableRefactorsRequestArgs;
     }
-
     export type GetApplicableRefactorsRequestArgs = FileLocationOrRangeRequestArgs;
 
-    export interface ApplicableRefactorInfo {
-        name: string;
-        description: string;
-    }
-
+    /**
+     * Response is a list of available refactorings.
+     * Each refactoring exposes one or more "Actions"; a user selects one action to invoke a refactoring
+     */
     export interface GetApplicableRefactorsResponse extends Response {
         body?: ApplicableRefactorInfo[];
     }
 
-    export interface GetRefactorCodeActionsRequest extends Request {
-        command: CommandTypes.GetRefactorCodeActions;
-        arguments: GetRefactorCodeActionsRequestArgs;
+    /**
+     * A set of one or more available refactoring actions, grouped under a parent refactoring.
+     */
+    export interface ApplicableRefactorInfo {
+        /**
+         * The programmatic name of the refactoring
+         */
+        name: string;
+        /**
+         * A description of this refactoring category to show to the user.
+         * If the refactoring gets inlined (see below), this text will not be visible.
+         */
+        description: string;
+        /**
+         * Inlineable refactorings can have their actions hoisted out to the top level
+         * of a context menu. Non-inlineanable refactorings should always be shown inside
+         * their parent grouping.
+         *
+         * If not specified, this value is assumed to be 'true'
+         */
+        inlineable?: boolean;
+
+        actions: RefactorActionInfo[];
     }
 
-    export type GetRefactorCodeActionsRequestArgs = FileLocationOrRangeRequestArgs & {
-        /* The kind of the applicable refactor */
-        refactorName: string;
+    /**
+     * Represents a single refactoring action - for example, the "Extract Method..." refactor might
+     * offer several actions, each corresponding to a surround class or closure to extract into.
+     */
+    export type RefactorActionInfo = {
+        /**
+         * The programmatic name of the refactoring action
+         */
+        name: string;
+
+        /**
+         * A description of this refactoring action to show to the user.
+         * If the parent refactoring is inlined away, this will be the only text shown,
+         * so this description should make sense by itself if the parent is inlineable=true
+         */
+        description: string;
     };
 
-    export type RefactorCodeActions = {
-        actions: protocol.CodeAction[];
-        renameLocation?: number
-    };
-
-    /* @internal */
-    export type RefactorCodeActionsFull = {
-        actions: ts.CodeAction[];
-        renameLocation?: number
-    };
-
-    export interface GetRefactorCodeActionsResponse extends Response {
-        body: RefactorCodeActions;
+    export interface GetEditsForRefactorRequest extends Request {
+        command: CommandTypes.GetEditsForRefactor;
+        arguments: GetEditsForRefactorRequestArgs;
     }
 
-    /* @internal */
-    export interface GetRefactorCodeActionsFullResponse extends Response {
-        body: RefactorCodeActionsFull;
+    /**
+     * Request the edits that a particular refactoring action produces.
+     * Callers must specify the name of the refactor and the name of the action.
+     */
+    export type GetEditsForRefactorRequestArgs = FileLocationOrRangeRequestArgs & {
+        /* The 'name' property from the refactoring that offered this action */
+        refactor: string;
+        /* The 'name' property from the refactoring action */
+        action: string;
+    };
+
+
+    export interface GetEditsForRefactorResponse extends Response {
+        body?: RefactorEditInfo;
     }
+
+    export type RefactorEditInfo = {
+        edits: FileCodeEdits[];
+
+        /**
+         * An optional location where the editor should start a rename operation once
+         * the refactoring edits have been applied
+         */
+        renameLocation?: Location;
+        renameFilename?: string;
+    };
 
     /**
      * Request for the available codefixes at a specific position.

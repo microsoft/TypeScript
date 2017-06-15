@@ -2,7 +2,7 @@
 <!-- QUESTIONS: This is not a general support forum! Ask Qs at http://stackoverflow.com/questions/tagged/typescript -->
 <!-- SUGGESTIONS: See https://github.com/Microsoft/TypeScript-wiki/blob/master/Writing-Good-Design-Proposals.md -->
 
-**TypeScript Version:**  2.2.1 / nightly (2.2.0-dev.201xxxxx)
+**TypeScript Version:**  2.4.0 / nightly (2.5.0-dev.201xxxxx)
 
 **Code**
 

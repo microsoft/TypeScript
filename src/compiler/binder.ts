@@ -612,7 +612,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    bindForInOrForOfStatement(<ForInOrOfStatement>node);
                     break;
                 case SyntaxKind.IfStatement:
                     bindIfStatement(<IfStatement>node);
@@ -950,7 +950,7 @@ namespace ts {
             currentFlow = finishFlowLabel(postLoopLabel);
         }
 
-        function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
+        function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
@@ -1328,7 +1328,7 @@ namespace ts {
 
         function bindVariableDeclarationFlow(node: VariableDeclaration) {
             bindEachChild(node);
-            if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+            if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
             }
         }
@@ -1521,7 +1521,7 @@ namespace ts {
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
                     // they're only accessed 'lexically' (i.e. from code that exists underneath
-                    // their container in the tree.  To accomplish this, we simply add their declared
+                    // their container in the tree). To accomplish this, we simply add their declared
                     // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
                     return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
@@ -2053,7 +2053,10 @@ namespace ts {
                 case SyntaxKind.TypePredicate:
                     return checkTypePredicate(node as TypePredicateNode);
                 case SyntaxKind.TypeParameter:
-                    return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    if (node.parent.kind !== ts.SyntaxKind.JSDocTemplateTag || isInJavaScriptFile(node)) {
+                        return declareSymbolAndAddToSymbolTable(<Declaration>node, SymbolFlags.TypeParameter, SymbolFlags.TypeParameterExcludes);
+                    }
+                    return;
                 case SyntaxKind.Parameter:
                     return bindParameter(<ParameterDeclaration>node);
                 case SyntaxKind.VariableDeclaration:
@@ -2135,8 +2138,10 @@ namespace ts {
                 case SyntaxKind.EnumDeclaration:
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
-                    return bindModuleDeclaration(<ModuleDeclaration>node);
-
+                    if (node.parent.kind !== ts.SyntaxKind.JSDocTypedefTag || isInJavaScriptFile(node)) {
+                        return bindModuleDeclaration(<ModuleDeclaration>node);
+                    }
+                    return undefined;
                 // Jsx-attributes
                 case SyntaxKind.JsxAttributes:
                     return bindJsxAttributes(<JsxAttributes>node);

@@ -118,7 +118,13 @@ namespace ts.server {
         return true;
     }
 
-    export import CommandNames = protocol.CommandTypes;
+    // CommandNames used to be exposed before TS 2.4 as a namespace
+    // In TS 2.4 we switched to an enum, keep this for backward compatibility
+    // The var assignment ensures that even though CommandTypes are a const enum
+    // we want to ensure the value is maintained in the out since the file is
+    // built using --preseveConstEnum.
+    export type CommandNames = protocol.CommandTypes;
+    export const CommandNames = (<any>protocol).CommandTypes;
 
     export function formatMessage<T extends protocol.Message>(msg: T, logger: server.Logger, byteLength: (s: string, encoding: string) => number, newLine: string): string {
         const verboseLogging = logger.hasLevel(LogLevel.verbose);
@@ -1487,29 +1493,40 @@ namespace ts.server {
             return project.getLanguageService().getApplicableRefactors(file, position || textRange);
         }
 
-        private getRefactorCodeActions(args: protocol.GetRefactorCodeActionsRequestArgs, simplifiedResult: boolean): protocol.RefactorCodeActions | protocol.RefactorCodeActionsFull {
+        private getEditsForRefactor(args: protocol.GetEditsForRefactorRequestArgs, simplifiedResult: boolean): ts.RefactorEditInfo | protocol.RefactorEditInfo {
             const { file, project } = this.getFileAndProjectWithoutRefreshingInferredProjects(args);
             const scriptInfo = project.getScriptInfoForNormalizedPath(file);
             const { position, textRange } = this.extractPositionAndRange(args, scriptInfo);
 
-            const result: ts.CodeAction[] = project.getLanguageService().getRefactorCodeActions(
+            const result = project.getLanguageService().getEditsForRefactor(
                 file,
                 this.projectService.getFormatCodeOptions(),
                 position || textRange,
-                args.refactorName
+                args.refactor,
+                args.action
             );
 
-            if (simplifiedResult) {
-                // Not full
+            if (result === undefined) {
                 return {
-                    actions: result.map(action => this.mapCodeAction(action, scriptInfo))
+                    edits: []
+                };
+            }
+
+            if (simplifiedResult) {
+                const file = result.renameFilename;
+                let location: ILineInfo | undefined  = undefined;
+                if (file !== undefined && result.renameLocation !== undefined) {
+                    const renameScriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(file));
+                    location = renameScriptInfo.positionToLineOffset(result.renameLocation);
+                }
+                return {
+                    renameLocation: location,
+                    renameFilename: file,
+                    edits: result.edits.map(change => this.mapTextChangesToCodeEdits(project, change))
                 };
             }
             else {
-                // Full
-                return {
-                    actions: result
-                };
+                return result;
             }
         }
 
@@ -1567,6 +1584,14 @@ namespace ts.server {
             };
         }
 
+        private mapTextChangesToCodeEdits(project: Project, textChanges: FileTextChanges): protocol.FileCodeEdits {
+            const scriptInfo = project.getScriptInfoForNormalizedPath(toNormalizedPath(textChanges.fileName));
+            return {
+                fileName: textChanges.fileName,
+                textChanges: textChanges.textChanges.map(textChange => this.convertTextChangeToCodeEdit(textChange, scriptInfo))
+            };
+        }
+
         private convertTextChangeToCodeEdit(change: ts.TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
             return {
                 start: scriptInfo.positionToLineOffset(change.span.start),
@@ -1606,18 +1631,22 @@ namespace ts.server {
             const normalizedFileName = toNormalizedPath(fileName);
             const project = this.projectService.getDefaultProjectForFile(normalizedFileName, /*refreshInferredProjects*/ true);
             for (const fileNameInProject of fileNamesInProject) {
-                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName))
+                if (this.getCanonicalFileName(fileNameInProject) === this.getCanonicalFileName(fileName)) {
                     highPriorityFiles.push(fileNameInProject);
+                }
                 else {
                     const info = this.projectService.getScriptInfo(fileNameInProject);
                     if (!info.isScriptOpen()) {
-                        if (fileNameInProject.indexOf(".d.ts") > 0)
+                        if (fileNameInProject.indexOf(Extension.Dts) > 0) {
                             veryLowPriorityFiles.push(fileNameInProject);
-                        else
+                        }
+                        else {
                             lowPriorityFiles.push(fileNameInProject);
+                        }
                     }
-                    else
+                    else {
                         mediumPriorityFiles.push(fileNameInProject);
+                    }
                 }
             }
 
@@ -1895,11 +1924,11 @@ namespace ts.server {
             [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
                 return this.requiredResponse(this.getApplicableRefactors(request.arguments));
             },
-            [CommandNames.GetRefactorCodeActions]: (request: protocol.GetRefactorCodeActionsRequest) => {
-                return this.requiredResponse(this.getRefactorCodeActions(request.arguments, /*simplifiedResult*/ true));
+            [CommandNames.GetEditsForRefactor]: (request: protocol.GetEditsForRefactorRequest) => {
+                return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ true));
             },
-            [CommandNames.GetRefactorCodeActionsFull]: (request: protocol.GetRefactorCodeActionsRequest) => {
-                return this.requiredResponse(this.getRefactorCodeActions(request.arguments, /*simplifiedResult*/ false));
+            [CommandNames.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
+                return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));
             }
         });
 

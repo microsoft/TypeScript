@@ -14,7 +14,7 @@ namespace ts {
         else if (kind === SyntaxKind.Identifier) {
             return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, pos, end);
         }
-        else if (kind < SyntaxKind.FirstNode) {
+        else if (!isNodeKind(kind)) {
             return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, pos, end);
         }
         else {
@@ -489,7 +489,11 @@ namespace ts {
     // becoming detached from any SourceFile).  It is recommended that this SourceFile not
     // be used once 'update' is called on it.
     export function updateSourceFile(sourceFile: SourceFile, newText: string, textChangeRange: TextChangeRange, aggressiveChecks?: boolean): SourceFile {
-        return IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+        const newSourceFile = IncrementalParser.updateSourceFile(sourceFile, newText, textChangeRange, aggressiveChecks);
+        // Because new source file node is created, it may not have the flag PossiblyContainDynamicImport. This is the case if there is no new edit to add dynamic import.
+        // We will manually port the flag to the new source file.
+        newSourceFile.flags |= (sourceFile.flags & NodeFlags.PossiblyContainsDynamicImport);
+        return newSourceFile;
     }
 
     /* @internal */
@@ -714,7 +718,7 @@ namespace ts {
 
             sourceFile.statements = parseList(ParsingContext.SourceElements, parseStatement);
             Debug.assert(token() === SyntaxKind.EndOfFileToken);
-            sourceFile.endOfFileToken = <EndOfFileToken>parseTokenNode();
+            sourceFile.endOfFileToken = addJSDocComment(parseTokenNode() as EndOfFileToken);
 
             setExternalModuleIndicator(sourceFile);
 
@@ -793,7 +797,7 @@ namespace ts {
             sourceFile.languageVersion = languageVersion;
             sourceFile.fileName = normalizePath(fileName);
             sourceFile.languageVariant = getLanguageVariant(scriptKind);
-            sourceFile.isDeclarationFile = fileExtensionIs(sourceFile.fileName, ".d.ts");
+            sourceFile.isDeclarationFile = fileExtensionIs(sourceFile.fileName, Extension.Dts);
             sourceFile.scriptKind = scriptKind;
 
             return sourceFile;
@@ -1132,7 +1136,7 @@ namespace ts {
                 pos = scanner.getStartPos();
             }
 
-            return kind >= SyntaxKind.FirstNode ? new NodeConstructor(kind, pos, pos) :
+            return isNodeKind(kind) ? new NodeConstructor(kind, pos, pos) :
                 kind === SyntaxKind.Identifier ? new IdentifierConstructor(kind, pos, pos) :
                     new TokenConstructor(kind, pos, pos);
         }
@@ -3001,7 +3005,7 @@ namespace ts {
                 // for now we just check if the next token is an identifier.  More heuristics
                 // can be added here later as necessary.  We just need to make sure that we
                 // don't accidentally consume something legal.
-                return lookAhead(nextTokenIsIdentifierOrKeywordOrNumberOnSameLine);
+                return lookAhead(nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine);
             }
 
             return false;
@@ -3519,7 +3523,7 @@ namespace ts {
                 }
 
                 // here we are using similar heuristics as 'isYieldExpression'
-                return lookAhead(nextTokenIsIdentifierOnSameLine);
+                return lookAhead(nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine);
             }
 
             return false;
@@ -3734,7 +3738,7 @@ namespace ts {
                 // For example:
                 //      var foo3 = require("subfolder
                 //      import * as foo1 from "module-from-node  -> we want this import to be a statement rather than import call expression
-                sourceFile.flags |= NodeFlags.PossiblyContainDynamicImport;
+                sourceFile.flags |= NodeFlags.PossiblyContainsDynamicImport;
                 expression = parseTokenNode<PrimaryExpression>();
             }
             else {
@@ -4728,9 +4732,9 @@ namespace ts {
             return token() === SyntaxKind.FunctionKeyword && !scanner.hasPrecedingLineBreak();
         }
 
-        function nextTokenIsIdentifierOrKeywordOrNumberOnSameLine() {
+        function nextTokenIsIdentifierOrKeywordOrLiteralOnSameLine() {
             nextToken();
-            return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral) && !scanner.hasPrecedingLineBreak();
+            return (tokenIsIdentifierOrKeyword(token()) || token() === SyntaxKind.NumericLiteral || token() === SyntaxKind.StringLiteral) && !scanner.hasPrecedingLineBreak();
         }
 
         function isDeclaration(): boolean {
@@ -6566,6 +6570,10 @@ namespace ts {
                             case "augments":
                                 tag = parseAugmentsTag(atToken, tagName);
                                 break;
+                            case "class":
+                            case "constructor":
+                                tag = parseClassTag(atToken, tagName);
+                                break;
                             case "arg":
                             case "argument":
                             case "param":
@@ -6692,14 +6700,12 @@ namespace ts {
                     });
                 }
 
-                function parseBracketNameInPropertyAndParamTag() {
-                    let name: Identifier;
-                    let isBracketed: boolean;
+                function parseBracketNameInPropertyAndParamTag(): { name: Identifier, isBracketed: boolean } {
                     // Looking for something like '[foo]' or 'foo'
-                    if (parseOptionalToken(SyntaxKind.OpenBracketToken)) {
-                        name = parseJSDocIdentifierName();
+                    const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
+                    const name = parseJSDocIdentifierName(/*createIfMissing*/ true);
+                    if (isBracketed) {
                         skipWhitespace();
-                        isBracketed = true;
 
                         // May have an optional default, e.g. '[foo = 42]'
                         if (parseOptionalToken(SyntaxKind.EqualsToken)) {
@@ -6708,9 +6714,7 @@ namespace ts {
 
                         parseExpected(SyntaxKind.CloseBracketToken);
                     }
-                    else if (tokenIsIdentifierOrKeyword(token())) {
-                        name = parseJSDocIdentifierName();
-                    }
+
                     return { name, isBracketed };
                 }
 
@@ -6721,20 +6725,12 @@ namespace ts {
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
 
-                    if (!name) {
-                        parseErrorAtPosition(scanner.getStartPos(), 0, Diagnostics.Identifier_expected);
-                        return undefined;
-                    }
-
                     let preName: Identifier, postName: Identifier;
                     if (typeExpression) {
                         postName = name;
                     }
                     else {
                         preName = name;
-                    }
-
-                    if (!typeExpression) {
                         typeExpression = tryParseTypeExpression();
                     }
 
@@ -6783,6 +6779,13 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = typeExpression;
                     return finishNode(result);
+                }
+
+                function parseClassTag(atToken: AtToken, tagName: Identifier): JSDocClassTag {
+                    const tag = <JSDocClassTag>createNode(SyntaxKind.JSDocClassTag, atToken.pos);
+                    tag.atToken = atToken;
+                    tag.tagName = tagName;
+                    return finishNode(tag);
                 }
 
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier): JSDocTypedefTag {
@@ -6878,7 +6881,7 @@ namespace ts {
                             jsDocNamespaceNode.flags |= flags;
                             jsDocNamespaceNode.name = typeNameOrNamespaceName;
                             jsDocNamespaceNode.body = parseJSDocTypeNameWithNamespace(NodeFlags.NestedNamespace);
-                            return jsDocNamespaceNode;
+                            return finishNode(jsDocNamespaceNode);
                         }
 
                         if (typeNameOrNamespaceName && flags & NodeFlags.NestedNamespace) {
@@ -6969,14 +6972,19 @@ namespace ts {
                     return currentToken = scanner.scanJSDocToken();
                 }
 
-                function parseJSDocIdentifierName(): Identifier {
-                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()));
+                function parseJSDocIdentifierName(createIfMissing = false): Identifier {
+                    return createJSDocIdentifier(tokenIsIdentifierOrKeyword(token()), createIfMissing);
                 }
 
-                function createJSDocIdentifier(isIdentifier: boolean): Identifier {
+                function createJSDocIdentifier(isIdentifier: boolean, createIfMissing: boolean): Identifier {
                     if (!isIdentifier) {
-                        parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
-                        return undefined;
+                        if (createIfMissing) {
+                            return <Identifier>createMissingNode(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
+                        }
+                        else {
+                            parseErrorAtCurrentToken(Diagnostics.Identifier_expected);
+                            return undefined;
+                        }
                     }
 
                     const pos = scanner.getTokenPos();

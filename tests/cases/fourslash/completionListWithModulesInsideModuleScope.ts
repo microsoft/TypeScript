@@ -62,6 +62,7 @@
 ////        namespace m1Mod { }
 ////        export namespace m1eMod { }
 ////        /*namespace*/
+////        var tmp: /*namespaceType*/
 ////    }
 ////    export var mod1evar = 1;
 ////    export function mod1efn() {
@@ -124,8 +125,10 @@
 ////        namespace mMod { }
 ////    	export namespace meMod { }
 ////        /*exportedNamespace*/
+////        var tmp: /*exportedNamespaceType*/
 ////    }
 ////    /*mod1*/
+////    var tmp: /*mod1Type*/;
 ////}
 ////
 ////// EXTENDING NAMESPACE 1
@@ -133,6 +136,7 @@
 ////    export var mod1eexvar = 1;
 ////    var mod1exvar = 2;
 ////    /*extendedNamespace*/
+////    var tmp: /*extendedNamespaceType*/;
 ////}
 ////
 ////namespace mod2 {
@@ -225,28 +229,46 @@
 ////
 ////var shwvar = 1;
 
-function goToMarkAndGeneralVerify(marker: string, isClassScope?: boolean)
+interface GotoMarkVerifyOptions {
+    isClassScope?: boolean;
+    isTypeLocation?: boolean;
+}
+
+function getVerify(isTypeLocation: boolean) {
+    return {
+        verifyValue: isTypeLocation ? verify.not : verify,
+        verifyType: isTypeLocation ? verify : verify.not,
+        verifyValueOrType: verify,
+        verifyNotValueOrType: verify.not,
+    };
+}
+
+function goToMarkAndGeneralVerify(marker: string, { isClassScope, isTypeLocation }: GotoMarkVerifyOptions = {})
 {
     goTo.marker(marker);
 
-    const verifyModule = isClassScope ? verify.not : verify;
-    verifyModule.completionListContains('mod1var', 'var mod1var: number');
-    verifyModule.completionListContains('mod1fn', 'function mod1fn(): void');
-    verifyModule.completionListContains('mod1cls', 'class mod1cls');
-    verifyModule.completionListContains('mod1int', 'interface mod1int');
-    verifyModule.completionListContains('mod1mod', 'namespace mod1mod');
-    verifyModule.completionListContains('mod1evar', 'var mod1.mod1evar: number');
-    verifyModule.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
-    verifyModule.completionListContains('mod1ecls', 'class mod1.mod1ecls');
-    verifyModule.completionListContains('mod1eint', 'interface mod1.mod1eint');
-    verifyModule.completionListContains('mod1emod', 'namespace mod1.mod1emod');
-    verifyModule.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
-    verifyModule.completionListContains('mod2', 'namespace mod2');
-    verifyModule.completionListContains('mod3', 'namespace mod3');
-    verifyModule.completionListContains('shwvar', 'var shwvar: number');
-    verifyModule.completionListContains('shwfn', 'function shwfn(): void');
-    verifyModule.completionListContains('shwcls', 'class shwcls');
-    verifyModule.completionListContains('shwint', 'interface shwint');
+    const verifyValueInModule = isClassScope || isTypeLocation ? verify.not : verify;
+    const verifyValueOrTypeInModule = isClassScope ? verify.not : verify;
+    const verifyTypeInModule = isTypeLocation ? verify : verify.not;
+    verifyValueInModule.completionListContains('mod1var', 'var mod1var: number');
+    verifyValueInModule.completionListContains('mod1fn', 'function mod1fn(): void');
+    verifyValueInModule.completionListContains('mod1evar', 'var mod1.mod1evar: number');
+    verifyValueInModule.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
+    verifyValueInModule.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
+    verifyValueInModule.completionListContains('mod3', 'namespace mod3');
+    verifyValueInModule.completionListContains('shwvar', 'var shwvar: number');
+    verifyValueInModule.completionListContains('shwfn', 'function shwfn(): void');
+
+    verifyTypeInModule.completionListContains('mod1int', 'interface mod1int');
+    verifyTypeInModule.completionListContains('mod1eint', 'interface mod1.mod1eint');
+    verifyTypeInModule.completionListContains('shwint', 'interface shwint');
+
+    verifyValueOrTypeInModule.completionListContains('mod1cls', 'class mod1cls');
+    verifyValueOrTypeInModule.completionListContains('mod1mod', 'namespace mod1mod');
+    verifyValueOrTypeInModule.completionListContains('mod1ecls', 'class mod1.mod1ecls');
+    verifyValueOrTypeInModule.completionListContains('mod1emod', 'namespace mod1.mod1emod');
+    verifyValueOrTypeInModule.completionListContains('mod2', 'namespace mod2');
+    verifyValueOrTypeInModule.completionListContains('shwcls', 'class shwcls');
 
     verify.not.completionListContains('mod2var');
     verify.not.completionListContains('mod2fn');
@@ -274,6 +296,8 @@ function goToMarkAndGeneralVerify(marker: string, isClassScope?: boolean)
 
 // from mod1
 goToMarkAndGeneralVerify('mod1');
+// from mod1 in type position
+goToMarkAndGeneralVerify('mod1Type', { isTypeLocation: true });
 
 // from function in mod1
 goToMarkAndGeneralVerify('function');
@@ -281,7 +305,7 @@ verify.completionListContains('bar', '(local var) bar: number');
 verify.completionListContains('foob', '(local function) foob(): void');
 
 // from class in mod1
-goToMarkAndGeneralVerify('class', /*isClassScope*/ true);
+goToMarkAndGeneralVerify('class', { isClassScope: true });
 //verify.not.completionListContains('ceFunc');
 //verify.not.completionListContains('ceVar');
 
@@ -289,17 +313,28 @@ goToMarkAndGeneralVerify('class', /*isClassScope*/ true);
 goToMarkAndGeneralVerify('interface');
 
 // from namespace in mod1
-goToMarkAndGeneralVerify('namespace');
-verify.completionListContains('m1X', 'var m1X: number');
-verify.completionListContains('m1Func', 'function m1Func(): void');
-verify.completionListContains('m1Class', 'class m1Class');
-verify.completionListContains('m1Int', 'interface m1Int');
-verify.completionListContains('m1Mod', 'namespace m1Mod');
-verify.completionListContains('m1eX', 'var mod1mod.m1eX: number');
-verify.completionListContains('m1eFunc', 'function mod1mod.m1eFunc(): void');
-verify.completionListContains('m1eClass', 'class mod1mod.m1eClass');
-verify.completionListContains('m1eInt', 'interface mod1mod.m1eInt');
-verify.completionListContains('m1eMod', 'namespace mod1mod.m1eMod');
+verifyNamespaceInMod1('namespace');
+verifyNamespaceInMod1('namespaceType', /*isTypeLocation*/ true);
+
+function verifyNamespaceInMod1(marker: string, isTypeLocation?: boolean) {
+    goToMarkAndGeneralVerify(marker, { isTypeLocation });
+
+    const { verifyValue, verifyType, verifyValueOrType, verifyNotValueOrType } = getVerify(isTypeLocation);
+
+    verifyValue.completionListContains('m1X', 'var m1X: number');
+    verifyValue.completionListContains('m1Func', 'function m1Func(): void');
+    verifyValue.completionListContains('m1eX', 'var mod1mod.m1eX: number');
+    verifyValue.completionListContains('m1eFunc', 'function mod1mod.m1eFunc(): void');
+
+    verifyType.completionListContains('m1Int', 'interface m1Int');
+    verifyType.completionListContains('m1eInt', 'interface mod1mod.m1eInt');
+
+    verifyValueOrType.completionListContains('m1Class', 'class m1Class');
+    verifyValueOrType.completionListContains('m1eClass', 'class mod1mod.m1eClass');
+
+    verifyNotValueOrType.completionListContains('m1Mod', 'namespace m1Mod');
+    verifyNotValueOrType.completionListContains('m1eMod', 'namespace mod1mod.m1eMod');
+}
 
 // from exported function in mod1
 goToMarkAndGeneralVerify('exportedFunction');
@@ -307,59 +342,77 @@ verify.completionListContains('bar', '(local var) bar: number');
 verify.completionListContains('foob', '(local function) foob(): void');
 
 // from exported class in mod1
-goToMarkAndGeneralVerify('exportedClass', /*isClassScope*/ true);
-//verify.not.completionListContains('ceFunc');
-//verify.not.completionListContains('ceVar');
+goToMarkAndGeneralVerify('exportedClass', { isClassScope: true });
+verify.not.completionListContains('ceFunc');
+verify.not.completionListContains('ceVar');
 
 // from exported interface in mod1
 goToMarkAndGeneralVerify('exportedInterface');
 
 // from exported namespace in mod1
-goToMarkAndGeneralVerify('exportedNamespace');
-verify.completionListContains('mX', 'var mX: number');
-verify.completionListContains('mFunc', 'function mFunc(): void');
-verify.completionListContains('mClass', 'class mClass');
-verify.completionListContains('mInt', 'interface mInt');
-verify.completionListContains('mMod', 'namespace mMod');
-verify.completionListContains('meX', 'var mod1.mod1emod.meX: number');
-verify.completionListContains('meFunc', 'function mod1.mod1emod.meFunc(): void');
-verify.completionListContains('meClass', 'class mod1.mod1emod.meClass');
-verify.completionListContains('meInt', 'interface mod1.mod1emod.meInt');
-verify.completionListContains('meMod', 'namespace mod1.mod1emod.meMod');
+verifyExportedNamespace('exportedNamespace');
+verifyExportedNamespace('exportedNamespaceType', /*isTypeLocation*/ true);
+function verifyExportedNamespace(marker: string, isTypeLocation?: boolean) {
+    goToMarkAndGeneralVerify(marker, { isTypeLocation });
+    const { verifyValue, verifyType, verifyValueOrType, verifyNotValueOrType } = getVerify(isTypeLocation);
+    verifyValue.completionListContains('mX', 'var mX: number');
+    verifyValue.completionListContains('mFunc', 'function mFunc(): void');
+    verifyValue.completionListContains('meX', 'var mod1.mod1emod.meX: number');
+    verifyValue.completionListContains('meFunc', 'function mod1.mod1emod.meFunc(): void');
+
+    verifyType.completionListContains('mInt', 'interface mInt');
+    verifyType.completionListContains('meInt', 'interface mod1.mod1emod.meInt');
+
+    verifyValueOrType.completionListContains('mClass', 'class mClass');
+    verifyValueOrType.completionListContains('meClass', 'class mod1.mod1emod.meClass');
+
+    verifyNotValueOrType.completionListContains('mMod', 'namespace mMod');
+    verifyNotValueOrType.completionListContains('meMod', 'namespace mod1.mod1emod.meMod');
+}
 
 // from extended namespace
-goTo.marker('extendedNamespace');
-verify.completionListContains('mod1evar', 'var mod1.mod1evar: number');
-verify.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
-verify.completionListContains('mod1ecls', 'class mod1.mod1ecls');
-verify.completionListContains('mod1eint', 'interface mod1.mod1eint');
-verify.completionListContains('mod1emod', 'namespace mod1.mod1emod');
-verify.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
-verify.completionListContains('mod2', 'namespace mod2');
-verify.completionListContains('mod3', 'namespace mod3');
-verify.completionListContains('shwvar', 'var shwvar: number');
-verify.completionListContains('shwfn', 'function shwfn(): void');
-verify.completionListContains('shwcls', 'class shwcls');
-verify.completionListContains('shwint', 'interface shwint');
+verifyExtendedNamespace('extendedNamespace');
+verifyExtendedNamespace('extendedNamespaceType', /*isTypeLocation*/ true);
 
-verify.not.completionListContains('mod2var');
-verify.not.completionListContains('mod2fn');
-verify.not.completionListContains('mod2cls');
-verify.not.completionListContains('mod2int');
-verify.not.completionListContains('mod2mod');
-verify.not.completionListContains('mod2evar');
-verify.not.completionListContains('mod2efn');
-verify.not.completionListContains('mod2ecls');
-verify.not.completionListContains('mod2eint');
-verify.not.completionListContains('mod2emod');
-verify.not.completionListContains('sfvar');
-verify.not.completionListContains('sffn');
-verify.not.completionListContains('scvar');
-verify.not.completionListContains('scfn');
-verify.not.completionListContains('scpfn');
-verify.not.completionListContains('scpvar');
-verify.not.completionListContains('scsvar');
-verify.not.completionListContains('scsfn');
-verify.not.completionListContains('sivar');
-verify.not.completionListContains('sifn');
-verify.not.completionListContains('mod2eexvar');
+function verifyExtendedNamespace(marker: string, isTypeLocation?: boolean) {
+    goTo.marker(marker);
+    const { verifyValue, verifyType, verifyValueOrType, verifyNotValueOrType } = getVerify(isTypeLocation);
+
+    verifyValue.completionListContains('mod1evar', 'var mod1.mod1evar: number');
+    verifyValue.completionListContains('mod1efn', 'function mod1.mod1efn(): void');
+    verifyValue.completionListContains('mod1eexvar', 'var mod1.mod1eexvar: number');
+    verifyValue.completionListContains('mod3', 'namespace mod3');
+    verifyValue.completionListContains('shwvar', 'var shwvar: number');
+    verifyValue.completionListContains('shwfn', 'function shwfn(): void');
+
+    verifyType.completionListContains('mod1eint', 'interface mod1.mod1eint');
+    verifyType.completionListContains('shwint', 'interface shwint');
+
+    verifyValueOrType.completionListContains('mod1ecls', 'class mod1.mod1ecls');
+    verifyValueOrType.completionListContains('mod1emod', 'namespace mod1.mod1emod');
+    verifyValueOrType.completionListContains('mod2', 'namespace mod2');
+    verifyValueOrType.completionListContains('shwcls', 'class shwcls');
+
+
+    verify.not.completionListContains('mod2var');
+    verify.not.completionListContains('mod2fn');
+    verify.not.completionListContains('mod2cls');
+    verify.not.completionListContains('mod2int');
+    verify.not.completionListContains('mod2mod');
+    verify.not.completionListContains('mod2evar');
+    verify.not.completionListContains('mod2efn');
+    verify.not.completionListContains('mod2ecls');
+    verify.not.completionListContains('mod2eint');
+    verify.not.completionListContains('mod2emod');
+    verify.not.completionListContains('sfvar');
+    verify.not.completionListContains('sffn');
+    verify.not.completionListContains('scvar');
+    verify.not.completionListContains('scfn');
+    verify.not.completionListContains('scpfn');
+    verify.not.completionListContains('scpvar');
+    verify.not.completionListContains('scsvar');
+    verify.not.completionListContains('scsfn');
+    verify.not.completionListContains('sivar');
+    verify.not.completionListContains('sifn');
+    verify.not.completionListContains('mod2eexvar');
+}

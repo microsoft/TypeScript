@@ -1384,7 +1384,7 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if ((file.flags & NodeFlags.PossiblyContainDynamicImport) || isJavaScriptFile) {
+                if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
                     collectDynamicImportOrRequireCalls(node);
                 }
             }
@@ -1500,7 +1500,7 @@ namespace ts {
                 }
 
                 const sourceFileWithAddedExtension = forEach(supportedExtensions, extension => getSourceFile(fileName + extension));
-                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + ".ts");
+                if (fail && !sourceFileWithAddedExtension) fail(Diagnostics.File_0_not_found, fileName + Extension.Ts);
                 return sourceFileWithAddedExtension;
             }
         }

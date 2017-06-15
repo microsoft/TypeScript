@@ -3286,6 +3286,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3629,7 +3633,11 @@
         "category": "Message",
         "code": 90024
     },
-
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
+    
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

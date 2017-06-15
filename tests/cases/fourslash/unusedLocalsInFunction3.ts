@@ -7,4 +7,4 @@
 ////    z+1;
 ////}
 
-verify.rangeAfterCodeFix("var x,z = 1;", /*includeWhiteSpace*/ undefined, 6133);
+verify.rangeAfterCodeFix("var x,z = 1;", /*includeWhiteSpace*/ undefined, /*errorCode*/ 6133);

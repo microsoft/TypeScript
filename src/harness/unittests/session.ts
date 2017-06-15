@@ -25,7 +25,7 @@ namespace ts.server {
         clearTimeout: noop,
         setImmediate: () => 0,
         clearImmediate: noop,
-        createHash: s => s
+        createHash: Harness.LanguageService.mockHash,
     };
 
     const mockLogger: Logger = {
@@ -240,8 +240,8 @@ namespace ts.server {
                 CommandNames.GetCodeFixesFull,
                 CommandNames.GetSupportedCodeFixes,
                 CommandNames.GetApplicableRefactors,
-                CommandNames.GetRefactorCodeActions,
-                CommandNames.GetRefactorCodeActionsFull,
+                CommandNames.GetEditsForRefactor,
+                CommandNames.GetEditsForRefactorFull,
             ];
 
             it("should not throw when commands are executed with invalid arguments", () => {

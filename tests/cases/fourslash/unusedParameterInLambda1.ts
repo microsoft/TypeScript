@@ -6,4 +6,4 @@
 ////     [|return (x:number) => {}|]
 //// }
 
-verify.rangeAfterCodeFix("return () => {}");
+verify.rangeAfterCodeFix("return () => {}", /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);

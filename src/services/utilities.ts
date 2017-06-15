@@ -82,7 +82,7 @@ namespace ts {
         else if (node.parent.kind === SyntaxKind.ExportAssignment) {
             return SemanticMeaning.All;
         }
-        else if (isInRightSideOfImport(node)) {
+        else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
             return getMeaningFromRightHandSideOfImportEquals(node);
         }
         else if (isDeclarationName(node)) {
@@ -93,6 +93,10 @@ namespace ts {
         }
         else if (isNamespaceReference(node)) {
             return SemanticMeaning.Namespace;
+        }
+        else if (isTypeParameterDeclaration(node.parent)) {
+            Debug.assert(isJSDocTemplateTag(node.parent.parent)); // Else would be handled by isDeclarationName
+            return SemanticMeaning.Type;
         }
         else {
             return SemanticMeaning.Value;
@@ -114,7 +118,7 @@ namespace ts {
         return SemanticMeaning.Namespace;
     }
 
-    function isInRightSideOfImport(node: Node) {
+    export function isInRightSideOfInternalImportEqualsDeclaration(node: Node) {
         while (node.parent.kind === SyntaxKind.QualifiedName) {
             node = node.parent;
         }
@@ -615,18 +619,21 @@ namespace ts {
         return getTouchingToken(sourceFile, position, includeJsDocComment, n => isPropertyName(n.kind));
     }
 
-    /** Returns the token if position is in [start, end) or if position === end and includeItemAtEndPosition(token) === true */
-    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeItemAtEndPosition?: (n: Node) => boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includeItemAtEndPosition, includeJsDocComment);
+    /**
+     * Returns the token if position is in [start, end).
+     * If position === end, returns the preceding token if includeItemAtEndPosition(previousToken) === true
+     */
+    export function getTouchingToken(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includePrecedingTokenAtEndPosition?: (n: Node) => boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ false, includePrecedingTokenAtEndPosition, /*includeEndPosition*/ false, includeJsDocComment);
     }
 
     /** Returns a token if position is in [start-of-leading-trivia, end) */
-    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean): Node {
-        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includeItemAtEndPosition*/ undefined, includeJsDocComment);
+    export function getTokenAtPosition(sourceFile: SourceFile, position: number, includeJsDocComment: boolean, includeEndPosition?: boolean): Node {
+        return getTokenAtPositionWorker(sourceFile, position, /*allowPositionInLeadingTrivia*/ true, /*includePrecedingTokenAtEndPosition*/ undefined, includeEndPosition, includeJsDocComment);
     }
 
     /** Get the token whose text contains the position */
-    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includeItemAtEndPosition: (n: Node) => boolean, includeJsDocComment: boolean): Node {
+    function getTokenAtPositionWorker(sourceFile: SourceFile, position: number, allowPositionInLeadingTrivia: boolean, includePrecedingTokenAtEndPosition: (n: Node) => boolean, includeEndPosition: boolean, includeJsDocComment: boolean): Node {
         let current: Node = sourceFile;
         outer: while (true) {
             if (isToken(current)) {
@@ -636,7 +643,7 @@ namespace ts {
 
             // find the child that contains 'position'
             for (const child of current.getChildren()) {
-                if (isJSDocNode(child) && !includeJsDocComment) {
+                if (!includeJsDocComment && isJSDocNode(child)) {
                     continue;
                 }
 
@@ -646,13 +653,13 @@ namespace ts {
                 }
 
                 const end = child.getEnd();
-                if (position < end || (position === end && child.kind === SyntaxKind.EndOfFileToken)) {
+                if (position < end || (position === end && (child.kind === SyntaxKind.EndOfFileToken || includeEndPosition))) {
                     current = child;
                     continue outer;
                 }
-                else if (includeItemAtEndPosition && end === position) {
+                else if (includePrecedingTokenAtEndPosition && end === position) {
                     const previousToken = findPrecedingToken(position, sourceFile, child);
-                    if (previousToken && includeItemAtEndPosition(previousToken)) {
+                    if (previousToken && includePrecedingTokenAtEndPosition(previousToken)) {
                         return previousToken;
                     }
                 }
@@ -707,7 +714,7 @@ namespace ts {
         }
     }
 
-    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node): Node {
+    export function findPrecedingToken(position: number, sourceFile: SourceFile, startNode?: Node, includeJsDoc?: boolean): Node {
         return find(startNode || sourceFile);
 
         function findRightmostToken(n: Node): Node {
@@ -738,7 +745,7 @@ namespace ts {
                 // NOTE: JsxText is a weird kind of node that can contain only whitespaces (since they are not counted as trivia).
                 // if this is the case - then we should assume that token in question is located in previous child.
                 if (position < child.end && (nodeHasTokens(child) || child.kind === SyntaxKind.JsxText)) {
-                    const start = child.getStart(sourceFile);
+                    const start = child.getStart(sourceFile, includeJsDoc);
                     const lookInPreviousChild =
                         (start >= position) || // cursor in the leading trivia
                         (child.kind === SyntaxKind.JsxText && start === child.end); // whitespace only JsxText
@@ -755,7 +762,7 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile);
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
@@ -899,42 +906,6 @@ namespace ts {
             const text = sourceFile.text;
             return text.length >= c.pos + 3 && text[c.pos] === "/" && text[c.pos + 1] === "*" && text[c.pos + 2] === "*";
         }
-    }
-
-    /**
-     * Get the corresponding JSDocTag node if the position is in a jsDoc comment
-     */
-    export function getJsDocTagAtPosition(sourceFile: SourceFile, position: number): JSDocTag {
-        let node = ts.getTokenAtPosition(sourceFile, position, /*includeJsDocComment*/ false);
-        if (isToken(node)) {
-            switch (node.kind) {
-                case SyntaxKind.VarKeyword:
-                case SyntaxKind.LetKeyword:
-                case SyntaxKind.ConstKeyword:
-                    // if the current token is var, let or const, skip the VariableDeclarationList
-                    node = node.parent === undefined ? undefined : node.parent.parent;
-                    break;
-                default:
-                    node = node.parent;
-                    break;
-            }
-        }
-
-        if (node) {
-            if (node.jsDoc) {
-                for (const jsDoc of node.jsDoc) {
-                    if (jsDoc.tags) {
-                        for (const tag of jsDoc.tags) {
-                            if (tag.pos <= position && position <= tag.end) {
-                                return tag;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return undefined;
     }
 
     function nodeHasTokens(n: Node): boolean {
