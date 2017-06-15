@@ -2339,7 +2339,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.4.1-insiders.20170614";
+    const version = "2.4.1";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
