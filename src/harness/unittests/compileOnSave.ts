@@ -513,7 +513,7 @@ namespace ts.projectSystem {
                 const lines = ["var x = 1;", "var y = 2;"];
                 const path = "/a/app";
                 const f = {
-                    path: path + ts.Extension.Ts,
+                    path: path + ".ts",
                     content: lines.join(newLine)
                 };
                 const host = createServerHost([f], { newLine });
@@ -530,7 +530,7 @@ namespace ts.projectSystem {
                     command: "compileOnSaveEmitFile",
                     arguments: { file: f.path }
                 });
-                const emitOutput = host.readFile(path + ts.Extension.Js);
+                const emitOutput = host.readFile(path + ".js");
                 assert.equal(emitOutput, f.content + newLine, "content of emit output should be identical with the input + newline");
             }
         });
