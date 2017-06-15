@@ -2339,7 +2339,7 @@ declare namespace ts {
     }
 }
 declare namespace ts {
-    const version = "2.4.1";
+    const version = "2.4.1-insiders.20170614";
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -5038,17 +5038,18 @@ declare namespace ts.server {
 declare namespace ts.server {
     class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private readonly host;
-        private readonly project;
+        private project;
         private readonly cancellationToken;
         private compilationSettings;
         private readonly resolvedModuleNames;
         private readonly resolvedTypeReferenceDirectives;
         private readonly getCanonicalFileName;
         private filesWithChangedSetOfUnresolvedImports;
-        private readonly resolveModuleName;
+        private resolveModuleName;
         readonly trace: (s: string) => void;
         readonly realpath?: (path: string) => string;
         constructor(host: ServerHost, project: Project, cancellationToken: HostCancellationToken);
+        dispose(): void;
         startRecordingFilesWithChangedResolutions(): void;
         finishRecordingFilesWithChangedResolutions(): Path[];
         private resolveNamesWithLocalCache<T, R>(names, containingFile, cache, loader, getResult, getResultFileName, logChanges);
@@ -5164,7 +5165,7 @@ declare namespace ts.server {
         private lastCachedUnresolvedImportsList;
         protected languageService: LanguageService;
         languageServiceEnabled: boolean;
-        protected readonly lsHost: LSHost;
+        protected lsHost: LSHost;
         builder: Builder;
         private updatedFileNames;
         private lastReportedFileNames;
@@ -5428,6 +5429,7 @@ declare namespace ts.server {
         private removeProject(project);
         private assignScriptInfoToInferredProjectIfNecessary(info, addToListOfOpenFiles);
         private closeOpenFile(info);
+        private deleteOrphanScriptInfoNotInAnyProject();
         private openOrUpdateConfiguredProjectForFile(fileName, projectRootPath?);
         private findConfigFile(searchPath, projectRootPath?);
         private printProjects();
@@ -5447,6 +5449,7 @@ declare namespace ts.server {
         createInferredProjectWithRootFileIfNecessary(root: ScriptInfo): InferredProject;
         getOrCreateScriptInfo(uncheckedFileName: string, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind): ScriptInfo;
         getScriptInfo(uncheckedFileName: string): ScriptInfo;
+        watchClosedScriptInfo(info: ScriptInfo): void;
         getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean): ScriptInfo;
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo;
         getScriptInfoForPath(fileName: Path): ScriptInfo;
