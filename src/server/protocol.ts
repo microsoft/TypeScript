@@ -2,107 +2,110 @@
  * Declaration module describing the TypeScript Server protocol
  */
 namespace ts.server.protocol {
-    // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
-    export const enum CommandTypes {
-        Brace = "brace",
-        /* @internal */
-        BraceFull = "brace-full",
-        BraceCompletion = "braceCompletion",
-        Change = "change",
-        Close = "close",
-        Completions = "completions",
-        /* @internal */
-        CompletionsFull = "completions-full",
-        CompletionDetails = "completionEntryDetails",
-        CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList",
-        CompileOnSaveEmitFile = "compileOnSaveEmitFile",
-        Configure = "configure",
-        Definition = "definition",
-        /* @internal */
-        DefinitionFull = "definition-full",
-        Implementation = "implementation",
-        /* @internal */
-        ImplementationFull = "implementation-full",
-        Exit = "exit",
-        Format = "format",
-        Formatonkey = "formatonkey",
-        /* @internal */
-        FormatFull = "format-full",
-        /* @internal */
-        FormatonkeyFull = "formatonkey-full",
-        /* @internal */
-        FormatRangeFull = "formatRange-full",
-        Geterr = "geterr",
-        GeterrForProject = "geterrForProject",
-        SemanticDiagnosticsSync = "semanticDiagnosticsSync",
-        SyntacticDiagnosticsSync = "syntacticDiagnosticsSync",
-        NavBar = "navbar",
-        /* @internal */
-        NavBarFull = "navbar-full",
-        Navto = "navto",
-        /* @internal */
-        NavtoFull = "navto-full",
-        NavTree = "navtree",
-        NavTreeFull = "navtree-full",
-        Occurrences = "occurrences",
-        DocumentHighlights = "documentHighlights",
-        /* @internal */
-        DocumentHighlightsFull = "documentHighlights-full",
-        Open = "open",
-        Quickinfo = "quickinfo",
-        /* @internal */
-        QuickinfoFull = "quickinfo-full",
-        References = "references",
-        /* @internal */
-        ReferencesFull = "references-full",
-        Reload = "reload",
-        Rename = "rename",
-        /* @internal */
-        RenameInfoFull = "rename-full",
-        /* @internal */
-        RenameLocationsFull = "renameLocations-full",
-        Saveto = "saveto",
-        SignatureHelp = "signatureHelp",
-        /* @internal */
-        SignatureHelpFull = "signatureHelp-full",
-        TypeDefinition = "typeDefinition",
-        ProjectInfo = "projectInfo",
-        ReloadProjects = "reloadProjects",
-        Unknown = "unknown",
-        OpenExternalProject = "openExternalProject",
-        OpenExternalProjects = "openExternalProjects",
-        CloseExternalProject = "closeExternalProject",
-        /* @internal */
-        SynchronizeProjectList = "synchronizeProjectList",
-        /* @internal */
-        ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
-        /* @internal */
-        EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
-        /* @internal */
-        Cleanup = "cleanup",
-        /* @internal */
-        OutliningSpans = "outliningSpans",
-        TodoComments = "todoComments",
-        Indentation = "indentation",
-        DocCommentTemplate = "docCommentTemplate",
-        /* @internal */
-        CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full",
-        /* @internal */
-        NameOrDottedNameSpan = "nameOrDottedNameSpan",
-        /* @internal */
-        BreakpointStatement = "breakpointStatement",
-        CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects",
-        GetCodeFixes = "getCodeFixes",
-        /* @internal */
-        GetCodeFixesFull = "getCodeFixes-full",
-        GetSupportedCodeFixes = "getSupportedCodeFixes",
 
-        GetApplicableRefactors = "getApplicableRefactors",
-        GetEditsForRefactor = "getEditsForRefactor",
+    export namespace CommandTypes {
+        export type Brace = "brace";
         /* @internal */
-        GetEditsForRefactorFull = "getEditsForRefactor-full",
+        export type BraceFull = "brace-full";
+        export type BraceCompletion = "braceCompletion";
+        export type Change = "change";
+        export type Close = "close";
+        export type Completions = "completions";
+        /* @internal */
+        export type CompletionsFull = "completions-full";
+        export type CompletionDetails = "completionEntryDetails";
+        export type CompileOnSaveAffectedFileList = "compileOnSaveAffectedFileList";
+        export type CompileOnSaveEmitFile = "compileOnSaveEmitFile";
+        export type Configure = "configure";
+        export type Definition = "definition";
+        /* @internal */
+        export type DefinitionFull = "definition-full";
+        export type Implementation = "implementation";
+        /* @internal */
+        export type ImplementationFull = "implementation-full";
+        export type Exit = "exit";
+        export type Format = "format";
+        export type Formatonkey = "formatonkey";
+        /* @internal */
+        export type FormatFull = "format-full";
+        /* @internal */
+        export type FormatonkeyFull = "formatonkey-full";
+        /* @internal */
+        export type FormatRangeFull = "formatRange-full";
+        export type Geterr = "geterr";
+        export type GeterrForProject = "geterrForProject";
+        export type SemanticDiagnosticsSync = "semanticDiagnosticsSync";
+        export type SyntacticDiagnosticsSync = "syntacticDiagnosticsSync";
+        export type NavBar = "navbar";
+        /* @internal */
+        export type NavBarFull = "navbar-full";
+        export type Navto = "navto";
+        /* @internal */
+        export type NavtoFull = "navto-full";
+        export type NavTree = "navtree";
+        export type NavTreeFull = "navtree-full";
+        export type Occurrences = "occurrences";
+        export type DocumentHighlights = "documentHighlights";
+        /* @internal */
+        export type DocumentHighlightsFull = "documentHighlights-full";
+        export type Open = "open";
+        export type Quickinfo = "quickinfo";
+        /* @internal */
+        export type QuickinfoFull = "quickinfo-full";
+        export type References = "references";
+        /* @internal */
+        export type ReferencesFull = "references-full";
+        export type Reload = "reload";
+        export type Rename = "rename";
+        /* @internal */
+        export type RenameInfoFull = "rename-full";
+        /* @internal */
+        export type RenameLocationsFull = "renameLocations-full";
+        export type Saveto = "saveto";
+        export type SignatureHelp = "signatureHelp";
+        /* @internal */
+        export type SignatureHelpFull = "signatureHelp-full";
+        export type TypeDefinition = "typeDefinition";
+        export type ProjectInfo = "projectInfo";
+        export type ReloadProjects = "reloadProjects";
+        export type Unknown = "unknown";
+        export type OpenExternalProject = "openExternalProject";
+        export type OpenExternalProjects = "openExternalProjects";
+        export type CloseExternalProject = "closeExternalProject";
+        /* @internal */
+        export type SynchronizeProjectList = "synchronizeProjectList";
+        /* @internal */
+        export type ApplyChangedToOpenFiles = "applyChangedToOpenFiles";
+        /* @internal */
+        export type EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full";
+        /* @internal */
+        export type Cleanup = "cleanup";
+        /* @internal */
+        export type OutliningSpans = "outliningSpans";
+        export type TodoComments = "todoComments";
+        export type Indentation = "indentation";
+        export type DocCommentTemplate = "docCommentTemplate";
+        /* @internal */
+        export type CompilerOptionsDiagnosticsFull = "compilerOptionsDiagnostics-full";
+        /* @internal */
+        export type NameOrDottedNameSpan = "nameOrDottedNameSpan";
+        /* @internal */
+        export type BreakpointStatement = "breakpointStatement";
+        export type CompilerOptionsForInferredProjects = "compilerOptionsForInferredProjects";
+        export type GetCodeFixes = "getCodeFixes";
+        /* @internal */
+        export type GetCodeFixesFull = "getCodeFixes-full";
+        export type GetSupportedCodeFixes = "getSupportedCodeFixes";
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
+        export type GetApplicableRefactors = "getApplicableRefactors";
+        export type GetRefactorCodeActions = "getRefactorCodeActions";
+        /* @internal */
+        export type GetRefactorCodeActionsFull = "getRefactorCodeActions-full";
+
+        export type GetEditsForRefactor = "getEditsForRefactor";
+        /* @internal */
+        export type GetEditsForRefactorFull = "getEditsForRefactor-full";
     }
 
     /**
