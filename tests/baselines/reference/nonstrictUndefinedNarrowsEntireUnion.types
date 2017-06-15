@@ -1,0 +1,92 @@
+=== tests/cases/compiler/nonstrictUndefinedNarrowsEntireUnion.ts ===
+// === undefined / null should remove the entire union, including number
+function tripleEqualsDisjuct(x: string | number): string {
+>tripleEqualsDisjuct : (x: string | number) => string
+>x : string | number
+
+    return typeof x === 'string' || x === undefined ? x : "";
+>typeof x === 'string' || x === undefined ? x : "" : string
+>typeof x === 'string' || x === undefined : boolean
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+>x === undefined : boolean
+>x : number
+>undefined : undefined
+>x : string
+>"" : ""
+}
+function tripleEquals(x: string | number): string {
+>tripleEquals : (x: string | number) => string
+>x : string | number
+
+    return x === undefined ? x : "";
+>x === undefined ? x : "" : ""
+>x === undefined : boolean
+>x : string | number
+>undefined : undefined
+>x : undefined
+>"" : ""
+}
+
+function doubleEqualsDisjunct(x: string | number): string {
+>doubleEqualsDisjunct : (x: string | number) => string
+>x : string | number
+
+    return typeof x === 'string' || x == undefined ? x : "";
+>typeof x === 'string' || x == undefined ? x : "" : string
+>typeof x === 'string' || x == undefined : boolean
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+>x == undefined : boolean
+>x : number
+>undefined : undefined
+>x : string
+>"" : ""
+}
+function doubleEquals(x: string | number): string {
+>doubleEquals : (x: string | number) => string
+>x : string | number
+
+    return x == undefined ? x : "";
+>x == undefined ? x : "" : ""
+>x == undefined : boolean
+>x : string | number
+>undefined : undefined
+>x : undefined
+>"" : ""
+}
+
+function doubleEqualsNullDisjunct(x: string | number): string {
+>doubleEqualsNullDisjunct : (x: string | number) => string
+>x : string | number
+
+    return typeof x === 'string' || x == null ? x : "";
+>typeof x === 'string' || x == null ? x : "" : string
+>typeof x === 'string' || x == null : boolean
+>typeof x === 'string' : boolean
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : string | number
+>'string' : "string"
+>x == null : boolean
+>x : number
+>null : null
+>x : string
+>"" : ""
+}
+function doubleEqualsNull(x: string | number): string {
+>doubleEqualsNull : (x: string | number) => string
+>x : string | number
+
+    return x == null ? x : "";
+>x == null ? x : "" : ""
+>x == null : boolean
+>x : string | number
+>null : null
+>x : null
+>"" : ""
+}
+

@@ -1,0 +1,60 @@
+=== tests/cases/compiler/nonstrictUndefinedNarrowsEntireUnion.ts ===
+// === undefined / null should remove the entire union, including number
+function tripleEqualsDisjuct(x: string | number): string {
+>tripleEqualsDisjuct : Symbol(tripleEqualsDisjuct, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 0, 0))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 1, 29))
+
+    return typeof x === 'string' || x === undefined ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 1, 29))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 1, 29))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 1, 29))
+}
+function tripleEquals(x: string | number): string {
+>tripleEquals : Symbol(tripleEquals, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 3, 1))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 4, 22))
+
+    return x === undefined ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 4, 22))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 4, 22))
+}
+
+function doubleEqualsDisjunct(x: string | number): string {
+>doubleEqualsDisjunct : Symbol(doubleEqualsDisjunct, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 6, 1))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 8, 30))
+
+    return typeof x === 'string' || x == undefined ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 8, 30))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 8, 30))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 8, 30))
+}
+function doubleEquals(x: string | number): string {
+>doubleEquals : Symbol(doubleEquals, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 10, 1))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 11, 22))
+
+    return x == undefined ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 11, 22))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 11, 22))
+}
+
+function doubleEqualsNullDisjunct(x: string | number): string {
+>doubleEqualsNullDisjunct : Symbol(doubleEqualsNullDisjunct, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 13, 1))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 15, 34))
+
+    return typeof x === 'string' || x == null ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 15, 34))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 15, 34))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 15, 34))
+}
+function doubleEqualsNull(x: string | number): string {
+>doubleEqualsNull : Symbol(doubleEqualsNull, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 17, 1))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 18, 26))
+
+    return x == null ? x : "";
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 18, 26))
+>x : Symbol(x, Decl(nonstrictUndefinedNarrowsEntireUnion.ts, 18, 26))
+}
+
