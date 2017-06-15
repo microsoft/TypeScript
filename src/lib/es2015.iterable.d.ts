@@ -1,4 +1,5 @@
 /// <reference path="lib.es2015.symbol.d.ts" />
+/// <reference path="lib.es2015.promise.d.ts" />
 
 interface SymbolConstructor {
     /**
@@ -186,26 +187,6 @@ interface WeakSet<T> { }
 
 interface WeakSetConstructor {
     new <T extends object>(iterable: Iterable<T>): WeakSet<T>;
-}
-
-interface Promise<T> { }
-
-interface PromiseConstructor {
-    /**
-     * Creates a Promise that is resolved with an array of results when all of the provided Promises
-     * resolve, or rejected when any Promise is rejected.
-     * @param values An array of Promises.
-     * @returns A new Promise.
-     */
-    all<TAll>(values: Iterable<TAll | PromiseLike<TAll>>): Promise<TAll[]>;
-
-    /**
-     * Creates a Promise that is resolved or rejected when any of the provided Promises are resolved
-     * or rejected.
-     * @param values An array of Promises.
-     * @returns A new Promise.
-     */
-    race<T>(values: Iterable<T | PromiseLike<T>>): Promise<T>;
 }
 
 declare namespace Reflect {
