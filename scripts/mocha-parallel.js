@@ -1,14 +1,15 @@
 var tty = require("tty")
-  , readline = require("readline")
-  , fs = require("fs")
-  , path = require("path")
-  , child_process = require("child_process")
-  , os = require("os")
-  , mocha = require("mocha")
-  , Base = mocha.reporters.Base
-  , color = Base.color
-  , cursor = Base.cursor
-  , ms = require("mocha/lib/ms");
+    , readline = require("readline")
+    , fs = require("fs")
+    , path = require("path")
+    , child_process = require("child_process")
+    , os = require("os")
+    , mocha = require("mocha")
+    , Base = mocha.reporters.Base
+    , color = Base.color
+    , cursor = Base.cursor
+    , ms = require("mocha/lib/ms")
+    , FileReporter = require("./mocha-file-reporter");
 
 var isatty = tty.isatty(1) && tty.isatty(2);
 var tapRangePattern = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
@@ -19,7 +20,7 @@ exports.runTestsInParallel = runTestsInParallel;
 exports.ProgressBars = ProgressBars;
 
 function runTestsInParallel(taskConfigsFolder, run, options, cb) {
-    if (options === undefined) options = { };
+    if (options === undefined) options = {};
 
     return discoverTests(run, options, function (error) {
         if (error) {
@@ -33,7 +34,12 @@ function runTestsInParallel(taskConfigsFolder, run, options, cb) {
 function discoverTests(run, options, cb) {
     console.log("Discovering tests...");
 
-    var cmd = "mocha -R " + require.resolve("./mocha-none-reporter.js") + " " + run;
+    var args = [];
+    args.push("--no-timeouts");
+    args.push("--delay"); // prevents mocha from running tests.
+    args.push(run);
+    args.push("--discover"); // signal discovery (must come after files)
+    var cmd = "mocha " + args.join(" ");
     var p = spawnProcess(cmd);
     p.on("exit", function (status) {
         if (status) {
@@ -46,25 +52,19 @@ function discoverTests(run, options, cb) {
 }
 
 function runTests(taskConfigsFolder, run, options, cb) {
-    var configFiles = fs.readdirSync(taskConfigsFolder);
-    var numPartitions = configFiles.length;
-    if (numPartitions <= 0) {
-        cb();
-        return;
-    }
-
-    console.log("Running tests on " + numPartitions + " threads...");
-
-    var partitions = Array(numPartitions);
-    var progressBars = new ProgressBars();
-    progressBars.enable();
-
-    var counter = numPartitions;
-    configFiles.forEach(runTestsInPartition);
-
-    function runTestsInPartition(file, index) {
-        var partition = {
-            file: path.join(taskConfigsFolder, file),
+    var partitions = fs.readdirSync(taskConfigsFolder).map(function (file, index) {
+        var file = path.join(taskConfigsFolder, file);
+        var args = [];
+        args.push("-t", options.testTimeout || 40000);
+        args.push("-R", "tap");
+        args.push("--no-colors");
+        args.push(run);
+        args.push("--config='" + file + "'");
+        var cmd = "mocha " + args.join(" ");
+        return {
+            file: file,
+            cmd: cmd,
+            index: index,
             tests: 0,
             passed: 0,
             failed: 0,
@@ -72,22 +72,47 @@ function runTests(taskConfigsFolder, run, options, cb) {
             current: undefined,
             start: undefined,
             end: undefined,
+            catastrophicError: "",
             failures: []
         };
-        partitions[index] = partition;
+    });
 
+    if (partitions.length <= 0) {
+        cb();
+        return;
+    }
+
+    console.log("Running tests on " + partitions.length + " threads...");
+
+    var progressBars = new ProgressBars();
+    progressBars.enable();
+
+    var counter = partitions.length;
+    partitions.forEach(runTestsInPartition);
+
+    function runTestsInPartition(partition) {
         // Set up the progress bar.
         updateProgress(0);
 
         // Start the background process.
-        var cmd = "mocha -t " + (options.testTimeout || 20000) + " -R tap --no-colors " + run + " --config='" + partition.file + "'";
-        var p = spawnProcess(cmd);
+        var p = spawnProcess(partition.cmd);
         var rl = readline.createInterface({
             input: p.stdout,
             terminal: false
         });
+
+        var rlError = readline.createInterface({
+            input: p.stderr,
+            terminal: false
+        });
+
         rl.on("line", onmessage);
+        rlError.on("line", onErrorMessage);
         p.on("exit", onexit)
+
+        function onErrorMessage(line) {
+            partition.catastrophicError += line + os.EOL;
+        }
 
         function onmessage(line) {
             if (partition.start === undefined) {
@@ -153,15 +178,17 @@ function runTests(taskConfigsFolder, run, options, cb) {
             }
         }
 
-        function onexit() {
+        function onexit(code) {
             if (partition.end === undefined) {
                 partition.end = Date.now();
             }
 
             partition.duration = partition.end - partition.start;
-            var summaryColor = partition.failed ? "fail" : "green";
-            var summarySymbol = partition.failed ? Base.symbols.err : Base.symbols.ok;
-            var summaryTests = (partition.passed === partition.tests ? partition.passed : partition.passed + "/" + partition.tests) + " passing";
+            var isPartitionFail = partition.failed || code !== 0;
+            var summaryColor = isPartitionFail ? "fail" : "green";
+            var summarySymbol = isPartitionFail ? Base.symbols.err : Base.symbols.ok;
+
+            var summaryTests = (isPartitionFail ? partition.passed + "/" + partition.tests : partition.passed) + " passing";
             var summaryDuration = "(" + ms(partition.duration) + ")";
             var savedUseColors = Base.useColors;
             Base.useColors = !options.noColors;
@@ -181,7 +208,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
             }
 
             progressBars.update(
-                index,
+                partition.index,
                 percentComplete,
                 progressColor,
                 title
@@ -198,12 +225,34 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 failures = reporter.failures;
 
             var duration = 0;
-            for (var i = 0; i < numPartitions; i++) {
+            var catastrophicError = "";
+            for (var i = 0; i < partitions.length; i++) {
                 var partition = partitions[i];
                 stats.passes += partition.passed;
                 stats.failures += partition.failed;
                 stats.tests += partition.tests;
                 duration += partition.duration;
+                if (partition.catastrophicError !== "") {
+                    // Partition is written out to a temporary file as a JSON object.
+                    // Below is an example of how the partition JSON object looks like
+                    // {
+                    //      "light":false,
+                    //      "tasks":[
+                    //          {
+                    //              "runner":"compiler",
+                    //              "files":["tests/cases/compiler/es6ImportNamedImportParsingError.ts"]
+                    //          }
+                    //      ],
+                    //      "runUnitTests":false
+                    // }
+                    var jsonText = fs.readFileSync(partition.file);
+                    var configObj = JSON.parse(jsonText);
+                    if (configObj.tasks && configObj.tasks[0]) {
+                        catastrophicError += "Error from one or more of these files: " + configObj.tasks[0].files + os.EOL;
+                        catastrophicError += partition.catastrophicError;
+                        catastrophicError += os.EOL;
+                    }
+                }
                 for (var j = 0; j < partition.failures.length; j++) {
                     var failure = partition.failures[j];
                     failures.push(makeMochaTest(failure));
@@ -223,18 +272,18 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 reporter.epilogue();
             }
 
-            if (stats.failures) {
-                return cb(new Error("Test failures reported: " + stats.failures));
-            }
-            else {
+            FileReporter.writeFailures(".failed-tests", failures, options.keepFailed, function (err) {
+                if (err) return cb(err);
+                if (catastrophicError !== "") return cb(new Error(catastrophicError));
+                if (stats.failures) return cb(new Error("Test failures reported: " + stats.failures));
                 return cb();
-            }
+            });
         }
     }
 
     function makeMochaTest(test) {
         return {
-            fullTitle: function() {
+            fullTitle: function () {
                 return test.name;
             },
             err: {
@@ -247,9 +296,9 @@ function runTests(taskConfigsFolder, run, options, cb) {
 
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
 if (process.env.path !== undefined) {
-   process.env.path = nodeModulesPathPrefix + process.env.path;
+    process.env.path = nodeModulesPathPrefix + process.env.path;
 } else if (process.env.PATH !== undefined) {
-   process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
+    process.env.PATH = nodeModulesPathPrefix + process.env.PATH;
 }
 
 function spawnProcess(cmd, options) {
@@ -294,7 +343,7 @@ ProgressBars.prototype = {
     update: function (index, percentComplete, color, title) {
         percentComplete = minMax(percentComplete, 0, 1);
 
-        var progressBar = this._progressBars[index] || (this._progressBars[index] = { });
+        var progressBar = this._progressBars[index] || (this._progressBars[index] = {});
         var width = this._options.width;
         var n = Math.floor(width * percentComplete);
         var i = width - n;

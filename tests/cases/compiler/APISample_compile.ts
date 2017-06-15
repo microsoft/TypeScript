@@ -2,6 +2,8 @@
 // @includebuiltfile: typescript_standalone.d.ts
 // @noImplicitAny:true
 // @strictNullChecks:true
+// @noTypesBaseline: true
+// @noSymbolsBaseline: true
 
 /*
  * Note: This test is a public API sample. The sample sources can be found

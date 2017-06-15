@@ -20,6 +20,7 @@ var docDirectory = "doc/";
 
 var builtDirectory = "built/";
 var builtLocalDirectory = "built/local/";
+var builtHarnessDirectory = "built/harness/";
 var LKGDirectory = "lib/";
 
 var copyright = "CopyrightNotice.txt";
@@ -87,6 +88,7 @@ var typingsInstallerSources = filesFromConfig(path.join(serverDirectory, "typing
 var watchGuardSources = filesFromConfig(path.join(serverDirectory, "watchGuard/tsconfig.json"));
 var serverSources = filesFromConfig(path.join(serverDirectory, "tsconfig.json"))
 var languageServiceLibrarySources = filesFromConfig(path.join(serverDirectory, "tsconfig.library.json"));
+var harness2Sources = filesFromConfig("./src/harness2/tsconfig.json");
 
 var harnessCoreSources = [
     "harness.ts",
@@ -276,6 +278,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
     * @param {Array} opts.types: array of types to include in compilation
+    * @param {boolean} opts.strict: true to compile using --strict
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
@@ -341,6 +344,9 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
         else {
             options += " --lib es5"
+        }
+        if (opts.strict) {
+            options += " --strict";
         }
         options += " --noUnusedLocals --noUnusedParameters";
 
@@ -715,6 +721,7 @@ task("LKG", ["clean", "release", "local"].concat(libraryTargets), function () {
 
 // Test directory
 directory(builtLocalDirectory);
+directory(builtHarnessDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
@@ -726,6 +733,15 @@ compileFile(
     /*useBuiltCompiler:*/ true,
     /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"], lib: "es6" });
 
+var run2 = path.join(builtHarnessDirectory, "run.js");
+compileFile(
+    /*outFile*/ run2,
+    /*source*/ harness2Sources,
+    /*prereqs*/[builtHarnessDirectory].concat(harness2Sources),
+    /*prefixes*/[],
+    /*useBuiltCompiler:*/ false,
+    /*opts*/ { inlineSourceMap: true, types: ["node", "mocha", "chai"], lib: "es6", noOutFile: true, outDir: builtHarnessDirectory, strict: true });
+
 var internalTests = "internal/";
 
 var localBaseline = "tests/baselines/local/";
@@ -736,6 +752,9 @@ var refRwcBaseline = path.join(internalTests, "baselines/rwc/reference");
 
 var localTest262Baseline = path.join(internalTests, "baselines/test262/local");
 var refTest262Baseline = path.join(internalTests, "baselines/test262/reference");
+
+desc("Builds the test harness");
+task("harness", [run2]);
 
 desc("Builds the test infrastructure using the built compiler");
 task("tests", ["local", run].concat(libraryTargets));
@@ -801,7 +820,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, runInParallel) {
+function runConsoleTests(defaultReporter, runInParallel, run) {
     var dirty = process.env.dirty;
     if (!dirty) {
         cleanTestDirs();
@@ -811,6 +830,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
     var tests = process.env.test || process.env.tests || process.env.t;
+    var failed = process.env.failed || false;
+    var keepFailed = process.env.keepFailed || process.env["keep-failed"] || false;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
@@ -847,11 +868,25 @@ function runConsoleTests(defaultReporter, runInParallel) {
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
     if (!runInParallel) {
+        if (!tests && process.env.failed && process.env.failed.toLowerCase() === "true") {
+            const unique = Object.create(null);
+            tests = fs.readdirSync("tests/baselines/local")
+                .map(name => name
+                    .replace(/(\.errors\.txt|\.jsx?(\.map)?|\.sourcemap\.txt|\.types|\.symbols)(\.delete)?$/, ".")
+                    .replace(/[^\w\s\\-]/g, m => "\\" + m))
+                .filter(name => unique[name] ? false : unique[name] = true)
+                .join("|");
+        }
+
         var startTime = mark();
         var args = [];
-        args.push("-R", reporter);
+        args.push("-R", "scripts/mocha-file-reporter");
+        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
+        }
+        else if (failed) {
+            args.push("--opts", ".failed-tests");
         }
         if (colors) {
             args.push("--colors");
@@ -894,12 +929,12 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors, keepFailed }, function (err) {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
             // last worker clean everything and runs linter in case if there were no errors
             deleteTemporaryProjectOutput();
-            jake.rmRf(taskConfigsFolder);
+            //jake.rmRf(taskConfigsFolder);
             if (err) {
                 fail(err);
             }
@@ -937,12 +972,20 @@ function runConsoleTests(defaultReporter, runInParallel) {
 
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function () {
-    runConsoleTests('min', /*runInParallel*/ true);
+    runConsoleTests('min', /*runInParallel*/ true, run);
 }, { async: true });
 
 desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false dirty=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
+    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false, run);
+}, { async: true });
+
+task("runtests2", [run2], function () {
+    runConsoleTests('dot', /*runInParallel*/ false, run2);
+}, { async: true });
+
+task("runtests-parallel2", [run2], function () {
+    runConsoleTests('min', /*runInParallel*/ true, run2);
 }, { async: true });
 
 desc("Generates code coverage data via instanbul");

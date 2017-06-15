@@ -1,3 +1,23 @@
 === tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts ===
+export interface IPoint {}
+>IPoint : Symbol(IPoint, Decl(duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts, 0, 0))
 
+export module Shapes {
+>Shapes : Symbol(Shapes, Decl(duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts, 0, 26))
+
+    export class Point implements IPoint {}
+>Point : Symbol(Point, Decl(duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts, 2, 22))
+>IPoint : Symbol(IPoint, Decl(duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_0.ts, 0, 0))
+
+}
+
+=== tests/cases/compiler/duplicateIdentifierShouldNotShortCircuitBaseTypeBinding_1.ts ===
+//var x = new Shapes.Point();
+No type information for this code.//interface IPoint {}
+No type information for this code.
+No type information for this code.//module Shapes {
+No type information for this code.
+No type information for this code.//    export class Point implements IPoint {}
+No type information for this code.
+No type information for this code.//}
 No type information for this code.

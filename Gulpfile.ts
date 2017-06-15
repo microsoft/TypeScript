@@ -38,7 +38,7 @@ const {runTestsInParallel} = mochaParallel;
 Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "failed", "bail", "keepFailed"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         b: "browser",
@@ -49,6 +49,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         c: "colors", color: "colors",
         f: "files", file: "files",
         w: "workers",
+        "keep-failed": "keepFailed"
     },
     default: {
         soft: false,
@@ -57,9 +58,12 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
+        bail: process.env.bail || false,
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
+        failed: process.env.failed || false,
+        keepFailed: process.env.keepFailed || process.env["keep-failed"] || false,
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -93,6 +97,7 @@ const docDirectory = "doc/";
 
 const builtDirectory = "built/";
 const builtLocalDirectory = "built/local/";
+const builtHarnessDirectory = "built/harness/";
 const LKGDirectory = "lib/";
 
 const copyright = "CopyrightNotice.txt";
@@ -565,6 +570,23 @@ gulp.task(run, /*help*/ false, [servicesFile], () => {
         .pipe(gulp.dest("src/harness"));
 });
 
+const run2 = path.join(builtHarnessDirectory, "run.js");
+gulp.task(run2, /*help*/ false, [], () => {
+    const harnessProject = tsc.createProject("src/harness2/tsconfig.json", getCompilerSettings({
+        types: ["node", "mocha", "chai"],
+        lib: ["es6"],
+        strict: true
+    }, /*useBuiltCompiler*/ false));
+    return harnessProject.src()
+        .pipe(newer(builtHarnessDirectory))
+        .pipe(sourcemaps.init())
+        .pipe(harnessProject())
+        .pipe(sourcemaps.write(".", <any>{ includeContent: false, destPath: builtHarnessDirectory }))
+        .pipe(gulp.dest(builtHarnessDirectory));
+});
+
+gulp.task("harness", "Builds the test harness", [run2]);
+
 const internalTests = "internal/";
 
 const localBaseline = "tests/baselines/local/";
@@ -594,7 +616,7 @@ function restoreSavedNodeEnv() {
     process.env.NODE_ENV = savedNodeEnv;
 }
 
-function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: (e?: any) => void) {
+function runConsoleTests(defaultReporter: string, runInParallel: boolean, run: string, done: (e?: any) => void) {
     const lintFlag = cmdLineOptions["lint"];
     cleanTestDirs((err) => {
         if (err) { console.error(err); failWithStatus(err, 1); }
@@ -603,6 +625,9 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
         const light = cmdLineOptions["light"];
+        const bail = cmdLineOptions["bail"];
+        const failed = cmdLineOptions["failed"];
+        const keepFailed = cmdLineOptions["keepFailed"];
         const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
@@ -637,15 +662,22 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            args.push("-R", reporter);
+            args.push("-R", "scripts/mocha-file-reporter");
+            args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
             if (tests) {
                 args.push("-g", `"${tests}"`);
+            }
+            else if (failed) {
+                args.push("--opts", ".failed-tests");
             }
             if (colors) {
                 args.push("--colors");
             }
             else {
                 args.push("--no-colors");
+            }
+            if (bail) {
+                args.push("--bail");
             }
             if (inspect) {
                 args.unshift("--inspect-brk");
@@ -675,7 +707,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors ", keepFailed }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {
@@ -720,13 +752,20 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
 }
 
 gulp.task("runtests-parallel", "Runs all the tests in parallel using the built run.js file. Optional arguments are: --t[ests]=category1|category2|... --d[ebug]=true.", ["build-rules", "tests"], (done) => {
-    runConsoleTests("min", /*runInParallel*/ true, done);
+    runConsoleTests("min", /*runInParallel*/ true, run, done);
 });
 gulp.task("runtests",
     "Runs the tests using the built run.js file. Optional arguments are: --t[ests]=regex --r[eporter]=[list|spec|json|<more>] --d[ebug]=true --color[s]=false --lint=true.",
     ["build-rules", "tests"],
     (done) => {
-        runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, done);
+        runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, run, done);
+    });
+
+gulp.task("runtests2",
+    "Runs the tests using the built run.js file. Optional arguments are: --t[ests]=regex --r[eporter]=[list|spec|json|<more>] --d[ebug]=true --color[s]=false --lint=true.",
+    ["harness"],
+    (done) => {
+        runConsoleTests("mocha-fivemat-progress-reporter", /*runInParallel*/ false, run2, done);
     });
 
 const nodeServerOutFile = "tests/webTestServer.js";

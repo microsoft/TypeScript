@@ -1,0 +1,43 @@
+﻿{
+    "extends": "../tsconfig-base",
+    "compilerOptions": {
+        "removeComments": false,
+        "outDir": "../../built/harness/",
+        "module": "commonjs",
+        "declaration": false,
+        "types": [
+            "node", 
+            "mocha", 
+            "chai"
+        ],
+        "lib": [
+            "es6",
+            "scripthost"
+        ],
+        "strict": true
+    },
+    "files": [
+        "utils.ts",
+        "collections.ts",
+        "vpath.ts",
+        "vfs.ts",
+        "io.ts",
+        "options.ts",
+        "documents.ts",
+        "testCaseParser.ts",
+        "textWriter.ts",
+        "sourceMaps.ts",
+        "baselines.ts",
+        "compiler.ts",
+        "formatters/index.ts",
+        "formatters/diagnostics.ts",
+        "formatters/javaScript.ts",
+        "formatters/moduleResolution.ts",
+        "formatters/sourceMaps.ts",
+        "formatters/types.ts",
+        "formatters/symbols.ts",
+        "runner.ts",
+        "runners/compiler.ts",
+        "run.ts"
+    ]
+}

@@ -18,6 +18,14 @@
             "problemMatcher": [
                 "$tsc"
             ]
+        },
+        {
+            "taskName": "harness",
+            "isBuildCommand": true,
+            "showOutput": "silent",
+            "problemMatcher": [
+                "$tsc"
+            ]
         }
     ]
 }

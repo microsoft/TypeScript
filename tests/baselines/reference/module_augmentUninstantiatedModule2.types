@@ -1,6 +1,56 @@
-=== tests/cases/compiler/module_augmentUninstantiatedModule2.ts ===
-declare var ng: ng.IAngularStatic;declare module ng {   export interface IModule {      name: string;   }   export interface IAngularStatic {       module: (s: string) => IModule;   }}export = ng;
+=== tests/cases/compiler/app.ts ===
+import ng = require("angular");
 >ng : ng.IAngularStatic
+
+import "./moduleAugmentation";
+
+var x: number = ng.getNumber();
+>x : number
+>ng.getNumber() : number
+>ng.getNumber : () => number
+>ng : ng.IAngularStatic
+>getNumber : () => number
+
+=== tests/cases/compiler/moduleAugmentation.ts ===
+import * as ng from "angular"
+>ng : ng.IAngularStatic
+
+declare module "angular" {
+    export interface IAngularStatic {
+>IAngularStatic : IAngularStatic
+
+        getNumber: () => number;
+>getNumber : () => number
+    }
+}
+
+=== tests/cases/compiler/node_modules/angular/index.d.ts ===
+declare var ng: ng.IAngularStatic;
+>ng : IAngularStatic
 >ng : any
->IAngularStatic : ng.IAngularStatic
+>IAngularStatic : IAngularStatic
+
+declare module ng {
+>ng : IAngularStatic
+
+   export interface IModule {
+>IModule : IModule
+
+      name: string;
+>name : string
+   }
+
+   export interface IAngularStatic {
+>IAngularStatic : IAngularStatic
+
+       module: (s: string) => IModule;
+>module : (s: string) => IModule
+>s : string
+>IModule : IModule
+   }
+}
+
+export = ng;
+>ng : IAngularStatic
+
 

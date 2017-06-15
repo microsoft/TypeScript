@@ -1346,3 +1346,57 @@ namespace ts {
         return getTokenAtPosition(sourceFile, declaration.members.pos - 1, /*includeJsDocComment*/ false);
     }
 }
+
+// Helpers for tests
+/* @internal */
+namespace ts {
+    export interface TypesAndSymbols {
+        line: number;
+        text: string;
+        type: string | undefined;
+        symbol: string | undefined;
+        declarations: { fileName: string, line: number, character: number }[] | undefined;
+    }
+
+    /**
+     * Helper used by the test harness to collect types and symbols in a file.
+     */
+    export function getTypesAndSymbols(program: Program, fileName: string, checked: boolean, exclude: "types" | "symbols" | undefined): TypesAndSymbols[] {
+        const checker = checked ? program.getDiagnosticsProducingTypeChecker() : program.getTypeChecker();
+        const sourceFile = program.getSourceFile(fileName);
+        const results: TypesAndSymbols[] = [];
+        visitNode(sourceFile);
+        return results;
+
+        function visitNode(node: Node) {
+            if (node) {
+                if (isPartOfExpression(node) || isIdentifier(node)) {
+                    writeTypeAndSymbol(node);
+                }
+                forEachChild(node, visitNode);
+            }
+        }
+
+        function writeTypeAndSymbol(node: Node) {
+            const start = node.getStart();
+            const { line } = sourceFile.getLineAndCharacterOfPosition(start);
+
+            // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
+            const type = exclude !== "types" && node.parent && isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) && checker.getTypeAtLocation(node.parent) || checker.getTypeAtLocation(node);
+            const symbol = exclude !== "symbols" && checker.getSymbolAtLocation(node);
+            const declarations = symbol && symbol.declarations && symbol.declarations.map(declaration => {
+                const file = declaration.getSourceFile();
+                const { line, character } = file.getLineAndCharacterOfPosition(declaration.pos);
+                return { fileName: file.fileName, line, character };
+            });
+
+            results.push({
+                line,
+                text: node.getText(),
+                type: type && checker.typeToString(type, node.parent, TypeFormatFlags.NoTruncation),
+                symbol: symbol && checker.symbolToString(symbol, node.parent),
+                declarations: declarations
+            });
+        }
+    }
+}

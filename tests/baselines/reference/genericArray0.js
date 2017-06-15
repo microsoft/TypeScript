@@ -1,5 +1,4 @@
 //// [genericArray0.ts]
-
 var x:number[];
 
 
