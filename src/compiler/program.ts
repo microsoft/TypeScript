@@ -804,7 +804,7 @@ namespace ts {
                     }
                     if ((oldSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport) !== (newSourceFile.flags & NodeFlags.PossiblyContainsDynamicImport)) {
                         // dynamicImport has changed
-                        oldProgram.structureIsReused = StructureIsReused.Not;
+                        oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
 
                     if (!arrayIsEqualTo(oldSourceFile.typeReferenceDirectives, newSourceFile.typeReferenceDirectives, fileReferenceIsEqualTo)) {
