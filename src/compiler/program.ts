@@ -874,12 +874,12 @@ namespace ts {
             return oldProgram.structureIsReused = StructureIsReused.Completely;
         }
 
-        function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
+        function getEmitHost(writeFileCallback?: WriteFileCallback, getCurrentDirectoryCallback?: GetCurrentDirectoryCallback): EmitHost {
             return {
                 getCanonicalFileName,
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
-                getCurrentDirectory: () => currentDirectory,
+                getCurrentDirectory: getCurrentDirectoryCallback || (() => currentDirectory),
                 getNewLine: () => host.getNewLine(),
                 getSourceFile: program.getSourceFile,
                 getSourceFileByPath: program.getSourceFileByPath,
@@ -907,15 +907,15 @@ namespace ts {
             return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
-        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
-            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers));
+        function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers, getCurrentDirectoryCallback?: GetCurrentDirectoryCallback): EmitResult {
+            return runWithCancellationToken(() => emitWorker(program, sourceFile, writeFileCallback, cancellationToken, emitOnlyDtsFiles, transformers, getCurrentDirectoryCallback));
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
             return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
-        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
+        function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers, getCurrentDirectoryCallback?: GetCurrentDirectoryCallback): EmitResult {
             let declarationDiagnostics: Diagnostic[] = [];
 
             if (options.noEmit) {
@@ -960,7 +960,7 @@ namespace ts {
             const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
-                getEmitHost(writeFileCallback),
+                getEmitHost(writeFileCallback, getCurrentDirectoryCallback),
                 sourceFile,
                 emitOnlyDtsFiles,
                 transformers);

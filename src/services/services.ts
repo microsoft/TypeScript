@@ -1528,7 +1528,7 @@ namespace ts {
             return ts.NavigateTo.getNavigateToItems(sourceFiles, program.getTypeChecker(), cancellationToken, searchValue, maxResultCount, excludeDtsFiles);
         }
 
-        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput {
+        function getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean, getCurrentDirectoryCallback?: GetCurrentDirectoryCallback): EmitOutput {
             synchronizeHostData();
 
             const sourceFile = getValidSourceFile(fileName);
@@ -1543,7 +1543,7 @@ namespace ts {
             }
 
             const customTransformers = host.getCustomTransformers && host.getCustomTransformers();
-            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+            const emitOutput = program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers, getCurrentDirectoryCallback);
 
             return {
                 outputFiles,

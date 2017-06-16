@@ -148,9 +148,9 @@ namespace ts.server {
 
             const { emitSkipped, outputFiles } = this.project.getFileEmitOutput(fileInfo.scriptInfo, /*emitOnlyDtsFiles*/ false);
             if (!emitSkipped) {
-                const projectRootPath = this.project.getProjectRootPath();
+                const currentDirectoryForEmit = this.project.getCurrentDirectoryForScriptInfoEmit(scriptInfo);
                 for (const outputFile of outputFiles) {
-                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, projectRootPath ? projectRootPath : getDirectoryPath(scriptInfo.fileName));
+                    const outputFileAbsoluteFileName = getNormalizedAbsolutePath(outputFile.name, currentDirectoryForEmit);
                     writeFile(outputFileAbsoluteFileName, outputFile.text, outputFile.writeByteOrderMark);
                 }
             }

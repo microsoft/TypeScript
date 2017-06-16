@@ -600,5 +600,48 @@ namespace ts.projectSystem {
             assert.isTrue(outFileContent.indexOf(file2.content) === -1);
             assert.isTrue(outFileContent.indexOf(file3.content) === -1);
         });
+
+        it("should use project root as current directory so that compile on save results in correct file mapping", () => {
+            const inputFileName = "Foo.ts";
+            const file1 = {
+                path: `/root/TypeScriptProject3/TypeScriptProject3/${inputFileName}`,
+                content: "consonle.log('file1');"
+            };
+            const externalProjectName = "/root/TypeScriptProject3/TypeScriptProject3/TypeScriptProject3.csproj";
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+
+            const outFileName = "bar.js";
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path]),
+                options: {
+                    outFile: outFileName,
+                    sourceMap: true,
+                    compileOnSave: true
+                },
+                projectFileName: externalProjectName
+            });
+
+            const emitRequest = makeSessionRequest<server.protocol.CompileOnSaveEmitFileRequestArgs>(CommandNames.CompileOnSaveEmitFile, { file: file1.path });
+            session.executeCommand(emitRequest);
+
+            // Verify js file
+            const expectedOutFileName = "/root/TypeScriptProject3/TypeScriptProject3/" + outFileName;
+            assert.isTrue(host.fileExists(expectedOutFileName));
+            const outFileContent = host.readFile(expectedOutFileName);
+            verifyContentHasString(outFileContent, file1.content);
+            verifyContentHasString(outFileContent, `//# sourceMappingURL=${outFileName}.map`);
+
+            // Verify map file
+            const expectedMapFileName = expectedOutFileName + ".map";
+            assert.isTrue(host.fileExists(expectedMapFileName));
+            const mapFileContent = host.readFile(expectedMapFileName);
+            verifyContentHasString(mapFileContent, `"sources":["${inputFileName}"]`);
+
+            function verifyContentHasString(content: string, string: string) {
+                assert.isTrue(content.indexOf(string) !== -1, `Expected "${content}" to have "${string}"`);
+            }
+        });
     });
 }
