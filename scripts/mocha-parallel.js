@@ -91,7 +91,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
         var rlError = readline.createInterface({
             input: p.stderr,
             terminal: false
-        })
+        });
 
         rl.on("line", onmessage);
         rlError.on("line", onErrorMessage);
