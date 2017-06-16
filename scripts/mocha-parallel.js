@@ -220,9 +220,18 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 stats.tests += partition.tests;
                 duration += partition.duration;
                 if (partition.catastrophicError !== "") {
-                    //{"light":false,
-                    // "tasks":[{"runner":"compiler","files":["tests/cases/compiler/es6ImportNamedImportParsingError.ts"]}],
-                    // "runUnitTests":false}
+                    // Partition is written out to a temporary file as a JSON object.
+                    // Below is an example of how the partition JSON object looks like
+                    // {
+                    //      "light":false,
+                    //      "tasks":[
+                    //          { 
+                    //              "runner":"compiler",
+                    //              "files":["tests/cases/compiler/es6ImportNamedImportParsingError.ts"]
+                    //          }
+                    //      ],
+                    //      "runUnitTests":false
+                    // }
                     var jsonText = fs.readFileSync(partition.file);
                     var configObj = JSON.parse(jsonText);
                     if (configObj.tasks && configObj.tasks[0]) {
