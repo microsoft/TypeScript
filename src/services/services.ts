@@ -37,7 +37,7 @@ namespace ts {
     let ruleProvider: formatting.RulesProvider;
 
     function createNode<TKind extends SyntaxKind>(kind: TKind, pos: number, end: number, parent?: Node): NodeObject | TokenObject<TKind> | IdentifierObject {
-        const node = kind >= SyntaxKind.FirstNode ? new NodeObject(kind, pos, end) :
+        const node = isNodeKind(kind) ? new NodeObject(kind, pos, end) :
             kind === SyntaxKind.Identifier ? new IdentifierObject(SyntaxKind.Identifier, pos, end) :
                 new TokenObject(kind, pos, end);
         node.parent = parent;
@@ -103,10 +103,10 @@ namespace ts {
             return sourceFile.text.substring(this.getStart(sourceFile), this.getEnd());
         }
 
-        private addSyntheticNodes(nodes: Node[], pos: number, end: number, useJSDocScanner?: boolean): number {
+        private addSyntheticNodes(nodes: Node[], pos: number, end: number): number {
             scanner.setTextPos(pos);
             while (pos < end) {
-                const token = useJSDocScanner ? scanner.scanJSDocToken() : scanner.scan();
+                const token = scanner.scan();
                 Debug.assert(token !== SyntaxKind.EndOfFileToken); // Else it would infinitely loop
                 const textPos = scanner.getTextPos();
                 if (textPos <= end) {
@@ -136,54 +136,50 @@ namespace ts {
         }
 
         private createChildren(sourceFile?: SourceFileLike) {
-            if (isJSDocTag(this)) {
+            if (!isNodeKind(this.kind)) {
+                this._children = emptyArray;
+                return;
+            }
+
+            if (isJSDocCommentContainingNode(this)) {
                 /** Don't add trivia for "tokens" since this is in a comment. */
                 const children: Node[] = [];
                 this.forEachChild(child => { children.push(child); });
                 this._children = children;
+                return;
             }
-            else if (this.kind >= SyntaxKind.FirstNode) {
-                const children: Node[] = [];
-                scanner.setText((sourceFile || this.getSourceFile()).text);
-                let pos = this.pos;
-                const useJSDocScanner = this.kind >= SyntaxKind.FirstJSDocTagNode && this.kind <= SyntaxKind.LastJSDocTagNode;
-                const processNode = (node: Node) => {
-                    const isJSDocTagNode = isJSDocTag(node);
-                    if (!isJSDocTagNode && pos < node.pos) {
-                        pos = this.addSyntheticNodes(children, pos, node.pos, useJSDocScanner);
-                    }
-                    children.push(node);
-                    if (!isJSDocTagNode) {
-                        pos = node.end;
-                    }
-                };
-                const processNodes = (nodes: NodeArray<Node>) => {
-                    if (pos < nodes.pos) {
-                        pos = this.addSyntheticNodes(children, pos, nodes.pos, useJSDocScanner);
-                    }
-                    children.push(this.createSyntaxList(nodes));
-                    pos = nodes.end;
-                };
-                // jsDocComments need to be the first children
-                if (this.jsDoc) {
-                    for (const jsDocComment of this.jsDoc) {
-                        processNode(jsDocComment);
-                    }
+
+            const children: Node[] = [];
+            scanner.setText((sourceFile || this.getSourceFile()).text);
+            let pos = this.pos;
+            const processNode = (node: Node) => {
+                pos = this.addSyntheticNodes(children, pos, node.pos);
+                children.push(node);
+                pos = node.end;
+            };
+            const processNodes = (nodes: NodeArray<Node>) => {
+                if (pos < nodes.pos) {
+                    pos = this.addSyntheticNodes(children, pos, nodes.pos);
                 }
-                // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
-                // For that to work, the jsdoc comments should still be the leading trivia of the first child.
-                // Restoring the scanner position ensures that.
-                pos = this.pos;
-                forEachChild(this, processNode, processNodes);
-                if (pos < this.end) {
-                    this.addSyntheticNodes(children, pos, this.end);
+                children.push(this.createSyntaxList(nodes));
+                pos = nodes.end;
+            };
+            // jsDocComments need to be the first children
+            if (this.jsDoc) {
+                for (const jsDocComment of this.jsDoc) {
+                    processNode(jsDocComment);
                 }
-                scanner.setText(undefined);
-                this._children = children;
             }
-            else {
-                this._children = emptyArray;
+            // For syntactic classifications, all trivia are classcified together, including jsdoc comments.
+            // For that to work, the jsdoc comments should still be the leading trivia of the first child.
+            // Restoring the scanner position ensures that.
+            pos = this.pos;
+            forEachChild(this, processNode, processNodes);
+            if (pos < this.end) {
+                this.addSyntheticNodes(children, pos, this.end);
             }
+            scanner.setText(undefined);
+            this._children = children;
         }
 
         public getChildCount(sourceFile?: SourceFile): number {
@@ -684,8 +680,9 @@ namespace ts {
                             forEachChild(decl.name, visit);
                             break;
                         }
-                        if (decl.initializer)
+                        if (decl.initializer) {
                             visit(decl.initializer);
+                        }
                     }
                         // falls through
                     case SyntaxKind.EnumMember:
@@ -732,6 +729,15 @@ namespace ts {
         }
     }
 
+    class SourceMapSourceObject implements SourceMapSource {
+        lineMap: number[];
+        constructor (public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) {}
+
+        public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
+            return ts.getLineAndCharacterOfPosition(this, pos);
+        }
+    }
+
     function getServicesObjectAllocator(): ObjectAllocator {
         return {
             getNodeConstructor: () => NodeObject,
@@ -742,6 +748,7 @@ namespace ts {
             getSymbolConstructor: () => SymbolObject,
             getTypeConstructor: () => TypeObject,
             getSignatureConstructor: () => SignatureObject,
+            getSourceMapSourceConstructor: () => SourceMapSourceObject,
         };
     }
 
@@ -815,7 +822,7 @@ namespace ts {
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
-        constructor(private host: LanguageServiceHost, private getCanonicalFileName: (fileName: string) => string) {
+        constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
             this.fileNameToEntry = createFileMap<HostFileInformation>();
@@ -850,22 +857,17 @@ namespace ts {
             return entry;
         }
 
-        private getEntry(path: Path): HostFileInformation {
+        public getEntryByPath(path: Path): HostFileInformation {
             return this.fileNameToEntry.get(path);
         }
 
-        private contains(path: Path): boolean {
+        public containsEntryByPath(path: Path): boolean {
             return this.fileNameToEntry.contains(path);
         }
 
-        public getOrCreateEntry(fileName: string): HostFileInformation {
-            const path = toPath(fileName, this.currentDirectory, this.getCanonicalFileName);
-            return this.getOrCreateEntryByPath(fileName, path);
-        }
-
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.contains(path)
-                ? this.getEntry(path)
+            return this.containsEntryByPath(path)
+                ? this.getEntryByPath(path)
                 : this.createEntry(fileName, path);
         }
 
@@ -882,12 +884,12 @@ namespace ts {
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntry(path);
+            const file = this.getEntryByPath(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1152,12 +1154,19 @@ namespace ts {
                 getCurrentDirectory: () => currentDirectory,
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
-                    return hostCache.getOrCreateEntry(fileName) !== undefined;
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    return hostCache.containsEntryByPath(path) ?
+                        !!hostCache.getEntryByPath(path) :
+                        (host.fileExists && host.fileExists(fileName));
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
-                    const entry = hostCache.getOrCreateEntry(fileName);
-                    return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                    if (hostCache.containsEntryByPath(path)) {
+                        const entry = hostCache.getEntryByPath(path);
+                        return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    }
+                    return host.readFile && host.readFile(fileName);
                 },
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
@@ -1290,8 +1299,20 @@ namespace ts {
                     }
                 }
 
+                const currentOptions = program.getCompilerOptions();
+                const newOptions = hostCache.compilationSettings();
                 // If the compilation settings do no match, then the program is not up-to-date
-                return compareDataObjects(program.getCompilerOptions(), hostCache.compilationSettings());
+                if (!compareDataObjects(currentOptions, newOptions)) {
+                    return false;
+                }
+
+                // If everything matches but the text of config file is changed,
+                // error locations can change for program options, so update the program
+                if (currentOptions.configFile && newOptions.configFile) {
+                    return currentOptions.configFile.text === newOptions.configFile.text;
+                }
+
+                return true;
             }
         }
 
@@ -1309,7 +1330,9 @@ namespace ts {
             if (program) {
                 forEach(program.getSourceFiles(), f =>
                     documentRegistry.releaseDocument(f.fileName, program.getCompilerOptions()));
+                program = undefined;
             }
+            host = undefined;
         }
 
         /// Diagnostics
@@ -1815,6 +1838,13 @@ namespace ts {
                 return false;
             }
 
+            switch (openingBrace) {
+                case CharacterCodes.singleQuote:
+                case CharacterCodes.doubleQuote:
+                case CharacterCodes.backtick:
+                    return !isInComment(sourceFile, position);
+            }
+
             return true;
         }
 
@@ -1989,15 +2019,16 @@ namespace ts {
             return refactor.getApplicableRefactors(getRefactorContext(file, positionOrRange));
         }
 
-        function getRefactorCodeActions(
+        function getEditsForRefactor(
             fileName: string,
             formatOptions: FormatCodeSettings,
             positionOrRange: number | TextRange,
-            refactorName: string): CodeAction[] | undefined {
+            refactorName: string,
+            actionName: string): RefactorEditInfo {
 
             synchronizeHostData();
             const file = getValidSourceFile(fileName);
-            return refactor.getRefactorCodeActions(getRefactorContext(file, positionOrRange, formatOptions), refactorName);
+            return refactor.getEditsForRefactor(getRefactorContext(file, positionOrRange, formatOptions), refactorName, actionName);
         }
 
         return {
@@ -2005,8 +2036,6 @@ namespace ts {
             cleanupSemanticCache,
             getSyntacticDiagnostics,
             getSemanticDiagnostics,
-            getApplicableRefactors,
-            getRefactorCodeActions,
             getCompilerOptionsDiagnostics,
             getSyntacticClassifications,
             getSemanticClassifications,
@@ -2044,7 +2073,9 @@ namespace ts {
             getEmitOutput,
             getNonBoundSourceFile,
             getSourceFile,
-            getProgram
+            getProgram,
+            getApplicableRefactors,
+            getEditsForRefactor,
         };
     }
 

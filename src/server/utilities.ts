@@ -49,7 +49,7 @@ namespace ts.server {
     export function createInstallTypingsRequest(project: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, cachePath?: string): DiscoverTypings {
         return {
             projectName: project.getProjectName(),
-            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true),
+            fileNames: project.getFileNames(/*excludeFilesFromExternalLibraries*/ true, /*excludeConfigFiles*/ true),
             compilerOptions: project.getCompilerOptions(),
             typeAcquisition,
             unresolvedImports,
@@ -193,6 +193,37 @@ namespace ts.server {
     export function toSortedReadonlyArray(arr: string[]): SortedReadonlyArray<string> {
         arr.sort();
         return <any>arr;
+    }
+
+    export function enumerateInsertsAndDeletes<T>(a: SortedReadonlyArray<T>, b: SortedReadonlyArray<T>, inserted: (item: T) => void, deleted: (item: T) => void, compare?: (a: T, b: T) => Comparison) {
+        compare = compare || ts.compareValues;
+        let aIndex = 0;
+        let bIndex = 0;
+        const aLen = a.length;
+        const bLen = b.length;
+        while (aIndex < aLen && bIndex < bLen) {
+            const aItem = a[aIndex];
+            const bItem = b[bIndex];
+            const compareResult = compare(aItem, bItem);
+            if (compareResult === Comparison.LessThan) {
+                inserted(aItem);
+                aIndex++;
+            }
+            else if (compareResult === Comparison.GreaterThan) {
+                deleted(bItem);
+                bIndex++;
+            }
+            else {
+                aIndex++;
+                bIndex++;
+            }
+        }
+        while (aIndex < aLen) {
+            inserted(a[aIndex++]);
+        }
+        while (bIndex < bLen) {
+            deleted(b[bIndex++]);
+        }
     }
 
     export class ThrottledOperations {

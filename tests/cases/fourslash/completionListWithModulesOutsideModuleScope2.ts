@@ -274,7 +274,7 @@ function goToMarkerAndVerify(marker: string)
     verify.completionListContains('shwvar', 'var shwvar: number');
     verify.completionListContains('shwfn', 'function shwfn(): void');
     verify.completionListContains('shwcls', 'class shwcls');
-    verify.completionListContains('shwint', 'interface shwint');
+    verify.not.completionListContains('shwint', 'interface shwint');
 
     verify.not.completionListContains('mod2var');
     verify.not.completionListContains('mod2fn');

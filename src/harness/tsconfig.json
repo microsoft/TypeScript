@@ -24,6 +24,7 @@
         "../compiler/checker.ts",
         "../compiler/factory.ts",
         "../compiler/visitor.ts",
+        "../compiler/transformers/utilities.ts",
         "../compiler/transformers/ts.ts",
         "../compiler/transformers/jsx.ts",
         "../compiler/transformers/esnext.ts",
@@ -80,7 +81,7 @@
         "../services/codefixes/fixConstructorForDerivedNeedSuperCall.ts",
         "../services/codefixes/helpers.ts",
         "../services/codefixes/importFixes.ts",
-        "../services/codefixes/unusedIdentifierFixes.ts",
+        "../services/codefixes/fixUnusedIdentifier.ts",
         "../services/codefixes/disableJsDiagnostics.ts",
 
         "harness.ts",

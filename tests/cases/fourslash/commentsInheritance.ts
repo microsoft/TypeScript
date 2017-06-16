@@ -346,7 +346,7 @@ verify.quickInfos({
 });
 
 goTo.marker('16');
-verify.completionListContains("i1", "interface i1", "i1 is interface with properties");
+verify.not.completionListContains("i1", "interface i1", "i1 is interface with properties");
 verify.completionListContains("i1_i", "var i1_i: i1", "");
 verify.completionListContains("c1", "class c1", "");
 verify.completionListContains("c1_i", "var c1_i: c1", "");
@@ -603,9 +603,9 @@ verify.quickInfos({
 });
 
 goTo.marker('51');
-verify.completionListContains("i2", "interface i2", "");
+verify.not.completionListContains("i2", "interface i2", "");
 verify.completionListContains("i2_i", "var i2_i: i2", "");
-verify.completionListContains("i3", "interface i3", "");
+verify.not.completionListContains("i3", "interface i3", "");
 verify.completionListContains("i3_i", "var i3_i: i3", "");
 
 goTo.marker('51i');

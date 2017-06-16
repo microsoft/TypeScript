@@ -146,7 +146,7 @@ namespace ts.BreakpointResolver {
 
                     case SyntaxKind.ForOfStatement:
                         // span in initializer
-                        return spanInInitializerOfForLike(<ForOfStatement | ForInStatement>node);
+                        return spanInInitializerOfForLike(<ForOfStatement>node);
 
                     case SyntaxKind.SwitchStatement:
                         // span on switch(...)

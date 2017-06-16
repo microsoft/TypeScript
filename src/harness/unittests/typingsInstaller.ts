@@ -80,7 +80,7 @@ namespace ts.projectSystem {
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(f1.path);
             service.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path]);
+            checkProjectActualFiles(service.configuredProjects[0], [f1.path, f2.path, config.path]);
             installer.installAll(0);
         });
     });
@@ -133,12 +133,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [file1.path]);
+            checkProjectActualFiles(p, [file1.path, tsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [file1.path, jquery.path]);
+            checkProjectActualFiles(p, [file1.path, jquery.path, tsconfig.path]);
         });
 
         it("inferred project (typings installed)", () => {
@@ -684,12 +684,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower_components", () => {
@@ -730,13 +730,13 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
             checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("configured projects discover from bower.json", () => {
@@ -777,12 +777,12 @@ namespace ts.projectSystem {
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
-            checkProjectActualFiles(p, [app.path]);
+            checkProjectActualFiles(p, [app.path, jsconfig.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(p, [app.path, jqueryDTS.path]);
+            checkProjectActualFiles(p, [app.path, jqueryDTS.path, jsconfig.path]);
         });
 
         it("Malformed package.json should be watched", () => {
@@ -1009,6 +1009,26 @@ namespace ts.projectSystem {
     });
 
     describe("discover typings", () => {
+        it("should use mappings from safe list", () => {
+            const app = {
+                path: "/a/b/app.js",
+                content: ""
+            };
+            const jquery = {
+                path: "/a/b/jquery.js",
+                content: ""
+            };
+            const chroma = {
+                path: "/a/b/chroma.min.js",
+                content: ""
+            };
+            const cache = createMap<string>();
+
+            const host = createServerHost([app, jquery, chroma]);
+            const result = JsTyping.discoverTypings(host, [app.path, jquery.path, chroma.path], getDirectoryPath(<Path>app.path), /*safeListPath*/ undefined, cache, { enable: true }, []);
+            assert.deepEqual(result.newTypingNames, ["jquery", "chroma-js"]);
+        });
+
         it("should return node for core modules", () => {
             const f = {
                 path: "/a/b/app.js",
@@ -1016,6 +1036,7 @@ namespace ts.projectSystem {
             };
             const host = createServerHost([f]);
             const cache = createMap<string>();
+
             for (const name of JsTyping.nodeCoreModuleList) {
                 const result = JsTyping.discoverTypings(host, [f.path], getDirectoryPath(<Path>f.path), /*safeListPath*/ undefined, cache, { enable: true }, [name, "somename"]);
                 assert.deepEqual(result.newTypingNames.sort(), ["node", "somename"]);
@@ -1040,7 +1061,7 @@ namespace ts.projectSystem {
     });
 
     describe("telemetry events", () => {
-        it ("should be received", () => {
+        it("should be received", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""
@@ -1089,7 +1110,7 @@ namespace ts.projectSystem {
     });
 
     describe("progress notifications", () => {
-        it ("should be sent for success", () => {
+        it("should be sent for success", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""
@@ -1140,7 +1161,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.inferredProjects[0], [f1.path, commander.path]);
         });
 
-        it ("should be sent for error", () => {
+        it("should be sent for error", () => {
             const f1 = {
                 path: "/a/app.js",
                 content: ""

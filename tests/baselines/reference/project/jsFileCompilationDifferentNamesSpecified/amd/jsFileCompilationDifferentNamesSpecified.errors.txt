@@ -2,5 +2,10 @@ error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The
 
 
 !!! error TS6054: File 'DifferentNamesSpecified/b.js' has unsupported extension. The only supported extensions are '.ts', '.tsx', '.d.ts'.
+==== DifferentNamesSpecified/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { "out": "test.js" },
+      "files": [ "a.ts", "b.js" ]
+    }
 ==== DifferentNamesSpecified/a.ts (0 errors) ====
     var test = 10;

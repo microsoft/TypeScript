@@ -595,7 +595,19 @@ namespace ts {
             // Binding of JsDocComment should be done before the current block scope container changes.
             // because the scope of JsDocComment should not be affected by whether the current node is a
             // container or not.
-            forEach(node.jsDoc, bind);
+            if (node.jsDoc) {
+                if (isInJavaScriptFile(node)) {
+                    for (const j of node.jsDoc) {
+                        bind(j);
+                    }
+                }
+                else {
+                    for (const j of node.jsDoc) {
+                        setParentPointers(node, j);
+                    }
+                }
+            }
+
             if (checkUnreachable(node)) {
                 bindEachChild(node);
                 return;
@@ -612,7 +624,7 @@ namespace ts {
                     break;
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
-                    bindForInOrForOfStatement(<ForInStatement | ForOfStatement>node);
+                    bindForInOrForOfStatement(<ForInOrOfStatement>node);
                     break;
                 case SyntaxKind.IfStatement:
                     bindIfStatement(<IfStatement>node);
@@ -950,7 +962,7 @@ namespace ts {
             currentFlow = finishFlowLabel(postLoopLabel);
         }
 
-        function bindForInOrForOfStatement(node: ForInStatement | ForOfStatement): void {
+        function bindForInOrForOfStatement(node: ForInOrOfStatement): void {
             const preLoopLabel = createLoopLabel();
             const postLoopLabel = createBranchLabel();
             addAntecedent(preLoopLabel, currentFlow);
@@ -1328,7 +1340,7 @@ namespace ts {
 
         function bindVariableDeclarationFlow(node: VariableDeclaration) {
             bindEachChild(node);
-            if (node.initializer || node.parent.parent.kind === SyntaxKind.ForInStatement || node.parent.parent.kind === SyntaxKind.ForOfStatement) {
+            if (node.initializer || isForInOrOfStatement(node.parent.parent)) {
                 bindInitializedVariableFlow(node);
             }
         }
@@ -1521,7 +1533,7 @@ namespace ts {
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
                     // they're only accessed 'lexically' (i.e. from code that exists underneath
-                    // their container in the tree.  To accomplish this, we simply add their declared
+                    // their container in the tree). To accomplish this, we simply add their declared
                     // symbol to the 'locals' of the container.  These symbols can then be found as
                     // the type checker walks up the containers, checking them for matching names.
                     return declareSymbol(container.locals, /*parent*/ undefined, node, symbolFlags, symbolExcludes);
@@ -1903,7 +1915,7 @@ namespace ts {
             // Here the current node is "foo", which is a container, but the scope of "MyType" should
             // not be inside "foo". Therefore we always bind @typedef before bind the parent node,
             // and skip binding this tag later when binding all the other jsdoc tags.
-            bindJSDocTypedefTagIfAny(node);
+            if (isInJavaScriptFile(node)) bindJSDocTypedefTagIfAny(node);
 
             // First we bind declaration nodes to a symbol if possible. We'll both create a symbol
             // and then potentially add the symbol to an appropriate symbol table. Possible
@@ -1991,7 +2003,7 @@ namespace ts {
                     // for typedef type names with namespaces, bind the new jsdoc type symbol here
                     // because it requires all containing namespaces to be in effect, namely the
                     // current "blockScopeContainer" needs to be set to its immediate namespace parent.
-                    if (isInJavaScriptFile(node) && (<Identifier>node).isInJSDocNamespace) {
+                    if ((<Identifier>node).isInJSDocNamespace) {
                         let parentNode = node.parent;
                         while (parentNode && parentNode.kind !== SyntaxKind.JSDocTypedefTag) {
                             parentNode = parentNode.parent;
@@ -2136,7 +2148,6 @@ namespace ts {
                     return bindEnumDeclaration(<EnumDeclaration>node);
                 case SyntaxKind.ModuleDeclaration:
                     return bindModuleDeclaration(<ModuleDeclaration>node);
-
                 // Jsx-attributes
                 case SyntaxKind.JsxAttributes:
                     return bindJsxAttributes(<JsxAttributes>node);
@@ -2168,13 +2179,6 @@ namespace ts {
                 case SyntaxKind.ModuleBlock:
                     return updateStrictModeStatementList((<Block | ModuleBlock>node).statements);
 
-                default:
-                    if (isInJavaScriptFile(node)) return bindJSDocWorker(node);
-            }
-        }
-
-        function bindJSDocWorker(node: Node) {
-            switch (node.kind) {
                 case SyntaxKind.JSDocRecordMember:
                     return bindPropertyWorker(node as JSDocRecordMember);
                 case SyntaxKind.JSDocPropertyTag:
@@ -3599,5 +3603,14 @@ namespace ts {
             default:
                 return TransformFlags.NodeExcludes;
         }
+    }
+
+    /**
+     * "Binds" JSDoc nodes in TypeScript code.
+     * Since we will never create symbols for JSDoc, we just set parent pointers instead.
+     */
+    function setParentPointers(parent: Node, child: Node): void {
+        child.parent = parent;
+        forEachChild(child, (childsChild) => setParentPointers(child, childsChild));
     }
 }

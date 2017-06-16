@@ -1,4 +1,4 @@
-﻿{
+{
     "Unterminated string literal.": {
         "category": "Error",
         "code": 1002
@@ -898,6 +898,14 @@
     "Dynamic import cannot have type arguments": {
         "category": "Error",
         "code": 1326
+    },
+    "String literal with double quotes expected.": {
+        "category": "Error",
+        "code": 1327
+    },
+    "Property value can only be string literal, numeric literal, 'true', 'false', 'null', object literal or array literal.": {
+        "category": "Error",
+        "code": 1328
     },
 
     "Duplicate identifier '{0}'.": {
@@ -3278,6 +3286,10 @@
         "category": "Message",
         "code": 6184
     },
+    "Disable strict checking of generic signatures in function types.": {
+        "category": "Message",
+        "code": 6185
+    },
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -3585,11 +3597,11 @@
         "category": "Message",
         "code": 90015
     },
-    "Add declaration for missing property '{0}'.": {
+    "Declare property '{0}'.": {
         "category": "Message",
         "code": 90016
     },
-    "Add index signature for missing property '{0}'.": {
+    "Add index signature for property '{0}'.": {
         "category": "Message",
         "code": 90017
     },
@@ -3613,7 +3625,19 @@
         "category": "Message",
         "code": 90022
     },
-
+    "Declare method '{0}'.": {
+        "category": "Message",
+        "code": 90023
+    },
+    "Declare static method '{0}'.": {
+        "category": "Message",
+        "code": 90024
+    },
+    "Prefix '{0}' with an underscore.": {
+        "category": "Message",
+        "code": 90025
+    },
+    
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001

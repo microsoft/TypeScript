@@ -259,8 +259,9 @@ namespace Utils {
                         return true;
                     }
                     else if ((f & v) > 0) {
-                        if (result.length)
+                        if (result.length) {
                             result += " | ";
+                        }
                         result += flags[v];
                         return false;
                     }
@@ -1052,7 +1053,7 @@ namespace Harness {
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;
-        function getCommandLineOption(name: string): ts.CommandLineOption {
+        function getCommandLineOption(name: string): ts.CommandLineOption | undefined {
             if (!optionsIndex) {
                 optionsIndex = ts.createMap<ts.CommandLineOption>();
                 const optionDeclarations = harnessOptionDeclarations.concat(ts.optionDeclarations);
@@ -1124,7 +1125,7 @@ namespace Harness {
             compilerOptions: ts.CompilerOptions,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string): CompilationOutput {
-            const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.clone(compilerOptions) : { noResolve: false };
+            const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
             options.newLine = options.newLine || ts.NewLineKind.CarriageReturnLineFeed;
             options.noErrorTruncation = true;
@@ -1248,7 +1249,7 @@ namespace Harness {
                     sourceFileName = outFile;
                 }
 
-                const dTsFileName = ts.removeFileExtension(sourceFileName) + ".d.ts";
+                const dTsFileName = ts.removeFileExtension(sourceFileName) + ts.Extension.Dts;
 
                 return ts.forEach(result.declFilesCode, declFile => declFile.fileName === dTsFileName ? declFile : undefined);
             }
@@ -1464,7 +1465,7 @@ namespace Harness {
                 // When calling this function from rwc-runner, the baselinePath will have no extension.
                 // As rwc test- file is stored in json which ".json" will get stripped off.
                 // When calling this function from compiler-runner, the baselinePath will then has either ".ts" or ".tsx" extension
-                const outputFileName = ts.endsWith(baselinePath, ".ts") || ts.endsWith(baselinePath, ".tsx") ?
+                const outputFileName = ts.endsWith(baselinePath, ts.Extension.Ts) || ts.endsWith(baselinePath, ts.Extension.Tsx) ?
                     baselinePath.replace(/\.tsx?/, fullExtension) : baselinePath.concat(fullExtension);
                 Harness.Baseline.runBaseline(outputFileName, () => fullBaseLine, opts);
             }
@@ -1556,13 +1557,13 @@ namespace Harness {
             }
         }
 
-        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
+        export function doJsEmitBaseline(baselinePath: string, header: string, options: ts.CompilerOptions, result: CompilerResult, tsConfigFiles: Harness.Compiler.TestFile[], toBeCompiled: Harness.Compiler.TestFile[], otherFiles: Harness.Compiler.TestFile[], harnessSettings: Harness.TestCaseParser.CompilerSettings) {
             if (!options.noEmit && result.files.length === 0 && result.errors.length === 0) {
                 throw new Error("Expected at least one js file to be emitted or at least one error to be created.");
             }
 
             // check js output
-            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ".js"), () => {
+            Harness.Baseline.runBaseline(baselinePath.replace(/\.tsx?/, ts.Extension.Js), () => {
                 let tsCode = "";
                 const tsSources = otherFiles.concat(toBeCompiled);
                 if (tsSources.length > 1) {
@@ -1592,7 +1593,7 @@ namespace Harness {
                 if (declFileCompilationResult && declFileCompilationResult.declResult.errors.length) {
                     jsCode += "\r\n\r\n//// [DtsFileErrors]\r\n";
                     jsCode += "\r\n\r\n";
-                    jsCode += Harness.Compiler.getErrorBaseline(declFileCompilationResult.declInputFiles.concat(declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
+                    jsCode += Harness.Compiler.getErrorBaseline(tsConfigFiles.concat(declFileCompilationResult.declInputFiles, declFileCompilationResult.declOtherFiles), declFileCompilationResult.declResult.errors);
                 }
 
                 if (jsCode.length > 0) {
@@ -1650,22 +1651,22 @@ namespace Harness {
         }
 
         export function isTS(fileName: string) {
-            return ts.endsWith(fileName, ".ts");
+            return ts.endsWith(fileName, ts.Extension.Ts);
         }
 
         export function isTSX(fileName: string) {
-            return ts.endsWith(fileName, ".tsx");
+            return ts.endsWith(fileName, ts.Extension.Tsx);
         }
 
         export function isDTS(fileName: string) {
-            return ts.endsWith(fileName, ".d.ts");
+            return ts.endsWith(fileName, ts.Extension.Dts);
         }
 
         export function isJS(fileName: string) {
-            return ts.endsWith(fileName, ".js");
+            return ts.endsWith(fileName, ts.Extension.Js);
         }
         export function isJSX(fileName: string) {
-            return ts.endsWith(fileName, ".jsx");
+            return ts.endsWith(fileName, ts.Extension.Jsx);
         }
 
         export function isJSMap(fileName: string) {
@@ -1743,7 +1744,12 @@ namespace Harness {
         }
 
         /** Given a test file containing // @FileName directives, return an array of named units of code to be added to an existing compiler instance */
-        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): { settings: CompilerSettings; testUnitData: TestUnitData[]; tsConfig: ts.ParsedCommandLine } {
+        export function makeUnitsFromTest(code: string, fileName: string, rootDir?: string): {
+            settings: CompilerSettings;
+            testUnitData: TestUnitData[];
+            tsConfig: ts.ParsedCommandLine;
+            tsConfigFileUnitData: TestUnitData;
+        } {
             const settings = extractCompilerSettings(code);
 
             // List of all the subfiles we've parsed out
@@ -1829,17 +1835,19 @@ namespace Harness {
 
             // check if project has tsconfig.json in the list of files
             let tsConfig: ts.ParsedCommandLine;
+            let tsConfigFileUnitData: TestUnitData;
             for (let i = 0; i < testUnitData.length; i++) {
                 const data = testUnitData[i];
                 if (ts.getBaseFileName(data.name).toLowerCase() === "tsconfig.json") {
-                    const configJson = ts.parseConfigFileTextToJson(data.name, data.content);
-                    assert.isTrue(configJson.config !== undefined);
+                    const configJson = ts.parseJsonText(data.name, data.content);
+                    assert.isTrue(configJson.endOfFileToken !== undefined);
                     let baseDir = ts.normalizePath(ts.getDirectoryPath(data.name));
                     if (rootDir) {
                         baseDir = ts.getNormalizedAbsolutePath(baseDir, rootDir);
                     }
-                    tsConfig = ts.parseJsonConfigFileContent(configJson.config, parseConfigHost, baseDir);
+                    tsConfig = ts.parseJsonSourceFileConfigFileContent(configJson, parseConfigHost, baseDir);
                     tsConfig.options.configFilePath = data.name;
+                    tsConfigFileUnitData = data;
 
                     // delete entry from the list
                     ts.orderedRemoveItemAt(testUnitData, i);
@@ -1847,7 +1855,7 @@ namespace Harness {
                     break;
                 }
             }
-            return { settings, testUnitData, tsConfig };
+            return { settings, testUnitData, tsConfig, tsConfigFileUnitData };
         }
     }
 
@@ -1972,7 +1980,7 @@ namespace Harness {
     export function isDefaultLibraryFile(filePath: string): boolean {
         // We need to make sure that the filePath is prefixed with "lib." not just containing "lib." and end with ".d.ts"
         const fileName = ts.getBaseFileName(ts.normalizeSlashes(filePath));
-        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ".d.ts");
+        return ts.startsWith(fileName, "lib.") && ts.endsWith(fileName, ts.Extension.Dts);
     }
 
     export function isBuiltFile(filePath: string): boolean {

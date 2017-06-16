@@ -275,7 +275,7 @@ namespace ts {
 
             case SyntaxKind.MethodSignature:
                 return updateMethodSignature(<MethodSignature>node,
-                    nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<MethodSignature>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<MethodSignature>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<MethodSignature>node).type, visitor, isTypeNode),
                     visitNode((<MethodSignature>node).name, visitor, isPropertyName),
@@ -288,7 +288,7 @@ namespace ts {
                     visitNode((<MethodDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<MethodDeclaration>node).name, visitor, isPropertyName),
                     visitNode((<MethodDeclaration>node).questionToken, tokenVisitor, isToken),
-                    nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<MethodDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<MethodDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<MethodDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<MethodDeclaration>node).body, visitor, context));
@@ -319,13 +319,13 @@ namespace ts {
 
             case SyntaxKind.CallSignature:
                 return updateCallSignature(<CallSignatureDeclaration>node,
-                    nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<CallSignatureDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<CallSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<CallSignatureDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructSignature:
                 return updateConstructSignature(<ConstructSignatureDeclaration>node,
-                    nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ConstructSignatureDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<ConstructSignatureDeclaration>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<ConstructSignatureDeclaration>node).type, visitor, isTypeNode));
 
@@ -350,13 +350,13 @@ namespace ts {
 
             case SyntaxKind.FunctionType:
                 return updateFunctionTypeNode(<FunctionTypeNode>node,
-                    nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<FunctionTypeNode>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<FunctionTypeNode>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<FunctionTypeNode>node).type, visitor, isTypeNode));
 
             case SyntaxKind.ConstructorType:
                 return updateConstructorTypeNode(<ConstructorTypeNode>node,
-                    nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ConstructorTypeNode>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<ConstructorTypeNode>node).parameters, visitor, isParameterDeclaration),
                     visitNode((<ConstructorTypeNode>node).type, visitor, isTypeNode));
 
@@ -400,7 +400,7 @@ namespace ts {
             case SyntaxKind.MappedType:
                 return updateMappedTypeNode((<MappedTypeNode>node),
                     visitNode((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
-                    visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameter),
+                    visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
                     visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
 
@@ -476,7 +476,7 @@ namespace ts {
                     nodesVisitor((<FunctionExpression>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionExpression>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionExpression>node).name, visitor, isIdentifier),
-                    nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<FunctionExpression>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<FunctionExpression>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<FunctionExpression>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
@@ -484,7 +484,7 @@ namespace ts {
             case SyntaxKind.ArrowFunction:
                 return updateArrowFunction(<ArrowFunction>node,
                     nodesVisitor((<ArrowFunction>node).modifiers, visitor, isModifier),
-                    nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ArrowFunction>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<ArrowFunction>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<ArrowFunction>node).type, visitor, isTypeNode),
                     visitFunctionBody((<ArrowFunction>node).body, visitor, context));
@@ -543,7 +543,7 @@ namespace ts {
                 return updateClassExpression(<ClassExpression>node,
                     nodesVisitor((<ClassExpression>node).modifiers, visitor, isModifier),
                     visitNode((<ClassExpression>node).name, visitor, isIdentifier),
-                    nodesVisitor((<ClassExpression>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ClassExpression>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<ClassExpression>node).heritageClauses, visitor, isHeritageClause),
                     nodesVisitor((<ClassExpression>node).members, visitor, isClassElement));
 
@@ -676,7 +676,7 @@ namespace ts {
                     nodesVisitor((<FunctionDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<FunctionDeclaration>node).asteriskToken, tokenVisitor, isToken),
                     visitNode((<FunctionDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<FunctionDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitParameterList((<FunctionDeclaration>node).parameters, visitor, context, nodesVisitor),
                     visitNode((<FunctionDeclaration>node).type, visitor, isTypeNode),
                     visitFunctionBody((<FunctionExpression>node).body, visitor, context));
@@ -686,7 +686,7 @@ namespace ts {
                     nodesVisitor((<ClassDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<ClassDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<ClassDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<ClassDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<ClassDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<ClassDeclaration>node).heritageClauses, visitor, isHeritageClause),
                     nodesVisitor((<ClassDeclaration>node).members, visitor, isClassElement));
 
@@ -695,7 +695,7 @@ namespace ts {
                     nodesVisitor((<InterfaceDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<InterfaceDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<InterfaceDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<InterfaceDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     nodesVisitor((<InterfaceDeclaration>node).heritageClauses, visitor, isHeritageClause),
                     nodesVisitor((<InterfaceDeclaration>node).members, visitor, isTypeElement));
 
@@ -704,7 +704,7 @@ namespace ts {
                     nodesVisitor((<TypeAliasDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<TypeAliasDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<TypeAliasDeclaration>node).name, visitor, isIdentifier),
-                    nodesVisitor((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameter),
+                    nodesVisitor((<TypeAliasDeclaration>node).typeParameters, visitor, isTypeParameterDeclaration),
                     visitNode((<TypeAliasDeclaration>node).type, visitor, isTypeNode));
 
             case SyntaxKind.EnumDeclaration:
@@ -1198,9 +1198,9 @@ namespace ts {
 
             case SyntaxKind.ForInStatement:
             case SyntaxKind.ForOfStatement:
-                result = reduceNode((<ForInStatement | ForOfStatement>node).initializer, cbNode, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).expression, cbNode, result);
-                result = reduceNode((<ForInStatement | ForOfStatement>node).statement, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).initializer, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).expression, cbNode, result);
+                result = reduceNode((<ForInOrOfStatement>node).statement, cbNode, result);
                 break;
 
             case SyntaxKind.ReturnStatement:
@@ -1517,35 +1517,7 @@ namespace ts {
     }
 
     export namespace Debug {
-        if (isDebugging) {
-            // Add additional properties in debug mode to assist with debugging.
-            Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
-                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
-            });
-
-            Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
-                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
-                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
-                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
-            });
-
-            for (const ctor of [objectAllocator.getNodeConstructor(), objectAllocator.getIdentifierConstructor(), objectAllocator.getTokenConstructor(), objectAllocator.getSourceFileConstructor()]) {
-                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
-                    Object.defineProperties(ctor.prototype, {
-                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
-                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
-                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
-                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
-                        "__debugGetText": { value(this: Node, includeTrivia?: boolean) {
-                            if (nodeIsSynthesized(this)) return "";
-                            const parseNode = getParseTreeNode(this);
-                            const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                            return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                        } }
-                    });
-                }
-            }
-        }
+        let isDebugInfoEnabled = false;
 
         export const failBadSyntaxKind = shouldAssert(AssertionLevel.Normal)
             ? (node: Node, message?: string): void => fail(
@@ -1592,5 +1564,51 @@ namespace ts {
                 () => `Node ${formatSyntaxKind(node.kind)} was unexpected'.`,
                 assertMissingNode)
             : noop;
+
+        /**
+         * Injects debug information into frequently used types.
+         */
+        export function enableDebugInfo() {
+            if (isDebugInfoEnabled) return;
+
+            // Add additional properties in debug mode to assist with debugging.
+            Object.defineProperties(objectAllocator.getSymbolConstructor().prototype, {
+                "__debugFlags": { get(this: Symbol) { return formatSymbolFlags(this.flags); } }
+            });
+
+            Object.defineProperties(objectAllocator.getTypeConstructor().prototype, {
+                "__debugFlags": { get(this: Type) { return formatTypeFlags(this.flags); } },
+                "__debugObjectFlags": { get(this: Type) { return this.flags & TypeFlags.Object ? formatObjectFlags((<ObjectType>this).objectFlags) : ""; } },
+                "__debugTypeToString": { value(this: Type) { return this.checker.typeToString(this); } },
+            });
+
+            const nodeConstructors = [
+                objectAllocator.getNodeConstructor(),
+                objectAllocator.getIdentifierConstructor(),
+                objectAllocator.getTokenConstructor(),
+                objectAllocator.getSourceFileConstructor()
+            ];
+
+            for (const ctor of nodeConstructors) {
+                if (!ctor.prototype.hasOwnProperty("__debugKind")) {
+                    Object.defineProperties(ctor.prototype, {
+                        "__debugKind": { get(this: Node) { return formatSyntaxKind(this.kind); } },
+                        "__debugModifierFlags": { get(this: Node) { return formatModifierFlags(getModifierFlagsNoCache(this)); } },
+                        "__debugTransformFlags": { get(this: Node) { return formatTransformFlags(this.transformFlags); } },
+                        "__debugEmitFlags": { get(this: Node) { return formatEmitFlags(getEmitFlags(this)); } },
+                        "__debugGetText": {
+                            value(this: Node, includeTrivia?: boolean) {
+                                if (nodeIsSynthesized(this)) return "";
+                                const parseNode = getParseTreeNode(this);
+                                const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                                return sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                            }
+                        }
+                    });
+                }
+            }
+
+            isDebugInfoEnabled = true;
+        }
     }
 }

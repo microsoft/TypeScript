@@ -3,7 +3,7 @@
 
 namespace ts {
     /** The version of the TypeScript compiler release */
-    export const version = "2.4.0";
+    export const version = "2.5.0";
 }
 
 /* @internal */
@@ -51,8 +51,10 @@ namespace ts {
 
         // Copies keys/values from template. Note that for..in will not throw if
         // template is undefined, and instead will just exit the loop.
-        for (const key in template) if (hasOwnProperty.call(template, key)) {
-            map.set(key, template[key]);
+        for (const key in template) {
+            if (hasOwnProperty.call(template, key)) {
+                map.set(key, template[key]);
+            }
         }
 
         return map;
@@ -473,7 +475,7 @@ namespace ts {
      * @param array The array to map.
      * @param mapfn The callback used to map the result into one or more values.
      */
-    export function flatMap<T, U>(array: T[], mapfn: (x: T, i: number) => U | U[]): U[] {
+    export function flatMap<T, U>(array: T[] | undefined, mapfn: (x: T, i: number) => U | U[] | undefined): U[] | undefined {
         let result: U[];
         if (array) {
             result = [];
@@ -521,8 +523,8 @@ namespace ts {
         return result || array;
     }
 
-    export function mapDefined<T>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => T | undefined): ReadonlyArray<T> {
-        const result: T[] = [];
+    export function mapDefined<T, U>(array: ReadonlyArray<T>, mapFn: (x: T, i: number) => U | undefined): U[] {
+        const result: U[] = [];
         for (let i = 0; i < array.length; i++) {
             const item = array[i];
             const mapped = mapFn(item, i);
@@ -977,9 +979,12 @@ namespace ts {
      */
     export function getOwnKeys<T>(map: MapLike<T>): string[] {
         const keys: string[] = [];
-        for (const key in map) if (hasOwnProperty.call(map, key)) {
-            keys.push(key);
+        for (const key in map) {
+            if (hasOwnProperty.call(map, key)) {
+                keys.push(key);
+            }
         }
+
         return keys;
     }
 
@@ -1042,8 +1047,10 @@ namespace ts {
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]): any;
     export function assign<T1 extends MapLike<{}>>(t: T1, ...args: any[]) {
         for (const arg of args) {
-            for (const p in arg) if (hasProperty(arg, p)) {
-                t[p] = arg[p];
+            for (const p in arg) {
+                if (hasProperty(arg, p)) {
+                    t[p] = arg[p];
+                }
             }
         }
         return t;
@@ -1058,13 +1065,19 @@ namespace ts {
     export function equalOwnProperties<T>(left: MapLike<T>, right: MapLike<T>, equalityComparer?: (left: T, right: T) => boolean) {
         if (left === right) return true;
         if (!left || !right) return false;
-        for (const key in left) if (hasOwnProperty.call(left, key)) {
-            if (!hasOwnProperty.call(right, key) === undefined) return false;
-            if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+        for (const key in left) {
+            if (hasOwnProperty.call(left, key)) {
+                if (!hasOwnProperty.call(right, key) === undefined) return false;
+                if (equalityComparer ? !equalityComparer(left[key], right[key]) : left[key] !== right[key]) return false;
+            }
         }
-        for (const key in right) if (hasOwnProperty.call(right, key)) {
-            if (!hasOwnProperty.call(left, key)) return false;
+
+        for (const key in right) {
+            if (hasOwnProperty.call(right, key)) {
+                if (!hasOwnProperty.call(left, key)) return false;
+            }
         }
+
         return true;
     }
 
@@ -1106,12 +1119,18 @@ namespace ts {
 
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
-        for (const id in second) if (hasOwnProperty.call(second, id)) {
-            (result as any)[id] = (second as any)[id];
+        for (const id in second) {
+            if (hasOwnProperty.call(second, id)) {
+                (result as any)[id] = (second as any)[id];
+            }
         }
-        for (const id in first) if (hasOwnProperty.call(first, id)) {
-            (result as any)[id] = (first as any)[id];
+
+        for (const id in first) {
+            if (hasOwnProperty.call(first, id)) {
+                (result as any)[id] = (first as any)[id];
+            }
         }
+
         return result;
     }
 
@@ -2112,14 +2131,16 @@ namespace ts {
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
         const ext = fileName.substr(fileName.lastIndexOf("."));
         switch (ext.toLowerCase()) {
-            case ".js":
+            case Extension.Js:
                 return ScriptKind.JS;
-            case ".jsx":
+            case Extension.Jsx:
                 return ScriptKind.JSX;
-            case ".ts":
+            case Extension.Ts:
                 return ScriptKind.TS;
-            case ".tsx":
+            case Extension.Tsx:
                 return ScriptKind.TSX;
+            case ".json":
+                return ScriptKind.JSON;
             default:
                 return ScriptKind.Unknown;
         }
@@ -2128,10 +2149,10 @@ namespace ts {
     /**
      *  List of supported extensions in order of file resolution precedence.
      */
-    export const supportedTypeScriptExtensions = [".ts", ".tsx", ".d.ts"];
+    export const supportedTypeScriptExtensions = [Extension.Ts, Extension.Tsx, Extension.Dts];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
-    export const supportedTypescriptExtensionsForExtractExtension = [".d.ts", ".ts", ".tsx"];
-    export const supportedJavascriptExtensions = [".js", ".jsx"];
+    export const supportedTypescriptExtensionsForExtractExtension = [Extension.Dts, Extension.Ts, Extension.Tsx];
+    export const supportedJavascriptExtensions = [Extension.Js, Extension.Jsx];
     const allSupportedExtensions = supportedTypeScriptExtensions.concat(supportedJavascriptExtensions);
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: JsFileExtensionInfo[]): string[] {
@@ -2139,7 +2160,7 @@ namespace ts {
         if (!extraFileExtensions || extraFileExtensions.length === 0 || !needAllExtensions) {
             return needAllExtensions ? allSupportedExtensions : supportedTypeScriptExtensions;
         }
-        const extensions = allSupportedExtensions.slice(0);
+        const extensions: string[] = allSupportedExtensions.slice(0);
         for (const extInfo of extraFileExtensions) {
             if (extensions.indexOf(extInfo.extension) === -1) {
                 extensions.push(extInfo.extension);
@@ -2218,7 +2239,7 @@ namespace ts {
         }
     }
 
-    const extensionsToRemove = [".d.ts", ".ts", ".js", ".tsx", ".jsx"];
+    const extensionsToRemove = [Extension.Dts, Extension.Ts, Extension.Js, Extension.Tsx, Extension.Jsx];
     export function removeFileExtension(path: string): string {
         for (const ext of extensionsToRemove) {
             const extensionless = tryRemoveExtension(path, ext);
@@ -2249,6 +2270,7 @@ namespace ts {
         getSymbolConstructor(): new (flags: SymbolFlags, name: string) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
+        getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
     function Symbol(this: Symbol, flags: SymbolFlags, name: string) {
@@ -2279,6 +2301,12 @@ namespace ts {
         this.original = undefined;
     }
 
+    function SourceMapSource(this: SourceMapSource, fileName: string, text: string, skipTrivia?: (pos: number) => number) {
+        this.fileName = fileName;
+        this.text = text;
+        this.skipTrivia = skipTrivia || (pos => pos);
+    }
+
     export let objectAllocator: ObjectAllocator = {
         getNodeConstructor: () => <any>Node,
         getTokenConstructor: () => <any>Node,
@@ -2286,7 +2314,8 @@ namespace ts {
         getSourceFileConstructor: () => <any>Node,
         getSymbolConstructor: () => <any>Symbol,
         getTypeConstructor: () => <any>Type,
-        getSignatureConstructor: () => <any>Signature
+        getSignatureConstructor: () => <any>Signature,
+        getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
     export const enum AssertionLevel {
@@ -2464,7 +2493,7 @@ namespace ts {
 
     /** True if an extension is one of the supported TypeScript extensions. */
     export function extensionIsTypeScript(ext: Extension): boolean {
-        return ext <= Extension.LastTypeScriptExtension;
+        return ext === Extension.Ts || ext === Extension.Tsx || ext === Extension.Dts;
     }
 
     /**
@@ -2479,21 +2508,7 @@ namespace ts {
         Debug.fail(`File ${path} has unknown extension.`);
     }
     export function tryGetExtensionFromPath(path: string): Extension | undefined {
-        if (fileExtensionIs(path, ".d.ts")) {
-            return Extension.Dts;
-        }
-        if (fileExtensionIs(path, ".ts")) {
-            return Extension.Ts;
-        }
-        if (fileExtensionIs(path, ".tsx")) {
-            return Extension.Tsx;
-        }
-        if (fileExtensionIs(path, ".js")) {
-            return Extension.Js;
-        }
-        if (fileExtensionIs(path, ".jsx")) {
-            return Extension.Jsx;
-        }
+        return find(supportedTypescriptExtensionsForExtractExtension, e => fileExtensionIs(path, e)) || find(supportedJavascriptExtensions, e => fileExtensionIs(path, e));
     }
 
     export function isCheckJsEnabledForFile(sourceFile: SourceFile, compilerOptions: CompilerOptions) {
