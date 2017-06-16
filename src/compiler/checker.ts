@@ -16107,7 +16107,7 @@ namespace ts {
             }
 
             // If we got a non-instantiated generic signature, see if we can still instantiate it if explicit type arguments were provided.
-            if (best.typeParameters && isCallOrNewExpression(node) && node.typeArguments) {
+            if (best.typeParameters && callLikeExpressionMayHaveTypeArguments(node) && node.typeArguments) {
                 const typeArguments = node.typeArguments.map(getTypeOfNode);
                 best = createSignatureInstantiation(best, { typeArguments, inferredAnyDefault: false });
             }
