@@ -244,7 +244,7 @@ namespace ts {
     const redForegroundEscapeSequence = "\u001b[91m";
     const yellowForegroundEscapeSequence = "\u001b[93m";
     const blueForegroundEscapeSequence = "\u001b[93m";
-    const gutterStyleSequence = "\u001b[100;30m";
+    const gutterStyleSequence = "\u001b[100;97m";
     const gutterSeparator = " ";
     const resetEscapeSequence = "\u001b[0m";
     const ellipsis = "...";
