@@ -42,6 +42,12 @@ let i: I; // Should succeed thanks to type parameter default
 /** @typedef {string} N.Str */
 import M = N; // Error: @typedef does not create namespaces in TypeScript code.
 
+// Not legal JSDoc, but that shouldn't matter in TypeScript.
+/**
+ * @type {{foo: (function(string, string): string)}}
+ */
+const obj = { foo: (a, b) => a + b };
+
 
 //// [jsdocInTypeScript.js]
 var T = (function () {
@@ -68,3 +74,8 @@ function tem(t) { return {}; }
 var i; // Should succeed thanks to type parameter default
 /** @typedef {string} N.Str */
 var M = N; // Error: @typedef does not create namespaces in TypeScript code.
+// Not legal JSDoc, but that shouldn't matter in TypeScript.
+/**
+ * @type {{foo: (function(string, string): string)}}
+ */
+var obj = { foo: function (a, b) { return a + b; } };
