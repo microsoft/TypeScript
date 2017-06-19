@@ -4,6 +4,6 @@
 /////*2*/type Stylet = { new   () {} }
 format.document();
 goTo.marker("1");
-verify.currentLineContentIs("interface Gourai { new() {} }");
+verify.currentLineContentIs("interface Gourai { new() { } }");
 goTo.marker("2");
-verify.currentLineContentIs("type Stylet = { new() {} }");
+verify.currentLineContentIs("type Stylet = { new() { } }");
