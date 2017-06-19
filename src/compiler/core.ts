@@ -2344,7 +2344,7 @@ namespace ts {
 
         export function fail(message?: string, stackCrawlMark?: Function): void {
             debugger;
-            const e = new Error(message ? `Debug Failure. ` : "Debug Failure.");
+            const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
