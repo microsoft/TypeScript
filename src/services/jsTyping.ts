@@ -61,17 +61,20 @@ namespace ts.JsTyping {
         unresolvedImports: ReadonlyArray<string>):
         { cachedTypingPaths: string[], newTypingNames: string[], filesToWatch: string[] } {
 
-        // A typing name to typing file path mapping
-        const inferredTypings = createMap<string>();
-
         if (!typeAcquisition || !typeAcquisition.enable) {
             return { cachedTypingPaths: [], newTypingNames: [], filesToWatch: [] };
         }
 
+        // A typing name to typing file path mapping
+        const inferredTypings = createMap<string>();
+
         // Only infer typings for .js and .jsx files
-        fileNames = filter(map(fileNames, normalizePath), f => {
-            const kind = ensureScriptKind(f, getScriptKindFromFileName(f));
-            return kind === ScriptKind.JS || kind === ScriptKind.JSX;
+        fileNames = mapDefined(fileNames, fileName => {
+            const path = normalizePath(fileName);
+            const kind = ensureScriptKind(path, getScriptKindFromFileName(path));
+            if (kind === ScriptKind.JS || kind === ScriptKind.JSX) {
+                return path;
+            }
         });
 
         if (!safeList) {
@@ -80,19 +83,17 @@ namespace ts.JsTyping {
         }
 
         const filesToWatch: string[] = [];
+
+        forEach(typeAcquisition.include, addInferredTyping);
+        const exclude = typeAcquisition.exclude || [];
+
         // Directories to search for package.json, bower.json and other typing information
-        let searchDirs: string[] = [];
-        let exclude: string[] = [];
-
-        mergeTypings(typeAcquisition.include);
-        exclude = typeAcquisition.exclude || [];
-
-        const possibleSearchDirs = map(fileNames, getDirectoryPath);
-        if (projectRootPath) {
-            possibleSearchDirs.push(projectRootPath);
+        const possibleSearchDirs = createMap<true>();
+        for (const f of fileNames) {
+            possibleSearchDirs.set(getDirectoryPath(f), true);
         }
-        searchDirs = deduplicate(possibleSearchDirs);
-        for (const searchDir of searchDirs) {
+        possibleSearchDirs.set(projectRootPath, true);
+        possibleSearchDirs.forEach((_true, searchDir) => {
             const packageJsonPath = combinePaths(searchDir, "package.json");
             getTypingNamesFromJson(packageJsonPath, filesToWatch);
 
@@ -100,11 +101,11 @@ namespace ts.JsTyping {
             getTypingNamesFromJson(bowerJsonPath, filesToWatch);
 
             const bowerComponentsPath = combinePaths(searchDir, "bower_components");
-            getTypingNamesFromPackagesFolder(bowerComponentsPath);
+            getTypingNamesFromPackagesFolder(bowerComponentsPath, filesToWatch);
 
             const nodeModulesPath = combinePaths(searchDir, "node_modules");
-            getTypingNamesFromPackagesFolder(nodeModulesPath);
-        }
+            getTypingNamesFromPackagesFolder(nodeModulesPath, filesToWatch);
+        });
         getTypingNamesFromSourceFileNames(fileNames);
 
         // add typings for unresolved imports
@@ -140,41 +141,33 @@ namespace ts.JsTyping {
         });
         return { cachedTypingPaths, newTypingNames, filesToWatch };
 
-        /**
-         * Merge a given list of typingNames to the inferredTypings map
-         */
-        function mergeTypings(typingNames: ReadonlyArray<string>) {
-            if (!typingNames) {
-                return;
-            }
-
-            for (const typing of typingNames) {
-                if (!inferredTypings.has(typing)) {
-                    inferredTypings.set(typing, undefined);
-                }
+        function addInferredTyping(typingName: string) {
+            if (!inferredTypings.has(typingName)) {
+                inferredTypings.set(typingName, undefined);
             }
         }
 
         /**
          * Get the typing info from common package manager json files like package.json or bower.json
          */
-        function getTypingNamesFromJson(jsonPath: string, filesToWatch: string[]) {
-            if (host.fileExists(jsonPath)) {
-                filesToWatch.push(jsonPath);
+        function getTypingNamesFromJson(jsonPath: string, filesToWatch: Push<string>) {
+            if (!host.fileExists(jsonPath)) {
+                return;
             }
-            const result = readConfigFile(jsonPath, (path: string) => host.readFile(path));
-            const jsonConfig: PackageJson = result.config;
-            if (jsonConfig.dependencies) {
-                mergeTypings(getOwnKeys(jsonConfig.dependencies));
-            }
-            if (jsonConfig.devDependencies) {
-                mergeTypings(getOwnKeys(jsonConfig.devDependencies));
-            }
-            if (jsonConfig.optionalDependencies) {
-                mergeTypings(getOwnKeys(jsonConfig.optionalDependencies));
-            }
-            if (jsonConfig.peerDependencies) {
-                mergeTypings(getOwnKeys(jsonConfig.peerDependencies));
+
+            filesToWatch.push(jsonPath);
+            const jsonConfig: PackageJson = readConfigFile(jsonPath, (path: string) => host.readFile(path)).config;
+            addInferredTypingsFromKeys(jsonConfig.dependencies);
+            addInferredTypingsFromKeys(jsonConfig.devDependencies);
+            addInferredTypingsFromKeys(jsonConfig.optionalDependencies);
+            addInferredTypingsFromKeys(jsonConfig.peerDependencies);
+
+            function addInferredTypingsFromKeys(map: MapLike<string> | undefined): void {
+                for (const key in map) {
+                    if (ts.hasProperty(map, key)) {
+                        addInferredTyping(key);
+                    }
+                }
             }
         }
 
@@ -185,17 +178,22 @@ namespace ts.JsTyping {
          * @param fileNames are the names for source files in the project
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
-            const jsFileNames = filter(fileNames, hasJavaScriptFileExtension);
-            const inferredTypingNames = map(jsFileNames, f => removeFileExtension(getBaseFileName(f.toLowerCase())));
-            const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
-
             if (safeList !== EmptySafeList) {
-                mergeTypings(ts.mapDefined(cleanedTypingNames, f => safeList.get(f)));
+                for (const j of fileNames) {
+                    if (!hasJavaScriptFileExtension(j)) continue;
+
+                    const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
+                    const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
+                    const safe = safeList.get(cleanedTypingName);
+                    if (safe !== undefined) {
+                        addInferredTyping(safe);
+                    }
+                }
             }
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
             if (hasJsxFile) {
-                mergeTypings(["react"]);
+                addInferredTyping("react");
             }
         }
 
@@ -203,7 +201,7 @@ namespace ts.JsTyping {
          * Infer typing names from packages folder (ex: node_module, bower_components)
          * @param packagesFolderPath is the path to the packages folder
          */
-        function getTypingNamesFromPackagesFolder(packagesFolderPath: string) {
+        function getTypingNamesFromPackagesFolder(packagesFolderPath: string, filesToWatch: Push<string>) {
             filesToWatch.push(packagesFolderPath);
 
             // Todo: add support for ModuleResolutionHost too
@@ -211,7 +209,6 @@ namespace ts.JsTyping {
                 return;
             }
 
-            const typingNames: string[] = [];
             const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
@@ -240,10 +237,9 @@ namespace ts.JsTyping {
                     inferredTypings.set(packageJson.name, absolutePath);
                 }
                 else {
-                    typingNames.push(packageJson.name);
+                    addInferredTyping(packageJson.name);
                 }
             }
-            mergeTypings(typingNames);
         }
 
     }
