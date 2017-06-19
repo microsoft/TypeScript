@@ -18802,6 +18802,7 @@ namespace ts {
             function getDeclarationSpaces(d: Declaration): SymbolFlags {
                 switch (d.kind) {
                     case SyntaxKind.InterfaceDeclaration:
+                    case SyntaxKind.TypeAliasDeclaration:
                         return SymbolFlags.ExportType;
                     case SyntaxKind.ModuleDeclaration:
                         return isAmbientModule(d) || getModuleInstanceState(d) !== ModuleInstanceState.NonInstantiated
@@ -18811,12 +18812,17 @@ namespace ts {
                     case SyntaxKind.EnumDeclaration:
                         return SymbolFlags.ExportType | SymbolFlags.ExportValue;
                     case SyntaxKind.ImportEqualsDeclaration:
-                        let result: SymbolFlags = 0;
+                        let result = SymbolFlags.None;
                         const target = resolveAlias(getSymbolOfNode(d));
                         forEach(target.declarations, d => { result |= getDeclarationSpaces(d); });
                         return result;
-                    default:
+                    case SyntaxKind.VariableDeclaration:
+                    case SyntaxKind.BindingElement:
+                    case SyntaxKind.FunctionDeclaration:
+                    case SyntaxKind.ImportSpecifier: // https://github.com/Microsoft/TypeScript/pull/7591
                         return SymbolFlags.ExportValue;
+                    default:
+                        Debug.fail((ts as any).SyntaxKind[d.kind]);
                 }
             }
         }
