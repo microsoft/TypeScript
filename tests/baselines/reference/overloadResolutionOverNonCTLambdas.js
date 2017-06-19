@@ -26,7 +26,7 @@ bug3(function(x:string):string { return x; });
 //// [overloadResolutionOverNonCTLambdas.js]
 var Bugs;
 (function (Bugs) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;

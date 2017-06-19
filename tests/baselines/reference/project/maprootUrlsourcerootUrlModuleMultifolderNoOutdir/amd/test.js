@@ -2,7 +2,7 @@ define(["require", "exports", "ref/m1", "../outputdir_module_multifolder_ref/m2"
     "use strict";
     exports.__esModule = true;
     exports.a1 = 10;
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

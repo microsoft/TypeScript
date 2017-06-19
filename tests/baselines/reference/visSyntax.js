@@ -14,7 +14,7 @@ module M {
 //// [visSyntax.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

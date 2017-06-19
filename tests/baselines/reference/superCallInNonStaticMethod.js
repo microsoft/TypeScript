@@ -61,14 +61,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Doing = (function () {
+var Doing = /** @class */ (function () {
     function Doing() {
     }
     Doing.prototype.instanceMethod = function () {
     };
     return Doing;
 }());
-var Other = (function (_super) {
+var Other = /** @class */ (function (_super) {
     __extends(Other, _super);
     function Other() {
         var _this = _super.call(this) || this;

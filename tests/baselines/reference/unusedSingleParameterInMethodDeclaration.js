@@ -6,7 +6,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInMethodDeclaration.js]
-var Dummy = (function () {
+var Dummy = /** @class */ (function () {
     function Dummy() {
     }
     Dummy.prototype.greeter = function (person) {

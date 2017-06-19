@@ -6,7 +6,7 @@ class C99 {
 
 
 //// [gettersAndSettersAccessibility.js]
-var C99 = (function () {
+var C99 = /** @class */ (function () {
     function C99() {
     }
     Object.defineProperty(C99.prototype, "Baz", {

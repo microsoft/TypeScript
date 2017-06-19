@@ -29,12 +29,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Control = (function () {
+var Control = /** @class */ (function () {
     function Control() {
     }
     return Control;
 }());
-var Button = (function (_super) {
+var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -42,7 +42,7 @@ var Button = (function (_super) {
     Button.prototype.select = function () { };
     return Button;
 }(Control));
-var TextBox = (function (_super) {
+var TextBox = /** @class */ (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -50,14 +50,14 @@ var TextBox = (function (_super) {
     TextBox.prototype.select = function () { };
     return TextBox;
 }(Control));
-var Image = (function (_super) {
+var Image = /** @class */ (function (_super) {
     __extends(Image, _super);
     function Image() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image;
 }(Control));
-var Location = (function () {
+var Location = /** @class */ (function () {
     function Location() {
     }
     Location.prototype.select = function () { };

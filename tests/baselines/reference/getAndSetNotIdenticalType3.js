@@ -16,12 +16,12 @@ var r = x.x;
 x.x = r;
 
 //// [getAndSetNotIdenticalType3.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "x", {

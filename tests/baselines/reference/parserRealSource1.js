@@ -186,7 +186,7 @@ var TypeScript;
         }
         CompilerDiagnostics.assert = assert;
     })(CompilerDiagnostics = TypeScript.CompilerDiagnostics || (TypeScript.CompilerDiagnostics = {}));
-    var NullLogger = (function () {
+    var NullLogger = /** @class */ (function () {
         function NullLogger() {
         }
         NullLogger.prototype.information = function () { return false; };
@@ -199,7 +199,7 @@ var TypeScript;
         return NullLogger;
     }());
     TypeScript.NullLogger = NullLogger;
-    var LoggerAdapter = (function () {
+    var LoggerAdapter = /** @class */ (function () {
         function LoggerAdapter(logger) {
             this.logger = logger;
             this._information = this.logger.information();
@@ -219,7 +219,7 @@ var TypeScript;
         return LoggerAdapter;
     }());
     TypeScript.LoggerAdapter = LoggerAdapter;
-    var BufferedLogger = (function () {
+    var BufferedLogger = /** @class */ (function () {
         function BufferedLogger() {
             this.logContents = [];
         }

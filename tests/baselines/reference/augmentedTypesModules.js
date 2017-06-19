@@ -112,7 +112,7 @@ var m1b = 1; // error
 var m1c = 1; // Should be allowed
 var m1d;
 (function (m1d) {
-    var I = (function () {
+    var I = /** @class */ (function () {
         function I() {
         }
         I.prototype.foo = function () { };
@@ -146,7 +146,7 @@ function m2f() { }
 function m2g() { }
 ;
 (function (m2g) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo = function () { };
@@ -154,7 +154,7 @@ function m2g() { }
     }());
     m2g.C = C;
 })(m2g || (m2g = {}));
-var m3 = (function () {
+var m3 = /** @class */ (function () {
     function m3() {
     }
     return m3;
@@ -163,13 +163,13 @@ var m3a;
 (function (m3a) {
     var y = 2;
 })(m3a || (m3a = {}));
-var m3a = (function () {
+var m3a = /** @class */ (function () {
     function m3a() {
     }
     m3a.prototype.foo = function () { };
     return m3a;
 }()); // error, class isn't ambient or declared before the module
-var m3b = (function () {
+var m3b = /** @class */ (function () {
     function m3b() {
     }
     m3b.prototype.foo = function () { };
@@ -178,7 +178,7 @@ var m3b = (function () {
 (function (m3b) {
     var y = 2;
 })(m3b || (m3b = {}));
-var m3c = (function () {
+var m3c = /** @class */ (function () {
     function m3c() {
     }
     m3c.prototype.foo = function () { };
@@ -197,7 +197,7 @@ var m3e;
 })(m3e || (m3e = {}));
 var m3g;
 (function (m3g) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo = function () { };
@@ -228,7 +228,7 @@ var m4c;
 })(m4c || (m4c = {}));
 var m4d;
 (function (m4d) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo = function () { };

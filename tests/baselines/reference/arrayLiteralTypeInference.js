@@ -62,19 +62,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Action = (function () {
+var Action = /** @class */ (function () {
     function Action() {
     }
     return Action;
 }());
-var ActionA = (function (_super) {
+var ActionA = /** @class */ (function (_super) {
     __extends(ActionA, _super);
     function ActionA() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return ActionA;
 }(Action));
-var ActionB = (function (_super) {
+var ActionB = /** @class */ (function (_super) {
     __extends(ActionB, _super);
     function ActionB() {
         return _super !== null && _super.apply(this, arguments) || this;

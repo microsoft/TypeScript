@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
         var InnerModule;
         (function (InnerModule) {
             /// class b comment
-            var b = (function () {
+            var b = /** @class */ (function () {
                 function b() {
                 }
                 return b;

@@ -48,13 +48,13 @@ var MsPortal;
         (function (Base) {
             var ItemList;
             (function (ItemList) {
-                var ItemValue = (function () {
+                var ItemValue = /** @class */ (function () {
                     function ItemValue(value) {
                     }
                     return ItemValue;
                 }());
                 ItemList.ItemValue = ItemValue;
-                var ViewModel = (function (_super) {
+                var ViewModel = /** @class */ (function (_super) {
                     __extends(ViewModel, _super);
                     function ViewModel() {
                         return _super !== null && _super.apply(this, arguments) || this;

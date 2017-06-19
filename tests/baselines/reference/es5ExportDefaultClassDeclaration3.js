@@ -17,7 +17,7 @@ var t: typeof C = C;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var before = new C();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () {

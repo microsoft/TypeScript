@@ -32,12 +32,12 @@ var numStrTuple2 = [5, "foo", true];
 var numStrBoolTuple = [5, "foo", true];
 var objNumTuple = [{ a: "world" }, 5];
 var strTupleTuple = ["bar", [5, { x: 1, y: 1 }]];
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

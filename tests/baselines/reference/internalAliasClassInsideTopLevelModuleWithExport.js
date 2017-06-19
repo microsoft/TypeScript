@@ -16,7 +16,7 @@ var cReturnVal = cProp.foo(10);
 exports.__esModule = true;
 var x;
 (function (x) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         c.prototype.foo = function (a) {

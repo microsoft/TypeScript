@@ -39,12 +39,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -52,12 +52,12 @@ var B = (function (_super) {
     return B;
 }(A));
 // Inheritance
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
     }
     return F;
 }());
-var G = (function (_super) {
+var G = /** @class */ (function (_super) {
     __extends(G, _super);
     function G() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -65,12 +65,12 @@ var G = (function (_super) {
     return G;
 }(F));
 // Other way
-var H = (function () {
+var H = /** @class */ (function () {
     function H() {
     }
     return H;
 }());
-var I = (function (_super) {
+var I = /** @class */ (function (_super) {
     __extends(I, _super);
     function I() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -78,12 +78,12 @@ var I = (function (_super) {
     return I;
 }(H));
 // With hidden indexer
-var J = (function () {
+var J = /** @class */ (function () {
     function J() {
     }
     return J;
 }());
-var K = (function (_super) {
+var K = /** @class */ (function (_super) {
     __extends(K, _super);
     function K() {
         return _super !== null && _super.apply(this, arguments) || this;

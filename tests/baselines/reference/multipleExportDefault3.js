@@ -13,7 +13,7 @@ exports.__esModule = true;
 exports["default"] = {
     uhoh: "another default"
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

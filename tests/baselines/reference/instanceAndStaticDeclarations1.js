@@ -14,7 +14,7 @@ class Point {
 
 //// [instanceAndStaticDeclarations1.js]
 // from spec
-var Point = (function () {
+var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
         this.y = y;

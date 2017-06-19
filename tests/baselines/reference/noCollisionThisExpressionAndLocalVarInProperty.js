@@ -20,7 +20,7 @@ class class2 {
 }
 
 //// [noCollisionThisExpressionAndLocalVarInProperty.js]
-var class1 = (function () {
+var class1 = /** @class */ (function () {
     function class1() {
         this.prop1 = {
             doStuff: function (callback) { return function () {
@@ -31,7 +31,7 @@ var class1 = (function () {
     }
     return class1;
 }());
-var class2 = (function () {
+var class2 = /** @class */ (function () {
     function class2() {
         this.prop1 = {
             doStuff: function (callback) { return function () {

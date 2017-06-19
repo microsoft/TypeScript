@@ -36,7 +36,7 @@ class Foo5 {
 }  
 
 //// [collisionThisExpressionAndPropertyNameAsConstuctorParameter.js]
-var Foo2 = (function () {
+var Foo2 = /** @class */ (function () {
     function Foo2(_this) {
         var _this = this;
         var lambda = function () {
@@ -45,7 +45,7 @@ var Foo2 = (function () {
     }
     return Foo2;
 }());
-var Foo3 = (function () {
+var Foo3 = /** @class */ (function () {
     function Foo3(_this) {
         var _this = this;
         this._this = _this;
@@ -55,7 +55,7 @@ var Foo3 = (function () {
     }
     return Foo3;
 }());
-var Foo4 = (function () {
+var Foo4 = /** @class */ (function () {
     function Foo4(_this) {
         var _this = this;
         var lambda = function () {
@@ -64,7 +64,7 @@ var Foo4 = (function () {
     }
     return Foo4;
 }());
-var Foo5 = (function () {
+var Foo5 = /** @class */ (function () {
     function Foo5(_this) {
         var _this = this;
         this._this = _this;

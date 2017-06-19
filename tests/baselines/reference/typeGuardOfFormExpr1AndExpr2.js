@@ -53,7 +53,7 @@ var num;
 var strOrNum;
 var strOrNumOrBool;
 var numOrBool;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

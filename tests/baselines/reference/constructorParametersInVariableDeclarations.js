@@ -17,7 +17,7 @@ class B {
 }
 
 //// [constructorParametersInVariableDeclarations.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A(x) {
         this.a = x;
         this.b = { p: x };
@@ -25,7 +25,7 @@ var A = (function () {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         this.a = x;
         this.b = { p: x };

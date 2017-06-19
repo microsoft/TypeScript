@@ -38,13 +38,13 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A(ctor) {
         }
         return A;
     }());
     exports.A = A;
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B(element, url) {
             var _this = _super.call(this, element) || this;

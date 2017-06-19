@@ -8,7 +8,7 @@ class Test {
 }
 
 //// [quotedPropertyName3.js]
-var Test = (function () {
+var Test = /** @class */ (function () {
     function Test() {
     }
     Test.prototype.foo = function () {

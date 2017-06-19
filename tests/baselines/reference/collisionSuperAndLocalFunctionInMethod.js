@@ -41,7 +41,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 function _super() {
 }
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.x = function () {
@@ -52,7 +52,7 @@ var Foo = (function () {
     };
     return Foo;
 }());
-var b = (function (_super) {
+var b = /** @class */ (function (_super) {
     __extends(b, _super);
     function b() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -65,7 +65,7 @@ var b = (function (_super) {
     };
     return b;
 }(Foo));
-var c = (function (_super) {
+var c = /** @class */ (function (_super) {
     __extends(c, _super);
     function c() {
         return _super !== null && _super.apply(this, arguments) || this;

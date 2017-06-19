@@ -67,7 +67,7 @@ foo();
 function foo2(x, y) { }
 foo2(1);
 foo2(1, 2);
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x) { };

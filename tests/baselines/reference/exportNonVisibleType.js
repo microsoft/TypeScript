@@ -41,7 +41,7 @@ var x = { a: "test", b: 42 };
 module.exports = x;
 //// [foo2.js]
 "use strict";
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
@@ -49,7 +49,7 @@ var C1 = (function () {
 module.exports = C1;
 //// [foo3.js]
 "use strict";
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;

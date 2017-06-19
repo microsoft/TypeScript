@@ -3,7 +3,7 @@ FileName : /tests/cases/fourslash/inputFile1.js.map
 {"version":3,"file":"inputFile1.js","sourceRoot":"","sources":["inputFile1.ts"],"names":[],"mappings":"AAAA,kBAAkB;AACjB,IAAI,CAAC,GAAW,CAAC,CAAC;AAClB;IAAA;IAGA,CAAC;IAAD,UAAC;AAAD,CAAC,AAHD,IAGC"}FileName : /tests/cases/fourslash/inputFile1.js
 // regular ts file
 var t = 5;
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;

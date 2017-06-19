@@ -39,7 +39,7 @@ define(["require", "exports", "recursiveExportAssignmentAndFindAliasedType6_modu
 //// [recursiveExportAssignmentAndFindAliasedType6_moduleB.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var ClassB = (function () {
+    var ClassB = /** @class */ (function () {
         function ClassB() {
         }
         return ClassB;

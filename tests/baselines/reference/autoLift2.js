@@ -32,7 +32,7 @@ a.baz();
 
 
 //// [autoLift2.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this.foo;
         any;

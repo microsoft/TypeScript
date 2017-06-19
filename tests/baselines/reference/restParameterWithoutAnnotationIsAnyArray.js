@@ -46,7 +46,7 @@ var f2 = function () {
         y[_i - 1] = arguments[_i];
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () {

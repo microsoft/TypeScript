@@ -10,7 +10,7 @@ class X {
 
 //// [readonlyInNonPropertyParameters.js]
 // `readonly` won't work outside of property parameters
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     X.prototype.method = function (x) { };

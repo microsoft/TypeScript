@@ -142,7 +142,7 @@ var __extends = (this && this.__extends) || (function () {
 //super property access in constructor of class with no base type
 //super property access in instance member function of class with no base type
 //super property access in instance member accessor(get and set) of class with no base type
-var NoBase = (function () {
+var NoBase = /** @class */ (function () {
     function NoBase() {
         this.m = _super.prototype.prototype;
         this.n = _super.prototype.hasOwnProperty.call(this, '');
@@ -171,7 +171,7 @@ var NoBase = (function () {
     });
     return NoBase;
 }());
-var SomeBase = (function () {
+var SomeBase = /** @class */ (function () {
     function SomeBase() {
         this.privateMember = 0;
         this.publicMember = 0;
@@ -188,7 +188,7 @@ var SomeBase = (function () {
 //super.publicInstanceMemberNotFunction in instance member function of derived class
 //super.publicInstanceMemberNotFunction in instance member accessor(get and set) of derived class
 //super property access only available with typed this
-var SomeDerived1 = (function (_super) {
+var SomeDerived1 = /** @class */ (function (_super) {
     __extends(SomeDerived1, _super);
     function SomeDerived1() {
         var _this = _super.call(this) || this;
@@ -222,7 +222,7 @@ var SomeDerived1 = (function (_super) {
 //super.privateProperty in constructor of derived class
 //super.privateProperty in instance member function of derived class
 //super.privateProperty in instance member accessor(get and set) of derived class
-var SomeDerived2 = (function (_super) {
+var SomeDerived2 = /** @class */ (function (_super) {
     __extends(SomeDerived2, _super);
     function SomeDerived2() {
         var _this = _super.call(this) || this;
@@ -249,7 +249,7 @@ var SomeDerived2 = (function (_super) {
 //super.publicStaticMemberNotFunction in static member accessor(get and set) of derived class
 //super.privateStaticProperty in static member function of derived class
 //super.privateStaticProperty in static member accessor(get and set) of derived class
-var SomeDerived3 = (function (_super) {
+var SomeDerived3 = /** @class */ (function (_super) {
     __extends(SomeDerived3, _super);
     function SomeDerived3() {
         return _super !== null && _super.apply(this, arguments) || this;

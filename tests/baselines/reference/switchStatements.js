@@ -95,12 +95,12 @@ switch (x) {
     default:
 }
 // basic assignable check, rest covered in tests for 'assignement compatibility'
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;

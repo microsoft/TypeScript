@@ -12,7 +12,7 @@ class D {
 }
 
 //// [propertyAndFunctionWithSameName.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.x = function () {
@@ -20,7 +20,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.x = function (v) { }; // error

@@ -14,7 +14,7 @@ function foo(x, y, z) {
     if (y === void 0) { y = false; }
     if (z === void 0) { z = 0; }
 }
-var CCC = (function () {
+var CCC = /** @class */ (function () {
     function CCC() {
     }
     CCC.prototype.foo = function (x, y, z) {

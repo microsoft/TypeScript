@@ -2,7 +2,7 @@ define("outputdir_module_multifolder/ref/m1", ["require", "exports"], function (
     "use strict";
     exports.__esModule = true;
     exports.m1_a1 = 10;
-    var m1_c1 = (function () {
+    var m1_c1 = /** @class */ (function () {
         function m1_c1() {
         }
         return m1_c1;
@@ -18,7 +18,7 @@ define("outputdir_module_multifolder_ref/m2", ["require", "exports"], function (
     "use strict";
     exports.__esModule = true;
     exports.m2_a1 = 10;
-    var m2_c1 = (function () {
+    var m2_c1 = /** @class */ (function () {
         function m2_c1() {
         }
         return m2_c1;
@@ -34,7 +34,7 @@ define("outputdir_module_multifolder/test", ["require", "exports", "outputdir_mo
     "use strict";
     exports.__esModule = true;
     exports.a1 = 10;
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

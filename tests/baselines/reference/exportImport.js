@@ -17,7 +17,7 @@ export function w(): e.w { // Should be OK
 //// [w1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Widget1 = (function () {
+    var Widget1 = /** @class */ (function () {
         function Widget1() {
             this.name = 'one';
         }

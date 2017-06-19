@@ -50,7 +50,7 @@ function foo() {
     function baz() { }
     function barn(cb) { }
     barn(function (private, public, package) { });
-    var myClass = (function (_super) {
+    var myClass = /** @class */ (function (_super) {
         __extends(package, _super);
         function package() {
             return _super !== null && _super.apply(this, arguments) || this;

@@ -109,7 +109,7 @@ var m1;
     var m2;
     (function (m2) {
         /** class comment;*/
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;
@@ -148,7 +148,7 @@ var m2;
     var m3;
     (function (m3) {
         /** Exported class comment*/
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;
@@ -165,7 +165,7 @@ var m3;
         var m5;
         (function (m5) {
             /** Exported class comment*/
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -185,7 +185,7 @@ var m4;
             var m7;
             (function (m7) {
                 /** Exported class comment*/
-                var c = (function () {
+                var c = /** @class */ (function () {
                     function c() {
                     }
                     return c;
@@ -207,7 +207,7 @@ var m5;
             var m8;
             (function (m8) {
                 /** Exported class comment*/
-                var c = (function () {
+                var c = /** @class */ (function () {
                     function c() {
                     }
                     return c;
@@ -225,7 +225,7 @@ var m6;
         var m8;
         (function (m8) {
             /** Exported class comment*/
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -243,20 +243,20 @@ var m7;
         var m9;
         (function (m9) {
             /** Exported class comment*/
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
             }());
             m9.c = c;
             /** class d */
-            var d = (function () {
+            var d = /** @class */ (function () {
                 function d() {
                 }
                 return d;
             }());
             // class e
-            var e = (function () {
+            var e = /** @class */ (function () {
                 function e() {
                 }
                 return e;

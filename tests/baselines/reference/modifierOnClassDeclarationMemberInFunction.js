@@ -9,7 +9,7 @@ function f() {
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
 function f() {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
             this.baz = 1;
         }

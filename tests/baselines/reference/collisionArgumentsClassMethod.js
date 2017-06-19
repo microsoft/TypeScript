@@ -49,7 +49,7 @@ class c3 {
 }
 
 //// [collisionArgumentsClassMethod.js]
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     function c1() {
     }
     c1.prototype.foo = function (i) {
@@ -88,7 +88,7 @@ var c1 = (function () {
     };
     return c1;
 }());
-var c3 = (function () {
+var c3 = /** @class */ (function () {
     function c3() {
     }
     c3.prototype.foo = function () {

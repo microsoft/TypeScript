@@ -43,7 +43,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var WithLocation = function (Base) { return (function (_super) {
+var WithLocation = function (Base) { return /** @class */ (function (_super) {
     __extends(class_1, _super);
     function class_1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -54,7 +54,7 @@ var WithLocation = function (Base) { return (function (_super) {
     };
     return class_1;
 }(Base)); };
-var Point = (function () {
+var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
         this.y = y;
@@ -64,7 +64,7 @@ var Point = (function () {
     };
     return Point;
 }());
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;

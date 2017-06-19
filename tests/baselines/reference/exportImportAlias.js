@@ -73,7 +73,7 @@ var p: M.D.Point;
 var A;
 (function (A) {
     A.x = 'hello world';
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;
@@ -97,7 +97,7 @@ var X;
     }
     X.Y = Y;
     (function (Y) {
-        var Point = (function () {
+        var Point = /** @class */ (function () {
             function Point(x, y) {
                 this.x = x;
                 this.y = y;
@@ -116,7 +116,7 @@ var m = Z.y();
 var n = new Z.y.Point(0, 0);
 var K;
 (function (K) {
-    var L = (function () {
+    var L = /** @class */ (function () {
         function L(name) {
             this.name = name;
         }

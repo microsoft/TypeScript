@@ -10,7 +10,7 @@ class CDoc {
 
 
 //// [functionExpressionAndLambdaMatchesFunction.js]
-var CDoc = (function () {
+var CDoc = /** @class */ (function () {
     function CDoc() {
         function doSomething(a) {
         }

@@ -21,7 +21,7 @@ import * as n from "./file1"
 //// [file1.js]
 "use strict";
 exports.__esModule = true;
-var Calculator = (function () {
+var Calculator = /** @class */ (function () {
     function Calculator() {
     }
     Calculator.prototype.handleChar = function () { };

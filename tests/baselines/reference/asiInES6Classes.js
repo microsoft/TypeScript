@@ -23,7 +23,7 @@ class Foo {
 
 
 //// [asiInES6Classes.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.defaults = {
             done: false

@@ -42,7 +42,7 @@ class Chain2<T extends I> {
 }
 
 //// [chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.js]
-var Chain = (function () {
+var Chain = /** @class */ (function () {
     function Chain(value) {
         this.value = value;
     }
@@ -60,7 +60,7 @@ var Chain = (function () {
     };
     return Chain;
 }());
-var Chain2 = (function () {
+var Chain2 = /** @class */ (function () {
     function Chain2(value) {
         this.value = value;
     }

@@ -49,7 +49,7 @@ module.exports = x;
 //// [foo2.js]
 "use strict";
 var x = 10;
-var y = (function () {
+var y = /** @class */ (function () {
     function y() {
     }
     return y;
@@ -62,7 +62,7 @@ var x;
 (function (x_1) {
     x_1.x = 10;
 })(x || (x = {}));
-var y = (function () {
+var y = /** @class */ (function () {
     function y() {
     }
     return y;

@@ -5,7 +5,7 @@ function foo() {
 
 //// [classInsideBlock.js]
 function foo() {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

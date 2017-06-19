@@ -8,7 +8,7 @@ class c {
 declare function foo(): boolean;
 
 //// [b.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

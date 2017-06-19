@@ -9,7 +9,7 @@ module m {
 //// [declFileModuleWithPropertyOfTypeModule.js]
 var m;
 (function (m) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

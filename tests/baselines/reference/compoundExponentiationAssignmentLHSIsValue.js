@@ -99,7 +99,7 @@ var __extends = (this && this.__extends) || (function () {
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value;
 // this
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this = Math.pow(this, value);
     }
@@ -141,7 +141,7 @@ value;
 // array literals
 _a = Math.pow(['', ''], value), '' = _a[0], '' = _a[1];
 // super
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super.call(this) || this;

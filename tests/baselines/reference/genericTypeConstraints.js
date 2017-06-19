@@ -24,23 +24,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.fooMethod = function () { };
     return Foo;
 }());
-var FooExtended = (function () {
+var FooExtended = /** @class */ (function () {
     function FooExtended() {
     }
     return FooExtended;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;
 }());
-var BarExtended = (function (_super) {
+var BarExtended = /** @class */ (function (_super) {
     __extends(BarExtended, _super);
     function BarExtended() {
         return _super.call(this) || this;

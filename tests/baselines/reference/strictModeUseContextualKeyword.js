@@ -17,7 +17,7 @@ function H() {
 "use strict";
 var as = 0;
 function foo(as) { }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.as = function () { };

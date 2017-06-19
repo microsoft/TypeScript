@@ -75,7 +75,7 @@ x = f; // ok
 var Others;
 (function (Others) {
     var a = e; // ok
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

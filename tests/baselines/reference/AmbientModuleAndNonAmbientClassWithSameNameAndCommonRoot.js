@@ -25,7 +25,7 @@ var p = new A.Point(0, 0); // unexpected error here, bug 840000
 //// [classPoint.js]
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;

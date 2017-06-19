@@ -20,7 +20,7 @@ const x: B = { c: B };
 //// [a.js]
 "use strict";
 // This test is just like exportDefaultProperty2, but with `export =`.
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

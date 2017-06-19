@@ -13,13 +13,13 @@ class C2<T> {
 
 //// [classWithOptionalParameter.js]
 // classes do not permit optional parameters, these are errors
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function () { };
     return C;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.f = function (x) { };

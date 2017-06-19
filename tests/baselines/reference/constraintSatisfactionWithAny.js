@@ -71,7 +71,7 @@ foo4(b);
 //function foo5<T extends String, U extends T>(x: T, y: U): T { return null; }
 //foo5(a, a);
 //foo5<any, any>(b, b);
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = x;
     }
@@ -79,7 +79,7 @@ var C = (function () {
 }());
 var c1 = new C(a);
 var c2 = new C(b);
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2(x) {
         this.x = x;
     }
@@ -92,7 +92,7 @@ var c4 = new C2(b);
 //}
 //var c5 = new C3(a);
 //var c6 = new C3<any>(b);
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4(x) {
         this.x = x;
     }

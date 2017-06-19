@@ -39,19 +39,19 @@ var y: (a: string) => string;
 var z: new (a: string) => m.c;
 
 //// [declFileTypeAnnotationTypeLiteral.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
 }());
-var g = (function () {
+var g = /** @class */ (function () {
     function g() {
     }
     return g;
 }());
 var m;
 (function (m) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

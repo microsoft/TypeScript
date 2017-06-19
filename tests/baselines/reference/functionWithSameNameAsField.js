@@ -9,7 +9,7 @@ class TestProgressBar {
 
 
 //// [functionWithSameNameAsField.js]
-var TestProgressBar = (function () {
+var TestProgressBar = /** @class */ (function () {
     function TestProgressBar() {
     }
     TestProgressBar.prototype.total = function (total) {

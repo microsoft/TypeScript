@@ -8,7 +8,7 @@ baz.concat("y");
   // So we don't want an error on 'concat'.
 
 //// [errorSupression1.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.bar = function () { return "x"; };

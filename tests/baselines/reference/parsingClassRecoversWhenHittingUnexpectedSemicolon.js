@@ -6,7 +6,7 @@ class C {
 
 
 //// [parsingClassRecoversWhenHittingUnexpectedSemicolon.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.f = function () { };

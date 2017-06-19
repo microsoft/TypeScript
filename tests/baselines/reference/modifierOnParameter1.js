@@ -4,7 +4,7 @@ class C {
 }
 
 //// [modifierOnParameter1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(p) {
     }
     return C;

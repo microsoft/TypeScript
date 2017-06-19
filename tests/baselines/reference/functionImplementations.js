@@ -232,12 +232,12 @@ var n = function () {
 // ignoring return statements with no expressions.
 // A compile - time error occurs if no return statement expression has a type that is a supertype of each of the others.
 // FunctionExpression with no return type annotation with multiple return statements with subtype relation between returns
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -288,14 +288,14 @@ function opt3(n, m) {
 function f6() {
     return;
 }
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Base));
-var AnotherClass = (function () {
+var AnotherClass = /** @class */ (function () {
     function AnotherClass() {
     }
     return AnotherClass;

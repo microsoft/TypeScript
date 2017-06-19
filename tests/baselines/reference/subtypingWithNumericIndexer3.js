@@ -55,19 +55,19 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var B2 = (function (_super) {
+var B2 = /** @class */ (function (_super) {
     __extends(B2, _super);
     function B2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -76,40 +76,40 @@ var B2 = (function (_super) {
 }(A));
 var Generics;
 (function (Generics) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(A));
-    var B2 = (function (_super) {
+    var B2 = /** @class */ (function (_super) {
         __extends(B2, _super);
         function B2() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B2;
     }(A));
-    var B3 = (function (_super) {
+    var B3 = /** @class */ (function (_super) {
         __extends(B3, _super);
         function B3() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B3;
     }(A));
-    var B4 = (function (_super) {
+    var B4 = /** @class */ (function (_super) {
         __extends(B4, _super);
         function B4() {
             return _super !== null && _super.apply(this, arguments) || this;
         }
         return B4;
     }(A));
-    var B5 = (function (_super) {
+    var B5 = /** @class */ (function (_super) {
         __extends(B5, _super);
         function B5() {
             return _super !== null && _super.apply(this, arguments) || this;

@@ -125,24 +125,24 @@ undefined === function () {
     throw undefined;
     var x = 4;
 };
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var AnotherClass = (function () {
+var AnotherClass = /** @class */ (function () {
     function AnotherClass() {
     }
     return AnotherClass;
 }());
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;

@@ -40,7 +40,7 @@ function filter(handler) {
         // ...
     };
 }
-var Wat = (function () {
+var Wat = /** @class */ (function () {
     function Wat() {
     }
     Wat.whatever = function () {

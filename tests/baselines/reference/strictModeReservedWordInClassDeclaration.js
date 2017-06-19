@@ -39,14 +39,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(private, public, static) {
         private = public = static;
     }
     Foo.prototype.banana = function (x) { };
     return Foo;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(public, let) {
         this.public = public;
     }
@@ -57,34 +57,34 @@ var C = (function () {
     C.prototype.pulbic = function () { }; // No Error;
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     return E;
 }());
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
     }
     return F;
 }());
-var F1 = (function () {
+var F1 = /** @class */ (function () {
     function F1() {
     }
     return F1;
 }());
-var G = (function (_super) {
+var G = /** @class */ (function (_super) {
     __extends(G, _super);
     function G() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return G;
 }(package));
-var H = (function (_super) {
+var H = /** @class */ (function (_super) {
     __extends(H, _super);
     function H() {
         return _super !== null && _super.apply(this, arguments) || this;

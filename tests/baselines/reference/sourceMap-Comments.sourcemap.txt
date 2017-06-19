@@ -90,7 +90,7 @@ sourceFile:sourceMap-Comments.ts
 1->^^^^
 2 >    ^^^^^^^^^^^
 3 >               ^^^^^
-4 >                    ^^^^^^^^^^^^^^->
+4 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >    
 3 >               tools
@@ -98,7 +98,7 @@ sourceFile:sourceMap-Comments.ts
 2 >Emitted(4, 16) Source(1, 12) + SourceIndex(0)
 3 >Emitted(4, 21) Source(1, 17) + SourceIndex(0)
 ---
->>>        var Test = (function () {
+>>>        var Test = /** @class */ (function () {
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^^^^^^^^^^^->
 1-> {

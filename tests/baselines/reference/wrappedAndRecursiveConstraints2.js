@@ -7,7 +7,7 @@ var c = new C(1);
 var c = new C(new C('')); // error
 
 //// [wrappedAndRecursiveConstraints2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
     }
     return C;

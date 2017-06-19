@@ -11,7 +11,7 @@ class C {
 
 //// [computedPropertyNames14_ES5.js]
 var b;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype[b] = function () { };

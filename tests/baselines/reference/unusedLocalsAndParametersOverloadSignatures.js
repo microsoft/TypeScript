@@ -29,7 +29,7 @@ function func(details, message) {
     return details + message;
 }
 exports.func = func;
-var C = (function () {
+var C = /** @class */ (function () {
     function C(details, message) {
         details + message;
     }

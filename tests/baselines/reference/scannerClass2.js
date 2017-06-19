@@ -8,7 +8,7 @@
 //// [scannerClass2.js]
 "use strict";
 exports.__esModule = true;
-var LoggerAdapter = (function () {
+var LoggerAdapter = /** @class */ (function () {
     function LoggerAdapter(logger) {
         this.logger = logger;
         this._information = this.logger.information();

@@ -32,7 +32,7 @@ class C6 implements I1 {
 
 
 //// [interfaceImplementation5.js]
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     Object.defineProperty(C1.prototype, "getset1", {
@@ -42,7 +42,7 @@ var C1 = (function () {
     });
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     Object.defineProperty(C2.prototype, "getset1", {
@@ -52,7 +52,7 @@ var C2 = (function () {
     });
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     Object.defineProperty(C3.prototype, "getset1", {
@@ -63,7 +63,7 @@ var C3 = (function () {
     });
     return C3;
 }());
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     Object.defineProperty(C4.prototype, "getset1", {
@@ -73,7 +73,7 @@ var C4 = (function () {
     });
     return C4;
 }());
-var C5 = (function () {
+var C5 = /** @class */ (function () {
     function C5() {
     }
     Object.defineProperty(C5.prototype, "getset1", {
@@ -83,7 +83,7 @@ var C5 = (function () {
     });
     return C5;
 }());
-var C6 = (function () {
+var C6 = /** @class */ (function () {
     function C6() {
     }
     Object.defineProperty(C6.prototype, "getset1", {

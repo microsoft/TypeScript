@@ -7,7 +7,7 @@ export class Logger {
 //// [parser509546.js]
 "use strict";
 exports.__esModule = true;
-var Logger = (function () {
+var Logger = /** @class */ (function () {
     function Logger() {
     }
     return Logger;

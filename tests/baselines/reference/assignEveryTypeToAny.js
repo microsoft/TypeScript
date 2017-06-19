@@ -82,7 +82,7 @@ var f = E.A;
 x = f;
 var g;
 x = g;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

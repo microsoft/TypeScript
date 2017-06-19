@@ -15,7 +15,7 @@ interface Bar {
 
 //// [privacyCheckExternalModuleExportAssignmentOfGenericClass_0.js]
 "use strict";
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(a) {
         this.a = a;
     }

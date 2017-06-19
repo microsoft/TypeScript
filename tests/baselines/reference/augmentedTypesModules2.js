@@ -59,7 +59,7 @@ function m2f() { }
 function m2g() { }
 ;
 (function (m2g) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.foo = function () { };

@@ -16,7 +16,7 @@ var w = v1.y.a; // should be 'string'
 var z = v1.z.a; // should be 'number'
 
 //// [genericClasses2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

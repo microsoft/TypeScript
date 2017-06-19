@@ -33,18 +33,18 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Component = (function () {
+var Component = /** @class */ (function () {
     function Component() {
     }
     Component.prototype.setState = function (state) { };
     return Component;
 }());
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Comp = (function (_super) {
+var Comp = /** @class */ (function (_super) {
     __extends(Comp, _super);
     function Comp() {
         return _super !== null && _super.apply(this, arguments) || this;

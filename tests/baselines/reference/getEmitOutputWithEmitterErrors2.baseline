@@ -5,7 +5,7 @@ FileName : /tests/cases/fourslash/inputFile.js
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

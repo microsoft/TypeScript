@@ -139,7 +139,7 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Widget1 = (function () {
+var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
     }
@@ -152,7 +152,7 @@ function createWidget1() {
 exports.createWidget1 = createWidget1;
 var SpecializedWidget;
 (function (SpecializedWidget) {
-    var Widget2 = (function () {
+    var Widget2 = /** @class */ (function () {
         function Widget2() {
             this.name = 'one';
         }
@@ -190,7 +190,7 @@ exports.createExportedWidget4 = createExportedWidget4;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
-var publicClassWithWithPrivateGetAccessorTypes = (function () {
+var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -252,7 +252,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
     return publicClassWithWithPrivateGetAccessorTypes;
 }());
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-var privateClassWithWithPrivateGetAccessorTypes = (function () {
+var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -313,7 +313,7 @@ var privateClassWithWithPrivateGetAccessorTypes = (function () {
     });
     return privateClassWithWithPrivateGetAccessorTypes;
 }());
-var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -347,7 +347,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     return publicClassWithPrivateModuleGetAccessorTypes;
 }());
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {

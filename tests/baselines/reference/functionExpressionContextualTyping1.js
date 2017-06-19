@@ -70,7 +70,7 @@ var a0 = function (num, str) {
     num.toExponential();
     return 0;
 };
-var Class = (function () {
+var Class = /** @class */ (function () {
     function Class() {
     }
     Class.prototype.foo = function () { };
@@ -110,7 +110,7 @@ b6 = function (i) {
     return i;
 }; // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
 b7 = function (j, m) { }; // Per spec, no contextual signature can be extracted in this case. (Otherwise clause)
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         var k = function (j, k) {
             return [j, k];

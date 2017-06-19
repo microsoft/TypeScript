@@ -36,7 +36,7 @@ module M { // Shouldnt bn _M
 var M;
 (function (M_1) {
     M_1.x = 3;
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         c.prototype.fn = function (M, p) {
@@ -46,7 +46,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M_2) {
-    var d = (function () {
+    var d = /** @class */ (function () {
         function d() {
         }
         d.prototype.fn2 = function () {
@@ -57,7 +57,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M_3) {
-    var e = (function () {
+    var e = /** @class */ (function () {
         function e() {
         }
         e.prototype.fn3 = function () {
@@ -69,7 +69,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M) {
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         f.prototype.M = function () {

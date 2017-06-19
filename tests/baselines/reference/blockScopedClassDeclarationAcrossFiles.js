@@ -8,7 +8,7 @@ class C { }
 
 //// [foo.js]
 var foo;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

@@ -24,7 +24,7 @@ interface IFace {
 
 
 //// [overloadReturnTypes.js]
-var Accessor = (function () {
+var Accessor = /** @class */ (function () {
     function Accessor() {
     }
     return Accessor;

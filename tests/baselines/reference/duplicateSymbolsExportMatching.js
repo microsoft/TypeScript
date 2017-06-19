@@ -95,7 +95,7 @@ define(["require", "exports"], function (require, exports) {
         M.F = F;
     })(M || (M = {}));
     (function (M) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;

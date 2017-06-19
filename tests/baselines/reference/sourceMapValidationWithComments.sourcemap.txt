@@ -8,7 +8,7 @@ sources: sourceMapValidationWithComments.ts
 emittedFile:tests/cases/compiler/sourceMapValidationWithComments.js
 sourceFile:sourceMapValidationWithComments.ts
 -------------------------------------------------------------------
->>>var DebugClass = (function () {
+>>>var DebugClass = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >

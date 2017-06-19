@@ -62,12 +62,12 @@ function f1() {
     a = { x: 1, y: 2, z: 3 };
     a = { x: 1, z: 3 }; // error
 }
-var Animal = (function () {
+var Animal = /** @class */ (function () {
     function Animal() {
     }
     return Animal;
 }());
-var Giraffe = (function (_super) {
+var Giraffe = /** @class */ (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
         return _super !== null && _super.apply(this, arguments) || this;

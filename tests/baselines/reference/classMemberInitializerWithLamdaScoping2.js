@@ -20,7 +20,7 @@ class Test1 {
 //// [classMemberInitializerWithLamdaScoping2_0.js]
 var field1;
 //// [classMemberInitializerWithLamdaScoping2_1.js]
-var Test1 = (function () {
+var Test1 = /** @class */ (function () {
     function Test1(field1) {
         this.field1 = field1;
         this.messageHandler = function () {

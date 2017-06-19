@@ -28,7 +28,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var module_1 = require("module");
 var module_2 = require("module");
 var ns = require("module");
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;

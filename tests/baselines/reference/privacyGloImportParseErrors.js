@@ -157,7 +157,7 @@ var m1;
 (function (m1) {
     var m1_M1_public;
     (function (m1_M1_public) {
-        var c1 = (function () {
+        var c1 = /** @class */ (function () {
             function c1() {
             }
             return c1;
@@ -171,7 +171,7 @@ var m1;
     })(m1_M1_public = m1.m1_M1_public || (m1.m1_M1_public = {}));
     var m1_M2_private;
     (function (m1_M2_private) {
-        var c1 = (function () {
+        var c1 = /** @class */ (function () {
             function c1() {
             }
             return c1;
@@ -222,7 +222,7 @@ var m1;
 })(m1 || (m1 = {}));
 var glo_M1_public;
 (function (glo_M1_public) {
-    var c1 = (function () {
+    var c1 = /** @class */ (function () {
         function c1() {
         }
         return c1;

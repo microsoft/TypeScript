@@ -42,7 +42,7 @@ define(["require", "exports"], function (require, exports) {
     function f() { }
     exports.f = f;
     exports.f1 = f;
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

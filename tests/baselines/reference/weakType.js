@@ -81,7 +81,7 @@ function del(options, error) {
     changes.push(options);
     changes.push(error);
 }
-var K = (function () {
+var K = /** @class */ (function () {
     function K(s) {
     }
     return K;

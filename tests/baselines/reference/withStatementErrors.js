@@ -24,7 +24,7 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) {
     bang = true; // no error
     function bar() { } // no error
     bar(); // no error
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

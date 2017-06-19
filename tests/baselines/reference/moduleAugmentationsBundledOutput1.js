@@ -58,7 +58,7 @@ c.baz2().x.toLowerCase();
 define("m1", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Cls = (function () {
+    var Cls = /** @class */ (function () {
         function Cls() {
         }
         return Cls;
@@ -74,13 +74,13 @@ define("m2", ["require", "exports", "m1"], function (require, exports, m1_1) {
 define("m3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
         }
         return C1;
     }());
     exports.C1 = C1;
-    var C2 = (function () {
+    var C2 = /** @class */ (function () {
         function C2() {
         }
         return C2;

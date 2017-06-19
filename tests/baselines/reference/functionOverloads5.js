@@ -6,7 +6,7 @@ class baz {
 
 
 //// [functionOverloads5.js]
-var baz = (function () {
+var baz = /** @class */ (function () {
     function baz() {
     }
     baz.prototype.foo = function (bar) { };

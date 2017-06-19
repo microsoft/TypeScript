@@ -18,7 +18,7 @@ function test() {
 
 
 //// [thisInInnerFunctions.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.x = "hello";
     }

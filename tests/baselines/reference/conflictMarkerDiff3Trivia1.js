@@ -10,7 +10,7 @@ class C {
 }
 
 //// [conflictMarkerDiff3Trivia1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.v = 1;
     }

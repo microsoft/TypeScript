@@ -4,7 +4,7 @@ class C {
 }
 
 //// [parserMemberAccessorDeclaration4.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "a", {

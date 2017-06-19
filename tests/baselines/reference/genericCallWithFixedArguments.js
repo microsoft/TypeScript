@@ -8,13 +8,13 @@ g<A, B>(7) // the parameter list is fixed, so this should not error
 
 
 //// [genericCallWithFixedArguments.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () { };
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.bar = function () { };

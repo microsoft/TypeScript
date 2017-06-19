@@ -53,12 +53,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 function PropDeco(target, propKey) { }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     __decorate([

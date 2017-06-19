@@ -4,7 +4,7 @@ class _this {
 var f = () => _this;
 
 //// [noCollisionThisExpressionAndClassInGlobal.js]
-var _this = (function () {
+var _this = /** @class */ (function () {
     function _this() {
     }
     return _this;

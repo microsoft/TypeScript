@@ -12,7 +12,7 @@ class Greeter {
 }
 
 //// [classMemberInitializerWithLamdaScoping5.js]
-var Greeter = (function () {
+var Greeter = /** @class */ (function () {
     function Greeter(message) {
         this.messageHandler = function (message) {
             console.log(message); // This shouldnt be error

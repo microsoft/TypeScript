@@ -6,7 +6,7 @@ new class {
 }().hi();
 
 //// [classExpression5.js]
-new (function () {
+new /** @class */ (function () {
     function class_1() {
     }
     class_1.prototype.hi = function () {

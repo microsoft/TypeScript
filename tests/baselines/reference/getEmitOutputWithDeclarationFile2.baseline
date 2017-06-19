@@ -4,7 +4,7 @@ EmitSkipped: false
 FileName : /tests/cases/fourslash/inputFile2.js
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

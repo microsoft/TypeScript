@@ -9,7 +9,7 @@ var f = () => this;
 var _this = this;
 var _this;
 (function (_this) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

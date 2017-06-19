@@ -45,7 +45,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Event = (function () {
+var Event = /** @class */ (function () {
     function Event() {
         // TODO: remove
         this._listeners = [];
@@ -58,7 +58,7 @@ var Event = (function () {
     };
     return Event;
 }());
-var ItemSetEvent = (function (_super) {
+var ItemSetEvent = /** @class */ (function (_super) {
     __extends(ItemSetEvent, _super);
     function ItemSetEvent() {
         return _super !== null && _super.apply(this, arguments) || this;

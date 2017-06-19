@@ -14,7 +14,7 @@ class Foo {
 
 //// [collisionThisExpressionAndNameResolution.js]
 var console;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.x = function () {

@@ -58,14 +58,14 @@ var n2 = 34;
 var s = "yo";
 var b = true;
 var n3 = 5 || {};
-var baz = (function () {
+var baz = /** @class */ (function () {
     function baz() {
     }
     baz.prototype.bar = function () { };
     ;
     return baz;
 }());
-var foo = (function (_super) {
+var foo = /** @class */ (function (_super) {
     __extends(foo, _super);
     function foo() {
         return _super !== null && _super.apply(this, arguments) || this;

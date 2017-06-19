@@ -6,7 +6,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInContructor.js]
-var Dummy = (function () {
+var Dummy = /** @class */ (function () {
     function Dummy(person) {
         var unused = 20;
     }

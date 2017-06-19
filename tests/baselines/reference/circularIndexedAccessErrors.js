@@ -41,12 +41,12 @@ function foo<T extends Foo | T["hello"]>() {
 
 //// [circularIndexedAccessErrors.js]
 var x2x = x2.x;
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;

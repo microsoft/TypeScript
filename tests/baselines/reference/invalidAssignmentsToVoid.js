@@ -28,7 +28,7 @@ x = 1;
 x = true;
 x = '';
 x = {};
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

@@ -21,7 +21,7 @@ y2 = ext;
 //// [typeofAmbientExternalModules_0.js]
 "use strict";
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
@@ -29,7 +29,7 @@ var C = (function () {
 exports.C = C;
 //// [typeofAmbientExternalModules_1.js]
 "use strict";
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;

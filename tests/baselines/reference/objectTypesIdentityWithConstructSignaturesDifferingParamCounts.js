@@ -78,13 +78,13 @@ function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignaturesDifferingParamCounts.js]
 // object types are identical structurally
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x, y) {
         return null;
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x, y) {
         return null;
     }

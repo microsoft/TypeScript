@@ -29,23 +29,23 @@ export = Foo;
 "use strict";
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
     }());
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;
     }());
 })(M || (M = {}));
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Bar = (function () {
+var Bar = /** @class */ (function () {
     function Bar() {
     }
     return Bar;

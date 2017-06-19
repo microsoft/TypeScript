@@ -227,7 +227,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var TypeCollectionContext = (function () {
+    var TypeCollectionContext = /** @class */ (function () {
         function TypeCollectionContext(scopeChain, checker) {
             this.scopeChain = scopeChain;
             this.checker = checker;
@@ -236,7 +236,7 @@ var TypeScript;
         return TypeCollectionContext;
     }());
     TypeScript.TypeCollectionContext = TypeCollectionContext;
-    var MemberScopeContext = (function () {
+    var MemberScopeContext = /** @class */ (function () {
         function MemberScopeContext(flow, pos, matchFlag) {
             this.flow = flow;
             this.pos = pos;
@@ -248,7 +248,7 @@ var TypeScript;
         return MemberScopeContext;
     }());
     TypeScript.MemberScopeContext = MemberScopeContext;
-    var EnclosingScopeContext = (function () {
+    var EnclosingScopeContext = /** @class */ (function () {
         function EnclosingScopeContext(logger, script, text, pos, isMemberCompletion) {
             this.logger = logger;
             this.script = script;

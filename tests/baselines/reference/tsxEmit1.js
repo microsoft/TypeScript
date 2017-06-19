@@ -54,7 +54,7 @@ var openClosed2 = <div n='m'>foo</div>;
 var openClosed3 = <div n='m'>{p}</div>;
 var openClosed4 = <div n='m'>{p < p}</div>;
 var openClosed5 = <div n='m'>{p > p}</div>;
-var SomeClass = (function () {
+var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     SomeClass.prototype.f = function () {

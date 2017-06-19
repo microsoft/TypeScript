@@ -16,12 +16,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
-var Bar = (function (_super) {
+var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;

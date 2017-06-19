@@ -48,7 +48,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
         var x;
     }
@@ -60,7 +60,7 @@ var Base = (function () {
     };
     return Base;
 }());
-var Sub1 = (function (_super) {
+var Sub1 = /** @class */ (function (_super) {
     __extends(Sub1, _super);
     function Sub1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -70,7 +70,7 @@ var Sub1 = (function (_super) {
     };
     return Sub1;
 }(Base));
-var SubSub1 = (function (_super) {
+var SubSub1 = /** @class */ (function (_super) {
     __extends(SubSub1, _super);
     function SubSub1() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -80,7 +80,7 @@ var SubSub1 = (function (_super) {
     };
     return SubSub1;
 }(Sub1));
-var Base2 = (function () {
+var Base2 = /** @class */ (function () {
     function Base2() {
     }
     Base2.prototype.foo = function () {

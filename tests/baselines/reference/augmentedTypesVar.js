@@ -47,13 +47,13 @@ var x3 = 1;
 var x3 = function () { }; // error
 // var then class
 var x4 = 1; // error
-var x4 = (function () {
+var x4 = /** @class */ (function () {
     function x4() {
     }
     return x4;
 }()); // error
 var x4a = 1; // error
-var x4a = (function () {
+var x4a = /** @class */ (function () {
     function x4a() {
     }
     x4a.prototype.foo = function () { };

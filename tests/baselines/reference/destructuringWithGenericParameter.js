@@ -15,7 +15,7 @@ genericFunction(genericObject, ({greeting}) => {
 
 
 //// [destructuringWithGenericParameter.js]
-var GenericClass = (function () {
+var GenericClass = /** @class */ (function () {
     function GenericClass() {
     }
     return GenericClass;

@@ -36,7 +36,7 @@ module Test {
 //// [arrayAssignmentTest5.js]
 var Test;
 (function (Test) {
-    var Bug = (function () {
+    var Bug = /** @class */ (function () {
         function Bug() {
         }
         Bug.prototype.onEnter = function (line, state, offset) {

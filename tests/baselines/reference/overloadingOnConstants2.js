@@ -38,20 +38,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.x = 1;
     }
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return D;
 }(C));
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
         this.y = 1;
     }

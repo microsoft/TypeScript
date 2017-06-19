@@ -196,7 +196,7 @@ setState(foo, {});
 setState(foo, foo);
 setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.setState = function (props) {

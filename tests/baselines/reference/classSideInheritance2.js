@@ -31,14 +31,14 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var SubText = (function (_super) {
+var SubText = /** @class */ (function (_super) {
     __extends(SubText, _super);
     function SubText(text, span) {
         return _super.call(this) || this;
     }
     return SubText;
 }(TextBase));
-var TextBase = (function () {
+var TextBase = /** @class */ (function () {
     function TextBase() {
     }
     TextBase.prototype.subText = function (span) {

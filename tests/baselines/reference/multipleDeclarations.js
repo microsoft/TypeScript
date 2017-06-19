@@ -42,7 +42,7 @@ function C() {
 C.prototype.m = function () {
     this.nothing();
 };
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
         this.m = this.m.bind(this);
         this.mistake = 'frankly, complete nonsense';
@@ -57,7 +57,7 @@ var x = new X();
 X.prototype.mistake = false;
 x.m();
 x.mistake;
-var Y = (function () {
+var Y = /** @class */ (function () {
     function Y() {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';

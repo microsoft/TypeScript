@@ -18,12 +18,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var AbstractGreeter = (function () {
+var AbstractGreeter = /** @class */ (function () {
     function AbstractGreeter() {
     }
     return AbstractGreeter;
 }());
-var Greeter = (function (_super) {
+var Greeter = /** @class */ (function (_super) {
     __extends(Greeter, _super);
     function Greeter() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

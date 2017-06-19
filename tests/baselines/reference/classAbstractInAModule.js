@@ -20,13 +20,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var M;
 (function (M) {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
     }());
     M.A = A;
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;

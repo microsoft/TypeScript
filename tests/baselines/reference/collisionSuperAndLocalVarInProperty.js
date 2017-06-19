@@ -29,7 +29,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _super = 10; // No Error
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.prop1 = {
             doStuff: function () {
@@ -40,7 +40,7 @@ var Foo = (function () {
     }
     return Foo;
 }());
-var b = (function (_super) {
+var b = /** @class */ (function (_super) {
     __extends(b, _super);
     function b() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

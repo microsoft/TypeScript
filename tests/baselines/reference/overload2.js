@@ -26,7 +26,7 @@ var B;
 // should be ok
 function foo(x) {
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

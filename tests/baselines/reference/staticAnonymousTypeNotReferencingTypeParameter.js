@@ -145,7 +145,7 @@ interface Array<T> {
 // This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
 // this would cause the compiler to run out of memory.
 function outer(x) {
-    var Inner = (function () {
+    var Inner = /** @class */ (function () {
         function Inner() {
         }
         Inner.y = x;
@@ -154,7 +154,7 @@ function outer(x) {
     return Inner;
 }
 var y = outer(5).y;
-var ListWrapper2 = (function () {
+var ListWrapper2 = /** @class */ (function () {
     function ListWrapper2() {
     }
     ListWrapper2.clone = function (dit, array) { return array.slice(0); };
@@ -184,7 +184,7 @@ var tessst;
     }
     tessst.funkyFor = funkyFor;
 })(tessst || (tessst = {}));
-var ListWrapper = (function () {
+var ListWrapper = /** @class */ (function () {
     function ListWrapper() {
     }
     // JS has no way to express a statically fixed size list, but dart does so we

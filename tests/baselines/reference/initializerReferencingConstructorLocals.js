@@ -23,7 +23,7 @@ class D<T> {
 
 //// [initializerReferencingConstructorLocals.js]
 // Initializer expressions for instance member variables are evaluated in the scope of the class constructor body but are not permitted to reference parameters or local variables of the constructor. 
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.a = z; // error
         this.c = this.z; // error
@@ -32,7 +32,7 @@ var C = (function () {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D(x) {
         this.a = z; // error
         this.c = this.z; // error

@@ -57,7 +57,7 @@ var r5 = b2[2];
 var r6 = b2[3];
 
 //// [numericIndexingResults.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this[1] = '';
         this["2"] = '';

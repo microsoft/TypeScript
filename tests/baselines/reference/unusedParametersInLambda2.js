@@ -8,7 +8,7 @@ class A {
 }
 
 //// [unusedParametersInLambda2.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.f1 = function () {

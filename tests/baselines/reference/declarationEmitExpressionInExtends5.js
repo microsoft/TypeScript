@@ -33,13 +33,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Test;
 (function (Test) {
-    var SomeClass = (function () {
+    var SomeClass = /** @class */ (function () {
         function SomeClass() {
         }
         return SomeClass;
     }());
     Test.SomeClass = SomeClass;
-    var Derived = (function (_super) {
+    var Derived = /** @class */ (function (_super) {
         __extends(Derived, _super);
         function Derived() {
             return _super !== null && _super.apply(this, arguments) || this;

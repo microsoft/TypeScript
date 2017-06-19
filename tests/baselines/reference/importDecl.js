@@ -84,7 +84,7 @@ export var useMultiImport_m4_f4 = multiImport_m4.foo();
 //// [importDecl_require.js]
 "use strict";
 exports.__esModule = true;
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     return d;
@@ -95,7 +95,7 @@ exports.foo = foo;
 //// [importDecl_require1.js]
 "use strict";
 exports.__esModule = true;
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     return d;
@@ -107,7 +107,7 @@ exports.foo = foo;
 //// [importDecl_require2.js]
 "use strict";
 exports.__esModule = true;
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     return d;
@@ -118,7 +118,7 @@ exports.foo = foo;
 //// [importDecl_require3.js]
 "use strict";
 exports.__esModule = true;
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     return d;

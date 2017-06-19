@@ -40,7 +40,7 @@ var EndGate;
 (function (EndGate) {
     var Tweening;
     (function (Tweening) {
-        var Tween = (function () {
+        var Tween = /** @class */ (function () {
             function Tween(from) {
                 this._from = from.Clone();
             }
@@ -52,7 +52,7 @@ var EndGate;
 (function (EndGate) {
     var Tweening;
     (function (Tweening) {
-        var NumberTween = (function (_super) {
+        var NumberTween = /** @class */ (function (_super) {
             __extends(NumberTween, _super);
             function NumberTween(from) {
                 return _super.call(this, from) || this;

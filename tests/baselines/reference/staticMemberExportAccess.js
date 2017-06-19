@@ -21,7 +21,7 @@ var r4 = $.sammy.x; // error
 Sammy.bar();
 
 //// [staticMemberExportAccess.js]
-var Sammy = (function () {
+var Sammy = /** @class */ (function () {
     function Sammy() {
     }
     Sammy.prototype.foo = function () { return "hi"; };

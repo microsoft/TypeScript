@@ -28,13 +28,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var B = (function () {
+var B = /** @class */ (function () {
     function B(y) {
         this.y = y;
     }
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C(y, z, w) {
         var _this = _super.call(this, y) || this;

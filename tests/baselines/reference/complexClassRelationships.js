@@ -59,7 +59,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 // There should be no errors in this file
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -70,18 +70,18 @@ var Derived = (function (_super) {
     };
     return Derived;
 }(Base));
-var BaseCollection = (function () {
+var BaseCollection = /** @class */ (function () {
     function BaseCollection(f) {
         (function (item) { return [item.Components]; });
     }
     return BaseCollection;
 }());
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Thing = (function () {
+var Thing = /** @class */ (function () {
     function Thing() {
     }
     Object.defineProperty(Thing.prototype, "Components", {
@@ -91,7 +91,7 @@ var Thing = (function () {
     });
     return Thing;
 }());
-var ComponentCollection = (function () {
+var ComponentCollection = /** @class */ (function () {
     function ComponentCollection() {
     }
     ComponentCollection.sortComponents = function (p) {
@@ -99,7 +99,7 @@ var ComponentCollection = (function () {
     };
     return ComponentCollection;
 }());
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Object.defineProperty(Foo.prototype, "prop1", {
@@ -121,12 +121,12 @@ var Foo = (function () {
     });
     return Foo;
 }());
-var GenericType = (function () {
+var GenericType = /** @class */ (function () {
     function GenericType(parent) {
     }
     return GenericType;
 }());
-var FooBase = (function () {
+var FooBase = /** @class */ (function () {
     function FooBase() {
     }
     FooBase.prototype.populate = function () {

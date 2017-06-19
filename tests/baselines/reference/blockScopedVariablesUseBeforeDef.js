@@ -117,7 +117,7 @@ function foo2() {
     var x;
 }
 function foo3() {
-    var X = (function () {
+    var X = /** @class */ (function () {
         function X() {
         }
         X.prototype.m = function () { return x; };
@@ -126,7 +126,7 @@ function foo3() {
     var x;
 }
 function foo4() {
-    var y = (function () {
+    var y = /** @class */ (function () {
         function class_1() {
         }
         class_1.prototype.m = function () { return x; };
@@ -145,7 +145,7 @@ function foo6() {
     var x;
 }
 function foo7() {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
             this.a = x;
         }
@@ -154,7 +154,7 @@ function foo7() {
     var x;
 }
 function foo8() {
-    var y = (function () {
+    var y = /** @class */ (function () {
         function class_2() {
             this.a = x;
         }
@@ -163,7 +163,7 @@ function foo8() {
     var x;
 }
 function foo9() {
-    var y = (_a = (function () {
+    var y = (_a = /** @class */ (function () {
             function class_3() {
             }
             return class_3;
@@ -174,7 +174,7 @@ function foo9() {
     var _a;
 }
 function foo10() {
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.a = x;
@@ -184,7 +184,7 @@ function foo10() {
 }
 function foo11() {
     function f() {
-        var y = (_a = (function () {
+        var y = (_a = /** @class */ (function () {
                 function class_4() {
                 }
                 return class_4;
@@ -197,7 +197,7 @@ function foo11() {
 }
 function foo12() {
     function f() {
-        var y = (function () {
+        var y = /** @class */ (function () {
             function class_5() {
                 this.a = x;
             }

@@ -62,24 +62,24 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Class = (function () {
+var Class = /** @class */ (function () {
     function Class() {
     }
     return Class;
 }());
-var SubClass = (function (_super) {
+var SubClass = /** @class */ (function (_super) {
     __extends(SubClass, _super);
     function SubClass() {
         return _super.call(this) || this;
     }
     return SubClass;
 }(Class));
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var SubD = (function (_super) {
+var SubD = /** @class */ (function (_super) {
     __extends(SubD, _super);
     function SubD() {
         return _super.call(this) || this;

@@ -188,7 +188,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var _this = this;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.explicitThis = function (m) {
@@ -208,7 +208,7 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.explicitThis = function (m) {
@@ -290,7 +290,7 @@ c.explicitThis = d.explicitThis;
 c.explicitVoid = d.explicitD;
 c.explicitVoid = d.explicitThis;
 /// class-based polymorphic assignability (with inheritance!) ///
-var Base1 = (function () {
+var Base1 = /** @class */ (function () {
     function Base1() {
     }
     Base1.prototype.polymorphic = function () { return this.x; };
@@ -298,21 +298,21 @@ var Base1 = (function () {
     Base1.explicitStatic = function () { return this.x; };
     return Base1;
 }());
-var Derived1 = (function (_super) {
+var Derived1 = /** @class */ (function (_super) {
     __extends(Derived1, _super);
     function Derived1() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived1;
 }(Base1));
-var Base2 = (function () {
+var Base2 = /** @class */ (function () {
     function Base2() {
     }
     Base2.prototype.polymorphic = function () { return this.y; };
     Base2.prototype.explicit = function () { return this.x; };
     return Base2;
 }());
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -331,7 +331,7 @@ function VoidThis() {
 }
 var voidThis = new VoidThis();
 ///// syntax-ish errors /////
-var ThisConstructor = (function () {
+var ThisConstructor = /** @class */ (function () {
     function ThisConstructor(n) {
         this.n = n;
     }

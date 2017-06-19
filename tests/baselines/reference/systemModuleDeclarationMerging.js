@@ -22,7 +22,7 @@ System.register([], function (exports_1, context_1) {
                 var x;
             })(F || (F = {}));
             exports_1("F", F);
-            C = (function () {
+            C = /** @class */ (function () {
                 function C() {
                 }
                 return C;

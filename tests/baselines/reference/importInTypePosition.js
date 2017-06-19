@@ -24,7 +24,7 @@ module C {
 //// [importInTypePosition.js]
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;

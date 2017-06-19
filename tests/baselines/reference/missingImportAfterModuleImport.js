@@ -25,7 +25,7 @@ export = MainModule;
 //// [missingImportAfterModuleImport_0.js]
 //// [missingImportAfterModuleImport_1.js]
 "use strict";
-var MainModule = (function () {
+var MainModule = /** @class */ (function () {
     function MainModule() {
     }
     return MainModule;

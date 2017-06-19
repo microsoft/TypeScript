@@ -8,7 +8,7 @@ var X = { 0b11: '', 3: '' };
 
 
 //// [duplicateIdentifierDifferentSpelling.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
         this[0b11] = '';
         this[3] = '';

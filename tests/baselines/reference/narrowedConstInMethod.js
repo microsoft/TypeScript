@@ -32,7 +32,7 @@ function f() {
 function f2() {
     var x = {};
     if (x !== null) {
-        return (function () {
+        return /** @class */ (function () {
             function class_1() {
             }
             class_1.prototype.bar = function () { return x.length; }; // ok

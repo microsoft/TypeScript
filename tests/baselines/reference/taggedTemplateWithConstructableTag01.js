@@ -4,7 +4,7 @@ class CtorTag { }
 CtorTag `Hello world!`;
 
 //// [taggedTemplateWithConstructableTag01.js]
-var CtorTag = (function () {
+var CtorTag = /** @class */ (function () {
     function CtorTag() {
     }
     return CtorTag;

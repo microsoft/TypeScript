@@ -47,7 +47,7 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedClassExpressionMethodDeclaration01.js]
 function getFoo1() {
-    return (function () {
+    return /** @class */ (function () {
         function class_1() {
         }
         class_1.method1 = function (arg) {
@@ -60,7 +60,7 @@ function getFoo1() {
     }());
 }
 function getFoo2() {
-    return _a = (function () {
+    return _a = /** @class */ (function () {
             function class_2() {
             }
             return class_2;
@@ -75,7 +75,7 @@ function getFoo2() {
     var _a;
 }
 function getFoo3() {
-    return _a = (function () {
+    return _a = /** @class */ (function () {
             function class_3() {
             }
             return class_3;

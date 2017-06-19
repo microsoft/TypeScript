@@ -34,7 +34,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A = __decorate([
@@ -42,7 +42,7 @@ var A = (function () {
     ], A);
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x) {
     }
     B = __decorate([
@@ -51,7 +51,7 @@ var B = (function () {
     ], B);
     return B;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;

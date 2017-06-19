@@ -10,7 +10,7 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 
 //// [templateStringsArrayTypeDefinedInES5Mode.js]
-var TemplateStringsArray = (function () {
+var TemplateStringsArray = /** @class */ (function () {
     function TemplateStringsArray() {
     }
     return TemplateStringsArray;

@@ -8,7 +8,7 @@ sources: computedPropertyNamesSourceMap1_ES5.ts
 emittedFile:tests/cases/conformance/es6/computedProperties/computedPropertyNamesSourceMap1_ES5.js
 sourceFile:computedPropertyNamesSourceMap1_ES5.ts
 -------------------------------------------------------------------
->>>var C = (function () {
+>>>var C = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

@@ -50,7 +50,7 @@ var f5 = function foo(x, y) { };
 var f6 = function (x, y) { };
 var f7 = function (x, y) { };
 var f8 = function (x, y) { };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { };

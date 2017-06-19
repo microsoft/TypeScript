@@ -61,7 +61,7 @@ var y = x;
 var r2 = y();
 var c;
 var r3 = c(); // should be an error
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.prototype = null;
         this.length = 1;
@@ -72,7 +72,7 @@ var C = (function () {
 }());
 var c2;
 var r4 = c2(); // should be an error
-var C2 = (function (_super) {
+var C2 = /** @class */ (function (_super) {
     __extends(C2, _super);
     function C2() {
         return _super !== null && _super.apply(this, arguments) || this;

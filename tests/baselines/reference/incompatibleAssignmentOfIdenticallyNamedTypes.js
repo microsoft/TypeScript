@@ -10,7 +10,7 @@ class Foo<T> {
 
 
 //// [incompatibleAssignmentOfIdenticallyNamedTypes.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.fn = function () {

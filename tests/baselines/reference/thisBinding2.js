@@ -22,7 +22,7 @@ var messenger = {
 
 
 //// [thisBinding2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         var _this = this;
         this.x = (function () {

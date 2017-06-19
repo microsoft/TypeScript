@@ -20,7 +20,7 @@ class C {
 var s;
 var n;
 var a;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this[n] = n;
         this[s + n] = 2;

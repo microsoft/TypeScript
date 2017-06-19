@@ -24,7 +24,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var M;
 (function (M) {
-    var N = (function () {
+    var N = /** @class */ (function () {
         function N() {
         }
         return N;
@@ -35,7 +35,7 @@ var M;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 (function (M) {
-    var O = (function (_super) {
+    var O = /** @class */ (function (_super) {
         __extends(O, _super);
         function O() {
             return _super !== null && _super.apply(this, arguments) || this;

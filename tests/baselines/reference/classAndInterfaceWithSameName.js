@@ -13,14 +13,14 @@ module M {
 }
 
 //// [classAndInterfaceWithSameName.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 var M;
 (function (M) {
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;

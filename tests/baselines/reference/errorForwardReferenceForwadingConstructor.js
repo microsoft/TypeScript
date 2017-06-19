@@ -26,13 +26,13 @@ function f() {
     var d1 = new derived();
     var d2 = new derived(4);
 }
-var base = (function () {
+var base = /** @class */ (function () {
     function base(n) {
         this.n = n;
     }
     return base;
 }());
-var derived = (function (_super) {
+var derived = /** @class */ (function (_super) {
     __extends(derived, _super);
     function derived() {
         return _super !== null && _super.apply(this, arguments) || this;

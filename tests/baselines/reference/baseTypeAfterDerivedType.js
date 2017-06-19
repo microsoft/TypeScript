@@ -17,7 +17,7 @@ interface Base2 {
 
 
 //// [baseTypeAfterDerivedType.js]
-var Derived2 = (function () {
+var Derived2 = /** @class */ (function () {
     function Derived2() {
     }
     Derived2.prototype.method = function () {

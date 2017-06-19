@@ -10,7 +10,7 @@ v = v2; // Should succeed
 var v3: { x } = new C; // Should fail
 
 //// [propertyParameterWithQuestionMark.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = x;
     }

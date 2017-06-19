@@ -15,7 +15,7 @@ class Comment {
 }
 
 //// [staticInstanceResolution.js]
-var Comment = (function () {
+var Comment = /** @class */ (function () {
     function Comment() {
     }
     Comment.prototype.getDocCommentText = function () {

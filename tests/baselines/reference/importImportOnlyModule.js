@@ -19,7 +19,7 @@ var x = foo; // Cause a runtime dependency
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var C1 = (function () {
+    var C1 = /** @class */ (function () {
         function C1() {
             this.m1 = 42;
         }

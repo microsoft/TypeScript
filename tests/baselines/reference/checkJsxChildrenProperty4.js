@@ -58,7 +58,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 exports.__esModule = true;
 var React = require("react");
-var FetchUser = (function (_super) {
+var FetchUser = /** @class */ (function (_super) {
     __extends(FetchUser, _super);
     function FetchUser() {
         return _super !== null && _super.apply(this, arguments) || this;

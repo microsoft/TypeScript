@@ -23,7 +23,7 @@ s.subby(12); // error unresolved
 String.fromCharCode(12);
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

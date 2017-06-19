@@ -12,7 +12,7 @@ class C {
 }
 
 //// [commentOnClassAccessor2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "bar", {

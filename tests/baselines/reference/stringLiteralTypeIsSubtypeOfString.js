@@ -111,7 +111,7 @@ function f6(x) { }
 function f7(x) { }
 function f8(x) { }
 function f9(x) { }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.toString = function () { return null; };

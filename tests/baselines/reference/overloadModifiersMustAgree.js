@@ -18,7 +18,7 @@ interface I {
 //// [overloadModifiersMustAgree.js]
 "use strict";
 exports.__esModule = true;
-var baz = (function () {
+var baz = /** @class */ (function () {
     function baz() {
     }
     baz.prototype.foo = function (bar) { }; // error - access modifiers do not agree

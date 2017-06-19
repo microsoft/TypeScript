@@ -44,7 +44,7 @@ fooLength + 1;
 "use strict";
 var A;
 (function (A) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B(b) {
         }
         return B;

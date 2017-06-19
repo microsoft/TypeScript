@@ -112,12 +112,12 @@ with (window) {
     var p = function () { return _this; };
 }
 // Arrow function as argument to super call
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(n) {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
         var _this = _super.call(this, function () { return _this; }) || this;
@@ -154,12 +154,12 @@ var M2;
         var p = function () { return _this; };
     }
     // Arrow function as argument to super call
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base(n) {
         }
         return Base;
     }());
-    var Derived = (function (_super) {
+    var Derived = /** @class */ (function (_super) {
         __extends(Derived, _super);
         function Derived() {
             var _this = _super.call(this, function () { return _this; }) || this;

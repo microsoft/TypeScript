@@ -20,7 +20,7 @@ Entity();
 //// [m1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     return foo;

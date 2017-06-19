@@ -57,7 +57,7 @@ var o = {
         };
     }
 };
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
         this.value = "value";
     }

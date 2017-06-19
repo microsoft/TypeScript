@@ -71,19 +71,19 @@ var s;
 // Type assertion of non - unary expression
 var a = "" + 4;
 var s = "" + 4;
-var SomeBase = (function () {
+var SomeBase = /** @class */ (function () {
     function SomeBase() {
     }
     return SomeBase;
 }());
-var SomeDerived = (function (_super) {
+var SomeDerived = /** @class */ (function (_super) {
     __extends(SomeDerived, _super);
     function SomeDerived() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return SomeDerived;
 }(SomeBase));
-var SomeOther = (function () {
+var SomeOther = /** @class */ (function () {
     function SomeOther() {
     }
     return SomeOther;

@@ -5,7 +5,7 @@ class C {
 }
 
 //// [parserSetAccessorWithTypeAnnotation1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C.prototype, "foo", {

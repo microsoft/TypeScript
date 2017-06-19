@@ -34,7 +34,7 @@ M.f();
 //// [statics.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C(c1, c2, c3) {
             var _this = this;
             this.c1 = c1;

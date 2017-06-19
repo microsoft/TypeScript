@@ -13,7 +13,7 @@ class Foo {
 }
 
 //// [staticClassMemberError.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.a = function () {
@@ -21,7 +21,7 @@ var C = (function () {
     };
     return C;
 }());
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;

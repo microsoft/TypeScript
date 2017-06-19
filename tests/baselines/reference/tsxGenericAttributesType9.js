@@ -28,7 +28,7 @@ var __extends = (this && this.__extends) || (function () {
 exports.__esModule = true;
 var React = require("react");
 function makeP(Ctor) {
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
             return _super !== null && _super.apply(this, arguments) || this;

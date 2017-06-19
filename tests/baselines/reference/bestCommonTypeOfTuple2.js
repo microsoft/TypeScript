@@ -33,35 +33,35 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     return E;
 }());
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     return F;
 }(C));
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1() {
         this.i = "foo";
     }
     return C1;
 }());
-var D1 = (function (_super) {
+var D1 = /** @class */ (function (_super) {
     __extends(D1, _super);
     function D1() {
         var _this = _super !== null && _super.apply(this, arguments) || this;

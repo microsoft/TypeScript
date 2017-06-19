@@ -26,7 +26,7 @@ sourceFile:app.ts
 1->Emitted(2, 1) Source(2, 1) + SourceIndex(0)
 2 >Emitted(2, 107) Source(2, 107) + SourceIndex(0)
 ---
->>>var c = (function () {
+>>>var c = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >
@@ -83,7 +83,7 @@ sources: app2.ts
 emittedFile:tests/cases/compiler/testfiles/app2.js
 sourceFile:app2.ts
 -------------------------------------------------------------------
->>>var d = (function () {
+>>>var d = /** @class */ (function () {
 1 >
 2 >^^^^^^^^^^^^^^^^^^^->
 1 >

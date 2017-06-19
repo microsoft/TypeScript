@@ -14,14 +14,14 @@ export class B<T2> {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A(callback) {
             var child = new B(this);
         }
         return A;
     }());
     exports.A = A;
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B(parent) {
         }
         return B;

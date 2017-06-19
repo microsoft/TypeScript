@@ -23,7 +23,7 @@ var result3: string = foo(x => { // x has type D
 
 
 //// [overloadresolutionWithConstraintCheckingDeferred.js]
-var G = (function () {
+var G = /** @class */ (function () {
     function G(x) {
     }
     return G;

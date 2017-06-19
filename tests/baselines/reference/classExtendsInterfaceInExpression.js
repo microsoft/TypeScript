@@ -22,7 +22,7 @@ var __extends = (this && this.__extends) || (function () {
 function factory(a) {
     return null;
 }
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
         return _super !== null && _super.apply(this, arguments) || this;

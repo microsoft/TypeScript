@@ -33,7 +33,7 @@ var Microsoft;
     (function (PeopleAtWork) {
         var Model;
         (function (Model) {
-            var _Person = (function () {
+            var _Person = /** @class */ (function () {
                 function _Person() {
                 }
                 _Person.prototype.populate = function (raw) {
@@ -57,7 +57,7 @@ var Microsoft;
     (function (PeopleAtWork) {
         var Model;
         (function (Model) {
-            var KnockoutExtentions = (function () {
+            var KnockoutExtentions = /** @class */ (function () {
                 function KnockoutExtentions() {
                 }
                 return KnockoutExtentions;

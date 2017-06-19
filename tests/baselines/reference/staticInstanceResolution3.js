@@ -15,7 +15,7 @@ WinJS.Promise.timeout(10);
 //// [staticInstanceResolution3_0.js]
 "use strict";
 exports.__esModule = true;
-var Promise = (function () {
+var Promise = /** @class */ (function () {
     function Promise() {
     }
     Promise.timeout = function (delay) {

@@ -24,7 +24,7 @@ var X;
         (function (base) {
             function f() { }
             base.f = f;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;

@@ -17,7 +17,7 @@ export class ClassA {
 //// [auxiliry.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var SomeClass = (function () {
+var SomeClass = /** @class */ (function () {
     function SomeClass() {
     }
     return SomeClass;
@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function annotation() {
     return function (target) { };
 }
-var ClassA = (function () {
+var ClassA = /** @class */ (function () {
     function ClassA() {
     }
     __decorate([

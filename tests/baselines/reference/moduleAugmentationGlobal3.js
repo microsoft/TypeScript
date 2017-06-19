@@ -22,7 +22,7 @@ let y = x.getCountAsString().toLowerCase();
 //// [f1.js]
 "use strict";
 exports.__esModule = true;
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

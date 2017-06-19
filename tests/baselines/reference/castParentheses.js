@@ -12,7 +12,7 @@ var b = (<any>new a.b);
 var b = (<any>new a).b 
 
 //// [castParentheses.js]
-var a = (function () {
+var a = /** @class */ (function () {
     function a() {
     }
     return a;

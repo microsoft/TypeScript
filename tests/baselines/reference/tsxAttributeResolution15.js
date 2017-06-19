@@ -30,7 +30,7 @@ var __extends = (this && this.__extends) || (function () {
 var _this = this;
 exports.__esModule = true;
 var React = require("react");
-var BigGreeter = (function (_super) {
+var BigGreeter = /** @class */ (function (_super) {
     __extends(BigGreeter, _super);
     function BigGreeter() {
         return _super !== null && _super.apply(this, arguments) || this;

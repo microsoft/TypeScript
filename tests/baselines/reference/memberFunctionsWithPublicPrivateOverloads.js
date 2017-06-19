@@ -63,7 +63,7 @@ var d: D<number>;
 var r2 = d.foo(2); // error
 
 //// [memberFunctionsWithPublicPrivateOverloads.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { };
@@ -74,7 +74,7 @@ var C = (function () {
     C.baz = function (x, y) { };
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     D.prototype.foo = function (x, y) { };

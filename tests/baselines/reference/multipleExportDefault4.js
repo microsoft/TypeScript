@@ -8,7 +8,7 @@ export default {
 //// [multipleExportDefault4.js]
 "use strict";
 exports.__esModule = true;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

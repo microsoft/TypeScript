@@ -49,7 +49,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-var Parent = (function () {
+var Parent = /** @class */ (function () {
     function Parent() {
     }
     Parent.prototype.getData = function () {
@@ -57,7 +57,7 @@ var Parent = (function () {
     };
     return Parent;
 }());
-var Foo = (function (_super) {
+var Foo = /** @class */ (function (_super) {
     __extends(Foo, _super);
     function Foo() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -68,7 +68,7 @@ var Foo = (function (_super) {
     return Foo;
 }(Parent));
 exports.Foo = Foo;
-var Bar = (function (_super) {
+var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;

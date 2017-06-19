@@ -25,7 +25,7 @@ sourceFile:tests/cases/compiler/ref/a.ts
 >>>    return {
 >>>        setters: [],
 >>>        execute: function () {
->>>            A = (function () {
+>>>            A = /** @class */ (function () {
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^->
 1 >
@@ -96,7 +96,7 @@ sourceFile:tests/cases/compiler/b.ts
 >>>            }
 >>>        ],
 >>>        execute: function () {
->>>            B = (function (_super) {
+>>>            B = /** @class */ (function (_super) {
 1 >^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >import {A} from "./ref/a";

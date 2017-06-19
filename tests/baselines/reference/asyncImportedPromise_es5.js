@@ -22,7 +22,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Task = (function (_super) {
+var Task = /** @class */ (function (_super) {
     __extends(Task, _super);
     function Task() {
         return _super !== null && _super.apply(this, arguments) || this;
@@ -69,7 +69,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var task_1 = require("./task");
-var Test = (function () {
+var Test = /** @class */ (function () {
     function Test() {
     }
     Test.prototype.example = function () {

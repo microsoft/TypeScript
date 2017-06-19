@@ -2,7 +2,7 @@
 class any {}
 
 //// [primitiveTypeAsClassName.js]
-var any = (function () {
+var any = /** @class */ (function () {
     function any() {
     }
     return any;

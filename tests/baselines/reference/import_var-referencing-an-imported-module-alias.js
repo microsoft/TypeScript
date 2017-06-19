@@ -13,7 +13,7 @@ var v = new hostVar.Host();
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var Host = (function () {
+    var Host = /** @class */ (function () {
         function Host() {
         }
         return Host;

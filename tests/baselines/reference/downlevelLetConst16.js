@@ -254,7 +254,7 @@ function foo2() {
     }
     use(x);
 }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.m1 = function () {
@@ -278,7 +278,7 @@ var A = (function () {
     };
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.m1 = function () {

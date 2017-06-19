@@ -46,7 +46,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            default_1 = (function () {
+            default_1 = /** @class */ (function () {
                 function default_1() {
                 }
                 return default_1;
@@ -63,7 +63,7 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            C = (function () {
+            C = /** @class */ (function () {
                 function C() {
                 }
                 return C;

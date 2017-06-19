@@ -6,7 +6,7 @@ static public intI: number;
 
 
 //// [parserAccessibilityAfterStatic1.js]
-var Outer = (function () {
+var Outer = /** @class */ (function () {
     function Outer() {
     }
     return Outer;

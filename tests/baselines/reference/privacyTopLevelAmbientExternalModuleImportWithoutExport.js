@@ -54,7 +54,7 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
     // Public elements
-    var c_public = (function () {
+    var c_public = /** @class */ (function () {
         function c_public() {
         }
         return c_public;
@@ -65,7 +65,7 @@ define(["require", "exports"], function (require, exports) {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var c_public = (function () {
+    var c_public = /** @class */ (function () {
         function c_public() {
         }
         return c_public;

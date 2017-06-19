@@ -46,7 +46,7 @@ var __extends = (this && this.__extends) || (function () {
 // There's a 'File' class in the stdlib, wrap with a namespace to avoid collision
 var Test;
 (function (Test) {
-    var FileSystemObject = (function () {
+    var FileSystemObject = /** @class */ (function () {
         function FileSystemObject(path) {
             this.path = path;
         }
@@ -70,7 +70,7 @@ var Test;
         return FileSystemObject;
     }());
     Test.FileSystemObject = FileSystemObject;
-    var File = (function (_super) {
+    var File = /** @class */ (function (_super) {
         __extends(File, _super);
         function File(path, content) {
             var _this = _super.call(this, path) || this;
@@ -80,7 +80,7 @@ var Test;
         return File;
     }(FileSystemObject));
     Test.File = File;
-    var Directory = (function (_super) {
+    var Directory = /** @class */ (function (_super) {
         __extends(Directory, _super);
         function Directory() {
             return _super !== null && _super.apply(this, arguments) || this;

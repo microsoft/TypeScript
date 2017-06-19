@@ -25,7 +25,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var symbol;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype[symbol] = function () {
@@ -33,7 +33,7 @@ var Foo = (function () {
     };
     return Foo;
 }());
-var Bar = (function (_super) {
+var Bar = /** @class */ (function (_super) {
     __extends(Bar, _super);
     function Bar() {
         return _super !== null && _super.apply(this, arguments) || this;

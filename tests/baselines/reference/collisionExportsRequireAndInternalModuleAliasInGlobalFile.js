@@ -25,7 +25,7 @@ module m2 {
 //// [collisionExportsRequireAndInternalModuleAliasInGlobalFile.js]
 var mOfGloalFile;
 (function (mOfGloalFile) {
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         return c;

@@ -21,13 +21,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var A = (function () {
+var A = /** @class */ (function () {
     function A(map) {
         this.map = map;
     }
     return A;
 }());
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     // Ensure 'value' is not of type 'any' by invoking it with type arguments.
     function C() {

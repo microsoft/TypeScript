@@ -15,7 +15,7 @@ function foo<T>(f: { y: T }): T { return null }
 var x = foo(new C()).x; // was Error that property x does not exist on type {}
 
 //// [typeArgumentInferenceOrdering.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

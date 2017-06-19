@@ -16,7 +16,7 @@ o.b = o.a.toString();
 //// [objectFreeze.js]
 var f = Object.freeze(function foo(a, b) { return false; });
 f(1, "") === false;
-var C = (function () {
+var C = /** @class */ (function () {
     function C(a) {
     }
     return C;

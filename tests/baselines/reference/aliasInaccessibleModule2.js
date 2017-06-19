@@ -14,7 +14,7 @@ var M;
 (function (M) {
     var N;
     (function (N) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;

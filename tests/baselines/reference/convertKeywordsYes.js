@@ -382,7 +382,7 @@ var bigObject = {
     "while": 0,
     "with": 0
 };
-var bigClass = (function () {
+var bigClass = /** @class */ (function () {
     function bigClass() {
         this["constructor"] = 0;
         this.any = 0;
@@ -500,72 +500,72 @@ var bigEnum;
 })(bigEnum || (bigEnum = {}));
 var bigModule;
 (function (bigModule) {
-    var constructor = (function () {
+    var constructor = /** @class */ (function () {
         function constructor() {
         }
         return constructor;
     }());
-    var implements = (function () {
+    var implements = /** @class */ (function () {
         function implements() {
         }
         return implements;
     }());
-    var interface = (function () {
+    var interface = /** @class */ (function () {
         function interface() {
         }
         return interface;
     }());
-    var let = (function () {
+    var let = /** @class */ (function () {
         function let() {
         }
         return let;
     }());
-    var module = (function () {
+    var module = /** @class */ (function () {
         function module() {
         }
         return module;
     }());
-    var package = (function () {
+    var package = /** @class */ (function () {
         function package() {
         }
         return package;
     }());
-    var private = (function () {
+    var private = /** @class */ (function () {
         function private() {
         }
         return private;
     }());
-    var protected = (function () {
+    var protected = /** @class */ (function () {
         function protected() {
         }
         return protected;
     }());
-    var public = (function () {
+    var public = /** @class */ (function () {
         function public() {
         }
         return public;
     }());
-    var set = (function () {
+    var set = /** @class */ (function () {
         function set() {
         }
         return set;
     }());
-    var static = (function () {
+    var static = /** @class */ (function () {
         function static() {
         }
         return static;
     }());
-    var get = (function () {
+    var get = /** @class */ (function () {
         function get() {
         }
         return get;
     }());
-    var yield = (function () {
+    var yield = /** @class */ (function () {
         function yield() {
         }
         return yield;
     }());
-    var declare = (function () {
+    var declare = /** @class */ (function () {
         function declare() {
         }
         return declare;

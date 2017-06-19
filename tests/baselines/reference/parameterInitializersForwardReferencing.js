@@ -81,7 +81,7 @@ function defaultArgArrow(a, b) {
     if (a === void 0) { a = function () { return function () { return b; }; }; }
     if (b === void 0) { b = 3; }
 }
-var C = (function () {
+var C = /** @class */ (function () {
     function C(a, b) {
         if (a === void 0) { a = b; }
         if (b === void 0) { b = 1; }

@@ -26,7 +26,7 @@ export class B extends A {
 define(["require", "exports"], function (require, exports) {
     "use strict";
     exports.__esModule = true;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.setProtected = function (val) {
@@ -50,7 +50,7 @@ var __extends = (this && this.__extends) || (function () {
 define(["require", "exports", "./a"], function (require, exports, a_1) {
     "use strict";
     exports.__esModule = true;
-    var B = (function (_super) {
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
             return _super !== null && _super.apply(this, arguments) || this;

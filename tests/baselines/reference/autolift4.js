@@ -34,7 +34,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var Point = (function () {
+var Point = /** @class */ (function () {
     function Point(x, y) {
         this.x = x;
         this.y = y;
@@ -45,7 +45,7 @@ var Point = (function () {
     Point.origin = new Point(0, 0);
     return Point;
 }());
-var Point3D = (function (_super) {
+var Point3D = /** @class */ (function (_super) {
     __extends(Point3D, _super);
     function Point3D(x, y, z, m) {
         var _this = _super.call(this, x, y) || this;

@@ -4,7 +4,7 @@ class C {
 }
 
 //// [parserParameterList1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.F = function (B) { };

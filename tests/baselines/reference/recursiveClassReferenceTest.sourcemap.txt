@@ -203,7 +203,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^
-4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^->
+4 >                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       Find
@@ -211,7 +211,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >Emitted(20, 24) Source(32, 29) + SourceIndex(0)
 3 >Emitted(20, 28) Source(32, 33) + SourceIndex(0)
 ---
->>>                var StartFindAction = (function () {
+>>>                var StartFindAction = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
@@ -627,7 +627,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^
 3 >                   ^^^^^^^
-4 >                          ^^^^^^^^^^^^^^^^^^->
+4 >                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >        
 3 >                   Widgets
@@ -635,7 +635,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >Emitted(39, 20) Source(44, 21) + SourceIndex(0)
 3 >Emitted(39, 27) Source(44, 28) + SourceIndex(0)
 ---
->>>            var FindWidget = (function () {
+>>>            var FindWidget = /** @class */ (function () {
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
@@ -1083,7 +1083,7 @@ sourceFile:recursiveClassReferenceTest.ts
 5 >         ^^^^^
 6 >              ^^^^^^
 7 >                    ^^^^^^^^
-8 >                            ^^^^^^->
+8 >                            ^^^^^^^^^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -1119,7 +1119,7 @@ sourceFile:recursiveClassReferenceTest.ts
 6 >Emitted(60, 21) Source(44, 14) + SourceIndex(0)
 7 >Emitted(60, 29) Source(64, 2) + SourceIndex(0)
 ---
->>>var AbstractMode = (function () {
+>>>var AbstractMode = /** @class */ (function () {
 1->
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
@@ -1362,7 +1362,7 @@ sourceFile:recursiveClassReferenceTest.ts
 1->^^^^^^^^^^^^
 2 >            ^^^^^^^^^^^
 3 >                       ^^^^^^^^^
-4 >                                ^^^^^^^^^^^->
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >            
 3 >                       PlainText
@@ -1370,7 +1370,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >Emitted(73, 24) Source(76, 31) + SourceIndex(0)
 3 >Emitted(73, 33) Source(76, 40) + SourceIndex(0)
 ---
->>>                var State = (function () {
+>>>                var State = /** @class */ (function () {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1-> {
@@ -1584,7 +1584,7 @@ sourceFile:recursiveClassReferenceTest.ts
 2 >                ^^^^^^^^^^^^^^^
 3 >                               ^^^^^^^^
 4 >                                       ^
-5 >                                        ^^^^^^^^->
+5 >                                        ^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >                State
 3 >                                implements IState {		
@@ -1605,7 +1605,7 @@ sourceFile:recursiveClassReferenceTest.ts
 3 >Emitted(87, 40) Source(89, 3) + SourceIndex(0)
 4 >Emitted(87, 41) Source(89, 3) + SourceIndex(0)
 ---
->>>                var Mode = (function (_super) {
+>>>                var Mode = /** @class */ (function (_super) {
 1->^^^^^^^^^^^^^^^^
 2 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->

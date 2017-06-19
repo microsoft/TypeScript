@@ -78,7 +78,7 @@ var p1;
 // makes this an instantiated mmodule
 var M2;
 (function (M2) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         Point.Origin = function () {
