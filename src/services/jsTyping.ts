@@ -29,8 +29,6 @@ namespace ts.JsTyping {
     // that we are confident require typings
     let safeList: Map<string>;
 
-    const EmptySafeList: Map<string> = createMap<string>();
-
     /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "buffer", "querystring", "events", "http", "cluster",
@@ -189,9 +187,7 @@ namespace ts.JsTyping {
             const inferredTypingNames = map(jsFileNames, f => removeFileExtension(getBaseFileName(f.toLowerCase())));
             const cleanedTypingNames = map(inferredTypingNames, f => f.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, ""));
 
-            if (safeList !== EmptySafeList) {
-                mergeTypings(ts.mapDefined(cleanedTypingNames, f => safeList.get(f)));
-            }
+            mergeTypings(ts.mapDefined(cleanedTypingNames, f => safeList.get(f)));
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
             if (hasJsxFile) {
