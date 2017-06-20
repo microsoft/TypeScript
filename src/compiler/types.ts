@@ -2390,7 +2390,7 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[]): string[];
+        readDirectory(rootDir: string, extensions: string[], excludes: string[], includes: string[], depth: number): string[];
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.

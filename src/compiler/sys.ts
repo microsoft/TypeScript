@@ -33,7 +33,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -281,8 +281,8 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[], depth?: number): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 
             const enum FileSystemEntryKind {
@@ -475,7 +475,7 @@ namespace ts {
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
                 getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
+                readDirectory(path, extensions, excludes, includes, _depth) {
                     const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
                 },

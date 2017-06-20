@@ -222,8 +222,8 @@ namespace ts.server {
             return this.host.directoryExists(path);
         }
 
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[] {
-            return this.host.readDirectory(path, extensions, exclude, include);
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[] {
+            return this.host.readDirectory(path, extensions, exclude, include, depth);
         }
 
         getDirectories(path: string): string[] {
