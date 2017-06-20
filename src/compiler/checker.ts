@@ -12002,9 +12002,9 @@ namespace ts {
             }
 
             const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
+            let declaration = localOrExportSymbol.valueDeclaration;
 
             if (localOrExportSymbol.flags & SymbolFlags.Class) {
-                const declaration = localOrExportSymbol.valueDeclaration;
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.
@@ -12046,7 +12046,6 @@ namespace ts {
             checkNestedBlockScopedBinding(node, symbol);
 
             const type = getDeclaredOrApparentType(localOrExportSymbol, node);
-            const declaration = localOrExportSymbol.valueDeclaration;
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
@@ -12062,9 +12061,22 @@ namespace ts {
 
             // We only narrow variables and parameters occurring in a non-assignment position. For all other
             // entities we simply return the declared type.
-            if (!(localOrExportSymbol.flags & SymbolFlags.Variable) || assignmentKind === AssignmentKind.Definite || !declaration) {
+            if (localOrExportSymbol.flags & SymbolFlags.Variable) {
+                if (assignmentKind === AssignmentKind.Definite) {
+                    return type;
+                }
+            }
+            else if (localOrExportSymbol.flags & SymbolFlags.Alias) {
+                declaration = find<Declaration>(symbol.declarations, isSomeImportDeclaration);
+            }
+            else {
                 return type;
             }
+
+            if (!declaration) {
+                return type;
+            }
+
             // The declaration container is the innermost function that encloses the declaration of the variable
             // or parameter. The flow container is the innermost function starting with which we analyze the control
             // flow graph to determine the control flow based type.
@@ -24719,6 +24731,21 @@ namespace ts {
                 return true;
             default:
                 return isDeclarationName(name);
+        }
+    }
+
+    function isSomeImportDeclaration(decl: Node): boolean {
+        switch (decl.kind) {
+            case SyntaxKind.ImportClause: // For default import
+            case SyntaxKind.ImportEqualsDeclaration:
+            case SyntaxKind.NamespaceImport:
+            case SyntaxKind.ImportSpecifier: // For rename import `x as y`
+                return true;
+            case SyntaxKind.Identifier:
+                // For regular import, `decl` is an Identifier under the ImportSpecifier.
+                return decl.parent.kind === SyntaxKind.ImportSpecifier;
+            default:
+                return false;
         }
     }
 }
