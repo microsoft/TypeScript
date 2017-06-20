@@ -861,14 +861,8 @@ namespace ts {
             return this.fileNameToEntry.get(path);
         }
 
-        public containsEntryByPath(path: Path): boolean {
-            return this.fileNameToEntry.contains(path);
-        }
-
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.containsEntryByPath(path)
-                ? this.getEntryByPath(path)
-                : this.createEntry(fileName, path);
+            return this.getEntryByPath(path) || this.createEntry(fileName, path);
         }
 
         public getRootFileNames(): string[] {
@@ -1155,16 +1149,14 @@ namespace ts {
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    return hostCache.containsEntryByPath(path) ?
-                        !!hostCache.getEntryByPath(path) :
-                        (host.fileExists && host.fileExists(fileName));
+                    return !!hostCache.getEntryByPath(path) || host.fileExists && host.fileExists(fileName);
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    if (hostCache.containsEntryByPath(path)) {
-                        const entry = hostCache.getEntryByPath(path);
-                        return entry && entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    const entry = hostCache.getEntryByPath(path);
+                    if (entry) {
+                        return entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                     }
                     return host.readFile && host.readFile(fileName);
                 },
