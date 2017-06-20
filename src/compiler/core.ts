@@ -955,7 +955,7 @@ namespace ts {
      * @param map A map-like.
      * @param key A property key.
      */
-    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
+    export function hasProperty(map: MapLike<any>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
