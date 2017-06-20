@@ -311,6 +311,13 @@ namespace ts.server {
             this.lsHost.dispose();
             this.lsHost = undefined;
 
+            // Clean up file watchers waiting for missing files
+            for (const p of this.missingFilesMap.getKeys()) {
+                this.missingFilesMap.get(p).close();
+                this.missingFilesMap.remove(p);
+            }
+            this.missingFilesMap = undefined;
+
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
             this.languageService = undefined;
