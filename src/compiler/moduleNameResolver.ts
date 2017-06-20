@@ -188,7 +188,10 @@ namespace ts {
 
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
-            resolved = realpath(resolved, host, traceEnabled);
+            if (!options.preserveSymlinks) {
+                resolved = realpath(resolved, host, traceEnabled);
+            }
+
             if (traceEnabled) {
                 trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved, primary);
             }
@@ -720,8 +723,14 @@ namespace ts {
                     trace(host, Diagnostics.Loading_module_0_from_node_modules_folder_target_file_type_1, moduleName, Extensions[extensions]);
                 }
                 const resolved = loadModuleFromNodeModules(extensions, moduleName, containingDirectory, failedLookupLocations, state, cache);
+                if (!resolved) return undefined;
+
+                let resolvedValue = resolved.value;
+                if (!compilerOptions.preserveSymlinks) {
+                    resolvedValue = resolvedValue && { path: realpath(resolved.value.path, host, traceEnabled), extension: resolved.value.extension };
+                }
                 // For node_modules lookups, get the real path so that multiple accesses to an `npm link`-ed module do not create duplicate files.
-                return resolved && { value: resolved.value && { resolved: { path: realpath(resolved.value.path, host, traceEnabled), extension: resolved.value.extension }, isExternalLibraryImport: true } };
+                return { value: resolvedValue && { resolved: resolvedValue, isExternalLibraryImport: true } };
             }
             else {
                 const candidate = normalizePath(combinePaths(containingDirectory, moduleName));
