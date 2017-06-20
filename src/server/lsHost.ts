@@ -210,8 +210,11 @@ namespace ts.server {
             return this.host.resolvePath(path);
         }
 
-        fileExists(path: string): boolean {
-            return this.host.fileExists(path);
+        fileExists(file: string): boolean {
+            // As an optimization, don't hit the disks for files we already know don't exist
+            // (because we're watching for their creation).
+            const path = toPath(file, this.host.getCurrentDirectory(), this.getCanonicalFileName);
+            return !this.project.isWatchedMissingFile(path) && this.host.fileExists(file);
         }
 
         readFile(fileName: string): string {
