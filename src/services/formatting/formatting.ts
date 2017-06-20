@@ -97,11 +97,23 @@ namespace ts.formatting {
     }
 
     export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
-        return formatOutermostParent(position, SyntaxKind.SemicolonToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
+        const outermostParent = findOutermostParentWithinListLevelFromPosition(position, SyntaxKind.SemicolonToken, sourceFile);
+        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
+    }
+
+    export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
+        const openingCurly = findPrecedingTokenOfKind(position, SyntaxKind.FirstPunctuation, sourceFile);
+        const block = openingCurly && openingCurly.parent;
+        if (!(block && isBlock(block))) {
+            return [];
+        }
+        const outermostParent = findOutermostParentWithinListLevel(block);
+        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
-        return formatOutermostParent(position, SyntaxKind.CloseBraceToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
+        const outermostParent = findOutermostParentWithinListLevelFromPosition(position, SyntaxKind.CloseBraceToken, sourceFile);
+        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
     }
 
     export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
@@ -121,44 +133,55 @@ namespace ts.formatting {
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
 
-    function formatOutermostParent(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
-        const parent = findOutermostParent(position, expectedLastToken, sourceFile);
+    function formatOutermostParent(parent: Node | undefined, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
         if (!parent) {
             return [];
         }
+
         const span = {
             pos: getLineStartPositionForPosition(parent.getStart(sourceFile), sourceFile),
             end: parent.end
         };
+
         return formatSpan(span, sourceFile, options, rulesProvider, requestKind);
     }
 
-    function findOutermostParent(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node {
+    function findPrecedingTokenOfKind(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
         const precedingToken = findPrecedingToken(position, sourceFile);
 
-        // when it is claimed that trigger character was typed at given position
-        // we verify that there is a token with a matching kind whose end is equal to position (because the character was just typed).
-        // If this condition is not hold - then trigger character was typed in some other context,
-        // i.e.in comment and thus should not trigger autoformatting
-        if (!precedingToken ||
-            precedingToken.kind !== expectedTokenKind ||
-            position !== precedingToken.getEnd()) {
-            return undefined;
-        }
+        return precedingToken && precedingToken.kind === expectedTokenKind && position === precedingToken.getEnd() ?
+            precedingToken :
+            undefined;
+    }
 
-        // walk up and search for the parent node that ends at the same position with precedingToken.
-        // for cases like this
-        //
-        // let x = 1;
-        // while (true) {
-        // }
-        // after typing close curly in while statement we want to reformat just the while statement.
-        // However if we just walk upwards searching for the parent that has the same end value -
-        // we'll end up with the whole source file. isListElement allows to stop on the list element level
-        let current = precedingToken;
+    /**
+     * Validating `expectedLastToken` ensures the token was typed in the context we expect (eg: not a comment).
+     * @param expectedLastToken The last token constituting the desired parent node.
+     */
+    function findOutermostParentWithinListLevelFromPosition(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile) {
+        const precedingToken = findPrecedingTokenOfKind(position, expectedLastToken, sourceFile);
+        return precedingToken && findOutermostParentWithinListLevel(precedingToken);
+    }
+
+    /**
+     * Finds the outermost parent within the same list level as the token at position.
+     *
+     * Consider typing the following
+     * ```
+     * let x = 1;
+     * while (true) {
+     * }
+     * ```
+     * Upon typing the closing curly, we want to format the entire `while`-statement, but not the preceding
+     * variable declaration.
+     */
+    function findOutermostParentWithinListLevel(token: Node): Node {
+        // If we walk upwards searching for the parent that has the same end value, we'll end up with the whole source file.
+        // `isListElement` allows to stop on the list element level.
+        let current = token;
         while (current &&
             current.parent &&
-            current.parent.end === precedingToken.end &&
+            current.parent.end === token.end &&
             !isListElement(current.parent, current)) {
             current = current.parent;
         }

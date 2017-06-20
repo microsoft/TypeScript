@@ -7,6 +7,7 @@ namespace ts.formatting {
         FormatSelection,
         FormatOnEnter,
         FormatOnSemicolon,
+        FormatOnOpeningCurlyBrace,
         FormatOnClosingCurlyBrace
     }
 }
