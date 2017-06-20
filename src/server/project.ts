@@ -107,6 +107,7 @@ namespace ts.server {
         private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
+        private missingFilesMap: FileMap<FileWatcher> = createFileMap<FileWatcher>();
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -606,6 +607,39 @@ namespace ts.server {
                 }
             }
 
+            if (hasChanges && this.program.getMissingFilePaths) {
+                const missingFilePaths = this.program.getMissingFilePaths() || emptyArray;
+                const missingFilePathsSet = createMap<true>();
+                missingFilePaths.forEach(p => missingFilePathsSet.set(p, true));
+
+                // Files that are no longer missing (e.g. because they are no longer required)
+                // should no longer be watched.
+                this.missingFilesMap.getKeys().forEach(p => {
+                    if (!missingFilePathsSet.has(p)) {
+                        this.missingFilesMap.get(p).close();
+                        this.missingFilesMap.remove(p);
+                    }
+                });
+
+                // Missing files that are not yet watched should be added to the map.
+                missingFilePaths.forEach(p => {
+                    if (!this.missingFilesMap.contains(p)) {
+                        const fileWatcher = ts.sys.watchFile(p, (_filename: string, removed?: boolean) => {
+                            // removed = deleted ? true : (added ? false : undefined)
+                            if (removed === false && this.missingFilesMap.contains(p)) {
+                                fileWatcher.close();
+                                this.missingFilesMap.remove(p);
+
+                                // When a missing file is created, we should update the graph.
+                                this.markAsDirty();
+                                this.updateGraph();
+                            }
+                        });
+                        this.missingFilesMap.set(p, fileWatcher);
+                    }
+                });
+            }
+
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
             enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles,
@@ -624,6 +658,10 @@ namespace ts.server {
                 });
 
             return hasChanges;
+        }
+
+        isWatchedMissingFile(path: Path) {
+            return this.missingFilesMap.contains(path);
         }
 
         getScriptInfoLSHost(fileName: string) {

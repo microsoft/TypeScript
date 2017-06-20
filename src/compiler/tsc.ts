@@ -285,6 +285,19 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+
+            if (compileResult.program.getMissingFilePaths) {
+                const missingPaths = compileResult.program.getMissingFilePaths() || [];
+                missingPaths.forEach((path: Path): void => {
+                    const fileWatcher = sys.watchFile(path, (_fileName: string, removed?: boolean) => {
+                        // removed = deleted ? true : (added ? false : undefined)
+                        if (removed === false) {
+                            fileWatcher.close();
+                            startTimerForRecompilation();
+                        }
+                    });
+                });
+            }
         }
 
         function cachedFileExists(fileName: string): boolean {
