@@ -53,6 +53,7 @@ namespace ts.JsTyping {
      */
     export function discoverTypings(
         host: TypingResolutionHost,
+        log: ((message: string) => void) | undefined,
         fileNames: string[],
         projectRootPath: Path,
         safeListPath: Path,
@@ -110,8 +111,9 @@ namespace ts.JsTyping {
 
         // add typings for unresolved imports
         if (unresolvedImports) {
-            for (const moduleId of unresolvedImports) {
-                const typingName = nodeCoreModules.has(moduleId) ? "node" : moduleId;
+            const x = unresolvedImports.map(moduleId => nodeCoreModules.has(moduleId) ? "node" : moduleId);
+            if (x.length && log) log(`Inferred typings from unresolved imports: ${JSON.stringify(x)}`);
+            for (const typingName of x) {
                 if (!inferredTypings.has(typingName)) {
                     inferredTypings.set(typingName, undefined);
                 }
@@ -139,7 +141,9 @@ namespace ts.JsTyping {
                 newTypingNames.push(typing);
             }
         });
-        return { cachedTypingPaths, newTypingNames, filesToWatch };
+        const result = { cachedTypingPaths, newTypingNames, filesToWatch };
+        if (log) log(`Result: ${JSON.stringify(result)}`);
+        return result;
 
         function addInferredTyping(typingName: string) {
             if (!inferredTypings.has(typingName)) {
@@ -156,6 +160,7 @@ namespace ts.JsTyping {
             }
 
             filesToWatch.push(jsonPath);
+            if (log) log(`Searching for typing names in '${jsonPath}' dependencies`);
             const jsonConfig: PackageJson = readConfigFile(jsonPath, (path: string) => host.readFile(path)).config;
             addInferredTypingsFromKeys(jsonConfig.dependencies);
             addInferredTypingsFromKeys(jsonConfig.devDependencies);
@@ -179,13 +184,16 @@ namespace ts.JsTyping {
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
             if (safeList !== EmptySafeList) {
-                for (const j of fileNames) {
-                    if (!hasJavaScriptFileExtension(j)) continue;
+                const fromFileNames = mapDefined(fileNames, j => {
+                    if (!hasJavaScriptFileExtension(j)) return undefined;
 
                     const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
                     const cleanedTypingName = inferredTypingName.replace(/((?:\.|-)min(?=\.|$))|((?:-|\.)\d+)/g, "");
-                    const safe = safeList.get(cleanedTypingName);
-                    if (safe !== undefined) {
+                    return safeList.get(cleanedTypingName);
+                });
+                if (fromFileNames.length) {
+                    if (log) log(`Inferred typings from file names: ${JSON.stringify(fromFileNames)}`);
+                    for (const safe of fromFileNames) {
                         addInferredTyping(safe);
                     }
                 }
@@ -193,6 +201,7 @@ namespace ts.JsTyping {
 
             const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
             if (hasJsxFile) {
+                if (log) log(`Inferred 'react' typings due to presence of '.jsx' extension`);
                 addInferredTyping("react");
             }
         }
@@ -210,6 +219,7 @@ namespace ts.JsTyping {
             }
 
             const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
+            if (log) log(`Searching for typing names in ${packagesFolderPath}; all files: ${JSON.stringify(fileNames)}`);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
                 const baseFileName = getBaseFileName(normalizedFileName);

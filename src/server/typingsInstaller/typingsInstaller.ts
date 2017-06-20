@@ -145,6 +145,7 @@ namespace ts.server.typingsInstaller {
 
             const discoverTypingsResult = JsTyping.discoverTypings(
                 this.installTypingHost,
+                this.log.isEnabled() ? this.log.writeLine : undefined,
                 req.fileNames,
                 req.projectRootPath,
                 this.safeListPath,
