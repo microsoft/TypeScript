@@ -818,7 +818,7 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: FileMap<HostFileInformation>;
+        private fileNameToEntry: FileMap<HostFileInformation | "does-not-exist">;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
@@ -842,7 +842,7 @@ namespace ts {
         }
 
         private createEntry(fileName: string, path: Path) {
-            let entry: HostFileInformation;
+            let entry: HostFileInformation | "does-not-exist" = "does-not-exist";
             const scriptSnapshot = this.host.getScriptSnapshot(fileName);
             if (scriptSnapshot) {
                 entry = {
@@ -857,19 +857,26 @@ namespace ts {
             return entry;
         }
 
-        public getEntryByPath(path: Path): HostFileInformation {
+        public getEntryByPath(path: Path): HostFileInformation | "does-not-exist" | undefined {
             return this.fileNameToEntry.get(path);
         }
 
+        private getEntryOrUndefined(path: Path) {
+            const entry = this.fileNameToEntry.get(path);
+            return entry === "does-not-exist" ? undefined : entry;
+        }
+
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
-            return this.getEntryByPath(path) || this.createEntry(fileName, path);
+            let entry = this.fileNameToEntry.get(path);
+            if (!entry) entry = this.createEntry(fileName, path);
+            return entry === "does-not-exist" ? undefined : entry;
         }
 
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
             this.fileNameToEntry.forEachValue((_path, value) => {
-                if (value) {
+                if (value !== "does-not-exist") {
                     fileNames.push(value.hostFileName);
                 }
             });
@@ -878,12 +885,12 @@ namespace ts {
         }
 
         public getVersion(path: Path): string {
-            const file = this.getEntryByPath(path);
+            const file = this.getEntryOrUndefined(path);
             return file && file.version;
         }
 
         public getScriptSnapshot(path: Path): IScriptSnapshot {
-            const file = this.getEntryByPath(path);
+            const file = this.getEntryOrUndefined(path);
             return file && file.scriptSnapshot;
         }
     }
@@ -1149,13 +1156,14 @@ namespace ts {
                 fileExists: (fileName): boolean => {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    return !!hostCache.getEntryByPath(path) || host.fileExists && host.fileExists(fileName);
+                    const entry = hostCache.getEntryByPath(path);
+                    return entry ? entry !== "does-not-exist" : host.fileExists && host.fileExists(fileName);
                 },
                 readFile: (fileName): string => {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     const entry = hostCache.getEntryByPath(path);
-                    if (entry) {
+                    if (entry && entry !== "does-not-exist") {
                         return entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                     }
                     return host.readFile && host.readFile(fileName);
