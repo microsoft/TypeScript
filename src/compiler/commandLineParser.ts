@@ -1053,7 +1053,7 @@ namespace ts {
                     errors.push(createDiagnosticForNodeInSourceFile(sourceFile, element.name, extraKeyDiagnosticMessage, keyText));
                 }
                 const value = convertPropertyValueToJson(element.initializer, option);
-                if (typeof keyText !== undefined && typeof value !== undefined) {
+                if (typeof keyText !== "undefined" && typeof value !== "undefined") {
                     result[keyText] = value;
                     // Notify key value set, if user asked for it
                     if (jsonConversionNotifier &&
