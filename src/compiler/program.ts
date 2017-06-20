@@ -879,15 +879,15 @@ namespace ts {
                         return oldProgram.structureIsReused = StructureIsReused.SafeModules;
                     }
                 }
+
+                for (const p of oldProgram.getMissingFilePaths()) {
+                    filesByName.set(p, undefined);
+                }
             }
 
             // update fileName -> file mapping
             for (let i = 0; i < newSourceFiles.length; i++) {
                 filesByName.set(filePaths[i], newSourceFiles[i]);
-            }
-
-            for (const p of oldProgram.getMissingFilePaths()) {
-                filesByName.set(p, undefined);
             }
 
             files = newSourceFiles;
