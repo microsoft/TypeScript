@@ -465,7 +465,7 @@ namespace ts.textChanges {
                 change.options.indentation !== undefined
                     ? change.options.indentation
                     : change.useIndentationFromFile
-                        ? formatting.SmartIndenter.getIndentation(change.range.pos, sourceFile, formatOptions, posStartsLine || (change.options.prefix === this.newLineCharacter))
+                        ? formatting.SmartIndenter.getIndentationAtPosition(change.range.pos, sourceFile, formatOptions, posStartsLine || (change.options.prefix === this.newLineCharacter))
                         : 0;
             const delta =
                 change.options.delta !== undefined

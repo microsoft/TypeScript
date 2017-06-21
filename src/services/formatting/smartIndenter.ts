@@ -9,18 +9,21 @@ namespace ts.formatting {
         }
 
         /**
-         * Computed indentation for a given position in source file
-         * @param position - position in file
-         * @param sourceFile - target source file
-         * @param options - set of editor options that control indentation
-         * @param assumeNewLineBeforeCloseBrace - false when getIndentation is called on the text from the real source file.
-         * true - when we need to assume that position is on the newline. This is usefult for codefixes, i.e.
+         * @param assumeNewLineBeforeCloseBrace
+         * `false` when called on text from a real source file.
+         * `true` when we need to assume `position` is on a newline.
+         *
+         * This is useful for codefixes. Consider
+         * ```
          * function f() {
          * |}
-         * when inserting some text after open brace we would like to get the value of indentation as if newline was already there.
-         * However by default indentation at position | will be 0 so 'assumeNewLineBeforeCloseBrace' allows to override this behavior,
+         * ```
+         * with `position` at `|`.
+         *
+         * When inserting some text after an open brace, we would like to get indentation as if a newline was already there.
+         * By default indentation at `position` will be 0 so 'assumeNewLineBeforeCloseBrace' overrides this behavior,
          */
-        export function getIndentation(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
+        export function getIndentationAtPosition(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
             if (position > sourceFile.text.length) {
                 return getBaseIndentation(options); // past EOF
             }
@@ -136,8 +139,10 @@ namespace ts.formatting {
             let parent: Node = current.parent;
             let parentStart: LineAndCharacter;
 
-            // walk upwards and collect indentations for pairs of parent-child nodes
-            // indentation is not added if parent and child nodes start on the same line or if parent is IfStatement and child starts on the same line with 'else clause'
+            // Walk up the tree and collect indentation for pairs of parent-child nodes.
+            // indentation is not added if
+            // * parent and child nodes start on the same line
+            // * parent is IfStatement and child starts on the same line with 'else clause'
             while (parent) {
                 let useActualIndentation = true;
                 if (ignoreActualIndentationRange) {
@@ -174,22 +179,24 @@ namespace ts.formatting {
                     indentationDelta += options.indentSize;
                 }
 
+                // Update current and parent.
+
+                const callExpressionUsesTrueStart =
+                    isParameterAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+
                 current = parent;
-                currentStart = parentStart;
                 parent = current.parent;
+                currentStart = callExpressionUsesTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : parentStart;
+                parentStart = undefined;
             }
 
             return indentationDelta + getBaseIndentation(options);
         }
 
-
         function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             const containingList = getContainingList(child, sourceFile);
-            if (containingList) {
-                return sourceFile.getLineAndCharacterOfPosition(containingList.pos);
-            }
-
-            return sourceFile.getLineAndCharacterOfPosition(parent.getStart(sourceFile));
+            const startPos = containingList ? containingList.pos : parent.getStart(sourceFile);
+            return sourceFile.getLineAndCharacterOfPosition(startPos);
         }
 
         /*
@@ -266,6 +273,16 @@ namespace ts.formatting {
 
         function getStartLineAndCharacterForNode(n: Node, sourceFile: SourceFileLike): LineAndCharacter {
             return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
+        }
+
+        export function isParameterAndStartLineOverlapsExpressionBeingCalled(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFileLike): boolean {
+            if (!(isCallExpression(parent) && contains(parent.arguments, child))) {
+                return false;
+            }
+
+            const callExpressionEnd = parent.expression.getEnd();
+            const expressionEndLine = getLineAndCharacterOfPosition(sourceFile, callExpressionEnd).line;
+            return expressionEndLine === childStartLine;
         }
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {
