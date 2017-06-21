@@ -631,7 +631,7 @@ namespace ts.server {
                 // Missing files that are not yet watched should be added to the map.
                 missingFilePaths.forEach(p => {
                     if (!this.missingFilesMap.contains(p)) {
-                        const fileWatcher = ts.sys.watchFile(p, (_filename: string, removed?: boolean) => {
+                        const fileWatcher = this.projectService.host.watchFile(p, (_filename: string, removed?: boolean) => {
                             // removed = deleted ? true : (added ? false : undefined)
                             if (removed === false && this.missingFilesMap.contains(p)) {
                                 fileWatcher.close();

@@ -2028,7 +2028,7 @@ namespace ts.projectSystem {
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkWatchedFiles(host, []);
+            checkWatchedFiles(host, [libFile.path]); // watching the "missing" lib file
 
             const project = projectService.externalProjects[0];
 
