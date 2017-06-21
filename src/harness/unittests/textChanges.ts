@@ -100,9 +100,9 @@ namespace ts {
 
         {
             const text = `
-namespace M 
+namespace M
 {
-    namespace M2 
+    namespace M2
     {
         function foo() {
             // comment 1
@@ -367,20 +367,22 @@ namespace M {
                 changeTracker.insertNodeAfter(sourceFile, findChild("M", sourceFile), createTestClass(), { prefix: newLineCharacter });
             });
         }
-        {
-            function findOpenBraceForConstructor(sourceFile: SourceFile) {
-                const classDecl = <ClassDeclaration>sourceFile.statements[0];
-                const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
-                return constructorDecl.body.getFirstToken();
-            }
-            function createTestSuperCall() {
-                const superCall = createCall(
-                    createSuper(),
+
+        function findOpenBraceForConstructor(sourceFile: SourceFile) {
+            const classDecl = <ClassDeclaration>sourceFile.statements[0];
+            const constructorDecl = forEach(classDecl.members, m => m.kind === SyntaxKind.Constructor && (<ConstructorDeclaration>m).body && <ConstructorDeclaration>m);
+            return constructorDecl.body.getFirstToken();
+        }
+        function createTestSuperCall() {
+            const superCall = createCall(
+                createSuper(),
                     /*typeArguments*/ undefined,
                     /*argumentsArray*/ emptyArray
-                );
-                return createStatement(superCall);
-            }
+            );
+            return createStatement(superCall);
+        }
+
+        {
             const text1 = `
 class A {
     constructor() {
@@ -548,7 +550,7 @@ const x = 1;`;
         }
         {
             const text = `
-const x = 1, 
+const x = 1,
     y = 2;`;
             runSingleFileTest("insertNodeInListAfter6", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
@@ -559,7 +561,7 @@ const x = 1,
         }
         {
             const text = `
-const /*x*/ x = 1, 
+const /*x*/ x = 1,
     /*y*/ y = 2;`;
             runSingleFileTest("insertNodeInListAfter8", noop, text, /*validateNodes*/ false, (sourceFile, changeTracker) => {
                 changeTracker.insertNodeInListAfter(sourceFile, findChild("x", sourceFile), createVariableDeclaration("z", /*type*/ undefined, createLiteral(1)));
