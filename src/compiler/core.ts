@@ -955,7 +955,7 @@ namespace ts {
      * @param map A map-like.
      * @param key A property key.
      */
-    export function hasProperty<T>(map: MapLike<T>, key: string): boolean {
+    export function hasProperty(map: MapLike<any>, key: string): boolean {
         return hasOwnProperty.call(map, key);
     }
 
@@ -2344,7 +2344,7 @@ namespace ts {
 
         export function fail(message?: string, stackCrawlMark?: Function): void {
             debugger;
-            const e = new Error(message ? `Debug Failure. ` : "Debug Failure.");
+            const e = new Error(message ? `Debug Failure. ${message}` : "Debug Failure.");
             if ((<any>Error).captureStackTrace) {
                 (<any>Error).captureStackTrace(e, stackCrawlMark || fail);
             }
