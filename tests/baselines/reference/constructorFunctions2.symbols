@@ -1,0 +1,41 @@
+=== tests/cases/conformance/salsa/node.d.ts ===
+declare function require(id: string): any;
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>id : Symbol(id, Decl(node.d.ts, 0, 25))
+
+declare var module: any, exports: any;
+>module : Symbol(module, Decl(node.d.ts, 1, 11))
+>exports : Symbol(exports, Decl(node.d.ts, 1, 24))
+
+=== tests/cases/conformance/salsa/index.js ===
+const A = require("./other");
+>A : Symbol(A, Decl(index.js, 0, 5))
+>require : Symbol(require, Decl(node.d.ts, 0, 0))
+>"./other" : Symbol("tests/cases/conformance/salsa/other", Decl(other.js, 0, 0))
+
+const a = new A().id;
+>a : Symbol(a, Decl(index.js, 1, 5))
+>new A().id : Symbol(A.id, Decl(other.js, 0, 14))
+>A : Symbol(A, Decl(index.js, 0, 5))
+>id : Symbol(A.id, Decl(other.js, 0, 14))
+
+const B = function() { this.id = 1; }
+>B : Symbol(B, Decl(index.js, 3, 5))
+>id : Symbol(B.id, Decl(index.js, 3, 22))
+
+const b = new B().id;
+>b : Symbol(b, Decl(index.js, 4, 5))
+>new B().id : Symbol(B.id, Decl(index.js, 3, 22))
+>B : Symbol(B, Decl(index.js, 3, 5))
+>id : Symbol(B.id, Decl(index.js, 3, 22))
+
+=== tests/cases/conformance/salsa/other.js ===
+function A() { this.id = 1; }
+>A : Symbol(A, Decl(other.js, 0, 0))
+>id : Symbol(A.id, Decl(other.js, 0, 14))
+
+module.exports = A;
+>module : Symbol(export=, Decl(other.js, 0, 29))
+>exports : Symbol(export=, Decl(other.js, 0, 29))
+>A : Symbol(A, Decl(other.js, 0, 0))
+

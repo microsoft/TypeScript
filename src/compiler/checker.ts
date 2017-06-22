@@ -16073,8 +16073,8 @@ namespace ts {
          * Indicates whether a declaration can be treated as a constructor in a JavaScript
          * file.
          */
-        function isJavaScriptConstructor(node: Declaration): boolean {
-            if (isInJavaScriptFile(node)) {
+        function isJavaScriptConstructor(node: Declaration | undefined): boolean {
+            if (node && isInJavaScriptFile(node)) {
                 // If the node has a @class tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
 
@@ -16087,6 +16087,21 @@ namespace ts {
             }
 
             return false;
+        }
+
+        function getJavaScriptClassType(symbol: Symbol): Type | undefined {
+            if (symbol && isDeclarationOfFunctionOrClassExpression(symbol)) {
+                symbol = getSymbolOfNode((<VariableDeclaration>symbol.valueDeclaration).initializer);
+            }
+            if (isJavaScriptConstructor(symbol.valueDeclaration)) {
+                return getInferredClassType(symbol);
+            }
+            if (symbol.flags & SymbolFlags.Variable) {
+                const valueType = getTypeOfSymbol(symbol);
+                if (valueType.symbol && !isInferredClassType(valueType) && isJavaScriptConstructor(valueType.symbol.valueDeclaration)) {
+                    return getInferredClassType(valueType.symbol);
+                }
+            }
         }
 
         function getInferredClassType(symbol: Symbol) {
@@ -16132,16 +16147,14 @@ namespace ts {
                     // in a JS file
                     // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
                     // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    let funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
+                    const funcSymbol = node.expression.kind === SyntaxKind.Identifier ?
                         getResolvedSymbol(node.expression as Identifier) :
                         checkExpression(node.expression).symbol;
-                    if (funcSymbol && isDeclarationOfFunctionOrClassExpression(funcSymbol)) {
-                        funcSymbol = getSymbolOfNode((<VariableDeclaration>funcSymbol.valueDeclaration).initializer);
+                    const type = funcSymbol && getJavaScriptClassType(funcSymbol);
+                    if (type) {
+                        return type;
                     }
-                    if (funcSymbol && funcSymbol.flags & SymbolFlags.Function && (funcSymbol.members || getJSDocClassTag(funcSymbol.valueDeclaration))) {
-                        return getInferredClassType(funcSymbol);
-                    }
-                    else if (noImplicitAny) {
+                    if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
                     return anyType;
