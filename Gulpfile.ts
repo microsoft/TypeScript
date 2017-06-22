@@ -38,7 +38,7 @@ const {runTestsInParallel} = mochaParallel;
 Error.stackTraceLimit = 1000;
 
 const cmdLineOptions = minimist(process.argv.slice(2), {
-    boolean: ["debug", "inspect", "light", "colors", "lint", "soft"],
+    boolean: ["debug", "inspect", "light", "colors", "lint", "soft", "failed", "bail", "keepFailed"],
     string: ["browser", "tests", "host", "reporter", "stackTraceLimit", "timeout"],
     alias: {
         b: "browser",
@@ -49,6 +49,7 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         c: "colors", color: "colors",
         f: "files", file: "files",
         w: "workers",
+        "keep-failed": "keepFailed"
     },
     default: {
         soft: false,
@@ -57,9 +58,12 @@ const cmdLineOptions = minimist(process.argv.slice(2), {
         inspect: process.env.inspect || process.env["inspect-brk"] || process.env.i,
         host: process.env.TYPESCRIPT_HOST || process.env.host || "node",
         browser: process.env.browser || process.env.b || "IE",
+        bail: process.env.bail || false,
         timeout: process.env.timeout || 40000,
         tests: process.env.test || process.env.tests || process.env.t,
         light: process.env.light || false,
+        failed: process.env.failed || false,
+        keepFailed: process.env.keepFailed || process.env["keep-failed"] || false,
         reporter: process.env.reporter || process.env.r,
         lint: process.env.lint || true,
         files: process.env.f || process.env.file || process.env.files || "",
@@ -603,6 +607,9 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         const inspect = cmdLineOptions["inspect"];
         const tests = cmdLineOptions["tests"];
         const light = cmdLineOptions["light"];
+        const bail = cmdLineOptions["bail"];
+        const failed = cmdLineOptions["failed"];
+        const keepFailed = cmdLineOptions["keepFailed"];
         const stackTraceLimit = cmdLineOptions["stackTraceLimit"];
         const testConfigFile = "test.config";
         if (fs.existsSync(testConfigFile)) {
@@ -637,15 +644,22 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
         // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
         if (!runInParallel) {
             const args = [];
-            args.push("-R", reporter);
+            args.push("-R", "scripts/mocha-file-reporter");
+            args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
             if (tests) {
                 args.push("-g", `"${tests}"`);
+            }
+            else if (failed) {
+                args.push("--opts", ".failed-tests");
             }
             if (colors) {
                 args.push("--colors");
             }
             else {
                 args.push("--no-colors");
+            }
+            if (bail) {
+                args.push("--bail");
             }
             if (inspect) {
                 args.unshift("--inspect-brk");
@@ -675,7 +689,7 @@ function runConsoleTests(defaultReporter: string, runInParallel: boolean, done: 
             }
             args.push(run);
             setNodeEnvToDevelopment();
-            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function(err) {
+            runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors ", keepFailed }, function(err) {
                 // last worker clean everything and runs linter in case if there were no errors
                 del(taskConfigsFolder).then(() => {
                     if (!err) {
