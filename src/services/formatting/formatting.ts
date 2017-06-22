@@ -1119,7 +1119,7 @@ namespace ts.formatting {
                         return;
                     }
 
-                    // edit should not be applied only if we have one line feed between elements
+                    // edit should not be applied if we have one line feed between elements
                     const lineDelta = currentStartLine - previousStartLine;
                     if (lineDelta !== 1) {
                         recordReplace(previousRange.end, currentRange.pos - previousRange.end, options.newLineCharacter);
