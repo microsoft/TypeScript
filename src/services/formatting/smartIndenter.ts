@@ -21,7 +21,7 @@ namespace ts.formatting {
          * with `position` at `|`.
          *
          * When inserting some text after an open brace, we would like to get indentation as if a newline was already there.
-         * By default indentation at `position` will be 0 so 'assumeNewLineBeforeCloseBrace' overrides this behavior,
+         * By default indentation at `position` will be 0 so 'assumeNewLineBeforeCloseBrace' overrides this behavior.
          */
         export function getIndentationAtPosition(position: number, sourceFile: SourceFile, options: EditorSettings, assumeNewLineBeforeCloseBrace = false): number {
             if (position > sourceFile.text.length) {
@@ -139,10 +139,9 @@ namespace ts.formatting {
             let parent: Node = current.parent;
             let parentStart: LineAndCharacter;
 
-            // Walk up the tree and collect indentation for pairs of parent-child nodes.
-            // indentation is not added if
-            // * parent and child nodes start on the same line
-            // * parent is IfStatement and child starts on the same line with 'else clause'
+            // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
+            // * parent and child nodes start on the same line, or
+            // * parent is an IfStatement and child starts on the same line as an 'else clause'.
             while (parent) {
                 let useActualIndentation = true;
                 if (ignoreActualIndentationRange) {
@@ -157,6 +156,7 @@ namespace ts.formatting {
                         return actualIndentation + indentationDelta;
                     }
                 }
+
                 parentStart = getParentStart(parent, current, sourceFile);
                 const parentAndChildShareLine =
                     parentStart.line === currentStart.line ||
@@ -179,14 +179,14 @@ namespace ts.formatting {
                     indentationDelta += options.indentSize;
                 }
 
-                // Update current and parent.
+                // Update `current` and `parent`.
 
-                const callExpressionUsesTrueStart =
+                const useTrueStart =
                     isParameterAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
                 current = parent;
                 parent = current.parent;
-                currentStart = callExpressionUsesTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : parentStart;
+                currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : parentStart;
                 parentStart = undefined;
             }
 
@@ -280,9 +280,9 @@ namespace ts.formatting {
                 return false;
             }
 
-            const callExpressionEnd = parent.expression.getEnd();
-            const expressionEndLine = getLineAndCharacterOfPosition(sourceFile, callExpressionEnd).line;
-            return expressionEndLine === childStartLine;
+            const expressionOfCallExpressionEnd = parent.expression.getEnd();
+            const expressionOfCallExpressionEndLine = getLineAndCharacterOfPosition(sourceFile, expressionOfCallExpressionEnd).line;
+            return expressionOfCallExpressionEndLine === childStartLine;
         }
 
         export function childStartsOnTheSameLineWithElseInIfStatement(parent: Node, child: TextRangeWithKind, childStartLine: number, sourceFile: SourceFileLike): boolean {

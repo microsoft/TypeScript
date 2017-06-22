@@ -5,11 +5,8 @@
 //// (foo)(1, function() {/*4_0*/
 //// });
 //// 
-//// /////////////
+//// // No line-breaks in the expression part of the call expression
 //// 
-//// (
-////     foo)(1, function () {/*4_1*/
-////     });
 //// (foo)
 ////     (1, function () {/*8_0*/
 ////     });
@@ -20,8 +17,11 @@
 //// {/*4_2*/
 //// });
 //// 
-//// //////////////////////
-//// 
+//// // Contains line-breaks in the expression part of the call expression.
+////
+//// (
+////     foo)(1, function () {/*4_1*/
+////     });
 //// (foo
 //// )(1, function () {/*4_3*/
 //// });
@@ -37,7 +37,6 @@
 //// )(1, function()
 //// {/*4_4*/
 //// });
-
 
 for (let i = 0; i < 5; ++i) {
     goTo.marker(`4_${i}`);
