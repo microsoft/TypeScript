@@ -4,7 +4,13 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
-    export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
+    export enum FileWatcherEventKind {
+        Created,
+        Changed,
+        Deleted
+    }
+
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
         fileName: string;
@@ -174,7 +180,7 @@ namespace ts {
                         const callbacks = fileWatcherCallbacks.get(fileName);
                         if (callbacks) {
                             for (const fileCallback of callbacks) {
-                                fileCallback(fileName);
+                                fileCallback(fileName, FileWatcherEventKind.Changed);
                             }
                         }
                     }
@@ -342,18 +348,20 @@ namespace ts {
                     function fileChanged(curr: any, prev: any) {
                         const isCurrZero = +curr.mtime === 0;
                         const isPrevZero = +prev.mtime === 0;
-                        const added = !isCurrZero && isPrevZero;
+                        const created = !isCurrZero && isPrevZero;
                         const deleted = isCurrZero && !isPrevZero;
 
-                        // This value is consistent with poll() in createPollingWatchedFileSet()
-                        // and depended upon by the file watchers created in Project.updateGraphWorker.
-                        const removed = deleted ? true : (added ? false : undefined);
+                        const eventKind = created
+                            ? FileWatcherEventKind.Created
+                            : deleted
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
 
-                        if (!added && !deleted && +curr.mtime <= +prev.mtime) {
+                        if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
                             return;
                         }
 
-                        callback(fileName, removed);
+                        callback(fileName, eventKind);
                     }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {

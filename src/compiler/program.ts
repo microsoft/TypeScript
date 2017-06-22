@@ -472,7 +472,7 @@ namespace ts {
             resolveTypeReferenceDirectiveNamesWorker = (typeReferenceDirectiveNames, containingFile) => loadWithLocalCache(typeReferenceDirectiveNames, containingFile, loader);
         }
 
-        const filesByName = createMap<SourceFile>();
+        const filesByName = createMap<SourceFile | undefined>();
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
@@ -513,7 +513,7 @@ namespace ts {
             }
         }
 
-        const missingFilePaths = filesByName.getKeys().filter(p => !filesByName.get(p));
+        const missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
 
         // unconditionally set moduleResolutionCache to undefined to avoid unnecessary leaks
         moduleResolutionCache = undefined;
@@ -872,17 +872,12 @@ namespace ts {
             // will be created until we encounter a change that prevents complete structure reuse.
             // During this interval, creation of the file will go unnoticed.  We expect this to be
             // both rare and low-impact.
-            if (oldProgram.getMissingFilePaths) {
-                const missingFilePaths: Path[] = oldProgram.getMissingFilePaths() || emptyArray;
-                for (const missingFilePath of missingFilePaths) {
-                    if (host.fileExists(missingFilePath)) {
-                        return oldProgram.structureIsReused = StructureIsReused.SafeModules;
-                    }
-                }
+            if (oldProgram.getMissingFilePaths().some(missingFilePath => host.fileExists(missingFilePath))) {
+                return oldProgram.structureIsReused = StructureIsReused.SafeModules;
+            }
 
-                for (const p of oldProgram.getMissingFilePaths()) {
-                    filesByName.set(p, undefined);
-                }
+            for (const p of oldProgram.getMissingFilePaths()) {
+                filesByName.set(p, undefined);
             }
 
             // update fileName -> file mapping

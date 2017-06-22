@@ -107,7 +107,7 @@ namespace ts.server {
         private rootFilesMap: Map<ScriptInfo> = createMap<ScriptInfo>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
-        private missingFilesMap: FileMap<FileWatcher> = createFileMap<FileWatcher>();
+        private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -312,10 +312,7 @@ namespace ts.server {
             this.lsHost = undefined;
 
             // Clean up file watchers waiting for missing files
-            for (const p of this.missingFilesMap.getKeys()) {
-                this.missingFilesMap.get(p).close();
-                this.missingFilesMap.remove(p);
-            }
+            this.missingFilesMap.forEach(fileWatcher => fileWatcher.close());
             this.missingFilesMap = undefined;
 
             // signal language service to release source files acquired from document registry
@@ -594,12 +591,12 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            let hasChanges = false;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            if (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely))) {
-                hasChanges = true;
+            const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely));
+
+            if (hasChanges) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -612,39 +609,35 @@ namespace ts.server {
                         }
                     }
                 }
-            }
 
-            if (hasChanges && this.program.getMissingFilePaths) {
-                const missingFilePaths = this.program.getMissingFilePaths() || emptyArray;
-                const missingFilePathsSet = createMap<true>();
-                missingFilePaths.forEach(p => missingFilePathsSet.set(p, true));
+                const missingFilePaths = this.program.getMissingFilePaths();
+                const missingFilePathsSet = arrayToSet(missingFilePaths, p => p);
 
                 // Files that are no longer missing (e.g. because they are no longer required)
                 // should no longer be watched.
-                this.missingFilesMap.getKeys().forEach(p => {
-                    if (!missingFilePathsSet.has(p)) {
-                        this.missingFilesMap.get(p).close();
-                        this.missingFilesMap.remove(p);
+                this.missingFilesMap.forEach((fileWatcher, missingFilePath) => {
+                    if (!missingFilePathsSet.has(missingFilePath)) {
+                        this.missingFilesMap.delete(missingFilePath);
+                        fileWatcher.close();
                     }
                 });
 
                 // Missing files that are not yet watched should be added to the map.
-                missingFilePaths.forEach(p => {
-                    if (!this.missingFilesMap.contains(p)) {
-                        const fileWatcher = this.projectService.host.watchFile(p, (_filename: string, removed?: boolean) => {
-                            // removed = deleted ? true : (added ? false : undefined)
-                            if (removed === false && this.missingFilesMap.contains(p)) {
+                for (const missingFilePath of missingFilePaths) {
+                    if (!this.missingFilesMap.has(missingFilePath)) {
+                        const fileWatcher = this.projectService.host.watchFile(missingFilePath, (_filename: string, eventKind: FileWatcherEventKind) => {
+                            if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
                                 fileWatcher.close();
-                                this.missingFilesMap.remove(p);
+                                this.missingFilesMap.delete(missingFilePath);
 
                                 // When a missing file is created, we should update the graph.
                                 this.markAsDirty();
                                 this.updateGraph();
                             }
                         });
-                        this.missingFilesMap.set(p, fileWatcher);
+                        this.missingFilesMap.set(missingFilePath, fileWatcher);
                     }
-                });
+                }
             }
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
@@ -668,7 +661,7 @@ namespace ts.server {
         }
 
         isWatchedMissingFile(path: Path) {
-            return this.missingFilesMap.contains(path);
+            return this.missingFilesMap.has(path);
         }
 
         getScriptInfoLSHost(fileName: string) {

@@ -820,7 +820,7 @@ namespace ts.projectSystem {
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             host.reloadFS([f, fixedPackageJson]);
-            host.triggerFileWatcherCallback(fixedPackageJson.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(fixedPackageJson.path, FileWatcherEventKind.Changed);
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
 

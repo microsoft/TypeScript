@@ -522,16 +522,16 @@ namespace ts.server {
                 return;
             }
 
-            // removed = deleted ? true : (added ? false : undefined)
-            // This value is consistent with sys.watchFile()
-            // and depended upon by the file watchers created in performCompilation() in tsc's executeCommandLine().
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = stats.mtime;
-                    watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
+                    const eventKind = watchedFile.mtime.getTime() === 0
+                        ? FileWatcherEventKind.Deleted
+                        : FileWatcherEventKind.Changed;
+                    watchedFile.callback(watchedFile.fileName, eventKind);
                 }
             });
         }

@@ -41,39 +41,33 @@ namespace ts {
             const program = createProgram([emptyFileRelativePath], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
-            assert.equal(missing.length, 0);
+            assert.deepEqual(missing, []);
         });
 
         it("handles missing root file", () => {
             const program = createProgram(["./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
-            assert.equal(missing.length, 1);
-            assert.equal(missing[0].toString(), "d:/pretend/nonexistent.ts"); // Absolute path
+            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts"]); // Absolute path
         });
 
         it("handles multiple missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", "./nonexistent1.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
-            assert.equal(missing.length, 2);
-            assert.equal(missing[0].toString(), "d:/pretend/nonexistent0.ts");
-            assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
+            assert.deepEqual(missing, ["d:/pretend/nonexistent0.ts", "d:/pretend/nonexistent1.ts"]);
         });
 
         it("handles a mix of present and missing root files", () => {
             const program = createProgram(["./nonexistent0.ts", emptyFileRelativePath, "./nonexistent1.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
-            assert.equal(missing.length, 2);
-            assert.equal(missing[0].toString(), "d:/pretend/nonexistent0.ts");
-            assert.equal(missing[1].toString(), "d:/pretend/nonexistent1.ts");
+            assert.deepEqual(missing, ["d:/pretend/nonexistent0.ts", "d:/pretend/nonexistent1.ts"]);
         });
 
         it("handles repeatedly specified root files", () => {
             const program = createProgram(["./nonexistent.ts", "./nonexistent.ts"], options, testCompilerHost);
             const missing = program.getMissingFilePaths();
             assert.isDefined(missing);
-            assert.equal(missing.length, 1);
-            assert.equal(missing[0].toString(), "d:/pretend/nonexistent.ts");
+            assert.deepEqual(missing, ["d:/pretend/nonexistent.ts"]);
         });
 
         it("normalizes file paths", () => {
@@ -89,21 +83,21 @@ namespace ts {
             const program = createProgram([referenceFileRelativePath], options, testCompilerHost);
             const missing = program.getMissingFilePaths().sort();
             assert.isDefined(missing);
-            assert.equal(missing.length, 6);
+            assert.deepEqual(missing, [
+                // From absolute reference
+                "d:/imaginary/nonexistent1.ts",
 
-            // From absolute reference
-            assert.equal(missing[0].toString(), "d:/imaginary/nonexistent1.ts");
+                // From relative reference
+                "d:/pretend/nonexistent2.ts",
 
-            // From relative reference
-            assert.equal(missing[1].toString(), "d:/pretend/nonexistent2.ts");
+                // From unqualified reference
+                "d:/pretend/nonexistent3.ts",
 
-            // From unqualified reference
-            assert.equal(missing[2].toString(), "d:/pretend/nonexistent3.ts");
-
-            // From no-extension reference
-            assert.equal(missing[3].toString(), "d:/pretend/nonexistent4.d.ts");
-            assert.equal(missing[4].toString(), "d:/pretend/nonexistent4.ts");
-            assert.equal(missing[5].toString(), "d:/pretend/nonexistent4.tsx");
+                // From no-extension reference
+                "d:/pretend/nonexistent4.d.ts",
+                "d:/pretend/nonexistent4.ts",
+                "d:/pretend/nonexistent4.tsx"
+            ]);
         });
     });
 }
