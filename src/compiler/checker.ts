@@ -1122,7 +1122,7 @@ namespace ts {
                     return undefined;
                 }
 
-                // Only check for block-scoped variable if we are looking for the
+                // Only check for block-scoped variable if we have an error location and are looking for the
                 // name with variable meaning
                 //      For example,
                 //          declare module foo {
@@ -1133,8 +1133,9 @@ namespace ts {
                 // block-scoped variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block-scoped
-                if (meaning & SymbolFlags.BlockScopedVariable ||
-                    ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value)) {
+                if (errorLocation &&
+                    (meaning & SymbolFlags.BlockScopedVariable ||
+                     ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
