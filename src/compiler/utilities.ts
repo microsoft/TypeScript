@@ -2664,11 +2664,11 @@ namespace ts {
      * Gets the effective type annotation of a variable, parameter, or property. If the node was
      * parsed in a JavaScript file, gets the type annotation from JSDoc.
      */
-    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode {
+    export function getEffectiveTypeAnnotationNode(node: VariableLikeDeclaration): TypeNode | undefined {
         if (node.type) {
             return node.type;
         }
-        if (node.flags & NodeFlags.JavaScriptFile) {
+        if (isInJavaScriptFile(node)) {
             return getJSDocType(node);
         }
     }
@@ -2677,11 +2677,11 @@ namespace ts {
      * Gets the effective return type annotation of a signature. If the node was parsed in a
      * JavaScript file, gets the return type annotation from JSDoc.
      */
-    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode {
+    export function getEffectiveReturnTypeNode(node: SignatureDeclaration): TypeNode | undefined {
         if (node.type) {
             return node.type;
         }
-        if (node.flags & NodeFlags.JavaScriptFile) {
+        if (isInJavaScriptFile(node)) {
             return getJSDocReturnType(node);
         }
     }

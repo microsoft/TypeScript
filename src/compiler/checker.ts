@@ -12693,12 +12693,6 @@ namespace ts {
                 if (typeNode) {
                     return getTypeFromTypeNode(typeNode);
                 }
-                if (isInJavaScriptFile(declaration)) {
-                    const jsDocType = getTypeForDeclarationFromJSDocComment(declaration);
-                    if (jsDocType) {
-                        return jsDocType;
-                    }
-                }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                     if (type) {
@@ -13306,6 +13300,7 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+            const isInJSFile = isInJavaScriptFile(node);
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
@@ -13314,6 +13309,11 @@ namespace ts {
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
+                    let jsdocType: Type;
+                    if (isInJSFile) {
+                        jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
+                    }
+
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -13324,6 +13324,11 @@ namespace ts {
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
                         type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
+                    }
+
+                    if (jsdocType) {
+                        checkTypeAssignableTo(type, jsdocType, memberDecl);
+                        type = jsdocType;
                     }
 
                     typeFlags |= type.flags;
