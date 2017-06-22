@@ -19426,6 +19426,9 @@ namespace ts {
                         case SyntaxKind.ConstructorType:
                             checkUnusedTypeParameters(<FunctionLikeDeclaration>node);
                             break;
+                        case SyntaxKind.TypeAliasDeclaration:
+                            checkUnusedTypeParameters(<TypeAliasDeclaration>node);
+                            break;
                     }
                 }
             }
@@ -19503,7 +19506,7 @@ namespace ts {
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration) {
+        function checkUnusedTypeParameters(node: ClassDeclaration | ClassExpression | FunctionDeclaration | MethodDeclaration | FunctionExpression | ArrowFunction | ConstructorDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration) {
             if (compilerOptions.noUnusedLocals && !isInAmbientContext(node)) {
                 if (node.typeParameters) {
                     // Only report errors on the last declaration for the type parameter container;
@@ -21208,6 +21211,7 @@ namespace ts {
             checkTypeNameIsReserved(node.name, Diagnostics.Type_alias_name_cannot_be_0);
             checkTypeParameters(node.typeParameters);
             checkSourceElement(node.type);
+            registerForUnusedIdentifiersCheck(node);
         }
 
         function computeEnumMemberValues(node: EnumDeclaration) {
