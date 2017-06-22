@@ -137,7 +137,7 @@ namespace ts.formatting {
             options: EditorSettings): number {
 
             let parent: Node = current.parent;
-            let parentStart: LineAndCharacter;
+            let containingListOrParentStart: LineAndCharacter;
 
             // Walk up the tree and collect indentation for parent-child node pairs. Indentation is not added if
             // * parent and child nodes start on the same line, or
@@ -157,9 +157,9 @@ namespace ts.formatting {
                     }
                 }
 
-                parentStart = getParentStart(parent, current, sourceFile);
+                containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
                 const parentAndChildShareLine =
-                    parentStart.line === currentStart.line ||
+                    containingListOrParentStart.line === currentStart.line ||
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
                 if (useActualIndentation) {
@@ -182,18 +182,18 @@ namespace ts.formatting {
                 // Update `current` and `parent`.
 
                 const useTrueStart =
-                    isParameterAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
+                    isArgumentAndStartLineOverlapsExpressionBeingCalled(parent, current, currentStart.line, sourceFile);
 
                 current = parent;
                 parent = current.parent;
-                currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : parentStart;
-                parentStart = undefined;
+                currentStart = useTrueStart ? sourceFile.getLineAndCharacterOfPosition(current.getStart()) : containingListOrParentStart;
+                containingListOrParentStart = undefined;
             }
 
             return indentationDelta + getBaseIndentation(options);
         }
 
-        function getParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
+        function getContainingListOrParentStart(parent: Node, child: Node, sourceFile: SourceFile): LineAndCharacter {
             const containingList = getContainingList(child, sourceFile);
             const startPos = containingList ? containingList.pos : parent.getStart(sourceFile);
             return sourceFile.getLineAndCharacterOfPosition(startPos);
@@ -275,7 +275,7 @@ namespace ts.formatting {
             return sourceFile.getLineAndCharacterOfPosition(n.getStart(sourceFile));
         }
 
-        export function isParameterAndStartLineOverlapsExpressionBeingCalled(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFileLike): boolean {
+        export function isArgumentAndStartLineOverlapsExpressionBeingCalled(parent: Node, child: Node, childStartLine: number, sourceFile: SourceFileLike): boolean {
             if (!(isCallExpression(parent) && contains(parent.arguments, child))) {
                 return false;
             }
