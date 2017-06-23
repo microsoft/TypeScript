@@ -145,7 +145,7 @@ namespace ts {
         };
     }
 
-    export function createFileMap<T>(keyMapper?: (key: string) => string): FileMap<T> {
+    export function createFileMap<T>(keyMapper: (key: string) => string): FileMap<T> {
         const files = createMap<T>();
         return {
             get,

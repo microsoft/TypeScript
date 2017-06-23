@@ -58,7 +58,7 @@ namespace ts.server {
     }
 
     export class UnresolvedImportsMap {
-        readonly perFileMap = createFileMap<ReadonlyArray<string>>();
+        readonly perFileMap = createMap<ReadonlyArray<string>>();
         private version = 0;
 
         public clear() {
@@ -71,7 +71,7 @@ namespace ts.server {
         }
 
         public remove(path: Path) {
-            this.perFileMap.remove(path);
+            this.perFileMap.delete(path);
             this.version++;
         }
 
@@ -104,7 +104,7 @@ namespace ts.server {
 
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap: FileMap<ScriptInfo> = createFileMap<ScriptInfo>();
+        private rootFilesMap: Map<ScriptInfo> = createMap<ScriptInfo>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
 
@@ -453,7 +453,7 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFilesMap && this.rootFilesMap.contains(info.path);
+            return this.rootFilesMap && this.rootFilesMap.has(info.path);
         }
 
         // add a root file to project
@@ -789,7 +789,7 @@ namespace ts.server {
         // remove a root file from project
         protected removeRoot(info: ScriptInfo): void {
             orderedRemoveItem(this.rootFiles, info);
-            this.rootFilesMap.remove(info.path);
+            this.rootFilesMap.delete(info.path);
         }
     }
 
