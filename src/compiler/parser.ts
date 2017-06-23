@@ -51,7 +51,7 @@ namespace ts {
      * @param cbNodes a callback to be invoked for embedded array
      */
     export function forEachChild<T>(node: Node, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
-        if (!node) {
+        if (!node || node.kind <= SyntaxKind.LastToken) {
             return;
         }
         switch (node.kind) {
