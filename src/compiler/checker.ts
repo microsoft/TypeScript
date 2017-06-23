@@ -14452,7 +14452,7 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
-                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) { //!
+                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, right.text);
                     return unknownType;
                 }

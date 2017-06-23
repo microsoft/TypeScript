@@ -75,11 +75,11 @@ var p: M2.Point;
 >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
 >Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
 
-var p2: { Origin() : { x: number; y: number; } };
+var p2: { readonly Origin: () => { x: number; y: number; } };
 >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
 >Origin : Symbol(Origin, Decl(nonInstantiatedModule.ts, 31, 9))
->x : Symbol(x, Decl(nonInstantiatedModule.ts, 31, 22))
->y : Symbol(y, Decl(nonInstantiatedModule.ts, 31, 33))
+>x : Symbol(x, Decl(nonInstantiatedModule.ts, 31, 34))
+>y : Symbol(y, Decl(nonInstantiatedModule.ts, 31, 45))
 
 var p2: typeof M2.Point;
 >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
