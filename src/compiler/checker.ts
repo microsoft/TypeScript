@@ -15637,13 +15637,16 @@ namespace ts {
             }
 
             // No signature was applicable. We have already reported the errors for the invalid signature.
-            // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
-            // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
-            //  declare function f(a: { xa: number; xb: number; });
-            //  f({ |
+            // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
+            // Pick the longest signature. This way we can get a contextual type for cases like:
+            //     declare function f(a: { xa: number; xb: number; }, b: number);
+            //     f({ |
+            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
+            //     declare function f<T>(k: keyof T);
+            //     f<Foo>("
             if (!produceDiagnostics) {
                 Debug.assert(candidates.length > 0); // Else would have exited above.
-                const bestIndex = getBestCandidateIndex(candidates, apparentArgumentCount === undefined ? args.length : apparentArgumentCount);
+                const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args.length : apparentArgumentCount);
                 const candidate = candidates[bestIndex];
 
                 const { typeParameters } = candidate;
@@ -15714,7 +15717,7 @@ namespace ts {
 
         }
 
-        function getBestCandidateIndex(candidates: Signature[], argsCount: number): number {
+        function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
             let maxParamsIndex = -1;
             let maxParams = -1;
 
