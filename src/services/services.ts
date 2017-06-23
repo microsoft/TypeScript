@@ -1163,8 +1163,8 @@ namespace ts {
                     // stub missing host functionality
                     const path = toPath(fileName, currentDirectory, getCanonicalFileName);
                     const entry = hostCache.getEntryByPath(path);
-                    if (entry && entry !== "does-not-exist") {
-                        return entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
+                    if (entry) {
+                        return entry === "does-not-exist" ? undefined : entry.scriptSnapshot.getText(0, entry.scriptSnapshot.getLength());
                     }
                     return host.readFile && host.readFile(fileName);
                 },
