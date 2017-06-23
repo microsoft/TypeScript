@@ -12059,6 +12059,8 @@ namespace ts {
                 }
             }
 
+            const isAlias = localOrExportSymbol.flags & SymbolFlags.Alias;
+
             // We only narrow variables and parameters occurring in a non-assignment position. For all other
             // entities we simply return the declared type.
             if (localOrExportSymbol.flags & SymbolFlags.Variable) {
@@ -12066,7 +12068,7 @@ namespace ts {
                     return type;
                 }
             }
-            else if (localOrExportSymbol.flags & SymbolFlags.Alias) {
+            else if (isAlias) {
                 declaration = find<Declaration>(symbol.declarations, isSomeImportDeclaration);
             }
             else {
@@ -12095,7 +12097,7 @@ namespace ts {
             // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
             // the entire control flow graph from the variable's declaration (i.e. when the flow container and
             // declaration container are the same).
-            const assumeInitialized = isParameter || isOuterVariable ||
+            const assumeInitialized = isParameter || isAlias || isOuterVariable ||
                 type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & TypeFlags.Any) !== 0 || isInTypeQuery(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
                 node.parent.kind === SyntaxKind.NonNullExpression ||
                 isInAmbientContext(declaration);
