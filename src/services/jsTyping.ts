@@ -71,8 +71,7 @@ namespace ts.JsTyping {
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
             const path = normalizePath(fileName);
-            const kind = ensureScriptKind(path, getScriptKindFromFileName(path));
-            if (kind === ScriptKind.JS || kind === ScriptKind.JSX) {
+            if (hasJavaScriptFileExtension(path)) {
                 return path;
             }
         });
@@ -191,7 +190,7 @@ namespace ts.JsTyping {
                 }
             }
 
-            const hasJsxFile = forEach(fileNames, f => ensureScriptKind(f, getScriptKindFromFileName(f)) === ScriptKind.JSX);
+            const hasJsxFile = some(fileNames, f => fileExtensionIs(f, Extension.Jsx));
             if (hasJsxFile) {
                 addInferredTyping("react");
             }
