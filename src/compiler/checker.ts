@@ -14452,7 +14452,7 @@ namespace ts {
             const assignmentKind = getAssignmentTargetKind(node);
 
             if (assignmentKind) {
-                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
+                if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) { //!
                     error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, right.text);
                     return unknownType;
                 }
@@ -16724,12 +16724,13 @@ namespace ts {
             // Variables declared with 'const'
             // Get accessors without matching set accessors
             // Enum members
+            // Classes, functions, enums, and nested namespaces (these are properties if defined in a namespace)
             // Unions and intersections of the above (unions and intersections eagerly set isReadonly on creation)
             return !!(getCheckFlags(symbol) & CheckFlags.Readonly ||
                 symbol.flags & SymbolFlags.Property && getDeclarationModifierFlagsFromSymbol(symbol) & ModifierFlags.Readonly ||
                 symbol.flags & SymbolFlags.Variable && getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const ||
                 symbol.flags & SymbolFlags.Accessor && !(symbol.flags & SymbolFlags.SetAccessor) ||
-                symbol.flags & SymbolFlags.EnumMember);
+                symbol.flags & (SymbolFlags.EnumMember | SymbolFlags.Class | SymbolFlags.Function | SymbolFlags.Enum | SymbolFlags.Namespace));
         }
 
         function isReferenceToReadonlyEntity(expr: Expression, symbol: Symbol): boolean {

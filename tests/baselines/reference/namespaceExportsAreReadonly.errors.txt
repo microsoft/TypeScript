@@ -1,0 +1,59 @@
+tests/cases/compiler/namespaceExportsAreReadonly.ts(19,3): error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
+tests/cases/compiler/namespaceExportsAreReadonly.ts(21,3): error TS2540: Cannot assign to 'C' because it is a constant or a read-only property.
+tests/cases/compiler/namespaceExportsAreReadonly.ts(24,3): error TS2540: Cannot assign to 'f' because it is a constant or a read-only property.
+tests/cases/compiler/namespaceExportsAreReadonly.ts(28,3): error TS2540: Cannot assign to 'E' because it is a constant or a read-only property.
+tests/cases/compiler/namespaceExportsAreReadonly.ts(33,3): error TS2540: Cannot assign to 'M' because it is a constant or a read-only property.
+
+
+==== tests/cases/compiler/namespaceExportsAreReadonly.ts (5 errors) ====
+    namespace N {
+        export const x = 0;
+    
+        export class C {}
+        export let D = class {}
+    
+        export function f() {}
+        export let g = function() {}
+    
+        export enum E {}
+        enum Ff {}
+        export let F = Ff;
+    
+        export namespace M { export const y = 0; }
+        namespace Oo { export const y = 0; }
+        export let O = Oo;
+    }
+    
+    N.x = 1; // Error
+      ~
+!!! error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
+    
+    N.C = class {}; // Error
+      ~
+!!! error TS2540: Cannot assign to 'C' because it is a constant or a read-only property.
+    N.D = class {}; // OK
+    
+    N.f = function() {} // Error
+      ~
+!!! error TS2540: Cannot assign to 'f' because it is a constant or a read-only property.
+    N.g = function() {} // OK
+    
+    enum Ee {}
+    N.E = Ee; // Error
+      ~
+!!! error TS2540: Cannot assign to 'E' because it is a constant or a read-only property.
+    enum Ff {}
+    N.F = Ff; // OK
+    
+    namespace Mm { export const y = 0; }
+    N.M = Mm; // Error
+      ~
+!!! error TS2540: Cannot assign to 'M' because it is a constant or a read-only property.
+    namespace Oo { export const y = 0; }
+    N.O = Oo; // OK
+    
+    class K {
+        m() {}
+    }
+    new K().m = () => {}; // OK
+    
