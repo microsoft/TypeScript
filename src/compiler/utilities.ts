@@ -1155,7 +1155,6 @@ namespace ts {
 
     export function isPartOfExpression(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ThisKeyword:
             case SyntaxKind.SuperKeyword:
             case SyntaxKind.NullKeyword:
             case SyntaxKind.TrueKeyword:
@@ -1224,7 +1223,6 @@ namespace ts {
                     case SyntaxKind.SwitchStatement:
                     case SyntaxKind.CaseClause:
                     case SyntaxKind.ThrowStatement:
-                    case SyntaxKind.SwitchStatement:
                         return (<ExpressionStatement>parent).expression === node;
                     case SyntaxKind.ForStatement:
                         const forStatement = <ForStatement>parent;
