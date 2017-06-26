@@ -3,6 +3,7 @@
 // @allowNonTsExtensions: true
 // @Filename: test123.js
 //// function fn() {
+////     /** neat! */
 ////     this.x = 100;
 //// }
 //// 
@@ -16,6 +17,7 @@
 verify.fileAfterApplyingRefactorAtMarker('1',
 `class fn {
     constructor() {
+        /** neat! */
         this.x = 100;
     }
     /**

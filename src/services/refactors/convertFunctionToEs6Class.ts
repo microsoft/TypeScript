@@ -197,8 +197,10 @@ namespace ts.refactor {
                         if (isSourceFileJavaScript(sourceFile)) {
                             return;
                         }
-                        return createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
+                        const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
+                        copyComments(assignmentBinaryExpression.parent, prop);
+                        return prop;
                     }
                 }
             }
