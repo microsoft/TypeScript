@@ -314,10 +314,11 @@ namespace ts {
         return node;
     }
 
-    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: PropertyName, type: TypeNode | undefined, initializer: Expression | undefined) {
+    export function updateProperty(node: PropertyDeclaration, decorators: Decorator[] | undefined, modifiers: Modifier[] | undefined, name: string | PropertyName, questionToken: QuestionToken | undefined, type: TypeNode | undefined, initializer: Expression | undefined) {
         return node.decorators !== decorators
             || node.modifiers !== modifiers
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
             ? updateNode(createProperty(decorators, modifiers, name, node.questionToken, type, initializer), node)
@@ -360,6 +361,7 @@ namespace ts {
             || node.modifiers !== modifiers
             || node.asteriskToken !== asteriskToken
             || node.name !== name
+            || node.questionToken !== questionToken
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
             || node.type !== type
