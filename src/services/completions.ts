@@ -1610,18 +1610,12 @@ namespace ts.Completions {
      * and checking whether the name is valid identifier name.
      */
     function getCompletionEntryDisplayName(name: string, target: ScriptTarget, performCharacterChecks: boolean): string {
-        if (!name) { // TODO: GH#16741
-            return undefined;
-        }
-
         // If the user entered name for the symbol was quoted, removing the quotes is not enough, as the name could be an
         // invalid identifier name. We need to check if whatever was inside the quotes is actually a valid identifier name.
         // e.g "b a" is valid quoted name but when we strip off the quotes, it is invalid.
         // We, thus, need to check if whatever was inside the quotes is actually a valid identifier name.
-        if (performCharacterChecks) {
-            if (!isIdentifierText(name, target)) {
-                return undefined;
-            }
+        if (performCharacterChecks && !isIdentifierText(name, target)) {
+            return undefined;
         }
 
         return name;

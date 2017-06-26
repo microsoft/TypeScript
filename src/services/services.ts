@@ -2090,42 +2090,30 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>();
-
-        walk(sourceFile);
-        sourceFile.nameTable = nameTable;
-
-        function walk(node: Node) {
-            switch (node.kind) {
-                case SyntaxKind.Identifier:
-                    setNameTable((<Identifier>node).text, node);
-                    break;
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.NumericLiteral:
-                    // We want to store any numbers/strings if they were a name that could be
-                    // related to a declaration.  So, if we have 'import x = require("something")'
-                    // then we want 'something' to be in the name table.  Similarly, if we have
-                    // "a['propname']" then we want to store "propname" in the name table.
-                    if (isDeclarationName(node) ||
-                        node.parent.kind === SyntaxKind.ExternalModuleReference ||
-                        isArgumentOfElementAccessExpression(node) ||
-                        isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text, node);
-                    }
-                    break;
-                default:
-                    forEachChild(node, walk);
-                    if (node.jsDoc) {
-                        for (const jsDoc of node.jsDoc) {
-                            forEachChild(jsDoc, walk);
-                        }
-                    }
+        const nameTable = sourceFile.nameTable = createMap<number>();
+        sourceFile.forEachChild(function walk(node) {
+            if ((isIdentifier(node) || isStringOrNumericLiteral(node) && literalIsName(node)) && node.text) {
+                nameTable.set(node.text, nameTable.get(node.text) === undefined ? node.pos : -1);
             }
-        }
 
-        function setNameTable(text: string, node: ts.Node): void {
-            nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
-        }
+            forEachChild(node, walk);
+            if (node.jsDoc) {
+                for (const jsDoc of node.jsDoc) {
+                    forEachChild(jsDoc, walk);
+                }
+            }
+        });
+    }
+
+    // We want to store any numbers/strings if they were a name that could be
+    // related to a declaration.  So, if we have 'import x = require("something")'
+    // then we want 'something' to be in the name table.  Similarly, if we have
+    // "a['propname']" then we want to store "propname" in the name table.
+    function literalIsName(node: ts.StringLiteral | ts.NumericLiteral): boolean {
+        return isDeclarationName(node) ||
+            node.parent.kind === SyntaxKind.ExternalModuleReference ||
+            isArgumentOfElementAccessExpression(node) ||
+            isLiteralComputedPropertyDeclarationName(node);
     }
 
     function isObjectLiteralElement(node: Node): node is ObjectLiteralElement  {
