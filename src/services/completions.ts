@@ -57,11 +57,11 @@ namespace ts.Completions {
 
         if (isSourceFileJavaScript(sourceFile)) {
             const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
-            addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target));
+            getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target, entries);
         }
         else {
             if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
-                    return undefined;
+               return undefined;
             }
 
             getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
@@ -79,32 +79,27 @@ namespace ts.Completions {
         return { isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation: isNewIdentifierLocation, entries };
     }
 
-    function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<string>, target: ScriptTarget): CompletionEntry[] {
-        const entries: CompletionEntry[] = [];
-
-        const nameTable = getNameTable(sourceFile);
-        nameTable.forEach((pos, name) => {
+    function getJavaScriptCompletionEntries(sourceFile: SourceFile, position: number, uniqueNames: Map<true>, target: ScriptTarget, entries: Push<CompletionEntry>): void {
+        getNameTable(sourceFile).forEach((pos, name) => {
             // Skip identifiers produced only from the current location
             if (pos === position) {
                 return;
             }
+            if (uniqueNames.has(name)) {
+                return;
+            }
 
-            if (!uniqueNames.get(name)) {
-                uniqueNames.set(name, name);
-                const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
-                if (displayName) {
-                    const entry = {
-                        name: displayName,
-                        kind: ScriptElementKind.warning,
-                        kindModifiers: "",
-                        sortText: "1"
-                    };
-                    entries.push(entry);
-                }
+            uniqueNames.set(name, true);
+            const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
+            if (displayName) {
+                entries.push({
+                    name: displayName,
+                    kind: ScriptElementKind.warning,
+                    kindModifiers: "",
+                    sortText: "1"
+                });
             }
         });
-
-        return entries;
     }
 
     function createCompletionEntry(symbol: Symbol, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget): CompletionEntry {
@@ -132,17 +127,17 @@ namespace ts.Completions {
         };
     }
 
-    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<string> {
+    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<true> {
         const start = timestamp();
-        const uniqueNames = createMap<string>();
+        const uniqueNames = createMap<true>();
         if (symbols) {
             for (const symbol of symbols) {
                 const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target);
                 if (entry) {
                     const id = escapeIdentifier(entry.name);
-                    if (!uniqueNames.get(id)) {
+                    if (!uniqueNames.has(id)) {
                         entries.push(entry);
-                        uniqueNames.set(id, id);
+                        uniqueNames.set(id, true);
                     }
                 }
             }
