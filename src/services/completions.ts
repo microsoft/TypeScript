@@ -61,7 +61,7 @@ namespace ts.Completions {
         }
         else {
             if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
-                    return undefined;
+                return undefined;
             }
 
             getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
@@ -111,7 +111,7 @@ namespace ts.Completions {
         // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
         // We would like to only show things that can be added after a dot, so for instance numeric properties can
         // not be accessed with a dot (a.1 <- invalid)
-        const displayName = getCompletionEntryDisplayNameForSymbol(typeChecker, symbol, target, performCharacterChecks, location);
+        const displayName = getCompletionEntryDisplayNameForSymbol(symbol, target, performCharacterChecks);
         if (!displayName) {
             return undefined;
         }
@@ -306,7 +306,7 @@ namespace ts.Completions {
             // We don't need to perform character checks here because we're only comparing the
             // name against 'entryName' (which is known to be good), not building a new
             // completion entry.
-            const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
+            const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false) === entryName ? s : undefined);
 
             if (symbol) {
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
@@ -340,20 +340,14 @@ namespace ts.Completions {
         return undefined;
     }
 
-    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol {
+    export function getCompletionEntrySymbol(typeChecker: TypeChecker, log: (message: string) => void, compilerOptions: CompilerOptions, sourceFile: SourceFile, position: number, entryName: string): Symbol | undefined {
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position);
-        if (completionData) {
-            const { symbols, location } = completionData;
-
-            // Find the symbol with the matching entry name.
-            // We don't need to perform character checks here because we're only comparing the
-            // name against 'entryName' (which is known to be good), not building a new
-            // completion entry.
-            return forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
-        }
-
-        return undefined;
+        // Find the symbol with the matching entry name.
+        // We don't need to perform character checks here because we're only comparing the
+        // name against 'entryName' (which is known to be good), not building a new
+        // completion entry.
+        return completionData && forEach(completionData.symbols, s => getCompletionEntryDisplayNameForSymbol(s, compilerOptions.target, /*performCharacterChecks*/ false) === entryName ? s : undefined);
     }
 
     interface CompletionData {
@@ -368,7 +362,7 @@ namespace ts.Completions {
     }
     type Request = { kind: "JsDocTagName" } | { kind: "JsDocTag" } | { kind: "JsDocParameterName", tag: JSDocParameterTag };
 
-    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number): CompletionData {
+    function getCompletionData(typeChecker: TypeChecker, log: (message: string) => void, sourceFile: SourceFile, position: number): CompletionData | undefined {
         const isJavaScriptFile = isSourceFileJavaScript(sourceFile);
 
         let request: Request | undefined;
@@ -629,29 +623,27 @@ namespace ts.Completions {
 
             if (!isTypeLocation) {
                 const type = typeChecker.getTypeAtLocation(node);
-                addTypeProperties(type);
+                if (type) addTypeProperties(type);
             }
         }
 
         function addTypeProperties(type: Type) {
-            if (type) {
-                // Filter private properties
-                for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
-                        symbols.push(symbol);
-                    }
+            // Filter private properties
+            for (const symbol of type.getApparentProperties()) {
+                if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                    symbols.push(symbol);
                 }
+            }
 
-                if (isJavaScriptFile && type.flags & TypeFlags.Union) {
-                    // In javascript files, for union types, we don't just get the members that
-                    // the individual types have in common, we also include all the members that
-                    // each individual type has.  This is because we're going to add all identifiers
-                    // anyways.  So we might as well elevate the members that were at least part
-                    // of the individual types to a higher status since we know what they are.
-                    const unionType = <UnionType>type;
-                    for (const elementType of unionType.types) {
-                        addTypeProperties(elementType);
-                    }
+            if (isJavaScriptFile && type.flags & TypeFlags.Union) {
+                // In javascript files, for union types, we don't just get the members that
+                // the individual types have in common, we also include all the members that
+                // each individual type has.  This is because we're going to add all identifiers
+                // anyways.  So we might as well elevate the members that were at least part
+                // of the individual types to a higher status since we know what they are.
+                const unionType = <UnionType>type;
+                for (const elementType of unionType.types) {
+                    addTypeProperties(elementType);
                 }
             }
         }
@@ -1598,17 +1590,16 @@ namespace ts.Completions {
      *
      * @return undefined if the name is of external module otherwise a name with striped of any quote
      */
-    function getCompletionEntryDisplayNameForSymbol(typeChecker: TypeChecker, symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
-        const displayName: string = getDeclaredName(typeChecker, symbol, location);
+    function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
+        const displayName = symbol.name;
+        if (!displayName) return undefined;
 
-        if (displayName) {
-            const firstCharCode = displayName.charCodeAt(0);
-            // First check of the displayName is not external module; if it is an external module, it is not valid entry
-            if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-                // If the symbol is external module, don't show it in the completion list
-                // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-                return undefined;
-            }
+        const firstCharCode = displayName.charCodeAt(0);
+        // First check of the displayName is not external module; if it is an external module, it is not valid entry
+        if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
+            // If the symbol is external module, don't show it in the completion list
+            // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+            return undefined;
         }
 
         return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
@@ -1619,13 +1610,7 @@ namespace ts.Completions {
      * and checking whether the name is valid identifier name.
      */
     function getCompletionEntryDisplayName(name: string, target: ScriptTarget, performCharacterChecks: boolean): string {
-        if (!name) {
-            return undefined;
-        }
-
-        name = stripQuotes(name);
-
-        if (!name) {
+        if (!name) { // TODO: GH#16741
             return undefined;
         }
 

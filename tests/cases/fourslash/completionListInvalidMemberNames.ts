@@ -19,6 +19,7 @@ verify.completionListContains("bar");
 verify.completionListContains("break");
 verify.completionListContains("any");
 verify.completionListContains("$");
+verify.completionListContains("b");
 
 // Nothing else should show up
-verify.completionListCount(4);
+verify.completionListCount(5);
