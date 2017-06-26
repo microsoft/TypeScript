@@ -97,23 +97,21 @@ namespace ts.formatting {
     }
 
     export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
-        const outermostParent = findOutermostParentWithinListLevelFromPosition(position, SyntaxKind.SemicolonToken, sourceFile);
-        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
+        const semicolon = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.SemicolonToken, sourceFile);
+        return formatOutermostNodeWithinListLevel(semicolon, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
     }
 
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
-        const openingCurly = findPrecedingTokenOfKind(position, SyntaxKind.FirstPunctuation, sourceFile);
-        const block = openingCurly && openingCurly.parent;
-        if (!(block && isBlock(block))) {
-            return [];
-        }
-        const outermostParent = findOutermostParentWithinListLevel(block);
-        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
+        const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
+        const curlyBraceRange = openingCurly && openingCurly.parent;
+        return curlyBraceRange ?
+            formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace) :
+            [];
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
-        const outermostParent = findOutermostParentWithinListLevelFromPosition(position, SyntaxKind.CloseBraceToken, sourceFile);
-        return formatOutermostParent(outermostParent, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
+        const precedingToken = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.CloseBraceToken, sourceFile);
+        return formatOutermostNodeWithinListLevel(precedingToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
     }
 
     export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
@@ -133,38 +131,21 @@ namespace ts.formatting {
         return formatSpan(span, sourceFile, options, rulesProvider, FormattingRequestKind.FormatSelection);
     }
 
-    function formatOutermostParent(parent: Node | undefined, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
-        if (!parent) {
-            return [];
-        }
+    /**
+     * Validating `expectedLastToken` ensures the token was typed in the context we expect (eg: not a comment).
+     * @param expectedLastToken The last token constituting the desired parent node.
+     */
+    function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
+        const precedingToken = findPrecedingToken(end, sourceFile);
 
-        const span = {
-            pos: getLineStartPositionForPosition(parent.getStart(sourceFile), sourceFile),
-            end: parent.end
-        };
-
-        return formatSpan(span, sourceFile, options, rulesProvider, requestKind);
-    }
-
-    function findPrecedingTokenOfKind(position: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
-        const precedingToken = findPrecedingToken(position, sourceFile);
-
-        return precedingToken && precedingToken.kind === expectedTokenKind && position === precedingToken.getEnd() ?
+        return precedingToken && precedingToken.kind === expectedTokenKind && end === precedingToken.getEnd() ?
             precedingToken :
             undefined;
     }
 
     /**
-     * Validating `expectedLastToken` ensures the token was typed in the context we expect (eg: not a comment).
-     * @param expectedLastToken The last token constituting the desired parent node.
-     */
-    function findOutermostParentWithinListLevelFromPosition(position: number, expectedLastToken: SyntaxKind, sourceFile: SourceFile) {
-        const precedingToken = findPrecedingTokenOfKind(position, expectedLastToken, sourceFile);
-        return precedingToken && findOutermostParentWithinListLevel(precedingToken);
-    }
-
-    /**
-     * Finds the outermost parent within the same list level as the token at position.
+     * Finds and formats the highest node enclosing `position` whose end does not exceed the given position
+     * and is at the same list level as the token at `position`.
      *
      * Consider typing the following
      * ```
@@ -175,18 +156,18 @@ namespace ts.formatting {
      * Upon typing the closing curly, we want to format the entire `while`-statement, but not the preceding
      * variable declaration.
      */
-    function findOutermostParentWithinListLevel(token: Node): Node {
+    function formatOutermostNodeWithinListLevel(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, formattingRequestKind: FormattingRequestKind) {
         // If we walk upwards searching for the parent that has the same end value, we'll end up with the whole source file.
         // `isListElement` allows to stop on the list element level.
-        let current = token;
+        let current = node;
         while (current &&
             current.parent &&
-            current.parent.end === token.end &&
+            current.parent.end === node.end &&
             !isListElement(current.parent, current)) {
             current = current.parent;
         }
 
-        return current;
+        return formatNodeLines(current, sourceFile, options, rulesProvider, formattingRequestKind);
     }
 
     // Returns true if node is a element in some list in parent
@@ -338,7 +319,7 @@ namespace ts.formatting {
     }
 
     /* @internal */
-    export function formatNode(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
+    export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
         return formatSpanWorker(
             range,
@@ -351,6 +332,19 @@ namespace ts.formatting {
             FormattingRequestKind.FormatSelection,
             _ => false, // assume that node does not have any errors
             sourceFileLike);
+    }
+
+    function formatNodeLines(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, requestKind: FormattingRequestKind): TextChange[] {
+        if (!node) {
+            return [];
+        }
+
+        const span = {
+            pos: getLineStartPositionForPosition(node.getStart(sourceFile), sourceFile),
+            end: node.end
+        };
+
+        return formatSpan(span, sourceFile, options, rulesProvider, requestKind);
     }
 
     function formatSpan(originalRange: TextRange,

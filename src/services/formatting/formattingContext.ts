@@ -47,6 +47,14 @@ namespace ts.formatting {
             return this.contextNodeAllOnSameLine;
         }
 
+        public NextNodeAllOnSameLine(): boolean {
+            if (this.nextNodeAllOnSameLine === undefined) {
+                this.nextNodeAllOnSameLine = this.NodeIsOnOneLine(this.nextTokenParent);
+            }
+
+            return this.nextNodeAllOnSameLine;
+        }
+
         public TokensAreOnSameLine(): boolean {
             if (this.tokensAreOnSameLine === undefined) {
                 const startLine = this.sourceFile.getLineAndCharacterOfPosition(this.currentTokenSpan.pos).line;

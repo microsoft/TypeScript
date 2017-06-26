@@ -654,7 +654,7 @@ namespace ts.formatting {
 
         // This check is done before an open brace in a control construct, a function, or a typescript block declaration
         static IsBeforeMultilineBlockContext(context: FormattingContext): boolean {
-            return Rules.IsBeforeBlockContext(context) && !(context.NextNodeBlockIsOnOneLine());
+            return Rules.IsBeforeBlockContext(context) && !(context.NextNodeAllOnSameLine() || context.NextNodeBlockIsOnOneLine());
         }
 
         static IsMultilineBlockContext(context: FormattingContext): boolean {

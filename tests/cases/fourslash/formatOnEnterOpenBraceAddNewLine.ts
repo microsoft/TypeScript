@@ -7,6 +7,12 @@
 format.setOption("PlaceOpenBraceOnNewLineForControlBlocks", true);
 goTo.marker("0");
 edit.insertLine("");
+verify.currentFileContentIs(
+`if (true)
+{
+}
+if(false){
+}`);
 goTo.marker("1");
 edit.insertLine("");
 verify.currentFileContentIs(
