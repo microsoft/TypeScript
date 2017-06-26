@@ -2404,7 +2404,7 @@ namespace ts.projectSystem {
             assert.deepEqual(resolutionTrace, [
                 "======== Resolving module 'lib' from '/a/b/app.js'. ========",
                 "Module resolution kind is not specified, using 'NodeJs'.",
-                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript'.",
+                "Loading module 'lib' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
                 "Directory '/a/b/node_modules' does not exist, skipping all lookups in it.",
                 "Directory '/a/node_modules' does not exist, skipping all lookups in it.",
                 "Directory '/node_modules' does not exist, skipping all lookups in it.",

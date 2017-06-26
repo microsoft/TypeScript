@@ -407,7 +407,7 @@ namespace ts {
                     [
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
-                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
                         "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.d.ts' does not exist.",
                         "File 'node_modules/a/index.ts' does not exist.",
@@ -434,7 +434,7 @@ namespace ts {
                     [
                         "======== Resolving module 'a' from 'file1.ts'. ========",
                         "Explicitly specified module resolution kind: 'NodeJs'.",
-                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript'.",
+                        "Loading module 'a' from 'node_modules' folder, target file type 'TypeScript ('.ts' preferred)'.",
                         "File 'node_modules/a/package.json' does not exist.",
                         "File 'node_modules/a/index.d.ts' exist - use it as a name resolution result.",
                         "======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========"
