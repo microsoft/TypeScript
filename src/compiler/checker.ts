@@ -8517,7 +8517,7 @@ namespace ts {
                     }
                     else if (isIdentifierTypePredicate(target.typePredicate)) {
                         if (reportErrors) {
-                            errorReporter(Diagnostics.Signature_0_must_have_a_type_predicate, signatureToString(source));
+                            errorReporter(Diagnostics.Signature_0_must_be_a_type_predicate, signatureToString(source));
                         }
                         return Ternary.False;
                     }
