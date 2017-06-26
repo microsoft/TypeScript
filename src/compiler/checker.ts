@@ -1122,7 +1122,7 @@ namespace ts {
                     return undefined;
                 }
 
-                // Only check for block-scoped variable if we are looking for the
+                // Only check for block-scoped variable if we have an error location and are looking for the
                 // name with variable meaning
                 //      For example,
                 //          declare module foo {
@@ -1133,8 +1133,9 @@ namespace ts {
                 // block-scoped variable and namespace module. However, only when we
                 // try to resolve name in /*1*/ which is used in variable position,
                 // we want to check for block-scoped
-                if (meaning & SymbolFlags.BlockScopedVariable ||
-                    ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value)) {
+                if (errorLocation &&
+                    (meaning & SymbolFlags.BlockScopedVariable ||
+                     ((meaning & SymbolFlags.Class || meaning & SymbolFlags.Enum) && (meaning & SymbolFlags.Value) === SymbolFlags.Value))) {
                     const exportOrLocalSymbol = getExportSymbolOfValueSymbolIfExported(result);
                     if (exportOrLocalSymbol.flags & SymbolFlags.BlockScopedVariable || exportOrLocalSymbol.flags & SymbolFlags.Class || exportOrLocalSymbol.flags & SymbolFlags.Enum) {
                         checkResolvedBlockScopedVariable(exportOrLocalSymbol, errorLocation);
@@ -12693,12 +12694,6 @@ namespace ts {
                 if (typeNode) {
                     return getTypeFromTypeNode(typeNode);
                 }
-                if (isInJavaScriptFile(declaration)) {
-                    const jsDocType = getTypeForDeclarationFromJSDocComment(declaration);
-                    if (jsDocType) {
-                        return jsDocType;
-                    }
-                }
                 if (declaration.kind === SyntaxKind.Parameter) {
                     const type = getContextuallyTypedParameterType(<ParameterDeclaration>declaration);
                     if (type) {
@@ -13306,6 +13301,7 @@ namespace ts {
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
+            const isInJSFile = isInJavaScriptFile(node);
 
             let offset = 0;
             for (let i = 0; i < node.properties.length; i++) {
@@ -13314,6 +13310,11 @@ namespace ts {
                 if (memberDecl.kind === SyntaxKind.PropertyAssignment ||
                     memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment ||
                     isObjectLiteralMethod(memberDecl)) {
+                    let jsdocType: Type;
+                    if (isInJSFile) {
+                        jsdocType = getTypeForDeclarationFromJSDocComment(memberDecl);
+                    }
+
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
                         type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
@@ -13324,6 +13325,11 @@ namespace ts {
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
                         type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
+                    }
+
+                    if (jsdocType) {
+                        checkTypeAssignableTo(type, jsdocType, memberDecl);
+                        type = jsdocType;
                     }
 
                     typeFlags |= type.flags;
