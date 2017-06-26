@@ -42,42 +42,47 @@ namespace ts {
         string(): string;
     }
 
-    // Pool writers to avoid needing to allocate them for every symbol we write.
-    const stringWriters: StringSymbolWriter[] = [];
+    const stringWriter = createSingleLineStringWriter();
+    let stringWriterIsReleased = true;
+
+    function createSingleLineStringWriter(): StringSymbolWriter {
+        let str = "";
+
+        const writeText: (text: string) => void = text => str += text;
+        return {
+            string: () => str,
+            writeKeyword: writeText,
+            writeOperator: writeText,
+            writePunctuation: writeText,
+            writeSpace: writeText,
+            writeStringLiteral: writeText,
+            writeParameter: writeText,
+            writeProperty: writeText,
+            writeSymbol: writeText,
+
+            // Completely ignore indentation for string writers.  And map newlines to
+            // a single space.
+            writeLine: () => str += " ",
+            increaseIndent: noop,
+            decreaseIndent: noop,
+            clear: () => str = "",
+            trackSymbol: noop,
+            reportInaccessibleThisError: noop,
+            reportPrivateInBaseOfClassExpression: noop,
+        };
+    }
+
     export function getSingleLineStringWriter(): StringSymbolWriter {
-        if (stringWriters.length === 0) {
-            let str = "";
-
-            const writeText: (text: string) => void = text => str += text;
-            return {
-                string: () => str,
-                writeKeyword: writeText,
-                writeOperator: writeText,
-                writePunctuation: writeText,
-                writeSpace: writeText,
-                writeStringLiteral: writeText,
-                writeParameter: writeText,
-                writeProperty: writeText,
-                writeSymbol: writeText,
-
-                // Completely ignore indentation for string writers.  And map newlines to
-                // a single space.
-                writeLine: () => str += " ",
-                increaseIndent: noop,
-                decreaseIndent: noop,
-                clear: () => str = "",
-                trackSymbol: noop,
-                reportInaccessibleThisError: noop,
-                reportPrivateInBaseOfClassExpression: noop,
-            };
-        }
-
-        return stringWriters.pop();
+        Debug.assert(stringWriterIsReleased);
+        stringWriterIsReleased = false;
+        return stringWriter;
     }
 
     export function releaseStringWriter(writer: StringSymbolWriter) {
+        Debug.assert(writer === stringWriter);
+        Debug.assert(!stringWriterIsReleased);
         writer.clear();
-        stringWriters.push(writer);
+        stringWriterIsReleased = true;
     }
 
     export function getFullWidth(node: Node) {

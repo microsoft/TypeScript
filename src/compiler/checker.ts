@@ -2279,20 +2279,24 @@ namespace ts {
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
             const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            try {
+                getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
+                return writer.string();
+            }
+            finally {
+                releaseStringWriter(writer);
+            }
         }
 
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
             const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            try {
+                getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
+                return writer.string();
+            }
+            finally {
+                releaseStringWriter(writer);
+            }
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
@@ -2990,11 +2994,13 @@ namespace ts {
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
             const writer = getSingleLineStringWriter();
-            getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
-            const result = writer.string();
-            releaseStringWriter(writer);
-
-            return result;
+            try {
+                getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
+                return writer.string();
+            }
+            finally {
+                releaseStringWriter(writer);
+            }
         }
 
         function formatUnionTypes(types: Type[]): Type[] {
