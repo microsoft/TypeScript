@@ -22,5 +22,5 @@ verify.completionListContains("B");
 verify.completionListContains("\u0042");
 verify.completionListContains("A");
 verify.completionListContains("\u0041");
-verify.not.completionListContains("C");
-verify.not.completionListContains("\u0043");
+verify.completionListContains("C");
+verify.completionListContains("\u0043");

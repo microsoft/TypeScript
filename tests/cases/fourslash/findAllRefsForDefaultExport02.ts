@@ -15,8 +15,9 @@
 const ranges = test.ranges();
 const [r0, r1, r2, r3, r4] = ranges;
 const fnRanges = [r0, r1, r2, r3];
-verify.singleReferenceGroup("function DefaultExportedFunction(): () => typeof DefaultExportedFunction", fnRanges);
+const fn = "function DefaultExportedFunction(): () => typeof DefaultExportedFunction";
+verify.singleReferenceGroup(fn, fnRanges);
 
 // The namespace and function do not merge,
 // so the namespace should be all alone.
-verify.singleReferenceGroup("namespace DefaultExportedFunction", [r4]);
+verify.singleReferenceGroup(`namespace DefaultExportedFunction\n${fn}`, [r4]);

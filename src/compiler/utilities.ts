@@ -3549,6 +3549,11 @@ namespace ts {
         }
         return previous[previous.length - 1];
     }
+
+    /** See comment on `declareModuleMember` in `binder.ts`. */
+    export function getCombinedLocalAndExportSymbolFlags(symbol: Symbol): SymbolFlags {
+        return symbol.exportSymbol ? symbol.exportSymbol.flags | symbol.flags : symbol.flags;
+    }
 }
 
 namespace ts {

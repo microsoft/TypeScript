@@ -91,7 +91,7 @@ namespace ts.Completions {
 
             if (!uniqueNames.get(name)) {
                 uniqueNames.set(name, name);
-                const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
+                const displayName = getCompletionEntryDisplayName(name, target, /*performCharacterChecks*/ true);
                 if (displayName) {
                     const entry = {
                         name: displayName,
@@ -608,7 +608,7 @@ namespace ts.Completions {
                     // Extract module or enum members
                     const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                     const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
-                    const isValidTypeAccess = (symbol: Symbol) => symbolCanbeReferencedAtTypeLocation(symbol);
+                    const isValidTypeAccess = (symbol: Symbol) => symbolCanBeReferencedAtTypeLocation(symbol);
                     const isValidAccess = isRhsOfImportDeclaration ?
                         // Any kind is allowed when dotting off namespace in internal import equals declaration
                         (symbol: Symbol) => isValidTypeAccess(symbol) || isValidValueAccess(symbol) :
@@ -768,12 +768,12 @@ namespace ts.Completions {
                         (!isContextTokenValueLocation(contextToken) &&
                             (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken)))) {
                         // Its a type, but you can reach it by namespace.type as well
-                        return symbolCanbeReferencedAtTypeLocation(symbol);
+                        return symbolCanBeReferencedAtTypeLocation(symbol);
                     }
                 }
 
                 // expressions are value space (which includes the value namespaces)
-                return !!(symbol.flags & SymbolFlags.Value);
+                return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
         }
 
@@ -803,7 +803,9 @@ namespace ts.Completions {
             }
         }
 
-        function symbolCanbeReferencedAtTypeLocation(symbol: Symbol): boolean {
+        function symbolCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
+            symbol = symbol.exportSymbol || symbol;
+
             // This is an alias, follow what it aliases
             if (symbol && symbol.flags & SymbolFlags.Alias) {
                 symbol = typeChecker.getAliasedSymbol(symbol);
@@ -817,7 +819,7 @@ namespace ts.Completions {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
-                return forEach(exportedSymbols, symbolCanbeReferencedAtTypeLocation);
+                return forEach(exportedSymbols, symbolCanBeReferencedAtTypeLocation);
             }
         }
 
@@ -1588,21 +1590,23 @@ namespace ts.Completions {
     /**
      * Get the name to be display in completion from a given symbol.
      *
-     * @return undefined if the name is of external module otherwise a name with striped of any quote
+     * @return undefined if the name is of external module
      */
-    function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string {
-        const displayName = symbol.name;
-        if (!displayName) return undefined;
+    function getCompletionEntryDisplayNameForSymbol(symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean): string | undefined {
+        const name = symbol.name;
+        if (!name) return undefined;
 
-        const firstCharCode = displayName.charCodeAt(0);
         // First check of the displayName is not external module; if it is an external module, it is not valid entry
-        if ((symbol.flags & SymbolFlags.Namespace) && (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote)) {
-            // If the symbol is external module, don't show it in the completion list
-            // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
-            return undefined;
+        if (symbol.flags & SymbolFlags.Namespace) {
+            const firstCharCode = name.charCodeAt(0);
+            if (firstCharCode === CharacterCodes.singleQuote || firstCharCode === CharacterCodes.doubleQuote) {
+                // If the symbol is external module, don't show it in the completion list
+                // (i.e declare module "http" { const x; } | // <= request completion here, "http" should not be there)
+                return undefined;
+            }
         }
 
-        return getCompletionEntryDisplayName(displayName, target, performCharacterChecks);
+        return getCompletionEntryDisplayName(name, target, performCharacterChecks);
     }
 
     /**
@@ -1618,7 +1622,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        return name;
+        return unescapeIdentifier(name);
     }
 
     // A cache of completion entries for keywords, these do not change between sessions

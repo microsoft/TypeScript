@@ -10,6 +10,8 @@
 ////namespace [|{| "isWriteAccess": true, "isDefinition": true |}DefaultExportedClass|] {
 ////}
 
+verify.noErrors();
+
 // The namespace and class do not merge,
 // so the namespace should be all alone.
-verify.singleReferenceGroup("namespace DefaultExportedClass");
+verify.singleReferenceGroup("class DefaultExportedClass\nnamespace DefaultExportedClass");
