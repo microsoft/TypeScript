@@ -159,6 +159,10 @@ namespace ts {
                 node = getParseTreeNode(node, isExpression);
                 return node ? getContextualType(node) : undefined;
             },
+            getContextualSignature: node => {
+                node = getParseTreeNode(node, isContextualSignatureNode);
+                return node ? getContextualSignature(node) : undefined;
+            },
             getFullyQualifiedName,
             getResolvedSignature: (node, candidatesOutArray?) => {
                 node = getParseTreeNode(node, isCallLikeExpression);
@@ -8281,14 +8285,13 @@ namespace ts {
 
         // Returns true if the given expression contains (at any level of nesting) a function or arrow expression
         // that is subject to contextual typing.
-        function isContextSensitive(node: Expression | MethodDeclaration | ObjectLiteralElementLike | JsxAttributeLike): boolean {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+        function isContextSensitive(node: Expression | ObjectLiteralElementLike & { parent: ObjectLiteralExpression } | JsxAttributeLike): boolean {
             switch (node.kind) {
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
                     return isContextSensitiveFunctionLikeDeclaration(<FunctionExpression>node);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return forEach((<ObjectLiteralExpression>node).properties, isContextSensitive);
+                    return forEach((<ObjectLiteralExpression>node).properties as Array<ObjectLiteralElementLike & { parent: ObjectLiteralExpression }>, isContextSensitive);
                 case SyntaxKind.ArrayLiteralExpression:
                     return forEach((<ArrayLiteralExpression>node).elements, isContextSensitive);
                 case SyntaxKind.ConditionalExpression:
@@ -8338,8 +8341,8 @@ namespace ts {
             return !(parameter && parameterIsThisKeyword(parameter));
         }
 
-        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is FunctionExpression | ArrowFunction | MethodDeclaration {
-            return (isFunctionExpressionOrArrowFunction(func) || isObjectLiteralMethod(func)) && isContextSensitiveFunctionLikeDeclaration(func);
+        function isContextSensitiveFunctionOrObjectLiteralMethod(func: Node): func is ContextualSignatureNode {
+            return isContextualSignatureNode(func) && isContextSensitiveFunctionLikeDeclaration(func);
         }
 
         function getTypeWithoutSignatures(type: Type): Type {
@@ -13065,18 +13068,12 @@ namespace ts {
             return sourceLength < targetParameterCount;
         }
 
-        function isFunctionExpressionOrArrowFunction(node: Node): node is FunctionExpression | ArrowFunction {
-            return node.kind === SyntaxKind.FunctionExpression || node.kind === SyntaxKind.ArrowFunction;
-        }
-
         function getContextualSignatureForFunctionLikeDeclaration(node: FunctionLikeDeclaration): Signature {
             // Only function expressions, arrow functions, and object literal methods are contextually typed.
-            return isFunctionExpressionOrArrowFunction(node) || isObjectLiteralMethod(node)
-                ? getContextualSignature(<FunctionExpression>node)
-                : undefined;
+            return isContextualSignatureNode(node) ? getContextualSignature(node) : undefined;
         }
 
-        function getContextualTypeForFunctionLikeDeclaration(node: FunctionExpression | ArrowFunction | MethodDeclaration) {
+        function getContextualTypeForFunctionLikeDeclaration(node: ContextualSignatureNode): Type | undefined {
             return isObjectLiteralMethod(node) ?
                 getContextualTypeForObjectLiteralMethod(node) :
                 getApparentTypeOfContextualType(node);
@@ -13087,8 +13084,7 @@ namespace ts {
         // If the contextual type is a union type, get the signature from each type possible and if they are
         // all identical ignoring their return type, the result is same signature but with return type as
         // union type of return types from these signatures
-        function getContextualSignature(node: FunctionExpression | ArrowFunction | MethodDeclaration): Signature {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+        function getContextualSignature(node: ContextualSignatureNode): Signature {
             const type = getContextualTypeForFunctionLikeDeclaration(node);
             if (!type) {
                 return undefined;
@@ -13317,14 +13313,14 @@ namespace ts {
 
                     let type: Type;
                     if (memberDecl.kind === SyntaxKind.PropertyAssignment) {
-                        type = checkPropertyAssignment(<PropertyAssignment>memberDecl, checkMode);
+                        type = checkPropertyAssignment(memberDecl, checkMode);
                     }
                     else if (memberDecl.kind === SyntaxKind.MethodDeclaration) {
-                        type = checkObjectLiteralMethod(<MethodDeclaration>memberDecl, checkMode);
+                        type = checkObjectLiteralMethod(memberDecl, checkMode);
                     }
                     else {
                         Debug.assert(memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment);
-                        type = checkExpressionForMutableLocation((<ShorthandPropertyAssignment>memberDecl).name, checkMode);
+                        type = checkExpressionForMutableLocation(memberDecl.name, checkMode);
                     }
 
                     if (jsdocType) {
@@ -13338,8 +13334,8 @@ namespace ts {
                         // If object literal is an assignment pattern and if the assignment pattern specifies a default value
                         // for the property, make the property optional.
                         const isOptional =
-                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue((<PropertyAssignment>memberDecl).initializer)) ||
-                            (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && (<ShorthandPropertyAssignment>memberDecl).objectAssignmentInitializer);
+                            (memberDecl.kind === SyntaxKind.PropertyAssignment && hasDefaultValue(memberDecl.initializer)) ||
+                            (memberDecl.kind === SyntaxKind.ShorthandPropertyAssignment && memberDecl.objectAssignmentInitializer);
                         if (isOptional) {
                             prop.flags |= SymbolFlags.Optional;
                         }
@@ -16603,9 +16599,7 @@ namespace ts {
             }
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode): Type {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-
+        function checkFunctionExpressionOrObjectLiteralMethod(node: ContextualSignatureNode, checkMode?: CheckMode): Type {
             // Grammar checking
             const hasGrammarError = checkGrammarFunctionLikeDeclaration(node);
             if (!hasGrammarError && node.kind === SyntaxKind.FunctionExpression) {
@@ -16661,9 +16655,7 @@ namespace ts {
             return type;
         }
 
-        function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
-            Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
-
+        function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ContextualSignatureNode) {
             const functionFlags = getFunctionFlags(node);
             const returnTypeNode = getEffectiveReturnTypeNode(node);
             const returnOrPromisedType = returnTypeNode &&
@@ -17600,7 +17592,7 @@ namespace ts {
             return checkExpressionForMutableLocation((<PropertyAssignment>node).initializer, checkMode);
         }
 
-        function checkObjectLiteralMethod(node: MethodDeclaration, checkMode?: CheckMode): Type {
+        function checkObjectLiteralMethod(node: MethodDeclaration & { parent: ObjectLiteralExpression }, checkMode?: CheckMode): Type {
             // Grammar checking
             checkGrammarMethod(node);
 
@@ -17747,7 +17739,7 @@ namespace ts {
                     return checkClassExpression(<ClassExpression>node);
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression>node, checkMode);
+                    return checkFunctionExpressionOrObjectLiteralMethod(<FunctionExpression | ArrowFunction>node, checkMode);
                 case SyntaxKind.TypeOfExpression:
                     return checkTypeOfExpression(<TypeOfExpression>node);
                 case SyntaxKind.TypeAssertionExpression:
