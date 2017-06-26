@@ -104,9 +104,7 @@ namespace ts.formatting {
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
         const curlyBraceRange = openingCurly && openingCurly.parent;
-        return curlyBraceRange ?
-            formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace) :
-            [];
+        return formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
