@@ -234,7 +234,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
         const uniques = createMap<true>();
 
-        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates);
+        typeChecker.getResolvedSignature(argumentInfo.invocation, candidates, argumentInfo.argumentCount);
 
         for (const candidate of candidates) {
             addStringLiteralCompletionsFromType(typeChecker.getParameterType(candidate, argumentInfo.argumentIndex), entries, typeChecker, uniques);

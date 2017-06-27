@@ -4689,6 +4689,11 @@ namespace ts {
 // they may be used with transformations.
 namespace ts {
     /* @internal */
+    export function isSyntaxList(n: Node): n is SyntaxList {
+        return n.kind === SyntaxKind.SyntaxList;
+    }
+
+    /* @internal */
     export function isNode(node: Node) {
         return isNodeKind(node.kind);
     }

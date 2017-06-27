@@ -75,6 +75,9 @@ namespace ts {
         undefinedSymbol.declarations = [];
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments");
 
+        /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
+        let apparentArgumentCount: number | undefined;
+
         // for public members that accept a Node or one of its subtypes, we must guard against
         // synthetic nodes created during transformations by calling `getParseTreeNode`.
         // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -160,9 +163,12 @@ namespace ts {
                 return node ? getContextualType(node) : undefined;
             },
             getFullyQualifiedName,
-            getResolvedSignature: (node, candidatesOutArray?) => {
+            getResolvedSignature: (node, candidatesOutArray, theArgumentCount) => {
                 node = getParseTreeNode(node, isCallLikeExpression);
-                return node ? getResolvedSignature(node, candidatesOutArray) : undefined;
+                apparentArgumentCount = theArgumentCount;
+                const res = node ? getResolvedSignature(node, candidatesOutArray) : undefined;
+                apparentArgumentCount = undefined;
+                return res;
             },
             getConstantValue: node => {
                 node = getParseTreeNode(node, canHaveConstantValue);
@@ -6313,12 +6319,12 @@ namespace ts {
                     // If a type parameter does not have a default type, or if the default type
                     // is a forward reference, the empty object type is used.
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = isJavaScript ? anyType : emptyObjectType;
+                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScript);
                     }
                     for (let i = numTypeArguments; i < numTypeParameters; i++) {
                         const mapper = createTypeMapper(typeParameters, typeArguments);
                         const defaultType = getDefaultFromTypeParameter(typeParameters[i]);
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : isJavaScript ? anyType : emptyObjectType;
+                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScript);
                     }
                 }
             }
@@ -7968,7 +7974,8 @@ namespace ts {
             };
         }
 
-        function createTypeMapper(sources: Type[], targets: Type[]): TypeMapper {
+        function createTypeMapper(sources: TypeParameter[], targets: Type[]): TypeMapper {
+            Debug.assert(targets === undefined || sources.length === targets.length);
             const mapper: TypeMapper = sources.length === 1 ? makeUnaryTypeMapper(sources[0], targets ? targets[0] : anyType) :
                 sources.length === 2 ? makeBinaryTypeMapper(sources[0], targets ? targets[0] : anyType, sources[1], targets ? targets[1] : anyType) :
                     makeArrayTypeMapper(sources, targets);
@@ -7976,7 +7983,7 @@ namespace ts {
             return mapper;
         }
 
-        function createTypeEraser(sources: Type[]): TypeMapper {
+        function createTypeEraser(sources: TypeParameter[]): TypeMapper {
             return createTypeMapper(sources, /*targets*/ undefined);
         }
 
@@ -10628,7 +10635,7 @@ namespace ts {
                                 context));
                     }
                     else {
-                        inferredType = context.flags & InferenceFlags.AnyDefault ? anyType : emptyObjectType;
+                        inferredType = getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
                     }
                 }
                 inference.inferredType = inferredType;
@@ -10642,6 +10649,10 @@ namespace ts {
                 }
             }
             return inferredType;
+        }
+
+        function getDefaultTypeArgumentType(isInJavaScriptFile: boolean): Type {
+            return isInJavaScriptFile ? anyType : emptyObjectType;
         }
 
         function getInferredTypes(context: InferenceContext): Type[] {
@@ -12787,7 +12798,9 @@ namespace ts {
             const args = getEffectiveCallArguments(callTarget);
             const argIndex = indexOf(args, arg);
             if (argIndex >= 0) {
-                const signature = getResolvedOrAnySignature(callTarget);
+                // If we're already in the process of resolving the given signature, don't resolve again as
+                // that could cause infinite recursion. Instead, return anySignature.
+                const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
                 return getTypeAtPosition(signature, argIndex);
             }
             return undefined;
@@ -14962,16 +14975,14 @@ namespace ts {
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: Expression[], excludeArgument: boolean[], context: InferenceContext): Type[] {
-            const inferences = context.inferences;
-
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
-            for (let i = 0; i < inferences.length; i++) {
+            for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
                 // for type parameters that have already been fixed on the previous call to inferTypeArguments.
                 // It would be just as correct to reset all of them. But then we'd be repeating the same work
                 // for the type parameters that were fixed, namely the work done by getInferredType.
-                if (!inferences[i].isFixed) {
-                    inferences[i].inferredType = undefined;
+                if (!inference.isFixed) {
+                    inference.inferredType = undefined;
                 }
             }
 
@@ -15640,19 +15651,34 @@ namespace ts {
             }
 
             // No signature was applicable. We have already reported the errors for the invalid signature.
-            // If this is a type resolution session, e.g. Language Service, try to get better information that anySignature.
-            // Pick the first candidate that matches the arity. This way we can get a contextual type for cases like:
-            //  declare function f(a: { xa: number; xb: number; });
-            //  f({ |
+            // If this is a type resolution session, e.g. Language Service, try to get better information than anySignature.
+            // Pick the longest signature. This way we can get a contextual type for cases like:
+            //     declare function f(a: { xa: number; xb: number; }, b: number);
+            //     f({ |
+            // Also, use explicitly-supplied type arguments if they are provided, so we can get a contextual signature in cases like:
+            //     declare function f<T>(k: keyof T);
+            //     f<Foo>("
             if (!produceDiagnostics) {
-                for (let candidate of candidates) {
-                    if (hasCorrectArity(node, args, candidate)) {
-                        if (candidate.typeParameters && typeArguments) {
-                            candidate = getSignatureInstantiation(candidate, map(typeArguments, getTypeFromTypeNode));
-                        }
-                        return candidate;
+                Debug.assert(candidates.length > 0); // Else would have exited above.
+                const bestIndex = getLongestCandidateIndex(candidates, apparentArgumentCount === undefined ? args.length : apparentArgumentCount);
+                const candidate = candidates[bestIndex];
+
+                const { typeParameters } = candidate;
+                if (typeParameters && callLikeExpressionMayHaveTypeArguments(node) && node.typeArguments) {
+                    const typeArguments = node.typeArguments.map(getTypeOfNode);
+                    while (typeArguments.length > typeParameters.length) {
+                        typeArguments.pop();
                     }
+                    while (typeArguments.length < typeParameters.length) {
+                        typeArguments.push(getDefaultTypeArgumentType(isInJavaScriptFile(node)));
+                    }
+
+                    const instantiated = createSignatureInstantiation(candidate, typeArguments);
+                    candidates[bestIndex] = instantiated;
+                    return instantiated;
                 }
+
+                return candidate;
             }
 
             return resolveErrorCall(node);
@@ -15660,7 +15686,8 @@ namespace ts {
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
                 candidateForTypeArgumentError = undefined;
-                for (const originalCandidate of candidates) {
+                for (let candidateIndex = 0; candidateIndex < candidates.length; candidateIndex++) {
+                    const originalCandidate = candidates[candidateIndex];
                     if (!hasCorrectArity(node, args, originalCandidate, signatureHelpTrailingComma)) {
                         continue;
                     }
@@ -15692,6 +15719,7 @@ namespace ts {
                         }
                         const index = excludeArgument ? indexOf(excludeArgument, /*value*/ true) : -1;
                         if (index < 0) {
+                            candidates[candidateIndex] = candidate;
                             return candidate;
                         }
                         excludeArgument[index] = false;
@@ -15701,6 +15729,24 @@ namespace ts {
                 return undefined;
             }
 
+        }
+
+        function getLongestCandidateIndex(candidates: Signature[], argsCount: number): number {
+            let maxParamsIndex = -1;
+            let maxParams = -1;
+
+            for (let i = 0; i < candidates.length; i++) {
+                const candidate = candidates[i];
+                if (candidate.hasRestParameter || candidate.parameters.length >= argsCount) {
+                    return i;
+                }
+                if (candidate.parameters.length > maxParams) {
+                    maxParams = candidate.parameters.length;
+                    maxParamsIndex = i;
+                }
+            }
+
+            return maxParamsIndex;
         }
 
         function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[]): Signature {
@@ -16017,9 +16063,7 @@ namespace ts {
 
             const callSignatures = elementType && getSignaturesOfType(elementType, SignatureKind.Call);
             if (callSignatures && callSignatures.length > 0) {
-                let callSignature: Signature;
-                callSignature = resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
-                return callSignature;
+                return resolveCall(openingLikeElement, callSignatures, candidatesOutArray);
             }
 
             return undefined;
@@ -16067,12 +16111,6 @@ namespace ts {
             // types from the control flow analysis.
             links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
             return result;
-        }
-
-        function getResolvedOrAnySignature(node: CallLikeExpression) {
-            // If we're already in the process of resolving the given signature, don't resolve again as
-            // that could cause infinite recursion. Instead, return anySignature.
-            return getNodeLinks(node).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(node);
         }
 
         /**

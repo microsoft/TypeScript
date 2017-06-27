@@ -588,14 +588,14 @@ namespace ts {
         return forEach(n.getChildren(sourceFile), c => c.kind === kind && c);
     }
 
-    export function findContainingList(node: Node): Node {
+    export function findContainingList(node: Node): SyntaxList | undefined {
         // The node might be a list element (nonsynthetic) or a comma (synthetic). Either way, it will
         // be parented by the container of the SyntaxList, not the SyntaxList itself.
         // In order to find the list item index, we first need to locate SyntaxList itself and then search
         // for the position of the relevant node (or comma).
         const syntaxList = forEach(node.parent.getChildren(), c => {
             // find syntax list that covers the span of the node
-            if (c.kind === SyntaxKind.SyntaxList && c.pos <= node.pos && c.end >= node.end) {
+            if (isSyntaxList(c) && c.pos <= node.pos && c.end >= node.end) {
                 return c;
             }
         });
