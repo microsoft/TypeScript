@@ -37,13 +37,17 @@ function FileReporter(runner, options) {
     }
 
     var failures = this.failures = [];
+    var tests = this.tests = [];
+    runner.on('test end', function (test) {
+        tests.push(test);
+    })
     runner.on('fail', function (test, err) {
         failures.push(test);
     });
 }
 
 FileReporter.prototype.done = function (numFailures, fn) {
-    FileReporter.writeFailures(this.reporterOptions.file, this.failures, this.reporterOptions.keepFailed, done);
+    FileReporter.writeFailures(this.reporterOptions.file, this.failures, this.reporterOptions.keepFailed || this.tests.length === 0, done);
 
     function done(err) {
         var reporter = this.reporter;
