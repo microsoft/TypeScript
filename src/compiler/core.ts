@@ -494,6 +494,17 @@ namespace ts {
         return result;
     }
 
+    export function flatMapIter<T, U>(iter: Iterator<T>, mapfn: (x: T) => U[] | undefined): U[] {
+        const result: U[] = [];
+        while (true) {
+            const { value, done } = iter.next();
+            if (done) break;
+            const res = mapfn(value);
+            if (res) result.push(...res);
+        }
+        return result;
+    }
+
     /**
      * Maps an array. If the mapped value is an array, it is spread into the result.
      * Avoids allocation if all elements map to themselves.
