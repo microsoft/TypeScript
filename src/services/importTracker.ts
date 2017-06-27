@@ -440,7 +440,7 @@ namespace ts.FindAllReferences {
 
         function getExport(): ExportedSymbol | ImportedSymbol | undefined {
             const parent = node.parent!;
-            if (symbol.flags & SymbolFlags.Export) {
+            if (symbol.exportSymbol) {
                 if (parent.kind === SyntaxKind.PropertyAccessExpression) {
                     // When accessing an export of a JS module, there's no alias. The symbol will still be flagged as an export even though we're at the use.
                     // So check that we are at the declaration.
@@ -449,9 +449,7 @@ namespace ts.FindAllReferences {
                         : undefined;
                 }
                 else {
-                    const { exportSymbol } = symbol;
-                    Debug.assert(!!exportSymbol);
-                    return exportInfo(exportSymbol, getExportKindForDeclaration(parent));
+                    return exportInfo(symbol.exportSymbol, getExportKindForDeclaration(parent));
                 }
             }
             else {

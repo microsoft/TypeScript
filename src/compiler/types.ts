@@ -2890,13 +2890,11 @@ namespace ts {
         TypeParameter           = 1 << 18,  // Type parameter
         TypeAlias               = 1 << 19,  // Type alias
         ExportValue             = 1 << 20,  // Exported value marker (see comment in declareModuleMember in binder)
-        ExportType              = 1 << 21,  // Exported type marker (see comment in declareModuleMember in binder)
-        ExportNamespace         = 1 << 22,  // Exported namespace marker (see comment in declareModuleMember in binder)
-        Alias                   = 1 << 23,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
-        Prototype               = 1 << 24,  // Prototype property (no source representation)
-        ExportStar              = 1 << 25,  // Export * declaration
-        Optional                = 1 << 26,  // Optional property
-        Transient               = 1 << 27,  // Transient symbol (created during type check)
+        Alias                   = 1 << 21,  // An alias for another symbol (see comment in isAliasSymbolDeclaration in checker)
+        Prototype               = 1 << 22,  // Prototype property (no source representation)
+        ExportStar              = 1 << 23,  // Export * declaration
+        Optional                = 1 << 24,  // Optional property
+        Transient               = 1 << 25,  // Transient symbol (created during type check)
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
@@ -2941,7 +2939,6 @@ namespace ts {
         BlockScoped = BlockScopedVariable | Class | Enum,
 
         PropertyOrAccessor = Property | Accessor,
-        Export = ExportNamespace | ExportType | ExportValue,
 
         ClassMember = Method | Accessor | Property,
 
