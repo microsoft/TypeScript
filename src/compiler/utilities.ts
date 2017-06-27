@@ -3549,6 +3549,10 @@ namespace ts {
         }
         return previous[previous.length - 1];
     }
+
+    export function skipAlias(symbol: Symbol, checker: TypeChecker) {
+        return symbol.flags & SymbolFlags.Alias ? checker.getAliasedSymbol(symbol) : symbol;
+    }
 }
 
 namespace ts {
