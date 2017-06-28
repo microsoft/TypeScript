@@ -4743,6 +4743,19 @@ namespace ts {
             || kind === SyntaxKind.TemplateTail;
     }
 
+    export function isStringTextContainingNode(node: Node) {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.TemplateHead:
+            case SyntaxKind.TemplateMiddle:
+            case SyntaxKind.TemplateTail:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     // Identifiers
 
     /* @internal */

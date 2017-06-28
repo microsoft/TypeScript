@@ -787,7 +787,7 @@ namespace ts {
 
     export function isInString(sourceFile: SourceFile, position: number): boolean {
         const previousToken = findPrecedingToken(position, sourceFile);
-        if (previousToken && previousToken.kind === SyntaxKind.StringLiteral) {
+        if (previousToken && isStringTextContainingNode(previousToken)) {
             const start = previousToken.getStart();
             const end = previousToken.getEnd();
 
