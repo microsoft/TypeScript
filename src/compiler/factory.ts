@@ -321,7 +321,7 @@ namespace ts {
             || node.questionToken !== questionToken
             || node.type !== type
             || node.initializer !== initializer
-            ? updateNode(createProperty(decorators, modifiers, name, node.questionToken, type, initializer), node)
+            ? updateNode(createProperty(decorators, modifiers, name, questionToken, type, initializer), node)
             : node;
     }
 
