@@ -104,7 +104,10 @@ namespace ts.formatting {
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
         const curlyBraceRange = openingCurly && openingCurly.parent;
-        return formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
+        const nextToken = curlyBraceRange && findNextToken(openingCurly, curlyBraceRange);
+        return nextToken && nextToken.kind === SyntaxKind.CloseBraceToken ?
+            formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace) :
+            [];
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
@@ -130,8 +133,8 @@ namespace ts.formatting {
     }
 
     /**
-     * Validating `expectedLastToken` ensures the token was typed in the context we expect (eg: not a comment).
-     * @param expectedLastToken The last token constituting the desired parent node.
+     * Validating `expectedTokenKind` ensures the token was typed in the context we expect (eg: not a comment).
+     * @param expectedTokenKind The kind of the last token constituting the desired parent node.
      */
     function findImmediatelyPrecedingTokenOfKind(end: number, expectedTokenKind: SyntaxKind, sourceFile: SourceFile): Node | undefined {
         const precedingToken = findPrecedingToken(end, sourceFile);
@@ -142,8 +145,8 @@ namespace ts.formatting {
     }
 
     /**
-     * Finds and formats the highest node enclosing `position` whose end does not exceed the given position
-     * and is at the same list level as the token at `position`.
+     * Finds and formats the highest node enclosing `node` whose end does not exceed the `node.end`
+     * and is at the same list level as the token at `node`.
      *
      * Consider typing the following
      * ```
