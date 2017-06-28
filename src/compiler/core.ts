@@ -2125,7 +2125,7 @@ namespace ts {
         // If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
         // to get the ScriptKind from the file name. If it cannot be resolved
         // from the file name then the default 'TS' script kind is returned.
-        return (scriptKind || getScriptKindFromFileName(fileName)) || ScriptKind.TS;
+        return scriptKind || getScriptKindFromFileName(fileName) || ScriptKind.TS;
     }
 
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
