@@ -657,7 +657,6 @@ namespace ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportSpecifier:
                     case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.GetAccessor:

@@ -1137,7 +1137,6 @@ namespace ts {
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.VariableDeclaration:
                             // type annotation
                             if ((<FunctionLikeDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration>parent).type === node) {
@@ -1202,7 +1201,6 @@ namespace ts {
                         case SyntaxKind.FunctionExpression:
                         case SyntaxKind.FunctionDeclaration:
                         case SyntaxKind.ArrowFunction:
-                        case SyntaxKind.FunctionDeclaration:
                             // Check type parameters
                             if (nodes === (<ClassDeclaration | FunctionLikeDeclaration>parent).typeParameters) {
                                 diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.type_parameter_declarations_can_only_be_used_in_a_ts_file));
