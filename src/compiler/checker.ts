@@ -2278,25 +2278,15 @@ namespace ts {
         }
 
         function symbolToString(symbol: Symbol, enclosingDeclaration?: Node, meaning?: SymbolFlags): string {
-            const writer = getSingleLineStringWriter();
-            try {
+            return usingSingleLineStringWriter(writer => {
                 getSymbolDisplayBuilder().buildSymbolDisplay(symbol, writer, enclosingDeclaration, meaning);
-                return writer.string();
-            }
-            finally {
-                releaseStringWriter(writer);
-            }
+            });
         }
 
         function signatureToString(signature: Signature, enclosingDeclaration?: Node, flags?: TypeFormatFlags, kind?: SignatureKind): string {
-            const writer = getSingleLineStringWriter();
-            try {
+            return usingSingleLineStringWriter(writer => {
                 getSymbolDisplayBuilder().buildSignatureDisplay(signature, writer, enclosingDeclaration, flags, kind);
-                return writer.string();
-            }
-            finally {
-                releaseStringWriter(writer);
-            }
+            });
         }
 
         function typeToString(type: Type, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string {
@@ -2993,14 +2983,9 @@ namespace ts {
         }
 
         function typePredicateToString(typePredicate: TypePredicate, enclosingDeclaration?: Declaration, flags?: TypeFormatFlags): string {
-            const writer = getSingleLineStringWriter();
-            try {
+            return usingSingleLineStringWriter(writer => {
                 getSymbolDisplayBuilder().buildTypePredicateDisplay(typePredicate, writer, enclosingDeclaration, flags);
-                return writer.string();
-            }
-            finally {
-                releaseStringWriter(writer);
-            }
+            });
         }
 
         function formatUnionTypes(types: Type[]): Type[] {

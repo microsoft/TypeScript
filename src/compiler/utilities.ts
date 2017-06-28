@@ -43,7 +43,6 @@ namespace ts {
     }
 
     const stringWriter = createSingleLineStringWriter();
-    let stringWriterIsReleased = true;
 
     function createSingleLineStringWriter(): StringSymbolWriter {
         let str = "";
@@ -72,17 +71,14 @@ namespace ts {
         };
     }
 
-    export function getSingleLineStringWriter(): StringSymbolWriter {
-        Debug.assert(stringWriterIsReleased);
-        stringWriterIsReleased = false;
-        return stringWriter;
-    }
-
-    export function releaseStringWriter(writer: StringSymbolWriter) {
-        Debug.assert(writer === stringWriter);
-        Debug.assert(!stringWriterIsReleased);
-        writer.clear();
-        stringWriterIsReleased = true;
+    export function usingSingleLineStringWriter(action: (writer: StringSymbolWriter) => void): string {
+        try {
+            action(stringWriter);
+            return stringWriter.string();
+        }
+        finally {
+            stringWriter.clear();
+        }
     }
 
     export function getFullWidth(node: Node) {
