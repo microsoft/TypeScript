@@ -11,8 +11,6 @@ function FileReporter(runner, options) {
     var reporterOptions = this.reporterOptions = options.reporterOptions || {};
     reporterOptions.file = reporterOptions.file || ".failed-tests";
     reporterOptions.keepFailed = reporterOptions.keepFailed || false;
-    reporterOptions.reporter = reporterOptions.reporter;
-    reporterOptions.reporterOptions = reporterOptions.reporterOptions || {};
     if (reporterOptions.reporter) {
         var _reporter;
         if (typeof reporterOptions.reporter === "function") {
@@ -32,7 +30,7 @@ function FileReporter(runner, options) {
 
         var newOptions = {};
         for (var p in options) newOptions[p] = options[p];
-        newOptions.reporterOptions = reporterOptions.reporterOptions;
+        newOptions.reporterOptions = reporterOptions.reporterOptions || {};
         this.reporter = new _reporter(runner, newOptions);
     }
 
