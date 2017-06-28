@@ -916,7 +916,7 @@ namespace ts {
         }
 
         function isEmitBlocked(emitFileName: string): boolean {
-            return hasEmitBlockingDiagnostics.contains(toPath(emitFileName, currentDirectory, getCanonicalFileName));
+            return hasEmitBlockingDiagnostics.has(toPath(emitFileName, currentDirectory, getCanonicalFileName));
         }
 
         function emitWorker(program: Program, sourceFile: SourceFile, writeFileCallback: WriteFileCallback, cancellationToken: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
@@ -1974,7 +1974,7 @@ namespace ts {
                     }
 
                     // Report error if multiple files write into same file
-                    if (emitFilesSeen.contains(emitFilePath)) {
+                    if (emitFilesSeen.has(emitFilePath)) {
                         // Already seen the same emit file - report error
                         blockEmittingOfFile(emitFileName, createCompilerDiagnostic(Diagnostics.Cannot_write_file_0_because_it_would_be_overwritten_by_multiple_input_files, emitFileName));
                     }
@@ -2101,6 +2101,30 @@ namespace ts {
         }
         function needAllowJs() {
             return options.allowJs ? undefined : Diagnostics.Module_0_was_resolved_to_1_but_allowJs_is_not_set;
+        }
+    }
+
+    interface FileMap<T> {
+        get(fileName: Path): T;
+        set(fileName: Path, value: T): void;
+        has(fileName: Path): boolean;
+    }
+
+    function createFileMap<T>(keyMapper: (key: string) => string): FileMap<T> {
+        const files = createMap<T>();
+        return { get, set, has };
+
+        // path should already be well-formed so it does not need to be normalized
+        function get(path: Path): T {
+            return files.get(keyMapper(path));
+        }
+
+        function set(path: Path, value: T) {
+            files.set(keyMapper(path), value);
+        }
+
+        function has(path: Path) {
+            return files.has(keyMapper(path));
         }
     }
 }

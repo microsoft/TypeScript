@@ -31,17 +31,6 @@ namespace ts {
     // arbitrary file name can be converted to Path via toPath function
     export type Path = string & { __pathBrand: any };
 
-    export interface FileMap<T> {
-        get(fileName: Path): T;
-        set(fileName: Path, value: T): void;
-        contains(fileName: Path): boolean;
-        remove(fileName: Path): void;
-
-        forEachValue(f: (key: Path, v: T) => void): void;
-        getKeys(): Path[];
-        clear(): void;
-    }
-
     export interface TextRange {
         pos: number;
         end: number;
