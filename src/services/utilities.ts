@@ -275,6 +275,13 @@ namespace ts {
     }
 
     export function getContainerNode(node: Node): Declaration {
+        if (node.kind === SyntaxKind.JSDocTypedefTag) {
+            // This doesn't just apply to the node immediately under the comment, but to everything in its parent's scope.
+            // node.parent = the JSDoc comment, node.parent.parent = the node having the comment.
+            // Then we get parent again in the loop.
+            node = node.parent.parent;
+        }
+
         while (true) {
             node = node.parent;
             if (!node) {
