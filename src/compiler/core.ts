@@ -2114,14 +2114,14 @@ namespace ts {
         return absolute.substring(0, absolute.lastIndexOf(directorySeparator, wildcardOffset));
     }
 
-    export function ensureScriptKind(fileName: string, scriptKind?: ScriptKind): ScriptKind {
+    export function ensureScriptKind(fileName: string, scriptKind: ScriptKind | undefined): ScriptKind {
         // Using scriptKind as a condition handles both:
         // - 'scriptKind' is unspecified and thus it is `undefined`
         // - 'scriptKind' is set and it is `Unknown` (0)
         // If the 'scriptKind' is 'undefined' or 'Unknown' then we attempt
         // to get the ScriptKind from the file name. If it cannot be resolved
         // from the file name then the default 'TS' script kind is returned.
-        return (scriptKind || getScriptKindFromFileName(fileName)) || ScriptKind.TS;
+        return scriptKind || getScriptKindFromFileName(fileName) || ScriptKind.TS;
     }
 
     export function getScriptKindFromFileName(fileName: string): ScriptKind {
