@@ -23266,10 +23266,10 @@ namespace ts {
             // this variable and functions that use it are deliberately moved here from the outer scope
             // to avoid scope pollution
             const resolvedTypeReferenceDirectives = host.getResolvedTypeReferenceDirectives();
-            let fileToDirective: FileMap<string>;
+            let fileToDirective: Map<string>;
             if (resolvedTypeReferenceDirectives) {
                 // populate reverse mapping: file path -> type reference directive that was resolved to this file
-                fileToDirective = createFileMap<string>();
+                fileToDirective = createMap<string>();
                 resolvedTypeReferenceDirectives.forEach((resolvedDirective, key) => {
                     if (!resolvedDirective) {
                         return;
@@ -23397,7 +23397,7 @@ namespace ts {
                 // check that at least one declaration of top level symbol originates from type declaration file
                 for (const decl of symbol.declarations) {
                     const file = getSourceFileOfNode(decl);
-                    if (fileToDirective.contains(file.path)) {
+                    if (fileToDirective.has(file.path)) {
                         return true;
                     }
                 }

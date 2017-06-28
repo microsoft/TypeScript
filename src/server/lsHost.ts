@@ -5,8 +5,8 @@
 namespace ts.server {
     export class LSHost implements ts.LanguageServiceHost, ModuleResolutionHost {
         private compilationSettings: ts.CompilerOptions;
-        private readonly resolvedModuleNames = createFileMap<Map<ResolvedModuleWithFailedLookupLocations>>();
-        private readonly resolvedTypeReferenceDirectives = createFileMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
+        private readonly resolvedModuleNames = createMap<Map<ResolvedModuleWithFailedLookupLocations>>();
+        private readonly resolvedTypeReferenceDirectives = createMap<Map<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>>();
         private readonly getCanonicalFileName: (fileName: string) => string;
 
         private filesWithChangedSetOfUnresolvedImports: Path[];
@@ -65,7 +65,7 @@ namespace ts.server {
         private resolveNamesWithLocalCache<T extends { failedLookupLocations: string[] }, R>(
             names: string[],
             containingFile: string,
-            cache: ts.FileMap<Map<T>>,
+            cache: Map<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost) => T,
             getResult: (s: T) => R,
             getResultFileName: (result: R) => string | undefined,
@@ -231,8 +231,8 @@ namespace ts.server {
         }
 
         notifyFileRemoved(info: ScriptInfo) {
-            this.resolvedModuleNames.remove(info.path);
-            this.resolvedTypeReferenceDirectives.remove(info.path);
+            this.resolvedModuleNames.delete(info.path);
+            this.resolvedTypeReferenceDirectives.delete(info.path);
         }
 
         setCompilationSettings(opt: ts.CompilerOptions) {

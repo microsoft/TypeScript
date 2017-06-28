@@ -817,14 +817,14 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: FileMap<HostFileInformation>;
+        private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createFileMap<HostFileInformation>();
+            this.fileNameToEntry = createMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -861,7 +861,7 @@ namespace ts {
         }
 
         public containsEntryByPath(path: Path): boolean {
-            return this.fileNameToEntry.contains(path);
+            return this.fileNameToEntry.has(path);
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
@@ -873,7 +873,7 @@ namespace ts {
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((_path, value) => {
+            this.fileNameToEntry.forEach(value => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }

@@ -261,9 +261,9 @@ namespace ts.projectSystem {
         return typeof (<File>s).content === "string";
     }
 
-    export function addFolder(fullPath: string, toPath: (s: string) => Path, fs: FileMap<FSEntry>): Folder {
+    export function addFolder(fullPath: string, toPath: (s: string) => Path, fs: Map<FSEntry>): Folder {
         const path = toPath(fullPath);
-        if (fs.contains(path)) {
+        if (fs.has(path)) {
             Debug.assert(isFolder(fs.get(path)));
             return (<Folder>fs.get(path));
         }
@@ -370,7 +370,7 @@ namespace ts.projectSystem {
 
         private readonly output: string[] = [];
 
-        private fs: ts.FileMap<FSEntry>;
+        private fs: Map<FSEntry>;
         private getCanonicalFileName: (s: string) => string;
         private toPath: (f: string) => Path;
         private timeoutCallbacks = new Callbacks();
@@ -390,7 +390,7 @@ namespace ts.projectSystem {
 
         reloadFS(filesOrFolders: FileOrFolder[]) {
             this.filesOrFolders = filesOrFolders;
-            this.fs = createFileMap<FSEntry>();
+            this.fs = createMap<FSEntry>();
             // always inject safelist file in the list of files
             for (const fileOrFolder of filesOrFolders.concat(safeList)) {
                 const path = this.toPath(fileOrFolder.path);
@@ -408,12 +408,12 @@ namespace ts.projectSystem {
 
         fileExists(s: string) {
             const path = this.toPath(s);
-            return this.fs.contains(path) && isFile(this.fs.get(path));
+            return this.fs.has(path) && isFile(this.fs.get(path));
         }
 
         getFileSize(s: string) {
             const path = this.toPath(s);
-            if (this.fs.contains(path)) {
+            if (this.fs.has(path)) {
                 const entry = this.fs.get(path);
                 if (isFile(entry)) {
                     return entry.fileSize ? entry.fileSize : entry.content.length;
@@ -424,12 +424,12 @@ namespace ts.projectSystem {
 
         directoryExists(s: string) {
             const path = this.toPath(s);
-            return this.fs.contains(path) && isFolder(this.fs.get(path));
+            return this.fs.has(path) && isFolder(this.fs.get(path));
         }
 
         getDirectories(s: string) {
             const path = this.toPath(s);
-            if (!this.fs.contains(path)) {
+            if (!this.fs.has(path)) {
                 return [];
             }
             else {
