@@ -98,21 +98,28 @@ namespace ts.formatting {
 
     export function formatOnSemicolon(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const semicolon = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.SemicolonToken, sourceFile);
-        return formatOutermostNodeWithinListLevel(semicolon, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
+        return formatNodeLines(findOutermostNodeWithinListLevel(semicolon), sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnSemicolon);
     }
 
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
-        const curlyBraceRange = openingCurly && openingCurly.parent;
-        const nextToken = curlyBraceRange && findNextToken(openingCurly, curlyBraceRange);
-        return nextToken && nextToken.kind === SyntaxKind.CloseBraceToken ?
-            formatOutermostNodeWithinListLevel(curlyBraceRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace) :
-            [];
+        if (openingCurly) {
+            const curlyBraceRange = openingCurly.parent;
+            const outermostNode = findOutermostNodeWithinListLevel(curlyBraceRange);
+
+            const textRange: TextRange = {
+                pos: getLineStartPositionForPosition(outermostNode.getStart(sourceFile), sourceFile),
+                end: position
+            };
+
+            return formatSpan(textRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
+        }
+        return [];
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const precedingToken = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.CloseBraceToken, sourceFile);
-        return formatOutermostNodeWithinListLevel(precedingToken, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
+        return formatNodeLines(findOutermostNodeWithinListLevel(precedingToken), sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnClosingCurlyBrace);
     }
 
     export function formatDocument(sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
@@ -145,8 +152,8 @@ namespace ts.formatting {
     }
 
     /**
-     * Finds and formats the highest node enclosing `node` whose end does not exceed the `node.end`
-     * and is at the same list level as the token at `node`.
+     * Finds the highest node enclosing `node` at the same list level as `node`
+     * and whose end does not exceed `node.end`.
      *
      * Consider typing the following
      * ```
@@ -157,9 +164,7 @@ namespace ts.formatting {
      * Upon typing the closing curly, we want to format the entire `while`-statement, but not the preceding
      * variable declaration.
      */
-    function formatOutermostNodeWithinListLevel(node: Node, sourceFile: SourceFile, options: FormatCodeSettings, rulesProvider: RulesProvider, formattingRequestKind: FormattingRequestKind) {
-        // If we walk upwards searching for the parent that has the same end value, we'll end up with the whole source file.
-        // `isListElement` allows to stop on the list element level.
+    function findOutermostNodeWithinListLevel(node: Node) {
         let current = node;
         while (current &&
             current.parent &&
@@ -168,7 +173,7 @@ namespace ts.formatting {
             current = current.parent;
         }
 
-        return formatNodeLines(current, sourceFile, options, rulesProvider, formattingRequestKind);
+        return current;
     }
 
     // Returns true if node is a element in some list in parent
