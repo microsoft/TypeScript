@@ -727,7 +727,7 @@ namespace ts {
         return result;
     }
 
-    export function sum(array: any[], prop: string): number {
+    export function sum<K extends string>(array: { [x in K]: number }[], prop: K): number {
         let result = 0;
         for (const v of array) {
             result += v[prop];

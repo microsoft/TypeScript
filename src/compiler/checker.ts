@@ -84,9 +84,9 @@ namespace ts {
         // extra cost of calling `getParseTreeNode` when calling these functions from inside the
         // checker.
         const checker: TypeChecker = {
-            getNodeCount: () => sum(host.getSourceFiles(), "nodeCount"),
-            getIdentifierCount: () => sum(host.getSourceFiles(), "identifierCount"),
-            getSymbolCount: () => sum(host.getSourceFiles(), "symbolCount") + symbolCount,
+            getNodeCount: () => sum<"nodeCount">(host.getSourceFiles(), "nodeCount"),
+            getIdentifierCount: () => sum<"identifierCount">(host.getSourceFiles(), "identifierCount"),
+            getSymbolCount: () => sum<"symbolCount">(host.getSourceFiles(), "symbolCount") + symbolCount,
             getTypeCount: () => typeCount,
             isUndefinedSymbol: symbol => symbol === undefinedSymbol,
             isArgumentsSymbol: symbol => symbol === argumentsSymbol,
