@@ -2321,16 +2321,16 @@ namespace ts {
                 if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
                     const declaration = symbol.valueDeclaration as VariableDeclaration;
                     if (declaration.initializer) {
-                        return isExportsOrModuleExportsOrAliasOrAssignemnt(declaration.initializer);
+                        return isExportsOrModuleExportsOrAliasOrAssignment(declaration.initializer);
                     }
                 }
             }
             return false;
         }
 
-        function isExportsOrModuleExportsOrAliasOrAssignemnt(node: Node): boolean {
+        function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
             return isExportsOrModuleExportsOrAlias(node) ||
-                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignemnt(node.left) || isExportsOrModuleExportsOrAliasOrAssignemnt(node.right)));
+                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignment(node.left) || isExportsOrModuleExportsOrAliasOrAssignment(node.right)));
         }
 
         function bindModuleExportsAssignment(node: BinaryExpression) {
