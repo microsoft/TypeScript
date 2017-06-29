@@ -53,18 +53,14 @@ namespace ts.JsDoc {
         // from Array<T> - Array<string> and Array<number>
         const documentationComment = <SymbolDisplayPart[]>[];
         forEachUnique(declarations, declaration => {
-            const comments = getCommentsFromJSDoc(declaration);
-            if (!comments) {
-                return;
-            }
-            for (const comment of comments) {
-                if (comment) {
+            forEach(getAllJSDocs(declaration), doc => {
+                if (doc.comment) {
                     if (documentationComment.length) {
                         documentationComment.push(lineBreakPart());
                     }
-                    documentationComment.push(textPart(comment));
+                    documentationComment.push(textPart(doc.comment));
                 }
-            }
+            });
         });
         return documentationComment;
     }
@@ -73,20 +69,11 @@ namespace ts.JsDoc {
         // Only collect doc comments from duplicate declarations once.
         const tags: JSDocTagInfo[] = [];
         forEachUnique(declarations, declaration => {
-            const jsDocs = getJSDocs(declaration);
-            if (!jsDocs) {
-                return;
-            }
-            for (const doc of jsDocs) {
-                const tagsForDoc = (doc as JSDoc).tags;
-                if (tagsForDoc) {
-                    tags.push(...tagsForDoc.filter(tag => tag.kind === SyntaxKind.JSDocTag).map(jsDocTag => {
-                        return {
-                            name: jsDocTag.tagName.text,
-                            text: jsDocTag.comment
-                        }; }));
+            forEach(getJSDocTags(declaration), tag => {
+                if (tag.kind === SyntaxKind.JSDocTag) {
+                    tags.push({ name: tag.tagName.text, text: tag.comment });
                 }
-            }
+            });
         });
         return tags;
     }
