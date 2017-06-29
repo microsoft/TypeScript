@@ -1,4 +1,4 @@
-/// <reference path="harness.ts"/>
+﻿/// <reference path="harness.ts"/>
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
@@ -215,6 +215,7 @@ namespace RWC {
                         if (compilerResult.errors.length === 0) {
                             return null;
                         }
+
                         const declFileCompilationResult = Harness.Compiler.compileDeclarationFiles(
                             inputFiles, otherFiles, compilerResult, /*harnessSettings*/ undefined, compilerOptions, currentDirectory);
 
