@@ -6,6 +6,13 @@
 ////     /** neat! */
 ////     this.x = 100;
 //// }
+////
+//// /** awesome
+////   * stuff
+////   */
+//// fn.prototype.arr = () => { return ""; }
+//// /** great */
+//// fn.prototype.arr2 = () => [];
 //// 
 //// /**
 ////   * This is a cool function!
@@ -20,6 +27,12 @@ verify.fileAfterApplyingRefactorAtMarker('1',
         /** neat! */
         this.x = 100;
     }
+    /** awesome
+      * stuff
+      */
+    arr() { return ""; }
+    /** great */
+    arr2() { return []; }
     /**
       * This is a cool function!
     */
@@ -27,5 +40,6 @@ verify.fileAfterApplyingRefactorAtMarker('1',
         this.x = y;
     }
 }
+
 
 `, 'Convert to ES2015 class', 'convert');
