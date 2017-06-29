@@ -22500,25 +22500,25 @@ namespace ts {
                 }
 
                 if (entityName.kind === SyntaxKind.Identifier) {
-                    if (isJSXTagName(entityName) && isJsxIntrinsicIdentifier(<Identifier>entityName)) {
+                    if (isJSXTagName(entityName) && isJsxIntrinsicIdentifier(entityName)) {
                         return getIntrinsicTagSymbol(<JsxOpeningLikeElement>entityName.parent);
                     }
 
-                    return resolveEntityName(<Identifier>entityName, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
+                    return resolveEntityName(entityName, SymbolFlags.Value, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
                 }
-                else if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
-                    const symbol = getNodeLinks(entityName).resolvedSymbol;
-                    if (!symbol) {
-                        checkPropertyAccessExpression(<PropertyAccessExpression>entityName);
+                else if (entityName.kind === SyntaxKind.PropertyAccessExpression || entityName.kind === SyntaxKind.QualifiedName) {
+                    const links = getNodeLinks(entityName);
+                    if (links.resolvedSymbol) {
+                        return links.resolvedSymbol;
                     }
-                    return getNodeLinks(entityName).resolvedSymbol;
-                }
-                else if (entityName.kind === SyntaxKind.QualifiedName) {
-                    const symbol = getNodeLinks(entityName).resolvedSymbol;
-                    if (!symbol) {
-                        checkQualifiedName(<QualifiedName>entityName);
+
+                    if (entityName.kind === SyntaxKind.PropertyAccessExpression) {
+                        checkPropertyAccessExpression(entityName);
                     }
-                    return getNodeLinks(entityName).resolvedSymbol;
+                    else {
+                        checkQualifiedName(entityName);
+                    }
+                    return links.resolvedSymbol;
                 }
             }
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
