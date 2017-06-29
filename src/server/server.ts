@@ -35,7 +35,6 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
-        const versionMajorMinor = ts.version.match(/\d+\.\d+/)[0];
         switch (process.platform) {
             case "win32": {
                 const basePath = process.env.LOCALAPPDATA ||

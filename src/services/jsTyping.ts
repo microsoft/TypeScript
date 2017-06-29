@@ -208,6 +208,7 @@ namespace ts.JsTyping {
                 return;
             }
 
+            // depth of 2, so we access `node_modules/foo` but not `node_modules/foo/bar`
             const fileNames = host.readDirectory(packagesFolderPath, [".json"], /*excludes*/ undefined, /*includes*/ undefined, /*depth*/ 2);
             for (const fileName of fileNames) {
                 const normalizedFileName = normalizePath(fileName);
