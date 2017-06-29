@@ -1066,7 +1066,7 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
@@ -1075,7 +1075,7 @@ namespace ts.projectSystem {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let seenTelemetryEvent = false;
             const installer = new (class extends Installer {
                 constructor() {
@@ -1115,7 +1115,7 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
@@ -1124,7 +1124,7 @@ namespace ts.projectSystem {
                 path: cachePath + "node_modules/@types/commander/index.d.ts",
                 content: "export let x: number"
             };
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
             const installer = new (class extends Installer {
@@ -1166,12 +1166,12 @@ namespace ts.projectSystem {
                 path: "/a/app.js",
                 content: ""
             };
-            const package = {
+            const packageFile = {
                 path: "/a/package.json",
                 content: JSON.stringify({ dependencies: { "commander": "1.0.0" } })
             };
             const cachePath = "/a/cache/";
-            const host = createServerHost([f1, package]);
+            const host = createServerHost([f1, packageFile]);
             let beginEvent: server.BeginInstallTypes;
             let endEvent: server.EndInstallTypes;
             const installer = new (class extends Installer {

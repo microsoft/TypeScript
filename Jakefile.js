@@ -286,7 +286,7 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         var startCompileTime = mark();
         opts = opts || {};
         var compilerPath = useBuiltCompiler ? builtLocalCompiler : LKGCompiler;
-        var options = "--noImplicitAny --noImplicitThis --noEmitOnError --types "
+        var options = "--noImplicitAny --noImplicitThis --alwaysStrict --noEmitOnError --types "
         if (opts.types) {
             options += opts.types.join(",");
         }

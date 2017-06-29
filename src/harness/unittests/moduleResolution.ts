@@ -950,8 +950,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ true, f1, f2, package);
+                const packageFile = { name: "/root/src/types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ true, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -961,8 +961,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/node_modules/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/src/node_modules/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -972,8 +972,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/src/node_modules/@types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/src/node_modules/@types/lib/package.json", content: JSON.stringify({ types: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
         });
         it("Can be resolved from secondary location", () => {
@@ -990,8 +990,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/node_modules/lib/typings/lib.d.ts" };
-                const package = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/node_modules/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
             {
                 const f1 = { name: "/root/src/app.ts" };
@@ -1001,8 +1001,8 @@ import b = require("./moduleB");
             {
                 const f1 = { name: "/root/src/app.ts" };
                 const f2 = { name: "/root/node_modules/@types/lib/typings/lib.d.ts" };
-                const package = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
-                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, package);
+                const packageFile = { name: "/root/node_modules/@types/lib/package.json", content: JSON.stringify({ typings: "typings/lib.d.ts" }) };
+                test(/*typesRoot*/"/root/src/types", /* typeDirective */"lib", /*primary*/ false, f1, f2, packageFile);
             }
         });
         it("Primary resolution overrides secondary resolutions", () => {
