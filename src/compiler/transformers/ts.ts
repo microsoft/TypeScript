@@ -3158,7 +3158,7 @@ namespace ts {
                 getExternalModuleOrNamespaceExportName(currentNamespaceContainerName, node, /*allowComments*/ false, /*allowSourceMaps*/ true),
                 getLocalName(node)
             );
-            setSourceMapRange(expression, createRange(node.name.pos, node.end));
+            setSourceMapRange(expression, createRange(node.name ? node.name.pos : node.pos, node.end));
 
             const statement = createStatement(expression);
             setSourceMapRange(statement, createRange(-1, node.end));

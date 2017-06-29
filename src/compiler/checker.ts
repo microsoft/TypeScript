@@ -23666,7 +23666,14 @@ namespace ts {
                         }
                         flags |= ModifierFlags.Export;
                         break;
+                    case SyntaxKind.DefaultKeyword:
+                        const container = node.parent.kind === SyntaxKind.SourceFile ? node.parent : node.parent.parent;
+                        if (container.kind === SyntaxKind.ModuleDeclaration && !isAmbientModule(container)) {
+                            return grammarErrorOnNode(modifier, Diagnostics.A_default_export_can_only_be_used_in_an_ECMAScript_style_module);
+                        }
 
+                        flags |= ModifierFlags.Default;
+                        break;
                     case SyntaxKind.DeclareKeyword:
                         if (flags & ModifierFlags.Ambient) {
                             return grammarErrorOnNode(modifier, Diagnostics._0_modifier_already_seen, "declare");
