@@ -16,7 +16,7 @@ namespace ts.codefix {
         const checker = context.program.getTypeChecker();
         let suggestion: string;
         if (node.kind === SyntaxKind.Identifier && isPropertyAccessExpression(node.parent)) {
-            const containingType = checker.getTypeAtLocation(node.parent.expression);
+            const containingType = checker.getApparentType(checker.getTypeAtLocation(node.parent.expression));
             suggestion = checker.getSuggestionForNonexistentProperty(node as Identifier, containingType);
         }
         else {
