@@ -138,6 +138,7 @@ var harnessSources = harnessCoreSources.concat([
     "telemetry.ts",
     "transform.ts",
     "customTransforms.ts",
+    "programMissingFiles.ts",
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([

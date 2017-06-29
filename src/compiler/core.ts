@@ -1098,6 +1098,15 @@ namespace ts {
         return result;
     }
 
+    /**
+     * Creates a set from the elements of an array.
+     *
+     * @param array the array of input elements.
+     */
+    export function arrayToSet<T>(array: T[], makeKey: (value: T) => string): Map<true> {
+        return arrayToMap<T, true>(array, makeKey, () => true);
+    }
+
     export function cloneMap<T>(map: Map<T>) {
         const clone = createMap<T>();
         copyEntries(map, clone);

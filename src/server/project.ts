@@ -107,6 +107,7 @@ namespace ts.server {
         private rootFilesMap: Map<ScriptInfo> = createMap<ScriptInfo>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
+        private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
 
         private cachedUnresolvedImportsPerFile = new UnresolvedImportsMap();
         private lastCachedUnresolvedImportsList: SortedReadonlyArray<string>;
@@ -309,6 +310,10 @@ namespace ts.server {
             this.projectErrors = undefined;
             this.lsHost.dispose();
             this.lsHost = undefined;
+
+            // Clean up file watchers waiting for missing files
+            this.missingFilesMap.forEach(fileWatcher => fileWatcher.close());
+            this.missingFilesMap = undefined;
 
             // signal language service to release source files acquired from document registry
             this.languageService.dispose();
@@ -586,12 +591,12 @@ namespace ts.server {
             const oldProgram = this.program;
             this.program = this.languageService.getProgram();
 
-            let hasChanges = false;
             // bump up the version if
             // - oldProgram is not set - this is a first time updateGraph is called
             // - newProgram is different from the old program and structure of the old program was not reused.
-            if (!oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely))) {
-                hasChanges = true;
+            const hasChanges = !oldProgram || (this.program !== oldProgram && !(oldProgram.structureIsReused & StructureIsReused.Completely));
+
+            if (hasChanges) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
                         if (this.program.getSourceFileByPath(f.path)) {
@@ -602,6 +607,35 @@ namespace ts.server {
                         if (scriptInfoToDetach) {
                             scriptInfoToDetach.detachFromProject(this);
                         }
+                    }
+                }
+
+                const missingFilePaths = this.program.getMissingFilePaths();
+                const missingFilePathsSet = arrayToSet(missingFilePaths, p => p);
+
+                // Files that are no longer missing (e.g. because they are no longer required)
+                // should no longer be watched.
+                this.missingFilesMap.forEach((fileWatcher, missingFilePath) => {
+                    if (!missingFilePathsSet.has(missingFilePath)) {
+                        this.missingFilesMap.delete(missingFilePath);
+                        fileWatcher.close();
+                    }
+                });
+
+                // Missing files that are not yet watched should be added to the map.
+                for (const missingFilePath of missingFilePaths) {
+                    if (!this.missingFilesMap.has(missingFilePath)) {
+                        const fileWatcher = this.projectService.host.watchFile(missingFilePath, (_filename: string, eventKind: FileWatcherEventKind) => {
+                            if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
+                                fileWatcher.close();
+                                this.missingFilesMap.delete(missingFilePath);
+
+                                // When a missing file is created, we should update the graph.
+                                this.markAsDirty();
+                                this.updateGraph();
+                            }
+                        });
+                        this.missingFilesMap.set(missingFilePath, fileWatcher);
                     }
                 }
             }
@@ -624,6 +658,10 @@ namespace ts.server {
                 });
 
             return hasChanges;
+        }
+
+        isWatchedMissingFile(path: Path) {
+            return this.missingFilesMap.has(path);
         }
 
         getScriptInfoLSHost(fileName: string) {

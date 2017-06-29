@@ -737,7 +737,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const p = projectService.configuredProjects[0];
             checkProjectActualFiles(p, [app.path, jsconfig.path]);
-            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules"]);
+            checkWatchedFiles(host, [jsconfig.path, "/bower_components", "/node_modules", libFile.path]);
 
             installer.installAll(/*expectedCount*/ 1);
 
@@ -826,7 +826,7 @@ namespace ts.projectSystem {
             installer.checkPendingCommands(/*expectedCount*/ 0);
 
             host.reloadFS([f, fixedPackageJson]);
-            host.triggerFileWatcherCallback(fixedPackageJson.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(fixedPackageJson.path, FileWatcherEventKind.Changed);
             // expected install request
             installer.installAll(/*expectedCount*/ 1);
 

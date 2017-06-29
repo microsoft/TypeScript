@@ -2427,6 +2427,13 @@ namespace ts {
         getSourceFiles(): SourceFile[];
 
         /**
+         * Get a list of file names that were passed to 'createProgram' or referenced in a
+         * program source file but could not be located.
+         */
+        /* @internal */
+        getMissingFilePaths(): Path[];
+
+        /**
          * Emits the JavaScript and declaration files.  If targetSourceFile is not specified, then
          * the JavaScript and declaration files will be produced for all the files in this program.
          * If targetSourceFile is specified, then only the JavaScript and declaration for that

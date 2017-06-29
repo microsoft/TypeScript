@@ -484,12 +484,12 @@ namespace ts.projectSystem {
             }
         }
 
-        triggerFileWatcherCallback(fileName: string, removed?: boolean): void {
+        triggerFileWatcherCallback(fileName: string, eventKind: FileWatcherEventKind): void {
             const path = this.toPath(fileName);
             const callbacks = this.watchedFiles.get(path);
             if (callbacks) {
                 for (const callback of callbacks) {
-                    callback(path, removed);
+                    callback(path, eventKind);
                 }
             }
         }
@@ -770,7 +770,7 @@ namespace ts.projectSystem {
 
             // remove the tsconfig file
             host.reloadFS(filesWithoutConfig);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
             checkNumberOfInferredProjects(projectService, 2);
             checkNumberOfConfiguredProjects(projectService, 0);
@@ -927,7 +927,7 @@ namespace ts.projectSystem {
                 "files": ["${commonFile1.path}"]
             }`;
             host.reloadFS(files);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
             checkNumberOfConfiguredProjects(projectService, 1);
             checkProjectRootFiles(project, [commonFile1.path]);
@@ -1001,7 +1001,7 @@ namespace ts.projectSystem {
                 "files": ["${file1.path}"]
             }`;
             host.reloadFS(files);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
             checkProjectActualFiles(project, [file1.path, classicModuleFile.path, configFile.path]);
             checkNumberOfInferredProjects(projectService, 1);
         });
@@ -1432,7 +1432,7 @@ namespace ts.projectSystem {
             };
 
             host.reloadFS([file1, modifiedFile2, file3]);
-            host.triggerFileWatcherCallback(modifiedFile2.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(modifiedFile2.path, FileWatcherEventKind.Changed);
 
             checkNumberOfInferredProjects(projectService, 1);
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, modifiedFile2.path, file3.path]);
@@ -1464,7 +1464,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
 
             host.reloadFS([file1, file3]);
-            host.triggerFileWatcherCallback(file2.path, /*removed*/ true);
+            host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Deleted);
 
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
 
@@ -1662,7 +1662,7 @@ namespace ts.projectSystem {
             };
 
             host.reloadFS([file1, file2, modifiedConfigFile]);
-            host.triggerFileWatcherCallback(configFile.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
@@ -1695,7 +1695,7 @@ namespace ts.projectSystem {
             };
 
             host.reloadFS([file1, file2, modifiedConfigFile]);
-            host.triggerFileWatcherCallback(configFile.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectRootFiles(projectService.configuredProjects[0], [file1.path, file2.path]);
@@ -1775,7 +1775,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             host.reloadFS([file1, file2]);
-            host.triggerFileWatcherCallback(config.path, /*removed*/ true);
+            host.triggerFileWatcherCallback(config.path, FileWatcherEventKind.Deleted);
 
             checkNumberOfProjects(projectService, { inferredProjects: 2 });
             checkProjectActualFiles(projectService.inferredProjects[0], [file1.path]);
@@ -2027,7 +2027,7 @@ namespace ts.projectSystem {
             projectService.openExternalProject({ projectFileName, options: {}, rootFiles: [{ fileName: file1.path, scriptKind: ScriptKind.JS, hasMixedContent: true }] });
 
             checkNumberOfProjects(projectService, { externalProjects: 1 });
-            checkWatchedFiles(host, []);
+            checkWatchedFiles(host, [libFile.path]); // watching the "missing" lib file
 
             const project = projectService.externalProjects[0];
 
@@ -2257,7 +2257,7 @@ namespace ts.projectSystem {
             assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
-            host.triggerFileWatcherCallback(config.path, /*removed*/ false);
+            host.triggerFileWatcherCallback(config.path, FileWatcherEventKind.Changed);
 
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.isTrue(project.languageServiceEnabled, "Language service enabled");
@@ -2491,7 +2491,7 @@ namespace ts.projectSystem {
 
             // rename tsconfig.json back to lib.ts
             host.reloadFS([f1, f2]);
-            host.triggerFileWatcherCallback(tsconfig.path, /*removed*/ true);
+            host.triggerFileWatcherCallback(tsconfig.path, FileWatcherEventKind.Deleted);
             projectService.openExternalProject({
                 projectFileName: projectName,
                 rootFiles: toExternalFiles([f1.path, f2.path]),
@@ -2636,7 +2636,7 @@ namespace ts.projectSystem {
             checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, app.path, config1.path]);
 
             host.reloadFS([libES5, libES2015Promise, app, config2]);
-            host.triggerFileWatcherCallback(config1.path);
+            host.triggerFileWatcherCallback(config1.path, FileWatcherEventKind.Changed);
 
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectActualFiles(projectService.configuredProjects[0], [libES5.path, libES2015Promise.path, app.path, config2.path]);
@@ -2859,7 +2859,7 @@ namespace ts.projectSystem {
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1]);
-            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Changed);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
@@ -2867,7 +2867,7 @@ namespace ts.projectSystem {
 
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1]);
-            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Changed);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
 
@@ -2911,7 +2911,7 @@ namespace ts.projectSystem {
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1, configFile]);
-            host.triggerFileWatcherCallback(moduleFileOldPath);
+            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Changed);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
@@ -2919,7 +2919,7 @@ namespace ts.projectSystem {
 
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1, configFile]);
-            host.triggerFileWatcherCallback(moduleFileNewPath);
+            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Changed);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
@@ -3084,7 +3084,7 @@ namespace ts.projectSystem {
                 }
             }`;
             host.reloadFS([file, configFile]);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
             host.runQueuedTimeoutCallbacks();
             serverEventManager.checkEventCountOfType("configFileDiag", 2);
 
@@ -3092,7 +3092,7 @@ namespace ts.projectSystem {
                 "compilerOptions": {}
             }`;
             host.reloadFS([file, configFile]);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
             host.runQueuedTimeoutCallbacks();
             serverEventManager.checkEventCountOfType("configFileDiag", 3);
         });
@@ -4020,7 +4020,7 @@ namespace ts.projectSystem {
 
             configFile.content = configFileContentWithoutCommentLine;
             host.reloadFS([file, configFile]);
-            host.triggerFileWatcherCallback(configFile.path);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
 
             const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
                 type: "request",
