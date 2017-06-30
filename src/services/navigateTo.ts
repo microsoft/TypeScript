@@ -85,11 +85,13 @@ namespace ts.NavigateTo {
 
         function getTextOfIdentifierOrLiteral(node: Node) {
             if (node) {
-                if (node.kind === SyntaxKind.Identifier ||
-                    node.kind === SyntaxKind.StringLiteral ||
+                if (node.kind === SyntaxKind.Identifier) {
+                    return unescapeIdentifier((<Identifier>node).text);
+                }
+                if (node.kind === SyntaxKind.StringLiteral ||
                     node.kind === SyntaxKind.NumericLiteral) {
 
-                    return (<Identifier | LiteralExpression>node).text;
+                    return (<LiteralExpression>node).text;
                 }
             }
 
@@ -132,7 +134,7 @@ namespace ts.NavigateTo {
             if (expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>expression;
                 if (includeLastPortion) {
-                    containers.unshift(propertyAccess.name.text);
+                    containers.unshift(unescapeIdentifier(propertyAccess.name.text));
                 }
 
                 return tryAddComputedPropertyName(propertyAccess.expression, containers, /*includeLastPortion*/ true);
@@ -204,7 +206,7 @@ namespace ts.NavigateTo {
                 fileName: rawItem.fileName,
                 textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                containerName: containerName ? (<Identifier>containerName).text : "",
+                containerName: containerName ? unescapeIdentifier((<Identifier>containerName).text) : "",
                 containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
             };
         }

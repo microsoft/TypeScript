@@ -56,7 +56,7 @@ namespace ts {
     export interface SourceFile {
         /* @internal */ version: string;
         /* @internal */ scriptSnapshot: IScriptSnapshot;
-        /* @internal */ nameTable: Map<number>;
+        /* @internal */ nameTable: EscapedIdentifierMap<number>;
 
         /* @internal */ getNamedDeclarations(): Map<Declaration[]>;
 

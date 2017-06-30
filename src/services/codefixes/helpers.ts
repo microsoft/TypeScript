@@ -35,7 +35,7 @@ namespace ts.codefix {
      */
     export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: Symbol[], checker: TypeChecker): Node[] {
         const classMembers = classDeclaration.symbol.members;
-        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.getName()));
+        const missingMembers = possiblyMissingSymbols.filter(symbol => !classMembers.has(symbol.name));
 
         let newNodes: Node[] = [];
         for (const symbol of missingMembers) {

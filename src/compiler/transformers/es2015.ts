@@ -661,7 +661,7 @@ namespace ts {
                 //   - break/continue is non-labeled and located in non-converted loop/switch statement
                 const jump = node.kind === SyntaxKind.BreakStatement ? Jump.Break : Jump.Continue;
                 const canUseBreakOrContinue =
-                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(node.label.text)) ||
+                    (node.label && convertedLoopState.labels && convertedLoopState.labels.get(unescapeIdentifier(node.label.text))) ||
                     (!node.label && (convertedLoopState.allowedNonLabeledJumps & jump));
 
                 if (!canUseBreakOrContinue) {
@@ -680,11 +680,11 @@ namespace ts {
                     else {
                         if (node.kind === SyntaxKind.BreakStatement) {
                             labelMarker = `break-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ true, node.label.text, labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ true, unescapeIdentifier(node.label.text), labelMarker);
                         }
                         else {
                             labelMarker = `continue-${node.label.text}`;
-                            setLabeledJump(convertedLoopState, /*isBreak*/ false, node.label.text, labelMarker);
+                            setLabeledJump(convertedLoopState, /*isBreak*/ false, unescapeIdentifier(node.label.text), labelMarker);
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
@@ -2236,11 +2236,11 @@ namespace ts {
         }
 
         function recordLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(node.label.text, node.label.text);
+            convertedLoopState.labels.set(unescapeIdentifier(node.label.text), unescapeIdentifier(node.label.text));
         }
 
         function resetLabel(node: LabeledStatement) {
-            convertedLoopState.labels.set(node.label.text, undefined);
+            convertedLoopState.labels.set(unescapeIdentifier(node.label.text), undefined);
         }
 
         function visitLabeledStatement(node: LabeledStatement): VisitResult<Statement> {

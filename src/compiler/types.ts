@@ -589,7 +589,7 @@ namespace ts {
          * Text of identifier (with escapes converted to characters).
          * If the identifier begins with two underscores, this will begin with three.
          */
-        text: string;
+        text: EscapedIdentifier;
         originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateKind?: GeneratedIdentifierKind; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
@@ -2336,7 +2336,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: Map<string>;
+        /* @internal */ identifiers: EscapedIdentifierMap<EscapedIdentifier>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;
@@ -2357,7 +2357,7 @@ namespace ts {
         // Stores a line map for the file.
         // This field should never be used directly to obtain line map, use getLineMap function instead.
         /* @internal */ lineMap: number[];
-        /* @internal */ classifiableNames?: Map<string>;
+        /* @internal */ classifiableNames?: EscapedIdentifierMap<EscapedIdentifier>;
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
@@ -2463,7 +2463,7 @@ namespace ts {
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
         /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
-        /* @internal */ getClassifiableNames(): Map<string>;
+        /* @internal */ getClassifiableNames(): EscapedIdentifierMap<EscapedIdentifier>;
 
         /* @internal */ getNodeCount(): number;
         /* @internal */ getIdentifierCount(): number;
@@ -2937,7 +2937,7 @@ namespace ts {
 
     export interface Symbol {
         flags: SymbolFlags;                     // Symbol flags
-        name: string;                           // Name of symbol
+        name: EscapedIdentifier;                           // Name of symbol
         declarations?: Declaration[];           // Declarations associated with this symbol
         valueDeclaration?: Declaration;         // First value declaration of the symbol
         members?: SymbolTable;                  // Class, interface or literal instance members
@@ -3005,7 +3005,24 @@ namespace ts {
         isRestParameter?: boolean;
     }
 
-    export type SymbolTable = Map<Symbol>;
+    export type EscapedIdentifier = (string & { __escapedIdentifier: void }) | (void & { __escapedIdentifier: void });
+
+    /** EscapedStringMap based on ES6 Map interface. */
+    export interface EscapedIdentifierMap<T> {
+        get(key: EscapedIdentifier): T | undefined;
+        has(key: EscapedIdentifier): boolean;
+        set(key: EscapedIdentifier, value: T): this;
+        delete(key: EscapedIdentifier): boolean;
+        clear(): void;
+        forEach(action: (value: T, key: EscapedIdentifier) => void): void;
+        readonly size: number;
+        keys(): Iterator<EscapedIdentifier>;
+        values(): Iterator<T>;
+        entries(): Iterator<[EscapedIdentifier, T]>;
+    }
+
+    /** SymbolTable based on ES6 Map interface. */
+    export type SymbolTable = EscapedIdentifierMap<Symbol>;
 
     /** Represents a "prefix*suffix" pattern. */
     /* @internal */

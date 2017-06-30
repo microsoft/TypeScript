@@ -99,7 +99,7 @@ namespace ts {
     }
 
     function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
-        const node = createStringLiteral(sourceNode.text);
+        const node = createStringLiteral(sourceNode.kind === SyntaxKind.Identifier ? unescapeIdentifier(sourceNode.text) : sourceNode.text);
         node.textSourceNode = sourceNode;
         return node;
     }
@@ -124,7 +124,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(node.text, typeArguments), node)
+        ? updateNode(createIdentifier(unescapeIdentifier(node.text), typeArguments), node)
         : node;
     }
 
@@ -2643,12 +2643,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(jsxFactory.right.text);
+            const right = createIdentifier(unescapeIdentifier(jsxFactory.right.text));
             right.text = jsxFactory.right.text;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(jsxFactory.text, parent);
+            return createReactNamespace(unescapeIdentifier(jsxFactory.text), parent);
         }
     }
 

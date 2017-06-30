@@ -411,7 +411,7 @@ namespace ts {
         }
         else if (isStringOrNumericLiteral(propertyName)) {
             const argumentExpression = getSynthesizedClone(propertyName);
-            argumentExpression.text = unescapeIdentifier(argumentExpression.text);
+            argumentExpression.text = argumentExpression.text;
             return createElementAccess(value, argumentExpression);
         }
         else {

@@ -304,7 +304,7 @@ namespace ts {
 
     class SymbolObject implements Symbol {
         flags: SymbolFlags;
-        name: string;
+        name: EscapedIdentifier;
         declarations?: Declaration[];
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
@@ -315,7 +315,7 @@ namespace ts {
         // symbol has no JSDoc tags, then the empty array will be returned.
         tags?: JSDocTagInfo[];
 
-        constructor(flags: SymbolFlags, name: string) {
+        constructor(flags: SymbolFlags, name: EscapedIdentifier) {
             this.flags = flags;
             this.name = name;
         }
@@ -325,7 +325,7 @@ namespace ts {
         }
 
         getName(): string {
-            return this.name;
+            return unescapeIdentifier(this.name);
         }
 
         getDeclarations(): Declaration[] | undefined {
@@ -360,7 +360,7 @@ namespace ts {
 
     class IdentifierObject extends TokenOrIdentifierObject implements Identifier {
         public kind: SyntaxKind.Identifier;
-        public text: string;
+        public text: EscapedIdentifier;
         _primaryExpressionBrand: any;
         _memberExpressionBrand: any;
         _leftHandSideExpressionBrand: any;
@@ -508,8 +508,8 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: Map<string>;
-        public nameTable: Map<number>;
+        public identifiers: EscapedIdentifierMap<EscapedIdentifier>;
+        public nameTable: EscapedIdentifierMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
         public imports: StringLiteral[];
@@ -597,7 +597,7 @@ namespace ts {
                     if (name.kind === SyntaxKind.ComputedPropertyName) {
                         const expr = (<ComputedPropertyName>name).expression;
                         if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                            return (<PropertyAccessExpression>expr).name.text;
+                            return unescapeIdentifier((<PropertyAccessExpression>expr).name.text);
                         }
 
                         return getTextOfIdentifierOrLiteral(expr);
@@ -609,11 +609,13 @@ namespace ts {
 
             function getTextOfIdentifierOrLiteral(node: Node) {
                 if (node) {
-                    if (node.kind === SyntaxKind.Identifier ||
-                        node.kind === SyntaxKind.StringLiteral ||
+                    if (node.kind === SyntaxKind.Identifier) {
+                        return unescapeIdentifier((<Identifier>node).text);
+                    }
+                    if (node.kind === SyntaxKind.StringLiteral ||
                         node.kind === SyntaxKind.NumericLiteral) {
 
-                        return (<Identifier | LiteralExpression>node).text;
+                        return (<LiteralExpression>node).text;
                     }
                 }
 
@@ -2082,7 +2084,7 @@ namespace ts {
 
     /* @internal */
     /** Names in the name table are escaped, so an identifier `__foo` will have a name table entry `___foo`. */
-    export function getNameTable(sourceFile: SourceFile): Map<number> {
+    export function getNameTable(sourceFile: SourceFile): EscapedIdentifierMap<number> {
         if (!sourceFile.nameTable) {
             initializeNameTable(sourceFile);
         }
@@ -2091,7 +2093,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>();
+        const nameTable = createMap<number>() as EscapedIdentifierMap<number>;
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;
@@ -2111,7 +2113,7 @@ namespace ts {
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text, node);
+                        setNameTable((<LiteralExpression>node).text as EscapedIdentifier, node); // Literal expressions are escaped
                     }
                     break;
                 default:
@@ -2124,7 +2126,7 @@ namespace ts {
             }
         }
 
-        function setNameTable(text: string, node: ts.Node): void {
+        function setNameTable(text: EscapedIdentifier, node: ts.Node): void {
             nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
         }
     }
@@ -2167,7 +2169,7 @@ namespace ts {
     export function getPropertySymbolsFromContextualType(typeChecker: TypeChecker, node: ObjectLiteralElement): Symbol[] {
         const objectLiteral = <ObjectLiteralExpression | JsxAttributes>node.parent;
         const contextualType = typeChecker.getContextualType(objectLiteral);
-        const name = getTextOfPropertyName(node.name);
+        const name = unescapeIdentifier(getTextOfPropertyName(node.name));
         if (name && contextualType) {
             const result: Symbol[] = [];
             const symbol = contextualType.getProperty(name);

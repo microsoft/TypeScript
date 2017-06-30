@@ -597,15 +597,15 @@ namespace ts.FindAllReferences {
 
     function symbolName(symbol: Symbol): string | undefined {
         if (symbol.name !== "default") {
-            return symbol.name;
+            return symbol.getName();
         }
 
         return forEach(symbol.declarations, decl => {
             if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? decl.expression.text : undefined;
+                return isIdentifier(decl.expression) ? unescapeIdentifier(decl.expression.text) : undefined;
             }
             const name = getNameOfDeclaration(decl);
-            return name && name.kind === SyntaxKind.Identifier && name.text;
+            return name && name.kind === SyntaxKind.Identifier && unescapeIdentifier(name.text);
         });
     }
 

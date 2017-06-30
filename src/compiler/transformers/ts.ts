@@ -65,7 +65,7 @@ namespace ts {
         let currentNamespace: ModuleDeclaration;
         let currentNamespaceContainerName: Identifier;
         let currentScope: SourceFile | Block | ModuleBlock | CaseBlock;
-        let currentScopeFirstDeclarationsOfName: Map<Node>;
+        let currentScopeFirstDeclarationsOfName: EscapedIdentifierMap<Node>;
 
         /**
          * Keeps track of whether expression substitution has been enabled for specific edge cases.
@@ -2647,7 +2647,7 @@ namespace ts {
             const name = node.symbol && node.symbol.name;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createMap<Node>();
+                    currentScopeFirstDeclarationsOfName = createMap<Node>() as EscapedIdentifierMap<Node>;
                 }
 
                 if (!currentScopeFirstDeclarationsOfName.has(name)) {

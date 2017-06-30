@@ -88,10 +88,11 @@ namespace ts.Completions {
             if (pos === position) {
                 return;
             }
+            const realName = unescapeIdentifier(name);
 
-            if (!uniqueNames.get(name)) {
-                uniqueNames.set(name, name);
-                const displayName = getCompletionEntryDisplayName(unescapeIdentifier(name), target, /*performCharacterChecks*/ true);
+            if (!uniqueNames.get(realName)) {
+                uniqueNames.set(realName, realName);
+                const displayName = getCompletionEntryDisplayName(realName, target, /*performCharacterChecks*/ true);
                 if (displayName) {
                     const entry = {
                         name: displayName,
@@ -139,7 +140,7 @@ namespace ts.Completions {
             for (const symbol of symbols) {
                 const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target);
                 if (entry) {
-                    const id = escapeIdentifier(entry.name);
+                    const id = entry.name;
                     if (!uniqueNames.get(id)) {
                         entries.push(entry);
                         uniqueNames.set(id, id);
@@ -613,7 +614,7 @@ namespace ts.Completions {
                 if (symbol && symbol.flags & SymbolFlags.HasExports) {
                     // Extract module or enum members
                     const exportedSymbols = typeChecker.getExportsOfModule(symbol);
-                    const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name);
+                    const isValidValueAccess = (symbol: Symbol) => typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getName());
                     const isValidTypeAccess = (symbol: Symbol) => symbolCanbeReferencedAtTypeLocation(symbol);
                     const isValidAccess = isRhsOfImportDeclaration ?
                         // Any kind is allowed when dotting off namespace in internal import equals declaration
@@ -637,7 +638,7 @@ namespace ts.Completions {
             if (type) {
                 // Filter private properties
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.name)) {
+                    if (typeChecker.isValidPropertyAccess(<PropertyAccessExpression>(node.parent), symbol.getName())) {
                         symbols.push(symbol);
                     }
                 }
@@ -1446,7 +1447,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-            const existingImportsOrExports = createMap<boolean>();
+            const existingImportsOrExports = createMap<boolean>() as EscapedIdentifierMap<boolean>;
 
             for (const element of namedImportsOrExports) {
                 // If this is the current item we are editing right now, do not filter it out
@@ -1476,7 +1477,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
-            const existingMemberNames = createMap<boolean>();
+            const existingMemberNames = createMap<boolean>() as EscapedIdentifierMap<boolean>;
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -1493,7 +1494,7 @@ namespace ts.Completions {
                     continue;
                 }
 
-                let existingName: string;
+                let existingName: EscapedIdentifier;
 
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
@@ -1505,7 +1506,8 @@ namespace ts.Completions {
                     // TODO(jfreeman): Account for computed property name
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
-                    existingName = (getNameOfDeclaration(m) as Identifier).text;
+                    const name = getNameOfDeclaration(m);
+                    existingName = name.kind === SyntaxKind.Identifier ? name.text : escapeIdentifier((name as LiteralExpression).text); // Literals used as identifiers must be escaped to be valid symbol names
                 }
 
                 existingMemberNames.set(existingName, true);
@@ -1520,7 +1522,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
         function filterClassMembersList(baseSymbols: Symbol[], implementingTypeSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createMap<boolean>();
+            const existingMemberNames = createMap<boolean>() as EscapedIdentifierMap<boolean>;
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -1573,7 +1575,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-            const seenNames = createMap<boolean>();
+            const seenNames = createMap<boolean>() as EscapedIdentifierMap<boolean>;
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
                 if (isCurrentlyEditingNode(attr)) {

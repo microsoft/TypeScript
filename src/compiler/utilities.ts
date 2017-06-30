@@ -351,8 +351,8 @@ namespace ts {
     }
 
     // Add an extra underscore to identifiers that start with two underscores to avoid issues with magic names like '__proto__'
-    export function escapeIdentifier(identifier: string): string {
-        return identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier;
+    export function escapeIdentifier(identifier: string): EscapedIdentifier {
+        return (identifier.length >= 2 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ ? "_" + identifier : identifier) as EscapedIdentifier;
     }
 
     // Make an identifier from an external module name by extracting the string after the last "/" and replacing
@@ -467,16 +467,16 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): string {
+    export function getTextOfPropertyName(name: PropertyName): EscapedIdentifier {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return (<Identifier>name).text;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
-                return (<LiteralExpression>name).text;
+                return (<LiteralExpression>name).text as EscapedIdentifier;
             case SyntaxKind.ComputedPropertyName:
                 if (isStringOrNumericLiteral((<ComputedPropertyName>name).expression)) {
-                    return (<LiteralExpression>(<ComputedPropertyName>name).expression).text;
+                    return (<LiteralExpression>(<ComputedPropertyName>name).expression).text as EscapedIdentifier;
                 }
         }
 
@@ -486,11 +486,11 @@ namespace ts {
     export function entityNameToString(name: EntityNameOrEntityNameExpression): string {
         switch (name.kind) {
             case SyntaxKind.Identifier:
-                return getFullWidth(name) === 0 ? unescapeIdentifier((<Identifier>name).text) : getTextOfNode(name);
+                return getFullWidth(name) === 0 ? unescapeIdentifier(name.text) : getTextOfNode(name);
             case SyntaxKind.QualifiedName:
-                return entityNameToString((<QualifiedName>name).left) + "." + entityNameToString((<QualifiedName>name).right);
+                return entityNameToString(name.left) + "." + entityNameToString(name.right);
             case SyntaxKind.PropertyAccessExpression:
-                return entityNameToString((<PropertyAccessEntityNameExpression>name).expression) + "." + entityNameToString((<PropertyAccessEntityNameExpression>name).name);
+                return entityNameToString(name.expression) + "." + entityNameToString(name.name);
         }
     }
 
@@ -1959,26 +1959,26 @@ namespace ts {
         return isPropertyAccessExpression(node) && isESSymbolIdentifier(node.expression);
     }
 
-    export function getPropertyNameForPropertyNameNode(name: DeclarationName | ParameterDeclaration): string {
-        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral || name.kind === SyntaxKind.Parameter) {
-            return (<Identifier | LiteralExpression>name).text;
+    export function getPropertyNameForPropertyNameNode(name: DeclarationName): EscapedIdentifier {
+        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return name.text as EscapedIdentifier;
         }
         if (name.kind === SyntaxKind.ComputedPropertyName) {
-            const nameExpression = (<ComputedPropertyName>name).expression;
+            const nameExpression = name.expression;
             if (isWellKnownSymbolSyntactically(nameExpression)) {
                 const rightHandSideName = (<PropertyAccessExpression>nameExpression).name.text;
-                return getPropertyNameForKnownSymbolName(rightHandSideName);
+                return getPropertyNameForKnownSymbolName(unescapeIdentifier(rightHandSideName));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
-                return (<LiteralExpression>nameExpression).text;
+                return (<LiteralExpression>nameExpression).text as EscapedIdentifier;
             }
         }
 
         return undefined;
     }
 
-    export function getPropertyNameForKnownSymbolName(symbolName: string): string {
-        return "__@" + symbolName;
+    export function getPropertyNameForKnownSymbolName(symbolName: string): EscapedIdentifier {
+        return "__@" + symbolName as EscapedIdentifier;
     }
 
     /**
@@ -2344,8 +2344,10 @@ namespace ts {
         return escapedCharsMap.get(c) || get16BitUnicodeEscapeSequence(c.charCodeAt(0));
     }
 
-    export function isIntrinsicJsxName(name: string) {
-        const ch = name.substr(0, 1);
+    export function isIntrinsicJsxName(name: EscapedIdentifier | string) {
+        // An escaped identifier had a leading underscore prior to being escaped, which would return true
+        // The escape adds an extra underscore which does not change the result
+        const ch = (name as string).substr(0, 1);
         return ch.toLowerCase() === ch;
     }
 
@@ -3974,8 +3976,8 @@ namespace ts {
      * @param identifier The escaped identifier text.
      * @returns The unescaped identifier text.
      */
-    export function unescapeIdentifier(identifier: string): string {
-        return identifier.length >= 3 && identifier.charCodeAt(0) === CharacterCodes._ && identifier.charCodeAt(1) === CharacterCodes._ && identifier.charCodeAt(2) === CharacterCodes._ ? identifier.substr(1) : identifier;
+    export function unescapeIdentifier(identifier: EscapedIdentifier): string {
+        return (identifier as string).length >= 3 && (identifier as string).charCodeAt(0) === CharacterCodes._ && (identifier as string).charCodeAt(1) === CharacterCodes._ && (identifier as string).charCodeAt(2) === CharacterCodes._ ? (identifier as string).substr(1) : identifier as string;
     }
 
     export function getNameOfDeclaration(declaration: Declaration): DeclarationName | undefined {

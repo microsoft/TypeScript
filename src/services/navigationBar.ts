@@ -380,7 +380,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return getPropertyNameForPropertyNameNode(declName);
+            return unescapeIdentifier(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -442,7 +442,7 @@ namespace ts.NavigationBar {
 
     function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
         if (node.name) {
-            return node.name.text;
+            return unescapeIdentifier(node.name.text);
         }
         else {
             const parentNode = node.parent && node.parent.parent;
@@ -450,7 +450,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return (<Identifier>nameIdentifier).text;
+                        return unescapeIdentifier((<Identifier>nameIdentifier).text);
                     }
                 }
             }
@@ -580,12 +580,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.text);
+        result.push(moduleDeclaration.name.kind === SyntaxKind.Identifier ? unescapeIdentifier(moduleDeclaration.name.text) : moduleDeclaration.name.text);
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.text);
+            result.push(moduleDeclaration.name.kind === SyntaxKind.Identifier ? unescapeIdentifier(moduleDeclaration.name.text) : moduleDeclaration.name.text);
         }
 
         return result.join(".");

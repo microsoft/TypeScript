@@ -253,7 +253,7 @@ namespace ts {
             else {
                 const name = (<JsxOpeningLikeElement>node).tagName;
                 if (isIdentifier(name) && isIntrinsicJsxName(name.text)) {
-                    return createLiteral(name.text);
+                    return createLiteral(unescapeIdentifier(name.text));
                 }
                 else {
                     return createExpressionFromEntityName(name);
@@ -268,11 +268,11 @@ namespace ts {
          */
         function getAttributeName(node: JsxAttribute): StringLiteral | Identifier {
             const name = node.name;
-            if (/^[A-Za-z_]\w*$/.test(name.text)) {
+            if (/^[A-Za-z_]\w*$/.test(unescapeIdentifier(name.text))) {
                 return name;
             }
             else {
-                return createLiteral(name.text);
+                return createLiteral(unescapeIdentifier(name.text));
             }
         }
 

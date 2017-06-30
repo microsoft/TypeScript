@@ -536,7 +536,7 @@ namespace ts {
         let currentToken: SyntaxKind;
         let sourceText: string;
         let nodeCount: number;
-        let identifiers: Map<string>;
+        let identifiers: EscapedIdentifierMap<EscapedIdentifier>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -681,7 +681,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<string>();
+            identifiers = createMap<EscapedIdentifier>() as EscapedIdentifierMap<EscapedIdentifier>;
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1178,12 +1178,12 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            (<Identifier>result).text = "";
+            (<Identifier>result).text = "" as EscapedIdentifier;
             return finishNode(result);
         }
 
-        function internIdentifier(text: string): string {
-            text = escapeIdentifier(text);
+        function internIdentifier(input: string): EscapedIdentifier {
+            const text = escapeIdentifier(input);
             let identifier = identifiers.get(text);
             if (identifier === undefined) {
                 identifiers.set(text, identifier = text);
@@ -1227,7 +1227,9 @@ namespace ts {
 
         function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
             if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
-                return <StringLiteral | NumericLiteral>parseLiteralNode(/*internName*/ true);
+                const node = <StringLiteral | NumericLiteral>parseLiteralNode(); // Interning makes the string literal be escaped - we do not want that
+                internIdentifier(node.text); // We do, however, want to intern the text for the purposes of the identifier list
+                return node;
             }
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
@@ -2049,26 +2051,26 @@ namespace ts {
             return finishNode(span);
         }
 
-        function parseLiteralNode(internName?: boolean): LiteralExpression {
-            return <LiteralExpression>parseLiteralLikeNode(token(), internName);
+        function parseLiteralNode(): LiteralExpression {
+            return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
         function parseTemplateHead(): TemplateHead {
-            const fragment = parseLiteralLikeNode(token(), /*internName*/ false);
+            const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateHead, "Template head has wrong token kind");
             return <TemplateHead>fragment;
         }
 
         function parseTemplateMiddleOrTemplateTail(): TemplateMiddle | TemplateTail {
-            const fragment = parseLiteralLikeNode(token(), /*internName*/ false);
+            const fragment = parseLiteralLikeNode(token());
             Debug.assert(fragment.kind === SyntaxKind.TemplateMiddle || fragment.kind === SyntaxKind.TemplateTail, "Template fragment has wrong token kind");
             return <TemplateMiddle | TemplateTail>fragment;
         }
 
-        function parseLiteralLikeNode(kind: SyntaxKind, internName: boolean): LiteralLikeNode {
+        function parseLiteralLikeNode(kind: SyntaxKind): LiteralLikeNode {
             const node = <LiteralExpression>createNode(kind);
             const text = scanner.getTokenValue();
-            node.text = internName ? internIdentifier(text) : text;
+            node.text = text;
 
             if (scanner.hasExtendedUnicodeEscape()) {
                 node.hasExtendedUnicodeEscape = true;
@@ -4098,7 +4100,7 @@ namespace ts {
                         indexedAccess.argumentExpression = allowInAnd(parseExpression);
                         if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
                             const literal = <LiteralExpression>indexedAccess.argumentExpression;
-                            literal.text = internIdentifier(literal.text);
+                            literal.text = internIdentifier(literal.text) as string;
                         }
                     }
 
@@ -5624,7 +5626,8 @@ namespace ts {
                 node.flags |= NodeFlags.GlobalAugmentation;
             }
             else {
-                node.name = <StringLiteral>parseLiteralNode(/*internName*/ true);
+                node.name = <StringLiteral>parseLiteralNode(); // Interning as an identifier causes it to be escaped - we do not want that
+                internIdentifier(node.name.text); // We do, however, want to intern the identifier for completions
             }
 
             if (token() === SyntaxKind.OpenBraceToken) {
@@ -6990,7 +6993,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.text = content.substring(pos, end);
+                    result.text = escapeIdentifier(content.substring(pos, end));
                     finishNode(result, end);
 
                     nextJSDocToken();
