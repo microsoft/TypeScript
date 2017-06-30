@@ -1930,7 +1930,7 @@ namespace ts {
         }
 
         function createTypeofType() {
-            return getUnionType(convertToArray(typeofEQFacts.keys(), getLiteralType));
+            return getUnionType(arrayFrom(typeofEQFacts.keys(), getLiteralType));
         }
 
         // A reserved member name starts with two underscores, but the third character cannot be an underscore
@@ -10531,12 +10531,8 @@ namespace ts {
                 }
             }
 
-            function inferFromParameterTypes(source: Type, target: Type) {
-                return inferFromTypes(source, target);
-            }
-
             function inferFromSignature(source: Signature, target: Signature) {
-                forEachMatchingParameterType(source, target, inferFromParameterTypes);
+                forEachMatchingParameterType(source, target, inferFromTypes);
 
                 if (source.typePredicate && target.typePredicate && source.typePredicate.kind === target.typePredicate.kind) {
                     inferFromTypes(source.typePredicate.type, target.typePredicate.type);
