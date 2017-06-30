@@ -103,18 +103,30 @@ namespace ts.formatting {
 
     export function formatOnOpeningCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
         const openingCurly = findImmediatelyPrecedingTokenOfKind(position, SyntaxKind.OpenBraceToken, sourceFile);
-        if (openingCurly) {
-            const curlyBraceRange = openingCurly.parent;
-            const outermostNode = findOutermostNodeWithinListLevel(curlyBraceRange);
-
-            const textRange: TextRange = {
-                pos: getLineStartPositionForPosition(outermostNode.getStart(sourceFile), sourceFile),
-                end: position
-            };
-
-            return formatSpan(textRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
+        if (!openingCurly) {
+            return [];
         }
-        return [];
+        const curlyBraceRange = openingCurly.parent;
+        const outermostNode = findOutermostNodeWithinListLevel(curlyBraceRange);
+
+        /**
+         * We limit the span to end at the opening curly to handle the case where
+         * the brace matched to that just typed will be incorrect after further edits.
+         * For example, we could type the opening curly for the following method
+         * body without brace-matching activated:
+         * ```
+         * class C {
+         *     foo()
+         * }
+         * ```
+         * and we wouldn't want to move the closing brace.
+         */
+        const textRange: TextRange = {
+            pos: getLineStartPositionForPosition(outermostNode.getStart(sourceFile), sourceFile),
+            end: position
+        };
+
+        return formatSpan(textRange, sourceFile, options, rulesProvider, FormattingRequestKind.FormatOnOpeningCurlyBrace);
     }
 
     export function formatOnClosingCurly(position: number, sourceFile: SourceFile, rulesProvider: RulesProvider, options: FormatCodeSettings): TextChange[] {
