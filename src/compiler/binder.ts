@@ -2080,22 +2080,6 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
-                case SyntaxKind.SpreadAssignment:
-                case SyntaxKind.JsxSpreadAttribute:
-                    let root = container;
-                    let hasRest = false;
-                    while (root.parent) {
-                        if (root.kind === SyntaxKind.ObjectLiteralExpression &&
-                            root.parent.kind === SyntaxKind.BinaryExpression &&
-                            (root.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-                            (root.parent as BinaryExpression).left === root) {
-                            hasRest = true;
-                            break;
-                        }
-                        root = root.parent;
-                    }
-                    return;
-
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
