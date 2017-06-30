@@ -24,7 +24,7 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, keywordFilters } = completionData;
+        const { symbols, useFullSymbolNames, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, request, keywordFilters } = completionData;
 
         if (sourceFile.languageVariant === LanguageVariant.JSX &&
             location && location.parent && location.parent.kind === SyntaxKind.JsxClosingElement) {
@@ -56,7 +56,7 @@ namespace ts.Completions {
         const entries: CompletionEntry[] = [];
 
         if (isSourceFileJavaScript(sourceFile)) {
-            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            const uniqueNames = getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, useFullSymbolNames);
             addRange(entries, getJavaScriptCompletionEntries(sourceFile, location.pos, uniqueNames, compilerOptions.target));
         }
         else {
@@ -64,7 +64,7 @@ namespace ts.Completions {
                     return undefined;
             }
 
-            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log);
+            getCompletionEntriesFromSymbols(symbols, entries, location, /*performCharacterChecks*/ true, typeChecker, compilerOptions.target, log, useFullSymbolNames);
         }
 
         // TODO add filter for keyword based on type/value/namespace and also location
@@ -107,11 +107,11 @@ namespace ts.Completions {
         return entries;
     }
 
-    function createCompletionEntry(symbol: Symbol, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget): CompletionEntry {
+    function createCompletionEntry(symbol: Symbol, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, useFullSymbolNames: boolean): CompletionEntry {
         // Try to get a valid display name for this symbol, if we could not find one, then ignore it.
         // We would like to only show things that can be added after a dot, so for instance numeric properties can
         // not be accessed with a dot (a.1 <- invalid)
-        const displayName = getCompletionEntryDisplayNameForSymbol(typeChecker, symbol, target, performCharacterChecks, location);
+        const displayName = getCompletionEntryDisplayNameForSymbol(typeChecker, symbol, target, performCharacterChecks, location, useFullSymbolNames);
         if (!displayName) {
             return undefined;
         }
@@ -132,12 +132,12 @@ namespace ts.Completions {
         };
     }
 
-    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log): Map<string> {
+    function getCompletionEntriesFromSymbols(symbols: Symbol[], entries: Push<CompletionEntry>, location: Node, performCharacterChecks: boolean, typeChecker: TypeChecker, target: ScriptTarget, log: Log, useFullSymbolNames?: boolean): Map<string> {
         const start = timestamp();
         const uniqueNames = createMap<string>();
         if (symbols) {
             for (const symbol of symbols) {
-                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target);
+                const entry = createCompletionEntry(symbol, location, performCharacterChecks, typeChecker, target, useFullSymbolNames);
                 if (entry) {
                     const id = escapeIdentifier(entry.name);
                     if (!uniqueNames.get(id)) {
@@ -300,13 +300,13 @@ namespace ts.Completions {
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position);
         if (completionData) {
-            const { symbols, location } = completionData;
+            const { symbols, useFullSymbolNames, location } = completionData;
 
             // Find the symbol with the matching entry name.
             // We don't need to perform character checks here because we're only comparing the
             // name against 'entryName' (which is known to be good), not building a new
             // completion entry.
-            const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
+            const symbol = forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location, useFullSymbolNames) === entryName ? s : undefined);
 
             if (symbol) {
                 const { displayParts, documentation, symbolKind, tags } = SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, location, location, SemanticMeaning.All);
@@ -344,13 +344,13 @@ namespace ts.Completions {
         // Compute all the completion symbols again.
         const completionData = getCompletionData(typeChecker, log, sourceFile, position);
         if (completionData) {
-            const { symbols, location } = completionData;
+            const { symbols, useFullSymbolNames, location } = completionData;
 
             // Find the symbol with the matching entry name.
             // We don't need to perform character checks here because we're only comparing the
             // name against 'entryName' (which is known to be good), not building a new
             // completion entry.
-            return forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location) === entryName ? s : undefined);
+            return forEach(symbols, s => getCompletionEntryDisplayNameForSymbol(typeChecker, s, compilerOptions.target, /*performCharacterChecks*/ false, location, useFullSymbolNames) === entryName ? s : undefined);
         }
 
         return undefined;
@@ -358,6 +358,7 @@ namespace ts.Completions {
 
     interface CompletionData {
         symbols: Symbol[];
+        useFullSymbolNames: boolean;
         isGlobalCompletion: boolean;
         isMemberCompletion: boolean;
         isNewIdentifierLocation: boolean;
@@ -440,7 +441,7 @@ namespace ts.Completions {
             }
 
             if (request) {
-                return { symbols: undefined, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, keywordFilters: KeywordCompletionFilters.None };
+                return { symbols: undefined, useFullSymbolNames: false, isGlobalCompletion: false, isMemberCompletion: false, isNewIdentifierLocation: false, location: undefined, isRightOfDot: false, request, keywordFilters: KeywordCompletionFilters.None };
             }
 
             if (!insideJsDocTagTypeExpression) {
@@ -474,6 +475,7 @@ namespace ts.Completions {
         let isRightOfDot = false;
         let isRightOfOpenTag = false;
         let isStartingCloseTag = false;
+        let isRightOfCase = false;
 
         let location = getTouchingPropertyName(sourceFile, position, insideJsDocTagTypeExpression); // TODO: GH#15853
         if (contextToken) {
@@ -498,6 +500,10 @@ namespace ts.Completions {
                     // or leading into a '...' token. Just bail out instead.
                     return undefined;
                 }
+            }
+            else if (contextToken.kind === SyntaxKind.CaseKeyword) {
+                node = contextToken.parent as CaseClause;
+                isRightOfCase = true;
             }
             else if (sourceFile.languageVariant === LanguageVariant.JSX) {
                 // <UI.Test /* completion position */ />
@@ -540,10 +546,14 @@ namespace ts.Completions {
         let isMemberCompletion: boolean;
         let isNewIdentifierLocation: boolean;
         let keywordFilters = KeywordCompletionFilters.None;
+        const useFullSymbolNames = isRightOfCase;
         let symbols: Symbol[] = [];
 
         if (isRightOfDot) {
             getTypeScriptMemberSymbols();
+        }
+        else if (isRightOfCase) {
+            getSwitchCaseSymbols(node as CaseClause);
         }
         else if (isRightOfOpenTag) {
             const tagSymbols = typeChecker.getJsxIntrinsicTagNames();
@@ -577,7 +587,7 @@ namespace ts.Completions {
 
         log("getCompletionData: Semantic work: " + (timestamp() - semanticStart));
 
-        return { symbols, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters };
+        return { symbols, useFullSymbolNames, isGlobalCompletion, isMemberCompletion, isNewIdentifierLocation, location, isRightOfDot: (isRightOfDot || isRightOfOpenTag), request, keywordFilters };
 
         type JSDocTagWithTypeExpression = JSDocAugmentsTag | JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -631,6 +641,20 @@ namespace ts.Completions {
                 const type = typeChecker.getTypeAtLocation(node);
                 addTypeProperties(type);
             }
+        }
+
+        function getSwitchCaseSymbols(clause: CaseClause): void {
+            isGlobalCompletion = false;
+            isMemberCompletion = true; // Set to true to avoid getting keyword completions. TODO: This really needs a refactor.
+            isNewIdentifierLocation = false;
+
+            const switchStatement = clause.parent.parent;
+            forEach(typeChecker.getRemainingSwitchCaseTypes(switchStatement), type => {
+                // TODO: GH#16863: Support regular number and string types, although those have no symbols.
+                if (type.flags & TypeFlags.EnumLiteral) {
+                    symbols.push(type.symbol);
+                }
+            });
         }
 
         function addTypeProperties(type: Type) {
@@ -1598,7 +1622,9 @@ namespace ts.Completions {
      *
      * @return undefined if the name is of external module otherwise a name with striped of any quote
      */
-    function getCompletionEntryDisplayNameForSymbol(typeChecker: TypeChecker, symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node): string {
+    function getCompletionEntryDisplayNameForSymbol(typeChecker: TypeChecker, symbol: Symbol, target: ScriptTarget, performCharacterChecks: boolean, location: Node, useFullSymbolNames: boolean): string {
+        if (useFullSymbolNames) return typeChecker.symbolToString(symbol, location);
+
         const displayName: string = getDeclaredName(typeChecker, symbol, location);
 
         if (displayName) {

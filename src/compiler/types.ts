@@ -2648,6 +2648,9 @@ namespace ts {
 
         /* @internal */ getJsxNamespace(): string;
         /* @internal */ resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined;
+
+        /** Types that are not already covered by some switch case. */
+        /* @internal */ getRemainingSwitchCaseTypes(node: SwitchStatement): Type[] | undefined;
     }
 
     export enum NodeBuilderFlags {
