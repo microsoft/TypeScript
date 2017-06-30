@@ -1,15 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-////[|class C {
-////    state = 'hi'
-////    doStuff() {
-////        this.start;
-////    }
+////[|function foo(s: string) {
+////    return s.toStrang();
 ////}|]
 
-verify.rangeAfterCodeFix(`class C {
-    state = 'hi'
-    doStuff() {
-        this.state;
-    }
-}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 2);
+verify.rangeAfterCodeFix(`function foo(s: string) {
+    return s.toString();
+}`, /*includeWhiteSpace*/false, /*errorCode*/ undefined, /*index*/ 0);
