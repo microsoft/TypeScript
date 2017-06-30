@@ -11067,8 +11067,14 @@ namespace ts {
             if (!links.switchTypes) {
                 // If all case clauses specify expressions that have unit types, we return an array
                 // of those unit types. Otherwise we return an empty array.
-                const types = map(switchStatement.caseBlock.clauses, getTypeOfSwitchClause);
-                links.switchTypes = !contains(types, undefined) ? types : emptyArray;
+                links.switchTypes = [];
+                for (const clause of switchStatement.caseBlock.clauses) {
+                    const type = getTypeOfSwitchClause(clause);
+                    if (type === undefined) {
+                        return links.switchTypes = emptyArray;
+                    }
+                    links.switchTypes.push(type);
+                }
             }
             return links.switchTypes;
         }
