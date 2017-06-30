@@ -1290,7 +1290,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return arrayFrom((<CommandLineOptionOfCustomType>option).type.keys())[0];
+                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
             }
         }
 
