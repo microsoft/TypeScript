@@ -1,4 +1,4 @@
-﻿/// <reference path="harness.ts"/>
+/// <reference path="harness.ts"/>
 /// <reference path="runnerbase.ts" />
 /// <reference path="loggedIO.ts" />
 /// <reference path="..\compiler\commandLineParser.ts"/>
