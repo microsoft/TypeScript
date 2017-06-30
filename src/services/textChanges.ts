@@ -511,7 +511,7 @@ namespace ts.textChanges {
             lineMap,
             getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
         };
-        const changes = formatting.formatNode(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
+        const changes = formatting.formatNodeGivenIndentation(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
         return applyChanges(nonFormattedText.text, changes);
     }
 
