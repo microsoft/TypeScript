@@ -315,7 +315,7 @@ namespace ts.formatting {
     }
 
     /* @internal */
-    export function formatNode(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number,  rulesProvider: RulesProvider): TextChange[] {
+    export function formatNode(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number, rulesProvider: RulesProvider): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
         return formatSpanWorker(
             range,
@@ -535,7 +535,7 @@ namespace ts.formatting {
                         }
                         case SyntaxKind.OpenBracketToken:
                         case SyntaxKind.CloseBracketToken: {
-                            if (container.kind !== SyntaxKind.MappedType) {
+                            if (container.kind !== SyntaxKind.MappedType && container.kind !== SyntaxKind.ElementAccessExpression) {
                                 return indentation;
                             }
                             break;
@@ -690,6 +690,31 @@ namespace ts.formatting {
                 return inheritedIndentation;
             }
 
+            /**
+             * In some case even when a node list did not start at the same line with its parent, it should be treated specially because
+             * of the "effective parent line" was indented. E.g.
+             *
+             *     Promise
+             *         .then( // this is the "lastIndentedLine"
+             *             a,  <- here should be indented
+             *         )
+             *
+             * Here the parent of argument list is the call expression itself, however the indentation of the argument list should carry
+             * over the indentation in line 1 (".then").
+             */
+            function shouldListInheritIndentationFromLastIndentedLine(listStartLine: number, parent: Node, nodes: NodeArray<Node>) {
+                if (lastIndentedLine !== listStartLine) {
+                    return false;
+                }
+
+                switch (parent.kind) {
+                    case SyntaxKind.CallExpression:
+                        return (<CallExpression>parent).arguments === nodes;
+                    default:
+                        return false;
+                }
+            }
+
             function processChildNodes(nodes: NodeArray<Node>,
                 parent: Node,
                 parentStartLine: number,
@@ -712,8 +737,13 @@ namespace ts.formatting {
                         else if (tokenInfo.token.kind === listStartToken) {
                             // consume list start token
                             startLine = sourceFile.getLineAndCharacterOfPosition(tokenInfo.token.pos).line;
+
+                            if (shouldListInheritIndentationFromLastIndentedLine(startLine, parent, nodes)) {
+                                parentStartLine = lastIndentedLine;
+                            }
+
                             const indentation =
-                                computeIndentation(tokenInfo.token, startLine, Constants.Unknown, parent, parentDynamicIndentation, parentStartLine);
+                                computeIndentation(tokenInfo.token, startLine, /*inheritedIndentation*/ Constants.Unknown, parent, parentDynamicIndentation, parentStartLine);
 
                             listDynamicIndentation = getDynamicIndentation(parent, parentStartLine, indentation.indentation, indentation.delta);
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
@@ -729,6 +759,13 @@ namespace ts.formatting {
                 for (let i = 0; i < nodes.length; i++) {
                     const child = nodes[i];
                     inheritedIndentation = processChildNode(child, inheritedIndentation, node, listDynamicIndentation, startLine, startLine, /*isListItem*/ true, /*isFirstListItem*/ i === 0);
+                }
+
+                if (nodes.hasTrailingComma && formattingScanner.isOnToken()) {
+                    const tokenInfo = formattingScanner.readTokenInfo(parent);
+                    if (tokenInfo.token.kind === SyntaxKind.CommaToken) {
+                        consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
+                    }
                 }
 
                 if (listEndToken !== SyntaxKind.Unknown) {
