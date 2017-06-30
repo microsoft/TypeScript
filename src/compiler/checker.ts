@@ -14504,7 +14504,7 @@ namespace ts {
         }
 
         function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): string | undefined {
-            const suggestion = getSpellingSuggestionForName(node.text, getPropertiesOfObjectType(containingType), SymbolFlags.Value);
+            const suggestion = getSpellingSuggestionForName(node.text, getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && suggestion.name;
         }
 
