@@ -8,7 +8,8 @@ var tty = require("tty")
   , Base = mocha.reporters.Base
   , color = Base.color
   , cursor = Base.cursor
-  , ms = require("mocha/lib/ms");
+  , ms = require("mocha/lib/ms")
+  , FileReporter = require("./mocha-file-reporter");
 
 var isatty = tty.isatty(1) && tty.isatty(2);
 var tapRangePattern = /^(\d+)\.\.(\d+)(?:$|\r\n?|\n)/;
@@ -46,25 +47,18 @@ function discoverTests(run, options, cb) {
 }
 
 function runTests(taskConfigsFolder, run, options, cb) {
-    var configFiles = fs.readdirSync(taskConfigsFolder);
-    var numPartitions = configFiles.length;
-    if (numPartitions <= 0) {
-        cb();
-        return;
-    }
-
-    console.log("Running tests on " + numPartitions + " threads...");
-
-    var partitions = Array(numPartitions);
-    var progressBars = new ProgressBars();
-    progressBars.enable();
-
-    var counter = numPartitions;
-    configFiles.forEach(runTestsInPartition);
-
-    function runTestsInPartition(file, index) {
-        var partition = {
-            file: path.join(taskConfigsFolder, file),
+    var partitions = fs.readdirSync(taskConfigsFolder).map(function (file, index) {
+        var file = path.join(taskConfigsFolder, file);
+        var args = [];
+        args.push("-t", options.testTimeout || 40000);
+        args.push("-R", "tap");
+        args.push("--no-colors");
+        args.push(run);
+        args.push("--config='" + file + "'");
+        return {
+            file: file,
+            cmd: "mocha " + args.join(" "),
+            index: index,
             tests: 0,
             passed: 0,
             failed: 0,
@@ -75,14 +69,27 @@ function runTests(taskConfigsFolder, run, options, cb) {
             catastrophicError: "",
             failures: []
         };
-        partitions[index] = partition;
+    });
 
+    if (partitions.length <= 0) {
+        cb();
+        return;
+    }
+
+    console.log("Running tests on " + partitions.length + " threads...");
+
+    var progressBars = new ProgressBars();
+    progressBars.enable();
+
+    var counter = partitions.length;
+    partitions.forEach(runTestsInPartition);
+
+    function runTestsInPartition(partition) {
         // Set up the progress bar.
         updateProgress(0);
 
         // Start the background process.
-        var cmd = "mocha -t " + (options.testTimeout || 20000) + " -R tap --no-colors " + run + " --config='" + partition.file + "'";
-        var p = spawnProcess(cmd);
+        var p = spawnProcess(partition.cmd);
         var rl = readline.createInterface({
             input: p.stdout,
             terminal: false
@@ -195,7 +202,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
             }
 
             progressBars.update(
-                index,
+                partition.index,
                 percentComplete,
                 progressColor,
                 title
@@ -213,7 +220,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
 
             var duration = 0;
             var catastrophicError = "";
-            for (var i = 0; i < numPartitions; i++) {
+            for (var i = 0; i < partitions.length; i++) {
                 var partition = partitions[i];
                 stats.passes += partition.passed;
                 stats.failures += partition.failed;
@@ -225,7 +232,7 @@ function runTests(taskConfigsFolder, run, options, cb) {
                     // {
                     //      "light":false,
                     //      "tasks":[
-                    //          { 
+                    //          {
                     //              "runner":"compiler",
                     //              "files":["tests/cases/compiler/es6ImportNamedImportParsingError.ts"]
                     //          }
@@ -259,15 +266,12 @@ function runTests(taskConfigsFolder, run, options, cb) {
                 reporter.epilogue();
             }
 
-            if (catastrophicError !== "") {
-                return cb(new Error(catastrophicError));
-            }
-            if (stats.failures) {
-                return cb(new Error("Test failures reported: " + stats.failures));
-            }
-            else {
+            FileReporter.writeFailures(".failed-tests", failures, options.keepFailed, function (err) {
+                if (err) return cb(err);
+                if (catastrophicError !== "") return cb(new Error(catastrophicError));
+                if (stats.failures) return cb(new Error("Test failures reported: " + stats.failures));
                 return cb();
-            }
+            });
         }
     }
 

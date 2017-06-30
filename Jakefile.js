@@ -812,6 +812,8 @@ function runConsoleTests(defaultReporter, runInParallel) {
     var inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     var testTimeout = process.env.timeout || defaultTestTimeout;
     var tests = process.env.test || process.env.tests || process.env.t;
+    var failed = process.env.failed || false;
+    var keepFailed = process.env.keepFailed || process.env["keep-failed"] || false;
     var light = process.env.light || false;
     var stackTraceLimit = process.env.stackTraceLimit;
     var testConfigFile = 'test.config';
@@ -850,9 +852,13 @@ function runConsoleTests(defaultReporter, runInParallel) {
     if (!runInParallel) {
         var startTime = mark();
         var args = [];
-        args.push("-R", reporter);
+        args.push("-R", "scripts/mocha-file-reporter");
+        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
         if (tests) {
             args.push("-g", `"${tests}"`);
+        }
+        else if (failed) {
+            args.push("--opts", ".failed-tests");
         }
         if (colors) {
             args.push("--colors");
@@ -895,7 +901,7 @@ function runConsoleTests(defaultReporter, runInParallel) {
         var savedNodeEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = "development";
         var startTime = mark();
-        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors }, function (err) {
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: !colors, keepFailed }, function (err) {
             process.env.NODE_ENV = savedNodeEnv;
             measure(startTime);
             // last worker clean everything and runs linter in case if there were no errors
