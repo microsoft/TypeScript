@@ -129,6 +129,7 @@ declare namespace FourSlashInterface {
         position(position: number, fileName?: string): any;
         file(index: number, content?: string, scriptKindName?: string): any;
         file(name: string, content?: string, scriptKindName?: string): any;
+        select(startMarker: string, endMarker: string): void;
     }
     class verifyNegatable {
         private negative;
@@ -155,6 +156,8 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableAtMarker(markerName: string): void;
         codeFixDiagnosticsAvailableAtMarkers(markerNames: string[], diagnosticCode?: number): void;
         applicableRefactorAvailableForRange(): void;
+
+        refactorAvailable(name?: string);
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -303,6 +306,8 @@ declare namespace FourSlashInterface {
         moveLeft(count?: number): void;
         enableFormatting(): void;
         disableFormatting(): void;
+
+        applyRefactor(name: string, index?: number): void;
     }
     class debug {
         printCurrentParameterHelp(): void;

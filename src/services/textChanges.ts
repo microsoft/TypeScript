@@ -83,14 +83,18 @@ namespace ts.textChanges {
         delta?: number;
     }
 
+    export interface ChangeNodesOptions {
+        nodesSeparator?: string;
+    }
+
     export type ChangeNodeOptions = ConfigurableStartEnd & InsertNodeOptions;
 
     interface Change {
         readonly sourceFile: SourceFile;
         readonly range: TextRange;
         readonly useIndentationFromFile?: boolean;
-        readonly node?: Node;
-        readonly options?: ChangeNodeOptions;
+        readonly node?: Node | Node[];
+        readonly options?: ChangeNodeOptions & ChangeNodesOptions;
     }
 
     export function getSeparatorCharacter(separator: Token<SyntaxKind.CommaToken | SyntaxKind.SemicolonToken>) {
@@ -158,6 +162,10 @@ namespace ts.textChanges {
         private readonly newLineCharacter: string;
 
         public static fromCodeFixContext(context: { newLineCharacter: string, rulesProvider: formatting.RulesProvider }) {
+            return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
+        }
+
+        public static fromRefactorContext(context: RefactorContext) {
             return new ChangeTracker(context.newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed, context.rulesProvider);
         }
 
@@ -238,6 +246,13 @@ namespace ts.textChanges {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.Start);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
             this.changes.push({ sourceFile, options, useIndentationFromFile: true, node: newNode, range: { pos: startPosition, end: endPosition } });
+            return this;
+        }
+
+        public replaceNodes(sourceFile: SourceFile, oldNodes: Node | Node[], newNodes: Node | Node[], options: ChangeNodeOptions & ChangeNodesOptions = {}) {
+            const startPosition = getAdjustedStartPosition(sourceFile, isArray(oldNodes) ? oldNodes[0] : oldNodes, options, Position.Start);
+            const endPosition = getAdjustedEndPosition(sourceFile, isArray(oldNodes) ? lastOrUndefined(oldNodes) : oldNodes, options);
+            this.changes.push({ sourceFile, options, useIndentationFromFile: true, node: newNodes, range: { pos: startPosition, end: endPosition } });
             return this;
         }
 
@@ -451,33 +466,45 @@ namespace ts.textChanges {
                 return "";
             }
             const options = change.options || {};
-            const nonFormattedText = getNonformattedText(change.node, sourceFile, this.newLine);
+            let text: string;
+            const pos = change.range.pos;
+            const posStartsLine = getLineStartPositionForPosition(pos, sourceFile) === pos;
+            if (isArray(change.node)) {
+                const parts = change.node.map(n => this.getFormattedTextOfNode(n, sourceFile, pos, change.useIndentationFromFile, options));
+                text = parts.join(change.options.nodesSeparator);
+            }
+            else {
+                text = this.getFormattedTextOfNode(change.node, sourceFile, pos, change.useIndentationFromFile, options);
+            }
+            // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
+            // however keep indentation if it is was forced
+            text = posStartsLine || change.options.indentation !== undefined ? text : text.replace(/^\s+/, "");
+            return (options.prefix || "") + text + (options.suffix || "");
+        }
+
+        private getFormattedTextOfNode(node: Node, sourceFile: SourceFile, pos: number, useIndentationFromFile: boolean, options: ChangeNodeOptions) {
+            const nonFormattedText = getNonformattedText(node, sourceFile, this.newLine);
             if (this.validator) {
                 this.validator(nonFormattedText);
             }
 
             const formatOptions = this.rulesProvider.getFormatOptions();
-            const pos = change.range.pos;
             const posStartsLine = getLineStartPositionForPosition(pos, sourceFile) === pos;
 
             const initialIndentation =
-                change.options.indentation !== undefined
-                    ? change.options.indentation
-                    : change.useIndentationFromFile
-                        ? formatting.SmartIndenter.getIndentation(change.range.pos, sourceFile, formatOptions, posStartsLine || (change.options.prefix === this.newLineCharacter))
+                options.indentation !== undefined
+                    ? options.indentation
+                    : useIndentationFromFile
+                        ? formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, posStartsLine || (options.prefix === this.newLineCharacter))
                         : 0;
             const delta =
-                change.options.delta !== undefined
-                    ? change.options.delta
-                    : formatting.SmartIndenter.shouldIndentChildNode(change.node)
+                options.delta !== undefined
+                    ? options.delta
+                    : formatting.SmartIndenter.shouldIndentChildNode(node)
                         ? formatOptions.indentSize
                         : 0;
 
-            let text = applyFormatting(nonFormattedText, sourceFile, initialIndentation, delta, this.rulesProvider);
-            // strip initial indentation (spaces or tabs) if text will be inserted in the middle of the line
-            // however keep indentation if it is was forced
-            text = posStartsLine || change.options.indentation !== undefined ? text : text.replace(/^\s+/, "");
-            return (options.prefix || "") + text + (options.suffix || "");
+            return applyFormatting(nonFormattedText, sourceFile, initialIndentation, delta, this.rulesProvider);
         }
 
         private static normalize(changes: Change[]): Change[] {

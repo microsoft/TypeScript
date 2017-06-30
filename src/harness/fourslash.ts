@@ -187,6 +187,9 @@ namespace FourSlash {
 
         // The current caret position in the active file
         public currentCaretPosition = 0;
+        // The position of the end of the current selection, or -1 if nothing is selected
+        public selectionEnd = -1;
+
         public lastKnownMarker = "";
 
         // The file that's currently 'opened'
@@ -433,11 +436,19 @@ namespace FourSlash {
 
         public goToPosition(pos: number) {
             this.currentCaretPosition = pos;
+            this.selectionEnd = -1;
+        }
+
+        public select(startMarker: string, endMarker: string) {
+            const start = this.getMarkerByName(startMarker), end = this.getMarkerByName(endMarker);
+            this.goToPosition(start.position);
+            this.selectionEnd = end.position;
         }
 
         public moveCaretRight(count = 1) {
             this.currentCaretPosition += count;
             this.currentCaretPosition = Math.min(this.currentCaretPosition, this.getFileContent(this.activeFile.fileName).length);
+            this.selectionEnd = -1;
         }
 
         // Opens a file given its 0-based index or fileName
@@ -2748,6 +2759,25 @@ namespace FourSlash {
             }
         }
 
+        public verifyRefactorAvailable(negative: boolean, name?: string) {
+            const selection = {
+                pos: this.currentCaretPosition,
+                end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd
+            };
+
+            let refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, selection);
+            if (name) {
+                refactors = refactors.filter(r => r.name === name);
+            }
+            const isAvailable = refactors.length > 0;
+            if (negative && isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected no refactor but found some.`);
+            }
+            if (!negative && !isAvailable) {
+                this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
+            }
+        }
+
         public verifyApplicableRefactorAvailableForRange(negative: boolean) {
             const ranges = this.getRanges();
             if (!(ranges && ranges.length === 1)) {
@@ -2762,6 +2792,18 @@ namespace FourSlash {
             if (!negative && !isAvailable) {
                 this.raiseError(`verifyApplicableRefactorAvailableForRange failed - expected a refactor but found none.`);
             }
+        }
+
+        public applyRefactor(name: string, index?: number) {
+            const range = { pos: this.currentCaretPosition, end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd };
+            const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
+            const refactor = ts.find(refactors, r  => r.name === name);
+            if (!refactor) {
+                this.raiseError(`The expected refactor: ${name} is not available at the marker location.`);
+            }
+
+            const actions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, this.formatCodeSettings, range, name);
+            this.applyCodeAction(this.activeFile.fileName, actions, index || 0);
         }
 
         public verifyFileAfterApplyingRefactorAtMarker(
@@ -3505,6 +3547,10 @@ namespace FourSlashInterface {
         public file(indexOrName: any, content?: string, scriptKindName?: string): void {
             this.state.openFile(indexOrName, content, scriptKindName);
         }
+
+        public select(startMarker: string, endMarker: string) {
+            this.state.select(startMarker, endMarker);
+        }
     }
 
     export class VerifyNegatable {
@@ -3625,6 +3671,10 @@ namespace FourSlashInterface {
 
         public applicableRefactorAvailableForRange() {
             this.state.verifyApplicableRefactorAvailableForRange(this.negative);
+        }
+
+        public refactorAvailable(name?: string) {
+            this.state.verifyRefactorAvailable(this.negative, name);
         }
     }
 
@@ -4016,6 +4066,10 @@ namespace FourSlashInterface {
 
         public disableFormatting() {
             this.state.enableFormatting = false;
+        }
+
+        public applyRefactor(name: string, index?: number) {
+            this.state.applyRefactor(name, index);
         }
     }
 

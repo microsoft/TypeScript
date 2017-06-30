@@ -222,11 +222,10 @@ namespace ts {
             getSuggestionForNonexistentProperty,
             getSuggestionForNonexistentSymbol,
             getBaseConstraintOfType,
-            getJsxNamespace,
-            resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined {
-                location = getParseTreeNode(location);
-                return resolveName(location, name, meaning, /*nameNotFoundMessage*/ undefined, name);
+            resolveName(name, location, meaning) {
+                return resolveName(location, name, meaning, /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
             },
+            getJsxNamespace,
         };
 
         const tupleTypes: GenericType[] = [];
