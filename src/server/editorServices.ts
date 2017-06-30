@@ -211,20 +211,6 @@ namespace ts.server {
         extraFileExtensions?: JsFileExtensionInfo[];
     }
 
-    interface ConfigFileConversionResult {
-        success: boolean;
-        configFileErrors?: Diagnostic[];
-
-        projectOptions?: ProjectOptions;
-    }
-
-    interface OpenConfigFileResult {
-        success: boolean;
-        errors?: Diagnostic[];
-
-        project?: ConfiguredProject;
-    }
-
     export interface OpenConfiguredProjectResult {
         configFileName?: NormalizedPath;
         configFileErrors?: Diagnostic[];
@@ -862,42 +848,44 @@ namespace ts.server {
         }
 
         /**
-         * This function tries to search for a tsconfig.json for the given file. If we found it,
-         * we first detect if there is already a configured project created for it: if so, we re-read
-         * the tsconfig file content and update the project; otherwise we create a new one.
+         * This function tries to search for a tsconfig.json for the given file.
+         * This is different from the method the compiler uses because
+         * the compiler can assume it will always start searching in the
+         * current directory (the directory in which tsc was invoked).
+         * The server must start searching from the directory containing
+         * the newly opened file.
          */
-        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult {
+        private getConfigFileNameForFile(fileName: NormalizedPath, projectRootPath?: NormalizedPath) {
             const searchPath = getDirectoryPath(fileName);
             this.logger.info(`Search path: ${searchPath}`);
 
             // check if this file is already included in one of external projects
             const configFileName = this.findConfigFile(asNormalizedPath(searchPath), projectRootPath);
-            if (!configFileName) {
-                this.logger.info("No config files found.");
-                return {};
-            }
-
-            this.logger.info(`Config file name: ${configFileName}`);
-
-            const project = this.findConfiguredProjectByProjectName(configFileName);
-            if (!project) {
-                const { success, errors } = this.openConfigFile(configFileName, fileName);
-                if (!success) {
-                    return { configFileName, configFileErrors: errors };
-                }
-
-                // even if opening config file was successful, it could still
-                // contain errors that were tolerated.
-                this.logger.info(`Opened configuration file ${configFileName}`);
-                if (errors && errors.length > 0) {
-                    return { configFileName, configFileErrors: errors };
-                }
+            if (configFileName) {
+                this.logger.info(`Config file name: ${configFileName}`);
             }
             else {
-                this.updateConfiguredProject(project);
+                this.logger.info("No config files found.");
             }
+            return configFileName;
+        }
 
-            return { configFileName };
+        /**
+         * This function tries to search for a tsconfig.json for the given file. If we found it,
+         * we first detect if there is already a configured project created for it: if so, we re-read
+         * the tsconfig file content and update the project; otherwise we create a new one.
+         */
+        private openOrUpdateConfiguredProjectForFile(fileName: NormalizedPath) {
+            const configFileName = this.getConfigFileNameForFile(fileName);
+            if (configFileName) {
+                const project = this.findConfiguredProjectByProjectName(configFileName);
+                if (!project) {
+                    this.openConfigFile(configFileName, fileName);
+                }
+                else {
+                    this.updateConfiguredProject(project);
+                }
+            }
         }
 
         // This is different from the method the compiler uses because
@@ -971,7 +959,7 @@ namespace ts.server {
             return findProjectByName(projectFileName, this.externalProjects);
         }
 
-        private convertConfigFileContentToProjectOptions(configFilename: string): ConfigFileConversionResult {
+        private convertConfigFileContentToProjectOptions(configFilename: string)  {
             configFilename = normalizePath(configFilename);
 
             const configFileContent = this.host.readFile(configFilename);
@@ -996,23 +984,38 @@ namespace ts.server {
 
             Debug.assert(!!parsedCommandLine.fileNames);
 
+            let success: boolean;
+            let projectOptions: ProjectOptions;
+
             if (parsedCommandLine.fileNames.length === 0) {
                 errors.push(createCompilerDiagnostic(Diagnostics.The_config_file_0_found_doesn_t_contain_any_source_files, configFilename));
-                return { success: false, configFileErrors: errors };
+                success = false;
+                projectOptions = {
+                    files: [],
+                    compilerOptions: {},
+                    configHasExtendsProperty: false,
+                    configHasFilesProperty: false,
+                    configHasIncludeProperty: false,
+                    configHasExcludeProperty: false,
+                    typeAcquisition: { enable: false }
+                };
+            }
+            else {
+                success = true;
+                projectOptions = {
+                    files: parsedCommandLine.fileNames,
+                    compilerOptions: parsedCommandLine.options,
+                    configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
+                    configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
+                    configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
+                    configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
+                    wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
+                    typeAcquisition: parsedCommandLine.typeAcquisition,
+                    compileOnSave: parsedCommandLine.compileOnSave
+                };
             }
 
-            const projectOptions: ProjectOptions = {
-                files: parsedCommandLine.fileNames,
-                compilerOptions: parsedCommandLine.options,
-                configHasExtendsProperty: parsedCommandLine.raw["extends"] !== undefined,
-                configHasFilesProperty: parsedCommandLine.raw["files"] !== undefined,
-                configHasIncludeProperty: parsedCommandLine.raw["include"] !== undefined,
-                configHasExcludeProperty: parsedCommandLine.raw["exclude"] !== undefined,
-                wildcardDirectories: createMapFromTemplate(parsedCommandLine.wildcardDirectories),
-                typeAcquisition: parsedCommandLine.typeAcquisition,
-                compileOnSave: parsedCommandLine.compileOnSave
-            };
-            return { success: true, projectOptions, configFileErrors: errors };
+            return { success, projectOptions, configFileErrors: errors };
         }
 
         private exceededTotalSizeLimitForNonTsFiles<T>(name: string, options: CompilerOptions, fileNames: T[], propertyReader: FilePropertyReader<T>) {
@@ -1149,8 +1152,7 @@ namespace ts.server {
         }
 
         private addFilesToProjectAndUpdateGraph<T>(project: ConfiguredProject | ExternalProject, files: T[], propertyReader: FilePropertyReader<T>, clientFileName: string, typeAcquisition: TypeAcquisition, configFileErrors: Diagnostic[]): void {
-            let errors: Diagnostic[];
-            for (const f of files) {
+           for (const f of files) {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
@@ -1159,25 +1161,21 @@ namespace ts.server {
                     project.addRoot(info);
                 }
                 else {
-                    (errors || (errors = [])).push(createFileNotFoundDiagnostic(rootFilename));
+                    (configFileErrors || (configFileErrors = [])).push(createFileNotFoundDiagnostic(rootFilename));
                 }
             }
-            project.setProjectErrors(concatenate(configFileErrors, errors));
+            project.setProjectErrors(configFileErrors);
             project.setTypeAcquisition(typeAcquisition);
             project.updateGraph();
         }
 
-        private openConfigFile(configFileName: NormalizedPath, clientFileName?: string): OpenConfigFileResult {
-            const conversionResult = this.convertConfigFileContentToProjectOptions(configFileName);
-            const projectOptions: ProjectOptions = conversionResult.success
-                ? conversionResult.projectOptions
-                : { files: [], compilerOptions: {}, configHasExtendsProperty: false, configHasFilesProperty: false, configHasIncludeProperty: false, configHasExcludeProperty: false, typeAcquisition: { enable: false } };
-            const project = this.createAndAddConfiguredProject(configFileName, projectOptions, conversionResult.configFileErrors, clientFileName);
-            return {
-                success: conversionResult.success,
-                project,
-                errors: project.getGlobalProjectErrors()
-            };
+        private openConfigFile(configFileName: NormalizedPath, clientFileName?: string) {
+            const { success, projectOptions, configFileErrors } = this.convertConfigFileContentToProjectOptions(configFileName);
+            if (success) {
+                this.logger.info(`Opened configuration file ${configFileName}`);
+            }
+
+            return this.createAndAddConfiguredProject(configFileName, projectOptions, configFileErrors, clientFileName);
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
@@ -1392,6 +1390,8 @@ namespace ts.server {
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
+                    // TODO: (sheetalkamat) We need to update the projects because of we might interprete more/less files
+                    // depending on whether extra files extenstions are either added or removed
                     this.logger.info("Host file extension mappings updated");
                 }
             }
@@ -1465,9 +1465,20 @@ namespace ts.server {
 
             let project: ConfiguredProject | ExternalProject = this.findContainingExternalProject(fileName);
             if (!project) {
-                ({ configFileName, configFileErrors } = this.openOrUpdateConfiguredProjectForFile(fileName, projectRootPath));
+                configFileName = this.getConfigFileNameForFile(fileName, projectRootPath);
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
+                    if (!project) {
+                        project = this.openConfigFile(configFileName, fileName);
+
+                        // even if opening config file was successful, it could still
+                        // contain errors that were tolerated.
+                        const errors = project.getGlobalProjectErrors();
+                        if (errors && errors.length > 0) {
+                            // set configFileErrors only when the errors array is non-empty
+                            configFileErrors = errors;
+                        }
+                    }
                 }
             }
             if (project && !project.languageServiceEnabled) {
@@ -1792,9 +1803,8 @@ namespace ts.server {
                 for (const tsconfigFile of tsConfigFiles) {
                     let project = this.findConfiguredProjectByProjectName(tsconfigFile);
                     if (!project) {
-                        const result = this.openConfigFile(tsconfigFile);
-                        // TODO: save errors
-                        project = result.success && result.project;
+                        // errors are stored in the project
+                        project = this.openConfigFile(tsconfigFile);
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project

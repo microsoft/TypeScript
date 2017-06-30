@@ -94,8 +94,8 @@ namespace ts.projectSystem {
             checkProjectErrors(projectService.synchronizeProjectList([])[0], ["File '/a/b/lib.ts' not found."]);
 
             host.reloadFS([file1, file2, config]);
+            host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Created);
 
-            projectService.openClientFile(file1.path);
             projectService.checkNumberOfProjects({ configuredProjects: 1 });
             checkProjectErrors(projectService.synchronizeProjectList([])[0], []);
         });
