@@ -1637,9 +1637,7 @@ namespace FourSlash {
             const checkCadence = (count >> 2) + 1;
 
             for (let i = 0; i < count; i++) {
-                // Make the edit
-                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
-                this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
+                this.editScriptAndUpdateMarkers(this.activeFile.fileName, offset, offset + 1, ch);
 
                 if (i % checkCadence === 0) {
                     this.checkPostEditInvariants();
@@ -1659,8 +1657,7 @@ namespace FourSlash {
         }
 
         public replace(start: number, length: number, text: string) {
-            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, start, start + length, text);
-            this.updateMarkersForEdit(this.activeFile.fileName, start, start + length, text);
+            this.editScriptAndUpdateMarkers(this.activeFile.fileName, start, start + length, text);
             this.checkPostEditInvariants();
         }
 
@@ -1672,9 +1669,7 @@ namespace FourSlash {
             for (let i = 0; i < count; i++) {
                 this.currentCaretPosition--;
                 offset--;
-                // Make the edit
-                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
-                this.updateMarkersForEdit(this.activeFile.fileName, offset, offset + 1, ch);
+                this.editScriptAndUpdateMarkers(this.activeFile.fileName, offset, offset + 1, ch);
 
                 if (i % checkCadence === 0) {
                     this.checkPostEditInvariants();
@@ -1695,12 +1690,11 @@ namespace FourSlash {
 
             for (let i = 0; i < text.length; i++) {
                 const ch = text.charAt(i);
-                this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset, ch);
+                this.editScriptAndUpdateMarkers(this.activeFile.fileName, offset, offset, ch);
                 if (highFidelity) {
                     this.languageService.getBraceMatchingAtPosition(this.activeFile.fileName, offset);
                 }
 
-                this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
                 this.currentCaretPosition++;
                 offset++;
 
@@ -1735,8 +1729,7 @@ namespace FourSlash {
         // Enters text as if the user had pasted it
         public paste(text: string) {
             const start = this.currentCaretPosition;
-            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition, text);
-            this.updateMarkersForEdit(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition, text);
+            this.editScriptAndUpdateMarkers(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition, text);
             this.checkPostEditInvariants();
             const offset = this.currentCaretPosition += text.length;
 
@@ -1809,8 +1802,7 @@ namespace FourSlash {
             for (const edit of edits) {
                 const offsetStart = edit.span.start + runningOffset;
                 const offsetEnd = offsetStart + edit.span.length;
-                this.languageServiceAdapterHost.editScript(fileName, offsetStart, offsetEnd, edit.newText);
-                this.updateMarkersForEdit(fileName, offsetStart, offsetEnd, edit.newText);
+                this.editScriptAndUpdateMarkers(fileName, offsetStart, offsetEnd, edit.newText);
                 const editDelta = edit.newText.length - edit.span.length;
                 if (offsetStart <= this.currentCaretPosition) {
                     this.currentCaretPosition += editDelta;
@@ -1859,7 +1851,8 @@ namespace FourSlash {
             this.fixCaretPosition();
         }
 
-        private updateMarkersForEdit(fileName: string, editStart: number, editEnd: number, newText: string) {
+        private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
+            this.languageServiceAdapterHost.editScript(fileName, editStart, editEnd, newText);
             for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
                     marker.position = updatePosition(marker.position);
