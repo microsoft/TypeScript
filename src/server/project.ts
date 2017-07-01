@@ -1072,8 +1072,8 @@ namespace ts.server {
             }));
         }
 
-        watchConfigFile(callback: (project: ConfiguredProject) => void) {
-            this.projectFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), _ => callback(this));
+        watchConfigFile(callback: (project: ConfiguredProject, eventKind: FileWatcherEventKind) => void) {
+            this.projectFileWatcher = this.projectService.host.watchFile(this.getConfigFilePath(), (_fileName, eventKind) => callback(this, eventKind));
         }
 
         watchTypeRoots(callback: (project: ConfiguredProject, path: string) => void) {

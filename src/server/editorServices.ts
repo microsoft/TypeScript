@@ -538,21 +538,21 @@ namespace ts.server {
             }
         }
 
-        private onSourceFileChanged(fileName: NormalizedPath) {
+        private onSourceFileChanged(fileName: NormalizedPath, eventKind: FileWatcherEventKind) {
             const info = this.getScriptInfoForNormalizedPath(fileName);
             if (!info) {
                 this.logger.info(`Error: got watch notification for unknown file: ${fileName}`);
                 return;
             }
 
-            if (!this.host.fileExists(fileName)) {
+            if (eventKind === FileWatcherEventKind.Deleted) {
                 // File was deleted
                 this.handleDeletedFile(info);
             }
             else {
-                if (info && (!info.isScriptOpen())) {
+                if (!info.isScriptOpen()) {
                     if (info.containingProjects.length === 0) {
-                        // Orphan script info, remove it as we can always reload it on next open
+                        // Orphan script info, remove it as we can always reload it on next open file request
                         info.stopWatcher();
                         this.filenameToScriptInfo.delete(info.path);
                     }
@@ -605,7 +605,7 @@ namespace ts.server {
             this.logger.info(`Type root file ${fileName} changed`);
             this.throttledOperations.schedule(project.getConfigFilePath() + " * type root", /*delay*/ 250, () => {
                 project.updateTypes();
-                this.updateConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
+                this.reloadConfiguredProject(project); // TODO: Figure out why this is needed (should be redundant?)
                 this.refreshInferredProjects();
             });
         }
@@ -644,7 +644,7 @@ namespace ts.server {
                 // just update the current project.
 
                 this.logger.info("Updating configured project");
-                this.updateConfiguredProject(project);
+                this.updateConfiguredProject(project, projectOptions, configFileErrors);
 
                 // Call refreshInferredProjects to clean up inferred projects we may have
                 // created for the new files
@@ -652,11 +652,19 @@ namespace ts.server {
             }
         }
 
-        private onConfigChangedForConfiguredProject(project: ConfiguredProject) {
+        private onConfigChangedForConfiguredProject(project: ConfiguredProject, eventKind: FileWatcherEventKind) {
             const configFileName = project.getConfigFilePath();
-            this.logger.info(`Config file changed: ${configFileName}`);
-            const configFileErrors = this.updateConfiguredProject(project);
-            this.reportConfigFileDiagnostics(configFileName, configFileErrors, /*triggerFile*/ configFileName);
+            if (eventKind === FileWatcherEventKind.Deleted) {
+                this.logger.info(`Config file deleted: ${configFileName}`);
+                // TODO: (sheetalkamat) Get the list of open files from this project
+                // and update the projects
+                this.removeProject(project);
+            }
+            else {
+                this.logger.info(`Config file changed: ${configFileName}`);
+                this.reloadConfiguredProject(project);
+                this.reportConfigFileDiagnostics(configFileName, project.getGlobalProjectErrors(), /*triggerFile*/ configFileName);
+            }
             this.refreshInferredProjects();
         }
 
@@ -670,6 +678,8 @@ namespace ts.server {
                 return;
             }
 
+            // TODO: (sheetalkamat) Technically we shouldnt have to do this:
+            // We can report these errors in reload projects or after reload project?
             const { configFileErrors } = this.convertConfigFileContentToProjectOptions(fileName);
             this.reportConfigFileDiagnostics(fileName, configFileErrors, fileName);
 
@@ -883,7 +893,7 @@ namespace ts.server {
                     this.openConfigFile(configFileName, fileName);
                 }
                 else {
-                    this.updateConfiguredProject(project);
+                    this.reloadConfiguredProject(project);
                 }
             }
         }
@@ -1133,7 +1143,7 @@ namespace ts.server {
 
             this.addFilesToProjectAndUpdateGraph(project, projectOptions.files, fileNamePropertyReader, clientFileName, projectOptions.typeAcquisition, configFileErrors);
 
-            project.watchConfigFile(project => this.onConfigChangedForConfiguredProject(project));
+            project.watchConfigFile((project, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind));
             if (!sizeLimitExceeded) {
                 this.watchConfigDirectoryForProject(project, projectOptions);
             }
@@ -1161,6 +1171,9 @@ namespace ts.server {
                     project.addRoot(info);
                 }
                 else {
+                    // TODO: (sheetalkamat) because the files are not added as a root, we wont have these available in
+                    // missing files unless someone recreates the project or it was also refrenced in existing sourcefile
+                    // Also these errors wouldnt show correct errors
                     (configFileErrors || (configFileErrors = [])).push(createFileNotFoundDiagnostic(rootFilename));
                 }
             }
@@ -1183,12 +1196,11 @@ namespace ts.server {
             const newRootScriptInfos: ScriptInfo[] = [];
             const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
 
-            let projectErrors: Diagnostic[];
             let rootFilesChanged = false;
             for (const f of newUncheckedFiles) {
                 const newRootFile = propertyReader.getFileName(f);
                 if (!this.host.fileExists(newRootFile)) {
-                    (projectErrors || (projectErrors = [])).push(createFileNotFoundDiagnostic(newRootFile));
+                    (configFileErrors || (configFileErrors = [])).push(createFileNotFoundDiagnostic(newRootFile));
                     continue;
                 }
                 const normalizedPath = toNormalizedPath(newRootFile);
@@ -1247,17 +1259,20 @@ namespace ts.server {
             if (compileOnSave !== undefined) {
                 project.compileOnSaveEnabled = compileOnSave;
             }
-            project.setProjectErrors(concatenate(configFileErrors, projectErrors));
+            project.setProjectErrors(configFileErrors);
 
             project.updateGraph();
         }
 
-        private updateConfiguredProject(project: ConfiguredProject) {
-            if (!this.host.fileExists(project.getConfigFilePath())) {
-                this.logger.info("Config file deleted");
-                this.removeProject(project);
-                return;
-            }
+        /**
+         * Read the config file of the project again and update the project
+         * @param project
+         */
+        private reloadConfiguredProject(project: ConfiguredProject) {
+            // At this point, there is no reason to not have configFile in the host
+
+            // TODO: (sheetalkamat) configErrors should always be in project and there shouldnt be
+            // any need to return these errors
 
             // note: the returned "success" is true does not mean the "configFileErrors" is empty.
             // because we might have tolerated the errors and kept going. So always return the configFileErrors
@@ -1266,9 +1281,16 @@ namespace ts.server {
             if (!success) {
                 // reset project settings to default
                 this.updateNonInferredProject(project, [], fileNamePropertyReader, {}, {}, /*compileOnSave*/ false, configFileErrors);
-                return configFileErrors;
             }
 
+            return this.updateConfiguredProject(project, projectOptions, configFileErrors);
+        }
+
+        /**
+         * Updates the configured project with updated config file contents
+         * @param project
+         */
+        private updateConfiguredProject(project: ConfiguredProject, projectOptions: ProjectOptions, configFileErrors: Diagnostic[]) {
             if (this.exceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, projectOptions.compilerOptions, projectOptions.files, fileNamePropertyReader)) {
                 project.setCompilerOptions(projectOptions.compilerOptions);
                 if (!project.languageServiceEnabled) {
@@ -1277,13 +1299,13 @@ namespace ts.server {
                 }
                 project.disableLanguageService();
                 project.stopWatchingDirectory();
+                project.setProjectErrors(configFileErrors);
             }
             else {
                 project.enableLanguageService();
                 this.watchConfigDirectoryForProject(project, projectOptions);
                 this.updateNonInferredProject(project, projectOptions.files, fileNamePropertyReader, projectOptions.compilerOptions, projectOptions.typeAcquisition, projectOptions.compileOnSave, configFileErrors);
             }
-            return configFileErrors;
         }
 
         createInferredProjectWithRootFileIfNecessary(root: ScriptInfo) {
@@ -1324,7 +1346,7 @@ namespace ts.server {
             // do not watch files with mixed content - server doesn't know how to interpret it
             if (!info.hasMixedContent) {
                 const { fileName } = info;
-                info.setWatcher(this.host.watchFile(fileName, _ => this.onSourceFileChanged(fileName)));
+                info.setWatcher(this.host.watchFile(fileName, (_fileName, eventKind) => this.onSourceFileChanged(fileName, eventKind)));
             }
         }
 
@@ -1390,8 +1412,9 @@ namespace ts.server {
                 }
                 if (args.extraFileExtensions) {
                     this.hostConfiguration.extraFileExtensions = args.extraFileExtensions;
-                    // TODO: (sheetalkamat) We need to update the projects because of we might interprete more/less files
+                    // We need to update the projects because of we might interprete more/less files
                     // depending on whether extra files extenstions are either added or removed
+                    this.reloadProjects();
                     this.logger.info("Host file extension mappings updated");
                 }
             }
@@ -1408,6 +1431,8 @@ namespace ts.server {
             this.logger.info("reload projects.");
             // try to reload config file for all open files
             for (const info of this.openFiles) {
+                // TODO: (sheetalkamat) batch these = multiple open files from the same project will
+                // end up updating project that many times
                 this.openOrUpdateConfiguredProjectForFile(info.fileName);
             }
             this.refreshInferredProjects();

@@ -770,7 +770,7 @@ namespace ts.projectSystem {
 
             // remove the tsconfig file
             host.reloadFS(filesWithoutConfig);
-            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Changed);
+            host.triggerFileWatcherCallback(configFile.path, FileWatcherEventKind.Deleted);
 
             checkNumberOfInferredProjects(projectService, 2);
             checkNumberOfConfiguredProjects(projectService, 0);
@@ -1837,16 +1837,18 @@ namespace ts.projectSystem {
 
             // HTML file will not be included in any projects yet
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, config.path]);
+            const configuredProj = projectService.configuredProjects[0];
+            checkProjectActualFiles(configuredProj, [file1.path, config.path]);
 
             // Specify .html extension as mixed content
             const extraFileExtensions = [{ extension: ".html", scriptKind: ScriptKind.JS, isMixedContent: true }];
             const configureHostRequest = makeSessionRequest<protocol.ConfigureRequestArguments>(CommandNames.Configure, { extraFileExtensions });
             session.executeCommand(configureHostRequest).response;
 
-            // HTML file still not included in the project as it is closed
+            // The configured project should now be updated to include html file
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
-            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, config.path]);
+            assert.strictEqual(projectService.configuredProjects[0], configuredProj, "Same configured project should be updated");
+            checkProjectActualFiles(projectService.configuredProjects[0], [file1.path, file2.path, config.path]);
 
             // Open HTML file
             projectService.applyChangesInOpenFiles(
@@ -2859,7 +2861,7 @@ namespace ts.projectSystem {
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1]);
-            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Changed);
+            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Deleted);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
@@ -2911,7 +2913,8 @@ namespace ts.projectSystem {
             const moduleFileNewPath = "/a/b/moduleFile1.ts";
             moduleFile.path = moduleFileNewPath;
             host.reloadFS([moduleFile, file1, configFile]);
-            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Changed);
+            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Deleted);
+            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Created);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
@@ -2919,7 +2922,8 @@ namespace ts.projectSystem {
 
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1, configFile]);
-            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Changed);
+            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Deleted);
+            host.triggerFileWatcherCallback(moduleFileOldPath, FileWatcherEventKind.Created);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
             diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
