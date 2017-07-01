@@ -1650,13 +1650,9 @@ namespace FourSlash {
                     const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
                     if (edits.length) {
                         offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                        // this.checkPostEditInvariants();
                     }
                 }
             }
-
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
             this.checkPostEditInvariants();
@@ -1674,6 +1670,7 @@ namespace FourSlash {
             const checkCadence = (count >> 2) + 1;
 
             for (let i = 0; i < count; i++) {
+                this.currentCaretPosition--;
                 offset--;
                 // Make the edit
                 this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset + 1, ch);
@@ -1683,17 +1680,8 @@ namespace FourSlash {
                     this.checkPostEditInvariants();
                 }
 
-                // Handle post-keystroke formatting
-                if (this.enableFormatting) {
-                    const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, offset, ch, this.formatCodeSettings);
-                    if (edits.length) {
-                        offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-                    }
-                }
+                // Don't need to examine formatting because there are no formatting changes on backspace.
             }
-
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
 
             this.fixCaretPosition();
             this.checkPostEditInvariants();
@@ -1706,7 +1694,6 @@ namespace FourSlash {
             const checkCadence = (text.length >> 2) + 1;
 
             for (let i = 0; i < text.length; i++) {
-                // Make the edit
                 const ch = text.charAt(i);
                 this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset, ch);
                 if (highFidelity) {
@@ -1714,6 +1701,7 @@ namespace FourSlash {
                 }
 
                 this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, ch);
+                this.currentCaretPosition++;
                 offset++;
 
                 if (highFidelity) {
@@ -1740,8 +1728,6 @@ namespace FourSlash {
                 }
             }
 
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
             this.fixCaretPosition();
             this.checkPostEditInvariants();
         }
@@ -1749,22 +1735,19 @@ namespace FourSlash {
         // Enters text as if the user had pasted it
         public paste(text: string) {
             const start = this.currentCaretPosition;
-            let offset = this.currentCaretPosition;
-            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, offset, offset, text);
-            this.updateMarkersForEdit(this.activeFile.fileName, offset, offset, text);
+            this.languageServiceAdapterHost.editScript(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition, text);
+            this.updateMarkersForEdit(this.activeFile.fileName, this.currentCaretPosition, this.currentCaretPosition, text);
             this.checkPostEditInvariants();
-            offset += text.length;
+            const offset = this.currentCaretPosition += text.length;
 
             // Handle formatting
             if (this.enableFormatting) {
                 const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, offset, this.formatCodeSettings);
                 if (edits.length) {
-                    offset += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+                    this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
                 }
             }
 
-            // Move the caret to wherever we ended up
-            this.currentCaretPosition = offset;
             this.fixCaretPosition();
 
             this.checkPostEditInvariants();
@@ -1804,19 +1787,35 @@ namespace FourSlash {
             }
         }
 
+        /**
+         * @returns The number of characters added to the file as a result of the edits.
+         * May be negative.
+         */
         private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
-            // of the incremental offset from each edit to the next. Assumption is that these edit ranges don't overlap
-            let runningOffset = 0;
+            // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
+
             edits = edits.sort((a, b) => a.span.start - b.span.start);
+            for (let i = 0; i < edits.length - 1; ++i) {
+                const firstEditSpan = edits[i].span;
+                const firstEditEnd = firstEditSpan.start + firstEditSpan.length;
+                assert.isTrue(firstEditEnd <= edits[i + 1].span.start);
+            }
+
             // Get a snapshot of the content of the file so we can make sure any formatting edits didn't destroy non-whitespace characters
             const oldContent = this.getFileContent(fileName);
+            let runningOffset = 0;
 
             for (const edit of edits) {
-                this.languageServiceAdapterHost.editScript(fileName, edit.span.start + runningOffset, ts.textSpanEnd(edit.span) + runningOffset, edit.newText);
-                this.updateMarkersForEdit(fileName, edit.span.start + runningOffset, ts.textSpanEnd(edit.span) + runningOffset, edit.newText);
-                const change = (edit.span.start - ts.textSpanEnd(edit.span)) + edit.newText.length;
-                runningOffset += change;
+                const offsetStart = edit.span.start + runningOffset;
+                const offsetEnd = offsetStart + edit.span.length;
+                this.languageServiceAdapterHost.editScript(fileName, offsetStart, offsetEnd, edit.newText);
+                this.updateMarkersForEdit(fileName, offsetStart, offsetEnd, edit.newText);
+                const editDelta = edit.newText.length - edit.span.length;
+                if (offsetStart <= this.currentCaretPosition) {
+                    this.currentCaretPosition += editDelta;
+                }
+                runningOffset += editDelta;
                 // TODO: Consider doing this at least some of the time for higher fidelity. Currently causes a failure (bug 707150)
                 // this.languageService.getScriptLexicalStructure(fileName);
             }
@@ -1828,6 +1827,7 @@ namespace FourSlash {
                     this.raiseError("Formatting operation destroyed non-whitespace content");
                 }
             }
+
             return runningOffset;
         }
 
@@ -1843,23 +1843,23 @@ namespace FourSlash {
 
         public formatDocument() {
             const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
-            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatSelection(start: number, end: number) {
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
-            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
         public formatOnType(pos: number, key: string) {
             const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
-            this.currentCaretPosition += this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
+            this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
             this.fixCaretPosition();
         }
 
-        private updateMarkersForEdit(fileName: string, minChar: number, limChar: number, text: string) {
+        private updateMarkersForEdit(fileName: string, editStart: number, editEnd: number, newText: string) {
             for (const marker of this.testData.markers) {
                 if (marker.fileName === fileName) {
                     marker.position = updatePosition(marker.position);
@@ -1874,14 +1874,14 @@ namespace FourSlash {
             }
 
             function updatePosition(position: number) {
-                if (position > minChar) {
-                    if (position < limChar) {
+                if (position > editStart) {
+                    if (position < editEnd) {
                         // Inside the edit - mark it as invalidated (?)
                         return -1;
                     }
                     else {
                         // Move marker back/forward by the appropriate amount
-                        return position + (minChar - limChar) + text.length;
+                        return position + (editStart - editEnd) + newText.length;
                     }
                 }
                 else {
@@ -2127,8 +2127,8 @@ namespace FourSlash {
             const actual = this.getFileContent(this.activeFile.fileName);
             if (normalizeNewLines(actual) !== normalizeNewLines(text)) {
                 throw new Error("verifyCurrentFileContent\n" +
-                    "\tExpected: \"" + text + "\"\n" +
-                    "\t  Actual: \"" + actual + "\"");
+                    "\tExpected: \"" + TestState.makeWhitespaceVisible(text) + "\"\n" +
+                    "\t  Actual: \"" + TestState.makeWhitespaceVisible(actual) + "\"");
             }
         }
 
@@ -2979,7 +2979,6 @@ ${code}
             f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlash.verifyOperationIsCancelled);
         }
         catch (err) {
-            // Debugging: FourSlash.currentTestState.printCurrentFileState();
             throw err;
         }
     }
@@ -4028,7 +4027,7 @@ namespace FourSlashInterface {
         }
 
         public printCurrentFileState() {
-            this.state.printCurrentFileState();
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ true, /*makeCaretVisible*/ true);
         }
 
         public printCurrentFileStateWithWhitespace() {
