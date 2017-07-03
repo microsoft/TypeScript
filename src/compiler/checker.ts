@@ -7492,12 +7492,12 @@ namespace ts {
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
             const propName = indexType.flags & TypeFlags.StringOrNumberLiteral ?
-                "" + (<LiteralType>indexType).value :
+                escapeIdentifier("" + (<LiteralType>indexType).value) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(unescapeIdentifier((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text)) :
                     undefined;
             if (propName !== undefined) {
-                const prop = getPropertyOfType(objectType, propName as EscapedIdentifier); // Symbols, numbers, and strings are escaped already by this point
+                const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
                     if (accessExpression) {
                         if (isAssignmentTarget(accessExpression) && (isReferenceToReadonlyEntity(accessExpression, prop) || isReferenceThroughNamespaceImport(accessExpression))) {

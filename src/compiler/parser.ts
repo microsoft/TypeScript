@@ -4100,7 +4100,7 @@ namespace ts {
                         indexedAccess.argumentExpression = allowInAnd(parseExpression);
                         if (indexedAccess.argumentExpression.kind === SyntaxKind.StringLiteral || indexedAccess.argumentExpression.kind === SyntaxKind.NumericLiteral) {
                             const literal = <LiteralExpression>indexedAccess.argumentExpression;
-                            literal.text = internIdentifier(literal.text) as string;
+                            internIdentifier(literal.text);
                         }
                     }
 

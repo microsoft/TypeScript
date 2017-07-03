@@ -1666,7 +1666,7 @@ namespace ts {
                         continue;
                     }
 
-                    const identifier = <Identifier>prop.name;
+                    const identifier = prop.name;
 
                     // ECMA-262 11.1.5 Object Initializer
                     // If previous is not undefined then throw a SyntaxError exception if any of the following conditions are true

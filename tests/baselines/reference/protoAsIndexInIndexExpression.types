@@ -17,7 +17,7 @@ WorkspacePrototype['__proto__'] = EntityPrototype;
 >WorkspacePrototype['__proto__'] = EntityPrototype : any
 >WorkspacePrototype['__proto__'] : any
 >WorkspacePrototype : { serialize: () => any; }
->'__proto__' : "___proto__"
+>'__proto__' : "__proto__"
 >EntityPrototype : any
 
 var o = {
