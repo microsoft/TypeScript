@@ -23,7 +23,7 @@ namespace ts {
                 }
                 const xs: number[] = [1,2,3];
                 `
-            }], () => void 0, ScriptTarget.ES3, /*useCaseSensitiveFileNames*/true, "", NewLineKind.CarriageReturnLineFeed);
+            }], () => void 0, ScriptTarget.ES3, /*useCaseSensitiveFileNames*/ true, "", NewLineKind.CarriageReturnLineFeed);
             program = ts.createProgram(["test.ts"], ts.defaultInitCompilerOptions, host);
             const diag = ts.getPreEmitDiagnostics(program);
             if (diag.length) {
@@ -87,42 +87,42 @@ namespace ts {
         });
 
         it("can get string literal types", () => {
-            assert((checker.getStringLiteralType("foobar") as LiteralType).text === "foobar");
+            assert((checker.getLiteralType("foobar") as LiteralType).value === "foobar");
         });
 
         it("can get numeber literal types", () => {
-            assert((checker.getNumberLiteralType("42") as LiteralType).text === "42");
+            assert((checker.getLiteralType(42) as LiteralType).value === "42");
         });
 
         it("doesn't choke on exceptional input to literal type getters", () => {
-            assert.equal((checker.getStringLiteralType("") as LiteralType).text, "");
-            assert.throws(() => checker.getStringLiteralType(undefined), Error, "Debug Failure. False expression:");
+            assert.equal((checker.getLiteralType("") as LiteralType).value, "");
+            assert.throws(() => checker.getLiteralType(/*content*/ undefined), Error, "Debug Failure. False expression:");
             /* tslint:disable:no-null-keyword */
-            assert.throws(() => checker.getStringLiteralType(null), Error, "Debug Failure. False expression:");
+            assert.throws(() => checker.getLiteralType(/*content*/ null), Error, "Debug Failure. False expression:");
             /* tslint:enable:no-null-keyword */
             let hugeStringLiteral = map(new Array(2 ** 16 - 1), () => "a").join();
-            assert.equal((checker.getStringLiteralType(hugeStringLiteral) as LiteralType).text, hugeStringLiteral);
+            assert.equal((checker.getLiteralType(hugeStringLiteral) as LiteralType).value, hugeStringLiteral);
             hugeStringLiteral = undefined;
 
 
-            assert.throws(() => checker.getNumberLiteralType(undefined), Error, "Debug Failure. False expression:");
+            assert.throws(() => checker.getLiteralType(/*content*/ undefined), Error, "Debug Failure. False expression:");
             /* tslint:disable:no-null-keyword */
-            assert.throws(() => checker.getNumberLiteralType(null), Error, "Debug Failure. False expression:");
+            assert.throws(() => checker.getLiteralType(/*content*/ null), Error, "Debug Failure. False expression:");
             /* tslint:enable:no-null-keyword */
 
             const sanityChecks = ["000", "0b0", "0x0", "0.0", "0e-0", "-010", "-0b10", "-0x10", "-0o10", "-10.0", "-1e-1", "NaN", "Infinity", "-Infinity"];
             forEach(sanityChecks, num => {
-                assert.equal((checker.getNumberLiteralType(num) as LiteralType).text, num, `${num} did not match.`);
+                assert.equal((checker.getLiteralType(num) as LiteralType).value, num, `${num} did not match.`);
             });
 
             const insanityChecks = [[0, "0"], [0b0, "0"], [-10, "-10"], [NaN, "NaN"], [Infinity, "Infinity"], [-Infinity, "-Infinity"]];
             forEach(insanityChecks, ([num, expected]) => {
-                assert.equal((checker.getNumberLiteralType(num as any) as LiteralType).text, expected, `${JSON.stringify(num)} should be ${expected}`);
+                assert.equal((checker.getLiteralType(num as any) as LiteralType).value, expected, `${JSON.stringify(num)} should be ${expected}`);
             });
 
             const instabilityChecks = [{ foo: 42 }, new Date(42), [42], new Number(42), new String("42")];
             forEach(instabilityChecks, (bad) => {
-                assert.throws(() => checker.getNumberLiteralType(bad as any));
+                assert.throws(() => checker.getLiteralType(bad as any));
             });
         });
 
@@ -152,7 +152,7 @@ namespace ts {
             assert.notEqual(checker.lookupGlobalType("Function"), innerFunction, "Inner function type should be different than global");
             const brandNameType = checker.getTypeOfSymbol(innerFunction.getProperty("myBrand"));
             assert.notEqual(brandNameType, checker.getUnknownType(), "Brand type on inner function should not be unknown");
-            assert.equal(brandNameType, checker.getNumberLiteralType("42"), "Brand type should be 42");
+            assert.equal(brandNameType, checker.getLiteralType(42), "Brand type should be 42");
 
             let skipped = false;
             const functionBody2 = forEachChild(program.getSourceFile("test.ts"), node => node.kind === SyntaxKind.FunctionDeclaration ? skipped ? (node as FunctionDeclaration) : (skipped = true, undefined) : undefined).body;
