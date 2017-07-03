@@ -6388,7 +6388,7 @@ namespace ts {
                     undefined;
                 // JS functions get a free rest parameter if they reference `arguments`
                 let hasRestLikeParameter = hasRestParameter(declaration);
-                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && !hasJSDocParameterTags(declaration) && containsArgumentsReference(declaration)) {
+                if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
                     hasRestLikeParameter = true;
                     const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as EscapedIdentifier);
                     syntheticArgsSymbol.type = anyArrayType;
@@ -14490,7 +14490,7 @@ namespace ts {
         }
 
         function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): EscapedIdentifier | undefined {
-            const suggestion = getSpellingSuggestionForName(unescapeIdentifier(node.text), getPropertiesOfObjectType(containingType), SymbolFlags.Value);
+            const suggestion = getSpellingSuggestionForName(unescapeIdentifier(node.text), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && suggestion.name;
         }
 
