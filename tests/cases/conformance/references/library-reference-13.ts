@@ -6,7 +6,8 @@
 // @filename: /a/tsconfig.json
 {
     "compilerOptions": {
-        "types": [ "jquery" ]
+        "types": [ "jquery" ],
+        "typeRoots": ["/a/types"]
     }
 }
 

@@ -304,6 +304,11 @@ declare namespace ts.server.protocol {
           * True if reference is a write location, false otherwise.
           */
         isWriteAccess: boolean;
+
+        /**
+         * True if reference is a definition, false otherwise.
+         */
+        isDefinition: boolean;
     }
 
     /**
@@ -429,6 +434,9 @@ declare namespace ts.server.protocol {
         /** Number of spaces to indent during formatting. Default value is 4. */
         indentSize?: number;
 
+        /** Number of additional spaces to indent during formatting to preserve base indentation (ex. script block indentation). Default value is 0. */
+        baseIndentSize?: number;
+
         /** The new line character to be used. Default value is the OS line delimiter. */
         newLineCharacter?: string;
 
@@ -469,7 +477,7 @@ declare namespace ts.server.protocol {
         placeOpenBraceOnNewLineForControlBlocks?: boolean;
 
         /** Index operator */
-        [key: string]: string | number | boolean;
+        [key: string]: string | number | boolean | undefined;
     }
 
     /**
@@ -1242,6 +1250,11 @@ declare namespace ts.server.protocol {
           * Optional children.
           */
         childItems?: NavigationBarItem[];
+
+        /**
+          * Number of levels deep this item should appear.
+          */
+        indent: number;
     }
 
     export interface NavBarResponse extends Response {

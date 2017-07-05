@@ -23,4 +23,4 @@ var A = (function () {
     };
     return A;
 }());
-exports.default = A;
+export default A;

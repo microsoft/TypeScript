@@ -8,7 +8,7 @@ export interface A {
 
     x: typeof $;
 >x : Symbol(A.x, Decl(app.ts, 2, 20))
->$ : Symbol($, Decl(app.ts, 1, 8))
+>$ : Symbol($, Decl(index.d.ts, 0, 11))
 }
 === /ref.d.ts ===
 

@@ -1,0 +1,53 @@
+=== tests/cases/compiler/server.ts ===
+
+var foo = 2;
+>foo : number
+>2 : number
+
+foo = 3;
+>foo = 3 : number
+>foo : number
+>3 : number
+
+var baz = 3;
+>baz : number
+>3 : number
+
+baz = 4;
+>baz = 4 : number
+>baz : number
+>4 : number
+
+var buzz = 10;
+>buzz : number
+>10 : number
+
+buzz += 3;
+>buzz += 3 : number
+>buzz : number
+>3 : number
+
+var bizz = 8;
+>bizz : number
+>8 : number
+
+bizz++; // compiles to exports.bizz = bizz += 1
+>bizz++ : number
+>bizz : number
+
+bizz--; // similarly
+>bizz-- : number
+>bizz : number
+
+++bizz; // compiles to exports.bizz = ++bizz
+>++bizz : number
+>bizz : number
+
+export { foo, baz, baz as quux, buzz, bizz };
+>foo : number
+>baz : number
+>baz : number
+>quux : number
+>buzz : number
+>bizz : number
+

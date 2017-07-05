@@ -81,4 +81,14 @@ tests/cases/conformance/types/typeRelationships/comparable/equalityStrictNulls.t
 !!! error TS2365: Operator '<=' cannot be applied to types 'number' and 'undefined'.
         }
     }
+    function f5(x: string) {
+        switch(x) {
+            case null:
+                break;
+            case undefined:
+                break;
+            default:
+                return;
+        }
+    }
     

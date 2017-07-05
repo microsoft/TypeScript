@@ -1,5 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
+// @currentDirectory: /
 
 // package.json in a secondary reference can refer to another file
 

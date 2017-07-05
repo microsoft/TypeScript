@@ -4,7 +4,7 @@ import appJs = require("file1");
 
 import Services = appJs.App.Services;
 >Services : Symbol(Services, Decl(file2.ts, 0, 32))
->appJs : Symbol(appJs, Decl(file1.ts, 0, 0))
+>appJs : Symbol(appJs, Decl(file2.ts, 0, 0))
 >App : Symbol(appJs.App, Decl(file1.ts, 0, 0))
 >Services : Symbol(Services, Decl(file1.ts, 0, 19))
 

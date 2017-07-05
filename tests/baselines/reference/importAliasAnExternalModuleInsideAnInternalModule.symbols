@@ -8,7 +8,7 @@ module m_private {
     //import r2 = require('m'); // would be error
     export import C = r; // no error
 >C : Symbol(C, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 1, 18))
->r : Symbol(C, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 0))
+>r : Symbol(r, Decl(importAliasAnExternalModuleInsideAnInternalModule_file1.ts, 0, 0))
 
     C.m.foo();
 >C.m.foo : Symbol(C.m.foo, Decl(importAliasAnExternalModuleInsideAnInternalModule_file0.ts, 0, 17))

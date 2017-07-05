@@ -52,13 +52,13 @@ declare module ts {
         None = 0,
         Block = 1,
         Smart = 2,
-    }  
+    }
 
     interface OutputFile {
         name: string;
         writeByteOrderMark: boolean;
         text: string;
-    }  
+    }
 }
 
 declare namespace FourSlashInterface {
@@ -68,6 +68,7 @@ declare namespace FourSlashInterface {
         data?: any;
     }
     interface EditorOptions {
+        BaseIndentSize?: number,
         IndentSize: number;
         TabSize: number;
         NewLineCharacter: string;
@@ -84,7 +85,7 @@ declare namespace FourSlashInterface {
         InsertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: boolean;
         PlaceOpenBraceOnNewLineForFunctions: boolean;
         PlaceOpenBraceOnNewLineForControlBlocks: boolean;
-        [s: string]: boolean | number | string;
+        [s: string]: boolean | number | string | undefined;
     }
     interface Range {
         fileName: string;
@@ -124,8 +125,6 @@ declare namespace FourSlashInterface {
         completionListIsEmpty(): void;
         completionListAllowsNewIdentifier(): void;
         memberListIsEmpty(): void;
-        referencesCountIs(count: number): void;
-        referencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
         signatureHelpPresent(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
@@ -139,10 +138,10 @@ declare namespace FourSlashInterface {
         isValidBraceCompletionAtPostion(openingBrace?: string): void;
     }
     class verify extends verifyNegatable {
-        assertHasRanges(ranges: FourSlash.Range[]): void;
+        assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
         indentationIs(numberOfSpaces: number): void;
-        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle): void;
+        indentationAtPositionIs(fileName: string, position: number, numberOfSpaces: number, indentStyle?: ts.IndentStyle, baseIndentSize?: number): void;
         textAtCaretIs(text: string): void;
         /**
          * Compiles the current file and evaluates 'expr' in a context containing
@@ -154,6 +153,24 @@ declare namespace FourSlashInterface {
         currentFileContentIs(text: string): void;
         verifyGetEmitOutputForCurrentFile(expected: string): void;
         verifyGetEmitOutputContentsForCurrentFile(expected: ts.OutputFile[]): void;
+        referencesCountIs(count: number): void;
+        /**
+         * Asserts that the given ranges are the references from the current position.
+         * If ranges have markers, those markers may have "isDefinition" and "isWriteAccess" data
+         * (otherwise these properties pf the reference are not tested).
+         * Order of ranges does not matter.
+         */
+        referencesAre(ranges: Range[]): void;
+        /**
+         * Like `referencesAre`, but goes to `start` first.
+         * `start` should be included in `references`.
+         */
+        referencesOf(start: Range, references: Range[]): void;
+        /**
+         * Performs `referencesOf` for every range on the whole set.
+         * If `ranges` is omitted, this is `test.ranges()`.
+         */
+        rangesReferenceEachOther(ranges?: Range[]): void;
         currentParameterHelpArgumentNameIs(name: string): void;
         currentParameterSpanIs(parameter: string): void;
         currentParameterHelpArgumentDocCommentIs(docComment: string): void;
@@ -175,9 +192,7 @@ declare namespace FourSlashInterface {
         DocCommentTemplate(expectedText: string, expectedOffset: number, empty?: boolean): void;
         noDocCommentTemplate(): void;
 
-        navigationBarCount(count: number): void;
-        navigationBarContains(name: string, kind: string, fileName?: string, parentName?: string, isAdditionalSpan?: boolean, markerPosition?: number): void;
-        navigationBarChildItem(parent: string, text: string, kind: string): void;
+        navigationBar(json: any): void;
         navigationItemsListCount(count: number, searchValue: string, matchKind?: string): void;
         navigationItemsListContains(name: string, kind: string, searchValue: string, matchKind: string, fileName?: string, parentName?: string): void;
         occurrencesAtPositionContains(range: Range, isWriteAccess?: boolean): void;
@@ -248,6 +263,7 @@ declare namespace FourSlashInterface {
         copyFormatOptions(): FormatCodeOptions;
         setFormatOptions(options: FormatCodeOptions): any;
         selection(startMarker: string, endMarker: string): void;
+        onType(posMarker: string, key: string): void;
         setOption(name: string, value: number): any;
         setOption(name: string, value: string): any;
         setOption(name: string, value: boolean): any;

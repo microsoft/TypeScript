@@ -172,7 +172,7 @@ namespace Harness.LanguageService {
           */
         public positionToLineAndCharacter(fileName: string, position: number): ts.LineAndCharacter {
             const script: ScriptInfo = this.fileNameToScript[fileName];
-            assert.isNotNull(script);
+            assert.isOk(script);
 
             return ts.computeLineAndCharacterOfPosition(script.getLineMap(), position);
         }
@@ -182,6 +182,7 @@ namespace Harness.LanguageService {
     class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceHost {
         getCompilationSettings() { return this.settings; }
         getCancellationToken() { return this.cancellationToken; }
+        getDirectories(path: string): string[] { return []; }
         getCurrentDirectory(): string { return ""; }
         getDefaultLibFileName(): string { return Harness.Compiler.defaultLibFileName; }
         getScriptFileNames(): string[] { return this.getFilenames(); }
@@ -245,16 +246,21 @@ namespace Harness.LanguageService {
                 };
                 this.getTypeReferenceDirectiveResolutionsForFile = (fileName) => {
                     const scriptInfo = this.getScriptInfo(fileName);
-                    const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
-                    const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
-                    const settings = this.nativeHost.getCompilationSettings();
-                    for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
-                        const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
-                        if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
-                            resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                    if (scriptInfo) {
+                        const preprocessInfo = ts.preProcessFile(scriptInfo.content, /*readImportFiles*/ false);
+                        const resolutions: ts.Map<ts.ResolvedTypeReferenceDirective> = {};
+                        const settings = this.nativeHost.getCompilationSettings();
+                        for (const typeReferenceDirective of preprocessInfo.typeReferenceDirectives) {
+                            const resolutionInfo = ts.resolveTypeReferenceDirective(typeReferenceDirective.fileName, fileName, settings, moduleResolutionHost);
+                            if (resolutionInfo.resolvedTypeReferenceDirective.resolvedFileName) {
+                                resolutions[typeReferenceDirective.fileName] = resolutionInfo.resolvedTypeReferenceDirective;
+                            }
                         }
+                        return JSON.stringify(resolutions);
                     }
-                    return JSON.stringify(resolutions);
+                    else {
+                        return "[]";
+                    }
                 };
             }
         }
@@ -268,6 +274,7 @@ namespace Harness.LanguageService {
         getCompilationSettings(): string { return JSON.stringify(this.nativeHost.getCompilationSettings()); }
         getCancellationToken(): ts.HostCancellationToken { return this.nativeHost.getCancellationToken(); }
         getCurrentDirectory(): string { return this.nativeHost.getCurrentDirectory(); }
+        getDirectories(path: string) { return this.nativeHost.getDirectories(path); }
         getDefaultLibFileName(): string { return this.nativeHost.getDefaultLibFileName(); }
         getScriptFileNames(): string { return JSON.stringify(this.nativeHost.getScriptFileNames()); }
         getScriptSnapshot(fileName: string): ts.ScriptSnapshotShim {
@@ -598,6 +605,10 @@ namespace Harness.LanguageService {
 
         getCurrentDirectory(): string {
             return this.host.getCurrentDirectory();
+        }
+
+        getDirectories(path: string): string[] {
+            return [];
         }
 
         readDirectory(path: string, extension?: string): string[] {

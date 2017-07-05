@@ -1,7 +1,0 @@
-[
-    "======== Resolving type reference directive 'alpha', containing file '/base/src/foo.ts', root directory '/'. ========",
-    "Resolving with primary search path '/share/typelib'",
-    "File '/share/typelib/alpha/package.json' does not exist.",
-    "File '/share/typelib/alpha/index.d.ts' exist - use it as a name resolution result.",
-    "======== Type reference directive 'alpha' was successfully resolved to '/share/typelib/alpha/index.d.ts', primary: true. ========"
-]

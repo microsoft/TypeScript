@@ -5,11 +5,13 @@
     "Resolving module name 'folder2/file2' relative to base url 'c:/root' - 'c:/root/folder2/file2'.",
     "Loading module as file / folder, candidate module location 'c:/root/folder2/file2'.",
     "File 'c:/root/folder2/file2.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/root/folder2/file2.ts', result 'c:/root/folder2/file2.ts'",
     "======== Module name 'folder2/file2' was successfully resolved to 'c:/root/folder2/file2.ts'. ========",
     "======== Resolving module './file3' from 'c:/root/folder2/file2.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
     "Loading module as file / folder, candidate module location 'c:/root/folder2/file3'.",
     "File 'c:/root/folder2/file3.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/root/folder2/file3.ts', result 'c:/root/folder2/file3.ts'",
     "======== Module name './file3' was successfully resolved to 'c:/root/folder2/file3.ts'. ========",
     "======== Resolving module 'file4' from 'c:/root/folder2/file2.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
@@ -59,5 +61,6 @@
     "File 'c:/node_modules/file4/index.ts' does not exist.",
     "File 'c:/node_modules/file4/index.tsx' does not exist.",
     "File 'c:/node_modules/file4/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/node_modules/file4/index.d.ts', result 'c:/node_modules/file4/index.d.ts'",
     "======== Module name 'file4' was successfully resolved to 'c:/node_modules/file4/index.d.ts'. ========"
 ]

@@ -443,7 +443,7 @@
         "category": "Error",
         "code": 1147
     },
-    "Cannot compile modules unless the '--module' flag is provided with a valid module type. Consider setting the 'module' compiler option in a 'tsconfig.json' file.": {
+    "Cannot use imports, exports, or module augmentations when '--module' is 'none'.": {
         "category": "Error",
         "code": 1148
     },
@@ -627,17 +627,13 @@
         "category": "Error",
         "code": 1200
     },
-    "Import assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
+    "Import assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'import * as ns from \"mod\"', 'import {a} from \"mod\"', 'import d from \"mod\"', or another module format instead.": {
         "category": "Error",
         "code": 1202
     },
-    "Export assignment cannot be used when targeting ECMAScript 6 modules. Consider using 'export default' or another module format instead.": {
+    "Export assignment cannot be used when targeting ECMAScript 2015 modules. Consider using 'export default' or another module format instead.": {
         "category": "Error",
         "code": 1203
-    },
-    "Cannot compile modules into 'es2015' when targeting 'ES5' or lower.": {
-        "category": "Error",
-        "code": 1204
     },
     "Decorators are not valid here.": {
         "category": "Error",
@@ -687,7 +683,7 @@
         "category": "Error",
         "code": 1219
     },
-    "Generators are only available when targeting ECMAScript 6 or higher.": {
+    "Generators are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1220
     },
@@ -819,6 +815,10 @@
         "category": "Error",
         "code": 1252
     },
+    "'{0}' tag cannot be used independently as a top level JSDoc tag.": {
+        "category": "Error",
+        "code": 1253
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -827,7 +827,7 @@
         "category": "Error",
         "code": 1308
     },
-    "Async functions are only available when targeting ECMAScript 6 and higher.": {
+    "Async functions are only available when targeting ECMAScript 2015 or higher.": {
         "category": "Error",
         "code": 1311
     },
@@ -1923,6 +1923,18 @@
         "category": "Error",
         "code": 2685
     },
+    "Identifier '{0}' must be imported from a module": {
+        "category": "Error",
+        "code": 2686
+    },
+    "All declarations of '{0}' must have identical modifiers.": {
+        "category": "Error",
+        "code": 2687
+    },
+    "Cannot find type definition file for '{0}'.": {
+        "category": "Error",
+        "code": 2688
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2248,7 +2260,7 @@
         "category": "Error",
         "code": 5047
     },
-    "Option 'inlineSources' can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
+    "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
     },
@@ -2296,7 +2308,7 @@
         "category": "Error",
         "code": 5062
     },
-    "Substututions for pattern '{0}' should be an array.": {
+    "Substitutions for pattern '{0}' should be an array.": {
         "category": "Error",
         "code": 5063
     },
@@ -2347,6 +2359,10 @@
     "Allow default imports from modules with no default export. This does not affect code emit, just typechecking.": {
         "category": "Message",
         "code": 6011
+    },
+    "Skip type checking of declaration files.": {
+        "category": "Message",
+        "code": 6012
     },
     "Specify ECMAScript target version: 'ES3' (default), 'ES5', or 'ES2015'": {
         "category": "Message",
@@ -2751,7 +2767,16 @@
     "Resolving real path for '{0}', result '{1}'": {
         "category": "Message",
         "code": 6130
-    },    
+    },
+    "Cannot compile modules using option '{0}' unless the '--module' flag is 'amd' or 'system'.": {
+        "category": "Error",
+        "code": 6131
+    },
+    "File name '{0}' has a '{1}' extension - stripping it": {
+        "category": "Message",
+        "code": 6132
+    },
+
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -2895,10 +2920,6 @@
     "'parameter modifiers' can only be used in a .ts file.": {
         "category": "Error",
         "code": 8012
-    },
-    "'property declarations' can only be used in a .ts file.": {
-        "category": "Error",
-        "code": 8014
     },
     "'enum declarations' can only be used in a .ts file.": {
         "category": "Error",

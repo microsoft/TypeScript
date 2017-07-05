@@ -18,6 +18,7 @@
     "Loading 'project/file3' from the root dir 'c:/root/generated/src', candidate location 'c:/root/generated/src/project/file3'",
     "Loading module as file / folder, candidate module location 'c:/root/generated/src/project/file3'.",
     "File 'c:/root/generated/src/project/file3.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/root/generated/src/project/file3.ts', result 'c:/root/generated/src/project/file3.ts'",
     "======== Module name './project/file3' was successfully resolved to 'c:/root/generated/src/project/file3.ts'. ========",
     "======== Resolving module '../file2' from 'c:/root/generated/src/project/file3.ts'. ========",
     "Module resolution kind is not specified, using 'NodeJs'.",
@@ -44,5 +45,6 @@
     "File 'c:/root/src/file2/index.ts' does not exist.",
     "File 'c:/root/src/file2/index.tsx' does not exist.",
     "File 'c:/root/src/file2/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for 'c:/root/src/file2/index.d.ts', result 'c:/root/src/file2/index.d.ts'",
     "======== Module name '../file2' was successfully resolved to 'c:/root/src/file2/index.d.ts'. ========"
 ]

@@ -23,4 +23,4 @@ Bar.fn();
 var x;
 var y = x.n;
 // should error
-var z = Foo;
+var z = exports.Foo;

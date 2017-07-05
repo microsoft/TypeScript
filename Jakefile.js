@@ -5,6 +5,7 @@ var os = require("os");
 var path = require("path");
 var child_process = require("child_process");
 var Linter = require("tslint");
+var runTestsInParallel = require("./scripts/mocha-parallel").runTestsInParallel;
 
 // Variables
 var compilerDirectory = "src/compiler/";
@@ -153,7 +154,8 @@ var harnessSources = harnessCoreSources.concat([
     "tsconfigParsing.ts",
     "commandLineParsing.ts",
     "convertCompilerOptionsFromJson.ts",
-    "convertTypingOptionsFromJson.ts"
+    "convertTypingOptionsFromJson.ts",
+    "tsserverProjectSystem.ts"
 ].map(function (f) {
     return path.join(unittestsDirectory, f);
 })).concat([
@@ -187,7 +189,10 @@ var es2016LibrarySourceMap = es2016LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
 });
 
-var es2017LibrarySource = ["es2017.object.d.ts"];
+var es2017LibrarySource = [
+    "es2017.object.d.ts",
+    "es2017.sharedmemory.d.ts"
+];
 
 var es2017LibrarySourceMap = es2017LibrarySource.map(function (source) {
     return { target: "lib." + source, sources: ["header.d.ts", source] };
@@ -207,7 +212,7 @@ var librarySourceMap = [
         { target: "lib.es2015.d.ts", sources: ["header.d.ts", "es2015.d.ts"] },
         { target: "lib.es2016.d.ts", sources: ["header.d.ts", "es2016.d.ts"] },
         { target: "lib.es2017.d.ts", sources: ["header.d.ts", "es2017.d.ts"] },
-        
+
         // JavaScript + all host library
         { target: "lib.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(hostsLibrarySources) },
         { target: "lib.es6.d.ts", sources: ["header.d.ts", "es5.d.ts"].concat(es2015LibrarySources, hostsLibrarySources, "dom.iterable.d.ts") }
@@ -271,6 +276,7 @@ var builtLocalCompiler = path.join(builtLocalDirectory, compilerFilename);
     * @param {boolean} opts.noResolve: true if compiler should not include non-rooted files in compilation
     * @param {boolean} opts.stripInternal: true if compiler should remove declarations marked as @internal
     * @param {boolean} opts.noMapRoot: true if compiler omit mapRoot option
+    * @param {boolean} opts.inlineSourceMap: true if compiler should inline sourceMap
     * @param callback: a function to execute after the compilation process ends
     */
 function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts, callback) {
@@ -308,10 +314,16 @@ function compileFile(outFile, sources, prereqs, prefixes, useBuiltCompiler, opts
         }
 
         if (useDebugMode) {
-            options += " -sourcemap";
-            if (!opts.noMapRoot) {
-                options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+            if (opts.inlineSourceMap) {
+                options += " --inlineSourceMap --inlineSources";
+            } else {
+                options += " -sourcemap";
+                if (!opts.noMapRoot) {
+                    options += " -mapRoot file:///" + path.resolve(path.dirname(outFile));
+                }
             }
+        } else {
+            options += " --newLine LF";
         }
 
         if (opts.stripInternal) {
@@ -488,7 +500,13 @@ var nodeStandaloneDefinitionsFile = path.join(builtLocalDirectory, "typescript_s
 compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
             /*prefixes*/ [copyright],
             /*useBuiltCompiler*/ true,
-            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true },
+            /*opts*/ { noOutFile: false,
+                generateDeclarations: true,
+                preserveConstEnums: true,
+                keepComments: true,
+                noResolve: false,
+                stripInternal: true
+            },
             /*callback*/ function () {
                 jake.cpR(servicesFile, nodePackageFile, {silent: true});
 
@@ -511,16 +529,21 @@ compileFile(servicesFile, servicesSources,[builtLocalDirectory, copyright].conca
                 fs.writeFileSync(nodeStandaloneDefinitionsFile, nodeStandaloneDefinitionsFileContents);
             });
 
-compileFile(servicesFileInBrowserTest, servicesSources,[builtLocalDirectory, copyright].concat(servicesSources),
-            /*prefixes*/ [copyright],
-            /*useBuiltCompiler*/ true,
-            { noOutFile: false, generateDeclarations: true, preserveConstEnums: true, keepComments: true, noResolve: false, stripInternal: true, noMapRoot: true },
-            /*callback*/ function () {
-                var content = fs.readFileSync(servicesFileInBrowserTest).toString();
-                var i = content.lastIndexOf("\n");
-                fs.writeFileSync(servicesFileInBrowserTest, content.substring(0, i) + "\r\n//# sourceURL=../built/local/typeScriptServices.js" + content.substring(i));
-            });
-    
+compileFile(
+    servicesFileInBrowserTest,
+    servicesSources,
+    [builtLocalDirectory, copyright].concat(servicesSources),
+    /*prefixes*/ [copyright],
+    /*useBuiltCompiler*/ true,
+    { noOutFile: false,
+      generateDeclarations: true,
+      preserveConstEnums: true,
+      keepComments: true,
+      noResolve: false,
+      stripInternal: true,
+      noMapRoot: true,
+      inlineSourceMap: true
+     });
 
 var serverFile = path.join(builtLocalDirectory, "tsserver.js");
 compileFile(serverFile, serverSources,[builtLocalDirectory, copyright].concat(serverSources), /*prefixes*/ [copyright], /*useBuiltCompiler*/ true);
@@ -621,7 +644,13 @@ directory(builtLocalDirectory);
 
 // Task to build the tests infrastructure using the built compiler
 var run = path.join(builtLocalDirectory, "run.js");
-compileFile(run, harnessSources, [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources), [], /*useBuiltCompiler:*/ true);
+compileFile(
+    /*outFile*/ run,
+    /*source*/ harnessSources,
+    /*prereqs*/ [builtLocalDirectory, tscFile].concat(libraryTargets).concat(harnessSources),
+    /*prefixes*/ [],
+    /*useBuiltCompiler:*/ true,
+    /*opts*/ { inlineSourceMap: true });
 
 var internalTests = "internal/";
 
@@ -680,9 +709,8 @@ function cleanTestDirs() {
 }
 
 // used to pass data from jake command line directly to run.js
-function writeTestConfigFile(tests, light, testConfigFile) {
-    console.log('Running test(s): ' + tests);
-    var testConfigContents = JSON.stringify({ test: [tests], light: light });
+function writeTestConfigFile(tests, light, taskConfigsFolder, workerCount) {
+    var testConfigContents = JSON.stringify({ test: tests ? [tests] : undefined, light: light, workerCount: workerCount, taskConfigsFolder: taskConfigsFolder });
     fs.writeFileSync('test.config', testConfigContents);
 }
 
@@ -692,7 +720,7 @@ function deleteTemporaryProjectOutput() {
     }
 }
 
-function runConsoleTests(defaultReporter, defaultSubsets) {
+function runConsoleTests(defaultReporter, runInParallel) {
     cleanTestDirs();
     var debug = process.env.debug || process.env.d;
     tests = process.env.test || process.env.tests || process.env.t;
@@ -701,9 +729,22 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     if(fs.existsSync(testConfigFile)) {
         fs.unlinkSync(testConfigFile);
     }
+    var workerCount, taskConfigsFolder;
+    if (runInParallel) {
+        // generate name to store task configuration files
+        var prefix = os.tmpdir() + "/ts-tests";
+        var i = 1;
+        do {
+            taskConfigsFolder = prefix + i;
+            i++;
+        } while (fs.existsSync(taskConfigsFolder));
+        fs.mkdirSync(taskConfigsFolder);
 
-    if (tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        workerCount = process.env.workerCount || os.cpus().length;
+    }
+
+    if (tests || light || taskConfigsFolder) {
+        writeTestConfigFile(tests, light, taskConfigsFolder, workerCount);
     }
 
     if (tests && tests.toLocaleLowerCase() === "rwc") {
@@ -713,49 +754,81 @@ function runConsoleTests(defaultReporter, defaultSubsets) {
     colors = process.env.colors || process.env.color;
     colors = colors ? ' --no-colors ' : ' --colors ';
     reporter = process.env.reporter || process.env.r || defaultReporter;
+    var bail = (process.env.bail || process.env.b) ? "--bail" : "";
     var lintFlag = process.env.lint !== 'false';
 
     // timeout normally isn't necessary but Travis-CI has been timing out on compiler baselines occasionally
     // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-    var subsetRegexes;
-    if(defaultSubsets.length === 0) {
-        subsetRegexes = [tests];
+    if(!runInParallel) {
+        tests = tests ? ' -g "' + tests + '"' : '';
+        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + bail + ' -t ' + testTimeout + ' ' + run;
+        console.log(cmd);
+
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
+        exec(cmd, function () {
+            process.env.NODE_ENV = savedNodeEnv;
+            runLinter();
+            finish();
+        }, function(e, status) {
+            process.env.NODE_ENV = savedNodeEnv;
+            finish(status);
+        });
+
     }
     else {
-        var subsets = tests ? tests.split("|") : defaultSubsets;
-        subsetRegexes = subsets.map(function (sub) { return "^" + sub + ".*$"; });
-        subsetRegexes.push("^(?!" + subsets.join("|") + ").*$");
-    }
-    subsetRegexes.forEach(function (subsetRegex, i) {
-        tests = subsetRegex ? ' -g "' + subsetRegex + '"' : '';
-        var cmd = "mocha" + (debug ? " --debug-brk" : "") + " -R " + reporter + tests + colors + ' -t ' + testTimeout + ' ' + run;
-        console.log(cmd);
-        function finish() {
+        var savedNodeEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = "development";
+        runTestsInParallel(taskConfigsFolder, run, { testTimeout: testTimeout, noColors: colors === " --no-colors " }, function (err) {
+            process.env.NODE_ENV = savedNodeEnv;
+
+            // last worker clean everything and runs linter in case if there were no errors
             deleteTemporaryProjectOutput();
+            jake.rmRf(taskConfigsFolder);
+            if (err) {
+                fail(err);
+            }
+            else {
+                runLinter();
+                complete();
+            }
+        });
+    }
+
+    function failWithStatus(status) {
+        fail("Process exited with code " + status);
+    }
+
+    function finish(errorStatus) {
+        deleteTemporaryProjectOutput();
+        if (errorStatus !== undefined) {
+            failWithStatus(errorStatus);
+        }
+        else {
             complete();
         }
-        exec(cmd, function () {
-            if (lintFlag && i === 0) {
-                var lint = jake.Task['lint'];
-                lint.addListener('complete', function () {
-                    complete();
-                });
-                lint.invoke();
-            }
-            finish();
-        }, finish);
-    });
+    }
+    function runLinter() {
+        if (!lintFlag) {
+            return;
+        }
+        var lint = jake.Task['lint'];
+        lint.addListener('complete', function () {
+            complete();
+        });
+        lint.invoke();
+    }
 }
 
 var testTimeout = 20000;
 desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
 task("runtests-parallel", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('min', ['compiler', 'conformance', 'Projects', 'fourslash']);
+    runConsoleTests('min', /*runInParallel*/ true);
 }, {async: true});
 
-desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true.");
+desc("Runs the tests using the built run.js file. Optional arguments are: t[ests]=regex r[eporter]=[list|spec|json|<more>] d[ebug]=true color[s]=false lint=true bail=false.");
 task("runtests", ["build-rules", "tests", builtLocalDirectory], function() {
-    runConsoleTests('mocha-fivemat-progress-reporter', []);
+    runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
 }, {async: true});
 
 desc("Generates code coverage data via instanbul");
@@ -772,7 +845,7 @@ compileFile(nodeServerOutFile, [nodeServerInFile], [builtLocalDirectory, tscFile
 
 desc("Runs browserify on run.js to produce a file suitable for running tests in the browser");
 task("browserify", ["tests", builtLocalDirectory, nodeServerOutFile], function() {
-    var cmd = 'browserify built/local/run.js -o built/local/bundle.js';
+    var cmd = 'browserify built/local/run.js -d -o built/local/bundle.js';
     exec(cmd);
 }, {async: true});
 
@@ -789,11 +862,11 @@ task("runtests-browser", ["tests", "browserify", builtLocalDirectory, servicesFi
         fs.unlinkSync(testConfigFile);
     }
     if(tests || light) {
-        writeTestConfigFile(tests, light, testConfigFile);
+        writeTestConfigFile(tests, light);
     }
 
     tests = tests ? tests : '';
-    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + tests;
+    var cmd = host + " tests/webTestServer.js " + port + " " + browser + " " + JSON.stringify(tests);
     console.log(cmd);
     exec(cmd);
 }, {async: true});
@@ -962,36 +1035,30 @@ function lintFileAsync(options, path, cb) {
     });
 }
 
-var servicesLintTargets = [
-    "navigateTo.ts",
-    "navigationBar.ts",
-    "outliningElementsCollector.ts",
-    "patternMatcher.ts",
-    "services.ts",
-    "shims.ts",
-    "jsTyping.ts"
-].map(function (s) {
-    return path.join(servicesDirectory, s);
-});
 var lintTargets = compilerSources
-    .concat(harnessCoreSources)
+    .concat(harnessSources)
+    // Other harness sources
+    .concat(["instrumenter.ts"].map(function(f) { return path.join(harnessDirectory, f) }))
     .concat(serverCoreSources)
     .concat(tslintRulesFiles)
-    .concat(servicesLintTargets);
+    .concat(servicesSources);
+
 
 desc("Runs tslint on the compiler sources. Optional arguments are: f[iles]=regex");
 task("lint", ["build-rules"], function() {
     var lintOptions = getLinterOptions();
     var failed = 0;
     var fileMatcher = RegExp(process.env.f || process.env.file || process.env.files || "");
+    var done = {};
     for (var i in lintTargets) {
         var target = lintTargets[i];
-        if (fileMatcher.test(target)) {
+        if (!done[target] && fileMatcher.test(target)) {
             var result = lintFile(lintOptions, target);
             if (result.failureCount > 0) {
                 console.log(result.output);
                 failed += result.failureCount;
             }
+            done[target] = true;
         }
     }
     if (failed > 0) {

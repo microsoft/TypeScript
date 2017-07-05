@@ -3,12 +3,20 @@ interface I<T> {
 >I : I<T>
 >T : T
 
-    [s: number]: T;
->s : number
+    [n: number]: T;
+>n : number
+>T : T
+}
+interface J<T> {
+>J : J<T>
+>T : T
+
+    [s: string]: T;
+>s : string
 >T : T
 }
 
-declare function foo<T>(obj: I<T>): T
+declare function foo<T>(obj: I<T>): T;
 >foo : <T>(obj: I<T>) => T
 >T : T
 >obj : I<T>
@@ -16,14 +24,18 @@ declare function foo<T>(obj: I<T>): T
 >T : T
 >T : T
 
-foo({
->foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : (() => void) | number | number[]
->foo : <T>(obj: I<T>) => T
->{    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: string | (() => void) | boolean | number | number[]; [x: number]: (() => void) | number | number[]; 0: () => void; p: string; }
+declare function g<T>(obj: J<T>): T;
+>g : <T>(obj: J<T>) => T
+>T : T
+>obj : J<T>
+>J : J<T>
+>T : T
+>T : T
 
-    p: "",
->p : string
->"" : string
+foo({
+>foo({    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : (() => void) | number | number[]
+>foo : <T>(obj: I<T>) => T
+>{    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]} : { [x: string]: (() => void) | boolean | number | number[]; [x: number]: (() => void) | number | number[]; 0: () => void; }
 
     0: () => { },
 >() => { } : () => void
@@ -47,3 +59,11 @@ foo({
 >0 : number
 
 });
+
+g({ p: "" });
+>g({ p: "" }) : string
+>g : <T>(obj: J<T>) => T
+>{ p: "" } : { p: string; }
+>p : string
+>"" : string
+

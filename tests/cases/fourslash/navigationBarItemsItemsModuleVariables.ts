@@ -19,12 +19,54 @@
 ////    export var z = 0;
 ////}
 goTo.marker("file1");
-verify.navigationBarContains("Module1", "module");
-verify.navigationBarContains("x", "var");
 // nothing else should show up
-verify.navigationBarCount(2);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Module1",
+                "kind": "module"
+            }
+        ]
+    },
+    {
+        "text": "Module1",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "x",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ],
+        "indent": 1
+    }
+]);
 
 goTo.marker("file2");
-verify.navigationBarContains("Module1.SubModule", "module");
-verify.navigationBarContains("y", "var");
-verify.navigationBarCount(2);
+verify.navigationBar([
+    {
+        "text": "<global>",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "Module1.SubModule",
+                "kind": "module"
+            }
+        ]
+    },
+    {
+        "text": "Module1.SubModule",
+        "kind": "module",
+        "childItems": [
+            {
+                "text": "y",
+                "kind": "var",
+                "kindModifiers": "export"
+            }
+        ],
+        "indent": 1
+    }
+]);

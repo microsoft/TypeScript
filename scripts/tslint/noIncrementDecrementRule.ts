@@ -28,8 +28,15 @@ class IncrementDecrementWalker extends Lint.RuleWalker {
     }
 
     visitIncrementDecrement(node: ts.UnaryExpression) {
-        if (node.parent && (node.parent.kind === ts.SyntaxKind.ExpressionStatement ||
-                            node.parent.kind === ts.SyntaxKind.ForStatement)) {
+        if (node.parent && (
+            // Can be a statement
+            node.parent.kind === ts.SyntaxKind.ExpressionStatement ||
+            // Can be directly in a for-statement
+            node.parent.kind === ts.SyntaxKind.ForStatement ||
+            // Can be in a comma operator in a for statement (`for (let a = 0, b = 10; a < b; a++, b--)`)
+            node.parent.kind === ts.SyntaxKind.BinaryExpression &&
+            (<ts.BinaryExpression>node.parent).operatorToken.kind === ts.SyntaxKind.CommaToken &&
+            node.parent.parent.kind === ts.SyntaxKind.ForStatement)) {
             return;
         }
         this.addFailure(this.createFailure(node.getStart(), node.getWidth(), Rule.POSTFIX_FAILURE_STRING));

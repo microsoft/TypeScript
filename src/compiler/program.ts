@@ -9,16 +9,11 @@ namespace ts {
     /* @internal */ export let ioWriteTime = 0;
 
     /** The version of the TypeScript compiler release */
+    export const version = "1.9.0";
 
     const emptyArray: any[] = [];
 
-    const defaultLibrarySearchPaths = [
-        "types/",
-        "node_modules/",
-        "node_modules/@types/",
-    ];
-
-    export const version = "1.9.0";
+    const defaultTypeRoots = ["node_modules/@types"];
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean): string {
         while (true) {
@@ -95,7 +90,8 @@ namespace ts {
         return compilerOptions.traceResolution && host.trace !== undefined;
     }
 
-    function hasZeroOrOneAsteriskCharacter(str: string): boolean {
+    /* @internal */
+    export function hasZeroOrOneAsteriskCharacter(str: string): boolean {
         let seenAsterisk = false;
         for (let i = 0; i < str.length; i++) {
             if (str.charCodeAt(i) === CharacterCodes.asterisk) {
@@ -182,6 +178,11 @@ namespace ts {
 
     const typeReferenceExtensions = [".d.ts"];
 
+    function getEffectiveTypeRoots(options: CompilerOptions, host: ModuleResolutionHost) {
+        return options.typeRoots ||
+            defaultTypeRoots.map(d => combinePaths(options.configFilePath ? getDirectoryPath(options.configFilePath) : host.getCurrentDirectory(), d));
+    }
+
     /**
      * @param {string | undefined} containingFile - file that contains type reference directive, can be undefined if containing file is unknown.
      * This is possible in case if resolution is performed for directives specified via 'types' parameter. In this case initial path for secondary lookups
@@ -196,24 +197,22 @@ namespace ts {
             traceEnabled
         };
 
-        // use typesRoot and fallback to directory that contains tsconfig if typesRoot is not set
-        const rootDir = options.typesRoot || (options.configFilePath ? getDirectoryPath(options.configFilePath) : undefined);
-
+        const typeRoots = getEffectiveTypeRoots(options, host);
         if (traceEnabled) {
             if (containingFile === undefined) {
-                if (rootDir === undefined) {
+                if (typeRoots === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, typeRoots);
                 }
             }
             else {
-                if (rootDir === undefined) {
+                if (typeRoots === undefined) {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, rootDir);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typeRoots);
                 }
             }
         }
@@ -221,14 +220,13 @@ namespace ts {
         const failedLookupLocations: string[] = [];
 
         // Check primary library paths
-        if (rootDir !== undefined) {
-            const effectivePrimarySearchPaths = options.typesSearchPaths || defaultLibrarySearchPaths;
-            for (const searchPath of effectivePrimarySearchPaths) {
-                const primaryPath = combinePaths(rootDir, searchPath);
-                if (traceEnabled) {
-                    trace(host, Diagnostics.Resolving_with_primary_search_path_0, primaryPath);
-                }
-                const candidate = combinePaths(primaryPath, typeReferenceDirectiveName);
+        if (typeRoots.length) {
+            if (traceEnabled) {
+                trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
+            }
+            const primarySearchPaths = typeRoots;
+            for (const typeRoot of primarySearchPaths) {
+                const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                 const candidateDirectory = getDirectoryPath(candidate);
                 const resolvedFile = loadNodeModuleFromDirectory(typeReferenceExtensions, candidate, failedLookupLocations,
                     !directoryProbablyExists(candidateDirectory, host), moduleResolutionState);
@@ -254,9 +252,6 @@ namespace ts {
         let initialLocationForSecondaryLookup: string;
         if (containingFile) {
             initialLocationForSecondaryLookup = getDirectoryPath(containingFile);
-        }
-        else {
-            initialLocationForSecondaryLookup = rootDir;
         }
 
         if (initialLocationForSecondaryLookup !== undefined) {
@@ -496,48 +491,23 @@ namespace ts {
             trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, state.compilerOptions.baseUrl, moduleName);
         }
 
-        let longestMatchPrefixLength = -1;
-        let matchedPattern: string;
-        let matchedStar: string;
-
+        // string is for exact match
+        let matchedPattern: Pattern | string | undefined = undefined;
         if (state.compilerOptions.paths) {
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
             }
-
-            for (const key in state.compilerOptions.paths) {
-                const pattern: string = key;
-                const indexOfStar = pattern.indexOf("*");
-                if (indexOfStar !== -1) {
-                    const prefix = pattern.substr(0, indexOfStar);
-                    const suffix = pattern.substr(indexOfStar + 1);
-                    if (moduleName.length >= prefix.length + suffix.length &&
-                        startsWith(moduleName, prefix) &&
-                        endsWith(moduleName, suffix)) {
-
-                        // use length of prefix as betterness criteria
-                        if (prefix.length > longestMatchPrefixLength) {
-                            longestMatchPrefixLength = prefix.length;
-                            matchedPattern = pattern;
-                            matchedStar = moduleName.substr(prefix.length, moduleName.length - suffix.length);
-                        }
-                    }
-                }
-                else if (pattern === moduleName) {
-                    // pattern was matched as is - no need to search further
-                    matchedPattern = pattern;
-                    matchedStar = undefined;
-                    break;
-                }
-            }
+            matchedPattern = matchPatternOrExact(getKeys(state.compilerOptions.paths), moduleName);
         }
 
         if (matchedPattern) {
+            const matchedStar = typeof matchedPattern === "string" ? undefined : matchedText(matchedPattern, moduleName);
+            const matchedPatternText = typeof matchedPattern === "string" ? matchedPattern : patternText(matchedPattern);
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPattern);
+                trace(state.host, Diagnostics.Module_name_0_matched_pattern_1, moduleName, matchedPatternText);
             }
-            for (const subst of state.compilerOptions.paths[matchedPattern]) {
-                const path = matchedStar ? subst.replace("\*", matchedStar) : subst;
+            for (const subst of state.compilerOptions.paths[matchedPatternText]) {
+                const path = matchedStar ? subst.replace("*", matchedStar) : subst;
                 const candidate = normalizePath(combinePaths(state.compilerOptions.baseUrl, path));
                 if (state.traceEnabled) {
                     trace(state.host, Diagnostics.Trying_substitution_0_candidate_module_location_Colon_1, subst, path);
@@ -558,6 +528,75 @@ namespace ts {
 
             return loader(candidate, supportedExtensions, failedLookupLocations, !directoryProbablyExists(getDirectoryPath(candidate), state.host), state);
         }
+    }
+
+    /**
+     * patternStrings contains both pattern strings (containing "*") and regular strings.
+     * Return an exact match if possible, or a pattern match, or undefined.
+     * (These are verified by verifyCompilerOptions to have 0 or 1 "*" characters.)
+     */
+    function matchPatternOrExact(patternStrings: string[], candidate: string): string | Pattern | undefined {
+        const patterns: Pattern[] = [];
+        for (const patternString of patternStrings) {
+            const pattern = tryParsePattern(patternString);
+            if (pattern) {
+                patterns.push(pattern);
+            }
+            else if (patternString === candidate) {
+                // pattern was matched as is - no need to search further
+                return patternString;
+            }
+        }
+
+        return findBestPatternMatch(patterns, _ => _, candidate);
+    }
+
+    function patternText({prefix, suffix}: Pattern): string {
+        return `${prefix}*${suffix}`;
+    }
+
+    /**
+     * Given that candidate matches pattern, returns the text matching the '*'.
+     * E.g.: matchedText(tryParsePattern("foo*baz"), "foobarbaz") === "bar"
+     */
+    function matchedText(pattern: Pattern, candidate: string): string {
+        Debug.assert(isPatternMatch(pattern, candidate));
+        return candidate.substr(pattern.prefix.length, candidate.length - pattern.suffix.length);
+    }
+
+    /** Return the object corresponding to the best pattern to match `candidate`. */
+    /* @internal */
+    export function findBestPatternMatch<T>(values: T[], getPattern: (value: T) => Pattern, candidate: string): T | undefined {
+        let matchedValue: T | undefined = undefined;
+        // use length of prefix as betterness criteria
+        let longestMatchPrefixLength = -1;
+
+        for (const v of values) {
+            const pattern = getPattern(v);
+            if (isPatternMatch(pattern, candidate) && pattern.prefix.length > longestMatchPrefixLength) {
+                longestMatchPrefixLength = pattern.prefix.length;
+                matchedValue = v;
+            }
+        }
+
+        return matchedValue;
+    }
+
+    function isPatternMatch({prefix, suffix}: Pattern, candidate: string) {
+        return candidate.length >= prefix.length + suffix.length &&
+               startsWith(candidate, prefix) &&
+               endsWith(candidate, suffix);
+    }
+
+    /* @internal */
+    export function tryParsePattern(pattern: string): Pattern | undefined {
+        // This should be verified outside of here and a proper error thrown.
+        Debug.assert(hasZeroOrOneAsteriskCharacter(pattern));
+        const indexOfStar = pattern.indexOf("*");
+        return indexOfStar === -1 ? undefined : {
+            prefix: pattern.substr(0, indexOfStar),
+            suffix: pattern.substr(indexOfStar + 1)
+        };
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
@@ -619,8 +658,25 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
+        // First try to keep/add an extension: importing "./foo.ts" can be matched by a file "./foo.ts", and "./foo" by "./foo.d.ts"
+        const resolvedByAddingOrKeepingExtension = loadModuleFromFileWorker(candidate, extensions, failedLookupLocation, onlyRecordFailures, state);
+        if (resolvedByAddingOrKeepingExtension) {
+            return resolvedByAddingOrKeepingExtension;
+        }
+        // Then try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one, e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
+        if (hasJavaScriptFileExtension(candidate)) {
+            const extensionless = removeFileExtension(candidate);
+            if (state.traceEnabled) {
+                const extension = candidate.substring(extensionless.length);
+                trace(state.host, Diagnostics.File_name_0_has_a_1_extension_stripping_it, candidate, extension);
+            }
+            return loadModuleFromFileWorker(extensionless, extensions, failedLookupLocation, onlyRecordFailures, state);
+        }
+    }
+
+    function loadModuleFromFileWorker(candidate: string, extensions: string[], failedLookupLocation: string[], onlyRecordFailures: boolean, state: ModuleResolutionState): string {
         if (!onlyRecordFailures) {
-            // check if containig folder exists - if it doesn't then just record failures for all supported extensions without disk probing
+            // check if containing folder exists - if it doesn't then just record failures for all supported extensions without disk probing
             const directory = getDirectoryPath(candidate);
             if (directory) {
                 onlyRecordFailures = !directoryProbablyExists(directory, state.host);
@@ -629,7 +685,7 @@ namespace ts {
         return forEach(extensions, tryLoad);
 
         function tryLoad(ext: string): string {
-            if (ext === ".tsx" && state.skipTsx) {
+            if (state.skipTsx && isJsxOrTsxExtension(ext)) {
                 return undefined;
             }
             const fileName = fileExtensionIs(candidate, ext) ? candidate : candidate + ext;
@@ -895,6 +951,7 @@ namespace ts {
             readFile: fileName => sys.readFile(fileName),
             trace: (s: string) => sys.write(s + newLine),
             directoryExists: directoryName => sys.directoryExists(directoryName),
+            getDirectories: (path: string) => sys.getDirectories(path),
             realpath
         };
     }
@@ -958,6 +1015,37 @@ namespace ts {
         return resolutions;
     }
 
+    function getInferredTypesRoot(options: CompilerOptions, rootFiles: string[], host: CompilerHost) {
+        return computeCommonSourceDirectoryOfFilenames(rootFiles, host.getCurrentDirectory(), f => host.getCanonicalFileName(f));
+    }
+
+    /**
+      * Given a set of options and a set of root files, returns the set of type directive names
+      *   that should be included for this program automatically.
+      * This list could either come from the config file,
+      *   or from enumerating the types root + initial secondary types lookup location.
+      * More type directives might appear in the program later as a result of loading actual source files;
+      *   this list is only the set of defaults that are implicitly included.
+      */
+    export function getAutomaticTypeDirectiveNames(options: CompilerOptions, rootFiles: string[], host: CompilerHost): string[] {
+        // Use explicit type list from tsconfig.json
+        if (options.types) {
+            return options.types;
+        }
+
+        // Walk the primary type lookup locations
+        let result: string[] = [];
+        if (host.directoryExists && host.getDirectories) {
+            const typeRoots = getEffectiveTypeRoots(options, host);
+            for (const root of typeRoots) {
+                if (host.directoryExists(root)) {
+                    result = result.concat(host.getDirectories(root));
+                }
+            }
+        }
+        return result;
+    }
+
     export function createProgram(rootNames: string[], options: CompilerOptions, host?: CompilerHost, oldProgram?: Program): Program {
         let program: Program;
         let files: SourceFile[] = [];
@@ -1005,15 +1093,20 @@ namespace ts {
         const filesByNameIgnoreCase = host.useCaseSensitiveFileNames() ? createFileMap<SourceFile>(fileName => fileName.toLowerCase()) : undefined;
 
         if (!tryReuseStructureFromOldProgram()) {
-            // load type declarations specified via 'types' argument
-            if (options.types && options.types.length) {
-                const resolutions = resolveTypeReferenceDirectiveNamesWorker(options.types, /*containingFile*/ undefined);
-                for (let i = 0; i < options.types.length; i++) {
-                    processTypeReferenceDirective(options.types[i], resolutions[i]);
+            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
+
+            // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
+            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, rootNames, host);
+
+            if (typeReferences) {
+                const inferredRoot = getInferredTypesRoot(options, rootNames, host);
+                const containingFilename = combinePaths(inferredRoot, "__inferred type names__.ts");
+                const resolutions = resolveTypeReferenceDirectiveNamesWorker(typeReferences, containingFilename);
+                for (let i = 0; i < typeReferences.length; i++) {
+                    processTypeReferenceDirective(typeReferences[i], resolutions[i]);
                 }
             }
 
-            forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false));
             // Do not process the default library if:
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
@@ -1109,16 +1202,16 @@ namespace ts {
             // if any of these properties has changed - structure cannot be reused
             const oldOptions = oldProgram.getCompilerOptions();
             if ((oldOptions.module !== options.module) ||
+                (oldOptions.moduleResolution !== options.moduleResolution) ||
                 (oldOptions.noResolve !== options.noResolve) ||
                 (oldOptions.target !== options.target) ||
                 (oldOptions.noLib !== options.noLib) ||
                 (oldOptions.jsx !== options.jsx) ||
                 (oldOptions.allowJs !== options.allowJs) ||
                 (oldOptions.rootDir !== options.rootDir) ||
-                (oldOptions.typesSearchPaths !== options.typesSearchPaths) ||
                 (oldOptions.configFilePath !== options.configFilePath) ||
                 (oldOptions.baseUrl !== options.baseUrl) ||
-                (oldOptions.typesRoot !== options.typesRoot) ||
+                !arrayIsEqualTo(oldOptions.typeRoots, oldOptions.typeRoots) ||
                 !arrayIsEqualTo(oldOptions.rootDirs, options.rootDirs) ||
                 !mapIsEqualTo(oldOptions.paths, options.paths)) {
                 return false;
@@ -1508,8 +1601,19 @@ namespace ts {
                             }
                             break;
                         case SyntaxKind.PropertyDeclaration:
-                            diagnostics.push(createDiagnosticForNode(node, Diagnostics.property_declarations_can_only_be_used_in_a_ts_file));
-                            return true;
+                            const propertyDeclaration = <PropertyDeclaration>node;
+                            if (propertyDeclaration.modifiers) {
+                                for (const modifier of propertyDeclaration.modifiers) {
+                                    if (modifier.kind !== SyntaxKind.StaticKeyword) {
+                                        diagnostics.push(createDiagnosticForNode(modifier, Diagnostics._0_can_only_be_used_in_a_ts_file, tokenToString(modifier.kind)));
+                                        return true;
+                                    }
+                                }
+                            }
+                            if (checkTypeAnnotation((<PropertyDeclaration>node).type)) {
+                                return true;
+                            }
+                            break;
                         case SyntaxKind.EnumDeclaration:
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.enum_declarations_can_only_be_used_in_a_ts_file));
                             return true;
@@ -1678,9 +1782,12 @@ namespace ts {
                                 // The StringLiteral must specify a top - level external module name.
                                 // Relative external module names are not permitted
 
-                                // NOTE: body of ambient module is always a module block
-                                for (const statement of (<ModuleBlock>(<ModuleDeclaration>node).body).statements) {
-                                    collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                // NOTE: body of ambient module is always a module block, if it exists
+                                const body = <ModuleBlock>(<ModuleDeclaration>node).body;
+                                if (body) {
+                                    for (const statement of body.statements) {
+                                        collectModuleReferences(statement, /*inAmbientModule*/ true);
+                                    }
                                 }
                             }
                         }
@@ -1762,10 +1869,6 @@ namespace ts {
                     reportFileNamesDifferOnlyInCasingError(fileName, file.fileName, refFile, refPos, refEnd);
                 }
 
-                if (file) {
-                    file.wasReferenced = file.wasReferenced || isReference;
-                }
-
                 return file;
             }
 
@@ -1782,7 +1885,6 @@ namespace ts {
 
             filesByName.set(path, file);
             if (file) {
-                file.wasReferenced = file.wasReferenced || isReference;
                 file.path = path;
 
                 if (host.useCaseSensitiveFileNames()) {
@@ -1875,7 +1977,7 @@ namespace ts {
                 }
             }
             else {
-                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_name_0, typeReferenceDirective));
+                fileProcessingDiagnostics.add(createDiagnostic(refFile, refPos, refEnd, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective));
             }
 
             if (saveResolution) {
@@ -1914,20 +2016,7 @@ namespace ts {
                         i < file.imports.length;
 
                     if (shouldAddFile) {
-                        const importedFile = findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
-
-                        if (importedFile && resolution.isExternalLibraryImport) {
-                            // Since currently irrespective of allowJs, we only look for supportedTypeScript extension external module files,
-                            // this check is ok. Otherwise this would be never true for javascript file
-                            if (!isExternalModule(importedFile) && importedFile.statements.length) {
-                                const start = getTokenPosOfNode(file.imports[i], file);
-                                fileProcessingDiagnostics.add(createFileDiagnostic(file, start, file.imports[i].end - start, Diagnostics.Exported_external_package_typings_file_0_is_not_a_module_Please_contact_the_package_author_to_update_the_package_definition, importedFile.fileName));
-                            }
-                            else if (importedFile.referencedFiles.length) {
-                                const firstRef = importedFile.referencedFiles[0];
-                                fileProcessingDiagnostics.add(createFileDiagnostic(importedFile, firstRef.pos, firstRef.end - firstRef.pos, Diagnostics.Exported_external_package_typings_file_cannot_contain_tripleslash_references_Please_contact_the_package_author_to_update_the_package_definition));
-                            }
-                        }
+                        findSourceFile(resolution.resolvedFileName, toPath(resolution.resolvedFileName, currentDirectory, getCanonicalFileName), /*isDefaultLib*/ false, /*isReference*/ false, file, skipTrivia(file.text, file.imports[i].pos), file.imports[i].end);
                     }
                 }
             }
@@ -2021,17 +2110,17 @@ namespace ts {
                         }
                     }
                     else {
-                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substututions_for_pattern_0_should_be_an_array, key));
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Substitutions_for_pattern_0_should_be_an_array, key));
                     }
                 }
             }
 
-            if (options.inlineSources) {
-                if (!options.sourceMap && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_inlineSources_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided));
+            if (!options.sourceMap && !options.inlineSourceMap) {
+                if (options.inlineSources) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "inlineSources"));
                 }
                 if (options.sourceRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceRoot", "inlineSources"));
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_can_only_be_used_when_either_option_inlineSourceMap_or_option_sourceMap_is_provided, "sourceRoot"));
                 }
             }
 
@@ -2039,14 +2128,9 @@ namespace ts {
                 programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_with_option_1, "out", "outFile"));
             }
 
-            if (!options.sourceMap && (options.mapRoot || options.sourceRoot)) {
-                // Error to specify --mapRoot or --sourceRoot without mapSourceFiles
-                if (options.mapRoot) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
-                }
-                if (options.sourceRoot && !options.inlineSourceMap) {
-                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "sourceRoot", "sourceMap"));
-                }
+            if (options.mapRoot && !options.sourceMap) {
+                // Error to specify --mapRoot without --sourcemap
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "mapRoot", "sourceMap"));
             }
 
             if (options.declarationDir) {
@@ -2080,17 +2164,18 @@ namespace ts {
             else if (firstExternalModuleSourceFile && languageVersion < ScriptTarget.ES6 && options.module === ModuleKind.None) {
                 // We cannot use createDiagnosticFromNode because nodes do not have parents yet
                 const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
-                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_unless_the_module_flag_is_provided_with_a_valid_module_type_Consider_setting_the_module_compiler_option_in_a_tsconfig_json_file));
-            }
-
-            // Cannot specify module gen target of es6 when below es6
-            if (options.module === ModuleKind.ES6 && languageVersion < ScriptTarget.ES6) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Cannot_compile_modules_into_es2015_when_targeting_ES5_or_lower));
+                programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_use_imports_exports_or_module_augmentations_when_module_is_none));
             }
 
             // Cannot specify module gen that isn't amd or system with --out
-            if (outFile && options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+            if (outFile) {
+                if (options.module && !(options.module === ModuleKind.AMD || options.module === ModuleKind.System)) {
+                    programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Only_amd_and_system_modules_are_supported_alongside_0, options.out ? "out" : "outFile"));
+                }
+                else if (options.module === undefined && firstExternalModuleSourceFile) {
+                    const span = getErrorSpanForNode(firstExternalModuleSourceFile, firstExternalModuleSourceFile.externalModuleIndicator);
+                    programDiagnostics.add(createFileDiagnostic(firstExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_modules_using_option_0_unless_the_module_flag_is_amd_or_system, options.out ? "out" : "outFile"));
+                }
             }
 
             // there has to be common source directory if user specified --outdir || --sourceRoot

@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @traceResolution: true
-// @typesRoot: /src
+// @currentDirectory: /src
 
 // Secondary references are possible
 

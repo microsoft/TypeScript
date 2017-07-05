@@ -27,6 +27,23 @@ var f: F1 & F2;
 var s = f("hello");
 var n = f(42);
 
+interface D {
+    nested: { doublyNested: { d: string; }, different: { e: number } };
+}
+interface E {
+    nested: { doublyNested: { f: string; }, other: {g: number } };
+}
+const de: D & E = {
+    nested: {
+        doublyNested: {
+            d: 'yes',
+            f: 'no'
+        },
+        different: { e: 12 },
+        other: { g: 101 }
+    }
+}
+
 
 //// [intersectionTypeMembers.js]
 // An intersection type has those members that are present in any of its constituent types,
@@ -42,3 +59,13 @@ xyz.x.c = "hello";
 var f;
 var s = f("hello");
 var n = f(42);
+var de = {
+    nested: {
+        doublyNested: {
+            d: 'yes',
+            f: 'no'
+        },
+        different: { e: 12 },
+        other: { g: 101 }
+    }
+};

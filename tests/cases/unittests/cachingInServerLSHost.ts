@@ -7,7 +7,7 @@ namespace ts {
     }
 
     function createDefaultServerHost(fileMap: Map<File>): server.ServerHost {
-        let existingDirectories: Map<boolean> = {};
+        const existingDirectories: Map<boolean> = {};
         forEachValue(fileMap, v => {
             let dir = getDirectoryPath(v.name);
             let previous: string;
@@ -46,6 +46,7 @@ namespace ts {
             getCurrentDirectory: (): string => {
                 return "";
             },
+            getDirectories: (path: string) => [],
             readDirectory: (path: string, extension?: string, exclude?: string[]): string[] => {
                 throw new Error("NYI");
             },
@@ -67,7 +68,7 @@ namespace ts {
     }
 
     function createProject(rootFile: string, serverHost: server.ServerHost): { project: server.Project, rootScriptInfo: server.ScriptInfo } {
-        let logger: server.Logger = {
+        const logger: server.Logger = {
             close() { },
             isVerbose: () => false,
             loggingEnabled: () => false,
@@ -78,9 +79,9 @@ namespace ts {
             msg: (s: string, type?: string) => { }
         };
 
-        let projectService = new server.ProjectService(serverHost, logger);
-        let rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
-        let project = projectService.createInferredProject(rootScriptInfo);
+        const projectService = new server.ProjectService(serverHost, logger);
+        const rootScriptInfo = projectService.openFile(rootFile, /* openedByClient */true);
+        const project = projectService.createInferredProject(rootScriptInfo);
         project.setProjectOptions({ files: [rootScriptInfo.fileName], compilerOptions: { module: ts.ModuleKind.AMD } });
         return {
             project,
@@ -90,24 +91,24 @@ namespace ts {
 
     describe("Caching in LSHost", () => {
         it("works using legacy resolution logic", () => {
-            let root: File = {
+            const root: File = {
                 name: "c:/d/f0.ts",
                 content: `import {x} from "f1"`
             };
 
-            let imported: File = {
+            const imported: File = {
                 name: "c:/f1.ts",
                 content: `foo()`
             };
 
-            let serverHost = createDefaultServerHost({ [root.name]: root, [imported.name]: imported });
-            let { project, rootScriptInfo } = createProject(root.name, serverHost);
+            const serverHost = createDefaultServerHost({ [root.name]: root, [imported.name]: imported });
+            const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             // ensure that imported file was found
             let diags = project.compilerService.languageService.getSemanticDiagnostics(imported.name);
             assert.equal(diags.length, 1);
 
-            let originalFileExists = serverHost.fileExists;
+            const originalFileExists = serverHost.fileExists;
             {
                 // patch fileExists to make sure that disk is not touched
                 serverHost.fileExists = (fileName): boolean => {
@@ -115,7 +116,7 @@ namespace ts {
                     return false;
                 };
 
-                let newContent = `import {x} from "f1"
+                const newContent = `import {x} from "f1"
                 var x: string = 1;`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
                 // trigger synchronization to make sure that import will be fetched from the cache
@@ -133,7 +134,7 @@ namespace ts {
                     assert.isTrue(fileName.indexOf("/f2.") !== -1);
                     return originalFileExists.call(serverHost, fileName);
                 };
-                let newContent = `import {x} from "f2"`;
+                const newContent = `import {x} from "f2"`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
 
                 try {
@@ -157,7 +158,7 @@ namespace ts {
                     return originalFileExists.call(serverHost, fileName);
                 };
 
-                let newContent = `import {x} from "f1"`;
+                const newContent = `import {x} from "f1"`;
                 rootScriptInfo.editContent(0, rootScriptInfo.content.length, newContent);
                 project.compilerService.languageService.getSemanticDiagnostics(imported.name);
                 assert.isTrue(fileExistsCalled);
@@ -165,7 +166,7 @@ namespace ts {
                 // setting compiler options discards module resolution cache
                 fileExistsCalled = false;
 
-                let opts = ts.clone(project.projectOptions);
+                const opts = ts.clone(project.projectOptions);
                 opts.compilerOptions = ts.clone(opts.compilerOptions);
                 opts.compilerOptions.target = ts.ScriptTarget.ES5;
                 project.setProjectOptions(opts);
@@ -176,19 +177,19 @@ namespace ts {
         });
 
         it("loads missing files from disk", () => {
-            let root: File = {
+            const root: File = {
                 name: `c:/foo.ts`,
                 content: `import {x} from "bar"`
             };
 
-            let imported: File = {
+            const imported: File = {
                 name: `c:/bar.d.ts`,
                 content: `export var y = 1`
             };
 
-            let fileMap: Map<File> = { [root.name]: root };
-            let serverHost = createDefaultServerHost(fileMap);
-            let originalFileExists = serverHost.fileExists;
+            const fileMap: Map<File> = { [root.name]: root };
+            const serverHost = createDefaultServerHost(fileMap);
+            const originalFileExists = serverHost.fileExists;
 
             let fileExistsCalledForBar = false;
             serverHost.fileExists = fileName => {
@@ -202,7 +203,7 @@ namespace ts {
                 return originalFileExists.call(serverHost, fileName);
             };
 
-            let { project, rootScriptInfo } = createProject(root.name, serverHost);
+            const { project, rootScriptInfo } = createProject(root.name, serverHost);
 
             let diags = project.compilerService.languageService.getSemanticDiagnostics(root.name);
             assert.isTrue(fileExistsCalledForBar, "'fileExists' should be called");

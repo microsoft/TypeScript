@@ -20,9 +20,4 @@
 // site is included in the references to the namespace.
 
 goTo.marker();
-let ranges = test.ranges();
-verify.referencesCountIs(ranges.length);
-
-for (let expectedReference of ranges) {
-    verify.referencesAtPositionContains(expectedReference);
-}
+verify.referencesAre(test.ranges());

@@ -1,7 +1,18 @@
 === tests/cases/conformance/types/never/neverType.ts ===
 
-function error(message: string) {
+
+function error(message: string): never {
 >error : (message: string) => never
+>message : string
+
+    throw new Error(message);
+>new Error(message) : Error
+>Error : ErrorConstructor
+>message : string
+}
+
+function errorVoid(message: string) {
+>errorVoid : (message: string) => void
 >message : string
 
     throw new Error(message);
@@ -19,8 +30,32 @@ function fail() {
 >"Something failed" : string
 }
 
-function infiniteLoop() {
->infiniteLoop : () => never
+function failOrThrow(shouldFail: boolean) {
+>failOrThrow : (shouldFail: boolean) => never
+>shouldFail : boolean
+
+    if (shouldFail) {
+>shouldFail : boolean
+
+        return fail();
+>fail() : never
+>fail : () => never
+    }
+    throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+}
+
+function infiniteLoop1() {
+>infiniteLoop1 : () => void
+
+    while (true) {
+>true : boolean
+    }
+}
+
+function infiniteLoop2(): never {
+>infiniteLoop2 : () => never
 
     while (true) {
 >true : boolean
@@ -92,6 +127,37 @@ function check<T>(x: T | undefined) {
 >"Undefined value" : string
 }
 
+class C {
+>C : C
+
+    void1() {
+>void1 : () => void
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    void2() {
+>void2 : () => void
+
+        while (true) {}
+>true : boolean
+    }
+    never1(): never {
+>never1 : () => never
+
+        throw new Error();
+>new Error() : Error
+>Error : ErrorConstructor
+    }
+    never2(): never {
+>never2 : () => never
+
+        while (true) {}
+>true : boolean
+    }
+}
+
 function f1(x: string | number) {
 >f1 : (x: string | number) => void
 >x : string | number
@@ -124,22 +190,6 @@ function f2(x: string | number) {
 >x : never
         }
     }
-}
-
-function failOrThrow(shouldFail: boolean) {
->failOrThrow : (shouldFail: boolean) => never
->shouldFail : boolean
-
-    if (shouldFail) {
->shouldFail : boolean
-
-        return fail();
->fail() : never
->fail : () => never
-    }
-    throw new Error();
->new Error() : Error
->Error : ErrorConstructor
 }
 
 function test(cb: () => string) {

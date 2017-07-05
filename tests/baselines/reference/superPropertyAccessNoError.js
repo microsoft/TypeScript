@@ -16,6 +16,9 @@ class SomeBaseClass {
         return 3;
     }
 
+    returnThis() {
+        return this;
+    }
 }
 
 class SomeDerivedClass extends SomeBaseClass {
@@ -58,7 +61,14 @@ class SomeDerivedClass extends SomeBaseClass {
         var x: number;
     }
 
+    returnThis() {
+        return super.returnThis();
+    }
 }
+
+let instance = new SomeDerivedClass();
+instance.returnThis().fn();
+
 
 //// [superPropertyAccessNoError.js]
 //super.publicInstanceMemberFunction in constructor of derived class
@@ -80,6 +90,9 @@ var SomeBaseClass = (function () {
     };
     SomeBaseClass.func = function () {
         return 3;
+    };
+    SomeBaseClass.prototype.returnThis = function () {
+        return this;
     };
     return SomeBaseClass;
 }());
@@ -126,5 +139,10 @@ var SomeDerivedClass = (function (_super) {
         enumerable: true,
         configurable: true
     });
+    SomeDerivedClass.prototype.returnThis = function () {
+        return _super.prototype.returnThis.call(this);
+    };
     return SomeDerivedClass;
 }(SomeBaseClass));
+var instance = new SomeDerivedClass();
+instance.returnThis().fn();

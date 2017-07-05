@@ -1,6 +1,6 @@
 === tests/cases/compiler/nestedBlockScopedBindings6.ts ===
 function a0() {
->a0 : () => never
+>a0 : () => void
 
     for (let x of [1]) {
 >x : number
@@ -27,7 +27,7 @@ function a0() {
 }
 
 function a1() {
->a1 : () => never
+>a1 : () => void
 
     for (let x of [1]) {
 >x : number
@@ -58,7 +58,7 @@ function a1() {
 }
 
 function a2() {
->a2 : () => never
+>a2 : () => void
 
     for (let x of [1]) {
 >x : number
@@ -89,7 +89,7 @@ function a2() {
 }
 
 function a3() {
->a3 : () => never
+>a3 : () => void
 
     for (let x of [1]) {
 >x : number

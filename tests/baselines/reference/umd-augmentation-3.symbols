@@ -44,7 +44,7 @@ export = M2D;
 >M2D : Symbol(M2D, Decl(index.d.ts, 3, 13))
 
 declare namespace M2D {
->M2D : Symbol(, Decl(index.d.ts, 3, 13), Decl(math2d-augment.d.ts, 0, 33))
+>M2D : Symbol(Math2d, Decl(index.d.ts, 3, 13), Decl(math2d-augment.d.ts, 0, 33))
 
 	interface Point {
 >Point : Symbol(Point, Decl(index.d.ts, 5, 23))

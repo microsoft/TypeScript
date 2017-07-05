@@ -34,7 +34,6 @@ tests/webhost/*.d.ts
 tests/webhost/webtsc.js
 tests/cases/**/*.js
 tests/cases/**/*.js.map
-tests/cases/**/*.d.ts
 *.config
 scripts/debug.bat
 scripts/run.bat
@@ -49,3 +48,4 @@ internal/
 **/.vs
 **/.vscode
 !**/.vscode/tasks.json
+!tests/cases/projects/projectOption/**/node_modules

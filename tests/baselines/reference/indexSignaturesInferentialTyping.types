@@ -25,26 +25,16 @@ var x1 = foo({ 0: 0, 1: 1 });       // type should be number
 >0 : number
 >1 : number
 
-var x2 = foo({ zero: 0, one: 1 });
->x2 : {}
->foo({ zero: 0, one: 1 }) : {}
->foo : <T>(items: { [index: number]: T; }) => T
->{ zero: 0, one: 1 } : { zero: number; one: number; }
->zero : number
->0 : number
->one : number
->1 : number
-
-var x3 = bar({ 0: 0, 1: 1 });
->x3 : number
+var x2 = bar({ 0: 0, 1: 1 });
+>x2 : number
 >bar({ 0: 0, 1: 1 }) : number
 >bar : <T>(items: { [index: string]: T; }) => T
 >{ 0: 0, 1: 1 } : { 0: number; 1: number; }
 >0 : number
 >1 : number
 
-var x4 = bar({ zero: 0, one: 1 });  // type should be number
->x4 : number
+var x3 = bar({ zero: 0, one: 1 });  // type should be number
+>x3 : number
 >bar({ zero: 0, one: 1 }) : number
 >bar : <T>(items: { [index: string]: T; }) => T
 >{ zero: 0, one: 1 } : { zero: number; one: number; }

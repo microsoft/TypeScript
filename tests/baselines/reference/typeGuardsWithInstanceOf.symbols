@@ -1,0 +1,26 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
+interface I { global: string; }
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+>global : Symbol(I.global, Decl(typeGuardsWithInstanceOf.ts, 0, 13))
+
+var result: I;
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+
+var result2: I;
+>result2 : Symbol(result2, Decl(typeGuardsWithInstanceOf.ts, 2, 3))
+>I : Symbol(I, Decl(typeGuardsWithInstanceOf.ts, 0, 0))
+
+if (!(result instanceof RegExp)) {
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+
+    result = result2;
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>result2 : Symbol(result2, Decl(typeGuardsWithInstanceOf.ts, 2, 3))
+
+} else if (!result.global) {
+>result.global : Symbol(global, Decl(typeGuardsWithInstanceOf.ts, 0, 13), Decl(lib.d.ts, --, --))
+>result : Symbol(result, Decl(typeGuardsWithInstanceOf.ts, 1, 3))
+>global : Symbol(global, Decl(typeGuardsWithInstanceOf.ts, 0, 13), Decl(lib.d.ts, --, --))
+}

@@ -268,7 +268,7 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
-            if (!this.filenameToScript.contains(info.path)) {
+            if (this.filenameToScript.contains(info.path)) {
                 this.filenameToScript.remove(info.path);
                 this.roots = copyListRemovingItem(info, this.roots);
                 this.resolvedModuleNames.remove(info.path);
@@ -313,6 +313,10 @@ namespace ts.server {
 
         directoryExists(path: string): boolean {
             return this.host.directoryExists(path);
+        }
+
+        getDirectories(path: string): string[] {
+            return this.host.getDirectories(path);
         }
 
         /**
@@ -803,6 +807,7 @@ namespace ts.server {
             else {
                 this.findReferencingProjects(info);
                 if (info.defaultProject) {
+                    info.defaultProject.addOpenRef();
                     this.openFilesReferenced.push(info);
                 }
                 else {
@@ -1138,7 +1143,7 @@ namespace ts.server {
             else {
                 this.log("No config files found.");
             }
-            return {};
+            return configFileName ? { configFileName } : {};
         }
 
         /**
@@ -1384,6 +1389,7 @@ namespace ts.server {
 
         static getDefaultFormatCodeOptions(host: ServerHost): ts.FormatCodeOptions {
             return ts.clone({
+                BaseIndentSize: 0,
                 IndentSize: 4,
                 TabSize: 4,
                 NewLineCharacter: host.newLine || "\n",

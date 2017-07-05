@@ -1,0 +1,32 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsToLiteralTypeUnion.ts ===
+declare function isFoo(value: string) : value is ("foo" | "bar");
+>isFoo : Symbol(isFoo, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 0))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 23))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 23))
+
+declare function doThis(value: "foo" | "bar"): void;
+>doThis : Symbol(doThis, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 65))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 1, 24))
+
+declare function doThat(value: string) : void;
+>doThat : Symbol(doThat, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 1, 52))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 2, 24))
+
+let value: string;
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 3, 3))
+
+if (isFoo(value)) {
+>isFoo : Symbol(isFoo, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 0))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 3, 3))
+
+    doThis(value);
+>doThis : Symbol(doThis, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 0, 65))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 3, 3))
+
+} else {
+    doThat(value);
+>doThat : Symbol(doThat, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 1, 52))
+>value : Symbol(value, Decl(typeGuardNarrowsToLiteralTypeUnion.ts, 3, 3))
+}
+
+

@@ -1,6 +1,6 @@
-/// <reference path="fourslash.ts"/>
+/// <reference path="../fourslash.ts"/>
 
-// @typesRoot: src
+// @typeRoots: src/types
 // @Filename: src/types/lib/index.d.ts
 /////*0*/declare let $: {x: number};
 

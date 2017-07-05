@@ -1,6 +1,6 @@
 // @noImplicitReferences: true
 // @declaration: true
-// @typesRoot: /
+// @typeRoots: /types
 // @traceResolution: true
 // @types: lib
 

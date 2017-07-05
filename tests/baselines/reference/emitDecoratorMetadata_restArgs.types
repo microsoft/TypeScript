@@ -1,0 +1,44 @@
+=== tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
+
+declare const MyClassDecorator: ClassDecorator;
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+>ClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+
+declare const MyMethodDecorator: MethodDecorator;
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+>MethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+
+@MyClassDecorator
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+
+class A {
+>A : A
+
+    constructor(...args) {}
+>args : any[]
+
+    @MyMethodDecorator
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+
+    method(...args) {}
+>method : (...args: any[]) => void
+>args : any[]
+}
+
+@MyClassDecorator
+>MyClassDecorator : <TFunction extends Function>(target: TFunction) => TFunction | void
+
+class B {
+>B : B
+
+    constructor(...args: number[]) {}
+>args : number[]
+
+    @MyMethodDecorator
+>MyMethodDecorator : <T>(target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T> | void
+
+    method(...args: string[]) {}
+>method : (...args: string[]) => void
+>args : string[]
+}
+

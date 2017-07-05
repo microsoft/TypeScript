@@ -25,10 +25,9 @@ namespace ts.formatting {
         }
 
         public ensureUpToDate(options: ts.FormatCodeOptions) {
-            // TODO: Should this be '==='?
-            if (this.options == null || !ts.compareDataObjects(this.options, options)) {
-                let activeRules = this.createActiveRules(options);
-                let rulesMap = RulesMap.create(activeRules);
+            if (!this.options || !ts.compareDataObjects(this.options, options)) {
+                const activeRules = this.createActiveRules(options);
+                const rulesMap = RulesMap.create(activeRules);
 
                 this.activeRules = activeRules;
                 this.rulesMap = rulesMap;
