@@ -3,7 +3,7 @@
 
 /* @internal */
 namespace ts.refactor.extractMethod {
-    export const name = 'extract_method';
+    export const name = "extract_method";
     const extractMethod: Refactor = {
         name: "Extract Method",
         description: Diagnostics.Extract_function.message,
@@ -23,13 +23,13 @@ namespace ts.refactor.extractMethod {
             // No extractions possible
             return undefined;
         }
-        
-        
+
+
         const actions: RefactorActionInfo[] = [];
         let i = 0;
         for (const extr of extractions) {
             actions.push({
-                description: formatMessage(extr.scopeDescription, Diagnostics.Extract_function_into_0),
+                description: formatStringFromArgs(Diagnostics.Extract_function_into_0.message, [extr.scopeDescription]),
                 name: `scope_${i}`
             });
             i++;
@@ -44,7 +44,8 @@ namespace ts.refactor.extractMethod {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: context.endPosition - context.startPosition });
+        const length = context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
+        const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length });
         const targetRange: TargetRange = rangeToExtract.targetRange;
         const extractions = extractRange(targetRange, context.file, context);
 
@@ -135,9 +136,10 @@ namespace ts.refactor.extractMethod {
         // We'll modify these flags as we walk the tree to collect data
         // about what things need to be done as part of the extraction.
         let facts = RangeFacts.None;
-        
+
         if (!start || !end) {
             // cannot find either start or end node
+            debugger;
             return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
         }
 
@@ -438,7 +440,7 @@ namespace ts.refactor.extractMethod {
         const changeTracker = textChanges.ChangeTracker.fromRefactorContext(context);
 
         // Make a unique name for the extracted function
-        let functionNameText = 'newFunction';
+        let functionNameText = "newFunction";
         if (scope.locals && scope.locals.has(functionNameText)) {
             let i = 1;
             while (scope.locals.has(functionNameText = `newFunction_${i}`)) {
@@ -471,7 +473,7 @@ namespace ts.refactor.extractMethod {
 
         const { body, returnValueProperty } = transformFunctionBody(node);
         let newFunction: MethodDeclaration | FunctionDeclaration;
-        
+
         if (isClassLike(scope)) {
             // always create private method
             const modifiers: Modifier[] = [createToken(SyntaxKind.PrivateKeyword)];
