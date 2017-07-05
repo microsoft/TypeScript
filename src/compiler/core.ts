@@ -1016,13 +1016,13 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T>, callback: (value: T, key: EscapedIdentifier) => U | undefined): U | undefined;
     export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T> | Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T> | Map<T>, callback: (value: T, key: (string & EscapedIdentifier)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
-            const result = callback(value, key as string);
+            const result = callback(value, key as (string & EscapedIdentifier));
             if (result) {
                 return result;
             }
