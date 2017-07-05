@@ -415,7 +415,7 @@ namespace ts.textChanges {
         }
 
         public getChanges(): FileTextChanges[] {
-            const changesPerFile = createFileMap<Change[]>();
+            const changesPerFile = createMap<Change[]>();
             // group changes per file
             for (const c of this.changes) {
                 let changesInFile = changesPerFile.get(c.sourceFile.path);
@@ -426,8 +426,7 @@ namespace ts.textChanges {
             }
             // convert changes
             const fileChangesList: FileTextChanges[] = [];
-            changesPerFile.forEachValue(path => {
-                const changesInFile = changesPerFile.get(path);
+            changesPerFile.forEach(changesInFile => {
                 const sourceFile = changesInFile[0].sourceFile;
                 const fileTextChanges: FileTextChanges = { fileName: sourceFile.fileName, textChanges: [] };
                 for (const c of ChangeTracker.normalize(changesInFile)) {
@@ -512,7 +511,7 @@ namespace ts.textChanges {
             lineMap,
             getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
         };
-        const changes = formatting.formatNode(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
+        const changes = formatting.formatNodeGivenIndentation(nonFormattedText.node, file, sourceFile.languageVariant, initialIndentation, delta, rulesProvider);
         return applyChanges(nonFormattedText.text, changes);
     }
 

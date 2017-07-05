@@ -2,6 +2,7 @@
     "compilerOptions": {
         "noImplicitAny": true,
         "noImplicitThis": true,
+        "alwaysStrict": true,
         "preserveConstEnums": true,
         "pretty": true,
         "outFile": "../../built/local/tsserverlibrary.js",

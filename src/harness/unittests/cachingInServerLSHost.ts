@@ -75,7 +75,7 @@ namespace ts {
         const rootScriptInfo = projectService.getOrCreateScriptInfo(rootFile, /* openedByClient */ true, /*containingProject*/ undefined);
 
         const project = projectService.createInferredProjectWithRootFileIfNecessary(rootScriptInfo);
-        project.setCompilerOptions({ module: ts.ModuleKind.AMD } );
+        project.setCompilerOptions({ module: ts.ModuleKind.AMD, noLib: true } );
         return {
             project,
             rootScriptInfo

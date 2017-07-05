@@ -434,5 +434,4 @@ namespace ts.server.typingsInstaller {
     export function typingsName(packageName: string): string {
         return `@types/${packageName}@ts${versionMajorMinor}`;
     }
-    const versionMajorMinor = version.split(".").slice(0, 2).join(".");
 }

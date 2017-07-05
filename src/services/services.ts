@@ -657,7 +657,6 @@ namespace ts {
                     case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ExportSpecifier:
                     case SyntaxKind.ImportSpecifier:
-                    case SyntaxKind.ImportEqualsDeclaration:
                     case SyntaxKind.ImportClause:
                     case SyntaxKind.NamespaceImport:
                     case SyntaxKind.GetAccessor:
@@ -818,14 +817,14 @@ namespace ts {
     // at each language service public entry point, since we don't know when
     // the set of scripts handled by the host changes.
     class HostCache {
-        private fileNameToEntry: FileMap<HostFileInformation>;
+        private fileNameToEntry: Map<HostFileInformation>;
         private _compilationSettings: CompilerOptions;
         private currentDirectory: string;
 
         constructor(private host: LanguageServiceHost, getCanonicalFileName: (fileName: string) => string) {
             // script id => script index
             this.currentDirectory = host.getCurrentDirectory();
-            this.fileNameToEntry = createFileMap<HostFileInformation>();
+            this.fileNameToEntry = createMap<HostFileInformation>();
 
             // Initialize the list with the root file names
             const rootFileNames = host.getScriptFileNames();
@@ -862,7 +861,7 @@ namespace ts {
         }
 
         public containsEntryByPath(path: Path): boolean {
-            return this.fileNameToEntry.contains(path);
+            return this.fileNameToEntry.has(path);
         }
 
         public getOrCreateEntryByPath(fileName: string, path: Path): HostFileInformation {
@@ -874,7 +873,7 @@ namespace ts {
         public getRootFileNames(): string[] {
             const fileNames: string[] = [];
 
-            this.fileNameToEntry.forEachValue((_path, value) => {
+            this.fileNameToEntry.forEach(value => {
                 if (value) {
                     fileNames.push(value.hostFileName);
                 }
@@ -1763,8 +1762,10 @@ namespace ts {
         function getFormattingEditsAfterKeystroke(fileName: string, position: number, key: string, options: FormatCodeOptions | FormatCodeSettings): TextChange[] {
             const sourceFile = syntaxTreeCache.getCurrentSourceFile(fileName);
             const settings = toEditorSettings(options);
-
-            if (key === "}") {
+            if (key === "{") {
+                return formatting.formatOnOpeningCurly(position, sourceFile, getRuleProvider(settings), settings);
+            }
+            else if (key === "}") {
                 return formatting.formatOnClosingCurly(position, sourceFile, getRuleProvider(settings), settings);
             }
             else if (key === ";") {

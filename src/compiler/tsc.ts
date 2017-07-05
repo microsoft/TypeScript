@@ -285,6 +285,16 @@ namespace ts {
 
             setCachedProgram(compileResult.program);
             reportWatchDiagnostic(createCompilerDiagnostic(Diagnostics.Compilation_complete_Watching_for_file_changes));
+
+            const missingPaths = compileResult.program.getMissingFilePaths();
+            missingPaths.forEach(path => {
+                const fileWatcher = sys.watchFile(path, (_fileName, eventKind) => {
+                    if (eventKind === FileWatcherEventKind.Created) {
+                        fileWatcher.close();
+                        startTimerForRecompilation();
+                    }
+                });
+            });
         }
 
         function cachedFileExists(fileName: string): boolean {
@@ -308,7 +318,7 @@ namespace ts {
             const sourceFile = hostGetSourceFile(fileName, languageVersion, onError);
             if (sourceFile && isWatchSet(compilerOptions) && sys.watchFile) {
                 // Attach a file watcher
-                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName: string, removed?: boolean) => sourceFileChanged(sourceFile, removed));
+                sourceFile.fileWatcher = sys.watchFile(sourceFile.fileName, (_fileName, eventKind) => sourceFileChanged(sourceFile, eventKind));
             }
             return sourceFile;
         }
@@ -330,10 +340,10 @@ namespace ts {
         }
 
         // If a source file changes, mark it as unwatched and start the recompilation timer
-        function sourceFileChanged(sourceFile: SourceFile, removed?: boolean) {
+        function sourceFileChanged(sourceFile: SourceFile, eventKind: FileWatcherEventKind) {
             sourceFile.fileWatcher.close();
             sourceFile.fileWatcher = undefined;
-            if (removed) {
+            if (eventKind === FileWatcherEventKind.Deleted) {
                 unorderedRemoveItem(rootFileNames, sourceFile.fileName);
             }
             startTimerForRecompilation();

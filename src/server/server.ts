@@ -35,7 +35,6 @@ namespace ts.server {
     } = require("os");
 
     function getGlobalTypingsCacheLocation() {
-        const versionMajorMinor = ts.version.match(/\d+\.\d+/)[0];
         switch (process.platform) {
             case "win32": {
                 const basePath = process.env.LOCALAPPDATA ||
@@ -524,11 +523,14 @@ namespace ts.server {
 
             fs.stat(watchedFile.fileName, (err: any, stats: any) => {
                 if (err) {
-                    watchedFile.callback(watchedFile.fileName);
+                    watchedFile.callback(watchedFile.fileName, FileWatcherEventKind.Changed);
                 }
                 else if (watchedFile.mtime.getTime() !== stats.mtime.getTime()) {
                     watchedFile.mtime = stats.mtime;
-                    watchedFile.callback(watchedFile.fileName, watchedFile.mtime.getTime() === 0);
+                    const eventKind = watchedFile.mtime.getTime() === 0
+                        ? FileWatcherEventKind.Deleted
+                        : FileWatcherEventKind.Changed;
+                    watchedFile.callback(watchedFile.fileName, eventKind);
                 }
             });
         }
@@ -560,7 +562,9 @@ namespace ts.server {
             const file: WatchedFile = {
                 fileName,
                 callback,
-                mtime: getModifiedTime(fileName)
+                mtime: sys.fileExists(fileName)
+                    ? getModifiedTime(fileName)
+                    : new Date(0) // Any subsequent modification will occur after this time
             };
 
             watchedFiles.push(file);

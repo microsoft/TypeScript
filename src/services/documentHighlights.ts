@@ -2,7 +2,10 @@
 namespace ts.DocumentHighlights {
     export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
         const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
-        if (!node) return undefined;
+        // Note that getTouchingWord indicates failure by returning the sourceFile node.
+        if (node === sourceFile) return undefined;
+
+        Debug.assert(node.parent !== undefined);
 
         if (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent)) {
             // For a JSX element, just highlight the matching tag, not all references.
