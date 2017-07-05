@@ -2794,16 +2794,18 @@ namespace FourSlash {
             }
         }
 
-        public applyRefactor(name: string, index?: number) {
+        public applyRefactor(refactorName: string, actionName: string) {
             const range = { pos: this.currentCaretPosition, end: this.selectionEnd === -1 ? this.currentCaretPosition : this.selectionEnd };
             const refactors = this.languageService.getApplicableRefactors(this.activeFile.fileName, range);
-            const refactor = ts.find(refactors, r  => r.name === name);
+            const refactor = ts.find(refactors, r  => r.name === refactorName);
             if (!refactor) {
-                this.raiseError(`The expected refactor: ${name} is not available at the marker location.`);
+                this.raiseError(`The expected refactor: ${refactorName} is not available at the marker location.`);
             }
 
-            const actions = this.languageService.getRefactorCodeActions(this.activeFile.fileName, this.formatCodeSettings, range, name);
-            this.applyCodeAction(this.activeFile.fileName, actions, index || 0);
+            const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, this.formatCodeSettings, range, refactorName, actionName);
+            for (const edit of editInfo.edits) {
+                this.applyEdits(edit.fileName, edit.textChanges);
+            }
         }
 
         public verifyFileAfterApplyingRefactorAtMarker(
@@ -4068,8 +4070,8 @@ namespace FourSlashInterface {
             this.state.enableFormatting = false;
         }
 
-        public applyRefactor(name: string, index?: number) {
-            this.state.applyRefactor(name, index);
+        public applyRefactor(refactorName: string, actionName: string) {
+            this.state.applyRefactor(refactorName, actionName);
         }
     }
 
