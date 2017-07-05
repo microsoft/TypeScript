@@ -2647,7 +2647,7 @@ namespace ts {
             const name = node.symbol && node.symbol.name;
             if (name) {
                 if (!currentScopeFirstDeclarationsOfName) {
-                    currentScopeFirstDeclarationsOfName = createMap<Node>() as EscapedIdentifierMap<Node>;
+                    currentScopeFirstDeclarationsOfName = createEscapedIdentifierMap<Node>();
                 }
 
                 if (!currentScopeFirstDeclarationsOfName.has(name)) {

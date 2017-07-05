@@ -147,7 +147,7 @@ namespace ts {
             options = opts;
             languageVersion = getEmitScriptTarget(options);
             inStrictMode = bindInStrictMode(file, opts);
-            classifiableNames = createMap<EscapedIdentifier>() as EscapedIdentifierMap<EscapedIdentifier>;
+            classifiableNames = createEscapedIdentifierMap<EscapedIdentifier>();
             symbolCount = 0;
             skipTransformFlagAggregation = file.isDeclarationFile;
 
@@ -1659,7 +1659,7 @@ namespace ts {
             }
 
             if (inStrictMode) {
-                const seen = createMap<ElementKind>() as EscapedIdentifierMap<ElementKind>;
+                const seen = createEscapedIdentifierMap<ElementKind>();
 
                 for (const prop of node.properties) {
                     if (prop.kind === SyntaxKind.SpreadAssignment || prop.name.kind !== SyntaxKind.Identifier) {

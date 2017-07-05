@@ -2093,7 +2093,7 @@ namespace ts {
     }
 
     function initializeNameTable(sourceFile: SourceFile): void {
-        const nameTable = createMap<number>() as EscapedIdentifierMap<number>;
+        const nameTable = createEscapedIdentifierMap<number>();
 
         walk(sourceFile);
         sourceFile.nameTable = nameTable;

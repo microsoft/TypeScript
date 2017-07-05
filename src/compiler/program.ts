@@ -580,7 +580,7 @@ namespace ts {
             if (!classifiableNames) {
                 // Initialize a checker so that all our files are bound.
                 getTypeChecker();
-                classifiableNames = createMap<string>() as EscapedIdentifierMap<EscapedIdentifier>;
+                classifiableNames = createEscapedIdentifierMap<EscapedIdentifier>();
 
                 for (const sourceFile of files) {
                     copyEntries(sourceFile.classifiableNames, classifiableNames);

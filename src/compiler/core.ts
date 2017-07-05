@@ -47,6 +47,11 @@ namespace ts {
         return new MapCtr<T>();
     }
 
+    /** Create a new escaped identifier map. */
+    export function createEscapedIdentifierMap<T>(): EscapedIdentifierMap<T> {
+        return new MapCtr<T>() as EscapedIdentifierMap<T>;
+    }
+
     /* @internal */
     export function createSymbolTable(symbols?: Symbol[]): SymbolTable {
         const result = createMap<Symbol>() as SymbolTable;

@@ -681,7 +681,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createMap<EscapedIdentifier>() as EscapedIdentifierMap<EscapedIdentifier>;
+            identifiers = createEscapedIdentifierMap<EscapedIdentifier>();
             identifierCount = 0;
             nodeCount = 0;
 

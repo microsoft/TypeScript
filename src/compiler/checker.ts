@@ -452,7 +452,7 @@ namespace ts {
         let _hasComputedJsxElementChildrenPropertyName = false;
 
         /** Things we lazy load from the JSX namespace */
-        const jsxTypes = createMap<Type>() as EscapedIdentifierMap<Type>;
+        const jsxTypes = createEscapedIdentifierMap<Type>();
 
         const JsxNames = {
             JSX: "JSX" as EscapedIdentifier,
@@ -4075,7 +4075,7 @@ namespace ts {
             }
 
             const members = createSymbolTable();
-            const names = createMap<true>() as EscapedIdentifierMap<true>;
+            const names = createEscapedIdentifierMap<true>();
             for (const name of properties) {
                 names.set(getTextOfPropertyName(name), true);
             }
@@ -7683,7 +7683,7 @@ namespace ts {
             }
 
             const members = createSymbolTable();
-            const skippedPrivateMembers = createMap<boolean>() as EscapedIdentifierMap<boolean>;
+            const skippedPrivateMembers = createEscapedIdentifierMap<boolean>();
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
             if (left === emptyObjectType) {
@@ -18078,8 +18078,8 @@ namespace ts {
                 Property = Getter | Setter
             }
 
-            const instanceNames = createMap<Declaration>() as EscapedIdentifierMap<Declaration>;
-            const staticNames = createMap<Declaration>() as EscapedIdentifierMap<Declaration>;
+            const instanceNames = createEscapedIdentifierMap<Declaration>();
+            const staticNames = createEscapedIdentifierMap<Declaration>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
@@ -21167,7 +21167,7 @@ namespace ts {
             }
 
             type InheritanceInfoMap = { prop: Symbol; containingType: Type };
-            const seen = createMap<InheritanceInfoMap>() as EscapedIdentifierMap<InheritanceInfoMap>;
+            const seen = createEscapedIdentifierMap<InheritanceInfoMap>();
             forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.name, { prop: p, containingType: type }); });
             let ok = true;
 
@@ -24081,7 +24081,7 @@ namespace ts {
         }
 
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
-            const seen = createMap<SymbolFlags>() as EscapedIdentifierMap<SymbolFlags>;
+            const seen = createEscapedIdentifierMap<SymbolFlags>();
             const Property = 1;
             const GetAccessor = 2;
             const SetAccessor = 4;
@@ -24171,7 +24171,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
-            const seen = createMap<boolean>() as EscapedIdentifierMap<boolean>;
+            const seen = createEscapedIdentifierMap<boolean>();
 
             for (const attr of node.attributes.properties) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
