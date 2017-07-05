@@ -272,16 +272,16 @@ namespace ts {
             getUnknownType: () => unknownType,
             getStringLiteralType: (text: string) => {
                 /* tslint:disable:no-null-keyword */
-                Debug.assert(text !== undefined && text !== null);
+                Debug.assert(text !== undefined && text !== null, "Argument to getStringLiteralType was null or undefined");
                 /* tslint:enable:no-null-keyword */
-                Debug.assert(typeof text === "string");
+                Debug.assert(typeof text === "string", "Argument to getStringLiteralType not a string");
                 return getLiteralType(text);
             },
             getNumberLiteralType: (number: number) => {
                 /* tslint:disable:no-null-keyword */
-                Debug.assert(number !== undefined && number !== null);
+                Debug.assert(number !== undefined && number !== null, "Argument to getNumberLiteralType was null or undefined");
                 /* tslint:enable:no-null-keyword */
-                Debug.assert(typeof number === "number");
+                Debug.assert(typeof number === "number", "Argument to getStringLiteralType not a number");
                 return getLiteralType(number);
             },
             getFalseType: () => falseType,

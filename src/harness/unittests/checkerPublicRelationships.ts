@@ -87,42 +87,38 @@ namespace ts {
         });
 
         it("can get string literal types", () => {
-            assert((checker.getLiteralType("foobar") as LiteralType).value === "foobar");
+            assert(checker.getStringLiteralType("foobar").value === "foobar");
         });
 
         it("can get numeber literal types", () => {
-            assert((checker.getLiteralType(42) as LiteralType).value === "42");
+            assert(checker.getNumberLiteralType(42).value === 42);
         });
 
         it("doesn't choke on exceptional input to literal type getters", () => {
-            assert.equal((checker.getLiteralType("") as LiteralType).value, "");
-            assert.throws(() => checker.getLiteralType(/*content*/ undefined), Error, "Debug Failure. False expression:");
+            assert.equal(checker.getStringLiteralType("").value, "");
+            assert.throws(() => checker.getStringLiteralType(/*content*/ undefined), Error, "Argument to getStringLiteralType was null or undefined");
             /* tslint:disable:no-null-keyword */
-            assert.throws(() => checker.getLiteralType(/*content*/ null), Error, "Debug Failure. False expression:");
+            assert.throws(() => checker.getNumberLiteralType(/*content*/ null), Error, "Argument to getNumberLiteralType was null or undefined");
             /* tslint:enable:no-null-keyword */
             let hugeStringLiteral = map(new Array(2 ** 16 - 1), () => "a").join();
-            assert.equal((checker.getLiteralType(hugeStringLiteral) as LiteralType).value, hugeStringLiteral);
+            assert.equal(checker.getStringLiteralType(hugeStringLiteral).value, hugeStringLiteral);
             hugeStringLiteral = undefined;
-
-
-            assert.throws(() => checker.getLiteralType(/*content*/ undefined), Error, "Debug Failure. False expression:");
-            /* tslint:disable:no-null-keyword */
-            assert.throws(() => checker.getLiteralType(/*content*/ null), Error, "Debug Failure. False expression:");
-            /* tslint:enable:no-null-keyword */
 
             const sanityChecks = ["000", "0b0", "0x0", "0.0", "0e-0", "-010", "-0b10", "-0x10", "-0o10", "-10.0", "-1e-1", "NaN", "Infinity", "-Infinity"];
             forEach(sanityChecks, num => {
-                assert.equal((checker.getLiteralType(num) as LiteralType).value, num, `${num} did not match.`);
+                assert.equal(checker.getStringLiteralType(num).value, num, `${num} did not match.`);
             });
 
-            const insanityChecks = [[0, "0"], [0b0, "0"], [-10, "-10"], [NaN, "NaN"], [Infinity, "Infinity"], [-Infinity, "-Infinity"]];
-            forEach(insanityChecks, ([num, expected]) => {
-                assert.equal((checker.getLiteralType(num as any) as LiteralType).value, expected, `${JSON.stringify(num)} should be ${expected}`);
+            const insanityChecks = [0, 0b0, -10, Infinity, -Infinity];
+            forEach(insanityChecks, (num) => {
+                assert.equal(checker.getNumberLiteralType(num).value, num, `${JSON.stringify(num)} should be ${num}`);
             });
+
+            assert.isNaN(checker.getNumberLiteralType(NaN).value);
 
             const instabilityChecks = [{ foo: 42 }, new Date(42), [42], new Number(42), new String("42")];
             forEach(instabilityChecks, (bad) => {
-                assert.throws(() => checker.getLiteralType(bad as any));
+                assert.throws(() => checker.getStringLiteralType(bad as any));
             });
         });
 
@@ -152,7 +148,7 @@ namespace ts {
             assert.notEqual(checker.lookupGlobalType("Function"), innerFunction, "Inner function type should be different than global");
             const brandNameType = checker.getTypeOfSymbol(innerFunction.getProperty("myBrand"));
             assert.notEqual(brandNameType, checker.getUnknownType(), "Brand type on inner function should not be unknown");
-            assert.equal(brandNameType, checker.getLiteralType(42), "Brand type should be 42");
+            assert.equal(brandNameType, checker.getNumberLiteralType(42), "Brand type should be 42");
 
             let skipped = false;
             const functionBody2 = forEachChild(program.getSourceFile("test.ts"), node => node.kind === SyntaxKind.FunctionDeclaration ? skipped ? (node as FunctionDeclaration) : (skipped = true, undefined) : undefined).body;
