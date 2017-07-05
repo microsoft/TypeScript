@@ -5,15 +5,15 @@
 namespace ts.refactor.extractMethod {
     export const name = 'extract_method';
     const extractMethod: Refactor = {
-        name: "Extract method",
-        description: Diagnostics.Convert_function_to_an_ES2015_class.message,
+        name: "Extract Method",
+        description: Diagnostics.Extract_function.message,
         getAvailableActions,
         getEditsForAction,
     };
 
     registerRefactor(extractMethod);
 
-        /** Compute the associated code actions */
+    /** Compute the associated code actions */
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
         const rangeToExtract = getRangeToExtract(context.file, { start: context.startPosition, length: context.endPosition - context.startPosition });
         const targetRange: TargetRange = rangeToExtract.targetRange;
@@ -29,15 +29,15 @@ namespace ts.refactor.extractMethod {
         let i = 0;
         for (const extr of extractions) {
             actions.push({
-                description: extr.scopeDescription,
+                description: formatMessage(extr.scopeDescription, Diagnostics.Extract_function_into_0),
                 name: `scope_${i}`
             });
             i++;
         }
 
         return [{
-            name,
-            description: "Extract method/function",
+            name: extractMethod.name,
+            description: extractMethod.description,
             inlineable: true,
             actions
         }];
@@ -62,23 +62,12 @@ namespace ts.refactor.extractMethod {
         return undefined;
     }
 
-/*
-    function isApplicable(context: RefactorContext): boolean {
-        // Must have something selected
-        if (context.endPosition === undefined || context.endPosition <= context.startPosition) {
-            return false;
-        }
-        return true;
-    }
-*/
-
-    // TODO: put into diagnostic messages
+    // Move these into diagnostic messages if they become user-facing
     namespace Messages {
         function m(message: string): DiagnosticMessage {
             return { message, code: 0, category: DiagnosticCategory.Message, key: message };
         }
 
-        // TODO provide more information in errors
         export const CannotExtractFunction: DiagnosticMessage = m("Cannot extract function.");
         export const StatementOrExpressionExpected: DiagnosticMessage = m("Statement or expression expected.");
         export const CannotExtractRangeContainingConditionalBreakOrContinueStatements: DiagnosticMessage = m("Cannot extract range containing conditional break or continue statements.");
@@ -130,16 +119,28 @@ namespace ts.refactor.extractMethod {
         readonly errors?: Diagnostic[];
     }
 
+    /**
+     * getRangeToExtract takes a span inside a text file and returns either an expression or an array
+     * of statements representing the minimum set of nodes needed to extract the entire span. This
+     * process may fail, in which case a set of errors is returned instead (these are currently
+     * not shown to the user, but can be used by us diagnostically)
+     */
     export function getRangeToExtract(sourceFile: SourceFile, span: TextSpan): RangeToExtract {
+        // Walk up starting from the the start position until we find a non-SourceFile node that subsumes the selected span.
+        // This may fail (e.g. you select two statements in the root of a source file)
         let start = getParentNodeInSpan(getTokenAtPosition(sourceFile, span.start, /*includeJsDocComment*/ false), sourceFile, span);
+        // Do the same for the ending position
         let end = getParentNodeInSpan(findTokenOnLeftOfPosition(sourceFile, textSpanEnd(span)), sourceFile, span);
 
+        // We'll modify these flags as we walk the tree to collect data
+        // about what things need to be done as part of the extraction.
         let facts = RangeFacts.None;
-
+        
         if (!start || !end) {
             // cannot find either start or end node
             return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
         }
+
         if (start.parent !== end.parent) {
             // handle cases like 1 + [2 + 3] + 4
             // user selection is marked with [].
@@ -197,7 +198,8 @@ namespace ts.refactor.extractMethod {
             return { targetRange: { range, facts } };
         }
 
-        function checkNode(n: Node): Diagnostic[] {
+        // Verifies whether we can actually extract this node or not.
+        function checkNode(n: Node): Diagnostic[] | undefined {
             const enum PermittedJumps {
                 None = 0,
                 Break = 1 << 0,
@@ -266,6 +268,7 @@ namespace ts.refactor.extractMethod {
                             break;
                     }
                 }
+
                 switch (n.kind) {
                     case SyntaxKind.ThisType:
                     case SyntaxKind.ThisKeyword:
@@ -321,9 +324,13 @@ namespace ts.refactor.extractMethod {
         }
     }
 
-    export function collectEnclosingScopes(range: TargetRange) {
+    /**
+     * Computes possible places we could extract the function into. For example,
+     * you may be able to extract into a class method *or* local closure *or* namespace function,
+     * depending on what's in the extracted body.
+     */
+    export function collectEnclosingScopes(range: TargetRange): Scope[] {
         let current: Node = isArray(range.range) ? firstOrUndefined(range.range) : range.range;
-        // 2. collect enclosing scopes
         if (range.facts & RangeFacts.UsesThis) {
             // if range uses this as keyword or as type inside the class then it can only be extracted to a method of the containing class
             const containingClass = getContainingClass(current);
@@ -348,6 +355,11 @@ namespace ts.refactor.extractMethod {
         return scopes;
     }
 
+    /**
+     * Given a piece of text to extract ('targetRange'), computes a list of possible extractions.
+     * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
+     * or an error explaining why we can't extract into that scope.
+     */
     export function extractRange(targetRange: TargetRange, sourceFile: SourceFile, context: RefactorContext): ReadonlyArray<ExtractResultForScope> {
         const scopes = collectEnclosingScopes(targetRange);
         if (scopes.length === 0) {
@@ -424,13 +436,19 @@ namespace ts.refactor.extractMethod {
         const checker = context.program.getTypeChecker();
 
         const changeTracker = textChanges.ChangeTracker.fromRefactorContext(context);
-        // TODO: analyze types of usages and introduce type parameters
-        // TODO: generate unique function name
 
-        const functionName = createIdentifier("newFunction");
-        // TODO: derive type parameters from parameter types
+        // Make a unique name for the extracted function
+        let functionNameText = 'newFunction';
+        if (scope.locals && scope.locals.has(functionNameText)) {
+            let i = 1;
+            while (scope.locals.has(functionNameText = `newFunction_${i}`)) {
+                i++;
+            }
+        }
+
+        const functionName = createIdentifier(functionNameText);
+        // Currently doesn't get populated, but we might try to infer from this at some point
         const typeParameters: TypeParameterDeclaration[] = undefined;
-        // TODO: use real type?
         const returnType: TypeNode = undefined;
         const parameters: ParameterDeclaration[] = [];
         const callArguments: Identifier[] = [];
@@ -550,7 +568,6 @@ namespace ts.refactor.extractMethod {
         }
 
         function generateReturnValueProperty() {
-            // TODO: generate unique property name
             return "__return";
         }
 
@@ -613,7 +630,6 @@ namespace ts.refactor.extractMethod {
         startLexicalEnvironment: noop,
         suspendLexicalEnvironment: noop
     };
-
 
     function isModuleBlock(n: Node): n is ModuleBlock {
         return n.kind === SyntaxKind.ModuleBlock;
