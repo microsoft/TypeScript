@@ -237,7 +237,7 @@ namespace ts {
                     const nameExpression = (<ComputedPropertyName>name).expression;
                     // treat computed property names where expression is string/numeric literal as just string/numeric literal
                     if (isStringOrNumericLiteral(nameExpression)) {
-                        return nameExpression.text && escapeIdentifier(nameExpression.text);
+                        return escapeIdentifier(nameExpression.text);
                     }
 
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));

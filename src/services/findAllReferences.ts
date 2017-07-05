@@ -1568,10 +1568,7 @@ namespace ts.FindAllReferences.Core {
             }
             return undefined;
         }
-        if (node.name.kind === SyntaxKind.Identifier) {
-            return unescapeIdentifier(node.name.text);
-        }
-        return node.name.text;
+        return getTextOfIdentifierOrLiteral(node.name);
     }
 
     /** Gets all symbols for one property. Does not get symbols for every property. */
