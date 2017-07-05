@@ -706,7 +706,6 @@ namespace ts.formatting {
                 if (isToken(child) && child.kind !== SyntaxKind.JsxText) {
                     // if child node is a token, it does not impact indentation, proceed it using parent indentation scope rules
                     const tokenInfo = formattingScanner.readTokenInfo(child);
-                    Debug.assert(tokenInfo.token.end === child.end, "Token end is child end");
                     consumeTokenAndAdvanceScanner(tokenInfo, node, parentDynamicIndentation, child);
                     return inheritedIndentation;
                 }
