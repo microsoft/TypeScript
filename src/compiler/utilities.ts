@@ -899,11 +899,11 @@ namespace ts {
         });
     }
 
-    export function getContainingFunction(node: Node): FunctionLikeDeclaration {
+    export function getContainingFunction(node: Node): FunctionLikeTypes {
         while (true) {
             node = node.parent;
             if (!node || isFunctionLike(node)) {
-                return <FunctionLikeDeclaration>node;
+                return <FunctionLikeTypes>node;
             }
         }
     }
@@ -1885,7 +1885,7 @@ namespace ts {
         AsyncGenerator = Async | Generator, // Function is an async generator function
     }
 
-    export function getFunctionFlags(node: FunctionLikeDeclaration | undefined) {
+    export function getFunctionFlags(node: FunctionLikeTypes | undefined) {
         if (!node) {
             return FunctionFlags.Invalid;
         }
@@ -1906,7 +1906,7 @@ namespace ts {
                 break;
         }
 
-        if (!node.body) {
+        if (!(node as FunctionLikeDeclaration).body) {
             flags |= FunctionFlags.Invalid;
         }
 
@@ -4810,7 +4810,7 @@ namespace ts {
 
     // Functions
 
-    export function isFunctionLike(node: Node): node is FunctionLikeDeclaration {
+    export function isFunctionLike(node: Node): node is FunctionLikeTypes {
         return node && isFunctionLikeKind(node.kind);
     }
 

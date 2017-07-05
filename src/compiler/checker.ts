@@ -183,8 +183,8 @@ namespace ts {
                 return declaration ? getSignatureFromDeclaration(declaration) : undefined;
             },
             isImplementationOfOverload: node => {
-                node = getParseTreeNode(node, isFunctionLike);
-                return node ? isImplementationOfOverload(node) : undefined;
+                const parsed = getParseTreeNode(node, isFunctionLike);
+                return parsed ? isImplementationOfOverload(parsed) : undefined;
             },
             getImmediateAliasedSymbol: symbol => {
                 Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
@@ -12575,7 +12575,7 @@ namespace ts {
             }
         }
 
-        function getContainingObjectLiteral(func: FunctionLikeDeclaration) {
+        function getContainingObjectLiteral(func: FunctionLikeTypes) {
             return (func.kind === SyntaxKind.MethodDeclaration ||
                 func.kind === SyntaxKind.GetAccessor ||
                 func.kind === SyntaxKind.SetAccessor) && func.parent.kind === SyntaxKind.ObjectLiteralExpression ? <ObjectLiteralExpression>func.parent :
@@ -12593,7 +12593,7 @@ namespace ts {
             });
         }
 
-        function getContextualThisParameterType(func: FunctionLikeDeclaration): Type {
+        function getContextualThisParameterType(func: FunctionLikeTypes): Type {
             if (func.kind === SyntaxKind.ArrowFunction) {
                 return undefined;
             }
@@ -12770,7 +12770,7 @@ namespace ts {
             return false;
         }
 
-        function getContextualReturnType(functionDecl: FunctionLikeDeclaration): Type {
+        function getContextualReturnType(functionDecl: FunctionLikeTypes): Type {
             // If the containing function has a return type annotation, is a constructor, or is a get accessor whose
             // corresponding set accessor has a type annotation, return statements in the function are contextually typed
             if (functionDecl.kind === SyntaxKind.Constructor ||
@@ -17866,7 +17866,7 @@ namespace ts {
                     error(node, Diagnostics.A_parameter_property_is_only_allowed_in_a_constructor_implementation);
                 }
             }
-            if (node.questionToken && isBindingPattern(node.name) && func.body) {
+            if (node.questionToken && isBindingPattern(node.name) && (func as FunctionLikeDeclaration).body) {
                 error(node, Diagnostics.A_binding_pattern_parameter_cannot_be_optional_in_an_implementation_signature);
             }
             if ((<Identifier>node.name).text === "this") {
@@ -18624,12 +18624,12 @@ namespace ts {
             let hasOverloads = false;
             let bodyDeclaration: FunctionLikeDeclaration;
             let lastSeenNonAmbientDeclaration: FunctionLikeDeclaration;
-            let previousDeclaration: FunctionLikeDeclaration;
+            let previousDeclaration: FunctionLikeTypes;
 
             const declarations = symbol.declarations;
             const isConstructor = (symbol.flags & SymbolFlags.Constructor) !== 0;
 
-            function reportImplementationExpectedError(node: FunctionLikeDeclaration): void {
+            function reportImplementationExpectedError(node: FunctionLikeTypes): void {
                 if (node.name && nodeIsMissing(node.name)) {
                     return;
                 }
@@ -18688,7 +18688,7 @@ namespace ts {
             let duplicateFunctionDeclaration = false;
             let multipleConstructorImplementation = false;
             for (const current of declarations) {
-                const node = <FunctionLikeDeclaration>current;
+                const node = <FunctionLikeTypes>current;
                 const inAmbientContext = isInAmbientContext(node);
                 const inAmbientContextOrInterface = node.parent.kind === SyntaxKind.InterfaceDeclaration || node.parent.kind === SyntaxKind.TypeLiteral || inAmbientContext;
                 if (inAmbientContextOrInterface) {
@@ -18709,7 +18709,7 @@ namespace ts {
                     someHaveQuestionToken = someHaveQuestionToken || hasQuestionToken(node);
                     allHaveQuestionToken = allHaveQuestionToken && hasQuestionToken(node);
 
-                    if (nodeIsPresent(node.body) && bodyDeclaration) {
+                    if (nodeIsPresent((node as FunctionLikeDeclaration).body) && bodyDeclaration) {
                         if (isConstructor) {
                             multipleConstructorImplementation = true;
                         }
@@ -18721,9 +18721,9 @@ namespace ts {
                         reportImplementationExpectedError(previousDeclaration);
                     }
 
-                    if (nodeIsPresent(node.body)) {
+                    if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                         if (!bodyDeclaration) {
-                            bodyDeclaration = node;
+                            bodyDeclaration = node as FunctionLikeDeclaration;
                         }
                     }
                     else {
@@ -18733,7 +18733,7 @@ namespace ts {
                     previousDeclaration = node;
 
                     if (!inAmbientContextOrInterface) {
-                        lastSeenNonAmbientDeclaration = node;
+                        lastSeenNonAmbientDeclaration = node as FunctionLikeDeclaration;
                     }
                 }
             }
@@ -19930,7 +19930,7 @@ namespace ts {
                 forEach((<BindingPattern>node.name).elements, checkSourceElement);
             }
             // For a parameter declaration with an initializer, error and exit if the containing function doesn't have a body
-            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing(getContainingFunction(node).body)) {
+            if (node.initializer && getRootDeclaration(node).kind === SyntaxKind.Parameter && nodeIsMissing((getContainingFunction(node) as FunctionLikeDeclaration).body)) {
                 error(node, Diagnostics.A_parameter_initializer_is_only_allowed_in_a_function_or_constructor_implementation);
                 return;
             }
@@ -20529,12 +20529,12 @@ namespace ts {
             // TODO: Check that target label is valid
         }
 
-        function isGetAccessorWithAnnotatedSetAccessor(node: FunctionLikeDeclaration) {
+        function isGetAccessorWithAnnotatedSetAccessor(node: FunctionLikeTypes) {
             return node.kind === SyntaxKind.GetAccessor
                 && getEffectiveSetAccessorTypeAnnotationNode(getDeclarationOfKind<SetAccessorDeclaration>(node.symbol, SyntaxKind.SetAccessor)) !== undefined;
         }
 
-        function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeDeclaration, returnType: Type): boolean {
+        function isUnwrappedReturnTypeVoidOrAny(func: FunctionLikeTypes, returnType: Type): boolean {
             const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
                 ? getPromisedTypeOfPromise(returnType) // Async function
                 : returnType; // AsyncGenerator function, Generator function, or normal function
@@ -23054,8 +23054,8 @@ namespace ts {
             return false;
         }
 
-        function isImplementationOfOverload(node: FunctionLikeDeclaration) {
-            if (nodeIsPresent(node.body)) {
+        function isImplementationOfOverload(node: FunctionLikeTypes) {
+            if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
                 const symbol = getSymbolOfNode(node);
                 const signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload

@@ -1049,16 +1049,17 @@ namespace ts.FindAllReferences.Core {
             if (isVariableLike(parent) && parent.type === containingTypeReference && parent.initializer && isImplementationExpression(parent.initializer)) {
                 addReference(parent.initializer);
             }
-            else if (isFunctionLike(parent) && parent.type === containingTypeReference && parent.body) {
-                if (parent.body.kind === SyntaxKind.Block) {
-                    forEachReturnStatement(<Block>parent.body, returnStatement => {
+            else if (isFunctionLike(parent) && parent.type === containingTypeReference && (parent as FunctionLikeDeclaration).body) {
+                const body = (parent as FunctionLikeDeclaration).body;
+                if (body.kind === SyntaxKind.Block) {
+                    forEachReturnStatement(<Block>body, returnStatement => {
                         if (returnStatement.expression && isImplementationExpression(returnStatement.expression)) {
                             addReference(returnStatement.expression);
                         }
                     });
                 }
-                else if (isImplementationExpression(<Expression>parent.body)) {
-                    addReference(parent.body);
+                else if (isImplementationExpression(<Expression>body)) {
+                    addReference(body);
                 }
             }
             else if (isAssertionExpression(parent) && isImplementationExpression(parent.expression)) {
@@ -1643,7 +1644,7 @@ namespace ts.FindAllReferences.Core {
             }
         }
         else if (isFunctionLike(node)) {
-            return !!node.body || hasModifier(node, ModifierFlags.Ambient);
+            return !!(node as FunctionLikeDeclaration).body || hasModifier(node, ModifierFlags.Ambient);
         }
         else {
             switch (node.kind) {
