@@ -353,7 +353,7 @@ namespace ts {
                     // write name of indirectly exported entry, i.e. 'export {x} from ...'
                     exportedNames.push(
                         createPropertyAssignment(
-                            createLiteral(unescapeIdentifier((element.name || element.propertyName).text)),
+                            createLiteral(unescapeLeadingUnderscores((element.name || element.propertyName).text)),
                             createTrue()
                         )
                     );
@@ -504,10 +504,10 @@ namespace ts {
                                 for (const e of (<ExportDeclaration>entry).exportClause.elements) {
                                     properties.push(
                                         createPropertyAssignment(
-                                            createLiteral(unescapeIdentifier(e.name.text)),
+                                            createLiteral(unescapeLeadingUnderscores(e.name.text)),
                                             createElementAccess(
                                                 parameterName,
-                                                createLiteral(unescapeIdentifier((e.propertyName || e.name).text))
+                                                createLiteral(unescapeLeadingUnderscores((e.propertyName || e.name).text))
                                             )
                                         )
                                     );
@@ -1028,7 +1028,7 @@ namespace ts {
                 let excludeName: string;
                 if (exportSelf) {
                     statements = appendExportStatement(statements, decl.name, getLocalName(decl));
-                    excludeName = unescapeIdentifier(decl.name.text);
+                    excludeName = unescapeLeadingUnderscores(decl.name.text);
                 }
 
                 statements = appendExportsOfDeclaration(statements, decl, excludeName);
@@ -1080,7 +1080,7 @@ namespace ts {
             }
 
             const name = getDeclarationName(decl);
-            const exportSpecifiers = moduleInfo.exportSpecifiers.get(unescapeIdentifier(name.text));
+            const exportSpecifiers = moduleInfo.exportSpecifiers.get(unescapeLeadingUnderscores(name.text));
             if (exportSpecifiers) {
                 for (const exportSpecifier of exportSpecifiers) {
                     if (exportSpecifier.name.text !== excludeName) {

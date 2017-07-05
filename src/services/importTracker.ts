@@ -602,10 +602,10 @@ namespace ts.FindAllReferences {
 
         return forEach(symbol.declarations, decl => {
             if (isExportAssignment(decl)) {
-                return isIdentifier(decl.expression) ? unescapeIdentifier(decl.expression.text) : undefined;
+                return isIdentifier(decl.expression) ? unescapeLeadingUnderscores(decl.expression.text) : undefined;
             }
             const name = getNameOfDeclaration(decl);
-            return name && name.kind === SyntaxKind.Identifier && unescapeIdentifier(name.text);
+            return name && name.kind === SyntaxKind.Identifier && unescapeLeadingUnderscores(name.text);
         });
     }
 

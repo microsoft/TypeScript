@@ -2761,7 +2761,7 @@ namespace ts {
                 return generateName(node);
             }
             else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeIdentifier(node.text);
+                return unescapeLeadingUnderscores(node.text);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
@@ -2843,7 +2843,7 @@ namespace ts {
         function isUniqueLocalName(name: string, container: Node): boolean {
             for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
                 if (node.locals) {
-                    const local = node.locals.get(escapeIdentifier(name));
+                    const local = node.locals.get(escapeLeadingUnderscores(name));
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
                     if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
@@ -2981,7 +2981,7 @@ namespace ts {
                 case GeneratedIdentifierKind.Loop:
                     return makeTempVariableName(TempFlags._i);
                 case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(unescapeIdentifier(name.text));
+                    return makeUniqueName(unescapeLeadingUnderscores(name.text));
             }
 
             Debug.fail("Unsupported GeneratedIdentifierKind.");

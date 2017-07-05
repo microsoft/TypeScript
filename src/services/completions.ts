@@ -88,7 +88,7 @@ namespace ts.Completions {
             if (pos === position) {
                 return;
             }
-            const realName = unescapeIdentifier(name);
+            const realName = unescapeLeadingUnderscores(name);
 
             if (!uniqueNames.get(realName)) {
                 uniqueNames.set(realName, realName);
@@ -1447,7 +1447,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterNamedImportOrExportCompletionItems(exportsOfModule: Symbol[], namedImportsOrExports: ImportOrExportSpecifier[]): Symbol[] {
-            const existingImportsOrExports = createEscapedIdentifierMap<boolean>();
+            const existingImportsOrExports = createUnderscoreEscapedMap<boolean>();
 
             for (const element of namedImportsOrExports) {
                 // If this is the current item we are editing right now, do not filter it out
@@ -1477,7 +1477,7 @@ namespace ts.Completions {
                 return contextualMemberSymbols;
             }
 
-            const existingMemberNames = createEscapedIdentifierMap<boolean>();
+            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyAssignment &&
@@ -1494,7 +1494,7 @@ namespace ts.Completions {
                     continue;
                 }
 
-                let existingName: EscapedIdentifier;
+                let existingName: UnderscoreEscapedString;
 
                 if (m.kind === SyntaxKind.BindingElement && (<BindingElement>m).propertyName) {
                     // include only identifiers in completion list
@@ -1522,7 +1522,7 @@ namespace ts.Completions {
          * @returns Symbols to be suggested in an class element depending on existing memebers and symbol flags
          */
         function filterClassMembersList(baseSymbols: Symbol[], implementingTypeSymbols: Symbol[], existingMembers: ClassElement[], currentClassElementModifierFlags: ModifierFlags): Symbol[] {
-            const existingMemberNames = createEscapedIdentifierMap<boolean>();
+            const existingMemberNames = createUnderscoreEscapedMap<boolean>();
             for (const m of existingMembers) {
                 // Ignore omitted expressions for missing members
                 if (m.kind !== SyntaxKind.PropertyDeclaration &&
@@ -1575,7 +1575,7 @@ namespace ts.Completions {
          *          do not occur at the current position and have not otherwise been typed.
          */
         function filterJsxAttributes(symbols: Symbol[], attributes: NodeArray<JsxAttribute | JsxSpreadAttribute>): Symbol[] {
-            const seenNames = createEscapedIdentifierMap<boolean>();
+            const seenNames = createUnderscoreEscapedMap<boolean>();
             for (const attr of attributes) {
                 // If this is the current item we are editing right now, do not filter it out
                 if (isCurrentlyEditingNode(attr)) {

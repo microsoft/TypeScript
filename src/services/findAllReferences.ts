@@ -122,7 +122,7 @@ namespace ts.FindAllReferences {
                 }
                 case "label": {
                     const { node } = def;
-                    return { node, name: unescapeIdentifier(node.text), kind: ScriptElementKind.label, displayParts: [displayPart(unescapeIdentifier(node.text), SymbolDisplayPartKind.text)] };
+                    return { node, name: unescapeLeadingUnderscores(node.text), kind: ScriptElementKind.label, displayParts: [displayPart(unescapeLeadingUnderscores(node.text), SymbolDisplayPartKind.text)] };
                 }
                 case "keyword": {
                     const { node } = def;
@@ -357,7 +357,7 @@ namespace ts.FindAllReferences.Core {
         // Labels
         if (isLabelName(node)) {
             if (isJumpStatementTarget(node)) {
-                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), unescapeIdentifier((<Identifier>node).text));
+                const labelDefinition = getTargetLabel((<BreakOrContinueStatement>node.parent), unescapeLeadingUnderscores((<Identifier>node).text));
                 // if we have a label definition, look within its statement for references, if not, then
                 // the label is undefined and we have no results..
                 return labelDefinition && getLabelReferencesInNode(labelDefinition.parent, labelDefinition);
@@ -432,7 +432,7 @@ namespace ts.FindAllReferences.Core {
         readonly location: Node;
         readonly symbol: Symbol;
         readonly text: string;
-        readonly escapedText: EscapedIdentifier;
+        readonly escapedText: UnderscoreEscapedString;
         /** Only set if `options.implementations` is true. These are the symbols checked to get the implementations of a property access. */
         readonly parents: Symbol[] | undefined;
 
@@ -494,7 +494,7 @@ namespace ts.FindAllReferences.Core {
         createSearch(location: Node, symbol: Symbol, comingFrom: ImportExport | undefined, searchOptions: { text?: string, allSearchSymbols?: Symbol[] } = {}): Search {
             // Note: if this is an external module symbol, the name doesn't include quotes.
             const { text = stripQuotes(getDeclaredName(this.checker, symbol, location)), allSearchSymbols = undefined } = searchOptions;
-            const escapedText = escapeIdentifier(text);
+            const escapedText = escapeLeadingUnderscores(text);
             const parents = this.options.implementations && getParentSymbolsOfPropertyAccess(location, symbol, this.checker);
             return {
                 location, symbol, comingFrom, text, escapedText, parents,
@@ -604,7 +604,7 @@ namespace ts.FindAllReferences.Core {
         if (isObjectBindingPatternElementWithoutPropertyName(symbol)) {
             const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
             const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, unescapeIdentifier((<Identifier>bindingElement.name).text));
+            return typeOfPattern && checker.getPropertyOfType(typeOfPattern, unescapeLeadingUnderscores((<Identifier>bindingElement.name).text));
         }
         return undefined;
     }
@@ -716,7 +716,7 @@ namespace ts.FindAllReferences.Core {
     function getLabelReferencesInNode(container: Node, targetLabel: Identifier): SymbolAndEntries[] {
         const references: Entry[] = [];
         const sourceFile = container.getSourceFile();
-        const labelName = unescapeIdentifier(targetLabel.text);
+        const labelName = unescapeLeadingUnderscores(targetLabel.text);
         const possiblePositions = getPossibleSymbolReferencePositions(sourceFile, labelName, container);
         for (const position of possiblePositions) {
             const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ false);
@@ -733,7 +733,7 @@ namespace ts.FindAllReferences.Core {
         // Compare the length so we filter out strict superstrings of the symbol we are looking for
         switch (node && node.kind) {
             case SyntaxKind.Identifier:
-                return unescapeIdentifier((node as Identifier).text).length === searchSymbolName.length;
+                return unescapeLeadingUnderscores((node as Identifier).text).length === searchSymbolName.length;
 
             case SyntaxKind.StringLiteral:
                 return (isLiteralNameOfPropertyDeclarationOrIndexAccess(node) || isNameOfExternalModuleImportOrDeclaration(node)) &&
@@ -977,7 +977,7 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members.get("__constructor" as EscapedIdentifier).declarations) {
+        for (const decl of classSymbol.members.get("__constructor" as UnderscoreEscapedString).declarations) {
             const ctrKeyword = ts.findChildOfKind(decl, ts.SyntaxKind.ConstructorKeyword, sourceFile)!;
             Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
             addNode(ctrKeyword);
@@ -1001,7 +1001,7 @@ namespace ts.FindAllReferences.Core {
     /** Find references to `super` in the constructor of an extending class.  */
     function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
         const symbol = cls.symbol;
-        const ctr = symbol.members.get("__constructor" as EscapedIdentifier);
+        const ctr = symbol.members.get("__constructor" as UnderscoreEscapedString);
         if (!ctr) {
             return;
         }

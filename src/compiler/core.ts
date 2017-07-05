@@ -48,8 +48,8 @@ namespace ts {
     }
 
     /** Create a new escaped identifier map. */
-    export function createEscapedIdentifierMap<T>(): EscapedIdentifierMap<T> {
-        return new MapCtr<T>() as EscapedIdentifierMap<T>;
+    export function createUnderscoreEscapedMap<T>(): UnderscoreEscapedMap<T> {
+        return new MapCtr<T>() as UnderscoreEscapedMap<T>;
     }
 
     /* @internal */
@@ -1016,13 +1016,13 @@ namespace ts {
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
-    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T>, callback: (value: T, key: EscapedIdentifier) => U | undefined): U | undefined;
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T>, callback: (value: T, key: UnderscoreEscapedString) => U | undefined): U | undefined;
     export function forEachEntry<T, U>(map: Map<T>, callback: (value: T, key: string) => U | undefined): U | undefined;
-    export function forEachEntry<T, U>(map: EscapedIdentifierMap<T> | Map<T>, callback: (value: T, key: (string & EscapedIdentifier)) => U | undefined): U | undefined {
+    export function forEachEntry<T, U>(map: UnderscoreEscapedMap<T> | Map<T>, callback: (value: T, key: (string & UnderscoreEscapedString)) => U | undefined): U | undefined {
         const iterator = map.entries();
         for (let { value: pair, done } = iterator.next(); !done; { value: pair, done } = iterator.next()) {
             const [key, value] = pair;
-            const result = callback(value, key as (string & EscapedIdentifier));
+            const result = callback(value, key as (string & UnderscoreEscapedString));
             if (result) {
                 return result;
             }
@@ -1031,12 +1031,12 @@ namespace ts {
     }
 
     /** `forEachEntry` for just keys. */
-    export function forEachKey<T>(map: EscapedIdentifierMap<{}>, callback: (key: EscapedIdentifier) => T | undefined): T | undefined;
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}>, callback: (key: UnderscoreEscapedString) => T | undefined): T | undefined;
     export function forEachKey<T>(map: Map<{}>, callback: (key: string) => T | undefined): T | undefined;
-    export function forEachKey<T>(map: EscapedIdentifierMap<{}> | Map<{}>, callback: (key: string & EscapedIdentifier) => T | undefined): T | undefined {
+    export function forEachKey<T>(map: UnderscoreEscapedMap<{}> | Map<{}>, callback: (key: string & UnderscoreEscapedString) => T | undefined): T | undefined {
         const iterator = map.keys();
         for (let { value: key, done } = iterator.next(); !done; { value: key, done } = iterator.next()) {
-            const result = callback(key as string & EscapedIdentifier);
+            const result = callback(key as string & UnderscoreEscapedString);
             if (result) {
                 return result;
             }
@@ -1045,9 +1045,9 @@ namespace ts {
     }
 
     /** Copy entries from `source` to `target`. */
-    export function copyEntries<T>(source: EscapedIdentifierMap<T>, target: EscapedIdentifierMap<T>): void;
+    export function copyEntries<T>(source: UnderscoreEscapedMap<T>, target: UnderscoreEscapedMap<T>): void;
     export function copyEntries<T>(source: Map<T>, target: Map<T>): void;
-    export function copyEntries<T, U extends EscapedIdentifierMap<T> | Map<T>>(source: U, target: U): void {
+    export function copyEntries<T, U extends UnderscoreEscapedMap<T> | Map<T>>(source: U, target: U): void {
         (source as Map<T>).forEach((value, key) => {
             (target as Map<T>).set(key, value);
         });
@@ -2296,13 +2296,13 @@ namespace ts {
         getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
         getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
-        getSymbolConstructor(): new (flags: SymbolFlags, name: EscapedIdentifier) => Symbol;
+        getSymbolConstructor(): new (flags: SymbolFlags, name: UnderscoreEscapedString) => Symbol;
         getTypeConstructor(): new (checker: TypeChecker, flags: TypeFlags) => Type;
         getSignatureConstructor(): new (checker: TypeChecker) => Signature;
         getSourceMapSourceConstructor(): new (fileName: string, text: string, skipTrivia?: (pos: number) => number) => SourceMapSource;
     }
 
-    function Symbol(this: Symbol, flags: SymbolFlags, name: EscapedIdentifier) {
+    function Symbol(this: Symbol, flags: SymbolFlags, name: UnderscoreEscapedString) {
         this.flags = flags;
         this.name = name;
         this.declarations = undefined;

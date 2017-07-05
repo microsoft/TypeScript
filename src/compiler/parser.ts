@@ -1178,7 +1178,7 @@ namespace ts {
             }
 
             const result = createNode(kind, scanner.getStartPos());
-            (<Identifier>result).text = "" as EscapedIdentifier;
+            (<Identifier>result).text = "" as UnderscoreEscapedString;
             return finishNode(result);
         }
 
@@ -1202,7 +1202,7 @@ namespace ts {
                 if (token() !== SyntaxKind.Identifier) {
                     node.originalKeywordKind = token();
                 }
-                node.text = escapeIdentifier(internIdentifier(scanner.getTokenValue()));
+                node.text = escapeLeadingUnderscores(internIdentifier(scanner.getTokenValue()));
                 nextToken();
                 return finishNode(node);
             }
@@ -6992,7 +6992,7 @@ namespace ts {
                     const pos = scanner.getTokenPos();
                     const end = scanner.getTextPos();
                     const result = <Identifier>createNode(SyntaxKind.Identifier, pos);
-                    result.text = escapeIdentifier(content.substring(pos, end));
+                    result.text = escapeLeadingUnderscores(content.substring(pos, end));
                     finishNode(result, end);
 
                     nextJSDocToken();

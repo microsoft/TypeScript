@@ -71,9 +71,9 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
-        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as EscapedIdentifier);
+        const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as UnderscoreEscapedString);
         undefinedSymbol.declarations = [];
-        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as EscapedIdentifier);
+        const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as UnderscoreEscapedString);
 
         /** This will be set during calls to `getResolvedSignature` where services determines an apparent number of arguments greater than what is actually provided. */
         let apparentArgumentCount: number | undefined;
@@ -101,11 +101,11 @@ namespace ts {
             getSymbolsOfParameterPropertyDeclaration: (parameter, parameterName) => {
                 parameter = getParseTreeNode(parameter, isParameter);
                 Debug.assert(parameter !== undefined, "Cannot get symbols of a synthetic parameter that cannot be resolved to a parse-tree node.");
-                return getSymbolsOfParameterPropertyDeclaration(parameter, escapeIdentifier(parameterName));
+                return getSymbolsOfParameterPropertyDeclaration(parameter, escapeLeadingUnderscores(parameterName));
             },
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
-            getPropertyOfType: (type, name) => getPropertyOfType(type, escapeIdentifier(name)),
+            getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType,
             getSignaturesOfType,
             getIndexTypeOfType,
@@ -176,7 +176,7 @@ namespace ts {
             },
             isValidPropertyAccess: (node, propertyName) => {
                 node = getParseTreeNode(node, isPropertyAccessOrQualifiedName);
-                return node ? isValidPropertyAccess(node, escapeIdentifier(propertyName)) : false;
+                return node ? isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName)) : false;
             },
             getSignatureFromDeclaration: declaration => {
                 declaration = getParseTreeNode(declaration, isFunctionLike);
@@ -211,7 +211,7 @@ namespace ts {
                 node = getParseTreeNode(node, isParameter);
                 return node ? isOptionalParameter(node) : false;
             },
-            tryGetMemberInModuleExports: (name, symbol) => tryGetMemberInModuleExports(escapeIdentifier(name), symbol),
+            tryGetMemberInModuleExports: (name, symbol) => tryGetMemberInModuleExports(escapeLeadingUnderscores(name), symbol),
             tryFindAmbientModuleWithoutAugmentations: moduleName => {
                 // we deliberately exclude augmentations
                 // since we are only interested in declarations of the module itself
@@ -219,13 +219,13 @@ namespace ts {
             },
             getApparentType,
             getAllPossiblePropertiesOfType,
-            getSuggestionForNonexistentProperty: (node, type) => unescapeIdentifier(getSuggestionForNonexistentProperty(node, type)),
-            getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeIdentifier(getSuggestionForNonexistentSymbol(location, escapeIdentifier(name), meaning)),
+            getSuggestionForNonexistentProperty: (node, type) => unescapeLeadingUnderscores(getSuggestionForNonexistentProperty(node, type)),
+            getSuggestionForNonexistentSymbol: (location, name, meaning) => unescapeLeadingUnderscores(getSuggestionForNonexistentSymbol(location, escapeLeadingUnderscores(name), meaning)),
             getBaseConstraintOfType,
-            getJsxNamespace: () => unescapeIdentifier(getJsxNamespace()),
+            getJsxNamespace: () => unescapeLeadingUnderscores(getJsxNamespace()),
             resolveNameAtLocation(location: Node, name: string, meaning: SymbolFlags): Symbol | undefined {
                 location = getParseTreeNode(location);
-                return resolveName(location, escapeIdentifier(name), meaning, /*nameNotFoundMessage*/ undefined, escapeIdentifier(name));
+                return resolveName(location, escapeLeadingUnderscores(name), meaning, /*nameNotFoundMessage*/ undefined, escapeLeadingUnderscores(name));
             },
         };
 
@@ -236,8 +236,8 @@ namespace ts {
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
 
-        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as EscapedIdentifier);
-        const resolvingSymbol = createSymbol(0, "__resolving__" as EscapedIdentifier);
+        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as UnderscoreEscapedString);
+        const resolvingSymbol = createSymbol(0, "__resolving__" as UnderscoreEscapedString);
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
@@ -259,7 +259,7 @@ namespace ts {
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
-        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type" as EscapedIdentifier);
+        const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, "__type" as UnderscoreEscapedString);
         emptyTypeLiteralSymbol.members = createSymbolTable();
         const emptyTypeLiteralType = createAnonymousType(emptyTypeLiteralSymbol, emptySymbols, emptyArray, emptyArray, undefined, undefined);
 
@@ -444,25 +444,25 @@ namespace ts {
         });
         const typeofType = createTypeofType();
 
-        let _jsxNamespace: EscapedIdentifier;
+        let _jsxNamespace: UnderscoreEscapedString;
         let _jsxFactoryEntity: EntityName;
-        let _jsxElementPropertiesName: EscapedIdentifier;
+        let _jsxElementPropertiesName: UnderscoreEscapedString;
         let _hasComputedJsxElementPropertiesName = false;
-        let _jsxElementChildrenPropertyName: EscapedIdentifier;
+        let _jsxElementChildrenPropertyName: UnderscoreEscapedString;
         let _hasComputedJsxElementChildrenPropertyName = false;
 
         /** Things we lazy load from the JSX namespace */
-        const jsxTypes = createEscapedIdentifierMap<Type>();
+        const jsxTypes = createUnderscoreEscapedMap<Type>();
 
         const JsxNames = {
-            JSX: "JSX" as EscapedIdentifier,
-            IntrinsicElements: "IntrinsicElements" as EscapedIdentifier,
-            ElementClass: "ElementClass" as EscapedIdentifier,
-            ElementAttributesPropertyNameContainer: "ElementAttributesProperty" as EscapedIdentifier,
-            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute" as EscapedIdentifier,
-            Element: "Element" as EscapedIdentifier,
-            IntrinsicAttributes: "IntrinsicAttributes" as EscapedIdentifier,
-            IntrinsicClassAttributes: "IntrinsicClassAttributes" as EscapedIdentifier
+            JSX: "JSX" as UnderscoreEscapedString,
+            IntrinsicElements: "IntrinsicElements" as UnderscoreEscapedString,
+            ElementClass: "ElementClass" as UnderscoreEscapedString,
+            ElementAttributesPropertyNameContainer: "ElementAttributesProperty" as UnderscoreEscapedString,
+            ElementChildrenAttributeNameContainer: "ElementChildrenAttribute" as UnderscoreEscapedString,
+            Element: "Element" as UnderscoreEscapedString,
+            IntrinsicAttributes: "IntrinsicAttributes" as UnderscoreEscapedString,
+            IntrinsicClassAttributes: "IntrinsicClassAttributes" as UnderscoreEscapedString
         };
 
         const subtypeRelation = createMap<RelationComparisonResult>();
@@ -496,9 +496,9 @@ namespace ts {
 
         return checker;
 
-        function getJsxNamespace(): EscapedIdentifier {
+        function getJsxNamespace(): UnderscoreEscapedString {
             if (!_jsxNamespace) {
-                _jsxNamespace = "React" as EscapedIdentifier;
+                _jsxNamespace = "React" as UnderscoreEscapedString;
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
                     if (_jsxFactoryEntity) {
@@ -506,7 +506,7 @@ namespace ts {
                     }
                 }
                 else if (compilerOptions.reactNamespace) {
-                    _jsxNamespace = escapeIdentifier(compilerOptions.reactNamespace);
+                    _jsxNamespace = escapeLeadingUnderscores(compilerOptions.reactNamespace);
                 }
             }
             return _jsxNamespace;
@@ -526,7 +526,7 @@ namespace ts {
             diagnostics.add(diagnostic);
         }
 
-        function createSymbol(flags: SymbolFlags, name: EscapedIdentifier) {
+        function createSymbol(flags: SymbolFlags, name: UnderscoreEscapedString) {
             symbolCount++;
             const symbol = <TransientSymbol>(new Symbol(flags | SymbolFlags.Transient, name));
             symbol.checkFlags = 0;
@@ -675,7 +675,7 @@ namespace ts {
                 const targetSymbol = target.get(id);
                 if (targetSymbol) {
                     // Error on redeclarations
-                    forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeIdentifier(id), message));
+                    forEach(targetSymbol.declarations, addDeclarationDiagnostic(unescapeLeadingUnderscores(id), message));
                 }
                 else {
                     target.set(id, sourceSymbol);
@@ -706,7 +706,7 @@ namespace ts {
             return node.kind === SyntaxKind.SourceFile && !isExternalOrCommonJsModule(<SourceFile>node);
         }
 
-        function getSymbol(symbols: SymbolTable, name: EscapedIdentifier, meaning: SymbolFlags): Symbol {
+        function getSymbol(symbols: SymbolTable, name: UnderscoreEscapedString, meaning: SymbolFlags): Symbol {
             if (meaning) {
                 const symbol = symbols.get(name);
                 if (symbol) {
@@ -732,7 +732,7 @@ namespace ts {
          * @param parameterName a name of the parameter to get the symbols for.
          * @return a tuple of two symbols
          */
-        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: EscapedIdentifier): [Symbol, Symbol] {
+        function getSymbolsOfParameterPropertyDeclaration(parameter: ParameterDeclaration, parameterName: UnderscoreEscapedString): [Symbol, Symbol] {
             const constructorDeclaration = parameter.parent;
             const classDeclaration = parameter.parent.parent;
 
@@ -855,20 +855,20 @@ namespace ts {
         // the given name can be found.
         function resolveName(
             location: Node | undefined,
-            name: EscapedIdentifier,
+            name: UnderscoreEscapedString,
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage | undefined,
-            nameArg: EscapedIdentifier | Identifier,
+            nameArg: UnderscoreEscapedString | Identifier,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             return resolveNameHelper(location, name, meaning, nameNotFoundMessage, nameArg, getSymbol, suggestedNameNotFoundMessage);
         }
 
         function resolveNameHelper(
             location: Node | undefined,
-            name: EscapedIdentifier,
+            name: UnderscoreEscapedString,
             meaning: SymbolFlags,
             nameNotFoundMessage: DiagnosticMessage,
-            nameArg: EscapedIdentifier | Identifier,
+            nameArg: UnderscoreEscapedString | Identifier,
             lookup: typeof getSymbol,
             suggestedNameNotFoundMessage?: DiagnosticMessage): Symbol {
             const originalLocation = location; // needed for did-you-mean error reporting, which gathers candidates starting from the original location
@@ -933,7 +933,7 @@ namespace ts {
 
                             // It's an external module. First see if the module has an export default and if the local
                             // name of that export default matches.
-                            if (result = moduleExports.get("default" as EscapedIdentifier)) {
+                            if (result = moduleExports.get("default" as UnderscoreEscapedString)) {
                                 const localSymbol = getLocalSymbolForExportDefault(result);
                                 if (localSymbol && (result.flags & meaning) && localSymbol.name === name) {
                                     break loop;
@@ -1101,11 +1101,11 @@ namespace ts {
                         !checkAndReportErrorForUsingTypeAsNamespace(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingTypeAsValue(errorLocation, name, meaning) &&
                         !checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation, name, meaning))  {
-                        let suggestion: EscapedIdentifier | undefined;
+                        let suggestion: UnderscoreEscapedString | undefined;
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
-                                error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg), unescapeIdentifier(suggestion));
+                                error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg), unescapeLeadingUnderscores(suggestion));
                             }
                         }
                         if (!suggestion) {
@@ -1152,15 +1152,15 @@ namespace ts {
                 if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
                     const decls = result.declarations;
                     if (decls && decls.length === 1 && decls[0].kind === SyntaxKind.NamespaceExportDeclaration) {
-                        error(errorLocation, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeIdentifier(name));
+                        error(errorLocation, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name));
                     }
                 }
             }
             return result;
         }
 
-        function diagnosticName(nameArg: EscapedIdentifier | Identifier) {
-            return typeof nameArg === "string" ? unescapeIdentifier(nameArg as EscapedIdentifier) : declarationNameToString(nameArg as Identifier);
+        function diagnosticName(nameArg: UnderscoreEscapedString | Identifier) {
+            return typeof nameArg === "string" ? unescapeLeadingUnderscores(nameArg as UnderscoreEscapedString) : declarationNameToString(nameArg as Identifier);
         }
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
@@ -1173,7 +1173,7 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: EscapedIdentifier, nameArg: EscapedIdentifier | Identifier): boolean {
+        function checkAndReportErrorForMissingPrefix(errorLocation: Node, name: UnderscoreEscapedString, nameArg: UnderscoreEscapedString | Identifier): boolean {
             if ((errorLocation.kind === SyntaxKind.Identifier && (isTypeReferenceIdentifier(<Identifier>errorLocation)) || isInTypeQuery(errorLocation))) {
                 return false;
             }
@@ -1236,11 +1236,11 @@ namespace ts {
             }
         }
 
-        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: EscapedIdentifier, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsNamespace(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
             if (meaning === SymbolFlags.Namespace) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol) {
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, unescapeIdentifier(name));
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_namespace_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
@@ -1248,33 +1248,33 @@ namespace ts {
             return false;
         }
 
-        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: EscapedIdentifier, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingTypeAsValue(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule)) {
                 if (name === "any" || name === "string" || name === "number" || name === "boolean" || name === "never") {
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeIdentifier(name));
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
-                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeIdentifier(name));
+                    error(errorLocation, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
             return false;
         }
 
-        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: EscapedIdentifier, meaning: SymbolFlags): boolean {
+        function checkAndReportErrorForUsingNamespaceModuleAsValue(errorLocation: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): boolean {
             if (meaning & (SymbolFlags.Value & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Type)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol) {
-                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeIdentifier(name));
+                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_value, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
             else if (meaning & (SymbolFlags.Type & ~SymbolFlags.NamespaceModule & ~SymbolFlags.Value)) {
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.NamespaceModule & ~SymbolFlags.Type, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined));
                 if (symbol) {
-                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeIdentifier(name));
+                    error(errorLocation, Diagnostics.Cannot_use_namespace_0_as_a_type, unescapeLeadingUnderscores(name));
                     return true;
                 }
             }
@@ -1339,10 +1339,10 @@ namespace ts {
                     exportDefaultSymbol = moduleSymbol;
                 }
                 else {
-                    const exportValue = moduleSymbol.exports.get("export=" as EscapedIdentifier);
+                    const exportValue = moduleSymbol.exports.get("export=" as UnderscoreEscapedString);
                     exportDefaultSymbol = exportValue
-                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as EscapedIdentifier)
-                        : resolveSymbol(moduleSymbol.exports.get("default" as EscapedIdentifier), dontResolveAlias);
+                        ? getPropertyOfType(getTypeOfSymbol(exportValue), "default" as UnderscoreEscapedString)
+                        : resolveSymbol(moduleSymbol.exports.get("default" as UnderscoreEscapedString), dontResolveAlias);
                 }
 
                 if (!exportDefaultSymbol && !allowSyntheticDefaultImports) {
@@ -1394,13 +1394,13 @@ namespace ts {
             return result;
         }
 
-        function getExportOfModule(symbol: Symbol, name: EscapedIdentifier, dontResolveAlias: boolean): Symbol {
+        function getExportOfModule(symbol: Symbol, name: UnderscoreEscapedString, dontResolveAlias: boolean): Symbol {
             if (symbol.flags & SymbolFlags.Module) {
                 return resolveSymbol(getExportsOfSymbol(symbol).get(name), dontResolveAlias);
             }
         }
 
-        function getPropertyOfVariable(symbol: Symbol, name: EscapedIdentifier): Symbol {
+        function getPropertyOfVariable(symbol: Symbol, name: UnderscoreEscapedString): Symbol {
             if (symbol.flags & SymbolFlags.Variable) {
                 const typeAnnotation = (<VariableDeclaration>symbol.valueDeclaration).type;
                 if (typeAnnotation) {
@@ -1421,7 +1421,7 @@ namespace ts {
 
                     let symbolFromVariable: Symbol;
                     // First check if module was specified with "export=". If so, get the member from the resolved type
-                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get("export=" as EscapedIdentifier)) {
+                    if (moduleSymbol && moduleSymbol.exports && moduleSymbol.exports.get("export=" as UnderscoreEscapedString)) {
                         symbolFromVariable = getPropertyOfType(getTypeOfSymbol(targetSymbol), name.text);
                     }
                     else {
@@ -1738,7 +1738,7 @@ namespace ts {
         // An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
         // and an external module with no 'export =' declaration resolves to the module itself.
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export=" as EscapedIdentifier), dontResolveAlias)) || moduleSymbol;
+            return moduleSymbol && getMergedSymbol(resolveSymbol(moduleSymbol.exports.get("export=" as UnderscoreEscapedString), dontResolveAlias)) || moduleSymbol;
         }
 
         // An external module with an 'export =' declaration may be referenced as an ES6 module provided the 'export ='
@@ -1753,7 +1753,7 @@ namespace ts {
         }
 
         function hasExportAssignmentSymbol(moduleSymbol: Symbol): boolean {
-            return moduleSymbol.exports.get("export=" as EscapedIdentifier) !== undefined;
+            return moduleSymbol.exports.get("export=" as UnderscoreEscapedString) !== undefined;
         }
 
         function getExportsOfModuleAsArray(moduleSymbol: Symbol): Symbol[] {
@@ -1769,7 +1769,7 @@ namespace ts {
             return exports;
         }
 
-        function tryGetMemberInModuleExports(memberName: EscapedIdentifier, moduleSymbol: Symbol): Symbol | undefined {
+        function tryGetMemberInModuleExports(memberName: UnderscoreEscapedString, moduleSymbol: Symbol): Symbol | undefined {
             const symbolTable = getExportsOfModule(moduleSymbol);
             if (symbolTable) {
                 return symbolTable.get(memberName);
@@ -1790,7 +1790,7 @@ namespace ts {
             exportsWithDuplicate: ExportDeclaration[];
         }
 
-        type ExportCollisionTrackerTable = EscapedIdentifierMap<ExportCollisionTracker>;
+        type ExportCollisionTrackerTable = UnderscoreEscapedMap<ExportCollisionTracker>;
 
         /**
          * Extends one symbol table with another while collecting information on name collisions for error message generation into the `lookupTable` argument
@@ -1838,7 +1838,7 @@ namespace ts {
                 visitedSymbols.push(symbol);
                 const symbols = cloneMap(symbol.exports);
                 // All export * declarations are collected in an __export symbol by the binder
-                const exportStars = symbol.exports.get("__export" as EscapedIdentifier);
+                const exportStars = symbol.exports.get("__export" as UnderscoreEscapedString);
                 if (exportStars) {
                     const nestedSymbols = createSymbolTable();
                     const lookupTable = createMap<ExportCollisionTracker>() as ExportCollisionTrackerTable;
@@ -1862,7 +1862,7 @@ namespace ts {
                                 node,
                                 Diagnostics.Module_0_has_already_exported_a_member_named_1_Consider_explicitly_re_exporting_to_resolve_the_ambiguity,
                                 lookupTable.get(id).specifierText,
-                                unescapeIdentifier(id)
+                                unescapeLeadingUnderscores(id)
                             ));
                         }
                     });
@@ -1939,7 +1939,7 @@ namespace ts {
         // or the @ symbol. A third underscore indicates an escaped form of an identifer that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
         // Symbol instance.
-        function isReservedMemberName(name: EscapedIdentifier) {
+        function isReservedMemberName(name: UnderscoreEscapedString) {
             return (name as string).charCodeAt(0) === CharacterCodes._ &&
                 (name as string).charCodeAt(1) === CharacterCodes._ &&
                 (name as string).charCodeAt(2) !== CharacterCodes._ &&
@@ -2856,7 +2856,7 @@ namespace ts {
                     parameterDeclaration.name.kind === SyntaxKind.Identifier ?
                         setEmitFlags(getSynthesizedClone(parameterDeclaration.name), EmitFlags.NoAsciiEscaping) :
                         cloneBindingName(parameterDeclaration.name) :
-                    unescapeIdentifier(parameterSymbol.name);
+                    unescapeLeadingUnderscores(parameterSymbol.name);
                 const questionToken = isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : undefined;
 
                 let parameterType = getTypeOfSymbol(parameterSymbol);
@@ -2992,7 +2992,7 @@ namespace ts {
                             return "(Anonymous function)";
                     }
                 }
-                return unescapeIdentifier(symbol.name);
+                return unescapeLeadingUnderscores(symbol.name);
             }
         }
 
@@ -3079,7 +3079,7 @@ namespace ts {
                         return "(Anonymous function)";
                 }
             }
-            return unescapeIdentifier(symbol.name);
+            return unescapeLeadingUnderscores(symbol.name);
         }
 
         function getSymbolDisplayBuilder(): SymbolDisplayBuilder {
@@ -3536,7 +3536,7 @@ namespace ts {
                                 continue;
                             }
                             if (getDeclarationModifierFlagsFromSymbol(p) & (ModifierFlags.Private | ModifierFlags.Protected)) {
-                                writer.reportPrivateInBaseOfClassExpression(unescapeIdentifier(p.name));
+                                writer.reportPrivateInBaseOfClassExpression(unescapeLeadingUnderscores(p.name));
                             }
                         }
                         const t = getTypeOfSymbol(p);
@@ -4048,7 +4048,7 @@ namespace ts {
         }
 
         // Return the type of the given property in the given type, or undefined if no such property exists
-        function getTypeOfPropertyOfType(type: Type, name: EscapedIdentifier): Type {
+        function getTypeOfPropertyOfType(type: Type, name: UnderscoreEscapedString): Type {
             const prop = getPropertyOfType(type, name);
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
@@ -4079,7 +4079,7 @@ namespace ts {
             }
 
             const members = createSymbolTable();
-            const names = createEscapedIdentifierMap<true>();
+            const names = createUnderscoreEscapedMap<true>();
             for (const name of properties) {
                 names.set(getTextOfPropertyName(name), true);
             }
@@ -4166,7 +4166,7 @@ namespace ts {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const propName = "" + indexOf(pattern.elements, declaration);
                     type = isTupleLikeType(parentType)
-                        ? getTypeOfPropertyOfType(parentType, propName as EscapedIdentifier)
+                        ? getTypeOfPropertyOfType(parentType, propName as UnderscoreEscapedString)
                         : elementType;
                     if (!type) {
                         if (isTupleType(parentType)) {
@@ -5333,8 +5333,8 @@ namespace ts {
             if (!(<InterfaceTypeWithDeclaredMembers>type).declaredProperties) {
                 const symbol = type.symbol;
                 (<InterfaceTypeWithDeclaredMembers>type).declaredProperties = getNamedMembers(symbol.members);
-                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call" as EscapedIdentifier));
-                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new" as EscapedIdentifier));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredCallSignatures = getSignaturesOfSymbol(symbol.members.get("__call" as UnderscoreEscapedString));
+                (<InterfaceTypeWithDeclaredMembers>type).declaredConstructSignatures = getSignaturesOfSymbol(symbol.members.get("__new" as UnderscoreEscapedString));
                 (<InterfaceTypeWithDeclaredMembers>type).declaredStringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 (<InterfaceTypeWithDeclaredMembers>type).declaredNumberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
             }
@@ -5625,8 +5625,8 @@ namespace ts {
             }
             else if (symbol.flags & SymbolFlags.TypeLiteral) {
                 const members = symbol.members;
-                const callSignatures = getSignaturesOfSymbol(members.get("__call" as EscapedIdentifier));
-                const constructSignatures = getSignaturesOfSymbol(members.get("__new" as EscapedIdentifier));
+                const callSignatures = getSignaturesOfSymbol(members.get("__call" as UnderscoreEscapedString));
+                const constructSignatures = getSignaturesOfSymbol(members.get("__new" as UnderscoreEscapedString));
                 const stringIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.String);
                 const numberIndexInfo = getIndexInfoOfSymbol(symbol, IndexKind.Number);
                 setStructuredTypeMembers(type, members, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -5641,7 +5641,7 @@ namespace ts {
                 }
                 if (symbol.flags & SymbolFlags.Class) {
                     const classType = getDeclaredTypeOfClassOrInterface(symbol);
-                    constructSignatures = getSignaturesOfSymbol(symbol.members.get("__constructor" as EscapedIdentifier));
+                    constructSignatures = getSignaturesOfSymbol(symbol.members.get("__constructor" as UnderscoreEscapedString));
                     if (!constructSignatures.length) {
                         constructSignatures = getDefaultConstructSignatures(classType);
                     }
@@ -5709,7 +5709,7 @@ namespace ts {
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
                 if (t.flags & TypeFlags.StringLiteral) {
-                    const propName = escapeIdentifier((<StringLiteralType>t).value);
+                    const propName = escapeLeadingUnderscores((<StringLiteralType>t).value);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = templateOptional || !!(modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
                     const prop = createSymbol(SymbolFlags.Property | (isOptional ? SymbolFlags.Optional : 0), propName);
@@ -5811,7 +5811,7 @@ namespace ts {
         /** If the given type is an object type and that type has a property by the given name,
          * return the symbol for that property. Otherwise return undefined.
          */
-        function getPropertyOfObjectType(type: Type, name: EscapedIdentifier): Symbol {
+        function getPropertyOfObjectType(type: Type, name: UnderscoreEscapedString): Symbol {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
                 const symbol = resolved.members.get(name);
@@ -6006,7 +6006,7 @@ namespace ts {
                 t;
         }
 
-        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: EscapedIdentifier): Symbol {
+        function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
             let props: Symbol[];
             const types = containingType.types;
             const isUnion = containingType.flags & TypeFlags.Union;
@@ -6077,7 +6077,7 @@ namespace ts {
         // constituents, in which case the isPartial flag is set when the containing type is union type. We need
         // these partial properties when identifying discriminant properties, but otherwise they are filtered out
         // and do not appear to be present in the union type.
-        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: EscapedIdentifier): Symbol {
+        function getUnionOrIntersectionProperty(type: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
             const properties = type.propertyCache || (type.propertyCache = createSymbolTable());
             let property = properties.get(name);
             if (!property) {
@@ -6089,7 +6089,7 @@ namespace ts {
             return property;
         }
 
-        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: EscapedIdentifier): Symbol {
+        function getPropertyOfUnionOrIntersectionType(type: UnionOrIntersectionType, name: UnderscoreEscapedString): Symbol {
             const property = getUnionOrIntersectionProperty(type, name);
             // We need to filter out partial properties in union types
             return property && !(getCheckFlags(property) & CheckFlags.Partial) ? property : undefined;
@@ -6103,7 +6103,7 @@ namespace ts {
          * @param type a type to look up property from
          * @param name a name of property to look up in a given type
          */
-        function getPropertyOfType(type: Type, name: EscapedIdentifier): Symbol | undefined {
+        function getPropertyOfType(type: Type, name: UnderscoreEscapedString): Symbol | undefined {
             type = getApparentType(type);
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -6230,7 +6230,7 @@ namespace ts {
             if (isExternalModuleNameRelative(moduleName)) {
                 return undefined;
             }
-            const symbol = getSymbol(globals, `"${moduleName}"` as EscapedIdentifier, SymbolFlags.ValueModule);
+            const symbol = getSymbol(globals, `"${moduleName}"` as UnderscoreEscapedString, SymbolFlags.ValueModule);
             // merged symbol is module declaration symbol combined with all augmentations
             return symbol && withAugmentations ? getMergedSymbol(symbol) : symbol;
         }
@@ -6394,7 +6394,7 @@ namespace ts {
                 let hasRestLikeParameter = hasRestParameter(declaration);
                 if (!hasRestLikeParameter && isInJavaScriptFile(declaration) && containsArgumentsReference(declaration)) {
                     hasRestLikeParameter = true;
-                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as EscapedIdentifier);
+                    const syntheticArgsSymbol = createSymbol(SymbolFlags.Variable, "args" as UnderscoreEscapedString);
                     syntheticArgsSymbol.type = anyArrayType;
                     syntheticArgsSymbol.isRestParameter = true;
                     parameters.push(syntheticArgsSymbol);
@@ -6599,7 +6599,7 @@ namespace ts {
         }
 
         function getIndexSymbol(symbol: Symbol): Symbol {
-            return symbol.members.get("__index" as EscapedIdentifier);
+            return symbol.members.get("__index" as UnderscoreEscapedString);
         }
 
         function getIndexDeclarationOfSymbol(symbol: Symbol, kind: IndexKind): SignatureDeclaration {
@@ -6969,88 +6969,88 @@ namespace ts {
             }
             const type = getDeclaredTypeOfSymbol(symbol);
             if (!(type.flags & TypeFlags.Object)) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, unescapeIdentifier(symbol.name));
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_be_a_class_or_interface_type, unescapeLeadingUnderscores(symbol.name));
                 return arity ? emptyGenericType : emptyObjectType;
             }
             if (length((<InterfaceType>type).typeParameters) !== arity) {
-                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, unescapeIdentifier(symbol.name), arity);
+                error(getTypeDeclaration(symbol), Diagnostics.Global_type_0_must_have_1_type_parameter_s, unescapeLeadingUnderscores(symbol.name), arity);
                 return arity ? emptyGenericType : emptyObjectType;
             }
             return <ObjectType>type;
         }
 
-        function getGlobalValueSymbol(name: EscapedIdentifier, reportErrors: boolean): Symbol {
+        function getGlobalValueSymbol(name: UnderscoreEscapedString, reportErrors: boolean): Symbol {
             return getGlobalSymbol(name, SymbolFlags.Value, reportErrors ? Diagnostics.Cannot_find_global_value_0 : undefined);
         }
 
-        function getGlobalTypeSymbol(name: EscapedIdentifier, reportErrors: boolean): Symbol {
+        function getGlobalTypeSymbol(name: UnderscoreEscapedString, reportErrors: boolean): Symbol {
             return getGlobalSymbol(name, SymbolFlags.Type, reportErrors ? Diagnostics.Cannot_find_global_type_0 : undefined);
         }
 
-        function getGlobalSymbol(name: EscapedIdentifier, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
+        function getGlobalSymbol(name: UnderscoreEscapedString, meaning: SymbolFlags, diagnostic: DiagnosticMessage): Symbol {
             return resolveName(undefined, name, meaning, diagnostic, name);
         }
 
-        function getGlobalType(name: EscapedIdentifier, arity: 0, reportErrors: boolean): ObjectType;
-        function getGlobalType(name: EscapedIdentifier, arity: number, reportErrors: boolean): GenericType;
-        function getGlobalType(name: EscapedIdentifier, arity: number, reportErrors: boolean): ObjectType {
+        function getGlobalType(name: UnderscoreEscapedString, arity: 0, reportErrors: boolean): ObjectType;
+        function getGlobalType(name: UnderscoreEscapedString, arity: number, reportErrors: boolean): GenericType;
+        function getGlobalType(name: UnderscoreEscapedString, arity: number, reportErrors: boolean): ObjectType {
             const symbol = getGlobalTypeSymbol(name, reportErrors);
             return symbol || reportErrors ? getTypeOfGlobalSymbol(symbol, arity) : undefined;
         }
 
         function getGlobalTypedPropertyDescriptorType() {
-            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as EscapedIdentifier, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
+            return deferredGlobalTypedPropertyDescriptorType || (deferredGlobalTypedPropertyDescriptorType = getGlobalType("TypedPropertyDescriptor" as UnderscoreEscapedString, /*arity*/ 1, /*reportErrors*/ true)) || emptyGenericType;
         }
 
         function getGlobalTemplateStringsArrayType() {
-            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
+            return deferredGlobalTemplateStringsArrayType || (deferredGlobalTemplateStringsArrayType = getGlobalType("TemplateStringsArray" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true)) || emptyObjectType;
         }
 
         function getGlobalESSymbolConstructorSymbol(reportErrors: boolean) {
-            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as EscapedIdentifier, reportErrors));
+            return deferredGlobalESSymbolConstructorSymbol || (deferredGlobalESSymbolConstructorSymbol = getGlobalValueSymbol("Symbol" as UnderscoreEscapedString, reportErrors));
         }
 
         function getGlobalESSymbolType(reportErrors: boolean) {
-            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as EscapedIdentifier, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return deferredGlobalESSymbolType || (deferredGlobalESSymbolType = getGlobalType("Symbol" as UnderscoreEscapedString, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalPromiseType(reportErrors: boolean) {
-            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalPromiseType || (deferredGlobalPromiseType = getGlobalType("Promise" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalPromiseConstructorSymbol(reportErrors: boolean): Symbol | undefined {
-            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as EscapedIdentifier, reportErrors));
+            return deferredGlobalPromiseConstructorSymbol || (deferredGlobalPromiseConstructorSymbol = getGlobalValueSymbol("Promise" as UnderscoreEscapedString, reportErrors));
         }
 
         function getGlobalPromiseConstructorLikeType(reportErrors: boolean) {
-            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike" as EscapedIdentifier, /*arity*/ 0, reportErrors)) || emptyObjectType;
+            return deferredGlobalPromiseConstructorLikeType || (deferredGlobalPromiseConstructorLikeType = getGlobalType("PromiseConstructorLike" as UnderscoreEscapedString, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
 
         function getGlobalAsyncIterableType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIterableType || (deferredGlobalAsyncIterableType = getGlobalType("AsyncIterable" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableType(reportErrors: boolean) {
-            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as EscapedIdentifier, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as UnderscoreEscapedString, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
-        function getGlobalTypeOrUndefined(name: EscapedIdentifier, arity = 0): ObjectType {
+        function getGlobalTypeOrUndefined(name: UnderscoreEscapedString, arity = 0): ObjectType {
             const symbol = getGlobalSymbol(name, SymbolFlags.Type, /*diagnostic*/ undefined);
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
@@ -7059,7 +7059,7 @@ namespace ts {
          * Returns a type that is inside a namespace at the global scope, e.g.
          * getExportedTypeFromNamespace('JSX', 'Element') returns the JSX.Element type
          */
-        function getExportedTypeFromNamespace(namespace: EscapedIdentifier, name: EscapedIdentifier): Type {
+        function getExportedTypeFromNamespace(namespace: UnderscoreEscapedString, name: UnderscoreEscapedString): Type {
             const namespaceSymbol = getGlobalSymbol(namespace, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             const typeSymbol = namespaceSymbol && getSymbol(namespaceSymbol.exports, name, SymbolFlags.Type);
             return typeSymbol && getDeclaredTypeOfSymbol(typeSymbol);
@@ -7117,7 +7117,7 @@ namespace ts {
             for (let i = 0; i < arity; i++) {
                 const typeParameter = <TypeParameter>createType(TypeFlags.TypeParameter);
                 typeParameters.push(typeParameter);
-                const property = createSymbol(SymbolFlags.Property, "" + i as EscapedIdentifier);
+                const property = createSymbol(SymbolFlags.Property, "" + i as UnderscoreEscapedString);
                 property.type = typeParameter;
                 properties.push(property);
             }
@@ -7459,7 +7459,7 @@ namespace ts {
         function getLiteralTypeFromPropertyName(prop: Symbol) {
             return getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier || startsWith(prop.name as string, "__@") ?
                 neverType :
-                getLiteralType(unescapeIdentifier(prop.name));
+                getLiteralType(unescapeLeadingUnderscores(prop.name));
         }
 
         function getLiteralTypeFromPropertyNames(type: Type) {
@@ -7496,9 +7496,9 @@ namespace ts {
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? <ElementAccessExpression>accessNode : undefined;
             const propName = indexType.flags & TypeFlags.StringOrNumberLiteral ?
-                escapeIdentifier("" + (<LiteralType>indexType).value) :
+                escapeLeadingUnderscores("" + (<LiteralType>indexType).value) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
-                    getPropertyNameForKnownSymbolName(unescapeIdentifier((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text)) :
+                    getPropertyNameForKnownSymbolName(unescapeLeadingUnderscores((<Identifier>(<PropertyAccessExpression>accessExpression.argumentExpression).name).text)) :
                     undefined;
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
@@ -7687,7 +7687,7 @@ namespace ts {
             }
 
             const members = createSymbolTable();
-            const skippedPrivateMembers = createEscapedIdentifierMap<boolean>();
+            const skippedPrivateMembers = createUnderscoreEscapedMap<boolean>();
             let stringIndexInfo: IndexInfo;
             let numberIndexInfo: IndexInfo;
             if (left === emptyObjectType) {
@@ -8496,8 +8496,8 @@ namespace ts {
                 if (!related) {
                     if (reportErrors) {
                         errorReporter(Diagnostics.Types_of_parameters_0_and_1_are_incompatible,
-                            unescapeIdentifier(sourceParams[i < sourceMax ? i : sourceMax].name),
-                            unescapeIdentifier(targetParams[i < targetMax ? i : targetMax].name));
+                            unescapeLeadingUnderscores(sourceParams[i < sourceMax ? i : sourceMax].name),
+                            unescapeLeadingUnderscores(targetParams[i < targetMax ? i : targetMax].name));
                     }
                     return Ternary.False;
                 }
@@ -8646,7 +8646,7 @@ namespace ts {
                     const targetProperty = getPropertyOfType(targetEnumType, property.name);
                     if (!targetProperty || !(targetProperty.flags & SymbolFlags.EnumMember)) {
                         if (errorReporter) {
-                            errorReporter(Diagnostics.Property_0_is_missing_in_type_1, unescapeIdentifier(property.name),
+                            errorReporter(Diagnostics.Property_0_is_missing_in_type_1, unescapeLeadingUnderscores(property.name),
                                 typeToString(getDeclaredTypeOfSymbol(targetSymbol), /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType));
                         }
                         enumRelation.set(id, false);
@@ -9898,7 +9898,7 @@ namespace ts {
         }
 
         function isTupleLikeType(type: Type): boolean {
-            return !!getPropertyOfType(type, "0" as EscapedIdentifier);
+            return !!getPropertyOfType(type, "0" as UnderscoreEscapedString);
         }
 
         function isUnitType(type: Type): boolean {
@@ -10122,7 +10122,7 @@ namespace ts {
                     const t = getTypeOfSymbol(p);
                     if (t.flags & TypeFlags.ContainsWideningType) {
                         if (!reportWideningErrorsInType(t)) {
-                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, unescapeIdentifier(p.name), typeToString(getWidenedType(t)));
+                            error(p.valueDeclaration, Diagnostics.Object_literal_s_property_0_implicitly_has_an_1_type, unescapeLeadingUnderscores(p.name), typeToString(getWidenedType(t)));
                         }
                         errorReported = true;
                     }
@@ -10753,7 +10753,7 @@ namespace ts {
             return undefined;
         }
 
-        function isDiscriminantProperty(type: Type, name: EscapedIdentifier) {
+        function isDiscriminantProperty(type: Type, name: UnderscoreEscapedString) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
@@ -10834,7 +10834,7 @@ namespace ts {
             // check. This gives us a quicker out in the common case where an object type is not a function.
             const resolved = resolveStructuredTypeMembers(type);
             return !!(resolved.callSignatures.length || resolved.constructSignatures.length ||
-                resolved.members.get("bind" as EscapedIdentifier) && isTypeSubtypeOf(type, globalFunctionType));
+                resolved.members.get("bind" as UnderscoreEscapedString) && isTypeSubtypeOf(type, globalFunctionType));
         }
 
         function getTypeFacts(type: Type): TypeFacts {
@@ -10912,7 +10912,7 @@ namespace ts {
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
-            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index as EscapedIdentifier) ||
+            return isTupleLikeType(type) && getTypeOfPropertyOfType(type, "" + index as UnderscoreEscapedString) ||
                 checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
                 unknownType;
         }
@@ -11745,7 +11745,7 @@ namespace ts {
                 }
 
                 let targetType: Type;
-                const prototypeProperty = getPropertyOfType(rightType, "prototype" as EscapedIdentifier);
+                const prototypeProperty = getPropertyOfType(rightType, "prototype" as UnderscoreEscapedString);
                 if (prototypeProperty) {
                     // Target type is type of the prototype property
                     const prototypePropertyType = getTypeOfSymbol(prototypeProperty);
@@ -12836,7 +12836,7 @@ namespace ts {
             return undefined;
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: EscapedIdentifier) {
+        function getTypeOfPropertyOfContextualType(type: Type, name: UnderscoreEscapedString) {
             return mapType(type, t => {
                 const prop = t.flags & TypeFlags.StructuredType ? getPropertyOfType(t, name) : undefined;
                 return prop ? getTypeOfSymbol(prop) : undefined;
@@ -12896,7 +12896,7 @@ namespace ts {
             const type = getApparentTypeOfContextualType(arrayLiteral);
             if (type) {
                 const index = indexOf(arrayLiteral.elements, node);
-                return getTypeOfPropertyOfContextualType(type, "" + index as EscapedIdentifier)
+                return getTypeOfPropertyOfContextualType(type, "" + index as UnderscoreEscapedString)
                     || getIndexTypeOfContextualType(type, IndexKind.Number)
                     || getIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false);
             }
@@ -13228,11 +13228,11 @@ namespace ts {
             return isTypeAny(type) || isTypeOfKind(type, kind);
         }
 
-        function isInfinityOrNaNString(name: string | EscapedIdentifier): boolean {
+        function isInfinityOrNaNString(name: string | UnderscoreEscapedString): boolean {
             return name === "Infinity" || name === "-Infinity" || name === "NaN";
         }
 
-        function isNumericLiteralName(name: string | EscapedIdentifier) {
+        function isNumericLiteralName(name: string | UnderscoreEscapedString) {
             // The intent of numeric names is that
             //     - they are names with text in a numeric form, and that
             //     - setting properties/indexing with them is always equivalent to doing so with the numeric literal 'numLit',
@@ -13498,7 +13498,7 @@ namespace ts {
         /**
          * Returns true iff the JSX element name would be a valid JS identifier, ignoring restrictions about keywords not being identifiers
          */
-        function isUnhyphenatedJsxName(name: string | EscapedIdentifier) {
+        function isUnhyphenatedJsxName(name: string | UnderscoreEscapedString) {
             // - is the only character supported in JSX attribute names that isn't valid in JavaScript identifiers
             return (name as string).indexOf("-") < 0;
         }
@@ -13615,7 +13615,7 @@ namespace ts {
                     // This is because children element will overwrite the value from attributes.
                     // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
                     if (explicitlySpecifyChildrenAttribute) {
-                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeIdentifier(jsxChildrenPropertyName));
+                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                     }
 
                     // If there are children in the body of JSX element, create dummy attribute "children" with anyType so that it will pass the attribute checking process
@@ -13640,7 +13640,7 @@ namespace ts {
              * @param symbol a symbol of JsxAttributes containing attributes corresponding to attributesTable
              * @param attributesTable a symbol table of attributes property
              */
-            function createJsxAttributesType(symbol: Symbol, attributesTable: EscapedIdentifierMap<Symbol>) {
+            function createJsxAttributesType(symbol: Symbol, attributesTable: UnderscoreEscapedMap<Symbol>) {
                 const result = createAnonymousType(symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                 result.flags |= TypeFlags.JsxAttributes | TypeFlags.ContainsObjectLiteral;
                 result.objectFlags |= ObjectFlags.ObjectLiteral;
@@ -13657,7 +13657,7 @@ namespace ts {
             return createJsxAttributesTypeFromAttributesProperty(node.parent as JsxOpeningLikeElement, /*filter*/ undefined, checkMode);
         }
 
-        function getJsxType(name: EscapedIdentifier) {
+        function getJsxType(name: UnderscoreEscapedString) {
             let jsxType = jsxTypes.get(name);
             if (jsxType === undefined) {
                 jsxTypes.set(name, jsxType = getExportedTypeFromNamespace(JsxNames.JSX, name) || unknownType);
@@ -13691,12 +13691,12 @@ namespace ts {
                     }
 
                     // Wasn't found
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeIdentifier((<Identifier>node.tagName).text), "JSX." + JsxNames.IntrinsicElements);
+                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores((<Identifier>node.tagName).text), "JSX." + JsxNames.IntrinsicElements);
                     return links.resolvedSymbol = unknownSymbol;
                 }
                 else {
                     if (noImplicitAny) {
-                        error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, unescapeIdentifier(JsxNames.IntrinsicElements));
+                        error(node, Diagnostics.JSX_element_implicitly_has_type_any_because_no_interface_JSX_0_exists, unescapeLeadingUnderscores(JsxNames.IntrinsicElements));
                     }
                     return links.resolvedSymbol = unknownSymbol;
                 }
@@ -13749,7 +13749,7 @@ namespace ts {
          * @param nameOfAttribPropContainer a string of value JsxNames.ElementAttributesPropertyNameContainer or JsxNames.ElementChildrenAttributeNameContainer
          *          if other string is given or the container doesn't exist, return undefined.
          */
-        function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: EscapedIdentifier): EscapedIdentifier {
+        function getNameFromJsxElementAttributesContainer(nameOfAttribPropContainer: UnderscoreEscapedString): UnderscoreEscapedString {
             // JSX
             const jsxNamespace = getGlobalSymbol(JsxNames.JSX, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined);
             // JSX.ElementAttributesProperty | JSX.ElementChildrenAttribute [symbol]
@@ -13761,7 +13761,7 @@ namespace ts {
             if (propertiesOfJsxElementAttribPropInterface) {
                 // Element Attributes has zero properties, so the element attributes type will be the class instance type
                 if (propertiesOfJsxElementAttribPropInterface.length === 0) {
-                    return "" as EscapedIdentifier;
+                    return "" as UnderscoreEscapedString;
                 }
                 // Element Attributes has one property, so the element attributes type will be the type of the corresponding
                 // property of the class instance type
@@ -13770,7 +13770,7 @@ namespace ts {
                 }
                 else if (propertiesOfJsxElementAttribPropInterface.length > 1) {
                     // More than one property on ElementAttributesProperty is an error
-                    error(jsxElementAttribPropInterfaceSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, unescapeIdentifier(nameOfAttribPropContainer));
+                    error(jsxElementAttribPropInterfaceSym.declarations[0], Diagnostics.The_global_type_JSX_0_may_not_have_more_than_one_property, unescapeLeadingUnderscores(nameOfAttribPropContainer));
                 }
             }
             return undefined;
@@ -13790,7 +13790,7 @@ namespace ts {
             return _jsxElementPropertiesName;
         }
 
-        function getJsxElementChildrenPropertyname(): EscapedIdentifier {
+        function getJsxElementChildrenPropertyname(): UnderscoreEscapedString {
             if (!_hasComputedJsxElementChildrenPropertyName) {
                 _hasComputedJsxElementChildrenPropertyName = true;
                 _jsxElementChildrenPropertyName = getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer);
@@ -13948,7 +13948,7 @@ namespace ts {
                 //      <CustomTag> Hello World </CustomTag>
                 const intrinsicElementsType = getJsxType(JsxNames.IntrinsicElements);
                 if (intrinsicElementsType !== unknownType) {
-                    const stringLiteralTypeName = escapeIdentifier((<StringLiteralType>elementType).value);
+                    const stringLiteralTypeName = escapeLeadingUnderscores((<StringLiteralType>elementType).value);
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, stringLiteralTypeName);
                     if (intrinsicProp) {
                         return getTypeOfSymbol(intrinsicProp);
@@ -13957,7 +13957,7 @@ namespace ts {
                     if (indexSignatureType) {
                         return indexSignatureType;
                     }
-                    error(openingLikeElement, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeIdentifier(stringLiteralTypeName), "JSX." + JsxNames.IntrinsicElements);
+                    error(openingLikeElement, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(stringLiteralTypeName), "JSX." + JsxNames.IntrinsicElements);
                 }
                 // If we need to report an error, we already done so here. So just return any to prevent any more error downstream
                 return anyType;
@@ -14190,7 +14190,7 @@ namespace ts {
          * @param name a property name to search
          * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
          */
-        function isKnownProperty(targetType: Type, name: EscapedIdentifier, isComparingJsxAttributes: boolean): boolean {
+        function isKnownProperty(targetType: Type, name: UnderscoreEscapedString, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>targetType);
                 if (resolved.stringIndexInfo ||
@@ -14240,7 +14240,7 @@ namespace ts {
             // If the targetAttributesType is an emptyObjectType, indicating that there is no property named 'props' on this instance type.
             // but there exists a sourceAttributesType, we need to explicitly give an error as normal assignability check allow excess properties and will pass.
             if (targetAttributesType === emptyObjectType && (isTypeAny(sourceAttributesType) || (<ResolvedType>sourceAttributesType).properties.length > 0)) {
-                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeIdentifier(getJsxElementPropertiesName()));
+                error(openingLikeElement, Diagnostics.JSX_element_class_does_not_support_attributes_because_it_does_not_have_a_0_property, unescapeLeadingUnderscores(getJsxElementPropertiesName()));
             }
             else {
                 // Check if sourceAttributesType assignable to targetAttributesType though this check will allow excess properties
@@ -14250,7 +14250,7 @@ namespace ts {
                 if (isSourceAttributeTypeAssignableToTarget && !isTypeAny(sourceAttributesType) && !isTypeAny(targetAttributesType)) {
                     for (const attribute of openingLikeElement.attributes.properties) {
                         if (isJsxAttribute(attribute) && !isKnownProperty(targetAttributesType, attribute.name.text, /*isComparingJsxAttributes*/ true)) {
-                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeIdentifier(attribute.name.text), typeToString(targetAttributesType));
+                            error(attribute, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(attribute.name.text), typeToString(targetAttributesType));
                             // We break here so that errors won't be cascading
                             break;
                         }
@@ -14435,13 +14435,13 @@ namespace ts {
             if (prop.valueDeclaration) {
                 if (isInPropertyInitializer(node) &&
                     !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeIdentifier(right.text));
+                    error(right, Diagnostics.Block_scoped_variable_0_used_before_its_declaration, unescapeLeadingUnderscores(right.text));
                 }
                 if (prop.valueDeclaration.kind === SyntaxKind.ClassDeclaration &&
                     node.parent && node.parent.kind !== SyntaxKind.TypeReference &&
                     !isInAmbientContext(prop.valueDeclaration) &&
                     !isBlockScopedNameDeclaredBeforeUse(prop.valueDeclaration, right)) {
-                    error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeIdentifier(right.text));
+                    error(right, Diagnostics.Class_0_used_before_its_declaration, unescapeLeadingUnderscores(right.text));
                 }
             }
 
@@ -14456,7 +14456,7 @@ namespace ts {
 
             if (assignmentKind) {
                 if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
-                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, unescapeIdentifier(right.text));
+                    error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, unescapeLeadingUnderscores(right.text));
                     return unknownType;
                 }
             }
@@ -14493,12 +14493,12 @@ namespace ts {
             diagnostics.add(createDiagnosticForNodeFromMessageChain(propNode, errorInfo));
         }
 
-        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): EscapedIdentifier | undefined {
-            const suggestion = getSpellingSuggestionForName(unescapeIdentifier(node.text), getPropertiesOfType(containingType), SymbolFlags.Value);
+        function getSuggestionForNonexistentProperty(node: Identifier, containingType: Type): UnderscoreEscapedString | undefined {
+            const suggestion = getSpellingSuggestionForName(unescapeLeadingUnderscores(node.text), getPropertiesOfType(containingType), SymbolFlags.Value);
             return suggestion && suggestion.name;
         }
 
-        function getSuggestionForNonexistentSymbol(location: Node, name: EscapedIdentifier, meaning: SymbolFlags): EscapedIdentifier {
+        function getSuggestionForNonexistentSymbol(location: Node, name: UnderscoreEscapedString, meaning: SymbolFlags): UnderscoreEscapedString {
             const result = resolveNameHelper(location, name, meaning, /*nameNotFoundMessage*/ undefined, name, (symbols, name, meaning) => {
                 const symbol = getSymbol(symbols, name, meaning);
                 if (symbol) {
@@ -14507,7 +14507,7 @@ namespace ts {
                     // However, resolveNameHelper will continue and call this callback again, so we'll eventually get a correct suggestion.
                     return symbol;
                 }
-                return getSpellingSuggestionForName(unescapeIdentifier(name), arrayFrom(symbols.values()), meaning);
+                return getSpellingSuggestionForName(unescapeLeadingUnderscores(name), arrayFrom(symbols.values()), meaning);
             });
             if (result) {
                 return result.name;
@@ -14541,7 +14541,7 @@ namespace ts {
             }
             name = name.toLowerCase();
             for (const candidate of symbols) {
-                let candidateName = unescapeIdentifier(candidate.name);
+                let candidateName = unescapeLeadingUnderscores(candidate.name);
                 if (candidate.flags & meaning &&
                     candidateName &&
                     Math.abs(candidateName.length - name.length) < maximumLengthDifference) {
@@ -14603,7 +14603,7 @@ namespace ts {
             return false;
         }
 
-        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: EscapedIdentifier): boolean {
+        function isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName, propertyName: UnderscoreEscapedString): boolean {
             const left = node.kind === SyntaxKind.PropertyAccessExpression
                 ? (<PropertyAccessExpression>node).expression
                 : (<QualifiedName>node).left;
@@ -14614,7 +14614,7 @@ namespace ts {
         function isValidPropertyAccessWithType(
             node: PropertyAccessExpression | QualifiedName,
             left: LeftHandSideExpression | QualifiedName,
-            propertyName: EscapedIdentifier,
+            propertyName: UnderscoreEscapedString,
             type: Type): boolean {
 
             if (type !== unknownType && !isTypeAny(type)) {
@@ -15356,7 +15356,7 @@ namespace ts {
                 const element = <ClassElement>node;
                 switch (element.name.kind) {
                     case SyntaxKind.Identifier:
-                        return getLiteralType(unescapeIdentifier((<Identifier>element.name).text));
+                        return getLiteralType(unescapeLeadingUnderscores((<Identifier>element.name).text));
                     case SyntaxKind.NumericLiteral:
                     case SyntaxKind.StringLiteral:
                         return getLiteralType((<LiteralExpression>element.name).text);
@@ -17068,7 +17068,7 @@ namespace ts {
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElement) {
-                    const propName = "" + elementIndex as EscapedIdentifier;
+                    const propName = "" + elementIndex as UnderscoreEscapedString;
                     const type = isTypeAny(sourceType)
                         ? sourceType
                         : isTupleLikeType(sourceType)
@@ -18082,8 +18082,8 @@ namespace ts {
                 Property = Getter | Setter
             }
 
-            const instanceNames = createEscapedIdentifierMap<Declaration>();
-            const staticNames = createEscapedIdentifierMap<Declaration>();
+            const instanceNames = createUnderscoreEscapedMap<Declaration>();
+            const staticNames = createUnderscoreEscapedMap<Declaration>();
             for (const member of node.members) {
                 if (member.kind === SyntaxKind.Constructor) {
                     for (const param of (member as ConstructorDeclaration).parameters) {
@@ -18119,7 +18119,7 @@ namespace ts {
                 }
             }
 
-            function addName(names: EscapedIdentifierMap<Declaration>, location: Node, name: EscapedIdentifier, meaning: Declaration) {
+            function addName(names: UnderscoreEscapedMap<Declaration>, location: Node, name: UnderscoreEscapedString, meaning: Declaration) {
                 const prev = names.get(name);
                 if (prev) {
                     if (prev & Declaration.Method) {
@@ -18183,7 +18183,7 @@ namespace ts {
                             memberName = member.name.text;
                             break;
                         case SyntaxKind.Identifier:
-                            memberName = unescapeIdentifier(member.name.text);
+                            memberName = unescapeLeadingUnderscores(member.name.text);
                             break;
                         default:
                             continue;
@@ -18893,7 +18893,7 @@ namespace ts {
                 return typeAsPromise.promisedTypeOfPromise = (<GenericType>promise).typeArguments[0];
             }
 
-            const thenFunction = getTypeOfPropertyOfType(promise, "then" as EscapedIdentifier);
+            const thenFunction = getTypeOfPropertyOfType(promise, "then" as UnderscoreEscapedString);
             if (isTypeAny(thenFunction)) {
                 return undefined;
             }
@@ -19025,7 +19025,7 @@ namespace ts {
             // of a runtime problem. If the user wants to return this value from an async
             // function, they would need to wrap it in some other value. If they want it to
             // be treated as a promise, they can cast to <any>.
-            const thenFunction = getTypeOfPropertyOfType(type, "then" as EscapedIdentifier);
+            const thenFunction = getTypeOfPropertyOfType(type, "then" as UnderscoreEscapedString);
             if (thenFunction && getSignaturesOfType(thenFunction, SignatureKind.Call).length > 0) {
                 if (errorNode) {
                     Debug.assert(!!diagnosticMessage);
@@ -19134,7 +19134,7 @@ namespace ts {
                 const collidingSymbol = getSymbol(node.locals, rootName.text, SymbolFlags.Value);
                 if (collidingSymbol) {
                     error(collidingSymbol.valueDeclaration, Diagnostics.Duplicate_identifier_0_Compiler_uses_declaration_1_to_support_async_functions,
-                        unescapeIdentifier(rootName.text),
+                        unescapeLeadingUnderscores(rootName.text),
                         entityNameToString(promiseConstructorName));
                     return unknownType;
                 }
@@ -19483,11 +19483,11 @@ namespace ts {
                                 !isParameterPropertyDeclaration(parameter) &&
                                 !parameterIsThisKeyword(parameter) &&
                                 !parameterNameStartsWithUnderscore(name)) {
-                                error(name, Diagnostics._0_is_declared_but_never_used, unescapeIdentifier(local.name));
+                                error(name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(local.name));
                             }
                         }
                         else if (compilerOptions.noUnusedLocals) {
-                            forEach(local.declarations, d => errorUnusedLocal(getNameOfDeclaration(d) || d, unescapeIdentifier(local.name)));
+                            forEach(local.declarations, d => errorUnusedLocal(getNameOfDeclaration(d) || d, unescapeLeadingUnderscores(local.name)));
                         }
                     }
                 });
@@ -19520,7 +19520,7 @@ namespace ts {
         }
 
         function isIdentifierThatStartsWithUnderScore(node: Node) {
-            return node.kind === SyntaxKind.Identifier && unescapeIdentifier((<Identifier>node).text).charCodeAt(0) === CharacterCodes._;
+            return node.kind === SyntaxKind.Identifier && unescapeLeadingUnderscores((<Identifier>node).text).charCodeAt(0) === CharacterCodes._;
         }
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression): void {
@@ -19529,13 +19529,13 @@ namespace ts {
                     for (const member of node.members) {
                         if (member.kind === SyntaxKind.MethodDeclaration || member.kind === SyntaxKind.PropertyDeclaration) {
                             if (!member.symbol.isReferenced && getModifierFlags(member) & ModifierFlags.Private) {
-                                error(member.name, Diagnostics._0_is_declared_but_never_used, unescapeIdentifier(member.symbol.name));
+                                error(member.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(member.symbol.name));
                             }
                         }
                         else if (member.kind === SyntaxKind.Constructor) {
                             for (const parameter of (<ConstructorDeclaration>member).parameters) {
                                 if (!parameter.symbol.isReferenced && getModifierFlags(parameter) & ModifierFlags.Private) {
-                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_never_used, unescapeIdentifier(parameter.symbol.name));
+                                    error(parameter.name, Diagnostics.Property_0_is_declared_but_never_used, unescapeLeadingUnderscores(parameter.symbol.name));
                                 }
                             }
                         }
@@ -19556,7 +19556,7 @@ namespace ts {
                     }
                     for (const typeParameter of node.typeParameters) {
                         if (!getMergedSymbol(typeParameter.symbol).isReferenced) {
-                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, unescapeIdentifier(typeParameter.symbol.name));
+                            error(typeParameter.name, Diagnostics._0_is_declared_but_never_used, unescapeLeadingUnderscores(typeParameter.symbol.name));
                         }
                     }
                 }
@@ -19569,7 +19569,7 @@ namespace ts {
                     if (!local.isReferenced && !local.exportSymbol) {
                         for (const declaration of local.declarations) {
                             if (!isAmbientModule(declaration)) {
-                                errorUnusedLocal(getNameOfDeclaration(declaration), unescapeIdentifier(local.name));
+                                errorUnusedLocal(getNameOfDeclaration(declaration), unescapeLeadingUnderscores(local.name));
                             }
                         }
                     }
@@ -20462,7 +20462,7 @@ namespace ts {
             }
 
             // Both async and non-async iterators must have a `next` method.
-            const nextMethod = getTypeOfPropertyOfType(type, "next" as EscapedIdentifier);
+            const nextMethod = getTypeOfPropertyOfType(type, "next" as UnderscoreEscapedString);
             if (isTypeAny(nextMethod)) {
                 return undefined;
             }
@@ -20490,7 +20490,7 @@ namespace ts {
                 }
             }
 
-            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as EscapedIdentifier);
+            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as UnderscoreEscapedString);
             if (!nextValue) {
                 if (errorNode) {
                     error(errorNode, isAsyncIterator
@@ -21171,7 +21171,7 @@ namespace ts {
             }
 
             type InheritanceInfoMap = { prop: Symbol; containingType: Type };
-            const seen = createEscapedIdentifierMap<InheritanceInfoMap>();
+            const seen = createUnderscoreEscapedMap<InheritanceInfoMap>();
             forEach(resolveDeclaredMembers(type).declaredProperties, p => { seen.set(p.name, { prop: p, containingType: type }); });
             let ok = true;
 
@@ -21370,7 +21370,7 @@ namespace ts {
                             if (type.symbol && type.symbol.flags & SymbolFlags.Enum) {
                                 const name = expr.kind === SyntaxKind.PropertyAccessExpression ?
                                     (<PropertyAccessExpression>expr).name.text :
-                                    (<LiteralExpression>(<ElementAccessExpression>expr).argumentExpression).text as EscapedIdentifier;
+                                    (<LiteralExpression>(<ElementAccessExpression>expr).argumentExpression).text as UnderscoreEscapedString;
                                 return evaluateEnumMember(expr, type.symbol, name);
                             }
                         }
@@ -21379,7 +21379,7 @@ namespace ts {
                 return undefined;
             }
 
-            function evaluateEnumMember(expr: Expression, enumSymbol: Symbol, name: EscapedIdentifier) {
+            function evaluateEnumMember(expr: Expression, enumSymbol: Symbol, name: UnderscoreEscapedString) {
                 const memberSymbol = enumSymbol.exports.get(name);
                 if (memberSymbol) {
                     const declaration = memberSymbol.valueDeclaration;
@@ -21844,7 +21844,7 @@ namespace ts {
                 const symbol = resolveName(exportedName, exportedName.text, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias,
                     /*nameNotFoundMessage*/ undefined, /*nameArg*/ undefined);
                 if (symbol && (symbol === undefinedSymbol || isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
-                    error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, unescapeIdentifier(exportedName.text));
+                    error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, unescapeLeadingUnderscores(exportedName.text));
                 }
                 else {
                     markExportAsReferenced(node);
@@ -21902,7 +21902,7 @@ namespace ts {
             const moduleSymbol = getSymbolOfNode(node);
             const links = getSymbolLinks(moduleSymbol);
             if (!links.exportsChecked) {
-                const exportEqualsSymbol = moduleSymbol.exports.get("export=" as EscapedIdentifier);
+                const exportEqualsSymbol = moduleSymbol.exports.get("export=" as UnderscoreEscapedString);
                 if (exportEqualsSymbol && hasExportedMembers(moduleSymbol)) {
                     const declaration = getDeclarationOfAliasSymbol(exportEqualsSymbol) || exportEqualsSymbol.valueDeclaration;
                     if (!isTopLevelInExternalModuleAugmentation(declaration)) {
@@ -21929,7 +21929,7 @@ namespace ts {
                     if (exportedDeclarationsCount > 1) {
                         for (const declaration of declarations) {
                             if (isNotOverload(declaration)) {
-                                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeIdentifier(id)));
+                                diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Cannot_redeclare_exported_variable_0, unescapeLeadingUnderscores(id)));
                             }
                         }
                     }
@@ -22615,7 +22615,7 @@ namespace ts {
                         if (objectType === unknownType) return undefined;
                         const apparentType = getApparentType(objectType);
                         if (apparentType === unknownType) return undefined;
-                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as EscapedIdentifier);
+                        return getPropertyOfType(apparentType, (<NumericLiteral>node).text as UnderscoreEscapedString);
                     }
                     break;
             }
@@ -23208,7 +23208,7 @@ namespace ts {
         }
 
         function hasGlobalName(name: string): boolean {
-            return globals.has(escapeIdentifier(name));
+            return globals.has(escapeLeadingUnderscores(name));
         }
 
         function getReferencedValueSymbol(reference: Identifier, startInDeclarationContainer?: boolean): Symbol {
@@ -23452,23 +23452,23 @@ namespace ts {
             addToSymbolTable(globals, builtinGlobals, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0);
 
             getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
-            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
+            getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = unknownType;
 
             // Initialize special types
-            globalArrayType = getGlobalType("Array" as EscapedIdentifier, /*arity*/ 1, /*reportErrors*/ true);
-            globalObjectType = getGlobalType("Object" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
-            globalFunctionType = getGlobalType("Function" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
-            globalStringType = getGlobalType("String" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
-            globalNumberType = getGlobalType("Number" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
-            globalBooleanType = getGlobalType("Boolean" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
-            globalRegExpType = getGlobalType("RegExp" as EscapedIdentifier, /*arity*/ 0, /*reportErrors*/ true);
+            globalArrayType = getGlobalType("Array" as UnderscoreEscapedString, /*arity*/ 1, /*reportErrors*/ true);
+            globalObjectType = getGlobalType("Object" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalFunctionType = getGlobalType("Function" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalStringType = getGlobalType("String" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalNumberType = getGlobalType("Number" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalBooleanType = getGlobalType("Boolean" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
+            globalRegExpType = getGlobalType("RegExp" as UnderscoreEscapedString, /*arity*/ 0, /*reportErrors*/ true);
             anyArrayType = createArrayType(anyType);
             autoArrayType = createArrayType(autoType);
 
-            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as EscapedIdentifier, /*arity*/ 1);
+            globalReadonlyArrayType = <GenericType>getGlobalTypeOrUndefined("ReadonlyArray" as UnderscoreEscapedString, /*arity*/ 1);
             anyReadonlyArrayType = globalReadonlyArrayType ? createTypeFromGenericGlobalType(globalReadonlyArrayType, [anyType]) : anyArrayType;
-            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as EscapedIdentifier, /*arity*/ 1);
+            globalThisType = <GenericType>getGlobalTypeOrUndefined("ThisType" as UnderscoreEscapedString, /*arity*/ 1);
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
@@ -23481,7 +23481,7 @@ namespace ts {
                         for (let helper = ExternalEmitHelpers.FirstEmitHelper; helper <= ExternalEmitHelpers.LastEmitHelper; helper <<= 1) {
                             if (uncheckedHelpers & helper) {
                                 const name = getHelperName(helper);
-                                const symbol = getSymbol(helpersModule.exports, escapeIdentifier(name), SymbolFlags.Value);
+                                const symbol = getSymbol(helpersModule.exports, escapeLeadingUnderscores(name), SymbolFlags.Value);
                                 if (!symbol) {
                                     error(location, Diagnostics.This_syntax_requires_an_imported_helper_named_1_but_module_0_has_no_exported_member_1, externalHelpersModuleNameText, name);
                                 }
@@ -24085,7 +24085,7 @@ namespace ts {
         }
 
         function checkGrammarObjectLiteralExpression(node: ObjectLiteralExpression, inDestructuring: boolean) {
-            const seen = createEscapedIdentifierMap<SymbolFlags>();
+            const seen = createUnderscoreEscapedMap<SymbolFlags>();
             const Property = 1;
             const GetAccessor = 2;
             const SetAccessor = 4;
@@ -24175,7 +24175,7 @@ namespace ts {
         }
 
         function checkGrammarJsxElement(node: JsxOpeningLikeElement) {
-            const seen = createEscapedIdentifierMap<boolean>();
+            const seen = createUnderscoreEscapedMap<boolean>();
 
             for (const attr of node.attributes.properties) {
                 if (attr.kind === SyntaxKind.JsxSpreadAttribute) {
@@ -24480,7 +24480,7 @@ namespace ts {
 
         function checkESModuleMarker(name: Identifier | BindingPattern): boolean {
             if (name.kind === SyntaxKind.Identifier) {
-                if (unescapeIdentifier(name.text) === "__esModule") {
+                if (unescapeLeadingUnderscores(name.text) === "__esModule") {
                     return grammarErrorOnNode(name, Diagnostics.Identifier_expected_esModule_is_reserved_as_an_exported_marker_when_transforming_ECMAScript_modules);
                 }
             }
@@ -24732,7 +24732,7 @@ namespace ts {
         function getAmbientModules(): Symbol[] {
             const result: Symbol[] = [];
             globals.forEach((global, sym) => {
-                if (ambientModuleSymbolRegex.test(unescapeIdentifier(sym))) {
+                if (ambientModuleSymbolRegex.test(unescapeLeadingUnderscores(sym))) {
                     result.push(global);
                 }
             });

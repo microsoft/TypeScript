@@ -380,7 +380,7 @@ namespace ts.NavigationBar {
 
         const declName = getNameOfDeclaration(<Declaration>node);
         if (declName) {
-            return unescapeIdentifier(getPropertyNameForPropertyNameNode(declName));
+            return unescapeLeadingUnderscores(getPropertyNameForPropertyNameNode(declName));
         }
         switch (node.kind) {
             case SyntaxKind.FunctionExpression:
@@ -442,7 +442,7 @@ namespace ts.NavigationBar {
 
     function getJSDocTypedefTagName(node: JSDocTypedefTag): string {
         if (node.name) {
-            return unescapeIdentifier(node.name.text);
+            return unescapeLeadingUnderscores(node.name.text);
         }
         else {
             const parentNode = node.parent && node.parent.parent;
@@ -450,7 +450,7 @@ namespace ts.NavigationBar {
                 if ((<VariableStatement>parentNode).declarationList.declarations.length > 0) {
                     const nameIdentifier = (<VariableStatement>parentNode).declarationList.declarations[0].name;
                     if (nameIdentifier.kind === SyntaxKind.Identifier) {
-                        return unescapeIdentifier((<Identifier>nameIdentifier).text);
+                        return unescapeLeadingUnderscores((<Identifier>nameIdentifier).text);
                     }
                 }
             }

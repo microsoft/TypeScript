@@ -415,7 +415,7 @@ namespace ts {
             return createElementAccess(value, argumentExpression);
         }
         else {
-            const name = createIdentifier(unescapeIdentifier(propertyName.text));
+            const name = createIdentifier(unescapeLeadingUnderscores(propertyName.text));
             return createPropertyAccess(value, name);
         }
     }

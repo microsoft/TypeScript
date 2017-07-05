@@ -112,7 +112,7 @@ namespace ts {
     export function createIdentifier(text: string, typeArguments: TypeNode[]): Identifier;
     export function createIdentifier(text: string, typeArguments?: TypeNode[]): Identifier {
         const node = <Identifier>createSynthesizedNode(SyntaxKind.Identifier);
-        node.text = escapeIdentifier(text);
+        node.text = escapeLeadingUnderscores(text);
         node.originalKeywordKind = text ? stringToToken(text) : SyntaxKind.Unknown;
         node.autoGenerateKind = GeneratedIdentifierKind.None;
         node.autoGenerateId = 0;
@@ -124,7 +124,7 @@ namespace ts {
 
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(unescapeIdentifier(node.text), typeArguments), node)
+        ? updateNode(createIdentifier(unescapeLeadingUnderscores(node.text), typeArguments), node)
         : node;
     }
 
@@ -2643,12 +2643,12 @@ namespace ts {
     function createJsxFactoryExpressionFromEntityName(jsxFactory: EntityName, parent: JsxOpeningLikeElement): Expression {
         if (isQualifiedName(jsxFactory)) {
             const left = createJsxFactoryExpressionFromEntityName(jsxFactory.left, parent);
-            const right = createIdentifier(unescapeIdentifier(jsxFactory.right.text));
+            const right = createIdentifier(unescapeLeadingUnderscores(jsxFactory.right.text));
             right.text = jsxFactory.right.text;
             return createPropertyAccess(left, right);
         }
         else {
-            return createReactNamespace(unescapeIdentifier(jsxFactory.text), parent);
+            return createReactNamespace(unescapeLeadingUnderscores(jsxFactory.text), parent);
         }
     }
 

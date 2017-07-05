@@ -119,7 +119,7 @@ namespace ts.NavigateTo {
             if (expression.kind === SyntaxKind.PropertyAccessExpression) {
                 const propertyAccess = <PropertyAccessExpression>expression;
                 if (includeLastPortion) {
-                    containers.unshift(unescapeIdentifier(propertyAccess.name.text));
+                    containers.unshift(unescapeLeadingUnderscores(propertyAccess.name.text));
                 }
 
                 return tryAddComputedPropertyName(propertyAccess.expression, containers, /*includeLastPortion*/ true);
@@ -191,7 +191,7 @@ namespace ts.NavigateTo {
                 fileName: rawItem.fileName,
                 textSpan: createTextSpanFromNode(declaration),
                 // TODO(jfreeman): What should be the containerName when the container has a computed name?
-                containerName: containerName ? unescapeIdentifier((<Identifier>containerName).text) : "",
+                containerName: containerName ? unescapeLeadingUnderscores((<Identifier>containerName).text) : "",
                 containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
             };
         }
