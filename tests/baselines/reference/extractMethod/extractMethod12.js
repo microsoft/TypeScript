@@ -25,7 +25,7 @@ namespace A {
             return __return;
         }
 
-        private newFunction(z: any) {
+        private newFunction(z: number) {
             let a1 = { x: 1 };
             y = 10;
             z = 42;

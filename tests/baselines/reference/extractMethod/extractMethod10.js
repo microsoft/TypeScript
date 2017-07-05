@@ -9,21 +9,6 @@ namespace A {
         }
     }
 }
-==SCOPE::method a==
-namespace A {
-    export interface I { x: number };
-    class C {
-        a() {
-            let z = 1;
-            return newFunction();
-
-            function newFunction() {
-                let a1: I = { x: 1 };
-                return a1.x + 10;
-            }
-        }
-    }
-}
 ==SCOPE::class C==
 namespace A {
     export interface I { x: number };

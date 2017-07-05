@@ -11,23 +11,6 @@ namespace A {
         }
     }
 }
-==SCOPE::method a==
-namespace A {
-    let y = 1;
-    class C {
-        a() {
-            let z = 1;
-            return newFunction();
-
-            function newFunction() {
-                let a1 = { x: 1 };
-                y = 10;
-                z = 42;
-                return a1.x + 10;
-            }
-        }
-    }
-}
 ==SCOPE::class C==
 namespace A {
     let y = 1;
@@ -39,7 +22,7 @@ namespace A {
             return __return;
         }
 
-        private newFunction(z: any) {
+        private newFunction(z: number) {
             let a1 = { x: 1 };
             y = 10;
             z = 42;
@@ -59,7 +42,7 @@ namespace A {
         }
     }
 
-    function newFunction(z: any) {
+    function newFunction(z: number) {
         let a1 = { x: 1 };
         y = 10;
         z = 42;
@@ -78,7 +61,7 @@ namespace A {
         }
     }
 }
-function newFunction(y: any, z: any) {
+function newFunction(y: number, z: number) {
     let a1 = { x: 1 };
     y = 10;
     z = 42;
