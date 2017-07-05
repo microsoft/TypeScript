@@ -1960,8 +1960,11 @@ namespace ts {
     }
 
     export function getPropertyNameForPropertyNameNode(name: DeclarationName): EscapedIdentifier {
-        if (name.kind === SyntaxKind.Identifier || name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
-            return name.text as EscapedIdentifier;
+        if (name.kind === SyntaxKind.Identifier) {
+            return name.text;
+        }
+        if (name.kind === SyntaxKind.StringLiteral || name.kind === SyntaxKind.NumericLiteral) {
+            return escapeIdentifier(name.text);
         }
         if (name.kind === SyntaxKind.ComputedPropertyName) {
             const nameExpression = name.expression;
@@ -1970,7 +1973,7 @@ namespace ts {
                 return getPropertyNameForKnownSymbolName(unescapeIdentifier(rightHandSideName));
             }
             else if (nameExpression.kind === SyntaxKind.StringLiteral || nameExpression.kind === SyntaxKind.NumericLiteral) {
-                return (<LiteralExpression>nameExpression).text as EscapedIdentifier;
+                return escapeIdentifier((<LiteralExpression>nameExpression).text);
             }
         }
 
