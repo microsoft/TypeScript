@@ -536,7 +536,7 @@ namespace ts {
         let currentToken: SyntaxKind;
         let sourceText: string;
         let nodeCount: number;
-        let identifiers: EscapedIdentifierMap<EscapedIdentifier>;
+        let identifiers: Map<string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -681,7 +681,7 @@ namespace ts {
 
             parseDiagnostics = [];
             parsingContext = 0;
-            identifiers = createEscapedIdentifierMap<EscapedIdentifier>();
+            identifiers = createMap<string>();
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1182,8 +1182,7 @@ namespace ts {
             return finishNode(result);
         }
 
-        function internIdentifier(input: string): EscapedIdentifier {
-            const text = escapeIdentifier(input);
+        function internIdentifier(text: string): string {
             let identifier = identifiers.get(text);
             if (identifier === undefined) {
                 identifiers.set(text, identifier = text);
@@ -1203,7 +1202,7 @@ namespace ts {
                 if (token() !== SyntaxKind.Identifier) {
                     node.originalKeywordKind = token();
                 }
-                node.text = internIdentifier(scanner.getTokenValue());
+                node.text = escapeIdentifier(internIdentifier(scanner.getTokenValue()));
                 nextToken();
                 return finishNode(node);
             }

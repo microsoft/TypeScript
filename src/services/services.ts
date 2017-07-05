@@ -508,7 +508,7 @@ namespace ts {
         public scriptKind: ScriptKind;
         public languageVersion: ScriptTarget;
         public languageVariant: LanguageVariant;
-        public identifiers: EscapedIdentifierMap<EscapedIdentifier>;
+        public identifiers: Map<string>;
         public nameTable: EscapedIdentifierMap<number>;
         public resolvedModules: Map<ResolvedModuleFull>;
         public resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;

@@ -2336,7 +2336,7 @@ namespace ts {
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator: Node;
 
-        /* @internal */ identifiers: EscapedIdentifierMap<EscapedIdentifier>;
+        /* @internal */ identifiers: Map<string>;
         /* @internal */ nodeCount: number;
         /* @internal */ identifierCount: number;
         /* @internal */ symbolCount: number;

@@ -2833,7 +2833,7 @@ namespace ts {
          */
         function isUniqueName(name: string): boolean {
             return !(hasGlobalName && hasGlobalName(name))
-                && !currentSourceFile.identifiers.has(escapeIdentifier(name))
+                && !currentSourceFile.identifiers.has(name)
                 && !generatedNames.has(name);
         }
 

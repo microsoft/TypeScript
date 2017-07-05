@@ -61,7 +61,7 @@ namespace ts {
         let resultHasExternalModuleIndicator: boolean;
         let currentText: string;
         let currentLineMap: number[];
-        let currentIdentifiers: EscapedIdentifierMap<EscapedIdentifier>;
+        let currentIdentifiers: Map<string>;
         let isCurrentFileExternalModule: boolean;
         let reportedDeclarationError = false;
         let errorNameNode: DeclarationName;
@@ -608,14 +608,14 @@ namespace ts {
         // Note that export default is only allowed at most once in a module, so we
         // do not need to keep track of created temp names.
         function getExportTempVariableName(baseName: string): string {
-            if (!currentIdentifiers.has(escapeIdentifier(baseName))) {
+            if (!currentIdentifiers.has(baseName)) {
                 return baseName;
             }
             let count = 0;
             while (true) {
                 count++;
                 const name = baseName + "_" + count;
-                if (!currentIdentifiers.has(escapeIdentifier(name))) {
+                if (!currentIdentifiers.has(name)) {
                     return name;
                 }
             }
