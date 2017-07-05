@@ -1584,7 +1584,7 @@ namespace FourSlash {
             }
         }
 
-        public printCurrentFileState(makeWhitespaceVisible = false, makeCaretVisible = true) {
+        public printCurrentFileState(makeWhitespaceVisible: boolean, makeCaretVisible: boolean) {
             for (const file of this.testData.files) {
                 const active = (this.activeFile === file);
                 Harness.IO.log(`=== Script (${file.fileName}) ${(active ? "(active, cursor at |)" : "")} ===`);
@@ -1769,7 +1769,7 @@ namespace FourSlash {
          * @returns The number of characters added to the file as a result of the edits.
          * May be negative.
          */
-        private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit = false): number {
+        private applyEdits(fileName: string, edits: ts.TextChange[], isFormattingEdit: boolean): number {
             // We get back a set of edits, but langSvc.editScript only accepts one at a time. Use this to keep track
             // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
 
@@ -2759,7 +2759,7 @@ namespace FourSlash {
             const editInfo = this.languageService.getEditsForRefactor(this.activeFile.fileName, formattingOptions, markerPos, refactorNameToApply, actionName);
 
             for (const edit of editInfo.edits) {
-                this.applyEdits(edit.fileName, edit.textChanges);
+                this.applyEdits(edit.fileName, edit.textChanges, /*isFormattingEdit*/ false);
             }
             const actualContent = this.getFileContent(this.activeFile.fileName);
 
@@ -4002,11 +4002,11 @@ namespace FourSlashInterface {
         }
 
         public printCurrentFileState() {
-            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ true, /*makeCaretVisible*/ true);
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ false, /*makeCaretVisible*/ true);
         }
 
         public printCurrentFileStateWithWhitespace() {
-            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ true);
+            this.state.printCurrentFileState(/*makeWhitespaceVisible*/ true, /*makeCaretVisible*/ true);
         }
 
         public printCurrentFileStateWithoutCaret() {
