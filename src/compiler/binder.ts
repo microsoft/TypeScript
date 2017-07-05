@@ -10,7 +10,7 @@ namespace ts {
     }
 
     interface ActiveLabel {
-        name: string;
+        name: EscapedIdentifier;
         breakTarget: FlowLabel;
         continueTarget: FlowLabel;
         referenced: boolean;
@@ -1007,7 +1007,7 @@ namespace ts {
             currentFlow = unreachableFlow;
         }
 
-        function findActiveLabel(name: string) {
+        function findActiveLabel(name: EscapedIdentifier) {
             if (activeLabels) {
                 for (const label of activeLabels) {
                     if (label.name === name) {
@@ -1029,7 +1029,7 @@ namespace ts {
         function bindBreakOrContinueStatement(node: BreakOrContinueStatement): void {
             bind(node.label);
             if (node.label) {
-                const activeLabel = findActiveLabel(unescapeIdentifier(node.label.text));
+                const activeLabel = findActiveLabel(node.label.text);
                 if (activeLabel) {
                     activeLabel.referenced = true;
                     bindBreakOrContinueFlow(node, activeLabel.breakTarget, activeLabel.continueTarget);
@@ -1170,7 +1170,7 @@ namespace ts {
             bindEach(node.statements);
         }
 
-        function pushActiveLabel(name: string, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
+        function pushActiveLabel(name: EscapedIdentifier, breakTarget: FlowLabel, continueTarget: FlowLabel): ActiveLabel {
             const activeLabel = {
                 name,
                 breakTarget,
@@ -1190,7 +1190,7 @@ namespace ts {
             const postStatementLabel = createBranchLabel();
             bind(node.label);
             addAntecedent(preStatementLabel, currentFlow);
-            const activeLabel = pushActiveLabel(unescapeIdentifier(node.label.text), postStatementLabel, preStatementLabel);
+            const activeLabel = pushActiveLabel(node.label.text, postStatementLabel, preStatementLabel);
             bind(node.statement);
             popActiveLabel();
             if (!activeLabel.referenced && !options.allowUnusedLabels) {
