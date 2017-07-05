@@ -139,7 +139,6 @@ namespace ts.refactor.extractMethod {
 
         if (!start || !end) {
             // cannot find either start or end node
-            debugger;
             return { errors: [createFileDiagnostic(sourceFile, span.start, span.length, Messages.CannotExtractFunction)] };
         }
 
@@ -456,13 +455,17 @@ namespace ts.refactor.extractMethod {
         const callArguments: Identifier[] = [];
         let writes: UsageEntry[];
         usagesInScope.forEach((value, key) => {
+            let type = checker.getTypeOfSymbolAtLocation(value.symbol, value.node);
+            // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
+            type = checker.getBaseTypeOfLiteralType(type);
+
             const paramDecl = createParameter(
                 /*decorators*/ undefined,
                 /*modifiers*/ undefined,
                 /*dotDotDotToken*/ undefined,
                 /*name*/ key,
                 /*questionToken*/ undefined,
-                createTypeReferenceNode(checker.typeToString(checker.getTypeOfSymbolAtLocation(value.symbol, value.node)), [])
+                createTypeReferenceNode(checker.typeToString(type, node, TypeFormatFlags.NoTruncation), [])
             );
             parameters.push(paramDecl);
             if (value.usage === Usage.Write) {
@@ -579,7 +582,7 @@ namespace ts.refactor.extractMethod {
                 return { body: n, returnValueProperty: undefined };
             }
             let returnValueProperty: string;
-            const statements = createNodeArray(isBlock(n) ? n.statements.slice(0) : [isStatement(n) ? n : createStatement(<Expression>n)]);
+            const statements = createNodeArray(isBlock(n) ? n.statements.slice(0) : [isStatement(n) ? n : createReturn(<Expression>n)]);
             // rewrite body if either there are writes that should be propagated back via return statements or there are substitutions
             if (writes || substitutions.size) {
                 const rewrittenStatements = visitNodes(statements, visitor);
