@@ -1105,11 +1105,11 @@ namespace ts {
                         if (suggestedNameNotFoundMessage && suggestionCount < maximumSuggestionCount) {
                             suggestion = getSuggestionForNonexistentSymbol(originalLocation, name, meaning);
                             if (suggestion) {
-                                error(errorLocation, suggestedNameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg as Identifier), unescapeIdentifier(suggestion));
+                                error(errorLocation, suggestedNameNotFoundMessage, diagnosticName(nameArg), unescapeIdentifier(suggestion));
                             }
                         }
                         if (!suggestion) {
-                            error(errorLocation, nameNotFoundMessage, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg as Identifier));
+                            error(errorLocation, nameNotFoundMessage, diagnosticName(nameArg));
                         }
                         suggestionCount++;
                     }
@@ -1124,7 +1124,7 @@ namespace ts {
                     // to a local variable in the constructor where the code will be emitted.
                     const propertyName = (<PropertyDeclaration>propertyWithInvalidInitializer).name;
                     error(errorLocation, Diagnostics.Initializer_of_instance_member_variable_0_cannot_reference_identifier_1_declared_in_the_constructor,
-                        declarationNameToString(propertyName), typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg as Identifier));
+                        declarationNameToString(propertyName), diagnosticName(nameArg));
                     return undefined;
                 }
 
@@ -1159,6 +1159,10 @@ namespace ts {
             return result;
         }
 
+        function diagnosticName(nameArg: EscapedIdentifier | Identifier) {
+            return typeof nameArg === "string" ? unescapeIdentifier(nameArg as EscapedIdentifier) : declarationNameToString(nameArg as Identifier);
+        }
+
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
             for (const decl of symbol.declarations) {
                 if (decl.kind === SyntaxKind.TypeParameter && decl.parent === container) {
@@ -1186,7 +1190,7 @@ namespace ts {
                     // Check to see if a static member exists.
                     const constructorType = getTypeOfSymbol(classSymbol);
                     if (getPropertyOfType(constructorType, name)) {
-                        error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg as Identifier), symbolToString(classSymbol));
+                        error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_static_member_1_0, diagnosticName(nameArg), symbolToString(classSymbol));
                         return true;
                     }
 
@@ -1195,7 +1199,7 @@ namespace ts {
                     if (location === container && !(getModifierFlags(location) & ModifierFlags.Static)) {
                         const instanceType = (<InterfaceType>getDeclaredTypeOfSymbol(classSymbol)).thisType;
                         if (getPropertyOfType(instanceType, name)) {
-                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, typeof nameArg === "string" ? nameArg : declarationNameToString(nameArg as Identifier));
+                            error(errorLocation, Diagnostics.Cannot_find_name_0_Did_you_mean_the_instance_member_this_0, diagnosticName(nameArg));
                             return true;
                         }
                     }
