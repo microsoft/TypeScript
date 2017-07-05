@@ -83,26 +83,11 @@ namespace ts.NavigateTo {
             return true;
         }
 
-        function getTextOfIdentifierOrLiteral(node: Node) {
-            if (node) {
-                if (node.kind === SyntaxKind.Identifier) {
-                    return unescapeIdentifier((<Identifier>node).text);
-                }
-                if (node.kind === SyntaxKind.StringLiteral ||
-                    node.kind === SyntaxKind.NumericLiteral) {
-
-                    return (<LiteralExpression>node).text;
-                }
-            }
-
-            return undefined;
-        }
-
         function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]) {
             if (declaration) {
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
-                    const text = getTextOfIdentifierOrLiteral(name);
+                    const text = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                     if (text !== undefined) {
                         containers.unshift(text);
                     }
@@ -123,7 +108,7 @@ namespace ts.NavigateTo {
         //
         //      [X.Y.Z]() { }
         function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
-            const text = getTextOfIdentifierOrLiteral(expression);
+            const text = getTextOfIdentifierOrLiteral(expression as LiteralExpression);
             if (text !== undefined) {
                 if (includeLastPortion) {
                     containers.unshift(text);

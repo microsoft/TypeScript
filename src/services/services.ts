@@ -589,7 +589,7 @@ namespace ts {
             function getDeclarationName(declaration: Declaration) {
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
-                    const result = getTextOfIdentifierOrLiteral(name);
+                    const result = getTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                     if (result !== undefined) {
                         return result;
                     }
@@ -600,7 +600,7 @@ namespace ts {
                             return unescapeIdentifier((<PropertyAccessExpression>expr).name.text);
                         }
 
-                        return getTextOfIdentifierOrLiteral(expr);
+                        return getTextOfIdentifierOrLiteral(expr as (Identifier | LiteralExpression));
                     }
                 }
 
@@ -2098,7 +2098,7 @@ namespace ts {
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text, node);
+                        setNameTable(getEscapedTextOfIdentifierOrLiteral((<LiteralExpression>node)), node);
                     }
                     break;
                 default:
