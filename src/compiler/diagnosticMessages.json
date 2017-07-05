@@ -3647,6 +3647,16 @@
         "code": 95002
     },
 
+    "Extract function": {
+        "category": "Message",
+        "code": 95003
+    },
+
+    "Extract function into '{0}'": {
+        "category": "Message",
+        "code": 95004
+    },
+
     "Octal literal types must use ES2015 syntax. Use the syntax '{0}'.": {
         "category": "Error",
         "code": 8017
