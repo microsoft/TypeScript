@@ -105,17 +105,17 @@ namespace ts {
     export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
-        const buckets = createMap<FileMap<DocumentRegistryEntry>>();
+        const buckets = createMap<Map<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
         function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
             return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
         }
 
-        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): FileMap<DocumentRegistryEntry> {
+        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): Map<DocumentRegistryEntry> {
             let bucket = buckets.get(key);
             if (!bucket && createIfMissing) {
-                buckets.set(key, bucket = createFileMap<DocumentRegistryEntry>());
+                buckets.set(key, bucket = createMap<DocumentRegistryEntry>());
             }
             return bucket;
         }
@@ -124,9 +124,9 @@ namespace ts {
             const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
                 const entries = buckets.get(name);
                 const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
-                entries.forEachValue((key, entry) => {
+                entries.forEach((entry, name) => {
                     sourceFiles.push({
-                        name: key,
+                        name,
                         refCount: entry.languageServiceRefCount,
                         references: entry.owners.slice(0)
                     });
@@ -222,7 +222,7 @@ namespace ts {
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
-                bucket.remove(path);
+                bucket.delete(path);
             }
         }
 

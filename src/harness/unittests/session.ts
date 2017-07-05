@@ -19,7 +19,7 @@ namespace ts.server {
         getExecutingFilePath(): string { return void 0; },
         getCurrentDirectory(): string { return void 0; },
         getEnvironmentVariable(): string { return ""; },
-        readDirectory(): string[] { return []; },
+        readDirectory() { return []; },
         exit: noop,
         setTimeout() { return 0; },
         clearTimeout: noop,

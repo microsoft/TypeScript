@@ -1148,10 +1148,6 @@ namespace ts {
                 result = reduceNode((<AsExpression>node).type, cbNode, result);
                 break;
 
-            case SyntaxKind.NonNullExpression:
-                result = reduceNode((<NonNullExpression>node).expression, cbNode, result);
-                break;
-
             // Misc
             case SyntaxKind.TemplateSpan:
                 result = reduceNode((<TemplateSpan>node).expression, cbNode, result);

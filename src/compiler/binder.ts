@@ -2080,22 +2080,6 @@ namespace ts {
                 case SyntaxKind.EnumMember:
                     return bindPropertyOrMethodOrAccessor(<Declaration>node, SymbolFlags.EnumMember, SymbolFlags.EnumMemberExcludes);
 
-                case SyntaxKind.SpreadAssignment:
-                case SyntaxKind.JsxSpreadAttribute:
-                    let root = container;
-                    let hasRest = false;
-                    while (root.parent) {
-                        if (root.kind === SyntaxKind.ObjectLiteralExpression &&
-                            root.parent.kind === SyntaxKind.BinaryExpression &&
-                            (root.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken &&
-                            (root.parent as BinaryExpression).left === root) {
-                            hasRest = true;
-                            break;
-                        }
-                        root = root.parent;
-                    }
-                    return;
-
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.ConstructSignature:
                 case SyntaxKind.IndexSignature:
@@ -2321,16 +2305,16 @@ namespace ts {
                 if (symbol && symbol.valueDeclaration && symbol.valueDeclaration.kind === SyntaxKind.VariableDeclaration) {
                     const declaration = symbol.valueDeclaration as VariableDeclaration;
                     if (declaration.initializer) {
-                        return isExportsOrModuleExportsOrAliasOrAssignemnt(declaration.initializer);
+                        return isExportsOrModuleExportsOrAliasOrAssignment(declaration.initializer);
                     }
                 }
             }
             return false;
         }
 
-        function isExportsOrModuleExportsOrAliasOrAssignemnt(node: Node): boolean {
+        function isExportsOrModuleExportsOrAliasOrAssignment(node: Node): boolean {
             return isExportsOrModuleExportsOrAlias(node) ||
-                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignemnt(node.left) || isExportsOrModuleExportsOrAliasOrAssignemnt(node.right)));
+                (isAssignmentExpression(node, /*excludeCompoundAssignements*/ true) && (isExportsOrModuleExportsOrAliasOrAssignment(node.left) || isExportsOrModuleExportsOrAliasOrAssignment(node.right)));
         }
 
         function bindModuleExportsAssignment(node: BinaryExpression) {

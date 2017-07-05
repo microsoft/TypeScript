@@ -11,7 +11,7 @@
 goTo.marker("innermost");
 edit.insert(";");
 
-// Adding smicolon should format the innermost statement
+// Adding semicolon should format the innermost statement
 verify.currentLineContentIs('        var x = 0;');
 
 // Also should format any parent statement that is terminated by the semicolon

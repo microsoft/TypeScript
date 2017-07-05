@@ -1290,7 +1290,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return arrayFrom((<CommandLineOptionOfCustomType>option).type.keys())[0];
+                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
             }
         }
 
@@ -1992,7 +1992,7 @@ namespace ts {
         }
 
         if (include && include.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include)) {
+            for (const file of host.readDirectory(basePath, supportedExtensions, exclude, include, /*depth*/ undefined)) {
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //

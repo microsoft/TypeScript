@@ -164,12 +164,15 @@ namespace ts.refactor {
                 }
 
                 switch (assignmentBinaryExpression.right.kind) {
-                    case SyntaxKind.FunctionExpression:
+                    case SyntaxKind.FunctionExpression: {
                         const functionExpression = assignmentBinaryExpression.right as FunctionExpression;
-                        return createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const method = createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, functionExpression.parameters, /*type*/ undefined, functionExpression.body);
+                        copyComments(assignmentBinaryExpression, method);
+                        return method;
+                    }
 
-                    case SyntaxKind.ArrowFunction:
+                    case SyntaxKind.ArrowFunction: {
                         const arrowFunction = assignmentBinaryExpression.right as ArrowFunction;
                         const arrowFunctionBody = arrowFunction.body;
                         let bodyBlock: Block;
@@ -183,18 +186,40 @@ namespace ts.refactor {
                             const expression = arrowFunctionBody as Expression;
                             bodyBlock = createBlock([createReturn(expression)]);
                         }
-                        return createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
+                        const method = createMethod(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, memberDeclaration.name, /*questionToken*/ undefined,
                             /*typeParameters*/ undefined, arrowFunction.parameters, /*type*/ undefined, bodyBlock);
+                        copyComments(assignmentBinaryExpression, method);
+                        return method;
+                    }
 
-                    default:
+                    default: {
                         // Don't try to declare members in JavaScript files
                         if (isSourceFileJavaScript(sourceFile)) {
                             return;
                         }
-                        return createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
+                        const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,
                             /*type*/ undefined, assignmentBinaryExpression.right);
+                        copyComments(assignmentBinaryExpression.parent, prop);
+                        return prop;
+                    }
                 }
             }
+        }
+
+        function copyComments(sourceNode: Node, targetNode: Node) {
+            forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+                if (kind === SyntaxKind.MultiLineCommentTrivia) {
+                    // Remove leading /*
+                    pos += 2;
+                    // Remove trailing */
+                    end -= 2;
+                }
+                else {
+                    // Remove leading //
+                    pos += 2;
+                }
+                addSyntheticLeadingComment(targetNode, kind, sourceFile.text.slice(pos, end), htnl);
+            });
         }
 
         function createClassFromVariableDeclaration(node: VariableDeclaration): ClassDeclaration {
@@ -212,8 +237,10 @@ namespace ts.refactor {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, initializer.parameters, initializer.body));
             }
 
-            return createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+            // Don't call copyComments here because we'll already leave them in place
+            return cls;
         }
 
         function createClassFromFunctionDeclaration(node: FunctionDeclaration): ClassDeclaration {
@@ -221,8 +248,11 @@ namespace ts.refactor {
             if (node.body) {
                 memberElements.unshift(createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, node.parameters, node.body));
             }
-            return createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
+
+            const cls = createClassDeclaration(/*decorators*/ undefined, /*modifiers*/ undefined, node.name,
                 /*typeParameters*/ undefined, /*heritageClauses*/ undefined, memberElements);
+            // Don't call copyComments here because we'll already leave them in place
+            return cls;
         }
     }
 }

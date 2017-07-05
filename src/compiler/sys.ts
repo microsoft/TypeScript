@@ -4,7 +4,13 @@ declare function setTimeout(handler: (...args: any[]) => void, timeout: number):
 declare function clearTimeout(handle: any): void;
 
 namespace ts {
-    export type FileWatcherCallback = (fileName: string, removed?: boolean) => void;
+    export enum FileWatcherEventKind {
+        Created,
+        Changed,
+        Deleted
+    }
+
+    export type FileWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind) => void;
     export type DirectoryWatcherCallback = (fileName: string) => void;
     export interface WatchedFile {
         fileName: string;
@@ -33,7 +39,7 @@ namespace ts {
         getExecutingFilePath(): string;
         getCurrentDirectory(): string;
         getDirectories(path: string): string[];
-        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[]): string[];
+        readDirectory(path: string, extensions?: string[], exclude?: string[], include?: string[], depth?: number): string[];
         getModifiedTime?(path: string): Date;
         /**
          * This should be cryptographically secure.
@@ -174,7 +180,7 @@ namespace ts {
                         const callbacks = fileWatcherCallbacks.get(fileName);
                         if (callbacks) {
                             for (const fileCallback of callbacks) {
-                                fileCallback(fileName);
+                                fileCallback(fileName, FileWatcherEventKind.Changed);
                             }
                         }
                     }
@@ -281,8 +287,8 @@ namespace ts {
                 }
             }
 
-            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[]): string[] {
-                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), getAccessibleFileSystemEntries);
+            function readDirectory(path: string, extensions?: string[], excludes?: string[], includes?: string[], depth?: number): string[] {
+                return matchFiles(path, extensions, excludes, includes, useCaseSensitiveFileNames, process.cwd(), depth, getAccessibleFileSystemEntries);
             }
 
             const enum FileSystemEntryKind {
@@ -340,11 +346,22 @@ namespace ts {
                     }
 
                     function fileChanged(curr: any, prev: any) {
-                        if (+curr.mtime <= +prev.mtime) {
+                        const isCurrZero = +curr.mtime === 0;
+                        const isPrevZero = +prev.mtime === 0;
+                        const created = !isCurrZero && isPrevZero;
+                        const deleted = isCurrZero && !isPrevZero;
+
+                        const eventKind = created
+                            ? FileWatcherEventKind.Created
+                            : deleted
+                                ? FileWatcherEventKind.Deleted
+                                : FileWatcherEventKind.Changed;
+
+                        if (eventKind === FileWatcherEventKind.Changed && +curr.mtime <= +prev.mtime) {
                             return;
                         }
 
-                        callback(fileName);
+                        callback(fileName, eventKind);
                     }
                 },
                 watchDirectory: (directoryName, callback, recursive) => {
@@ -475,7 +492,7 @@ namespace ts {
                 getCurrentDirectory: () => ChakraHost.currentDirectory,
                 getDirectories: ChakraHost.getDirectories,
                 getEnvironmentVariable: ChakraHost.getEnvironmentVariable || (() => ""),
-                readDirectory: (path: string, extensions?: string[], excludes?: string[], includes?: string[]) => {
+                readDirectory(path, extensions, excludes, includes, _depth) {
                     const pattern = getFileMatcherPatterns(path, excludes, includes, !!ChakraHost.useCaseSensitiveFileNames, ChakraHost.currentDirectory);
                     return ChakraHost.readDirectory(path, extensions, pattern.basePaths, pattern.excludePattern, pattern.includeFilePattern, pattern.includeDirectoryPattern);
                 },
