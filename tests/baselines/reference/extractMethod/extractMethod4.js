@@ -42,7 +42,7 @@ namespace A {
             return await newFunction(z, z1);
         }
 
-        async function newFunction(z: any, z1: any) {
+        async function newFunction(z: number, z1: any) {
             let y = 5;
             if (z) {
                 await z1;
@@ -62,7 +62,7 @@ namespace A {
         }
     }
 
-    async function newFunction(z: any, z1: any) {
+    async function newFunction(z: number, z1: any) {
         let y = 5;
         if (z) {
             await z1;
@@ -81,7 +81,7 @@ namespace A {
         }
     }
 }
-async function newFunction(z: any, z1: any, foo: any) {
+async function newFunction(z: number, z1: any, foo: () => void) {
     let y = 5;
     if (z) {
         await z1;

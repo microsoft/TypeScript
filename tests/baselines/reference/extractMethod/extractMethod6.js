@@ -48,7 +48,7 @@ namespace A {
             return __return;
         }
 
-        function newFunction(a: any) {
+        function newFunction(a: number) {
             let y = 5;
             let z = x;
             a = y;
@@ -71,7 +71,7 @@ namespace A {
         }
     }
 
-    function newFunction(a: any) {
+    function newFunction(a: number) {
         let y = 5;
         let z = x;
         a = y;
@@ -93,7 +93,7 @@ namespace A {
         }
     }
 }
-function newFunction(x: any, a: any) {
+function newFunction(x: number, a: number) {
     let y = 5;
     let z = x;
     a = y;

@@ -78,7 +78,7 @@ namespace A {
         }
     }
 }
-function newFunction(x: any, foo: any) {
+function newFunction(x: number, foo: () => void) {
     let y = 5;
     let z = x;
     return foo();

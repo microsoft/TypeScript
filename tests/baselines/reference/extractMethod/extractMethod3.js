@@ -38,7 +38,7 @@ namespace A {
             return yield* newFunction(z);
         }
 
-        function* newFunction(z: any) {
+        function* newFunction(z: number) {
             let y = 5;
             yield z;
             return foo();
@@ -56,7 +56,7 @@ namespace A {
         }
     }
 
-    function* newFunction(z: any) {
+    function* newFunction(z: number) {
         let y = 5;
         yield z;
         return foo();
@@ -73,7 +73,7 @@ namespace A {
         }
     }
 }
-function* newFunction(z: any, foo: any) {
+function* newFunction(z: number, foo: () => void) {
     let y = 5;
     yield z;
     return foo();
