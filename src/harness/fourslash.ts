@@ -1774,7 +1774,7 @@ namespace FourSlash {
             // of the incremental offset from each edit to the next. We assume these edit ranges don't overlap
 
             edits = edits.sort((a, b) => a.span.start - b.span.start);
-            for (let i = 0; i < edits.length - 1; ++i) {
+            for (let i = 0; i < edits.length - 1; i++) {
                 const firstEditSpan = edits[i].span;
                 const firstEditEnd = firstEditSpan.start + firstEditSpan.length;
                 assert.isTrue(firstEditEnd <= edits[i + 1].span.start);
