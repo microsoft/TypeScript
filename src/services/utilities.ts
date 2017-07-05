@@ -2,7 +2,7 @@
 /* @internal */
 namespace ts {
     export const scanner: Scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true);
-    export const emptyArray: any[] = [];
+    export const emptyArray: never[] = [] as never[];
 
     export const enum SemanticMeaning {
         None = 0x0,
