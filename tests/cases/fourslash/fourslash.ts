@@ -307,7 +307,7 @@ declare namespace FourSlashInterface {
         enableFormatting(): void;
         disableFormatting(): void;
 
-        applyRefactor(name: string, index?: number): void;
+        applyRefactor(refactorName: string, actionName: string): void;
     }
     class debug {
         printCurrentParameterHelp(): void;
