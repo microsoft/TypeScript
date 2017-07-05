@@ -5,13 +5,15 @@
 ////         /*start*/var x = m;
 ////         x = x * 3;
 ////         var y = 30;
-////         var z = y + x;/*end*/
-////         return z;
+////         var z = y + x;
+////         console.log(z);/*end*/
+////         var q = 10;
+////         return q;
 ////     }
 //// }
 
 goTo.select('start', 'end')
-verify.refactorAvailable('Extract method');
+verify.refactorAvailable('Extract Method');
 debug.printCurrentFileState();
-edit.applyRefactor('Extract method', 1);
+edit.applyRefactor('Extract Method', "scope_0");
 debug.printCurrentFileState();
