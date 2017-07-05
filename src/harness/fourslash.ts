@@ -1652,7 +1652,6 @@ namespace FourSlash {
                 }
             }
 
-            this.fixCaretPosition();
             this.checkPostEditInvariants();
         }
 
@@ -1678,7 +1677,6 @@ namespace FourSlash {
                 // Don't need to examine formatting because there are no formatting changes on backspace.
             }
 
-            this.fixCaretPosition();
             this.checkPostEditInvariants();
         }
 
@@ -1722,7 +1720,6 @@ namespace FourSlash {
                 }
             }
 
-            this.fixCaretPosition();
             this.checkPostEditInvariants();
         }
 
@@ -1741,7 +1738,6 @@ namespace FourSlash {
                 }
             }
 
-            this.fixCaretPosition();
 
             this.checkPostEditInvariants();
         }
@@ -1767,17 +1763,6 @@ namespace FourSlash {
 
             Utils.assertDiagnosticsEquals(incrementalSyntaxDiagnostics, referenceSyntaxDiagnostics);
             Utils.assertStructuralEquals(incrementalSourceFile, referenceSourceFile);
-        }
-
-        private fixCaretPosition() {
-            // The caret can potentially end up between the \r and \n, which is confusing. If
-            // that happens, move it back one character
-            if (this.currentCaretPosition > 0) {
-                const ch = this.getFileContent(this.activeFile.fileName).substring(this.currentCaretPosition - 1, this.currentCaretPosition);
-                if (ch === "\r") {
-                    this.currentCaretPosition--;
-                }
-            }
         }
 
         /**
@@ -1836,19 +1821,16 @@ namespace FourSlash {
         public formatDocument() {
             const edits = this.languageService.getFormattingEditsForDocument(this.activeFile.fileName, this.formatCodeSettings);
             this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-            this.fixCaretPosition();
         }
 
         public formatSelection(start: number, end: number) {
             const edits = this.languageService.getFormattingEditsForRange(this.activeFile.fileName, start, end, this.formatCodeSettings);
             this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-            this.fixCaretPosition();
         }
 
         public formatOnType(pos: number, key: string) {
             const edits = this.languageService.getFormattingEditsAfterKeystroke(this.activeFile.fileName, pos, key, this.formatCodeSettings);
             this.applyEdits(this.activeFile.fileName, edits, /*isFormattingEdit*/ true);
-            this.fixCaretPosition();
         }
 
         private editScriptAndUpdateMarkers(fileName: string, editStart: number, editEnd: number, newText: string) {
