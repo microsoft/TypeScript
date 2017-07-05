@@ -21565,7 +21565,7 @@ namespace ts {
                         if (isGlobalAugmentation) {
                             error(node.name, Diagnostics.Augmentations_for_the_global_scope_can_only_be_directly_nested_in_external_modules_or_ambient_module_declarations);
                         }
-                        else if (isExternalModuleNameRelative(node.name.kind === SyntaxKind.Identifier ? unescapeIdentifier(node.name.text) : node.name.text)) {
+                        else if (isExternalModuleNameRelative(getTextOfIdentifierOrLiteral(node.name))) {
                             error(node.name, Diagnostics.Ambient_module_declaration_cannot_specify_relative_module_name);
                         }
                     }

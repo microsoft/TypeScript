@@ -1980,6 +1980,36 @@ namespace ts {
         return undefined;
     }
 
+    export function getTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
+        if (node) {
+            if (node.kind === SyntaxKind.Identifier) {
+                return unescapeIdentifier((node as Identifier).text);
+            }
+            if (node.kind === SyntaxKind.StringLiteral ||
+                node.kind === SyntaxKind.NumericLiteral) {
+
+                return (node as LiteralLikeNode).text;
+            }
+        }
+
+        return undefined;
+    }
+
+    export function getEscapedTextOfIdentifierOrLiteral(node: Identifier | LiteralLikeNode) {
+        if (node) {
+            if (node.kind === SyntaxKind.Identifier) {
+                return (node as Identifier).text;
+            }
+            if (node.kind === SyntaxKind.StringLiteral ||
+                node.kind === SyntaxKind.NumericLiteral) {
+
+                return escapeIdentifier((node as LiteralLikeNode).text);
+            }
+        }
+
+        return undefined;
+    }
+
     export function getPropertyNameForKnownSymbolName(symbolName: string): EscapedIdentifier {
         return "__@" + symbolName as EscapedIdentifier;
     }

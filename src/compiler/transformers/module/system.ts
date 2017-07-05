@@ -1055,7 +1055,7 @@ namespace ts {
             if (hasModifier(decl, ModifierFlags.Export)) {
                 const exportName = hasModifier(decl, ModifierFlags.Default) ? createLiteral("default") : decl.name;
                 statements = appendExportStatement(statements, exportName, getLocalName(decl));
-                excludeName = exportName.kind === SyntaxKind.Identifier ? unescapeIdentifier(exportName.text) : exportName.text;
+                excludeName = getTextOfIdentifierOrLiteral(exportName);
             }
 
             if (decl.name) {

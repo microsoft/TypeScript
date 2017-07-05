@@ -99,7 +99,7 @@ namespace ts {
     }
 
     function createLiteralFromNode(sourceNode: StringLiteral | NumericLiteral | Identifier): StringLiteral {
-        const node = createStringLiteral(sourceNode.kind === SyntaxKind.Identifier ? unescapeIdentifier(sourceNode.text) : sourceNode.text);
+        const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
     }

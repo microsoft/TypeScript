@@ -1507,7 +1507,7 @@ namespace ts.Completions {
                     // NOTE: if one only performs this step when m.name is an identifier,
                     // things like '__proto__' are not filtered out.
                     const name = getNameOfDeclaration(m);
-                    existingName = name.kind === SyntaxKind.Identifier ? name.text : escapeIdentifier((name as LiteralExpression).text); // Literals used as identifiers must be escaped to be valid symbol names
+                    existingName =  getEscapedTextOfIdentifierOrLiteral(name as (Identifier | LiteralExpression));
                 }
 
                 existingMemberNames.set(existingName, true);

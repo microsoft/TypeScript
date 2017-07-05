@@ -580,12 +580,12 @@ namespace ts.NavigationBar {
         // Otherwise, we need to aggregate each identifier to build up the qualified name.
         const result: string[] = [];
 
-        result.push(moduleDeclaration.name.kind === SyntaxKind.Identifier ? unescapeIdentifier(moduleDeclaration.name.text) : moduleDeclaration.name.text);
+        result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
 
         while (moduleDeclaration.body && moduleDeclaration.body.kind === SyntaxKind.ModuleDeclaration) {
             moduleDeclaration = <ModuleDeclaration>moduleDeclaration.body;
 
-            result.push(moduleDeclaration.name.kind === SyntaxKind.Identifier ? unescapeIdentifier(moduleDeclaration.name.text) : moduleDeclaration.name.text);
+            result.push(getTextOfIdentifierOrLiteral(moduleDeclaration.name));
         }
 
         return result.join(".");

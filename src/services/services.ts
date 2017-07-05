@@ -607,21 +607,6 @@ namespace ts {
                 return undefined;
             }
 
-            function getTextOfIdentifierOrLiteral(node: Node) {
-                if (node) {
-                    if (node.kind === SyntaxKind.Identifier) {
-                        return unescapeIdentifier((<Identifier>node).text);
-                    }
-                    if (node.kind === SyntaxKind.StringLiteral ||
-                        node.kind === SyntaxKind.NumericLiteral) {
-
-                        return (<LiteralExpression>node).text;
-                    }
-                }
-
-                return undefined;
-            }
-
             function visit(node: Node): void {
                 switch (node.kind) {
                     case SyntaxKind.FunctionDeclaration:
@@ -2113,7 +2098,7 @@ namespace ts {
                         node.parent.kind === SyntaxKind.ExternalModuleReference ||
                         isArgumentOfElementAccessExpression(node) ||
                         isLiteralComputedPropertyDeclarationName(node)) {
-                        setNameTable((<LiteralExpression>node).text as EscapedIdentifier, node); // Literal expressions are escaped
+                        setNameTable((<LiteralExpression>node).text, node);
                     }
                     break;
                 default:

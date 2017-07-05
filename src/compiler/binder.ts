@@ -230,7 +230,7 @@ namespace ts {
             const name = getNameOfDeclaration(node);
             if (name) {
                 if (isAmbientModule(node)) {
-                    const moduleName = name.kind === SyntaxKind.Identifier ? unescapeIdentifier((<Identifier>name).text) : (<LiteralExpression>name).text;
+                    const moduleName = getTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
                     return (isGlobalScopeAugmentation(<ModuleDeclaration>node) ? "__global" : `"${moduleName}"`) as EscapedIdentifier;
                 }
                 if (name.kind === SyntaxKind.ComputedPropertyName) {
@@ -243,7 +243,7 @@ namespace ts {
                     Debug.assert(isWellKnownSymbolSyntactically(nameExpression));
                     return getPropertyNameForKnownSymbolName(unescapeIdentifier((<PropertyAccessExpression>nameExpression).name.text));
                 }
-                return name.kind === SyntaxKind.Identifier ? (<Identifier>name).text : ((<LiteralExpression>name).text && escapeIdentifier((<LiteralExpression>name).text)); // A literal expression used as a symbol name _must_ be escaped
+                return getEscapedTextOfIdentifierOrLiteral(<Identifier | LiteralExpression>name);
             }
             switch (node.kind) {
                 case SyntaxKind.Constructor:
