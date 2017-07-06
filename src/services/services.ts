@@ -862,15 +862,7 @@ namespace ts {
         }
 
         public getRootFileNames(): string[] {
-            const fileNames: string[] = [];
-
-            this.fileNameToEntry.forEach(value => {
-                if (value) {
-                    fileNames.push(value.hostFileName);
-                }
-            });
-
-            return fileNames;
+            return this.host.getScriptFileNames();
         }
 
         public getVersion(path: Path): string {

@@ -20,19 +20,37 @@ namespace ts.projectSystem {
             }
         }
 
+        function checkDiagnosticsWithLinePos(errors: server.protocol.DiagnosticWithLinePosition[], expectedErrors: string[]) {
+            assert.equal(errors ? errors.length : 0, expectedErrors.length, `expected ${expectedErrors.length} error in the list`);
+            if (expectedErrors.length) {
+                for (let i = 0; i < errors.length; i++) {
+                    const actualMessage = errors[i].message;
+                    const expectedMessage = expectedErrors[i];
+                    assert.isTrue(actualMessage.indexOf(errors[i].message) === 0, `error message does not match, expected ${actualMessage} to start with ${expectedMessage}`);
+                }
+            }
+        }
+
         it("external project - diagnostics for missing files", () => {
             const file1 = {
                 path: "/a/b/app.ts",
                 content: ""
             };
             const file2 = {
-                path: "/a/b/lib.ts",
+                path: "/a/b/applib.ts",
                 content: ""
             };
             // only file1 exists - expect error
-            const host = createServerHost([file1]);
-            const projectService = createProjectService(host);
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
             const projectFileName = "/a/b/test.csproj";
+            const compilerOptionsRequest = <server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName }
+            };
 
             {
                 projectService.openExternalProject({
@@ -41,35 +59,27 @@ namespace ts.projectSystem {
                     rootFiles: toExternalFiles([file1.path, file2.path])
                 });
 
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], ["File '/a/b/lib.ts' not found."]);
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const diags = session.executeCommand(compilerOptionsRequest).response;
+                checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
             }
             // only file2 exists - expect error
-            host.reloadFS([file2]);
+            host.reloadFS([file2, libFile]);
             {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], ["File '/a/b/app.ts' not found."]);
+                host.triggerFileWatcherCallback(file1.path, FileWatcherEventKind.Deleted);
+                host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Created);
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const diags = session.executeCommand(compilerOptionsRequest).response;
+                checkDiagnosticsWithLinePos(diags, ["File '/a/b/app.ts' not found."]);
             }
 
             // both files exist - expect no errors
-            host.reloadFS([file1, file2]);
+            host.reloadFS([file1, file2, libFile]);
             {
-                projectService.openExternalProject({
-                    projectFileName,
-                    options: {},
-                    rootFiles: toExternalFiles([file1.path, file2.path])
-                });
-
-                projectService.checkNumberOfProjects({ externalProjects: 1 });
-                const knownProjects = projectService.synchronizeProjectList([]);
-                checkProjectErrors(knownProjects[0], []);
+                host.triggerFileWatcherCallback(file1.path, FileWatcherEventKind.Created);
+                checkNumberOfProjects(projectService, { externalProjects: 1 });
+                const diags = session.executeCommand(compilerOptionsRequest).response;
+                checkDiagnosticsWithLinePos(diags, []);
             }
         });
 
@@ -79,25 +89,34 @@ namespace ts.projectSystem {
                 content: ""
             };
             const file2 = {
-                path: "/a/b/lib.ts",
+                path: "/a/b/applib.ts",
                 content: ""
             };
             const config = {
                 path: "/a/b/tsconfig.json",
                 content: JSON.stringify({ files: [file1, file2].map(f => getBaseFileName(f.path)) })
             };
-            const host = createServerHost([file1, config]);
-            const projectService = createProjectService(host);
+            const host = createServerHost([file1, config, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            openFilesForSession([file1], session);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects[0];
+            const compilerOptionsRequest = <server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName: project.getProjectName() }
+            };
+            let diags = session.executeCommand(compilerOptionsRequest).response;
+            checkDiagnosticsWithLinePos(diags, ["File '/a/b/applib.ts' not found."]);
 
-            projectService.openClientFile(file1.path);
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectErrors(projectService.synchronizeProjectList([])[0], ["File '/a/b/lib.ts' not found."]);
-
-            host.reloadFS([file1, file2, config]);
+            host.reloadFS([file1, file2, config, libFile]);
             host.triggerFileWatcherCallback(file2.path, FileWatcherEventKind.Created);
 
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectErrors(projectService.synchronizeProjectList([])[0], []);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            diags = session.executeCommand(compilerOptionsRequest).response;
+            checkDiagnosticsWithLinePos(diags, []);
         });
 
         it("configured projects - diagnostics for corrupted config 1", () => {

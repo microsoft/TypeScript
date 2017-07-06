@@ -245,10 +245,6 @@ namespace ts.server {
         }
     }
 
-    function createFileNotFoundDiagnostic(fileName: string) {
-        return createCompilerDiagnostic(Diagnostics.File_0_not_found, fileName);
-    }
-
     /**
      * TODO: enforce invariants:
      *  - script info can be never migrate to state - root file in inferred project, this is only a starting point
@@ -1166,15 +1162,14 @@ namespace ts.server {
                 const rootFilename = propertyReader.getFileName(f);
                 const scriptKind = propertyReader.getScriptKind(f);
                 const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
+                const fileName = toNormalizedPath(rootFilename);
                 if (this.host.fileExists(rootFilename)) {
-                    const info = this.getOrCreateScriptInfoForNormalizedPath(toNormalizedPath(rootFilename), /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    const info = this.getOrCreateScriptInfoForNormalizedPath(fileName, /*openedByClient*/ clientFileName === rootFilename, /*fileContent*/ undefined, scriptKind, hasMixedContent);
                     project.addRoot(info);
                 }
                 else {
-                    // TODO: (sheetalkamat) because the files are not added as a root, we wont have these available in
-                    // missing files unless someone recreates the project or it was also refrenced in existing sourcefile
-                    // Also these errors wouldnt show correct errors
-                    (configFileErrors || (configFileErrors = [])).push(createFileNotFoundDiagnostic(rootFilename));
+                    // Create the file root with just the filename so that LS will have correct set of roots
+                    project.addMissingFileRoot(fileName);
                 }
             }
             project.setProjectErrors(configFileErrors);
@@ -1192,67 +1187,63 @@ namespace ts.server {
         }
 
         private updateNonInferredProject<T>(project: ExternalProject | ConfiguredProject, newUncheckedFiles: T[], propertyReader: FilePropertyReader<T>, newOptions: CompilerOptions, newTypeAcquisition: TypeAcquisition, compileOnSave: boolean, configFileErrors: Diagnostic[]) {
-            const oldRootScriptInfos = project.getRootScriptInfos();
-            const newRootScriptInfos: ScriptInfo[] = [];
-            const newRootScriptInfoMap: NormalizedPathMap<ScriptInfo> = createNormalizedPathMap<ScriptInfo>();
+            const projectRootFilesMap = project.getRootFilesMap();
+            const newRootScriptInfoMap: Map<ProjectRoot> = createMap<ProjectRoot>();
 
-            let rootFilesChanged = false;
             for (const f of newUncheckedFiles) {
                 const newRootFile = propertyReader.getFileName(f);
-                if (!this.host.fileExists(newRootFile)) {
-                    (configFileErrors || (configFileErrors = [])).push(createFileNotFoundDiagnostic(newRootFile));
-                    continue;
-                }
                 const normalizedPath = toNormalizedPath(newRootFile);
-                let scriptInfo = this.getScriptInfoForNormalizedPath(normalizedPath);
-                if (!scriptInfo || !project.isRoot(scriptInfo)) {
-                    rootFilesChanged = true;
-                    if (!scriptInfo) {
-                        const scriptKind = propertyReader.getScriptKind(f);
-                        const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
-                        scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                let scriptInfo: ScriptInfo | NormalizedPath;
+                let path: Path;
+                if (!this.host.fileExists(newRootFile)) {
+                    path = normalizedPathToPath(normalizedPath, this.host.getCurrentDirectory(), this.toCanonicalFileName);
+                    const existingValue = projectRootFilesMap.get(path);
+                    if (isScriptInfo(existingValue)) {
+                        project.removeFile(existingValue);
+                        projectRootFilesMap.set(path, normalizedPath);
                     }
+                    scriptInfo = normalizedPath;
                 }
-                newRootScriptInfos.push(scriptInfo);
-                newRootScriptInfoMap.set(scriptInfo.fileName, scriptInfo);
-            }
-
-            if (rootFilesChanged || newRootScriptInfos.length !== oldRootScriptInfos.length) {
-                let toAdd: ScriptInfo[];
-                let toRemove: ScriptInfo[];
-                for (const oldFile of oldRootScriptInfos) {
-                    if (!newRootScriptInfoMap.contains(oldFile.fileName)) {
-                        (toRemove || (toRemove = [])).push(oldFile);
-                    }
-                }
-                for (const newFile of newRootScriptInfos) {
-                    if (!project.isRoot(newFile)) {
-                        (toAdd || (toAdd = [])).push(newFile);
-                    }
-                }
-                if (toRemove) {
-                    for (const f of toRemove) {
-                        project.removeFile(f);
-                    }
-                }
-                if (toAdd) {
-                    for (const f of toAdd) {
-                        if (f.isScriptOpen() && isRootFileInInferredProject(f)) {
+                else {
+                    const scriptKind = propertyReader.getScriptKind(f);
+                    const hasMixedContent = propertyReader.hasMixedContent(f, this.hostConfiguration.extraFileExtensions);
+                    scriptInfo = this.getOrCreateScriptInfoForNormalizedPath(normalizedPath, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent);
+                    path = scriptInfo.path;
+                    // If this script info is not already a root add it
+                    if (!project.isRoot(scriptInfo)) {
+                        if (scriptInfo.isScriptOpen() && isRootFileInInferredProject(scriptInfo)) {
                             // if file is already root in some inferred project
                             // - remove the file from that project and delete the project if necessary
-                            const inferredProject = f.containingProjects[0];
-                            inferredProject.removeFile(f);
+                            const inferredProject = scriptInfo.containingProjects[0];
+                            inferredProject.removeFile(scriptInfo);
                             if (!inferredProject.hasRoots()) {
                                 this.removeProject(inferredProject);
                             }
                         }
-                        project.addRoot(f);
+                        project.addRoot(scriptInfo);
                     }
                 }
+                newRootScriptInfoMap.set(path, scriptInfo);
+            }
+
+            // project's root file map size is always going to be larger than new roots map
+            // as we have already all the new files to the project
+            if (projectRootFilesMap.size > newRootScriptInfoMap.size) {
+                projectRootFilesMap.forEach((value, path) => {
+                    if (!newRootScriptInfoMap.has(path)) {
+                        if (isScriptInfo(value)) {
+                            project.removeFile(value);
+                        }
+                        else {
+                            projectRootFilesMap.delete(path);
+                            project.markAsDirty();
+                        }
+                    }
+                });
             }
 
             project.setCompilerOptions(newOptions);
-            (<ExternalProject | ConfiguredProject>project).setTypeAcquisition(newTypeAcquisition);
+            project.setTypeAcquisition(newTypeAcquisition);
 
             // VS only set the CompileOnSaveEnabled option in the request if the option was changed recently
             // therefore if it is undefined, it should not be updated.

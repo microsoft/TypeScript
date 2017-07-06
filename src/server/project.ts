@@ -102,9 +102,19 @@ namespace ts.server {
         (mod: { typescript: typeof ts }): PluginModule;
     }
 
+    /**
+     * The project root can be script info - if root is present,
+     * or it could be just normalized path if root wasnt present on the host(only for non inferred project)
+     */
+    export type ProjectRoot = ScriptInfo | NormalizedPath;
+    /* @internal */
+    export function isScriptInfo(value: ProjectRoot): value is ScriptInfo {
+        return value instanceof ScriptInfo;
+    }
+
     export abstract class Project {
         private rootFiles: ScriptInfo[] = [];
-        private rootFilesMap: Map<ScriptInfo> = createMap<ScriptInfo>();
+        private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
         private program: ts.Program;
         private externalFiles: SortedReadonlyArray<string>;
         private missingFilesMap: Map<FileWatcher> = createMap<FileWatcher>();
@@ -335,12 +345,13 @@ namespace ts.server {
         getRootFilesLSHost() {
             const result: string[] = [];
             if (this.rootFiles) {
-                for (const f of this.rootFiles) {
-                    if (this.languageServiceEnabled || f.isScriptOpen()) {
+                this.rootFilesMap.forEach((value, _path) => {
+                    const f: ScriptInfo = isScriptInfo(value) && value;
+                    if (this.languageServiceEnabled || (f && f.isScriptOpen())) {
                         // if language service is disabled - process only files that are open
-                        result.push(f.fileName);
+                        result.push(f ? f.fileName : value as NormalizedPath);
                     }
-                }
+                });
                 if (this.typingFiles) {
                     for (const f of this.typingFiles) {
                         result.push(f);
@@ -348,6 +359,10 @@ namespace ts.server {
                 }
             }
             return result;
+        }
+
+        getRootFilesMap() {
+            return this.rootFilesMap;
         }
 
         getRootScriptInfos() {
@@ -458,7 +473,7 @@ namespace ts.server {
         }
 
         isRoot(info: ScriptInfo) {
-            return this.rootFilesMap && this.rootFilesMap.has(info.path);
+            return this.rootFilesMap && this.rootFilesMap.get(info.path) === info;
         }
 
         // add a root file to project
@@ -470,6 +485,14 @@ namespace ts.server {
 
                 this.markAsDirty();
             }
+        }
+
+        // add a root file to project
+        addMissingFileRoot(fileName: NormalizedPath) {
+            const path = toPath(fileName, this.projectService.host.getCurrentDirectory(),
+                createGetCanonicalFileName(this.projectService.host.useCaseSensitiveFileNames));
+            this.rootFilesMap.set(path, fileName);
+            this.markAsDirty();
         }
 
         removeFile(info: ScriptInfo, detachFromProject = true) {
@@ -671,6 +694,12 @@ namespace ts.server {
         getScriptInfoLSHost(fileName: string) {
             const scriptInfo = this.projectService.getOrCreateScriptInfo(fileName, /*openedByClient*/ false);
             if (scriptInfo) {
+                const existingValue = this.rootFilesMap.get(scriptInfo.path);
+                if (existingValue !== undefined && existingValue !== scriptInfo) {
+                    // This was missing path earlier but now the file exists. Update the root
+                    this.rootFiles.push(scriptInfo);
+                    this.rootFilesMap.set(scriptInfo.path, scriptInfo);
+                }
                 scriptInfo.attachToProject(this);
             }
             return scriptInfo;
@@ -898,12 +927,12 @@ namespace ts.server {
         }
 
         removeRoot(info: ScriptInfo) {
+            super.removeRoot(info);
             if (this._isJsInferredProject && info.isJavaScript()) {
-                if (filter(this.getRootScriptInfos(), info => info.isJavaScript()).length === 0) {
+                if (!some(this.getRootScriptInfos(), info => info.isJavaScript())) {
                     this.toggleJsInferredProject(/*isJsInferredProject*/ false);
                 }
             }
-            super.removeRoot(info);
         }
 
         getProjectRootPath() {

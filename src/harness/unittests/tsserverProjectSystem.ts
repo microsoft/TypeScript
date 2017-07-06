@@ -907,6 +907,41 @@ namespace ts.projectSystem {
             checkProjectRootFiles(project, [commonFile1.path, commonFile2.path]);
         });
 
+        it("handles the missing files - that were added to program because they were added with ///<ref", () => {
+            const file1: FileOrFolder = {
+                path: "/a/b/commonFile1.ts",
+                content: `/// <reference path="commonFile2.ts"/>
+                    let x = y`
+            };
+            const host = createServerHost([file1, libFile]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+            const projectService = session.getProjectService();
+
+            checkNumberOfInferredProjects(projectService, 1);
+            const project = projectService.inferredProjects[0];
+            checkProjectRootFiles(project, [file1.path]);
+            checkProjectActualFiles(project, [file1.path, libFile.path]);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+
+            // Two errors: CommonFile2 not found and cannot find name y
+            assert.equal(diags.length, 2, diags.map(diag => flattenDiagnosticMessageText(diag.text, "\n")).join("\n"));
+
+            host.reloadFS([file1, commonFile2, libFile]);
+            host.triggerFileWatcherCallback(commonFile2.path, FileWatcherEventKind.Created);
+            host.runQueuedTimeoutCallbacks();
+            checkNumberOfInferredProjects(projectService, 1);
+            assert.strictEqual(projectService.inferredProjects[0], project, "Inferred project should be same");
+            checkProjectRootFiles(project, [file1.path]);
+            checkProjectActualFiles(project, [file1.path, libFile.path, commonFile2.path]);
+            diags = <server.protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
+            assert.equal(diags.length, 0);
+        });
+
         it("should create new inferred projects for files excluded from a configured project", () => {
             const configFile: FileOrFolder = {
                 path: "/a/b/tsconfig.json",
@@ -2869,7 +2904,7 @@ namespace ts.projectSystem {
 
             moduleFile.path = moduleFileOldPath;
             host.reloadFS([moduleFile, file1]);
-            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Changed);
+            host.triggerFileWatcherCallback(moduleFileNewPath, FileWatcherEventKind.Deleted);
             host.triggerDirectoryWatcherCallback("/a/b", moduleFile.path);
             host.runQueuedTimeoutCallbacks();
 
